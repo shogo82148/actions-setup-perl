@@ -61,7 +61,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: build
       run: |
-        Invoke-WebRequest -Uri https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build -OutFile %RUNNER_TEMP%\perl-build
+        Invoke-WebRequest -Uri https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build -OutFile $env:RUNNER_TEMP\perl-build
       env:
         PERL_VERSION: ${{ matrix.perl }}
       shell: powershell

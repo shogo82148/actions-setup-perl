@@ -45,3 +45,23 @@ jobs:
         PERL_VERSION: ${{ matrix.perl }}
         BUILD_OS: ${{ matrix.os }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  windows:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+        - windows-2019
+        - windows-2016
+        perl:
+        - "5.30.0"
+        - "5.28.2"
+        - "5.26.3"
+    steps:
+    - uses: actions/checkout@v1
+    - name: build
+      run: |
+        Invoke-WebRequest -Uri https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build -OutFile %RUNNER_TEMP%\perl-build
+      env:
+        PERL_VERSION: ${{ matrix.perl }}
+      shell: powershell

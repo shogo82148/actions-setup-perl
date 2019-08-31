@@ -35,7 +35,7 @@ jobs:
     - name: upload
       run: |
         MINOR_VERSION=$(echo -n $(echo $PERL_VERSION | cut -d. -f1,2))
-        RELEASE_ID=$(curl -sSL -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/v0.0.1-alpha" | jq -r .id)
+        RELEASE_ID=$(echo -n "$(curl -sSL -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/v0.0.1-alpha" | jq -r .id)")
         curl -H "Authorization: token $GITHUB_TOKEN" \
           -H "Content-Type: application/octet-stream" \
           -d "@$RUNNER_TEMP/perl.tar.gz" \

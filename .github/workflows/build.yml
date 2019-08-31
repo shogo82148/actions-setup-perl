@@ -3,13 +3,16 @@ name: build perl
 on: [push]
 
 jobs:
-  ubuntu:
+  build:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os:
         - ubuntu-18.04
         - ubuntu-16.04
+        - macOS-10.14
+        - windows-2019
+        - windows-2016
         perl:
         - "5.30.0"
         - "5.28.2"
@@ -22,7 +25,18 @@ jobs:
         MINOR_VERSION=$(echo -n $(echo $PERL_VERSION | cut -d. -f1,2))
         perl "$RUNNER_TEMP/perl-build" "$PERL_VERSION" "$RUNNER_TOOL_CACHE/perl/$MINOR_VERSION/x64" --noman
         cd "$RUNNER_TOOL_CACHE" && tar zcf "$RUNNER_TEMP/perl.tar.gz" .
-        RELEASE_ID=$(curl -sSL "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/v0.0.1-alpha" | jq -r .id)
+      env:
+        PERL_VERSION: ${{ matrix.perl }}
+
+    - name: archive
+      run: |
+        cd "$RUNNER_TOOL_CACHE" && tar zcf "$RUNNER_TEMP/perl.tar.gz" perl
+
+    - name: upload
+      run: |
+        MINOR_VERSION=$(echo -n $(echo $PERL_VERSION | cut -d. -f1,2))
+        cd "$RUNNER_TOOL_CACHE" && tar zcf "$RUNNER_TEMP/perl.tar.gz" .
+        RELEASE_ID=$(curl -sSL -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/v0.0.1-alpha" | jq -r .id)
         curl -H "Authorization: token $GITHUB_TOKEN" \
           -H "Content-Type: application/octet-stream" \
           -d "@$RUNNER_TEMP/perl.tar.gz" \
@@ -32,34 +46,3 @@ jobs:
         PERL_VERSION: ${{ matrix.perl }}
         BUILD_OS: ${{ matrix.os }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  macos:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os:
-        - macOS-10.14
-    steps:
-    - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: echo Hello, world!
-    - name: Run a multi-line script
-      run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
-
-  windows:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os:
-        - windows-2019
-        - windows-2016
-    steps:
-    - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: echo Hello, world!
-    - name: Run a multi-line script
-      run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.

@@ -31,6 +31,7 @@ jobs:
         GZIP: "-9"
         PERL_VERSION: ${{ matrix.perl }}
         BUILD_OS: ${{ matrix.os }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   macos:
     runs-on: ${{ matrix.os }}

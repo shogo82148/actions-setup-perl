@@ -10,14 +10,20 @@ jobs:
         os:
         - ubuntu-18.04
         - ubuntu-16.04
+        perl:
+        - "5.30.0"
+        - "5.28.2"
+        - "5.26.3"
     steps:
     - uses: actions/checkout@v1
     - name: build
       run: |
         curl -sL https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build > "$RUNNER_TEMP/perl-build"
-        perl "$RUNNER_TEMP/perl-build" "$PERL_VERSION" "$RUNNER_TOOL_CACHE/perl/$PERL_VERSION/x64" --noman
+        MINOR_VERSION=$(echo -n $(echo $PERL_VERSION | cut -d. -f1,2))
+        echo $MINOR_VERSION
+        perl "$RUNNER_TEMP/perl-build" "$PERL_VERSION" "$RUNNER_TOOL_CACHE/perl/$MINOR_VERSION/x64" --noman
       env:
-        PERL_VERSION: "5.30.0"
+        PERL_VERSION: ${{ matrix.perl }}
 
   macos:
     runs-on: ${{ matrix.os }}

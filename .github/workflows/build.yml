@@ -35,7 +35,7 @@ jobs:
     - name: upload
       run: |
         MINOR_VERSION=$(echo -n $(echo $PERL_VERSION | cut -d. -f1,2))
-        RELEASE_ID=$(echo -n "$(curl -sSL -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/v0.0.1-alpha" | jq -r .id)")
+        RELEASE_ID=$(curl -sSL -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/v0.0.1-alpha" | jq -j .id)
         curl -H "Authorization: token $GITHUB_TOKEN" \
           -H "Content-Type: application/octet-stream" \
           -d "@$RUNNER_TEMP/perl.tar.gz" \
@@ -62,6 +62,7 @@ jobs:
     - name: build
       run: |
         Invoke-WebRequest -Uri https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build -OutFile $env:RUNNER_TEMP\perl-build
+        perl $env:RUNNER_TEMP\perl-build $env:PERL_VERSION $env:RUNNER_TOOL_CACHE\perl\$env:PERL_VERSION\x64 --noman
       env:
         PERL_VERSION: ${{ matrix.perl }}
       shell: powershell

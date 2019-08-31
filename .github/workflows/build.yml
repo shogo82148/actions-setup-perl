@@ -20,10 +20,17 @@ jobs:
       run: |
         curl -sL https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build > "$RUNNER_TEMP/perl-build"
         MINOR_VERSION=$(echo -n $(echo $PERL_VERSION | cut -d. -f1,2))
-        echo $MINOR_VERSION
         perl "$RUNNER_TEMP/perl-build" "$PERL_VERSION" "$RUNNER_TOOL_CACHE/perl/$MINOR_VERSION/x64" --noman
+        cd "$RUNNER_TOOL_CACHE" && tar zcf "$RUNNER_TEMP/perl.tar.gz" .
+        RELEASE_ID=$(curl -sSL "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/v0.0.1-alpha" | jq -r .id)
+        curl -H "Authorization: token $GITHUB_TOKEN" \
+          -H "Content-Type: application/octet-stream" \
+          -d "@$RUNNER_TEMP/perl.tar.gz"
+          "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets?name=perl-$MINOR_VERSION-$BUILD_OS.tar.gz"
       env:
+        GZIP: "-9"
         PERL_VERSION: ${{ matrix.perl }}
+        BUILD_OS: ${{ matrix.os }}
 
   macos:
     runs-on: ${{ matrix.os }}

@@ -12,12 +12,12 @@ jobs:
         - ubuntu-16.04
     steps:
     - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: echo Hello, world!
-    - name: Run a multi-line script
+    - name: build
       run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
+        curl -sL https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build > "$RUNNER_TEMP/perl-build"
+        perl "$RUNNER_TEMP/perl-build" "$PERL_VERSION" "$RUNNER_TOOL_CACHE/perl/$PERL_VERSION/x64" --noman
+      env:
+        PERL_VERSION: "5.30.0"
 
   macos:
     runs-on: ${{ matrix.os }}

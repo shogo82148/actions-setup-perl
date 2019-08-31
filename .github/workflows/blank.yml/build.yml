@@ -3,17 +3,44 @@ name: build perl
 on: [push]
 
 jobs:
-  build:
-
+  ubuntu:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os:
         - ubuntu-18.04
         - ubuntu-16.04
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run a one-line script
+      run: echo Hello, world!
+    - name: Run a multi-line script
+      run: |
+        echo Add other actions to build,
+        echo test, and deploy your project.
+
+  macos:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+        - macOS-10.14
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run a one-line script
+      run: echo Hello, world!
+    - name: Run a multi-line script
+      run: |
+        echo Add other actions to build,
+        echo test, and deploy your project.
+
+  windows:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
         - windows-2019
         - windows-2016
-        - macOS-10.14
     steps:
     - uses: actions/checkout@v1
     - name: Run a one-line script

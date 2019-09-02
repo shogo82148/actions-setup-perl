@@ -21,7 +21,6 @@ jobs:
         curl -sL https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build > "$RUNNER_TEMP/perl-build"
         MINOR_VERSION=$(echo -n $(echo $PERL_VERSION | cut -d. -f1,2))
         perl "$RUNNER_TEMP/perl-build" "$PERL_VERSION" "$RUNNER_TOOL_CACHE/perl/$MINOR_VERSION/x64" --noman
-        cd "$RUNNER_TOOL_CACHE" && tar zcf "$RUNNER_TEMP/perl.tar.gz" .
       env:
         PERL_VERSION: ${{ matrix.perl }}
 

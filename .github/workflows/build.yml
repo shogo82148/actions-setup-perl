@@ -40,10 +40,10 @@ jobs:
         MINOR_VERSION=$(echo -n $(echo $PERL_VERSION | cut -d. -f1,2))
         BUILD_OS=$(uname | tr '[A-Z]' '[a-z]')
         RELEASE_ID=$(curl -sSL -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG" | jq -j .id)
-        curl -v -H "Authorization: token $GITHUB_TOKEN" \
+        curl -H "Authorization: token $GITHUB_TOKEN" \
           -H "Content-Type: application/octet-stream" \
           --data-binary "@$RUNNER_TEMP/perl.tar.gz" \
-          "https://uploads.github.com/repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets?name=perl-$MINOR_VERSION-$BUILD_OS-x64.tar.gz"
+          "https://uploads.github.com/repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets?name=perl-$MINOR_VERSION-$BUILD_OS-x64.tar.gz" | jq .
       env:
         RELEASE_TAG: v0.0.1-alpha2
         PERL_VERSION: ${{ matrix.perl }}

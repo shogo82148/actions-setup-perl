@@ -8,9 +8,8 @@ jobs:
     strategy:
       matrix:
         os:
-        - ubuntu-18.04
-        - ubuntu-16.04
-        - macOS-10.14
+        - ubuntu-latest
+        - macOS-latest
         perl:
         - "5.30.0"
         - "5.28.2"
@@ -33,15 +32,15 @@ jobs:
     - name: upload
       run: |
         MINOR_VERSION=$(echo -n $(echo $PERL_VERSION | cut -d. -f1,2))
+        BUILD_OS=$(uname | tr '[A-Z]' '[a-z]')
         RELEASE_ID=$(curl -sSL -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/v0.0.1-alpha" | jq -j .id)
         curl -v -H "Authorization: token $GITHUB_TOKEN" \
           -H "Content-Type: application/octet-stream" \
           -d "@$RUNNER_TEMP/perl.tar.gz" \
-          "https://uploads.github.com/repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets?name=perl-$MINOR_VERSION-$BUILD_OS.tar.gz"
+          "https://uploads.github.com/repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets?name=perl-$MINOR_VERSION-$BUILD_OS-x64.tar.gz"
       env:
         GZIP: "-9"
         PERL_VERSION: ${{ matrix.perl }}
-        BUILD_OS: ${{ matrix.os }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # windows:

@@ -27,6 +27,13 @@ jobs:
     - name: archive
       run: |
         cd "$RUNNER_TOOL_CACHE" && tar zcf "$RUNNER_TEMP/perl.tar.gz" perl
+      env:
+        GZIP: "-9"
+
+    - uses: actions/upload-artifact@v1
+      with:
+        name: ${{ format('perl-{0}-{1}.tar.gz', matrix.perl, matrix.os }}
+        path: "$RUNNER_TEMP/perl.tar.gz"
 
     - name: upload
       run: |
@@ -38,7 +45,6 @@ jobs:
           -d "@$RUNNER_TEMP/perl.tar.gz" \
           "https://uploads.github.com/repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets?name=perl-$MINOR_VERSION-$BUILD_OS-x64.tar.gz"
       env:
-        GZIP: "-9"
         PERL_VERSION: ${{ matrix.perl }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

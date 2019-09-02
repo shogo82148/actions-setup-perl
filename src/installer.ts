@@ -8,6 +8,7 @@ import * as path from 'path';
 
 const actionVersion = 'v0.0.1-alpha';
 const osPlat = os.platform();
+const osArch = os.arch();
 
 if (!tempDirectory) {
   let baseLocation;
@@ -60,7 +61,7 @@ async function acquirePerl(version: string): Promise<string> {
 }
 
 function getFileName(version: string): string {
-  return `perl-${version}-${osPlat}.tar.gz`;
+  return `perl-${version}-${osPlat}-${osArch}.tar.gz`;
 }
 
 function getDownloadUrl(filename: string): string {

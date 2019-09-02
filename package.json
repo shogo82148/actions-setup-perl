@@ -1,0 +1,30 @@
+{
+  "name": "actions-setup-perl",
+  "version": "0.0.1",
+  "description": "",
+  "main": "lib/setup-perl.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/shogo82148/actions-setup-perl.git"
+  },
+  "author": "Ichinose Shogo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shogo82148/actions-setup-perl/issues"
+  },
+  "homepage": "https://github.com/shogo82148/actions-setup-perl#readme",
+  "dependencies": {
+    "@actions/core": "^1.0.0",
+    "@actions/tool-cache": "^1.1.0",
+    "semver": "^6.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^12.7.3",
+    "@types/semver": "^6.0.1",
+    "typescript": "^3.6.2"
+  }
+}

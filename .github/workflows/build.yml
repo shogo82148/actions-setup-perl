@@ -33,7 +33,7 @@ jobs:
     - uses: actions/upload-artifact@v1
       with:
         name: ${{ format('perl-{0}-{1}.tar.gz', matrix.perl, matrix.os) }}
-        path: "$RUNNER_TEMP/perl.tar.gz"
+        path: ${{ format('{0}/perl.tar.gz', runner.temp) }}
 
     - name: upload
       run: |

@@ -6,7 +6,7 @@ import * as tc from '@actions/tool-cache';
 import * as os from 'os';
 import * as path from 'path';
 
-const actionVersion = 'v0.0.1-alpha';
+const actionVersion = 'v0.0.1-alpha2';
 const osPlat = os.platform();
 const osArch = os.arch();
 

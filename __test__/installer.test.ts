@@ -19,14 +19,14 @@ describe('installer tests', () => {
     await io.rmRF(tempDir);
   }, 100000);
 
-  // afterAll(async () => {
-  //   try {
-  //     await io.rmRF(toolDir);
-  //     await io.rmRF(tempDir);
-  //   } catch {
-  //     console.log('Failed to remove test directories');
-  //   }
-  // }, 100000);
+  afterAll(async () => {
+    try {
+      await io.rmRF(toolDir);
+      await io.rmRF(tempDir);
+    } catch {
+      console.log('Failed to remove test directories');
+    }
+  }, 100000);
 
   it('Acquires version of Perl if no matching version is installed', async () => {
     await installer.getPerl('5.30');

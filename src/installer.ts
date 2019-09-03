@@ -56,8 +56,7 @@ async function acquirePerl(version: string): Promise<string> {
     extPath = await tc.extractTar(downloadPath);
   }
 
-  const toolRoot = path.join(extPath, 'perl');
-  return await tc.cacheDir(toolRoot, 'perl', version);
+  return await tc.cacheDir(extPath, 'perl', version);
 }
 
 function getFileName(version: string): string {

@@ -1,0 +1,10 @@
+name: 'Setup Perl environment'
+description: 'Setup a Perl environment and add it to the PATH'
+author: 'GitHub'
+inputs: 
+  go-version:
+    description: 'The Go version to download (if necessary) and use. Example: 5.30.0'
+    default: '5.30.0'
+runs:
+  using: 'node12'
+  main: 'lib/setup-perl.js'

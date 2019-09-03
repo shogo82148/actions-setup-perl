@@ -8,9 +8,8 @@ jobs:
     strategy:
       matrix:
         os:
-        - ubuntu-18.04
-        - ubuntu-16.04
-        - macOS-10.14
+        - ubuntu-latest
+        - macOS-latest
         perl:
         - "5.30.0"
         - "5.28.2"
@@ -22,26 +21,27 @@ jobs:
         curl -sL https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build > "$RUNNER_TEMP/perl-build"
         MINOR_VERSION=$(echo -n $(echo $PERL_VERSION | cut -d. -f1,2))
         perl "$RUNNER_TEMP/perl-build" "$PERL_VERSION" "$RUNNER_TOOL_CACHE/perl/$MINOR_VERSION/x64" --noman
-        cd "$RUNNER_TOOL_CACHE" && tar zcf "$RUNNER_TEMP/perl.tar.gz" .
+        cd "$RUNNER_TOOL_CACHE/perl/$MINOR_VERSION/x64" && tar zcf "$RUNNER_TEMP/perl.tar.gz" .
       env:
         PERL_VERSION: ${{ matrix.perl }}
 
-    - name: archive
-      run: |
-        cd "$RUNNER_TOOL_CACHE" && tar zcf "$RUNNER_TEMP/perl.tar.gz" perl
+    - uses: actions/upload-artifact@v1
+      with:
+        name: ${{ format('perl-{0}-{1}.tar.gz', matrix.perl, matrix.os) }}
+        path: ${{ format('{0}/perl.tar.gz', runner.temp) }}
 
     - name: upload
       run: |
         MINOR_VERSION=$(echo -n $(echo $PERL_VERSION | cut -d. -f1,2))
-        RELEASE_ID=$(curl -sSL -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/v0.0.1-alpha" | jq -j .id)
-        curl -v -H "Authorization: token $GITHUB_TOKEN" \
+        BUILD_OS=$(uname | tr '[A-Z]' '[a-z]')
+        RELEASE_ID=$(curl -sSL -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG" | jq -j .id)
+        curl -H "Authorization: token $GITHUB_TOKEN" \
           -H "Content-Type: application/octet-stream" \
-          -d "@$RUNNER_TEMP/perl.tar.gz" \
-          "https://uploads.github.com/repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets?name=perl-$MINOR_VERSION-$BUILD_OS.tar.gz"
+          --data-binary "@$RUNNER_TEMP/perl.tar.gz" \
+          "https://uploads.github.com/repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets?name=perl-$MINOR_VERSION-$BUILD_OS-x64.tar.gz" | jq .
       env:
-        GZIP: "-9"
+        RELEASE_TAG: v0.0.1-alpha2
         PERL_VERSION: ${{ matrix.perl }}
-        BUILD_OS: ${{ matrix.os }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # windows:

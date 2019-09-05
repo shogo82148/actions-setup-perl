@@ -5,8 +5,9 @@ import * as core from '@actions/core';
 import * as tc from '@actions/tool-cache';
 import * as os from 'os';
 import * as path from 'path';
+import * as semver from 'semver';
 
-const actionVersion = 'v0.0.1-alpha2';
+const actionVersion = 'v0.0.1';
 const osPlat = os.platform();
 const osArch = os.arch();
 
@@ -23,8 +24,44 @@ if (!tempDirectory) {
   tempDirectory = path.join(baseLocation, 'actions', 'temp');
 }
 
+const availableVersions = [
+  '5.30.0',
+  '5.28.2',
+  '5.28.1',
+  '5.28.0',
+  '5.26.3',
+  '5.26.2',
+  '5.26.1',
+  '5.26.0'
+];
+
+function determineVersion(version: string): string {
+  for (let v of availableVersions) {
+    if (semver.satisfies(v, version)) {
+      return v;
+    }
+  }
+  throw new Error('unable to get latest version');
+}
+
 export async function getPerl(version: string) {
-  await acquirePerl(version);
+  const selected = determineVersion(version);
+
+  // check cache
+  let toolPath: string;
+  toolPath = tc.find('perl', selected);
+
+  if (!toolPath) {
+    // download, extract, cache
+    toolPath = await acquirePerl(selected);
+    core.debug('Perl tool is cached under ' + toolPath);
+  }
+
+  toolPath = path.join(toolPath, 'bin');
+  //
+  // prepend the tools path. instructs the agent to prepend for future tasks
+  //
+  core.addPath(toolPath);
 }
 
 async function acquirePerl(version: string): Promise<string> {
@@ -64,5 +101,5 @@ function getFileName(version: string): string {
 }
 
 function getDownloadUrl(filename: string): string {
-  return `https://github.com/shogo82148/actions-setup-perl/releases/download/${actionVersion}/${filename}`;
+  return `https://shogo82148-actions-setup-perl.s3.amazonaws.com/${actionVersion}/${filename}`;
 }

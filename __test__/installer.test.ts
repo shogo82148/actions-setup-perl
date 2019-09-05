@@ -29,8 +29,8 @@ describe('installer tests', () => {
   }, 100000);
 
   it('Acquires version of Perl if no matching version is installed', async () => {
-    await installer.getPerl('5.30');
-    const perlDir = path.join(toolDir, 'perl', '5.30', os.arch());
+    await installer.getPerl('5.26.x');
+    const perlDir = path.join(toolDir, 'perl', '5.26.3', os.arch());
 
     expect(fs.existsSync(`${perlDir}.complete`)).toBe(true);
     if (IS_WINDOWS) {

@@ -13,7 +13,12 @@ jobs:
         perl:
         - "5.30.0"
         - "5.28.2"
+        - "5.28.1"
+        - "5.28.0"
         - "5.26.3"
+        - "5.26.2"
+        - "5.26.1"
+        - "5.26.0"
     steps:
     - uses: actions/checkout@v1
     - name: build
@@ -27,9 +32,8 @@ jobs:
 
     - name: upload
       run: |
-        MINOR_VERSION=$(echo -n $(echo $PERL_VERSION | cut -d. -f1,2))
         BUILD_OS=$(uname | tr '[A-Z]' '[a-z]')
-        aws s3 cp --acl public-read "$RUNNER_TEMP/perl.tar.gz" "s3://shogo82148-actions-setup-perl/$CURRENT_VERSION/perl-$MINOR_VERSION-$BUILD_OS-x64.tar.gz"
+        aws s3 cp --acl public-read "$RUNNER_TEMP/perl.tar.gz" "s3://shogo82148-actions-setup-perl/$CURRENT_VERSION/perl-$PERL_VERSION-$BUILD_OS-x64.tar.gz"
       env:
         CURRENT_VERSION: v0.0.1
         PERL_VERSION: ${{ matrix.perl }}

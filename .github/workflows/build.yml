@@ -9,7 +9,7 @@ jobs:
       matrix:
         os:
         - ubuntu-latest
-        - macOS-latest
+        # - macOS-latest # aws-cli doesn't works in macOS 
         perl:
         - "5.30.0"
         - "5.28.2"
@@ -25,24 +25,16 @@ jobs:
       env:
         PERL_VERSION: ${{ matrix.perl }}
 
-    - uses: actions/upload-artifact@v1
-      with:
-        name: ${{ format('perl-{0}-{1}.tar.gz', matrix.perl, matrix.os) }}
-        path: ${{ format('{0}/perl.tar.gz', runner.temp) }}
-
     - name: upload
       run: |
         MINOR_VERSION=$(echo -n $(echo $PERL_VERSION | cut -d. -f1,2))
         BUILD_OS=$(uname | tr '[A-Z]' '[a-z]')
-        RELEASE_ID=$(curl -sSL -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG" | jq -j .id)
-        curl -H "Authorization: token $GITHUB_TOKEN" \
-          -H "Content-Type: application/octet-stream" \
-          --data-binary "@$RUNNER_TEMP/perl.tar.gz" \
-          "https://uploads.github.com/repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets?name=perl-$MINOR_VERSION-$BUILD_OS-x64.tar.gz" | jq .
+        aws s3 cp "$RUNNER_TEMP/perl.tar.gz" "s3://shogo82148-actions-setup-perl/$CURRENT_VERSION/perl-$MINOR_VERSION-$BUILD_OS-x64.tar.gz"
       env:
-        RELEASE_TAG: v0.0.1-alpha2
+        CURRENT_VERSION: v0.0.1
         PERL_VERSION: ${{ matrix.perl }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
   # windows:
   #   runs-on: ${{ matrix.os }}

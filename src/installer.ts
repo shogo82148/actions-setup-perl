@@ -49,6 +49,7 @@ async function acquirePerl(version: string): Promise<string> {
   if (!extPath) {
     throw new Error('Temp directory not set');
   }
+  console.log(downloadPath);
 
   if (osPlat == 'win32') {
     extPath = await tc.extractZip(downloadPath);
@@ -64,5 +65,5 @@ function getFileName(version: string): string {
 }
 
 function getDownloadUrl(filename: string): string {
-  return `https://shogo82148-actions-setup-perl.s3.amazonaws.com/${actionVersion}/${actionVersion}/${filename}`;
+  return `https://shogo82148-actions-setup-perl.s3.amazonaws.com/${actionVersion}/${filename}`;
 }

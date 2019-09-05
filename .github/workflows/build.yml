@@ -9,7 +9,7 @@ jobs:
       matrix:
         os:
         - ubuntu-latest
-        - macOS-latest
+        # - macOS-latest # aws-cli doesn't works in macOS 
         perl:
         - "5.30.0"
         - "5.28.2"

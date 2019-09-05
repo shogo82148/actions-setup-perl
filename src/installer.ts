@@ -6,7 +6,7 @@ import * as tc from '@actions/tool-cache';
 import * as os from 'os';
 import * as path from 'path';
 
-const actionVersion = 'v0.0.1-alpha2';
+const actionVersion = 'v0.0.1';
 const osPlat = os.platform();
 const osArch = os.arch();
 
@@ -64,5 +64,5 @@ function getFileName(version: string): string {
 }
 
 function getDownloadUrl(filename: string): string {
-  return `https://github.com/shogo82148/actions-setup-perl/releases/download/${actionVersion}/${filename}`;
+  return `https://shogo82148-actions-setup-perl.s3.amazonaws.com/${actionVersion}/${actionVersion}/${filename}`;
 }

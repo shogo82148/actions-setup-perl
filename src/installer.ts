@@ -49,7 +49,6 @@ async function acquirePerl(version: string): Promise<string> {
   if (!extPath) {
     throw new Error('Temp directory not set');
   }
-  console.log(downloadPath);
 
   if (osPlat == 'win32') {
     extPath = await tc.extractZip(downloadPath);

@@ -21,6 +21,7 @@ print STDERR "extracting...\n";
 system("7z x perl-5.30.0.tar.gz | 7z x -si -ttar") == 0 or die "Failed to extract";
 
 print STDERR "start build\n";
-system("gmake", "-C" "perl-5.30.0\\win32", "INST_TOP=$ENV{RUNNER_TOOL_CACHE}\\perl\\${version}\\x64")
+system("gmake", "-C", "perl-5.30.0\\win32", "INST_TOP=$ENV{RUNNER_TOOL_CACHE}\\perl\\${version}\\x64") == 0
+    or die "Failed to build";
 
 1;

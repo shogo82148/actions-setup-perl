@@ -14,21 +14,30 @@ if (!$response->is_success) {
     die "download failed: " . $response->status_line;
 }
 
-open my $fh, ">", "perl-5.30.0.tar.gz" or die "$!"; 
+my $tmpdir = $ENV{RUNNER_TEMP};
+open my $fh, ">", "$tmpdir\\perl-5.30.0.tar.gz" or die "$!"; 
 binmode $fh;
 print $fh $response->content;
 close $fh;
 
 print STDERR "extracting...\n";
+chdir $tmpdir or die "failed to cd $tmpdir: $!";
 system("7z", "x", "perl-5.30.0.tar.gz") == 0 or die "Failed to extract gz";
 system("7z", "x", "perl-5.30.0.tar") == 0 or die "Failed to extract tar";
 
 print STDERR "start build\n";
-system("gmake", "-C", "perl-5.30.0\\win32", "INST_TOP=$ENV{RUNNER_TOOL_CACHE}\\perl\\${version}\\x64") == 0
+chdir "$tmpdir\\perl-5.30.0\\win32" or die "failed to cd $tmpdir\\perl-5.30.0\\win32: $!";
+my $install_dir = "$ENV{RUNNER_TOOL_CACHE}\\perl\\${version}\\x64";
+system("gmake", "INST_TOP=$install_dir") == 0
     or die "Failed to build";
 
 print STDERR "start install\n";
-system("gmake", "-C", "perl-5.30.0\\win32", "install") == 0
+system("gmake", "install") == 0
     or die "Failed to install";
+
+print STDERR "archiving...\n";
+chdir $install_dir or die "failed to cd $install_dir: $!";
+system("7z", "a", "$tmpdir\\perl.zip", ".") == 0
+    or die "failed to archive";
 
 1;

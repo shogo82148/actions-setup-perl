@@ -95,7 +95,7 @@ jobs:
       env:
         PERL_VERSION: ${{ matrix.perl }}
 
-    - name: build
+    - name: upload
       shell: pwsh
       run: |
         Set-Location ${env:RUNNER_TEMP}

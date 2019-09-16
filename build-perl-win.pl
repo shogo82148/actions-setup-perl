@@ -25,7 +25,7 @@ if (!$response->is_success) {
     die "download failed: " . $response->status_line;
 }
 
-$url =~ m/\/(perl-.*)$/
+$url =~ m/\/(perl-.*)$/;
 my $filename = $1;
 my $tmpdir = $ENV{RUNNER_TEMP};
 open my $fh, ">", "$tmpdir\\$filename" or die "$!"; 

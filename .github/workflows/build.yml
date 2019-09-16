@@ -73,24 +73,38 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-  # windows:
-  #   runs-on: ${{ matrix.os }}
-  #   strategy:
-  #     matrix:
-  #       os:
-  #       - windows-2019
-  #       # - windows-2016
-  #       perl:
-  #       - "5.30.0"
-  #       - "5.28.2"
-  #       - "5.26.3"
-  #   steps:
-  #   - uses: actions/checkout@v1
-  #   - name: build
-  #     run: |
-  #       Invoke-WebRequest -Uri https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build -OutFile $env:RUNNER_TEMP\perl-build
-  #       $minor_version = $env:PERL_VERSION.Split(".")[0,1] -join "."
-  #       C:\Strawberry\perl\bin\perl.exe $env:RUNNER_TEMP\perl-build $env:PERL_VERSION $env:RUNNER_TOOL_CACHE\perl\$minor_version\x64 --noman
-  #     env:
-  #       PERL_VERSION: ${{ matrix.perl }}
-  #     shell: powershell
+  windows:
+    runs-on: windows-2019
+    strategy:
+      matrix:
+        perl:
+        - "5.30.0"
+        - "5.28.2"
+        - "5.28.1"
+        - "5.28.0"
+        - "5.26.3"
+        - "5.26.2"
+        - "5.26.1"
+        - "5.26.0"
+    steps:
+    - uses: actions/checkout@v1
+    - name: build
+      shell: pwsh
+      run: |
+        C:\Strawberry\perl\bin\perl.exe build-perl-win.pl
+      env:
+        PERL_VERSION: ${{ matrix.perl }}
+
+    - name: upload
+      shell: pwsh
+      run: |
+        Set-Location ${env:RUNNER_TEMP}
+        Invoke-WebRequest -Uri https://github.com/shogo82148/s3cli-mini/releases/download/v0.0.2/s3cli-mini_windows_amd64.zip -OutFile s3cli-mini.zip
+        7z x s3cli-mini.zip
+        $pkg = Get-Content "${env:GITHUB_WORKSPACE}/package.json" -Encoding UTF8 -Raw | ConvertFrom-Json
+        $version = $pkg.version
+        s3cli-mini_windows_amd64/s3cli-mini --region us-east-1 cp --acl public-read perl.zip "s3://shogo82148-actions-setup-perl/v$version/perl-${env:PERL_VERSION}-win32-x64.tar.gz"
+      env:
+        PERL_VERSION: ${{ matrix.perl }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

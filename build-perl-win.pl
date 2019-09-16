@@ -54,14 +54,6 @@ my $ret = do {
     system("$install_dir\\bin\\cpan", "-T", "App::cpanminus", "Carton") == 0;
 };
 
-my @logs = glob "C:\\Users\\RUNNER~1\\.cpanm\\work\\*\\build.log";
-for my $log(@logs) {
-    open my $fh, "<", $log or die "$!";
-    for my $line(<$fh>) {
-        print $line;
-    }
-}
-
 if (!$ret) {
     die "Failed to install App::cpanminus and Carton";
 }

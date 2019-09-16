@@ -16,6 +16,7 @@ if (!$response->is_success) {
 
 open my $fh, ">", "perl-5.30.0.tar.gz" or die "$!"; 
 print $fh $response->content;
+close $fh;
 
 print STDERR "extracting...\n";
 system("7z x perl-5.30.0.tar.gz | 7z x -si -ttar") == 0 or die "Failed to extract";

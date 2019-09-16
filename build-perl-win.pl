@@ -15,6 +15,7 @@ if (!$response->is_success) {
 }
 
 open my $fh, ">", "perl-5.30.0.tar.gz" or die "$!"; 
+binmode $fh;
 print $fh $response->content;
 close $fh;
 

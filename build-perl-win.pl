@@ -48,6 +48,10 @@ print STDERR "start install\n";
 system("gmake", "install") == 0
     or die "Failed to install";
 
+print STDERR "install App::cpanminus and Carton\n";
+system("$install_dir\\bin\\perl.exe", "C:\\Strawberry\\perl\\bin\\cpanm", "App::cpanminus", "Carton") == 0
+    or die "Failed to install App::cpanminus and Carton";
+
 print STDERR "archiving...\n";
 chdir $install_dir or die "failed to cd $install_dir: $!";
 system("7z", "a", "$tmpdir\\perl.zip", ".") == 0

@@ -4,10 +4,10 @@ let tempDirectory = process.env['RUNNER_TEMPDIRECTORY'] || '';
 import * as core from '@actions/core';
 import * as tc from '@actions/tool-cache';
 import * as os from 'os';
+import * as fs from 'fs';
 import * as path from 'path';
 import * as semver from 'semver';
 
-const actionVersion = 'v0.0.1';
 const osPlat = os.platform();
 const osArch = os.arch();
 
@@ -69,7 +69,7 @@ async function acquirePerl(version: string): Promise<string> {
   // Download - a tool installer intimately knows how to get the tool (and construct urls)
   //
   const fileName = getFileName(version);
-  const downloadUrl = getDownloadUrl(fileName);
+  const downloadUrl = await getDownloadUrl(fileName);
   let downloadPath: string | null = null;
   try {
     downloadPath = await tc.downloadTool(downloadUrl);
@@ -100,6 +100,21 @@ function getFileName(version: string): string {
   return `perl-${version}-${osPlat}-${osArch}.tar.gz`;
 }
 
-function getDownloadUrl(filename: string): string {
-  return `https://shogo82148-actions-setup-perl.s3.amazonaws.com/${actionVersion}/${filename}`;
+interface PackageVersion {
+  version: string;
+}
+
+async function getDownloadUrl(filename: string): Promise<string> {
+  return new Promise<PackageVersion>((resolve, reject) => {
+    fs.readFile(path.join(__dirname, '..', 'package.json'), (err, data) => {
+      if (err) {
+        reject(err);
+      }
+      const info: PackageVersion = JSON.parse(data.toString());
+      resolve(info);
+    });
+  }).then(info => {
+    const actionsVersion = info.version;
+    return `https://shogo82148-actions-setup-perl.s3.amazonaws.com/v${actionsVersion}/${filename}`;
+  });
 }

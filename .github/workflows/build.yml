@@ -3,12 +3,10 @@ name: build perl
 on: [push]
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
+  linux:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        os:
-        - ubuntu-latest
         # - macOS-latest # aws-cli doesn't works in macOS 
         perl:
         - "5.30.0"
@@ -31,10 +29,46 @@ jobs:
 
     - name: upload
       run: |
-        BUILD_OS=$(uname | tr '[A-Z]' '[a-z]')
-        aws s3 cp --acl public-read "$RUNNER_TEMP/perl.tar.gz" "s3://shogo82148-actions-setup-perl/$CURRENT_VERSION/perl-$PERL_VERSION-$BUILD_OS-x64.tar.gz"
+        ACTIONS_VERSION=v$(cat "$GITHUB_WORKSPACE/package.json" | jq -r .version)
+        aws --region us-east-1 s3 cp --acl public-read "$RUNNER_TEMP/perl.tar.gz" "s3://shogo82148-actions-setup-perl/$ACTIONS_VERSION/perl-$PERL_VERSION-linux-x64.tar.gz"
       env:
-        CURRENT_VERSION: v0.0.1
+        PERL_VERSION: ${{ matrix.perl }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  darwin:
+    runs-on: macOS-latest
+    strategy:
+      matrix:
+        perl:
+        - "5.30.0"
+        - "5.28.2"
+        - "5.28.1"
+        - "5.28.0"
+        - "5.26.3"
+        - "5.26.2"
+        - "5.26.1"
+        - "5.26.0"
+    steps:
+    - uses: actions/checkout@v1
+    - name: build
+      run: |
+        curl -sL https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build > "$RUNNER_TEMP/perl-build"
+        perl "$RUNNER_TEMP/perl-build" "$PERL_VERSION" "$RUNNER_TOOL_CACHE/perl/$PERL_VERSION/x64" --noman
+        cd "$RUNNER_TOOL_CACHE/perl/$PERL_VERSION/x64" && tar zcf "$RUNNER_TEMP/perl.tar.gz" .
+      env:
+        PERL_VERSION: ${{ matrix.perl }}
+
+    - name: upload
+      run: |
+        # there is no aws cli in macOS, so use https://github.com/shogo82148/s3cli-mini
+        ACTIONS_VERSION=v$(cat "$GITHUB_WORKSPACE/package.json" | jq -r .version)
+        curl -sSL https://github.com/shogo82148/s3cli-mini/releases/download/v0.0.2/s3cli-mini_darwin_amd64.tar.gz -o s3cli-mini.tar.gz
+        tar xzvf s3cli-mini.tar.gz
+
+        # upload
+        s3cli-mini_darwin_amd64/s3cli-mini --region us-east-1 cp --acl public-read "$RUNNER_TEMP/perl.tar.gz" "s3://shogo82148-actions-setup-perl/$ACTIONS_VERSION/perl-$PERL_VERSION-darwin-x64.tar.gz"
+      env:
         PERL_VERSION: ${{ matrix.perl }}
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

@@ -7,7 +7,7 @@ jobs:
       matrix:
         os:
         - ubuntu-latest
-        # - macOS-latest
+        - macOS-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v1

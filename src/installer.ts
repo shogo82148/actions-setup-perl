@@ -108,7 +108,7 @@ async function getDownloadUrl(filename: string): Promise<string> {
   return new Promise<PackageVersion>((resolve, reject) => {
     fs.readFile(path.join(__dirname, '..', 'package.json'), (err, data) => {
       if (err) {
-        reject(err)
+        reject(err);
       }
       const info: PackageVersion = JSON.parse(data.toString());
       resolve(info);

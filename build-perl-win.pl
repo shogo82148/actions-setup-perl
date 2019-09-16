@@ -49,7 +49,7 @@ system("gmake", "install") == 0
     or die "Failed to install";
 
 print STDERR "install App::cpanminus and Carton\n";
-system("$install_dir\\bin\\perl.exe", "C:\\Strawberry\\perl\\bin\\cpanm", "--notest", "ExtUtils::MakeMaker", "ExtUtils::PL2Bat") == 0
+system("$install_dir\\bin\\perl.exe", "C:\\Strawberry\\perl\\bin\\cpanm", "--notest", "ExtUtils::PL2Bat") == 0
     or "failed to install ExtUtils::PL2Bat";
 my $ret = system("$install_dir\\bin\\perl.exe", "C:\\Strawberry\\perl\\bin\\cpanm", "--notest", "App::cpanminus", "Carton");
 

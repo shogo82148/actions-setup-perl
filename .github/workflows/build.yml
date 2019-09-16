@@ -73,24 +73,24 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-  # windows:
-  #   runs-on: ${{ matrix.os }}
-  #   strategy:
-  #     matrix:
-  #       os:
-  #       - windows-2019
-  #       # - windows-2016
-  #       perl:
-  #       - "5.30.0"
-  #       - "5.28.2"
-  #       - "5.26.3"
-  #   steps:
-  #   - uses: actions/checkout@v1
-  #   - name: build
-  #     run: |
-  #       Invoke-WebRequest -Uri https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build -OutFile $env:RUNNER_TEMP\perl-build
-  #       $minor_version = $env:PERL_VERSION.Split(".")[0,1] -join "."
-  #       C:\Strawberry\perl\bin\perl.exe $env:RUNNER_TEMP\perl-build $env:PERL_VERSION $env:RUNNER_TOOL_CACHE\perl\$minor_version\x64 --noman
-  #     env:
-  #       PERL_VERSION: ${{ matrix.perl }}
-  #     shell: powershell
+  windows:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+        - windows-2019
+        # - windows-2016
+        perl:
+        - "5.30.0"
+        - "5.28.2"
+        - "5.26.3"
+    steps:
+    - uses: actions/checkout@v1
+    - name: build
+      run: |
+        Invoke-WebRequest -Uri https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build -OutFile $env:RUNNER_TEMP\perl-build
+        $minor_version = $env:PERL_VERSION.Split(".")[0,1] -join "."
+        C:\Strawberry\perl\bin\perl.exe $env:RUNNER_TEMP\perl-build $env:PERL_VERSION $env:RUNNER_TOOL_CACHE\perl\$minor_version\x64 --noman
+      env:
+        PERL_VERSION: ${{ matrix.perl }}
+      shell: powershell

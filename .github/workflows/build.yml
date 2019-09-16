@@ -84,7 +84,6 @@ jobs:
     - name: build
       shell: pwsh
       run: |
-        perl C:\Strawberry\perl\bin\cpanm Perl::Build
-        perl C:\Strawberry\perl\bin\perl-build ${env:PERL_VERSION} ${env:RUNNER_TOOL_CACHE}\perl\${env:PERL_VERSION}\x64 --noman
+        C:\Strawberry\perl\bin\perl.exe build-perl-win.pl
       env:
         PERL_VERSION: ${{ matrix.perl }}

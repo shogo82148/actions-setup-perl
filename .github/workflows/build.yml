@@ -79,6 +79,13 @@ jobs:
       matrix:
         perl:
         - "5.30.0"
+        - "5.28.2"
+        - "5.28.1"
+        - "5.28.0"
+        - "5.26.3"
+        - "5.26.2"
+        - "5.26.1"
+        - "5.26.0"
     steps:
     - uses: actions/checkout@v1
     - name: build

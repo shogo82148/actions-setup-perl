@@ -49,8 +49,7 @@ system("gmake", "install") == 0
     or die "Failed to install";
 
 print STDERR "install App::cpanminus and Carton\n";
-system("$install_dir\\bin\\perl.exe", "C:\\Strawberry\\perl\\bin\\cpanm", "--notest", "App::cpanminus", "Carton") == 0
-    or die "Failed to install App::cpanminus and Carton";
+my $ret = system("$install_dir\\bin\\perl.exe", "C:\\Strawberry\\perl\\bin\\cpanm", "--notest", "App::cpanminus", "Carton");
 
 my @logs = glob "$tmpdir\\.cpanm\\work\\*\\build.log";
 for my $log(@logs) {
@@ -58,6 +57,10 @@ for my $log(@logs) {
     for my $line(<$fh>) {
         print $line;
     }
+}
+
+if ($ret != 0) {
+    die "Failed to install App::cpanminus and Carton";
 }
 
 print STDERR "archiving...\n";

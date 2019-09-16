@@ -28,7 +28,7 @@ if (!$response->is_success) {
 $url =~ m/\/(perl-.*)$/;
 my $filename = $1;
 my $tmpdir = $ENV{RUNNER_TEMP};
-open my $fh, ">", "$tmpdir\\$filename" or die "$!"; 
+open my $fh, ">", "$tmpdir\\$filename" or die "$!";
 binmode $fh;
 print $fh $response->content;
 close $fh;
@@ -51,6 +51,14 @@ system("gmake", "install") == 0
 print STDERR "install App::cpanminus and Carton\n";
 system("$install_dir\\bin\\perl.exe", "C:\\Strawberry\\perl\\bin\\cpanm", "--notest", "App::cpanminus", "Carton") == 0
     or die "Failed to install App::cpanminus and Carton";
+
+my @logs = glob "$tmpdir\\.cpanm\\work\\*\\build.log";
+for my $log(@logs) {
+    open my $fh, "<", $log or die "$!";
+    for my $line(<$fh>) {
+        print $line;
+    }
+}
 
 print STDERR "archiving...\n";
 chdir $install_dir or die "failed to cd $install_dir: $!";

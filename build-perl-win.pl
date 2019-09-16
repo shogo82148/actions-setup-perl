@@ -51,7 +51,7 @@ system("gmake", "install") == 0
 print STDERR "install App::cpanminus and Carton\n";
 my $ret = do {
     local $ENV{PATH} = "$install_dir\\bin;C:\\Strawberry\\c;$ENV{PATH}";
-    system("$install_dir\\bin\\cpan", "App::cpanminus", "Carton") == 0;
+    system("$install_dir\\bin\\cpan", "-T", "App::cpanminus", "Carton") == 0;
 };
 
 my @logs = glob "C:\\Users\\RUNNER~1\\.cpanm\\work\\*\\build.log";

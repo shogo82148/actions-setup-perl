@@ -49,9 +49,11 @@ system("gmake", "install") == 0
     or die "Failed to install";
 
 print STDERR "install App::cpanminus and Carton\n";
-system("$install_dir\\bin\\perl.exe", "C:\\Strawberry\\perl\\bin\\cpanm", "--notest", "ExtUtils::PL2Bat") == 0
-    or "failed to install ExtUtils::PL2Bat";
-my $ret = system("$install_dir\\bin\\perl.exe", "C:\\Strawberry\\perl\\bin\\cpanm", "--notest", "App::cpanminus", "Carton");
+my $ret = do {
+    local $ENV{PATH} = "$install_dir\\bin;C:\\Strawberry\\c";
+    system("$install_dir\\bin\\perl.exe", "C:\\Strawberry\\perl\\bin\\cpanm", "--notest", "ExtUtils::PL2Bat") == 0 and
+        system("$install_dir\\bin\\perl.exe", "C:\\Strawberry\\perl\\bin\\cpanm", "--notest", "App::cpanminus", "Carton") == 0;
+};
 
 my @logs = glob "C:\\Users\\RUNNER~1\\.cpanm\\work\\*\\build.log";
 for my $log(@logs) {
@@ -61,7 +63,7 @@ for my $log(@logs) {
     }
 }
 
-if ($ret != 0) {
+if (!$ret) {
     die "Failed to install App::cpanminus and Carton";
 }
 

@@ -3,7 +3,7 @@ name: build perl
 on: [push]
 
 jobs:
-  build:
+  linux:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -36,7 +36,7 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-  build:
+  darwin:
     runs-on: macOS-latest
     strategy:
       matrix:

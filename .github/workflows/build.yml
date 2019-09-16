@@ -101,7 +101,7 @@ jobs:
         Set-Location ${env:RUNNER_TEMP}
         Invoke-WebRequest -Uri https://github.com/shogo82148/s3cli-mini/releases/download/v0.0.2/s3cli-mini_windows_amd64.zip -OutFile s3cli-mini.zip
         7z x s3cli-mini.zip
-        $pkg = Get-Content package.json -Encoding UTF8 -Raw | ConvertFrom-Json
+        $pkg = Get-Content "${env:GITHUB_WORKSPACE}/package.json" -Encoding UTF8 -Raw | ConvertFrom-Json
         $version = $pkg.version
         s3cli-mini_windows_amd64/s3cli-mini --region us-east-1 cp --acl public-read perl.zip "s3://shogo82148-actions-setup-perl/v$version/perl-${env:PERL_VERSION}-win32-x64.tar.gz"
       env:

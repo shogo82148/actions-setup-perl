@@ -51,7 +51,7 @@ system("gmake", "install") == 0
 print STDERR "install App::cpanminus and Carton\n";
 my $ret = system("$install_dir\\bin\\perl.exe", "C:\\Strawberry\\perl\\bin\\cpanm", "--notest", "App::cpanminus", "Carton");
 
-my @logs = glob "$tmpdir\\.cpanm\\work\\*\\build.log";
+my @logs = glob "C:\\Users\\RUNNER~1\\.cpanm\\work\\*\\build.log";
 for my $log(@logs) {
     open my $fh, "<", $log or die "$!";
     for my $line(<$fh>) {

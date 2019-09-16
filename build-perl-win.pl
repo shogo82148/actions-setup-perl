@@ -27,4 +27,8 @@ print STDERR "start build\n";
 system("gmake", "-C", "perl-5.30.0\\win32", "INST_TOP=$ENV{RUNNER_TOOL_CACHE}\\perl\\${version}\\x64") == 0
     or die "Failed to build";
 
+print STDERR "start install\n";
+system("gmake", "-C", "perl-5.30.0\\win32", "install") == 0
+    or die "Failed to install";
+
 1;

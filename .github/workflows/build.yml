@@ -29,9 +29,9 @@ jobs:
 
     - name: upload
       run: |
+        ACTIONS_VERSION=v$(cat "$GITHUB_WORKSPACE/package.json" | jq -r .version)
         aws s3 cp --acl public-read "$RUNNER_TEMP/perl.tar.gz" "s3://shogo82148-actions-setup-perl/$ACTIONS_VERSION/perl-$PERL_VERSION-linux-x64.tar.gz"
       env:
-        ACTIONS_VERSION: v0.0.5
         PERL_VERSION: ${{ matrix.perl }}
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -62,13 +62,13 @@ jobs:
     - name: upload
       run: |
         # there is no aws cli in macOS, so use https://github.com/shogo82148/s3cli-mini
+        ACTIONS_VERSION=v$(cat "$GITHUB_WORKSPACE/package.json" | jq -r .version)
         curl -sSL https://github.com/shogo82148/s3cli-mini/releases/download/v0.0.2/s3cli-mini_darwin_amd64.tar.gz -o s3cli-mini.tar.gz
         tar xzvf s3cli-mini.tar.gz
 
         # upload
         s3cli-mini_darwin_amd64/s3cli-mini cp --acl public-read "$RUNNER_TEMP/perl.tar.gz" "s3://shogo82148-actions-setup-perl/$ACTIONS_VERSION/perl-$PERL_VERSION-darwin-x64.tar.gz"
       env:
-        ACTIONS_VERSION: v0.0.5
         PERL_VERSION: ${{ matrix.perl }}
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

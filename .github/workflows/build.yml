@@ -23,6 +23,7 @@ jobs:
       run: |
         curl -sL https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build > "$RUNNER_TEMP/perl-build"
         perl "$RUNNER_TEMP/perl-build" "$PERL_VERSION" "$RUNNER_TOOL_CACHE/perl/$PERL_VERSION/x64" --noman
+        curl -L https://cpanmin.us | "$RUNNER_TOOL_CACHE/perl/$PERL_VERSION/x64/bin/perl" - --notest App::cpanminus Carton
         cd "$RUNNER_TOOL_CACHE/perl/$PERL_VERSION/x64" && tar zcf "$RUNNER_TEMP/perl.tar.gz" .
       env:
         PERL_VERSION: ${{ matrix.perl }}
@@ -55,6 +56,7 @@ jobs:
       run: |
         curl -sL https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build > "$RUNNER_TEMP/perl-build"
         perl "$RUNNER_TEMP/perl-build" "$PERL_VERSION" "$RUNNER_TOOL_CACHE/perl/$PERL_VERSION/x64" --noman
+        curl -L https://cpanmin.us | "$RUNNER_TOOL_CACHE/perl/$PERL_VERSION/x64/bin/perl" - --notest App::cpanminus Carton
         cd "$RUNNER_TOOL_CACHE/perl/$PERL_VERSION/x64" && tar zcf "$RUNNER_TEMP/perl.tar.gz" .
       env:
         PERL_VERSION: ${{ matrix.perl }}

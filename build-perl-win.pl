@@ -28,7 +28,7 @@ if (!$response->is_success) {
 $url =~ m/\/(perl-.*)$/;
 my $filename = $1;
 my $tmpdir = $ENV{RUNNER_TEMP};
-open my $fh, ">", "$tmpdir\\$filename" or die "$!"; 
+open my $fh, ">", "$tmpdir\\$filename" or die "$!";
 binmode $fh;
 print $fh $response->content;
 close $fh;
@@ -47,6 +47,16 @@ system("gmake", "INST_TOP=$install_dir") == 0
 print STDERR "start install\n";
 system("gmake", "install") == 0
     or die "Failed to install";
+
+print STDERR "install App::cpanminus and Carton\n";
+my $ret = do {
+    local $ENV{PATH} = "$install_dir\\bin;C:\\Strawberry\\c;$ENV{PATH}";
+    system("$install_dir\\bin\\cpan", "-T", "App::cpanminus", "Carton") == 0;
+};
+
+if (!$ret) {
+    die "Failed to install App::cpanminus and Carton";
+}
 
 print STDERR "archiving...\n";
 chdir $install_dir or die "failed to cd $install_dir: $!";

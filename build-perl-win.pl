@@ -60,10 +60,7 @@ my %version2url = (
     "5.8.7" => "https://cpan.metacpan.org/authors/id/N/NW/NWCLARK/perl-5.8.7.tar.bz2",
     "5.8.6" => "https://cpan.metacpan.org/authors/id/N/NW/NWCLARK/perl-5.8.6.tar.bz2",
     "5.8.5" => "https://cpan.metacpan.org/authors/id/N/NW/NWCLARK/perl-5.8.5.tar.bz2",
-    "5.8.4" => "https://cpan.metacpan.org/authors/id/N/NW/NWCLARK/perl-5.8.4.tar.bz2",
-    "5.8.3" => "https://cpan.metacpan.org/authors/id/N/NW/NWCLARK/perl-5.8.3.tar.bz2",
-    "5.8.2" => "https://cpan.metacpan.org/authors/id/N/NW/NWCLARK/perl-5.8.2.tar.bz2",
-    "5.8.1" => "https://cpan.metacpan.org/authors/id/J/JH/JHI/perl-5.8.1.tar.gz",
+
 );
 
 my $url = $version2url{$version};

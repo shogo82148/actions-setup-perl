@@ -58,10 +58,6 @@ jobs:
         - "5.8.7"
         - "5.8.6"
         - "5.8.5"
-        - "5.8.4"
-        - "5.8.3"
-        - "5.8.2"
-        - "5.8.1"
     steps:
     - uses: actions/checkout@v1
     - name: build
@@ -137,10 +133,6 @@ jobs:
         - "5.8.7"
         - "5.8.6"
         - "5.8.5"
-        - "5.8.4"
-        - "5.8.3"
-        - "5.8.2"
-        - "5.8.1"
     steps:
     - uses: actions/checkout@v1
     - name: build
@@ -221,10 +213,6 @@ jobs:
         - "5.8.7"
         - "5.8.6"
         - "5.8.5"
-        - "5.8.4"
-        - "5.8.3"
-        - "5.8.2"
-        - "5.8.1"
     steps:
     - uses: actions/checkout@v1
     - name: build

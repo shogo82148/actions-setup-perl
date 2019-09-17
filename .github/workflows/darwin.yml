@@ -1,4 +1,4 @@
-name: build perl darwin
+name: build perl on darwin
 
 on: [push]
 

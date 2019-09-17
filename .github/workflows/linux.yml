@@ -1,4 +1,4 @@
-name: build perl
+name: build perl on linux
 
 on: [push]
 
@@ -7,7 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        # - macOS-latest # aws-cli doesn't works in macOS 
         perl:
         - "5.30.0"
         - "5.28.2"

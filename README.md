@@ -20,7 +20,7 @@ steps:
 - uses: shogo82148/actions-setup-perl@v1
   with:
     perl-version: '5.30'
-- run: carton install
+- run: cpanm --installdeps .
 - run: prove -lv t
 ```
 
@@ -33,14 +33,15 @@ jobs:
       matrix:
         os: ['ubuntu-18.04', 'macOS-10.14', 'windows-2019']
         perl: [ '5.30', '5.28' ]
-    name: Node ${{ matrix.perl }} sample
+    name: Perl ${{ matrix.perl }} on ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v1
-      - name: Setup node
+      - name: Setup perl
         uses: shogo82148/actions-setup-perl@v1
         with:
-          perl-version: ${{ matrix.node }}
-      - run: carton install
+          perl-version: ${{ matrix.perl }}
+      - run: perl -V
+      - run: cpanm --installdeps .
       - run: prove -lv t
 ```
 

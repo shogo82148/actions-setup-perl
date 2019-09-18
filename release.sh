@@ -2,12 +2,11 @@
 
 set -uex
 
-VERSION=$1
-MAJOR=$(echo "${VERSION#v}" | cut -d. -f1)
+CURRENT=$(cd "$(dirname "$0")" && pwd)
+VERSION=$(jq -r .version < "$CURRENT/package.json")
+MAJOR=$(echo "$VERSION" | cut -d. -f1)
 MINOR=$(echo "$VERSION" | cut -d. -f2)
 PATCH=$(echo "$VERSION" | cut -d. -f3)
-
-CURRENT=$(cd "$(dirname "$0")" && pwd)
 WORKING=$CURRENT/.working
 
 : clone
@@ -17,8 +16,8 @@ git clone "$ORIGIN" "$WORKING"
 cd "$WORKING"
 
 : build the action
-git checkout -b "releases/v$MAJOR" "origin/releases/v$MAJOR"
-git merge -X theirs -m "Merge branch 'master' into releases/v$MAJOR" master
+git checkout -b "releases/v$MAJOR" "origin/releases/v$MAJOR" || git git checkout -b "releases/v$MAJOR" master
+git merge -X theirs -m "Merge branch 'master' into releases/v$MAJOR" master || true
 npm install
 npm run build
 
@@ -36,3 +35,4 @@ git tag -fa "v$MAJOR" -m "release v$MAJOR.$MINOR.$PATCH"
 git push -f origin "v$MAJOR"
 
 cd "$CURRENT"
+rm -rf "$WORKING"

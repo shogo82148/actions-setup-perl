@@ -3,7 +3,6 @@ name: build perl on windows
 on:
   push:
     branches:
-    - 'master'
     - 'releases/*'
 
 jobs:

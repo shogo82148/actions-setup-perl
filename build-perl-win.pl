@@ -16,7 +16,53 @@ my %version2url = (
     "5.26.2" => "https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.26.2.tar.gz",
     "5.26.1" => "https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.26.1.tar.gz",
     "5.26.0" => "https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/perl-5.26.0.tar.bz2",
+    "5.24.4" => "https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.24.4.tar.gz",
+    "5.24.3" => "https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.24.3.tar.gz",
+    "5.24.2" => "https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.24.2.tar.gz",
+    "5.24.1" => "https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.24.1.tar.gz",
+    "5.24.0" => "https://cpan.metacpan.org/authors/id/R/RJ/RJBS/perl-5.24.0.tar.bz2",
+    "5.22.4" => "https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.22.4.tar.bz2",
+    "5.22.3" => "https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.22.3.tar.gz",
+    "5.22.2" => "https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.22.2.tar.bz2",
+    "5.22.1" => "https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.22.1.tar.gz",
+    "5.22.0" => "https://cpan.metacpan.org/authors/id/R/RJ/RJBS/perl-5.22.0.tar.bz2",
+    "5.20.3" => "https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.20.3.tar.bz2",
+    "5.20.2" => "https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.20.2.tar.bz2",
+    "5.20.1" => "https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.20.1.tar.bz2",
+    "5.20.0" => "https://cpan.metacpan.org/authors/id/R/RJ/RJBS/perl-5.20.0.tar.bz2",
+    "5.18.4" => "https://cpan.metacpan.org/authors/id/R/RJ/RJBS/perl-5.18.4.tar.bz2",
+    "5.18.3" => "https://cpan.metacpan.org/authors/id/R/RJ/RJBS/perl-5.18.3.tar.bz2",
+    "5.18.2" => "https://cpan.metacpan.org/authors/id/R/RJ/RJBS/perl-5.18.2.tar.bz2",
+    "5.18.1" => "https://cpan.metacpan.org/authors/id/R/RJ/RJBS/perl-5.18.1.tar.bz2",
+    "5.18.0" => "https://cpan.metacpan.org/authors/id/R/RJ/RJBS/perl-5.18.0.tar.bz2",
+    "5.16.3" => "https://cpan.metacpan.org/authors/id/R/RJ/RJBS/perl-5.16.3.tar.bz2",
+    "5.16.2" => "https://cpan.metacpan.org/authors/id/R/RJ/RJBS/perl-5.16.2.tar.bz2",
+    "5.16.1" => "https://cpan.metacpan.org/authors/id/R/RJ/RJBS/perl-5.16.1.tar.bz2",
+    "5.16.0" => "https://cpan.metacpan.org/authors/id/R/RJ/RJBS/perl-5.16.0.tar.bz2",
+    "5.14.4" => "https://cpan.metacpan.org/authors/id/D/DA/DAPM/perl-5.14.4.tar.bz2",
+    "5.14.3" => "https://cpan.metacpan.org/authors/id/D/DO/DOM/perl-5.14.3.tar.bz2",
+    "5.14.2" => "https://cpan.metacpan.org/authors/id/F/FL/FLORA/perl-5.14.2.tar.bz2",
+    "5.14.1" => "https://cpan.metacpan.org/authors/id/J/JE/JESSE/perl-5.14.1.tar.bz2",
+    "5.14.0" => "https://cpan.metacpan.org/authors/id/J/JE/JESSE/perl-5.14.0.tar.bz2",
+    "5.12.5" => "https://cpan.metacpan.org/authors/id/D/DO/DOM/perl-5.12.5.tar.bz2",
+    "5.12.4" => "https://cpan.metacpan.org/authors/id/L/LB/LBROCARD/perl-5.12.4.tar.bz2",
+    "5.12.3" => "https://cpan.metacpan.org/authors/id/R/RJ/RJBS/perl-5.12.3.tar.bz2",
+    "5.12.2" => "https://cpan.metacpan.org/authors/id/J/JE/JESSE/perl-5.12.2.tar.bz2",
+    "5.12.1" => "https://cpan.metacpan.org/authors/id/J/JE/JESSE/perl-5.12.1.tar.bz2",
+    "5.12.0" => "https://cpan.metacpan.org/authors/id/J/JE/JESSE/perl-5.12.0.tar.bz2",
+    "5.10.1" => "https://cpan.metacpan.org/authors/id/D/DA/DAPM/perl-5.10.1.tar.bz2",
+    "5.10.0" => "https://cpan.metacpan.org/authors/id/R/RG/RGARCIA/perl-5.10.0.tar.gz",
+    "5.8.9" => "https://cpan.metacpan.org/authors/id/N/NW/NWCLARK/perl-5.8.9.tar.bz2",
+    "5.10.1" => "https://cpan.metacpan.org/authors/id/D/DA/DAPM/perl-5.10.1.tar.bz2",
+    "5.10.0" => "https://cpan.metacpan.org/authors/id/R/RG/RGARCIA/perl-5.10.0.tar.gz",
+    "5.8.9" => "https://cpan.metacpan.org/authors/id/N/NW/NWCLARK/perl-5.8.9.tar.bz2",
+    "5.8.8" => "https://cpan.metacpan.org/authors/id/N/NW/NWCLARK/perl-5.8.8.tar.bz2",
+    "5.8.7" => "https://cpan.metacpan.org/authors/id/N/NW/NWCLARK/perl-5.8.7.tar.bz2",
+    "5.8.6" => "https://cpan.metacpan.org/authors/id/N/NW/NWCLARK/perl-5.8.6.tar.bz2",
+    "5.8.5" => "https://cpan.metacpan.org/authors/id/N/NW/NWCLARK/perl-5.8.5.tar.bz2",
+
 );
+
 my $url = $version2url{$version};
 print STDERR "downloading perl $version...\n";
 my $ua = LWP::UserAgent->new;
@@ -42,6 +88,7 @@ print STDERR "start build\n";
 chdir "$tmpdir\\perl-$version\\win32" or die "failed to cd $tmpdir\\perl-$version\\win32: $!";
 my $install_dir = "$ENV{RUNNER_TOOL_CACHE}\\perl\\${version}\\x64";
 system("gmake", "INST_TOP=$install_dir") == 0
+    or system("dmake", "INST_TOP=$install_dir") == 0 # fall back to dmake
     or die "Failed to build";
 
 print STDERR "start install\n";

@@ -66,6 +66,7 @@ jobs:
         C:\Strawberry\perl\bin\perl.exe build-perl-win.pl
       env:
         PERL_VERSION: ${{ matrix.perl }}
+      continue-on-error: true
 
     - name: upload
       shell: pwsh

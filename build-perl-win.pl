@@ -88,6 +88,7 @@ print STDERR "start build\n";
 chdir "$tmpdir\\perl-$version\\win32" or die "failed to cd $tmpdir\\perl-$version\\win32: $!";
 my $install_dir = "$ENV{RUNNER_TOOL_CACHE}\\perl\\${version}\\x64";
 system("gmake", "INST_TOP=$install_dir") == 0
+    or system("nmake", "INST_TOP=$install_dir") == 0 # fall back to Microsoft NMAKE
     or die "Failed to build";
 
 print STDERR "start install\n";

@@ -1,6 +1,10 @@
 name: build perl on linux
 
-on: [push]
+on:
+  push:
+    branches:
+    - 'master'
+    - 'releases/*'
 
 jobs:
   linux:

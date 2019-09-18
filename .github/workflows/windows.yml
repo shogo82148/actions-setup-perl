@@ -1,6 +1,10 @@
 name: build perl on windows
 
-on: [push]
+on:
+  push:
+    branches:
+    - 'master'
+    - 'releases/*'
 
 jobs:
   windows:
@@ -67,7 +71,6 @@ jobs:
         C:\Strawberry\perl\bin\perl.exe build-perl-win.pl
       env:
         PERL_VERSION: ${{ matrix.perl }}
-      continue-on-error: true
 
     - name: upload
       shell: pwsh
@@ -82,4 +85,3 @@ jobs:
         PERL_VERSION: ${{ matrix.perl }}
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      continue-on-error: true

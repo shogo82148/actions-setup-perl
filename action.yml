@@ -8,3 +8,6 @@ inputs:
 runs:
   using: 'node12'
   main: 'lib/setup-perl.js'
+branding:
+  icon: 'play'
+  color: 'blue'

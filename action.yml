@@ -4,7 +4,10 @@ author: 'Ichinose Shogo'
 inputs: 
   perl-version:
     description: 'The Perl version to download (if necessary) and use. Example: 5.30.0'
-    default: '5.30.0'
+    default: '5'
 runs:
   using: 'node12'
   main: 'lib/setup-perl.js'
+branding:
+  icon: 'play'
+  color: 'blue'

@@ -28,6 +28,7 @@ const availableVersions =
   process.platform === 'win32'
     ? [
         // available versions in windows
+        '5.30.1',
         '5.30.0',
         '5.28.2',
         '5.28.1',
@@ -44,6 +45,7 @@ const availableVersions =
       ]
     : [
         // available versions in linux and macOS
+        '5.30.1',
         '5.30.0',
         '5.28.2',
         '5.28.1',

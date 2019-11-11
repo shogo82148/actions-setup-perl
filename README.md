@@ -1,7 +1,7 @@
 # actions-setup-perl
 
 <p align="left">
-  <a href="https://github.com/shogo82148/actions-setup-perl"><img alt="GitHub Actions status" src="https://github.com/shogo82148/actions-setup-perl/workflows/Main%20workflow/badge.svg"></a>
+  <a href="https://github.com/shogo82148/actions-setup-perl/actions"><img alt="GitHub Actions status" src="https://github.com/shogo82148/actions-setup-perl/workflows/Main%20workflow/badge.svg"></a>
 </p>
 
 This action sets by perl environment for use in actions by:
@@ -31,7 +31,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: ['ubuntu-18.04', 'macOS-10.14', 'windows-2019']
+        os: ['ubuntu-latest', 'macos-latest', 'windows-latest']
         perl: [ '5.30', '5.28' ]
     name: Perl ${{ matrix.perl }} on ${{ matrix.os }}
     steps:

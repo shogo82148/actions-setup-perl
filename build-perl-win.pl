@@ -8,6 +8,7 @@ use LWP::UserAgent;
 
 my $version = $ENV{PERL_VERSION};
 my %version2url = (
+    "5.30.1" => "https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.30.1.tar.gz",
     "5.30.0" => "https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/perl-5.30.0.tar.gz",
     "5.28.2" => "https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.28.2.tar.gz",
     "5.28.1" => "https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.28.1.tar.gz",

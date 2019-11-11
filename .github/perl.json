@@ -4,11 +4,10 @@
             "owner": "perl",
             "pattern": [
                 {
-                    "regexp": "^([^:]*: )?((.:)?[^:]*):(\\d+)(:(\\d+))?: (.*)$",
+                    "regexp": "^(.+)\\sat\\s(.+)\\sline\\s(\\d+)\\.$",
                     "file": 2,
-                    "line": 4,
-                    "column": 6,
-                    "message": 7
+                    "line": 3,
+                    "message": 1
                 }
             ]
         }

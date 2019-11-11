@@ -31,7 +31,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: ['ubuntu-18.04', 'macOS-10.14', 'windows-2019']
+        os: ['ubuntu-latest', 'macos-latest', 'windows-latest']
         perl: [ '5.30', '5.28' ]
     name: Perl ${{ matrix.perl }} on ${{ matrix.os }}
     steps:

@@ -92,18 +92,12 @@ system("nmake", "INST_TOP=$install_dir", "CCTYPE=MSVC142") == 0
     or die "Failed to build";
 
 print STDERR "nmake install\n";
-system("gmake", "install") == 0
+system("nmake", "install") == 0
     or die "Failed to install";
 
 print STDERR "install App::cpanminus and Carton\n";
-my $ret = do {
-    local $ENV{PATH} = "$install_dir\\bin;C:\\Strawberry\\c;$ENV{PATH}";
-    system("$install_dir\\bin\\cpan", "-T", "App::cpanminus", "Carton") == 0;
-};
-
-if (!$ret) {
-    die "Failed to install App::cpanminus and Carton";
-}
+system("$install_dir\\bin\\cpan", "-T", "App::cpanminus", "Carton") == 0
+    or die "Failed to install App::cpanminus and Carton";
 
 print STDERR "archiving...\n";
 chdir $install_dir or die "failed to cd $install_dir: $!";

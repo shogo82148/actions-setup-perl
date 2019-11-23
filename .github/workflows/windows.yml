@@ -1,6 +1,7 @@
 name: build perl on windows
 
 on:
+  pull_request: {}
   push:
     branches:
     - 'releases/*'
@@ -9,6 +10,7 @@ jobs:
   windows:
     runs-on: windows-latest
     strategy:
+      fail-fast: false
       matrix:
         perl:
         - "5.30.1"
@@ -25,12 +27,11 @@ jobs:
         - "5.24.2"
         - "5.24.1"
         - "5.24.0"
-        # builds fail with these versions, I gave up :(
-        # - "5.22.4"
-        # - "5.22.3"
-        # - "5.22.2"
-        # - "5.22.1"
-        # - "5.22.0"
+        - "5.22.4"
+        - "5.22.3"
+        - "5.22.2"
+        - "5.22.1"
+        - "5.22.0"
         # - "5.20.3"
         # - "5.20.2"
         # - "5.20.1"
@@ -68,20 +69,20 @@ jobs:
     - name: build
       shell: pwsh
       run: |
-        C:\Strawberry\perl\bin\perl.exe build-perl-win.pl
+        C:\Strawberry\perl\bin\perl.exe scripts/build-perl-win.pl
       env:
         PERL_VERSION: ${{ matrix.perl }}
 
-    - name: upload
-      shell: pwsh
-      run: |
-        Set-Location ${env:RUNNER_TEMP}
-        Invoke-WebRequest -Uri https://github.com/shogo82148/s3cli-mini/releases/download/v0.0.2/s3cli-mini_windows_amd64.zip -OutFile s3cli-mini.zip
-        7z x s3cli-mini.zip
-        $pkg = Get-Content "${env:GITHUB_WORKSPACE}/package.json" -Encoding UTF8 -Raw | ConvertFrom-Json
-        $version = $pkg.version
-        s3cli-mini_windows_amd64/s3cli-mini --region us-east-1 cp --acl public-read perl.zip "s3://shogo82148-actions-setup-perl/v$version/perl-${env:PERL_VERSION}-win32-x64.tar.gz"
-      env:
-        PERL_VERSION: ${{ matrix.perl }}
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    # - name: upload
+    #   shell: pwsh
+    #   run: |
+    #     Set-Location ${env:RUNNER_TEMP}
+    #     Invoke-WebRequest -Uri https://github.com/shogo82148/s3cli-mini/releases/download/v0.0.2/s3cli-mini_windows_amd64.zip -OutFile s3cli-mini.zip
+    #     7z x s3cli-mini.zip
+    #     $pkg = Get-Content "${env:GITHUB_WORKSPACE}/package.json" -Encoding UTF8 -Raw | ConvertFrom-Json
+    #     $version = $pkg.version
+    #     s3cli-mini_windows_amd64/s3cli-mini --region us-east-1 cp --acl public-read perl.zip "s3://shogo82148-actions-setup-perl/v$version/perl-${env:PERL_VERSION}-win32-x64.tar.gz"
+    #   env:
+    #     PERL_VERSION: ${{ matrix.perl }}
+    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

@@ -88,12 +88,11 @@ system("7z", "x", "perl-$version.tar") == 0 or die "Failed to extract tar";
 print STDERR "start build\n";
 chdir "$tmpdir\\perl-$version\\win32" or die "failed to cd $tmpdir\\perl-$version\\win32: $!";
 my $install_dir = "$ENV{RUNNER_TOOL_CACHE}\\perl\\${version}\\x64";
-system("gmake", "INST_TOP=$install_dir") == 0
-    or system("dmake", "INST_TOP=$install_dir") == 0 # fall back to dmake
+system("gmake", "-f", "GNUMakefile", "-j2", "INST_TOP=$install_dir") == 0
     or die "Failed to build";
 
 print STDERR "start install\n";
-system("gmake", "install") == 0
+system("gmake", "-f", "GNUMakefile", "install") == 0
     or die "Failed to install";
 
 print STDERR "install App::cpanminus and Carton\n";

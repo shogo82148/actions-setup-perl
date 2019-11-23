@@ -81,7 +81,7 @@ jobs:
           perl build-perl-win.pl
         env:
           PERL_VERSION: ${{ matrix.perl }}
-          PERL5LIB: "/c/strawberry/perl/lib;/c/strawberry/perl/vendor/lib;/c/strawberry/perl/site/lib"
+          PERL5LIB: "/c/strawberry/perl/lib:/c/strawberry/perl/vendor/lib:/c/strawberry/perl/site/lib"
         working-directory: ./scripts
 
     # - name: upload

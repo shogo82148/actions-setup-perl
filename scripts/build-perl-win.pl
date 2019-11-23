@@ -8,6 +8,7 @@ use FindBin;
 use File::Copy;
 use LWP::UserAgent;
 use CPAN::Perl::Releases::MetaCPAN;
+use Devel::PatchPerl;
 
 sub perl_release {
     my $version = shift;
@@ -45,6 +46,7 @@ system("7z", "x", "perl-$version.tar") == 0 or die "Failed to extract tar";
 
 print STDERR "start build\n";
 chdir "$tmpdir\\perl-$version\\win32" or die "failed to cd $tmpdir\\perl-$version\\win32: $!";
+Devel::PatchPerl->patch_source($version);
 
 if (! -e "GNUMakefile") {
     copy("$FindBin::Bin\\GNUMakefile", "GNUMakefile") or die "copy failed: $!";

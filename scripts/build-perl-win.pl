@@ -56,6 +56,7 @@ my $install_dir = "$ENV{RUNNER_TOOL_CACHE}\\perl\\${version}\\x64";
 system("gmake", "-f", "GNUMakefile", "INST_TOP=$install_dir", "CCHOME=C:\\strawberry\\c") == 0
     or die "Failed to build";
 
+$ENV{PERL_DL_DEBUG} = 1;
 print STDERR "start install\n";
 system("gmake", "-f", "GNUMakefile", "install") == 0
     or die "Failed to install";

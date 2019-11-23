@@ -73,6 +73,8 @@ jobs:
         run: perl -V
       - name: gcc --version
         run: gcc --version
+
+      - name: build
         shell: bash
         run: |
           cpanm --installdeps .

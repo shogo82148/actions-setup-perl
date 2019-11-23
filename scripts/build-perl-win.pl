@@ -43,10 +43,10 @@ print STDERR "extracting...\n";
 chdir $tmpdir or die "failed to cd $tmpdir: $!";
 system("7z", "x", $filename) == 0 or die "Failed to extract gz";
 system("7z", "x", "perl-$version.tar") == 0 or die "Failed to extract tar";
+Devel::PatchPerl->patch_source($version, "$tmpdir\\perl-$version");
 
 print STDERR "start build\n";
 chdir "$tmpdir\\perl-$version\\win32" or die "failed to cd $tmpdir\\perl-$version\\win32: $!";
-Devel::PatchPerl->patch_source($version);
 
 if (! -e "GNUMakefile") {
     copy("$FindBin::Bin\\GNUMakefile", "GNUMakefile") or die "copy failed: $!";

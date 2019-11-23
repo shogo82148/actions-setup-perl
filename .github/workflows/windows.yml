@@ -77,7 +77,7 @@ jobs:
       - name: build
         shell: bash
         run: |
-          perl C:\strawberry\perl\bin\cpanm --installdeps .
+          perl C:\\strawberry\\perl\\bin\\cpanm --installdeps .
           perl build-perl-win.pl
         env:
           PERL_VERSION: ${{ matrix.perl }}

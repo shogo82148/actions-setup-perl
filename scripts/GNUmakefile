@@ -1147,7 +1147,7 @@ config.w32 : $(CFGSH_TMPL)
 	copy $(CFGSH_TMPL) config.w32
 
 # See the comment in Makefile.SH explaining this seemingly cranky ordering
-..\lib\buildcustomize.pl : $(MINI_OBJ) ..\write_buildcustomize.pl
+..\lib\buildcustomize.pl : $(MINIDIR) $(MINI_OBJ) ..\write_buildcustomize.pl
 ifeq ($(CCTYPE),GCC)
 	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
 else
@@ -1157,6 +1157,9 @@ else
 
 endif
 	$(MINIPERL) -I..\lib -f ..\write_buildcustomize.pl ..
+
+$(MINIDIR) :
+	if not exist "$(MINIDIR)" mkdir "$(MINIDIR)"
 
 #convinence target, get a working miniperl
 mp : $(CONFIGPM)

@@ -1,2 +1,3 @@
 requires "LWP::UserAgent";
 requires "LWP::Protocol::https";
+requires "CPAN::Perl::Releases::MetaCPAN";

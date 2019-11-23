@@ -75,15 +75,17 @@ jobs:
       - name: gcc --version
         run: gcc --version
 
+      - name: cpanm --installdeps .
+        shell: cmd
+        run: cpanm --installdeps .
+        working-directory: ./scripts
+
       - name: build
         shell: cmd
-        run: |
-          cpanm --installdeps .
-          perl build-perl-win.pl
+        run: perl build-perl-win.pl
         env:
           PERL_VERSION: ${{ matrix.perl }}
         working-directory: ./scripts
-
     # - name: upload
     #   shell: pwsh
     #   run: |

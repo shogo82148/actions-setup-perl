@@ -1078,7 +1078,7 @@ CFG_VARS	=					\
 
 .PHONY: all info
 
-all : info rebasePE Extensions_nonxs $(PERLSTATIC)
+all : .\config.h ..\git_version.h $(GLOBEXE) info $(CONFIGPM) $(UNIDATAFILES) $(PERLEXE) rebasePE Extensions_nonxs Extensions $(PERLSTATIC)
 
 info :
 	@echo # GCCBIN=$(GCCBIN)

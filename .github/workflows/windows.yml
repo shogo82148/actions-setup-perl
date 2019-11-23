@@ -77,11 +77,11 @@ jobs:
       - name: build
         shell: bash
         run: |
-          perl C:\\strawberry\\perl\\bin\\cpanm --installdeps .
+          cpanm --installdeps .
           perl build-perl-win.pl
         env:
           PERL_VERSION: ${{ matrix.perl }}
-          PERL5LIB: "C:\\strawberry\\perl\\lib;C:\\strawberry\\perl\\vendor\\lib;C:\\strawberry\\perl\\site\\lib"
+          PERL5LIB: "/c/strawberry/perl/lib;/c/strawberry/perl/vendor/lib;/c/strawberry/perl/site/lib"
         working-directory: ./scripts
 
     # - name: upload

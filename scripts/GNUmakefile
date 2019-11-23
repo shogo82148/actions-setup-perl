@@ -1346,7 +1346,7 @@ endif
 # 1. we don't want to rebuild miniperl.exe when config.h changes
 # 2. we don't want to rebuild miniperl.exe with non-default config.h
 # 3. we can't have miniperl.exe depend on git_version.h, as miniperl creates it
-$(MINI_OBJ)	: $(MINIDIR)\.exists $(CORE_NOCFG_H)
+$(MINI_OBJ)	: $(CORE_NOCFG_H)
 
 $(WIN32_OBJ)	: $(CORE_H)
 

@@ -1373,7 +1373,7 @@ endif
 
 $(PERLDLL): perldll.def $(PERLDLL_OBJ) $(PERLDLL_RES) Extensions_static
 	$(LINK32) -mdll -o $@ $(BLINK_FLAGS) \
-	   $(PERLDLL_OBJ) $(shell type Extensions_static) $(LIBFILES) $(PERLDLL_OBJ) $(PERLDLL_RES)
+	   $(PERLDLL_OBJ) $(shell type Extensions_static) $(LIBFILES) $(PERLDLL_RES)
 
 $(PERLSTATICLIB): $(PERLDLL_OBJ) Extensions_static
 ifeq ($(CCTYPE),GCC)

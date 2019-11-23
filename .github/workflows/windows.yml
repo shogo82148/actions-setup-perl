@@ -76,9 +76,9 @@ jobs:
         run: gcc --version
 
       - name: build
-        shell: bash
+        shell: cmd
         run: |
-          cpan -T CPAN::Perl::Releases
+          cpanm --installdeps .
           perl build-perl-win.pl
         env:
           PERL_VERSION: ${{ matrix.perl }}

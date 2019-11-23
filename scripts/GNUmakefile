@@ -1034,46 +1034,43 @@ RCOPY		= xcopy /f /r /i /e /d /y
 NOOP		= @rem
 
 #first ones are arrange in compile time order for faster parallel building
-#see #123867 for details
 MICROCORE_SRC	=		\
-		..\toke.c	\
-		..\regcomp.c	\
-		..\regexec.c	\
-		..\op.c		\
-		..\sv.c		\
-		..\pp.c		\
-		..\pp_ctl.c	\
-		..\pp_sys.c	\
-		..\pp_pack.c	\
-		..\pp_hot.c	\
-		..\gv.c		\
-		..\perl.c	\
-		..\utf8.c	\
-		..\dump.c	\
-		..\hv.c		\
 		..\av.c		\
 		..\caretx.c	\
 		..\deb.c	\
 		..\doio.c	\
 		..\doop.c	\
-		..\dquote.c	\
+		..\dump.c	\
 		..\globals.c	\
+		..\gv.c		\
 		..\mro_core.c	\
+		..\hv.c		\
 		..\locale.c	\
 		..\keywords.c	\
 		..\mathoms.c    \
 		..\mg.c		\
 		..\numeric.c	\
+		..\op.c		\
 		..\pad.c	\
+		..\perl.c	\
 		..\perlapi.c	\
 		..\perly.c	\
+		..\pp.c		\
+		..\pp_ctl.c	\
+		..\pp_hot.c	\
+		..\pp_pack.c	\
 		..\pp_sort.c	\
+		..\pp_sys.c	\
 		..\reentr.c	\
+		..\regcomp.c	\
+		..\regexec.c	\
 		..\run.c	\
 		..\scope.c	\
+		..\sv.c		\
 		..\taint.c	\
-		..\time64.c	\
+		..\toke.c	\
 		..\universal.c	\
+		..\utf8.c	\
 		..\util.c
 
 EXTRACORE_SRC	+= perllib.c
@@ -1683,12 +1680,6 @@ Extension_lib : ..\make_ext.pl $(CONFIGPM)
 $(DYNALOADER) : ..\make_ext.pl $(CONFIGPM) $(HAVE_COREDIR)
 	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(EXTDIR) --dir=$(DISTDIR) --dynaloader
 
-Extensions_clean :
-	-if exist $(MINIPERL) $(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --all --target=clean
-
-Extensions_realclean :
-	-if exist $(MINIPERL) $(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --all --target=realclean
-
 # all PE files need to be built by the time this target runs, PP files can still
 # be running in parallel like UNIDATAFILES, this target a placeholder for the
 # future
@@ -1752,127 +1743,6 @@ utils: $(HAVEMINIPERL) ..\utils\Makefile
 
 ..\pod\perltoc.pod: $(PERLEXE) $(PERLDLL) Extensions Extensions_nonxs $(NORMALIZE_DYN) utils
 	$(PERLEXE) -f ..\pod\buildtoc -q
-
-# Note that the pod cleanup in this next section is parsed (and regenerated
-# by pod/buildtoc so please check that script before making changes here
-
-distclean: realclean
-	-del /f $(MINIPERL) $(PERLEXE) $(PERLDLL) $(GLOBEXE) \
-		$(PERLIMPLIB) ..\miniperl$(a) $(PERLEXESTATIC) $(PERLSTATICLIB)
-	-del /f $(LIBDIR)\Encode.pm $(LIBDIR)\encoding.pm $(LIBDIR)\Errno.pm
-	-del /f $(LIBDIR)\Config.pod $(LIBDIR)\POSIX.pod $(LIBDIR)\threads.pm
-	-del /f $(LIBDIR)\.exists $(LIBDIR)\attributes.pm $(LIBDIR)\DynaLoader.pm
-	-del /f $(LIBDIR)\Fcntl.pm $(LIBDIR)\IO.pm $(LIBDIR)\Opcode.pm
-	-del /f $(LIBDIR)\ops.pm $(LIBDIR)\Safe.pm
-	-del /f $(LIBDIR)\SDBM_File.pm $(LIBDIR)\Socket.pm $(LIBDIR)\POSIX.pm
-	-del /f $(LIBDIR)\B.pm $(LIBDIR)\O.pm $(LIBDIR)\re.pm
-	-del /f $(LIBDIR)\File\Glob.pm
-	-del /f $(LIBDIR)\Sys\Hostname.pm
-	-del /f $(LIBDIR)\Time\HiRes.pm
-	-del /f $(LIBDIR)\Unicode\Normalize.pm
-	-del /f $(LIBDIR)\Math\BigInt\FastCalc.pm
-	-del /f $(LIBDIR)\Storable.pm $(LIBDIR)\Storable\Limit.pm
-	-del /f $(LIBDIR)\Win32.pm
-	-del /f $(LIBDIR)\Win32CORE.pm
-	-del /f $(LIBDIR)\Win32API\File.pm
-	-del /f $(LIBDIR)\Win32API\File\cFile.pc
-	-del /f $(LIBDIR)\buildcustomize.pl
-	-del /f $(DISTDIR)\XSLoader\XSLoader.pm
-	-del /f *.def *.map
-	-if exist $(LIBDIR)\Amiga rmdir /s /q $(LIBDIR)\Amiga
-	-if exist $(LIBDIR)\App rmdir /s /q $(LIBDIR)\App
-	-if exist $(LIBDIR)\Archive rmdir /s /q $(LIBDIR)\Archive
-	-if exist $(LIBDIR)\Attribute rmdir /s /q $(LIBDIR)\Attribute
-	-if exist $(LIBDIR)\autodie rmdir /s /q $(LIBDIR)\autodie
-	-if exist $(LIBDIR)\Carp rmdir /s /q $(LIBDIR)\Carp
-	-if exist $(LIBDIR)\Compress rmdir /s /q $(LIBDIR)\Compress
-	-if exist $(LIBDIR)\Config\Perl rmdir /s /q $(LIBDIR)\Config\Perl
-	-if exist $(LIBDIR)\CPAN rmdir /s /q $(LIBDIR)\CPAN
-	-if exist $(LIBDIR)\Data rmdir /s /q $(LIBDIR)\Data
-	-if exist $(LIBDIR)\Devel rmdir /s /q $(LIBDIR)\Devel
-	-if exist $(LIBDIR)\Digest rmdir /s /q $(LIBDIR)\Digest
-	-if exist $(LIBDIR)\Encode rmdir /s /q $(LIBDIR)\Encode
-	-if exist $(LIBDIR)\encoding rmdir /s /q $(LIBDIR)\encoding
-	-if exist $(LIBDIR)\Exporter rmdir /s /q $(LIBDIR)\Exporter
-	-if exist $(LIBDIR)\ExtUtils\CBuilder rmdir /s /q $(LIBDIR)\ExtUtils\CBuilder
-	-if exist $(LIBDIR)\ExtUtils\Command rmdir /s /q $(LIBDIR)\ExtUtils\Command
-	-if exist $(LIBDIR)\ExtUtils\Constant rmdir /s /q $(LIBDIR)\ExtUtils\Constant
-	-if exist $(LIBDIR)\ExtUtils\Liblist rmdir /s /q $(LIBDIR)\ExtUtils\Liblist
-	-if exist $(LIBDIR)\ExtUtils\MakeMaker rmdir /s /q $(LIBDIR)\ExtUtils\MakeMaker
-	-if exist $(LIBDIR)\ExtUtils\ParseXS rmdir /s /q $(LIBDIR)\ExtUtils\ParseXS
-	-if exist $(LIBDIR)\ExtUtils\Typemaps rmdir /s /q $(LIBDIR)\ExtUtils\Typemaps
-	-if exist $(LIBDIR)\File\Spec rmdir /s /q $(LIBDIR)\File\Spec
-	-if exist $(LIBDIR)\Filter rmdir /s /q $(LIBDIR)\Filter
-	-if exist $(LIBDIR)\Hash rmdir /s /q $(LIBDIR)\Hash
-	-if exist $(LIBDIR)\HTTP rmdir /s /q $(LIBDIR)\HTTP
-	-if exist $(LIBDIR)\I18N rmdir /s /q $(LIBDIR)\I18N
-	-if exist $(LIBDIR)\inc rmdir /s /q $(LIBDIR)\inc
-	-if exist $(LIBDIR)\IO rmdir /s /q $(LIBDIR)\IO
-	-if exist $(LIBDIR)\IPC rmdir /s /q $(LIBDIR)\IPC
-	-if exist $(LIBDIR)\JSON rmdir /s /q $(LIBDIR)\JSON
-	-if exist $(LIBDIR)\List rmdir /s /q $(LIBDIR)\List
-	-if exist $(LIBDIR)\Locale rmdir /s /q $(LIBDIR)\Locale
-	-if exist $(LIBDIR)\Math rmdir /s /q $(LIBDIR)\Math
-	-if exist $(LIBDIR)\Memoize rmdir /s /q $(LIBDIR)\Memoize
-	-if exist $(LIBDIR)\MIME rmdir /s /q $(LIBDIR)\MIME
-	-if exist $(LIBDIR)\Module rmdir /s /q $(LIBDIR)\Module
-	-if exist $(LIBDIR)\Net\FTP rmdir /s /q $(LIBDIR)\Net\FTP
-	-if exist $(LIBDIR)\Params rmdir /s /q $(LIBDIR)\Params
-	-if exist $(LIBDIR)\Parse rmdir /s /q $(LIBDIR)\Parse
-	-if exist $(LIBDIR)\Perl rmdir /s /q $(LIBDIR)\Perl
-	-if exist $(LIBDIR)\PerlIO rmdir /s /q $(LIBDIR)\PerlIO
-	-if exist $(LIBDIR)\Pod\Perldoc rmdir /s /q $(LIBDIR)\Pod\Perldoc
-	-if exist $(LIBDIR)\Pod\Simple rmdir /s /q $(LIBDIR)\Pod\Simple
-	-if exist $(LIBDIR)\Pod\Text rmdir /s /q $(LIBDIR)\Pod\Text
-	-if exist $(LIBDIR)\Scalar rmdir /s /q $(LIBDIR)\Scalar
-	-if exist $(LIBDIR)\Search rmdir /s /q $(LIBDIR)\Search
-	-if exist $(LIBDIR)\Sub rmdir /s /q $(LIBDIR)\Sub
-	-if exist $(LIBDIR)\Sys rmdir /s /q $(LIBDIR)\Sys
-	-if exist $(LIBDIR)\TAP rmdir /s /q $(LIBDIR)\TAP
-	-if exist $(LIBDIR)\Term rmdir /s /q $(LIBDIR)\Term
-	-if exist $(LIBDIR)\Test rmdir /s /q $(LIBDIR)\Test
-	-if exist $(LIBDIR)\Test2 rmdir /s /q $(LIBDIR)\Test2
-	-if exist $(LIBDIR)\Text rmdir /s /q $(LIBDIR)\Text
-	-if exist $(LIBDIR)\Thread rmdir /s /q $(LIBDIR)\Thread
-	-if exist $(LIBDIR)\threads rmdir /s /q $(LIBDIR)\threads
-	-if exist $(LIBDIR)\Tie\Hash rmdir /s /q $(LIBDIR)\Tie\Hash
-	-if exist $(LIBDIR)\Unicode\Collate rmdir /s /q $(LIBDIR)\Unicode\Collate
-	-if exist $(LIBDIR)\Unicode\Collate\Locale rmdir /s /q $(LIBDIR)\Unicode\Collate\Locale
-	-if exist $(LIBDIR)\version rmdir /s /q $(LIBDIR)\version
-	-if exist $(LIBDIR)\VMS rmdir /s /q $(LIBDIR)\VMS
-	-if exist $(LIBDIR)\Win32API rmdir /s /q $(LIBDIR)\Win32API
-	-if exist $(LIBDIR)\XS rmdir /s /q $(LIBDIR)\XS
-	-cd $(PODDIR) && del /f *.html *.bat roffitall \
-	    perl5317delta.pod perlaix.pod perlamiga.pod perlandroid.pod \
-	    perlapi.pod perlbs2000.pod perlcn.pod perlcygwin.pod \
-	    perldos.pod perlfreebsd.pod perlhaiku.pod perlhpux.pod \
-	    perlhurd.pod perlintern.pod perlirix.pod perljp.pod perlko.pod \
-	    perllinux.pod perlmacos.pod perlmacosx.pod perlmodlib.pod \
-	    perlnetware.pod perlopenbsd.pod perlos2.pod perlos390.pod \
-	    perlos400.pod perlplan9.pod perlqnx.pod perlriscos.pod \
-	    perlsolaris.pod perlsymbian.pod perlsynology.pod perltoc.pod \
-	    perltru64.pod perltw.pod perluniprops.pod perlvos.pod \
-	    perlwin32.pod
-	-cd ..\utils && del /f h2ph splain perlbug pl2pm h2xs \
-	    perldoc perlivp libnetcfg enc2xs encguess piconv cpan *.bat \
-	    xsubpp pod2html instmodsh json_pp prove ptar ptardiff ptargrep shasum corelist zipdetails
-	-del /f ..\config.sh perlmain.c dlutils.c config.h.new \
-	    perlmainst.c
-	-del /f $(CONFIGPM)
-	-del /f ..\lib\Config_git.pl
-	-del /f "bin\*.bat"
-	-del /f perllibst.h
-	-del /f $(PERLEXE_RES) perl.base
-	-cd .. && del /s *$(a) *.map *.pdb *.ilk *.bs *$(o) .exists pm_to_blib ppport.h
-	-cd $(EXTDIR) && del /s *.def Makefile Makefile.old
-	-cd $(DISTDIR) && del /s *.def Makefile Makefile.old
-	-cd $(CPANDIR) && del /s *.def Makefile Makefile.old
-	-del /s ..\utils\Makefile
-	-if exist $(AUTODIR) rmdir /s /q $(AUTODIR)
-	-if exist $(COREDIR) rmdir /s /q $(COREDIR)
-	-if exist pod2htmd.tmp del pod2htmd.tmp
-	-if exist $(HTMLDIR) rmdir /s /q $(HTMLDIR)
-	-del /f ..\t\test_state
 
 install : all installbare installhtml
 
@@ -1954,53 +1824,3 @@ _test :
 	$(XCOPY) $(GLOBEXE) ..\t\$(NULL)
 	set PERL_STATIC_EXT=$(STATIC_EXT) && \
 	    cd ..\t && perl.exe harness $(TEST_SWITCHES) $(TEST_FILES)
-
-_clean :
-	-@erase miniperlmain$(o)
-	-@erase $(MINIPERL)
-	-@erase perlglob$(o)
-	-@erase perlmain$(o)
-	-@erase perlmainst$(o)
-	-@erase /f config.h
-	-@erase /f ..\git_version.h
-	-@erase $(GLOBEXE)
-	-@erase $(PERLEXE)
-	-@erase $(WPERLEXE)
-	-@erase $(PERLEXESTATIC)
-	-@erase $(PERLSTATICLIB)
-	-@erase $(PERLDLL)
-	-@erase $(CORE_OBJ)
-	-@erase $(GENUUDMAP) $(GENUUDMAP_OBJ) $(GENERATED_HEADERS)
-	-@erase .coreheaders
-	-if exist $(MINIDIR) rmdir /s /q $(MINIDIR)
-	-if exist $(UNIDATADIR1) rmdir /s /q $(UNIDATADIR1)
-	-if exist $(UNIDATADIR2) rmdir /s /q $(UNIDATADIR2)
-	-@erase $(UNIDATAFILES)
-	-@erase $(WIN32_OBJ)
-	-@erase $(DLL_OBJ)
-	-@erase ..\*$(o) ..\*$(a) ..\*.exp *$(o) *$(a) *.exp *.res
-	-@erase ..\t\*.exe ..\t\*.dll ..\t\*.bat
-	-@erase *.ilk
-	-@erase *.pdb ..\*.pdb
-	-@erase Extensions_static
-
-clean : Extensions_clean _clean
-
-realclean : Extensions_realclean _clean
-
-# Handy way to run perlbug -ok without having to install and run the
-# installed perlbug. We don't re-run the tests here - we trust the user.
-# Please *don't* use this unless all tests pass.
-# If you want to report test failures, use "gmake nok" instead.
-ok: utils $(PERLEXE) $(PERLDLL) Extensions_nonxs Extensions
-	$(PERLEXE) ..\utils\perlbug -ok -s "(UNINSTALLED)"
-
-okfile: utils $(PERLEXE) $(PERLDLL) Extensions_nonxs Extensions
-	$(PERLEXE) ..\utils\perlbug -ok -s "(UNINSTALLED)" -F perl.ok
-
-nok: utils $(PERLEXE) $(PERLDLL) Extensions_nonxs Extensions
-	$(PERLEXE) ..\utils\perlbug -nok -s "(UNINSTALLED)"
-
-nokfile: utils $(PERLEXE) $(PERLDLL) Extensions_nonxs Extensions
-	$(PERLEXE) ..\utils\perlbug -nok -s "(UNINSTALLED)" -F perl.nok
-

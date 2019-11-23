@@ -1078,7 +1078,7 @@ CFG_VARS	=					\
 
 .PHONY: all info
 
-all : .\config.h ..\git_version.h $(GLOBEXE) info $(CONFIGPM) $(UNIDATAFILES) $(PERLEXE) rebasePE Extensions_nonxs Extensions $(PERLSTATIC)
+all : .\config.h ..\git_version.h $(GLOBEXE) info $(CONFIGPM) $(UNIDATAFILES) MakePPPort $(PERLEXE) rebasePE Extensions_nonxs Extensions $(PERLSTATIC)
 
 info :
 	@echo # GCCBIN=$(GCCBIN)
@@ -1457,9 +1457,12 @@ endif
 # There's no direct way to mark a dependency on
 # DynaLoader.pm, so this will have to do
 
+MakePPPort: $(MINIPERL) $(CONFIGPM) Extensions_nonxs
+	$(MINIPERL) -I..\lib ..\mkppport
+
+
 #most of deps of this target are in DYNALOADER and therefore omitted here
-Extensions : $(PERLDEP) $(DYNALOADER) $(GLOBEXE) $(HAVE_COREDIR)
-	$(XCOPY) ..\*.h $(COREDIR)\*.*
+Extensions : $(PERLDEP) $(DYNALOADER) $(GLOBEXE)
 	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --dynamic --verbose
 
 Extensions_reonly : $(PERLDEP) $(DYNALOADER) $(HAVE_COREDIR)
@@ -1467,12 +1470,10 @@ Extensions_reonly : $(PERLDEP) $(DYNALOADER) $(HAVE_COREDIR)
 	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --dynamic +re --verbose
 
 Extensions_static : ..\make_ext.pl list_static_libs.pl $(CONFIGPM) $(GLOBEXE) $(HAVE_COREDIR) Extensions_nonxs
-	$(XCOPY) ..\*.h $(COREDIR)\*.*
 	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --static --verbose
 	$(MINIPERL) -I..\lib list_static_libs.pl > Extensions_static
 
 Extensions_nonxs : ..\make_ext.pl ..\pod\perlfunc.pod $(CONFIGPM) $(GLOBEXE) $(HAVE_COREDIR)
-	$(XCOPY) ..\*.h $(COREDIR)\*.*
 	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --nonxs !libs --verbose
 
 #lib must be built, it can't be buildcustomize.pl-ed, and is required for XS building

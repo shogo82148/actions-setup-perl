@@ -889,46 +889,43 @@ RCOPY		= xcopy /f /r /i /e /d /y
 NOOP		= @rem
 
 #first ones are arrange in compile time order for faster parallel building
-#see #123867 for details
 MICROCORE_SRC	=		\
-		..\toke.c	\
-		..\regcomp.c	\
-		..\regexec.c	\
-		..\op.c		\
-		..\sv.c		\
-		..\pp.c		\
-		..\pp_ctl.c	\
-		..\pp_sys.c	\
-		..\pp_pack.c	\
-		..\pp_hot.c	\
-		..\gv.c		\
-		..\perl.c	\
-		..\utf8.c	\
-		..\dump.c	\
-		..\hv.c		\
 		..\av.c		\
 		..\caretx.c	\
 		..\deb.c	\
 		..\doio.c	\
 		..\doop.c	\
-		..\dquote.c	\
+		..\dump.c	\
 		..\globals.c	\
+		..\gv.c		\
 		..\mro_core.c	\
+		..\hv.c		\
 		..\locale.c	\
 		..\keywords.c	\
 		..\mathoms.c    \
 		..\mg.c		\
 		..\numeric.c	\
+		..\op.c		\
 		..\pad.c	\
+		..\perl.c	\
 		..\perlapi.c	\
 		..\perly.c	\
+		..\pp.c		\
+		..\pp_ctl.c	\
+		..\pp_hot.c	\
+		..\pp_pack.c	\
 		..\pp_sort.c	\
+		..\pp_sys.c	\
 		..\reentr.c	\
+		..\regcomp.c	\
+		..\regexec.c	\
 		..\run.c	\
 		..\scope.c	\
+		..\sv.c		\
 		..\taint.c	\
-		..\time64.c	\
+		..\toke.c	\
 		..\universal.c	\
+		..\utf8.c	\
 		..\util.c
 
 EXTRACORE_SRC	+= perllib.c

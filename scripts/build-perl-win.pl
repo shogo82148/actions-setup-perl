@@ -53,7 +53,7 @@ if (! -e "GNUMakefile") {
 }
 
 my $install_dir = "$ENV{RUNNER_TOOL_CACHE}\\perl\\${version}\\x64";
-system("gmake", "-f", "GNUMakefile", "-j2", "INST_TOP=$install_dir", "CCHOME=C:\\strawberry\\c") == 0
+system("gmake", "-f", "GNUMakefile", "INST_TOP=$install_dir", "CCHOME=C:\\strawberry\\c") == 0
     or die "Failed to build";
 
 print STDERR "start install\n";

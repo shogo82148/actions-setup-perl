@@ -68,7 +68,9 @@ jobs:
       - uses: actions/checkout@v1
       - name: setup built-in perl
         shell: bash
-        run: echo "::add-path::C:\strawberry\c\bin;C:\strawberry\perl\site\bin;C:\strawberry\perl\bin"
+        run: |
+          choco install strawberryperl
+          echo "::add-path::C:\strawberry\c\bin;C:\strawberry\perl\site\bin;C:\strawberry\perl\bin"
       - name: Host perl -V
         run: perl -V
       - name: gcc --version
@@ -81,7 +83,6 @@ jobs:
           perl build-perl-win.pl
         env:
           PERL_VERSION: ${{ matrix.perl }}
-          PERL5LIB: "/c/strawberry/perl/lib:/c/strawberry/perl/vendor/lib:/c/strawberry/perl/site/lib"
         working-directory: ./scripts
 
     # - name: upload

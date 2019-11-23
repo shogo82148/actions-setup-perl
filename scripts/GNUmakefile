@@ -1371,17 +1371,9 @@ else
 	lib -def:perldll.def -machine:$(ARCHITECTURE) /OUT:$(PERLIMPLIB)
 endif
 
-$(PERLDLL): $(PERLEXPLIB) $(PERLDLL_OBJ) $(PERLDLL_RES) Extensions_static
-ifeq ($(CCTYPE),GCC)
+$(PERLDLL): perldll.def $(PERLDLL_OBJ) $(PERLDLL_RES) Extensions_static
 	$(LINK32) -mdll -o $@ $(BLINK_FLAGS) \
-	   $(PERLDLL_OBJ) $(shell type Extensions_static) $(LIBFILES) $(PERLEXPLIB)
-else
-	$(LINK32) -dll -out:$@ $(BLINK_FLAGS) \
-	    @Extensions_static \
-	    -base:0x28000000 $(DELAYLOAD) $(LIBFILES) \
-	    $(PERLDLL_RES) $(PERLDLL_OBJ) $(PERLEXPLIB)
-	$(EMBED_DLL_MANI)
-endif
+	   $(PERLDLL_OBJ) $(shell type Extensions_static) $(LIBFILES) $(PERLDLL_OBJ) $(PERLDLL_RES)
 
 $(PERLSTATICLIB): $(PERLDLL_OBJ) Extensions_static
 ifeq ($(CCTYPE),GCC)

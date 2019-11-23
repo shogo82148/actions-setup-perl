@@ -1135,11 +1135,16 @@ regen_config_h:
 	-$(MINIPERL) -I..\lib config_h.PL "ARCHPREFIX=$(ARCHPREFIX)"
 	rename config.h $(CFGH_TMPL)
 
-$(CONFIGPM): ..\config.sh config_h.PL
+$(CONFIGPM) : $(MINIPERL) ..\config.sh config_h.PL
 	$(MINIPERL) -I..\lib ..\configpm --chdir=..
-	-$(MINIPERL) -I..\lib config_h.PL "ARCHPREFIX=$(ARCHPREFIX)"
+	$(XCOPY) ..\*.h $(COREDIR)\*.*
+	$(XCOPY) *.h $(COREDIR)\*.*
+	$(RCOPY) include $(COREDIR)\*.*
+	-$(MINIPERL) -I..\lib config_h.PL
+	if errorlevel 1 $(MAKE) /$(MAKEFLAGS) $(CONFIGPM)
 
-.\config.h : $(CONFIGPM)
+config.w32 : $(CFGSH_TMPL)
+	copy $(CFGSH_TMPL) config.w32
 
 # See the comment in Makefile.SH explaining this seemingly cranky ordering
 ..\lib\buildcustomize.pl : $(MINI_OBJ) ..\write_buildcustomize.pl
@@ -1156,8 +1161,6 @@ endif
 #convinence target, get a working miniperl
 mp : $(CONFIGPM)
 
-$(MINIDIR)\.exists : $(CFGH_TMPL)
-	if not exist "$(MINIDIR)" mkdir "$(MINIDIR)"
 #
 # Copy the template config.h and set configurables at the end of it
 # as per the options chosen and compiler used.
@@ -1167,8 +1170,7 @@ $(MINIDIR)\.exists : $(CFGH_TMPL)
 # real config.h used to build perl.exe is generated from the top-level
 # config_h.SH by config_h.PL (run by miniperl.exe).
 #
-# MINIDIR generates config.h so miniperl.exe is not rebuilt when the 2nd
-# config.h is generated in CONFIGPM target, see also the comments for $(MINI_OBJ).
+.\config.h : $(CFGH_TMPL)
 	copy $(CFGH_TMPL) config.h
 	@(echo.&& \
 	echo #ifndef _config_h_footer_&& \
@@ -1322,8 +1324,6 @@ else
 	@(echo #undef USE_CPLUSPLUS&& \
 	echo #endif)>> config.h
 endif
-#separate line since this is sentinal that this target is done
-	rem. > $(MINIDIR)\.exists
 
 $(MINICORE_OBJ) : $(CORE_NOCFG_H)
 	$(CC) -c $(CFLAGS) $(MINIBUILDOPT) -DPERL_EXTERNAL_GLOB -DPERL_IS_MINIPERL $(OBJOUT_FLAG)$@ $(PDBOUT) ..\$(*F).c

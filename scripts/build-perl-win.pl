@@ -4,6 +4,8 @@ use utf8;
 use warnings;
 use strict;
 use 5.026002;
+use FindBin;
+use File::Copy;
 use LWP::UserAgent;
 use CPAN::Perl::Releases::MetaCPAN;
 
@@ -43,6 +45,11 @@ system("7z", "x", "perl-$version.tar") == 0 or die "Failed to extract tar";
 
 print STDERR "start build\n";
 chdir "$tmpdir\\perl-$version\\win32" or die "failed to cd $tmpdir\\perl-$version\\win32: $!";
+
+if (! -e "GNUMakefile") {
+    copy("$FindBin::Bin\\GNUMakefile", "GNUMakefile") or die "copy failed: $!";
+}
+
 my $install_dir = "$ENV{RUNNER_TOOL_CACHE}\\perl\\${version}\\x64";
 system("gmake", "-f", "GNUMakefile", "-j2", "INST_TOP=$install_dir") == 0
     or die "Failed to build";

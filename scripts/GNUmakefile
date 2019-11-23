@@ -1688,7 +1688,7 @@ inst_lib : $(CONFIGPM)
 
 $(UNIDATAFILES) : ..\pod\perluniprops.pod
 
-..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM)
+..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(MINIPERL) ..\lib\unicore\mktables Extensions_nonxs
 	$(MINIPERL) -I..\lib ..\lib\unicore\mktables -C ..\lib\unicore -P ..\pod -maketest -makelist -p
 
 minitest : $(HAVEMINIPERL) $(GLOBEXE) $(CONFIGPM) $(UNIDATAFILES) utils

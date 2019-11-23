@@ -1,3 +1,2 @@
-requires "ExtUtils::Manifest";
 requires "LWP::UserAgent";
 requires "LWP::Protocol::https";

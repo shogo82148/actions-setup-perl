@@ -882,7 +882,7 @@ PERLSTATICLIB	?= ..\perl524s$(a)
 PERLDLL		= ..\perl524.dll
 
 # don't let "gmake -n all" try to run "miniperl.exe make_ext.pl"
-PLMAKE		= gmake
+PLMAKE		= gmake SHELL=cmd.exe
 
 XCOPY		= xcopy /f /r /i /d /y
 RCOPY		= xcopy /f /r /i /e /d /y

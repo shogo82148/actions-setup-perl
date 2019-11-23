@@ -66,10 +66,9 @@ jobs:
         # - "5.8.5"
     steps:
       - uses: actions/checkout@v1
-      - name: setup built-in perl
+      - name: setup host perl
         shell: bash
         run: |
-          choco install --force strawberryperl
           echo "::add-path::C:\strawberry\c\bin;C:\strawberry\perl\site\bin;C:\strawberry\perl\bin"
       - name: Host perl -V
         run: perl -V
@@ -79,7 +78,7 @@ jobs:
       - name: build
         shell: bash
         run: |
-          cpanm --installdeps .
+          cpan -T CPAN::Perl::Releases
           perl build-perl-win.pl
         env:
           PERL_VERSION: ${{ matrix.perl }}

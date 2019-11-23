@@ -69,7 +69,7 @@ jobs:
       - name: setup built-in perl
         shell: bash
         run: |
-          choco install strawberryperl
+          choco install --force strawberryperl
           echo "::add-path::C:\strawberry\c\bin;C:\strawberry\perl\site\bin;C:\strawberry\perl\bin"
       - name: Host perl -V
         run: perl -V

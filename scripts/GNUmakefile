@@ -714,12 +714,9 @@ $(CONFIGPM) : $(HAVEMINIPERL) ..\config.sh config_h.PL
 	-$(MINIPERL) -I..\lib config_h.PL "ARCHPREFIX=$(ARCHPREFIX)"
 
 # See the comment in Makefile.SH explaining this seemingly cranky ordering
-..\lib\buildcustomize.pl : $(MINIDIR) $(MINI_OBJ) ..\write_buildcustomize.pl
+..\lib\buildcustomize.pl : $(MINI_OBJ) ..\write_buildcustomize.pl
 	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
 	$(MINIPERL) -I..\lib -f ..\write_buildcustomize.pl ..
-
-$(MINIDIR) :
-	if not exist "$(MINIDIR)" mkdir "$(MINIDIR)"
 
 #
 # Copy the template config.h and set configurables at the end of it
@@ -731,7 +728,8 @@ $(MINIDIR) :
 # config_h.SH by config_h.PL (run by miniperl.exe).
 #
 .\config.h : $(CONFIGPM)
-$(MINIDIR)\.exists : $(MINIDIR) $(CFGH_TMPL)
+$(MINIDIR)\.exists : $(CFGH_TMPL)
+	if not exist "$(MINIDIR)" mkdir "$(MINIDIR)"
 	copy $(CFGH_TMPL) config.h
 	@(echo.&& \
 	echo #ifndef _config_h_footer_&& \

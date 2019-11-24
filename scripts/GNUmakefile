@@ -1,17 +1,7 @@
 #
 # Makefile to build perl on Windows using GMAKE.
 # Supported compilers:
-#	Microsoft Visual C++ 6.0 or later
-#	MinGW with gcc-3.4.5 or later
-#	Windows SDK 64-bit compiler and tools
-#
-# This is set up to build a perl.exe that runs off a shared library
-# (perl522.dll).  Also makes individual DLLs for the XS extensions.
-#
-# The easiest way to customize the build process is to use parameters like this:
-#
-# c:\dev\perlsrc\win32> gmake INST_TOP=c:\sw\perl CCHOME=c:\sw\mingw USE_64_BIT_INT=define
-
+#	MinGW with gcc-8.3.0 or later
 
 ##
 ## Make sure you read README.win32 *before* you mess with anything here!
@@ -29,13 +19,6 @@ SHELL := cmd.exe
 #                  x86_64-w64-mingw32-gcc
 GCCBIN := gcc
 
-ifeq ($(GCCBIN),x86_64-w64-mingw32-gcc)
-GCCCROSS := x86_64-w64-mingw32
-endif
-ifeq ($(GCCBIN),i686-w64-mingw32-gcc)
-GCCCROSS := i686-w64-mingw32
-endif
-
 GCCTARGET := $(shell $(GCCBIN) -dumpmachine)
 GCCVER1   := $(shell for /f "delims=. tokens=1,2,3" %%i in ('gcc -dumpversion') do echo %%i)
 GCCVER2   := $(shell for /f "delims=. tokens=1,2,3" %%i in ('gcc -dumpversion') do echo %%j)
@@ -51,12 +34,6 @@ GCCVER3   := $(shell for /f "delims=. tokens=1,2,3" %%i in ('gcc -dumpversion') 
 #
 INST_DRV := c:
 INST_TOP := $(INST_DRV)\perl
-
-#
-# Uncomment if you want to build a 32-bit Perl using a 32-bit compiler
-# on a 64-bit version of Windows.
-#
-#WIN64		:= undef
 
 #
 # Comment this out if you DON'T want your perl installation to be versioned.
@@ -146,38 +123,7 @@ USE_LARGE_FILES	:= define
 #
 #USE_NO_REGISTRY := define
 
-#
-# uncomment exactly one of the following
-#
-# Visual C++ 6.0 (aka Visual C++ 98)
-#CCTYPE		:= MSVC60
-# Visual C++ .NET 2002/2003 (aka Visual C++ 7.0/7.1) (full version)
-#CCTYPE		:= MSVC70
-# Visual C++ Toolkit 2003 (aka Visual C++ 7.1) (free command-line tools)
-#CCTYPE		:= MSVC70FREE
-# Windows Server 2003 SP1 Platform SDK (April 2005)
-#CCTYPE		:= SDK2003SP1
-# Visual C++ 2005 (aka Visual C++ 8.0) (full version)
-#CCTYPE		:= MSVC80
-# Visual C++ 2005 Express Edition (aka Visual C++ 8.0) (free version)
-#CCTYPE		:= MSVC80FREE
-# Visual C++ 2008 (aka Visual C++ 9.0) (full version)
-#CCTYPE		:= MSVC90
-# Visual C++ 2008 Express Edition (aka Visual C++ 9.0) (free version)
-#CCTYPE		:= MSVC90FREE
-# Visual C++ 2010 (aka Visual C++ 10.0) (full version)
-#CCTYPE		:= MSVC100
-# Visual C++ 2010 Express Edition (aka Visual C++ 10.0) (free version)
-#CCTYPE		:= MSVC100FREE
-# Visual C++ 2012 (aka Visual C++ 11.0) (full version)
-#CCTYPE		:= MSVC110
-# Visual C++ 2012 Express Edition (aka Visual C++ 11.0) (free version)
-#CCTYPE		:= MSVC110FREE
-# Visual C++ 2013 (aka Visual C++ 12.0) (full version)
-#CCTYPE		:= MSVC120
-# Visual C++ 2013 Express Edition (aka Visual C++ 12.0) (free version)
-#CCTYPE		:= MSVC120FREE
-# MinGW or mingw-w64 with gcc-3.4.5 or later
+# MinGW or mingw-w64 with gcc-8.3.0 or later
 CCTYPE		:= GCC
 
 #
@@ -219,43 +165,22 @@ CFG		:= Debug
 
 #
 # set the install locations of the compiler include/libraries
-# Running VCVARS32.BAT is *required* when using Visual C.
-# Some versions of Visual C don't define MSVCDIR in the environment,
-# so you may have to set CCHOME explicitly (spaces in the path name should
-# not be quoted)
 #
-ifeq ($(CCTYPE),GCC)
-CCHOME		:= C:\MinGW
-else
-CCHOME		:= $(MSVCDIR)
-endif
+CCHOME		:= C:\Strawberry\c
 
 #
 # Following sets $Config{incpath} and $Config{libpth}
 #
 
-ifneq ($(GCCCROSS),)
-CCINCDIR := $(CCHOME)\$(GCCCROSS)\include
-CCLIBDIR := $(CCHOME)\$(GCCCROSS)\lib
-CCDLLDIR := $(CCLIBDIR)
-ARCHPREFIX := $(GCCCROSS)-
-else
 CCINCDIR := $(CCHOME)\include
 CCLIBDIR := $(CCHOME)\lib
 CCDLLDIR := $(CCHOME)\bin
 ARCHPREFIX :=
-endif
 
 #
 # Additional compiler flags can be specified here.
 #
 BUILDOPT	:= $(BUILDOPTEXTRA)
-
-#
-# This should normally be disabled.  Enabling it will disable the File::Glob
-# implementation of CORE::glob.
-#
-#BUILDOPT	+= -DPERL_EXTERNAL_GLOB
 
 #
 # Perl needs to read scripts in text mode so that the DATA filehandle
@@ -275,11 +200,6 @@ BUILDOPT	+= -DPERL_TEXTMODE_SCRIPTS
 #
 EXTRALIBDIRS	:=
 
-#
-# set this to your email address (perl will guess a value from
-# from your loginname and your hostname, which may not be right)
-#
-#EMAIL		:=
 
 ##
 ## Build configuration ends.
@@ -336,61 +256,9 @@ ifeq ($(USE_NO_REGISTRY),define)
 BUILDOPT	+= -DWIN32_NO_REGISTRY
 endif
 
-ifeq ($(CCTYPE),GCC)
-ifeq ($(GCCTARGET),x86_64-w64-mingw32)
 WIN64 := define
 PROCESSOR_ARCHITECTURE := x64
-endif
-ifeq ($(GCCTARGET),i686-w64-mingw32)
-WIN64 := undef
-PROCESSOR_ARCHITECTURE := x86
-endif
-endif
-
-PROCESSOR_ARCHITECTURE  ?= x86
-
-ifeq ($(WIN64),undef)
-PROCESSOR_ARCHITECTURE	= x86
-endif
-
-ifeq ($(WIN64),)
-# When we are running from a 32bit cmd.exe on AMD64 then
-# PROCESSOR_ARCHITECTURE is set to x86 and PROCESSOR_ARCHITEW6432
-# is set to AMD64
-ifneq ($(PROCESSOR_ARCHITEW6432),)
-PROCESSOR_ARCHITECTURE	= $(PROCESSOR_ARCHITEW6432)
-WIN64			= define
-else ifeq ($(PROCESSOR_ARCHITECTURE),AMD64)
-WIN64			= define
-else ifeq ($(PROCESSOR_ARCHITECTURE),IA64)
-WIN64			= define
-else
-WIN64			= undef
-endif
-endif
-
-ifeq ($(WIN64),define)
-USE_64_BIT_INT	= define
-endif
-
-# Treat 64-bit MSVC60 (doesn't really exist) as SDK2003SP1 because
-# both link against MSVCRT.dll (which is part of Windows itself) and
-# not against a compiler specific versioned runtime.
-ifeq ("$(WIN64) $(CCTYPE)","define MSVC60")
-CCTYPE		= SDK2003SP1
-endif
-
-# Disable the 64-bit-int option for (32-bit) MSVC60 builds since that compiler
-# does not support it.
-ifeq ($(CCTYPE),MSVC60)
-USE_64_BIT_INT	= undef
-endif
-
-# Disable the long double option for MSVC builds since that compiler
-# does not support it.
-ifneq ($(CCTYPE),GCC)
-USE_LONG_DOUBLE	= undef
-endif
+USE_64_BIT_INT = define
 
 ARCHITECTURE = $(PROCESSOR_ARCHITECTURE)
 ifeq ($(ARCHITECTURE),AMD64)
@@ -452,8 +320,6 @@ INST_HTML	= $(INST_TOP)$(INST_VER)\html
 
 MINIBUILDOPT    :=
 
-ifeq ($(CCTYPE),GCC)
-
 CC		= $(ARCHPREFIX)gcc
 LINK32		= $(ARCHPREFIX)g++
 LIB32		= $(ARCHPREFIX)ar rc
@@ -484,10 +350,7 @@ a = .a
 #
 
 INCLUDES	= -I.\include -I. -I..
-DEFINES		= -DWIN32
-ifeq ($(WIN64),define)
-DEFINES		+= -DWIN64 -DCONSERVATIVE
-endif
+DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE
 LOCDEFS		= -DPERLDLL -DPERL_CORE
 CXX_FLAG	= -xc++
 LIBC		=
@@ -516,211 +379,12 @@ MINIBUILDOPT	+= -fno-strict-aliasing
 
 TESTPREPGCC	= test-prep-gcc
 
-else
-
-o = .obj
-
-# All but the free version of VC++ 7.1 can load DLLs on demand.  Makes the test
-# suite run in about 10% less time.
-ifneq ($(CCTYPE),MSVC70FREE)
-# If no registry, advapi32 is only used for Perl_pp_getlogin/getlogin/GetUserNameA
-# which is rare to execute
-ifneq ($(USE_NO_REGISTRY),undef)
-DELAYLOAD	= -DELAYLOAD:ws2_32.dll -DELAYLOAD:advapi32.dll delayimp.lib
-MINIDELAYLOAD	=
-else
-DELAYLOAD	= -DELAYLOAD:ws2_32.dll delayimp.lib
-#miniperl never does any registry lookups
-MINIDELAYLOAD	= -DELAYLOAD:advapi32.dll
-endif
-endif
-
-# Visual C++ 2005 and 2008 (VC++ 8.0 and 9.0) create manifest files for EXEs and
-# DLLs. These either need copying everywhere with the binaries, or else need
-# embedding in them otherwise MSVCR80.dll or MSVCR90.dll won't be found. For
-# simplicity, embed them if they exist (and delete them afterwards so that they
-# don't get installed too).
-EMBED_EXE_MANI	= if exist $@.manifest mt -nologo -manifest $@.manifest -outputresource:$@;1 && \
-		  if exist $@.manifest del $@.manifest
-EMBED_DLL_MANI	= if exist $@.manifest mt -nologo -manifest $@.manifest -outputresource:$@;2 && \
-		  if exist $@.manifest del $@.manifest
-
-# Most relevant compiler-specific options fall into two groups:
-# either pre-MSVC80 or MSVC80 onwards, so define a macro for this.
-ifeq ($(CCTYPE),MSVC60)
-PREMSVC80	= define
-else ifeq ($(CCTYPE),MSVC70)
-PREMSVC80	= define
-else ifeq ($(CCTYPE),MSVC70FREE)
-PREMSVC80	= define
-else
-PREMSVC80	= undef
-endif
-
-ifneq ($(__ICC),define)
-CC		= cl
-LINK32		= link
-else
-CC		= icl
-LINK32		= xilink
-endif
-LIB32		= $(LINK32) -lib
-RSC		= rc
-
-#
-# Options
-#
-
-INCLUDES	= -I.\include -I. -I..
-#PCHFLAGS	= -Fpc:\temp\vcmoduls.pch -YX
-DEFINES		= -DWIN32 -D_CONSOLE -DNO_STRICT
-LOCDEFS		= -DPERLDLL -DPERL_CORE
-CXX_FLAG	= -TP -EHsc
-
-LIBC		= msvcrt.lib
-
-ifeq ($(CFG),Debug)
-OPTIMIZE	= -Od -MD -Zi -DDEBUGGING
-LINK_DBG	= -debug
-else ifeq ($(CFG),DebugSymbols)
-OPTIMIZE	= -Od -MD -Zi
-LINK_DBG	= -debug
-else ifeq ($(CFG),DebugFull)
-LIBC		= msvcrtd.lib
-OPTIMIZE	= -Od -MDd -Zi -D_DEBUG -DDEBUGGING
-LINK_DBG	= -debug
-else
-# -O1 yields smaller code, which turns out to be faster than -O2 on x86 and x64
-OPTIMIZE	= -O1 -MD -Zi -DNDEBUG
-# we enable debug symbols in release builds also
-LINK_DBG	= -debug -opt:ref,icf
-# you may want to enable this if you want COFF symbols in the executables
-# in addition to the PDB symbols.  The default Dr. Watson that ships with
-# Windows can use the the former but not latter.  The free WinDbg can be
-# installed to get better stack traces from just the PDB symbols, so we
-# avoid the bloat of COFF symbols by default.
-#LINK_DBG	= $(LINK_DBG) -debugtype:both
-ifneq ($(CCTYPE),MSVC60)
-# enable Whole Program Optimizations (WPO) and Link Time Code Generation (LTCG)
-OPTIMIZE	+= -GL
-LINK_DBG	+= -ltcg
-LIB_FLAGS	= -ltcg
-endif
-endif
-
-ifeq ($(WIN64),define)
-DEFINES		+= -DWIN64 -DCONSERVATIVE
-OPTIMIZE	+= -fp:precise
-endif
-
-# For now, silence warnings from VC++ 8.0 onwards about "unsafe" CRT functions
-# and POSIX CRT function names being deprecated.
-ifeq ($(PREMSVC80),undef)
-DEFINES		+= -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE
-endif
-
-# In VS 2005 (VC++ 8.0) Microsoft changes time_t from 32-bit to
-# 64-bit, even in 32-bit mode.  It also provides the _USE_32BIT_TIME_T
-# preprocessor option to revert back to the old functionality for
-# backward compatibility.  We define this symbol here for older 32-bit
-# compilers only (which aren't using it at all) for the sole purpose
-# of getting it into $Config{ccflags}.  That way if someone builds
-# Perl itself with e.g. VC6 but later installs an XS module using VC8
-# the time_t types will still be compatible.
-ifeq ($(WIN64),undef)
-ifeq ((PREMSVC80),define)
-BUILDOPT	+= -D_USE_32BIT_TIME_T
-endif
-endif
-
-LIBBASEFILES	= oldnames.lib kernel32.lib user32.lib gdi32.lib winspool.lib \
-	comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib \
-	netapi32.lib uuid.lib ws2_32.lib mpr.lib winmm.lib version.lib \
-	odbc32.lib odbccp32.lib comctl32.lib
-
-# Avoid __intel_new_proc_init link error for libircmt.
-# libmmd is /MD equivelent, other variants exist.
-# libmmd is Intel C's math addon funcs to MS CRT, contains long doubles, C99,
-# and optimized C89 funcs
-ifeq ($(__ICC),define)
-LIBBASEFILES	+= libircmt.lib libmmd.lib
-endif
-
-# The 64 bit Windows Server 2003 SP1 SDK compilers link against MSVCRT.dll, which
-# doesn't include the buffer overrun verification code used by the /GS switch.
-# Since the code links against libraries that are compiled with /GS, this
-# "security cookie verification" code must be included via bufferoverflow.lib.
-ifeq ("$(WIN64) $(CCTYPE)","define SDK2003SP1")
-LIBBASEFILES    += bufferoverflowU.lib
-endif
-
-LIBFILES	= $(LIBBASEFILES) $(LIBC)
-
-EXTRACFLAGS	= -nologo -GF -W3
-ifeq ($(__ICC),define)
-EXTRACFLAGS	+= -Qstd=c99
-endif
-ifeq ($(USE_CPLUSPLUS),define)
-EXTRACFLAGS	+= $(CXX_FLAG)
-endif
-CFLAGS		= $(EXTRACFLAGS) $(INCLUDES) $(DEFINES) $(LOCDEFS) \
-		$(PCHFLAGS) $(OPTIMIZE)
-LINK_FLAGS	= -nologo -nodefaultlib $(LINK_DBG) \
-		-libpath:"$(INST_COREDIR)" \
-		-machine:$(PROCESSOR_ARCHITECTURE)
-LIB_FLAGS	+= -nologo
-OBJOUT_FLAG	= -Fo
-EXEOUT_FLAG	= -Fe
-LIBOUT_FLAG	= /out:
-PDBOUT		= -Fd$(*).pdb
-TESTPREPGCC	=
-
-endif
-
 CFLAGS_O	= $(CFLAGS) $(BUILDOPT)
 
 ifeq ($(PREMSVC80),undef)
 PRIV_LINK_FLAGS	+= "/manifestdependency:type='Win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'"
 else
 RSC_FLAGS	= -DINCLUDE_MANIFEST
-endif
-
-
-# For XP support in >= VS 2013 (VC++ 12.0), subsystem is always in Config.pm
-# LINK_FLAGS else subsystem is only needed for EXE building, not XS DLL building
-# Console vs GUI makes no difference for DLLs, so use default for cleaner
-# building cmd lines
-
-ifeq ($(CCTYPE),MSVC120)
-ifeq ($(WIN64),define)
-LINK_FLAGS	+= -subsystem:console,"5.02"
-else
-LINK_FLAGS	+= -subsystem:console,"5.01"
-endif
-
-else ifeq ($(CCTYPE),MSVC120FREE)
-ifeq ($(WIN64),define)
-LINK_FLAGS	+= -subsystem:console,"5.02"
-else
-LINK_FLAGS	+= -subsystem:console,"5.01"
-endif
-
-else ifeq ($(CCTYPE),MSVC140)
-ifeq ($(WIN64),define)
-LINK_FLAGS	+= -subsystem:console,"5.02"
-else
-LINK_FLAGS	+= -subsystem:console,"5.01"
-endif
-
-else ifeq ($(CCTYPE),MSVC140FREE)
-ifeq ($(WIN64),define)
-LINK_FLAGS	+= -subsystem:console,"5.02"
-else
-LINK_FLAGS	+= -subsystem:console,"5.01"
-endif
-
-else ifneq ($(CCTYPE),GCC)
-PRIV_LINK_FLAGS	+= -subsystem:console
 endif
 
 BLINK_FLAGS	= $(PRIV_LINK_FLAGS) $(LINK_FLAGS)
@@ -750,11 +414,7 @@ a ?= .lib
 	$(IMPLIB) --input-def $(*F).def --output-lib $(*F).a $@
 
 %.res: %.rc
-ifeq ($(CCTYPE),GCC)
 	$(RSC) --use-temp-file --include-dir=. --include-dir=.. -O COFF -D INCLUDE_MANIFEST -i $< -o $@
-else
-	$(RSC) -i.. -DINCLUDE_MANIFEST $<
-endif
 
 #
 # various targets
@@ -830,22 +490,12 @@ UTILS		=			\
 		bin\perlglob.pl		\
 		bin\search.pl
 
-ifeq ($(CCTYPE),GCC)
-
 CFGSH_TMPL	= config.gc
 CFGH_TMPL	= config_H.gc
 PERLIMPLIB	= $(COREDIR)\libperl522$(a)
 PERLIMPLIBBASE	= libperl522$(a)
 PERLSTATICLIB	= ..\libperl522s$(a)
 INT64		= long long
-
-else
-
-CFGSH_TMPL	= config.vc
-CFGH_TMPL	= config_H.vc
-INT64		= __int64
-
-endif
 
 # makedef.pl must be updated if this changes, and this should normally
 # only change when there is an incompatible revision of the public API.
@@ -918,9 +568,9 @@ WIN32_SRC	=		\
 
 # We need this for miniperl build unless we override canned
 # config.h #define building mini\*
-#ifeq ($(USE_PERLIO)" == "define"
+ifeq ($(USE_PERLIO)" == "define"
 WIN32_SRC	+= .\win32io.c
-#endif
+endif
 
 CORE_NOCFG_H	=		\
 		..\av.h		\
@@ -1050,25 +700,10 @@ CFG_VARS	=					\
 # Top targets
 #
 
-.PHONY: all info
+.PHONY: all
 
 all : .\config.h ..\git_version.h $(GLOBEXE) $(CONFIGPM) \
 	$(UNIDATAFILES) MakePPPort $(PERLEXE) Extensions_nonxs Extensions $(PERLSTATIC)
-
-info :
-	@echo # GCCBIN=$(GCCBIN)
-	@echo # GCCVER=$(GCCVER1).$(GCCVER2).$(GCCVER3)
-	@echo # GCCTARGET=$(GCCTARGET)
-	@echo # GCCCROSS=$(GCCCROSS)
-	@echo # WIN64=$(WIN64)
-	@echo # ARCHITECTURE=$(ARCHITECTURE)
-	@echo # ARCHNAME=$(ARCHNAME)
-	@echo # MAKE=$(PLMAKE)
-ifeq ($(GCCTARGET),)
-	@echo Unable to detect gcc and/or architecture!
-	@exit 1
-endif
-
 
 ..\regcomp$(o) : ..\regnodes.h ..\regcharclass.h
 
@@ -1083,12 +718,7 @@ static: $(PERLEXESTATIC)
 #----------------------------------------------------------------
 
 $(GLOBEXE) : perlglob.c
-ifeq ($(CCTYPE),GCC)
 	$(LINK32) $(OPTIMIZE) $(BLINK_FLAGS) -mconsole -o $@ perlglob.c $(LIBFILES)
-else
-	$(CC) $(OPTIMIZE) $(PDBOUT) -Fe$@ perlglob.c -link $(BLINK_FLAGS) \
-	setargv$(o) $(LIBFILES) && $(EMBED_EXE_MANI)
-endif
 
 ..\git_version.h : $(HAVEMINIPERL) ..\make_patchnum.pl
 	$(MINIPERL) -I..\lib ..\make_patchnum.pl
@@ -1123,21 +753,11 @@ config.w32 : $(CFGSH_TMPL)
 
 # See the comment in Makefile.SH explaining this seemingly cranky ordering
 ..\lib\buildcustomize.pl : $(MINIDIR) $(MINI_OBJ) ..\write_buildcustomize.pl
-ifeq ($(CCTYPE),GCC)
 	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
-else
-	$(LINK32) -out:$(MINIPERL) $(BLINK_FLAGS) \
-	    $(DELAYLOAD) $(MINIDELAYLOAD) $(LIBFILES) $(MINI_OBJ)
-	$(subst $@,$(MINIPERL),$(EMBED_EXE_MANI))
-
-endif
 	$(MINIPERL) -I..\lib -f ..\write_buildcustomize.pl ..
 
 $(MINIDIR) :
 	if not exist "$(MINIDIR)" mkdir "$(MINIDIR)"
-
-#convinence target, get a working miniperl
-mp : $(CONFIGPM)
 
 #
 # Copy the template config.h and set configurables at the end of it
@@ -1343,18 +963,13 @@ perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\embed.fnc ..\makedef.pl
 $(PERLEXPLIB) : $(PERLIMPLIB)
 
 $(PERLIMPLIB) : perldll.def
-ifeq ($(CCTYPE),GCC)
 	$(IMPLIB) -k -d perldll.def -l $(PERLIMPLIB) -e $(PERLEXPLIB)
-else
-	lib -def:perldll.def -machine:$(ARCHITECTURE) /OUT:$(PERLIMPLIB)
-endif
 
 $(PERLDLL): perldll.def $(PERLDLL_OBJ) $(PERLDLL_RES) Extensions_static
 	$(LINK32) -mdll -o $@ $(BLINK_FLAGS) \
 	   $(PERLDLL_OBJ) $(shell type Extensions_static) $(LIBFILES) $(PERLDLL_RES)
 
 $(PERLSTATICLIB): $(PERLDLL_OBJ) Extensions_static
-ifeq ($(CCTYPE),GCC)
 	$(LIB32) $(LIB_FLAGS) $@ $(PERLDLL_OBJ)
 	if exist $(STATICDIR) rmdir /s /q $(STATICDIR)
 	for %%i in ($(shell type Extensions_static)) do \
@@ -1362,10 +977,6 @@ ifeq ($(CCTYPE),GCC)
 		$(ARCHPREFIX)ar x ..\%%i && \
 		$(ARCHPREFIX)ar q ..\$@ *$(o) && \
 		cd .. && rmdir /s /q $(STATICDIR)
-else
-	$(LIB32) $(LIB_FLAGS) -out:$@ @Extensions_static \
-	    $(PERLDLL_OBJ)
-endif
 	$(XCOPY) $(PERLSTATICLIB) $(COREDIR)
 
 $(PERLEXE_RES): perlexe.rc $(PERLEXE_MANIFEST) $(PERLEXE_ICO)
@@ -1378,13 +989,8 @@ $(BITCOUNT_H) : $(GENUUDMAP)
 	$(GENUUDMAP) $(GENERATED_HEADERS)
 
 $(GENUUDMAP) : ..\mg_raw.h
-ifeq ($(CCTYPE),GCC)
 	$(LINK32) $(CFLAGS_O) -o..\generate_uudmap.exe ..\generate_uudmap.c \
 	$(BLINK_FLAGS) $(LIBFILES)
-else
-	$(CC) $(CFLAGS_O) $(PDBOUT) -Fe..\generate_uudmap.exe ..\generate_uudmap.c -link $(LIBFILES) $(BLINK_FLAGS)
-	$(EMBED_EXE_MANI)
-endif
 
 #This generates a stub ppport.h & creates & fills /lib/CORE to allow for XS
 #building .c->.obj wise (linking is a different thing). This target is AKA
@@ -1402,26 +1008,14 @@ perlmainst$(o) : runperl.c $(CONFIGPM)
 	$(CC) $(CFLAGS_O) $(OBJOUT_FLAG)$@ $(PDBOUT) -c runperl.c
 
 $(PERLEXE): $(CONFIGPM) $(PERLEXE_OBJ) $(PERLEXE_RES) $(PERLIMPLIB)
-ifeq ($(CCTYPE),GCC)
 	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS)  \
 	    $(PERLEXE_OBJ) $(PERLEXE_RES) $(PERLIMPLIB) $(LIBFILES)
-else
-	$(LINK32) -out:$@ $(BLINK_FLAGS) \
-	    $(PERLEXE_OBJ) $(PERLEXE_RES) $(PERLIMPLIB) $(LIBFILES) $(SETARGV_OBJ)
-	$(EMBED_EXE_MANI)
-endif
 	copy $(PERLEXE) $(WPERLEXE)
 	$(MINIPERL) -I..\lib bin\exetype.pl $(WPERLEXE) WINDOWS
 
 $(PERLEXESTATIC): $(PERLSTATICLIB) $(CONFIGPM) $(PERLEXEST_OBJ) $(PERLEXE_RES)
-ifeq ($(CCTYPE),GCC)
 	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) \
 	    $(PERLEXEST_OBJ) $(PERLEXE_RES) $(PERLSTATICLIB) $(LIBFILES)
-else
-	$(LINK32) -out:$@ $(BLINK_FLAGS) \
-	    $(PERLEXEST_OBJ) $(PERLEXE_RES) $(PERLSTATICLIB) $(LIBFILES) $(SETARGV_OBJ)
-	$(EMBED_EXE_MANI)
-endif
 
 #-------------------------------------------------------------------------------
 # There's no direct way to mark a dependency on
@@ -1453,12 +1047,6 @@ Extensions_nonxs : ..\make_ext.pl ..\pod\perlfunc.pod $(CONFIGPM) $(GLOBEXE) $(H
 $(DYNALOADER) : ..\make_ext.pl $(CONFIGPM) $(HAVE_COREDIR)
 	$(XCOPY) ..\*.h $(COREDIR)\*.*
 	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(EXTDIR) --dir=$(DISTDIR) --dynaloader lib --verbose
-
-Extensions_clean :
-	-if exist $(MINIPERL) $(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --all --target=clean
-
-Extensions_realclean :
-	-if exist $(MINIPERL) $(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --all --target=realclean
 
 #-------------------------------------------------------------------------------
 

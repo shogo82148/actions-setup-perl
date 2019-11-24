@@ -75,14 +75,14 @@ jobs:
       - name: gcc --version
         run: gcc --version
 
-      - name: install dependencies
+      - name: cpanm --installdeps .
         shell: cmd
-        run: cpanm Carton && carton install --deployment
+        run: cpanm --installdeps .
         working-directory: ./scripts
 
       - name: build
         shell: cmd
-        run: carton exec perl build-perl-win.pl
+        run: perl build-perl-win.pl
         env:
           PERL_VERSION: ${{ matrix.perl }}
         working-directory: ./scripts

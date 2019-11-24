@@ -704,12 +704,6 @@ all : .\config.h ..\git_version.h $(GLOBEXE) $(CONFIGPM) \
 
 ..\regexec$(o) : ..\regnodes.h ..\regcharclass.h
 
-reonly : ..\regnodes.h .\config.h ..\git_version.h $(GLOBEXE) $(HAVEMINIPERL)\
-	$(CONFIGPM) $(UNIDATAFILES) $(PERLEXE)				\
-	Extensions_reonly
-
-static: $(PERLEXESTATIC)
-
 #----------------------------------------------------------------
 
 $(GLOBEXE) : perlglob.c
@@ -1012,9 +1006,6 @@ MakePPPort: $(HAVEMINIPERL) $(CONFIGPM) Extensions_nonxs
 #most of deps of this target are in DYNALOADER and therefore omitted here
 Extensions : $(PERLDEP) $(DYNALOADER) $(GLOBEXE)
 	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --dynamic --verbose
-
-Extensions_reonly : $(PERLDEP) $(DYNALOADER) $(HAVE_COREDIR)
-	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --dynamic +re --verbose
 
 Extensions_static : ..\make_ext.pl list_static_libs.pl $(CONFIGPM) $(GLOBEXE) $(HAVE_COREDIR) Extensions_nonxs
 	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --static --verbose

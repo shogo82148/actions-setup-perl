@@ -706,7 +706,7 @@ $(GLOBEXE) : perlglob.c
 
 $(CONFIGPM) : $(HAVEMINIPERL) ..\config.sh config_h.PL
 	$(MINIPERL) -I..\lib ..\configpm --chdir=..
-	-$(MINIPERL) -I..\lib config_h.PL
+	-$(MINIPERL) -I..\lib config_h.PL "ARCHPREFIX=$(ARCHPREFIX)"
 
 # See the comment in Makefile.SH explaining this seemingly cranky ordering
 ..\lib\buildcustomize.pl : $(MINIDIR) $(MINI_OBJ) ..\write_buildcustomize.pl

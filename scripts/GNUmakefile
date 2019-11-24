@@ -990,17 +990,21 @@ MakePPPort: $(HAVEMINIPERL) $(CONFIGPM) Extensions_nonxs
 
 #most of deps of this target are in DYNALOADER and therefore omitted here
 Extensions : $(PERLDEP) $(DYNALOADER) $(GLOBEXE)
+	$(XCOPY) *.h $(COREDIR)\\*.*
 	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --dynamic --verbose
 
 Extensions_static : ..\make_ext.pl list_static_libs.pl $(CONFIGPM) $(GLOBEXE) $(HAVE_COREDIR) Extensions_nonxs
+	$(XCOPY) *.h $(COREDIR)\\*.*
 	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --static --verbose
 	$(MINIPERL) -I..\lib list_static_libs.pl > Extensions_static
 
 Extensions_nonxs : ..\make_ext.pl ..\pod\perlfunc.pod $(CONFIGPM) $(GLOBEXE) $(HAVE_COREDIR)
+	$(XCOPY) *.h $(COREDIR)\\*.*
 	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --nonxs !libs --verbose
 
 #lib must be built, it can't be buildcustomize.pl-ed, and is required for XS building
 $(DYNALOADER) : ..\make_ext.pl $(CONFIGPM) $(HAVE_COREDIR) Extensions_nonxs
+	$(XCOPY) *.h $(COREDIR)\\*.*
 	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(EXTDIR) --dir=$(DISTDIR) --dynaloader lib --verbose
 
 # all PE files need to be built by the time this target runs, PP files can still

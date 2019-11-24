@@ -763,7 +763,8 @@ $(MINIDIR) :
 # real config.h used to build perl.exe is generated from the top-level
 # config_h.SH by config_h.PL (run by miniperl.exe).
 #
-.\config.h : $(CFGH_TMPL)
+.\config.h : $(CONFIGPM)
+$(MINIDIR)\.exists : $(MINIDIR) $(CFGH_TMPL)
 	copy $(CFGH_TMPL) config.h
 	@(echo.&& \
 	echo #ifndef _config_h_footer_&& \
@@ -917,6 +918,8 @@ else
 	@(echo #undef USE_CPLUSPLUS&& \
 	echo #endif)>> config.h
 endif
+#separate line since this is sentinal that this target is done
+	rem. > $(MINIDIR)\.exists
 
 $(MINICORE_OBJ) : $(CORE_NOCFG_H)
 	$(CC) -c $(CFLAGS) $(MINIBUILDOPT) -DPERL_EXTERNAL_GLOB -DPERL_IS_MINIPERL $(OBJOUT_FLAG)$@ $(PDBOUT) ..\$(*F).c
@@ -939,7 +942,7 @@ endif
 # 1. we don't want to rebuild miniperl.exe when config.h changes
 # 2. we don't want to rebuild miniperl.exe with non-default config.h
 # 3. we can't have miniperl.exe depend on git_version.h, as miniperl creates it
-$(MINI_OBJ)	: $(CORE_NOCFG_H)
+$(MINI_OBJ)	: $(MINIDIR)\.exists $(CORE_NOCFG_H)
 
 $(WIN32_OBJ)	: $(CORE_H)
 

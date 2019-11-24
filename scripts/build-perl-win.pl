@@ -9,6 +9,9 @@ use File::Copy;
 use LWP::UserAgent;
 use CPAN::Perl::Releases::MetaCPAN;
 use Devel::PatchPerl;
+use Try::Tiny;
+
+local $| = 1;
 
 sub perl_release {
     my $version = shift;
@@ -21,59 +24,80 @@ sub perl_release {
     die "not found the tarball for perl-$version\n";
 }
 
-my $version = $ENV{PERL_VERSION};
-my $url = perl_release($version);
-
-print STDERR "downloading perl $version from $url\n";
-my $ua = LWP::UserAgent->new;
-my $response = $ua->get($url);
-if (!$response->is_success) {
-    die "download failed: " . $response->status_line;
+sub group {
+    my ($name, $sub) = @_;
+    try {
+        print "::group::$name\n";
+        $sub->();
+    } finally {
+        print "::endgroup::\n";
+    };
 }
 
-$url =~ m/\/(perl-.*)$/;
-my $filename = $1;
-my $tmpdir = $ENV{RUNNER_TEMP};
-open my $fh, ">", "$tmpdir\\$filename" or die "$!";
-binmode $fh;
-print $fh $response->content;
-close $fh;
+sub run {
+    my $version = $ENV{PERL_VERSION};
+    my $url = perl_release($version);
 
-print STDERR "extracting...\n";
-chdir $tmpdir or die "failed to cd $tmpdir: $!";
-system("7z", "x", $filename) == 0 or die "Failed to extract gz";
-system("7z", "x", "perl-$version.tar") == 0 or die "Failed to extract tar";
-Devel::PatchPerl->patch_source($version, "$tmpdir\\perl-$version");
+    my $tmpdir = $ENV{RUNNER_TEMP};
+    $url =~ m/\/(perl-.*)$/;
+    my $filename = $1;
+    my $install_dir = "$ENV{RUNNER_TOOL_CACHE}\\perl\\${version}\\x64";
 
-print STDERR "start build\n";
-chdir "$tmpdir\\perl-$version\\win32" or die "failed to cd $tmpdir\\perl-$version\\win32: $!";
+    group "downloading perl $version from $url" => sub {
+        my $ua = LWP::UserAgent->new;
+        my $response = $ua->get($url);
+        if (!$response->is_success) {
+            die "download failed: " . $response->status_line;
+        }
 
-if (! -e "GNUMakefile") {
-    copy("$FindBin::Bin\\GNUMakefile", "GNUMakefile") or die "copy failed: $!";
+        open my $fh, ">", "$tmpdir\\$filename" or die "$!";
+        binmode $fh;
+        print $fh $response->content;
+        close $fh;
+    };
+
+    group "extracting..." => sub {
+        chdir $tmpdir or die "failed to cd $tmpdir: $!";
+        system("7z", "x", $filename) == 0 or die "Failed to extract gz";
+        system("7z", "x", "perl-$version.tar") == 0 or die "Failed to extract tar";
+        Devel::PatchPerl->patch_source($version, "$tmpdir\\perl-$version");
+    };
+
+    group "build" => sub {
+        chdir "$tmpdir\\perl-$version\\win32" or die "failed to cd $tmpdir\\perl-$version\\win32: $!";
+
+        if (! -e "GNUMakefile") {
+            copy("$FindBin::Bin\\GNUMakefile", "GNUMakefile") or die "copy failed: $!";
+        }
+
+        system("gmake", "-f", "GNUMakefile", "INST_TOP=$install_dir", "CCHOME=C:\\strawberry\\c") == 0
+            or die "Failed to build";
+    };
+
+    group "install" => sub {
+        local $ENV{PERL_DL_DEBUG} = 1;
+        print STDERR "start install\n";
+        system("gmake", "-f", "GNUMakefile", "install") == 0
+            or die "Failed to install";
+    }
+
+    group "install App::cpanminus and Carton" => sub {
+        local $ENV{PATH} = "$install_dir\\bin;C:\\Strawberry\\c;$ENV{PATH}";
+        system("$install_dir\\bin\\cpan", "-T", "App::cpanminus", "Carton") == 0;
+            or die "Failed to install App::cpanminus and Carton";
+    };
+
+    group "archiving" => sub {
+        chdir $install_dir or die "failed to cd $install_dir: $!";
+        system("7z", "a", "$tmpdir\\perl.zip", ".") == 0
+            or die "failed to archive";
+    };
 }
 
-my $install_dir = "$ENV{RUNNER_TOOL_CACHE}\\perl\\${version}\\x64";
-system("gmake", "-f", "GNUMakefile", "INST_TOP=$install_dir", "CCHOME=C:\\strawberry\\c") == 0
-    or die "Failed to build";
-
-$ENV{PERL_DL_DEBUG} = 1;
-print STDERR "start install\n";
-system("gmake", "-f", "GNUMakefile", "install") == 0
-    or die "Failed to install";
-
-print STDERR "install App::cpanminus and Carton\n";
-my $ret = do {
-    local $ENV{PATH} = "$install_dir\\bin;C:\\Strawberry\\c;$ENV{PATH}";
-    system("$install_dir\\bin\\cpan", "-T", "App::cpanminus", "Carton") == 0;
+try {
+    run();
+} catch {
+    print "::error::$_\n";
 };
-
-if (!$ret) {
-    die "Failed to install App::cpanminus and Carton";
-}
-
-print STDERR "archiving...\n";
-chdir $install_dir or die "failed to cd $install_dir: $!";
-system("7z", "a", "$tmpdir\\perl.zip", ".") == 0
-    or die "failed to archive";
 
 1;

@@ -29,6 +29,8 @@ sub group {
     try {
         print "::group::$name\n";
         $sub->();
+    } catch {
+        die $_;
     } finally {
         print "::endgroup::\n";
     };

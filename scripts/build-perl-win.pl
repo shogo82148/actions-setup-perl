@@ -83,7 +83,7 @@ sub run {
 
     group "install App::cpanminus and Carton" => sub {
         local $ENV{PATH} = "$install_dir\\bin;C:\\Strawberry\\c;$ENV{PATH}";
-        system("$install_dir\\bin\\cpan", "-T", "App::cpanminus", "Carton") == 0;
+        system("$install_dir\\bin\\cpan", "-T", "App::cpanminus", "Carton") == 0
             or die "Failed to install App::cpanminus and Carton";
     };
 

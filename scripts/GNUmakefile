@@ -562,15 +562,10 @@ EXTRACORE_SRC	+= ..\perlio.c
 
 WIN32_SRC	=		\
 		.\win32.c	\
+		.\win32io.c	\
 		.\win32sck.c	\
 		.\win32thread.c	\
 		.\fcrypt.c
-
-# We need this for miniperl build unless we override canned
-# config.h #define building mini\*
-ifeq ($(USE_PERLIO)" == "define"
-WIN32_SRC	+= .\win32io.c
-endif
 
 CORE_NOCFG_H	=		\
 		..\av.h		\

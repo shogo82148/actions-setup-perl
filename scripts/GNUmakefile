@@ -721,7 +721,7 @@ $(GLOBEXE) : perlglob.c
 # make sure that we recompile perl.c if the git version changes
 ..\perl$(o) : ..\git_version.h
 
-..\config.sh : config.w32 $(HAVEMINIPERL) config_sh.PL FindExt.pm
+..\config.sh : $(CFGSH_TMPL) $(HAVEMINIPERL) config_sh.PL FindExt.pm
 	$(MINIPERL) -I..\lib config_sh.PL $(CFG_VARS) config.w32 > ..\config.sh
 
 # This target is for when changes to the main config.sh happen.
@@ -742,9 +742,6 @@ $(CONFIGPM) : $(HAVEMINIPERL) ..\config.sh config_h.PL
 	$(RCOPY) include $(COREDIR)\*.*
 	-$(MINIPERL) -I..\lib config_h.PL
 	if errorlevel 1 $(MAKE) /$(MAKEFLAGS) $(CONFIGPM)
-
-config.w32 : $(CFGSH_TMPL)
-	copy $(CFGSH_TMPL) config.w32
 
 # See the comment in Makefile.SH explaining this seemingly cranky ordering
 ..\lib\buildcustomize.pl : $(MINIDIR) $(MINI_OBJ) ..\write_buildcustomize.pl

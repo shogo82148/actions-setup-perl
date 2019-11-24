@@ -496,13 +496,7 @@ PERLIMPLIB	= $(COREDIR)\libperl522$(a)
 PERLIMPLIBBASE	= libperl522$(a)
 PERLSTATICLIB	= ..\libperl522s$(a)
 INT64		= long long
-
-# makedef.pl must be updated if this changes, and this should normally
-# only change when there is an incompatible revision of the public API.
-PERLIMPLIB	?= $(COREDIR)\perl522$(a)
-PERLIMPLIBBASE	?= perl522$(a)
-PERLEXPLIB	?= $(COREDIR)\perl522.exp
-PERLSTATICLIB	?= ..\perl522s$(a)
+PERLEXPLIB	= $(COREDIR)\perl522.exp
 PERLDLL		= ..\perl522.dll
 
 # don't let "gmake -n all" try to run "miniperl.exe make_ext.pl"

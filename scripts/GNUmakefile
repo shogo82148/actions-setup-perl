@@ -684,7 +684,9 @@ CFG_VARS	=					\
 
 .PHONY: all
 
-all : rebasePE Extensions_nonxs
+all : .\config.h ..\git_version.h $(GLOBEXE) $(CONFIGPM) \
+		$(UNIDATAFILES) MakePPPort $(PERLEXE) Extensions_nonxs Extensions $(PERLSTATIC)
+		@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
 
 ..\regcomp$(o) : ..\regnodes.h ..\regcharclass.h
 
@@ -989,33 +991,27 @@ MakePPPort: $(HAVEMINIPERL) $(CONFIGPM) Extensions_nonxs
 
 
 #most of deps of this target are in DYNALOADER and therefore omitted here
-Extensions : $(PERLDEP) $(DYNALOADER) $(GLOBEXE)
+Extensions : ..\make_ext.pl ..\lib\buildcustomize.pl $(PERLDEP) $(CONFIGPM) $(DYNALOADER)
 	$(XCOPY) *.h $(COREDIR)\\*.*
 	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --dynamic --verbose
 
-Extensions_static : ..\make_ext.pl list_static_libs.pl $(CONFIGPM) $(GLOBEXE) $(HAVE_COREDIR) Extensions_nonxs
+Extensions_static : ..\make_ext.pl ..\lib\buildcustomize.pl list_static_libs.pl $(CONFIGPM) Extensions_nonxs
 	$(XCOPY) *.h $(COREDIR)\\*.*
 	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --static --verbose
 	$(MINIPERL) -I..\lib list_static_libs.pl > Extensions_static
 
-Extensions_nonxs : ..\make_ext.pl ..\pod\perlfunc.pod $(CONFIGPM) $(GLOBEXE) $(HAVE_COREDIR)
+Extensions_nonxs : ..\make_ext.pl ..\lib\buildcustomize.pl $(PERLDEP) $(CONFIGPM) ..\pod\perlfunc.pod
 	$(XCOPY) *.h $(COREDIR)\\*.*
-	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --nonxs !libs --verbose
+	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --nonxs --verbose
 
 #lib must be built, it can't be buildcustomize.pl-ed, and is required for XS building
-$(DYNALOADER) : ..\make_ext.pl $(CONFIGPM) $(HAVE_COREDIR) Extensions_nonxs
+$(DYNALOADER) : ..\make_ext.pl ..\lib\buildcustomize.pl $(PERLDEP) $(CONFIGPM) Extensions_nonxs
 	$(XCOPY) *.h $(COREDIR)\\*.*
-	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(EXTDIR) --dir=$(DISTDIR) --dynaloader lib --verbose
-
-# all PE files need to be built by the time this target runs, PP files can still
-# be running in parallel like UNIDATAFILES, this target a placeholder for the
-# future
-rebasePE : Extensions $(PERLDLL) $(PERLEXE)
-	$(NOOP)
+	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(EXTDIR) --dynaloader --verbose
 
 #-------------------------------------------------------------------------------
 
-doc: $(PERLEXE) $(PERLDLL) ..\pod\perltoc.pod
+doc: $(PERLEXE) ..\pod\perltoc.pod
 	$(PERLEXE) -I..\lib ..\installhtml --podroot=.. --htmldir=$(HTMLDIR) \
 	    --podpath=pod:lib:utils --htmlroot="file://$(subst :,|,$(INST_HTML))"\
 	    --recurse

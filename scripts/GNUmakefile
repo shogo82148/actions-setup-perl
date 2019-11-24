@@ -697,8 +697,7 @@ CFG_VARS	=					\
 
 .PHONY: all
 
-all : .\config.h ..\git_version.h $(GLOBEXE) $(CONFIGPM) \
-	$(UNIDATAFILES) MakePPPort $(PERLEXE) rebasePE Extensions_nonxs Extensions
+all : rebasePE Extensions_nonxs
 
 ..\regcomp$(o) : ..\regnodes.h ..\regcharclass.h
 

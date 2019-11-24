@@ -79,7 +79,7 @@ sub run {
         print STDERR "start install\n";
         system("gmake", "-f", "GNUMakefile", "install") == 0
             or die "Failed to install";
-    }
+    };
 
     group "install App::cpanminus and Carton" => sub {
         local $ENV{PATH} = "$install_dir\\bin;C:\\Strawberry\\c;$ENV{PATH}";

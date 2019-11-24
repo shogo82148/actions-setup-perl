@@ -724,17 +724,6 @@ $(GLOBEXE) : perlglob.c
 ..\config.sh : $(CFGSH_TMPL) $(HAVEMINIPERL) config_sh.PL FindExt.pm
 	$(MINIPERL) -I..\lib config_sh.PL $(CFG_VARS) config.w32 > ..\config.sh
 
-# This target is for when changes to the main config.sh happen.
-# Edit config.gc, then make perl using GCC in a minimal configuration (i.e.
-# with MULTI, ITHREADS, IMP_SYS, LARGE_FILES and PERLIO off), then make
-# this target to regenerate config_H.gc.
-regen_config_h:
-	$(MINIPERL) -I..\lib config_sh.PL $(CFG_VARS) $(CFGSH_TMPL) > ..\config.sh
-	$(MINIPERL) -I..\lib ..\configpm --chdir=..
-	-del /f $(CFGH_TMPL)
-	-$(MINIPERL) -I..\lib config_h.PL "ARCHPREFIX=$(ARCHPREFIX)"
-	rename config.h $(CFGH_TMPL)
-
 $(CONFIGPM) : $(HAVEMINIPERL) ..\config.sh config_h.PL
 	$(MINIPERL) -I..\lib ..\configpm --chdir=..
 	$(XCOPY) ..\*.h $(COREDIR)\*.*

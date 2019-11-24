@@ -1121,7 +1121,7 @@ endif
 # make sure that we recompile perl.c if the git version changes
 ..\perl$(o) : ..\git_version.h
 
-..\config.sh : config.w32 $(MINIPERL) config_sh.PL FindExt.pm
+..\config.sh : config.w32 $(HAVEMINIPERL) config_sh.PL FindExt.pm
 	$(MINIPERL) -I..\lib config_sh.PL $(CFG_VARS) config.w32 > ..\config.sh
 
 # This target is for when changes to the main config.sh happen.
@@ -1135,7 +1135,7 @@ regen_config_h:
 	-$(MINIPERL) -I..\lib config_h.PL "ARCHPREFIX=$(ARCHPREFIX)"
 	rename config.h $(CFGH_TMPL)
 
-$(CONFIGPM) : $(MINIPERL) ..\config.sh config_h.PL
+$(CONFIGPM) : $(HAVEMINIPERL) ..\config.sh config_h.PL
 	$(MINIPERL) -I..\lib ..\configpm --chdir=..
 	$(XCOPY) ..\*.h $(COREDIR)\*.*
 	$(XCOPY) *.h $(COREDIR)\*.*
@@ -1452,7 +1452,7 @@ endif
 # There's no direct way to mark a dependency on
 # DynaLoader.pm, so this will have to do
 
-MakePPPort: $(MINIPERL) $(CONFIGPM) Extensions_nonxs
+MakePPPort: $(HAVEMINIPERL) $(CONFIGPM) Extensions_nonxs
 	$(MINIPERL) -I..\lib ..\mkppport
 
 
@@ -1687,7 +1687,7 @@ inst_lib : $(CONFIGPM)
 
 $(UNIDATAFILES) : ..\pod\perluniprops.pod
 
-..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(MINIPERL) ..\lib\unicore\mktables Extensions_nonxs
+..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(HAVEMINIPERL) ..\lib\unicore\mktables Extensions_nonxs
 	$(MINIPERL) -I..\lib ..\lib\unicore\mktables -C ..\lib\unicore -P ..\pod -maketest -makelist -p
 
 minitest : $(HAVEMINIPERL) $(GLOBEXE) $(CONFIGPM) $(UNIDATAFILES) utils

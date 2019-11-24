@@ -100,6 +100,7 @@ try {
     run();
 } catch {
     print "::error::$_\n";
+    exit 1;
 };
 
 1;

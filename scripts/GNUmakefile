@@ -706,6 +706,9 @@ $(GLOBEXE) : perlglob.c
 
 $(CONFIGPM) : $(HAVEMINIPERL) ..\config.sh config_h.PL
 	$(MINIPERL) -I..\lib ..\configpm --chdir=..
+	$(XCOPY) *.h $(COREDIR)\\*.*
+	$(RCOPY) include $(COREDIR)\\*.*
+	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
 	-$(MINIPERL) -I..\lib config_h.PL "ARCHPREFIX=$(ARCHPREFIX)"
 
 # See the comment in Makefile.SH explaining this seemingly cranky ordering

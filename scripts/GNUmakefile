@@ -190,7 +190,7 @@ CCTYPE		:= GCC
 # If not enabled, we automatically try to use maximum optimization
 # with all compilers that are known to have a working optimizer.
 #
-#CFG		:= Debug
+CFG		:= Debug
 
 #
 # uncomment to enable linking with setargv.obj under the Visual C

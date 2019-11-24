@@ -493,7 +493,7 @@ PERLEXPLIB	= $(COREDIR)\perl522.exp
 PERLDLL		= ..\perl522.dll
 
 # don't let "gmake -n all" try to run "miniperl.exe make_ext.pl"
-PLMAKE		= gmake SHELL=cmd.exe
+PLMAKE		= gmake
 
 XCOPY		= xcopy /f /r /i /d /y
 RCOPY		= xcopy /f /r /i /e /d /y

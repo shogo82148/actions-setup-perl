@@ -44,6 +44,7 @@ sub run {
     $url =~ m/\/(perl-.*)$/;
     my $filename = $1;
     my $install_dir = "$ENV{RUNNER_TOOL_CACHE}\\perl\\${version}\\x64";
+    local $ENV{MAKESHELL} = "cmd.exe";
 
     group "downloading perl $version from $url" => sub {
         my $ua = LWP::UserAgent->new;

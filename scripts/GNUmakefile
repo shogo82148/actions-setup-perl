@@ -912,10 +912,15 @@ EXTRACORE_SRC	+= ..\perlio.c
 
 WIN32_SRC	=		\
 		.\win32.c	\
-		.\win32io.c	\
 		.\win32sck.c	\
 		.\win32thread.c	\
 		.\fcrypt.c
+
+# We need this for miniperl build unless we override canned
+# config.h #define building mini\*
+#ifeq ($(USE_PERLIO)" == "define"
+WIN32_SRC	+= .\win32io.c
+#endif
 
 CORE_NOCFG_H	=		\
 		..\av.h		\
@@ -1078,10 +1083,61 @@ static: $(PERLEXESTATIC)
 #----------------------------------------------------------------
 
 $(GLOBEXE) : perlglob.c
+ifeq ($(CCTYPE),GCC)
 	$(LINK32) $(OPTIMIZE) $(BLINK_FLAGS) -mconsole -o $@ perlglob.c $(LIBFILES)
+else
+	$(CC) $(OPTIMIZE) $(PDBOUT) -Fe$@ perlglob.c -link $(BLINK_FLAGS) \
+	setargv$(o) $(LIBFILES) && $(EMBED_EXE_MANI)
+endif
+
+..\git_version.h : $(HAVEMINIPERL) ..\make_patchnum.pl
+	$(MINIPERL) -I..\lib ..\make_patchnum.pl
+
+# make sure that we recompile perl.c if the git version changes
+..\perl$(o) : ..\git_version.h
+
+..\config.sh : config.w32 $(HAVEMINIPERL) config_sh.PL FindExt.pm
+	$(MINIPERL) -I..\lib config_sh.PL $(CFG_VARS) config.w32 > ..\config.sh
+
+# This target is for when changes to the main config.sh happen.
+# Edit config.gc, then make perl using GCC in a minimal configuration (i.e.
+# with MULTI, ITHREADS, IMP_SYS, LARGE_FILES and PERLIO off), then make
+# this target to regenerate config_H.gc.
+regen_config_h:
+	$(MINIPERL) -I..\lib config_sh.PL $(CFG_VARS) $(CFGSH_TMPL) > ..\config.sh
+	$(MINIPERL) -I..\lib ..\configpm --chdir=..
+	-del /f $(CFGH_TMPL)
+	-$(MINIPERL) -I..\lib config_h.PL "ARCHPREFIX=$(ARCHPREFIX)"
+	rename config.h $(CFGH_TMPL)
+
+$(CONFIGPM) : $(HAVEMINIPERL) ..\config.sh config_h.PL
+	$(MINIPERL) -I..\lib ..\configpm --chdir=..
+	$(XCOPY) ..\*.h $(COREDIR)\*.*
+	$(XCOPY) *.h $(COREDIR)\*.*
+	$(RCOPY) include $(COREDIR)\*.*
+	-$(MINIPERL) -I..\lib config_h.PL
+	if errorlevel 1 $(MAKE) /$(MAKEFLAGS) $(CONFIGPM)
 
 config.w32 : $(CFGSH_TMPL)
 	copy $(CFGSH_TMPL) config.w32
+
+# See the comment in Makefile.SH explaining this seemingly cranky ordering
+..\lib\buildcustomize.pl : $(MINIDIR) $(MINI_OBJ) ..\write_buildcustomize.pl
+ifeq ($(CCTYPE),GCC)
+	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
+else
+	$(LINK32) -out:$(MINIPERL) $(BLINK_FLAGS) \
+	    $(DELAYLOAD) $(MINIDELAYLOAD) $(LIBFILES) $(MINI_OBJ)
+	$(subst $@,$(MINIPERL),$(EMBED_EXE_MANI))
+
+endif
+	$(MINIPERL) -I..\lib -f ..\write_buildcustomize.pl ..
+
+$(MINIDIR) :
+	if not exist "$(MINIDIR)" mkdir "$(MINIDIR)"
+
+#convinence target, get a working miniperl
+mp : $(CONFIGPM)
 
 #
 # Copy the template config.h and set configurables at the end of it
@@ -1247,43 +1303,6 @@ else
 	echo #endif)>> config.h
 endif
 
-
-..\git_version.h : $(HAVEMINIPERL) ..\make_patchnum.pl
-	$(MINIPERL) -I..\lib ..\make_patchnum.pl
-
-# make sure that we recompile perl.c if the git version changes
-..\perl$(o) : ..\git_version.h
-
-..\config.sh : config.w32 $(HAVEMINIPERL) config_sh.PL FindExt.pm
-	$(MINIPERL) -I..\lib config_sh.PL $(CFG_VARS) config.w32 > ..\config.sh
-
-# This target is for when changes to the main config.sh happen.
-# Edit config.gc, then make perl using GCC in a minimal configuration (i.e.
-# with MULTI, ITHREADS, IMP_SYS, LARGE_FILES and PERLIO off), then make
-# this target to regenerate config_H.gc.
-regen_config_h:
-	$(MINIPERL) -I..\lib config_sh.PL $(CFG_VARS) $(CFGSH_TMPL) > ..\config.sh
-	$(MINIPERL) -I..\lib ..\configpm --chdir=..
-	-del /f $(CFGH_TMPL)
-	-$(MINIPERL) -I..\lib config_h.PL "ARCHPREFIX=$(ARCHPREFIX)"
-	rename config.h $(CFGH_TMPL)
-
-$(CONFIGPM) : $(HAVEMINIPERL) ..\config.sh config_h.PL
-	$(MINIPERL) -I..\lib ..\configpm --chdir=..
-	$(XCOPY) ..\*.h $(COREDIR)\*.*
-	$(XCOPY) *.h $(COREDIR)\*.*
-	$(RCOPY) include $(COREDIR)\*.*
-	-$(MINIPERL) -I..\lib config_h.PL
-	if errorlevel 1 $(MAKE) /$(MAKEFLAGS) $(CONFIGPM)
-
-# See the comment in Makefile.SH explaining this seemingly cranky ordering
-..\lib\buildcustomize.pl : $(MINIDIR) $(MINI_OBJ) ..\write_buildcustomize.pl
-	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
-	$(MINIPERL) -I..\lib -f ..\write_buildcustomize.pl ..
-
-$(MINIDIR) :
-	if not exist "$(MINIDIR)" mkdir "$(MINIDIR)"
-
 $(MINICORE_OBJ) : $(CORE_NOCFG_H)
 	$(CC) -c $(CFLAGS) $(MINIBUILDOPT) -DPERL_EXTERNAL_GLOB -DPERL_IS_MINIPERL $(OBJOUT_FLAG)$@ $(PDBOUT) ..\$(*F).c
 
@@ -1308,17 +1327,18 @@ endif
 $(MINI_OBJ)	: $(CORE_NOCFG_H)
 
 $(WIN32_OBJ)	: $(CORE_H)
+
 $(CORE_OBJ)	: $(CORE_H)
+
 $(DLL_OBJ)	: $(CORE_H)
 
 
 perllibst.h : $(HAVEMINIPERL) $(CONFIGPM) create_perllibst_h.pl
 	$(MINIPERL) -I..\lib create_perllibst_h.pl
 
-perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\embed.fnc ..\makedef.pl create_perllibst_h.pl
-	$(MINIPERL) -I..\lib create_perllibst_h.pl
-	$(MINIPERL) -I..\lib -w ..\makedef.pl PLATFORM=win32 $(OPTIMIZE) $(DEFINES) $(BUILDOPT) 
-		CCTYPE=$(CCTYPE) TARG_DIR=..\ > perldll.def
+perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\embed.fnc ..\makedef.pl
+	$(MINIPERL) -I..\lib -w ..\makedef.pl PLATFORM=win32 $(OPTIMIZE) $(DEFINES) \
+	$(BUILDOPT) CCTYPE=$(CCTYPE) TARG_DIR=..\ > perldll.def
 
 $(PERLEXPLIB) : $(PERLIMPLIB)
 

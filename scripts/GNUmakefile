@@ -1000,7 +1000,7 @@ Extensions_nonxs : ..\make_ext.pl ..\pod\perlfunc.pod $(CONFIGPM) $(GLOBEXE) $(H
 	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --nonxs !libs --verbose
 
 #lib must be built, it can't be buildcustomize.pl-ed, and is required for XS building
-$(DYNALOADER) : ..\make_ext.pl $(CONFIGPM) $(HAVE_COREDIR)
+$(DYNALOADER) : ..\make_ext.pl $(CONFIGPM) $(HAVE_COREDIR) Extensions_nonxs
 	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(EXTDIR) --dir=$(DISTDIR) --dynaloader lib --verbose
 
 # all PE files need to be built by the time this target runs, PP files can still

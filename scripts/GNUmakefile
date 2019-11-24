@@ -698,7 +698,7 @@ CFG_VARS	=					\
 .PHONY: all
 
 all : .\config.h ..\git_version.h $(GLOBEXE) $(CONFIGPM) \
-	$(UNIDATAFILES) MakePPPort $(PERLEXE) Extensions_nonxs Extensions $(PERLSTATIC)
+	$(UNIDATAFILES) MakePPPort $(PERLEXE) rebasePE Extensions_nonxs Extensions
 
 ..\regcomp$(o) : ..\regnodes.h ..\regcharclass.h
 
@@ -1045,6 +1045,12 @@ Extensions_nonxs : ..\make_ext.pl ..\pod\perlfunc.pod $(CONFIGPM) $(GLOBEXE) $(H
 $(DYNALOADER) : ..\make_ext.pl $(CONFIGPM) $(HAVE_COREDIR)
 	$(XCOPY) ..\*.h $(COREDIR)\*.*
 	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(EXTDIR) --dir=$(DISTDIR) --dynaloader lib --verbose
+
+# all PE files need to be built by the time this target runs, PP files can still
+# be running in parallel like UNIDATAFILES, this target a placeholder for the
+# future
+rebasePE : Extensions $(PERLDLL) $(PERLEXE)
+	$(NOOP)
 
 #-------------------------------------------------------------------------------
 

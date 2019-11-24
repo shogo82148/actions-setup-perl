@@ -86,6 +86,12 @@ jobs:
         env:
           PERL_VERSION: ${{ matrix.perl }}
         working-directory: ./scripts
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: perl-${{ matrix.perl }}
+          path: d:/a/_temp/perl-${{ matrix.perl }}
+
     # - name: upload
     #   shell: pwsh
     #   run: |

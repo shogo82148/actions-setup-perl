@@ -77,6 +77,8 @@ jobs:
       - name: carton install
         shell: bash
         run: ./local/bin/carton install
+        env:
+          PERL5LIB: ${{ github.workspace }}/scripts/windows/local/lib/perl5
         working-directory: ./scripts/linux
 
       - name: build

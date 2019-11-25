@@ -29,7 +29,7 @@ sub run {
         Perl::Build->install_from_cpan(
             $version => (
                 dst_path          => $install_dir,
-                configure_options => ["-Dman1dir=none", "-Dman3dir=none"],
+                configure_options => ["-de", "-Dman1dir=none", "-Dman3dir=none"],
                 jobs              => 2,
             )
         );

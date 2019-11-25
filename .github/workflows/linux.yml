@@ -10,6 +10,7 @@ jobs:
   linux:
     runs-on: ubuntu-18.04
     strategy:
+      fail-fast: false
       matrix:
         perl:
         - "5.30.1"
@@ -67,7 +68,7 @@ jobs:
 
       - name: install Carton
         shell: bash
-        run: cpanm Carton
+        run: curl -L https://cpanmin.us | perl - Carton
         working-directory: ./scripts/linux
 
       - name: carton install

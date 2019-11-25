@@ -1,14 +1,19 @@
 name: build perl on linux
 
 on:
+  pull_request:
+    paths:
+      - 'scripts/linux/**'
+      - '.github/workflows/linux.yml'
   push:
     branches:
-    - 'releases/*'
+      - 'releases/*'
 
 jobs:
   linux:
     runs-on: ubuntu-18.04
     strategy:
+      fail-fast: false
       matrix:
         perl:
         - "5.30.1"
@@ -62,21 +67,38 @@ jobs:
         - "5.8.6"
         - "5.8.5"
     steps:
-    - uses: actions/checkout@v1
-    - name: build
-      run: |
-        curl -sL https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build > "$RUNNER_TEMP/perl-build"
-        perl "$RUNNER_TEMP/perl-build" "$PERL_VERSION" "$RUNNER_TOOL_CACHE/perl/$PERL_VERSION/x64" --noman
-        curl -L https://cpanmin.us | "$RUNNER_TOOL_CACHE/perl/$PERL_VERSION/x64/bin/perl" - --notest App::cpanminus Carton
-        cd "$RUNNER_TOOL_CACHE/perl/$PERL_VERSION/x64" && tar zcf "$RUNNER_TEMP/perl.tar.gz" .
-      env:
-        PERL_VERSION: ${{ matrix.perl }}
+      - uses: actions/checkout@v1
+      - name: Host perl -V
+        run: perl -V
+      - name: gcc --version
+        run: gcc --version
 
-    - name: upload
-      run: |
-        ACTIONS_VERSION=v$(cat "$GITHUB_WORKSPACE/package.json" | jq -r .version)
-        aws --region us-east-1 s3 cp --acl public-read "$RUNNER_TEMP/perl.tar.gz" "s3://shogo82148-actions-setup-perl/$ACTIONS_VERSION/perl-$PERL_VERSION-linux-x64.tar.gz"
-      env:
-        PERL_VERSION: ${{ matrix.perl }}
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: install Carton
+        shell: bash
+        run: curl -sSL https://cpanmin.us | perl - -L local Carton
+        working-directory: ./scripts/linux
+
+      - name: carton install
+        shell: bash
+        run: perl ./local/bin/carton install
+        env:
+          PERL5LIB: ${{ github.workspace }}/scripts/linux/local/lib/perl5
+        working-directory: ./scripts/linux
+
+      - name: build
+        shell: bash
+        run: perl build.pl
+        env:
+          PERL5LIB: ${{ github.workspace }}/scripts/linux/local/lib/perl5
+          PERL_VERSION: ${{ matrix.perl }}
+        working-directory: ./scripts/linux
+
+      - name: upload
+        if: startsWith(github.ref, 'refs/heads/releases/')
+        run: |
+          ACTIONS_VERSION=v$(cat "$GITHUB_WORKSPACE/package.json" | jq -r .version)
+          aws --region us-east-1 s3 cp --acl public-read "$RUNNER_TEMP/perl.tar.gz" "s3://shogo82148-actions-setup-perl/$ACTIONS_VERSION/perl-$PERL_VERSION-linux-x64.tar.gz"
+        env:
+          PERL_VERSION: ${{ matrix.perl }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

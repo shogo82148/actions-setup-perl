@@ -1,0 +1,83 @@
+name: update cpanfile.snapshot
+on:
+  pull_request: {}
+  push: {}
+
+jobs:
+  linux:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: install Carton
+        shell: bash
+        run: |
+          rm -f cpanfile.snapshot
+          curl -sSL https://cpanmin.us | perl - -L local Carton
+        working-directory: ./scripts/linux
+
+      - name: carton install
+        shell: bash
+        run: perl ./local/bin/carton install
+        env:
+          PERL5LIB: ${{ github.workspace }}/scripts/linux/local/lib/perl5
+        working-directory: ./scripts/linux
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: cpanfile.snapshot-linux
+          path: scripts/linux/cpanfile.snapshot
+
+  darwin:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: install Carton
+        shell: bash
+        run: |
+          rm -f cpanfile.snapshot
+          curl -sSL https://cpanmin.us | perl - -L local Carton
+        working-directory: ./scripts/darwin
+
+      - name: carton install
+        shell: bash
+        run: perl ./local/bin/carton install
+        env:
+          PERL5LIB: ${{ github.workspace }}/scripts/darwin/local/lib/perl5
+        working-directory: ./scripts/darwin
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: cpanfile.snapshot-darwin
+          path: scripts/darwin/cpanfile.snapshot
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - name: setup host perl
+        shell: bash
+        run: |
+          echo "::add-path::C:\strawberry\c\bin;C:\strawberry\perl\site\bin;C:\strawberry\perl\bin"
+
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: install Carton
+        shell: cmd
+        run: cpanm -L local Carton
+        working-directory: ./scripts/windows
+
+      - name: carton install
+        shell: cmd
+        run: "perl .\\local\\bin\\carton install"
+        env:
+          PERL5LIB: ${{ github.workspace }}/scripts/windows/local/lib/perl5
+        working-directory: ./scripts/windows
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: cpanfile.snapshot-windows
+          path: scripts/windows/cpanfile.snapshot

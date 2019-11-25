@@ -68,6 +68,10 @@ jobs:
         - "5.8.5"
     steps:
       - uses: actions/checkout@v1
+      - name: Host perl -V
+        run: perl -V
+      - name: gcc --version
+        run: gcc --version
 
       - name: install Carton
         shell: bash

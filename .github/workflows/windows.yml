@@ -80,12 +80,12 @@ jobs:
 
       - name: install Carton
         shell: cmd
-        run: cpanm Carton
+        run: cpanm -L local Carton
         working-directory: ./scripts/windows
 
       - name: carton install
         shell: cmd
-        run: carton install
+        run: .\\local\\bin\\carton install
         working-directory: ./scripts/windows
 
       - name: build
@@ -93,7 +93,7 @@ jobs:
         run: perl build.pl
         env:
           PERL_VERSION: ${{ matrix.perl }}
-          PERL5LIB: ${{ github.workspace }}/scripts/windows/lib/perl5
+          PERL5LIB: ${{ github.workspace }}/scripts/windows/local/lib/perl5
         working-directory: ./scripts/windows
 
       - name: upload

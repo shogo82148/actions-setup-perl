@@ -72,12 +72,12 @@ jobs:
 
       - name: install Carton
         shell: bash
-        run: curl -L https://cpanmin.us | perl - Carton
+        run: curl -L https://cpanmin.us | perl - -L local Carton
         working-directory: ./scripts/darwin
 
       - name: carton install
         shell: bash
-        run: carton install
+        run: ./local/bin/carton install
         working-directory: ./scripts/darwin
 
       - name: build

@@ -1,10 +1,13 @@
 name: build perl on darwin
 
 on:
-  pull_request: {}
+  pull_request:
+    paths:
+      - 'scripts/darwin/**'
+      - '.github/workflows/darwin.yml'
   push:
     branches:
-    - 'releases/*'
+      - 'releases/*'
 
 jobs:
   darwin:

@@ -1,10 +1,13 @@
 name: build perl on linux
 
 on:
-  pull_request: {}
+  pull_request:
+    paths:
+      - 'scripts/linux/**'
+      - '.github/workflows/linux.yml'
   push:
     branches:
-    - 'releases/*'
+      - 'releases/*'
 
 jobs:
   linux:

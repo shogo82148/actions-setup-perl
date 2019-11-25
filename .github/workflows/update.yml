@@ -1,6 +1,5 @@
 name: update cpanfile.snapshot
 on:
-  pull_request: {}
   push: {}
 
 jobs:

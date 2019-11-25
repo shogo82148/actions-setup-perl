@@ -85,7 +85,7 @@ jobs:
 
       - name: carton install
         shell: cmd
-        run: .\\local\\bin\\carton install
+        run: "perl .\\local\\bin\\carton install"
         working-directory: ./scripts/windows
 
       - name: build

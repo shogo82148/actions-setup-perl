@@ -72,14 +72,14 @@ jobs:
 
       - name: install Carton
         shell: bash
-        run: curl -L https://cpanmin.us | perl - -L local Carton
+        run: curl -sSL https://cpanmin.us | perl - -L local Carton
         working-directory: ./scripts/darwin
 
       - name: carton install
         shell: bash
-        run: ./local/bin/carton install
+        run: perl ./local/bin/carton install
         env:
-          PERL5LIB: ${{ github.workspace }}/scripts/windows/local/lib/perl5
+          PERL5LIB: ${{ github.workspace }}/scripts/darwin/local/lib/perl5
         working-directory: ./scripts/darwin
 
       - name: build

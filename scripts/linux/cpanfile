@@ -1,1 +1,2 @@
 requires "Perl::Build";
+requires "Try::Tiny";

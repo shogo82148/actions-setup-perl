@@ -57,6 +57,11 @@ jobs:
   windows:
     runs-on: windows-latest
     steps:
+      - name: setup host perl
+        shell: bash
+        run: |
+          echo "::add-path::C:\strawberry\c\bin;C:\strawberry\perl\site\bin;C:\strawberry\perl\bin"
+
       - name: Checkout
         uses: actions/checkout@v1
 

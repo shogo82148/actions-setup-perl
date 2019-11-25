@@ -75,17 +75,23 @@ jobs:
       - name: gcc --version
         run: gcc --version
 
-      - name: cpanm --installdeps .
+      - name: install Carton
         shell: cmd
-        run: cpanm --installdeps .
-        working-directory: ./scripts
+        run: cpanm Carton
+        working-directory: ./scripts/windows
+
+      - name: carton install
+        shell: cmd
+        run: carton install
+        working-directory: ./scripts/windows
 
       - name: build
         shell: cmd
-        run: perl build-perl-win.pl
+        run: perl build.pl
         env:
           PERL_VERSION: ${{ matrix.perl }}
-        working-directory: ./scripts
+          PERL5LIB: ${{ github.workspace }}/scripts/windows/lib/perl5
+        working-directory: ./scripts/windows
 
       - name: upload
         shell: pwsh

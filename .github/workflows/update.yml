@@ -34,8 +34,7 @@ jobs:
 
       - name: install Carton
         shell: bash
-        run: |
-          curl -sSL https://cpanmin.us | perl - --sudo Carton
+        run: "curl -sSL https://cpanmin.us | perl - --sudo Carton"
         working-directory: ./scripts/darwin
 
       - name: carton install
@@ -71,8 +70,6 @@ jobs:
       - name: carton install
         shell: cmd
         run: carton install
-        env:
-          PERL5LIB: ${{ github.workspace }}/scripts/windows/local/lib/perl5
         working-directory: ./scripts/windows
 
       - uses: actions/upload-artifact@v1

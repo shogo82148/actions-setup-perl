@@ -76,12 +76,12 @@ jobs:
 
       - name: install Carton
         shell: bash
-        run: curl -sSL https://cpanmin.us | sudo perl - Carton
+        run: "curl -sSL https://cpanmin.us | perl - --sudo Carton"
         working-directory: ./scripts/darwin
 
-      - name: carton install
+      - name: carton install --deployment
         shell: bash
-        run: carton install
+        run: carton install --deployment
         working-directory: ./scripts/darwin
 
       - name: build

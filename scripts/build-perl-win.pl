@@ -66,10 +66,9 @@ sub run {
     };
 
     group "build" => sub {
-        chdir "$tmpdir\\perl-$version\\win32" or die "failed to cd $tmpdir\\perl-$version\\win32: $!";
-
-        if (! -e "GNUMakefile") {
-            copy("$FindBin::Bin\\GNUMakefile", "GNUMakefile") or die "copy failed: $!";
+        chdir "$tmpdir\\perl-$version" or die "failed to cd $tmpdir\\perl-$version: $!";
+        if (! -e "win32\\GNUMakefile") {
+            copy("$FindBin::Bin\\GNUMakefile", "win32\\GNUMakefile") or die "copy failed: $!";
             Devel::PatchPerl::_patch(<<'PATCH');
 --- cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm.org
 +++ cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm
@@ -121,6 +120,8 @@ sub run {
  =item constants
 PATCH
         }
+
+        chdir "$tmpdir\\perl-$version\\win32" or die "failed to cd $tmpdir\\perl-$version\\win32: $!";
 
         system("gmake", "-f", "GNUMakefile", "INST_TOP=$install_dir", "CCHOME=C:\\strawberry\\c") == 0
             or die "Failed to build";

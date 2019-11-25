@@ -3,7 +3,7 @@
 set -uex
 
 CURRENT=$(cd "$(dirname "$0")" && pwd)
-VERSION=$(jq -r .version < "$CURRENT/package.json")
+VERSION=$1
 MAJOR=$(echo "$VERSION" | cut -d. -f1)
 MINOR=$(echo "$VERSION" | cut -d. -f2)
 PATCH=$(echo "$VERSION" | cut -d. -f3)
@@ -18,6 +18,8 @@ cd "$WORKING"
 : build the action
 git checkout -b "releases/v$MAJOR" "origin/releases/v$MAJOR" || git git checkout -b "releases/v$MAJOR" master
 git merge -X theirs -m "Merge branch 'master' into releases/v$MAJOR" master || true
+jq ".version=\"$MAJOR.$MINOR.$PATCH\"" < package.json > .tmp.json
+mv .tmp.json package.json
 npm install
 npm run build
 

@@ -1,0 +1,30 @@
+name: update cpanfile.snapshot
+on:
+  pull_request: {}
+  push: {}
+
+jobs:
+  linux:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: install Carton
+        shell: bash
+        run: |
+          rm -f cpanfile.snapshot
+          curl -sSL https://cpanmin.us | perl - -L local Carton
+        working-directory: ./scripts/linux
+
+      - name: carton install
+        shell: bash
+        run: perl ./local/bin/carton install
+        env:
+          PERL5LIB: ${{ github.workspace }}/scripts/linux/local/lib/perl5
+        working-directory: ./scripts/linux
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: cpanfile.snapshot-linux
+          path: scripts/linux/cpanfile.snapshot

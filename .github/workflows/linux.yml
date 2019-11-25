@@ -82,13 +82,12 @@ jobs:
         working-directory: ./scripts/linux
 
       - name: build
-        run: |
-          curl -sL https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build > "$RUNNER_TEMP/perl-build"
-          perl "$RUNNER_TEMP/perl-build" "$PERL_VERSION" "$RUNNER_TOOL_CACHE/perl/$PERL_VERSION/x64" --noman
-          curl -L https://cpanmin.us | "$RUNNER_TOOL_CACHE/perl/$PERL_VERSION/x64/bin/perl" - --notest App::cpanminus Carton
-          cd "$RUNNER_TOOL_CACHE/perl/$PERL_VERSION/x64" && tar zcf "$RUNNER_TEMP/perl.tar.gz" .
+        shell: bash
+        run: perl build.pl
         env:
+          PERL5LIB: ${{ github.workspace }}/scripts/linux/local/lib/perl5
           PERL_VERSION: ${{ matrix.perl }}
+        working-directory: ./scripts/linux
 
       - name: upload
         if: startsWith(github.ref, 'refs/heads/releases/')

@@ -61,7 +61,7 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v1
-      - run: rf -f scripts/windows/cpanfile.snapshot
+      - run: "rm -f scripts/windows/cpanfile.snapshot"
         shell: bash
 
       - name: install Carton

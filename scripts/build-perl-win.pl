@@ -70,6 +70,56 @@ sub run {
 
         if (! -e "GNUMakefile") {
             copy("$FindBin::Bin\\GNUMakefile", "GNUMakefile") or die "copy failed: $!";
+            Devel::PatchPerl::_patch(<<'PATCH');
+--- cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm.org
++++ cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm
+@@ -326,7 +326,8 @@ sub const_config {
+ # --- Constants Sections ---
+ 
+     my($self) = shift;
+-    my @m = <<"END";
++    my @m = $self->specify_shell(); # Usually returns empty string
++    push @m, <<"END";
+ 
+ # These definitions are from config.sh (via $INC{'Config.pm'}).
+ # They may have been overridden via Makefile.PL or on the command line.
+@@ -3176,6 +3177,16 @@ MAKE_FRAG
+     return $m;
+ }
+ 
++=item specify_shell
++
++Specify SHELL if needed - not done on Unix.
++
++=cut
++
++sub specify_shell {
++  return '';
++}
++
+ =item quote_paren
+ 
+ Backslashes parentheses C<()> in command line arguments.
+--- cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Win32.pm.org
++++ cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Win32.pm
+@@ -232,6 +232,17 @@ sub platform_constants {
+     return $make_frag;
+ }
+ 
++=item specify_shell
++
++Set SHELL to $ENV{COMSPEC} only if make is type 'gmake'.
++
++=cut
++
++sub specify_shell {
++    my $self = shift;
++    return '' unless $self->is_make_type('gmake');
++    "\nSHELL = $ENV{COMSPEC}\n";
++}
+ 
+ =item constants
+PATCH
         }
 
         system("gmake", "-f", "GNUMakefile", "INST_TOP=$install_dir", "CCHOME=C:\\strawberry\\c") == 0

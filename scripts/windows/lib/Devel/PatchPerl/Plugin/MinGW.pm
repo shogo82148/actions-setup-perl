@@ -1,3 +1,131 @@
+package Devel::PatchPerl::Plugin::MinGW;
+
+use utf8;
+use strict;
+use warnings;
+use 5.026002;
+use Devel::PatchPerl;
+use File::pushd qw[pushd];
+use File::Spec;
+
+# copy utility functions from Devel::PatchPerl
+*_is = *Devel::PatchPerl::_is;
+*_patch = *Devel::PatchPerl::_patch;
+
+my @patch = (
+    {
+        perl => [
+            qr/^5\.2[0-2]\.[0-9]+$/,
+            qr/^5\.1[0-9]\.[0-9]+$/,
+            qr/^5\.[0-9]\.[0-9]+$/,
+        ],
+        subs => [
+            [ \&_patch_make_maker ],
+        ],
+    },
+    {
+        perl => [
+            qr/^5\.22\.[0-9]+$/,
+        ],
+        subs => [
+            [ \&_patch_gnumakefile_522 ],
+        ],
+    },
+);
+
+sub patchperl {
+    my ($class, %args) = @_;
+    my $vers = $args{version};
+    my $source = $args{source};
+
+    my $dir = pushd( $source );
+
+    # copy from https://github.com/bingos/devel-patchperl/blob/acdcf1d67ae426367f42ca763b9ba6b92dd90925/lib/Devel/PatchPerl.pm#L301-L307
+    for my $p ( grep { _is( $_->{perl}, $vers ) } @patch ) {
+       for my $s (@{$p->{subs}}) {
+         my($sub, @args) = @$s;
+         push @args, $vers unless scalar @args;
+         $sub->(@args);
+       }
+    }
+}
+
+sub _write_or_die {
+    my($file, $data) = @_;
+    my $fh = IO::File->new(">$file") or die "$file: $!\n";
+    $fh->print($data);
+}
+
+sub _patch_make_maker {
+    # from https://github.com/Perl/perl5/commit/9cc600a92e7d683d4b053eb5e84ca8654ce82ac4
+    # Win32 gmake needs SHELL to be specified
+    _patch(<<'PATCH');
+--- cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm
++++ cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm
+@@ -317,8 +317,8 @@ sub const_cccmd {
+ 
+ =item const_config (o)
+ 
+-Defines a couple of constants in the Makefile that are imported from
+-%Config.
++Sets SHELL if needed, then defines a couple of constants in the Makefile
++that are imported from %Config.
+ 
+ =cut
+ 
+@@ -326,7 +326,8 @@ sub const_config {
+ # --- Constants Sections ---
+ 
+     my($self) = shift;
+-    my @m = <<"END";
++    my @m = $self->specify_shell(); # Usually returns empty string
++    push @m, <<"END";
+ 
+ # These definitions are from config.sh (via $INC{'Config.pm'}).
+ # They may have been overridden via Makefile.PL or on the command line.
+@@ -3176,6 +3177,16 @@ MAKE_FRAG
+     return $m;
+ }
+ 
++=item specify_shell
++
++Specify SHELL if needed - not done on Unix.
++
++=cut
++
++sub specify_shell {
++  return '';
++}
++
+ =item quote_paren
+ 
+ Backslashes parentheses C<()> in command line arguments.
+--- cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Win32.pm
++++ cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Win32.pm
+@@ -232,6 +232,17 @@ sub platform_constants {
+     return $make_frag;
+ }
+ 
++=item specify_shell
++
++Set SHELL to $ENV{COMSPEC} only if make is type 'gmake'.
++
++=cut
++
++sub specify_shell {
++    my $self = shift;
++    return '' unless $self->is_make_type('gmake');
++    "\nSHELL = $ENV{COMSPEC}\n";
++}
+ 
+ =item constants
+PATCH
+}
+
+sub _patch_gnumakefile_522 {
+    my $version = shift;
+    $version =~ s/[.]//g;
+    my $makefile = <<'MAKEFILE';
 #
 # Makefile to build perl on Windows using GMAKE.
 # Supported compilers:
@@ -18,11 +146,6 @@ SHELL := cmd.exe
 #                  i686-w64-mingw32-gcc
 #                  x86_64-w64-mingw32-gcc
 GCCBIN := gcc
-
-GCCTARGET := $(shell $(GCCBIN) -dumpmachine)
-GCCVER1   := $(shell for /f "delims=. tokens=1,2,3" %%i in ('gcc -dumpversion') do echo %%i)
-GCCVER2   := $(shell for /f "delims=. tokens=1,2,3" %%i in ('gcc -dumpversion') do echo %%j)
-GCCVER3   := $(shell for /f "delims=. tokens=1,2,3" %%i in ('gcc -dumpversion') do echo %%k)
 
 ##
 ## Build configuration.  Edit the values below to suit your needs.
@@ -324,15 +447,8 @@ BUILDOPT        += -D__USE_MINGW_ANSI_STDIO
 MINIBUILDOPT    += -D__USE_MINGW_ANSI_STDIO
 endif
 
-# If you are using GCC, 4.3 or later by default we add the -fwrapv option.
-# See https://rt.perl.org/Ticket/Display.html?id=121505
-#
-GCCWRAPV := $(shell if "$(GCCVER1)"=="4" (if "$(GCCVER2)" geq "3" echo define) else if "$(GCCVER1)" geq "5" (echo define))
-
-ifeq ($(GCCWRAPV),define)
 BUILDOPT        += -fwrapv
 MINIBUILDOPT    += -fwrapv
-endif
 
 i = .i
 o = .o
@@ -1054,7 +1170,7 @@ utils: $(HAVEMINIPERL) ..\utils\Makefile
 	copy ..\README.tw       ..\pod\perltw.pod
 	copy ..\README.vos      ..\pod\perlvos.pod
 	copy ..\README.win32    ..\pod\perlwin32.pod
-	copy ..\pod\perldelta.pod ..\pod\perl5224delta.pod
+	copy ..\pod\perldelta.pod ..\pod\perl__PERL_VERSION__delta.pod
 	$(MINIPERL) -I..\lib $(PL2BAT) $(UTILS)
 	$(MINIPERL) -I..\lib ..\autodoc.pl ..
 	$(MINIPERL) -I..\lib ..\pod\perlmodlib.PL -q ..
@@ -1082,3 +1198,9 @@ $(UNIDATAFILES) : ..\pod\perluniprops.pod
 
 ..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(HAVEMINIPERL) ..\lib\unicore\mktables Extensions_nonxs
 	$(MINIPERL) -I..\lib ..\lib\unicore\mktables -C ..\lib\unicore -P ..\pod -maketest -makelist -p
+MAKEFILE
+    $makefile =~ s/__PERL_VERSION__/$version/g;
+    _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
+}
+
+1;

@@ -69,6 +69,8 @@ jobs:
         - "5.8.5"
     steps:
       - uses: actions/checkout@v1
+      - name: setup host perl
+        run: perl -MConfig -E 'say "::add-path::$Config{bin}}"'
       - name: Host perl -V
         run: perl -V
       - name: gcc --version

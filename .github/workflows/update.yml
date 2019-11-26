@@ -29,6 +29,8 @@ jobs:
   darwin:
     runs-on: macos-latest
     steps:
+      - name: setup host perl
+        run: perl -MConfig -E 'say "::add-path::$Config{bin}}"'
       - name: Checkout
         uses: actions/checkout@v1
 

@@ -1615,6 +1615,7 @@ PERLEXESTATIC	= ..\perl-static.exe
 STATICDIR	= .\static.tmp
 GLOBEXE		= ..\perlglob.exe
 CONFIGPM	= ..\lib\Config.pm
+X2P		= ..\x2p\a2p.exe
 GENUUDMAP	= ..\generate_uudmap.exe
 PERLSTATIC	=
 
@@ -1748,6 +1749,13 @@ WIN32_SRC	=		\
 		.\win32thread.c	\
 		.\fcrypt.c
 
+X2P_SRC		=		\
+		..\x2p\a2p.c	\
+		..\x2p\hash.c	\
+		..\x2p\str.c	\
+		..\x2p\util.c	\
+		..\x2p\walk.c
+
 CORE_NOCFG_H	=		\
 		..\av.h		\
 		..\cop.h	\
@@ -1809,7 +1817,7 @@ MINICORE_OBJ	= $(subst ..\,mini\,$(MICROCORE_OBJ))	\
 MINIWIN32_OBJ	= $(subst .\,mini\,$(WIN32_OBJ))
 MINI_OBJ	= $(MINICORE_OBJ) $(MINIWIN32_OBJ)
 DLL_OBJ		= $(DYNALOADER)
-
+X2P_OBJ		= $(X2P_SRC:.c=.obj)
 PERLDLL_OBJ	= $(CORE_OBJ)
 PERLEXE_OBJ	= perlmain$(o)
 PERLEXEST_OBJ	= perlmainst$(o)
@@ -1879,7 +1887,7 @@ CFG_VARS	=					\
 .PHONY: all
 
 all : .\config.h ..\git_version.h $(GLOBEXE) $(CONFIGPM) \
-		$(UNIDATAFILES) MakePPPort $(PERLEXE) Extensions_nonxs Extensions $(PERLSTATIC)
+		$(UNIDATAFILES) MakePPPort $(PERLEXE) $(X2P) Extensions_nonxs Extensions $(PERLSTATIC)
 		@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
 
 ..\regcomp$(o) : ..\regnodes.h ..\regcharclass.h
@@ -2109,6 +2117,7 @@ $(CORE_OBJ)	: $(CORE_H)
 
 $(DLL_OBJ)	: $(CORE_H)
 
+$(X2P_OBJ)	: $(CORE_H)
 
 perllibst.h : $(HAVEMINIPERL) $(CONFIGPM) create_perllibst_h.pl
 	$(MINIPERL) -I..\lib create_perllibst_h.pl
@@ -2137,6 +2146,26 @@ $(PERLSTATICLIB): $(PERLDLL_OBJ) Extensions_static
 	$(XCOPY) $(PERLSTATICLIB) $(COREDIR)
 
 $(PERLEXE_RES): perlexe.rc $(PERLEXE_MANIFEST) $(PERLEXE_ICO)
+
+..\x2p\a2p$(o) : ..\x2p\a2p.c
+	$(CC) -I..\x2p $(CFLAGS) $(OBJOUT_FLAG)$@ -c ..\x2p\a2p.c
+
+..\x2p\hash$(o) : ..\x2p\hash.c
+	$(CC) -I..\x2p  $(CFLAGS) $(OBJOUT_FLAG)$@ -c ..\x2p\hash.c
+
+..\x2p\str$(o) : ..\x2p\str.c
+	$(CC) -I..\x2p  $(CFLAGS) $(OBJOUT_FLAG)$@ -c ..\x2p\str.c
+
+..\x2p\util$(o) : ..\x2p\util.c
+	$(CC) -I..\x2p  $(CFLAGS) $(OBJOUT_FLAG)$@ -c ..\x2p\util.c
+
+..\x2p\walk$(o) : ..\x2p\walk.c
+	$(CC) -I..\x2p  $(CFLAGS) $(OBJOUT_FLAG)$@ -c ..\x2p\walk.c
+
+$(X2P) : $(HAVEMINIPERL) $(X2P_OBJ) Extensions
+	$(MINIPERL) -I..\lib ..\x2p\find2perl.PL
+	$(MINIPERL) -I..\lib ..\x2p\s2p.PL
+	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) $(LIBFILES) $(X2P_OBJ)
 
 $(MINIDIR)\globals$(o) : $(GENERATED_HEADERS)
 
@@ -2216,7 +2245,7 @@ doc: $(PERLEXE) ..\pod\perltoc.pod
 
 # Note that this next section is parsed (and regenerated) by pod/buildtoc
 # so please check that script before making structural changes here
-utils: $(HAVEMINIPERL) ..\utils\Makefile
+utils: $(HAVEMINIPERL) $(X2P) ..\utils\Makefile
 	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
 	copy ..\README.aix      ..\pod\perlaix.pod
 	copy ..\README.amiga    ..\pod\perlamiga.pod
@@ -2267,6 +2296,7 @@ installbare : utils ..\pod\perltoc.pod
 	if exist $(PERLEXESTATIC) $(XCOPY) $(PERLEXESTATIC) $(INST_BIN)\$(NULL)
 	$(XCOPY) $(GLOBEXE) $(INST_BIN)\$(NULL)
 	if exist ..\perl*.pdb $(XCOPY) ..\perl*.pdb $(INST_BIN)\$(NULL)
+    if exist ..\x2p\a2p.pdb $(XCOPY) ..\x2p\a2p.pdb $(INST_BIN)\$(NULL)
 	$(XCOPY) "bin\*.bat" $(INST_SCRIPT)\$(NULL)
 
 installhtml : doc

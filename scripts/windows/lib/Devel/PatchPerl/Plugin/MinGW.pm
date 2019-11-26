@@ -33,10 +33,17 @@ my @patch = (
     },
     {
         perl => [
-            qr/^5\.20\.[0-9]+$/,
+            qr/^5\.20\.[012]$/,
         ],
         subs => [
             [ \&_patch_win32_mkstemp ],
+        ],
+    },
+    {
+        perl => [
+            qr/^5\.20\.[0-9]+$/,
+        ],
+        subs => [
             [ \&_patch_gnumakefile_520 ],
         ],
     },

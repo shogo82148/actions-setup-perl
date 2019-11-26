@@ -69,10 +69,6 @@ sub run {
     group "patching..." => sub {
         local $ENV{PERL5_PATCHPERL_PLUGIN} = "MinGW";
         Devel::PatchPerl->patch_source($version, "$tmpdir\\perl-$version");
-        my $dir = pushd("$tmpdir\\perl-$version");
-        if (! -e "win32\\GNUMakefile") {
-            copy("$FindBin::Bin\\GNUMakefile", "win32\\GNUMakefile") or die "copy failed: $!";
-        }
     };
 
     group "build" => sub {

@@ -71,15 +71,9 @@ sub run {
         Devel::PatchPerl->patch_source($version, "$tmpdir\\perl-$version");
     };
 
-    group "build" => sub {
+    group "build and install Perl" => sub {
         my $dir = pushd("$tmpdir\\perl-$version\\win32");
-        system("gmake", "-f", "GNUMakefile", "INST_TOP=$install_dir", "CCHOME=C:\\strawberry\\c") == 0
-            or die "Failed to build";
-    };
-
-    group "install" => sub {
-        my $dir = pushd("$tmpdir\\perl-$version\\win32");
-        system("gmake", "-f", "GNUMakefile", "install") == 0
+        system("gmake", "-f", "GNUMakefile", "install", "INST_TOP=$install_dir", "CCHOME=C:\\strawberry\\c") == 0
             or die "Failed to install";
     };
 

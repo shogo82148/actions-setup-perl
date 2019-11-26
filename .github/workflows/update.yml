@@ -1,6 +1,5 @@
 name: update cpanfile.snapshot
 on:
-  pull_request: {}
   push: {}
 
 jobs:
@@ -12,16 +11,14 @@ jobs:
 
       - name: install Carton
         shell: bash
-        run: |
-          rm -f cpanfile.snapshot
-          curl -sSL https://cpanmin.us | perl - -L local Carton
+        run: curl -sSL https://cpanmin.us | perl - --sudo Carton
         working-directory: ./scripts/linux
 
       - name: carton install
         shell: bash
-        run: perl ./local/bin/carton install
-        env:
-          PERL5LIB: ${{ github.workspace }}/scripts/linux/local/lib/perl5
+        run: |
+          rm -f cpanfile.snapshot
+          carton install
         working-directory: ./scripts/linux
 
       - uses: actions/upload-artifact@v1
@@ -32,21 +29,21 @@ jobs:
   darwin:
     runs-on: macos-latest
     steps:
+      - name: setup host perl
+        run: perl -MConfig -E 'say "::add-path::$Config{bin}"'
       - name: Checkout
         uses: actions/checkout@v1
 
       - name: install Carton
         shell: bash
-        run: |
-          rm -f cpanfile.snapshot
-          curl -sSL https://cpanmin.us | perl - -L local Carton
+        run: "curl -sSL https://cpanmin.us | perl - --sudo Carton"
         working-directory: ./scripts/darwin
 
       - name: carton install
         shell: bash
-        run: perl ./local/bin/carton install
-        env:
-          PERL5LIB: ${{ github.workspace }}/scripts/darwin/local/lib/perl5
+        run: |
+          rm -f cpanfile.snapshot
+          carton install
         working-directory: ./scripts/darwin
 
       - uses: actions/upload-artifact@v1
@@ -64,17 +61,17 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v1
+      - run: "rm -f scripts/windows/cpanfile.snapshot"
+        shell: bash
 
       - name: install Carton
         shell: cmd
-        run: cpanm -L local Carton
+        run: cpanm Carton
         working-directory: ./scripts/windows
 
       - name: carton install
         shell: cmd
-        run: "perl .\\local\\bin\\carton install"
-        env:
-          PERL5LIB: ${{ github.workspace }}/scripts/windows/local/lib/perl5
+        run: carton install
         working-directory: ./scripts/windows
 
       - uses: actions/upload-artifact@v1

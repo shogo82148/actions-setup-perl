@@ -80,14 +80,12 @@ jobs:
 
       - name: install Carton
         shell: cmd
-        run: cpanm -L local Carton
+        run: cpanm Carton
         working-directory: ./scripts/windows
 
       - name: carton install
         shell: cmd
-        run: "perl .\\local\\bin\\carton install"
-        env:
-          PERL5LIB: ${{ github.workspace }}/scripts/windows/local/lib/perl5
+        run: carton install
         working-directory: ./scripts/windows
 
       - name: build

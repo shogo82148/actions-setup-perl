@@ -75,14 +75,12 @@ jobs:
 
       - name: install Carton
         shell: bash
-        run: curl -sSL https://cpanmin.us | perl - -L local Carton
+        run: "curl -sSL https://cpanmin.us | perl - --sudo Carton"
         working-directory: ./scripts/linux
 
-      - name: carton install
+      - name: carton install --deployment
         shell: bash
-        run: perl ./local/bin/carton install
-        env:
-          PERL5LIB: ${{ github.workspace }}/scripts/linux/local/lib/perl5
+        run: carton install --deployment
         working-directory: ./scripts/linux
 
       - name: build

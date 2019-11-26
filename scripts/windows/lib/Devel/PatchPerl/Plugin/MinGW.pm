@@ -1888,7 +1888,7 @@ MINICORE_OBJ	= $(subst ..\,mini\,$(MICROCORE_OBJ))	\
 MINIWIN32_OBJ	= $(subst .\,mini\,$(WIN32_OBJ))
 MINI_OBJ	= $(MINICORE_OBJ) $(MINIWIN32_OBJ)
 DLL_OBJ		= $(DYNALOADER)
-X2P_OBJ		= $(X2P_SRC:.c=.obj)
+X2P_OBJ		= $(X2P_SRC:.c=$(o))
 PERLDLL_OBJ	= $(CORE_OBJ)
 PERLEXE_OBJ	= perlmain$(o)
 PERLEXEST_OBJ	= perlmainst$(o)
@@ -2222,16 +2222,16 @@ $(PERLEXE_RES): perlexe.rc $(PERLEXE_MANIFEST) $(PERLEXE_ICO)
 	$(CC) -I..\x2p $(CFLAGS) $(OBJOUT_FLAG)$@ -c ..\x2p\a2p.c
 
 ..\x2p\hash$(o) : ..\x2p\hash.c
-	$(CC) -I..\x2p  $(CFLAGS) $(OBJOUT_FLAG)$@ -c ..\x2p\hash.c
+	$(CC) -I..\x2p $(CFLAGS) $(OBJOUT_FLAG)$@ -c ..\x2p\hash.c
 
 ..\x2p\str$(o) : ..\x2p\str.c
-	$(CC) -I..\x2p  $(CFLAGS) $(OBJOUT_FLAG)$@ -c ..\x2p\str.c
+	$(CC) -I..\x2p $(CFLAGS) $(OBJOUT_FLAG)$@ -c ..\x2p\str.c
 
 ..\x2p\util$(o) : ..\x2p\util.c
-	$(CC) -I..\x2p  $(CFLAGS) $(OBJOUT_FLAG)$@ -c ..\x2p\util.c
+	$(CC) -I..\x2p $(CFLAGS) $(OBJOUT_FLAG)$@ -c ..\x2p\util.c
 
 ..\x2p\walk$(o) : ..\x2p\walk.c
-	$(CC) -I..\x2p  $(CFLAGS) $(OBJOUT_FLAG)$@ -c ..\x2p\walk.c
+	$(CC) -I..\x2p $(CFLAGS) $(OBJOUT_FLAG)$@ -c ..\x2p\walk.c
 
 $(X2P) : $(HAVEMINIPERL) $(X2P_OBJ) Extensions
 	$(MINIPERL) -I..\lib ..\x2p\find2perl.PL

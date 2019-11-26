@@ -1200,7 +1200,7 @@ $(UNIDATAFILES) : ..\pod\perluniprops.pod
 	$(MINIPERL) -I..\lib ..\lib\unicore\mktables -C ..\lib\unicore -P ..\pod -maketest -makelist -p
 MAKEFILE
     $makefile =~ s/__PERL_VERSION__/$version/g;
-    _write_or_die(File::Spec->catfile("win32", "GNUMakefile"));
+    _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
 }
 
 1;

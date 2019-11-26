@@ -1,55 +1,5 @@
 # carton snapshot format: version 1.0
 DISTRIBUTIONS
-  CPAN-Common-Index-0.010
-    pathname: D/DA/DAGOLDEN/CPAN-Common-Index-0.010.tar.gz
-    provides:
-      CPAN::Common::Index 0.010
-      CPAN::Common::Index::LocalPackage 0.010
-      CPAN::Common::Index::MetaDB 0.010
-      CPAN::Common::Index::Mirror 0.010
-      CPAN::Common::Index::Mux::Ordered 0.010
-    requirements:
-      CPAN::DistnameInfo 0
-      CPAN::Meta::YAML 0
-      Carp 0
-      Class::Tiny 0
-      ExtUtils::MakeMaker 6.17
-      File::Basename 0
-      File::Copy 0
-      File::Fetch 0
-      File::Spec 0
-      File::Temp 0.19
-      File::stat 0
-      HTTP::Tiny 0
-      Module::Load 0
-      Search::Dict 1.07
-      Tie::Handle::SkipHeader 0
-      URI 0
-      parent 0
-      perl 5.008001
-      strict 0
-      warnings 0
-  CPAN-DistnameInfo-0.12
-    pathname: G/GB/GBARR/CPAN-DistnameInfo-0.12.tar.gz
-    provides:
-      CPAN::DistnameInfo 0.12
-    requirements:
-      ExtUtils::MakeMaker 0
-      Test::More 0
-  CPAN-Meta-Check-0.014
-    pathname: L/LE/LEONT/CPAN-Meta-Check-0.014.tar.gz
-    provides:
-      CPAN::Meta::Check 0.014
-    requirements:
-      CPAN::Meta::Prereqs 2.132830
-      CPAN::Meta::Requirements 2.121
-      Exporter 0
-      ExtUtils::MakeMaker 0
-      Module::Metadata 1.000023
-      base 0
-      perl 5.006
-      strict 0
-      warnings 0
   CPAN-Perl-Releases-MetaCPAN-0.006
     pathname: S/SK/SKAJI/CPAN-Perl-Releases-MetaCPAN-0.006.tar.gz
     provides:
@@ -60,74 +10,6 @@ DISTRIBUTIONS
       JSON::PP 0
       Module::Build::Tiny 0.034
       perl 5.008001
-  Capture-Tiny-0.48
-    pathname: D/DA/DAGOLDEN/Capture-Tiny-0.48.tar.gz
-    provides:
-      Capture::Tiny 0.48
-    requirements:
-      Carp 0
-      Exporter 0
-      ExtUtils::MakeMaker 6.17
-      File::Spec 0
-      File::Temp 0
-      IO::Handle 0
-      Scalar::Util 0
-      Win32API::File 0
-      perl 5.006
-      strict 0
-      warnings 0
-  Carton-v1.0.34
-    pathname: M/MI/MIYAGAWA/Carton-v1.0.34.tar.gz
-    provides:
-      Carton 1.000034
-      Carton::Builder undef
-      Carton::CLI undef
-      Carton::CPANfile undef
-      Carton::Dependency undef
-      Carton::Dist undef
-      Carton::Dist::Core undef
-      Carton::Environment undef
-      Carton::Error undef
-      Carton::Error::CPANfileNotFound undef
-      Carton::Error::CommandExit undef
-      Carton::Error::CommandNotFound undef
-      Carton::Error::SnapshotNotFound undef
-      Carton::Error::SnapshotParseError undef
-      Carton::Index undef
-      Carton::Mirror undef
-      Carton::Package undef
-      Carton::Packer undef
-      Carton::Snapshot undef
-      Carton::Snapshot::Emitter undef
-      Carton::Snapshot::Parser undef
-      Carton::Tree undef
-      Carton::Util undef
-    requirements:
-      CPAN::Meta 2.120921
-      CPAN::Meta::Requirements 2.121
-      Class::Tiny 1.001
-      ExtUtils::MakeMaker 0
-      Getopt::Long 2.39
-      JSON::PP 2.27300
-      Menlo::CLI::Compat 1.9018
-      Module::CPANfile 0.9031
-      Module::CoreList 0
-      Path::Tiny 0.033
-      Try::Tiny 0.09
-      parent 0.223
-      perl 5.008005
-      version 0.77
-  Class-Tiny-1.006
-    pathname: D/DA/DAGOLDEN/Class-Tiny-1.006.tar.gz
-    provides:
-      Class::Tiny 1.006
-      Class::Tiny::Object 1.006
-    requirements:
-      Carp 0
-      ExtUtils::MakeMaker 6.17
-      perl 5.006
-      strict 0
-      warnings 0
   Devel-PatchPerl-1.80
     pathname: B/BI/BINGOS/Devel-PatchPerl-1.80.tar.gz
     provides:
@@ -190,18 +72,6 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  ExtUtils-MakeMaker-CPANfile-0.09
-    pathname: I/IS/ISHIGAKI/ExtUtils-MakeMaker-CPANfile-0.09.tar.gz
-    provides:
-      ExtUtils::MakeMaker::CPANfile 0.09
-    requirements:
-      CPAN::Meta::Converter 2.141170
-      Cwd 0
-      ExtUtils::MakeMaker 6.17
-      File::Path 0
-      Module::CPANfile 0
-      Test::More 0.88
-      version 0.76
   ExtUtils-PL2Bat-0.002
     pathname: L/LE/LEONT/ExtUtils-PL2Bat-0.002.tar.gz
     provides:
@@ -437,59 +307,6 @@ DISTRIBUTIONS
       Mozilla::CA 20110101
       Net::HTTPS 6
       perl 5.008001
-  Menlo-1.9019
-    pathname: M/MI/MIYAGAWA/Menlo-1.9019.tar.gz
-    provides:
-      Menlo 1.9019
-      Menlo::Builder::Static undef
-      Menlo::Dependency undef
-      Menlo::Index::MetaCPAN undef
-      Menlo::Index::MetaDB 1.9019
-      Menlo::Index::Mirror undef
-      Menlo::Util undef
-    requirements:
-      CPAN::Common::Index 0.006
-      CPAN::DistnameInfo 0
-      CPAN::Meta 2.132830
-      CPAN::Meta::Check 0
-      CPAN::Meta::Requirements 0
-      CPAN::Meta::YAML 0
-      Capture::Tiny 0
-      Class::Tiny 1.001
-      Exporter 0
-      ExtUtils::Config 0.003
-      ExtUtils::Helpers 0.020
-      ExtUtils::InstallPaths 0.002
-      ExtUtils::MakeMaker 0
-      File::Temp 0
-      File::Which 0
-      File::pushd 0
-      Getopt::Long 2.36
-      HTTP::Tiny 0.054
-      HTTP::Tinyish 0.04
-      JSON::PP 2
-      Module::CPANfile 0
-      Module::CoreList 0
-      Module::Metadata 0
-      Parse::CPAN::Meta 0
-      Parse::PMFile 0.26
-      String::ShellQuote 0
-      URI 0
-      Win32::ShellQuote 0
-      local::lib 0
-      parent 0
-      perl 5.008001
-      version 0
-  Menlo-Legacy-1.9022
-    pathname: M/MI/MIYAGAWA/Menlo-Legacy-1.9022.tar.gz
-    provides:
-      Menlo::CLI::Compat 1.9022
-      Menlo::Legacy 1.9022
-    requirements:
-      ExtUtils::MakeMaker 0
-      Menlo 1.9018
-      perl 5.008001
-      version 0.9905
   Module-Build-0.4229
     pathname: L/LE/LEONT/Module-Build-0.4229.tar.gz
     provides:
@@ -561,19 +378,6 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  Module-CPANfile-1.1004
-    pathname: M/MI/MIYAGAWA/Module-CPANfile-1.1004.tar.gz
-    provides:
-      Module::CPANfile 1.1004
-      Module::CPANfile::Environment undef
-      Module::CPANfile::Prereq undef
-      Module::CPANfile::Prereqs undef
-      Module::CPANfile::Requirement undef
-    requirements:
-      CPAN::Meta 2.12091
-      CPAN::Meta::Prereqs 2.12091
-      ExtUtils::MakeMaker 0
-      parent 0
   Module-Pluggable-5.2
     pathname: S/SI/SIMONW/Module-Pluggable-5.2.tar.gz
     provides:
@@ -626,124 +430,6 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       MIME::Base64 0
       perl 5.008001
-  Parse-PMFile-0.42
-    pathname: I/IS/ISHIGAKI/Parse-PMFile-0.42.tar.gz
-    provides:
-      Parse::PMFile 0.42
-    requirements:
-      Dumpvalue 0
-      ExtUtils::MakeMaker 0
-      ExtUtils::MakeMaker::CPANfile 0.09
-      File::Spec 0
-      JSON::PP 2.00
-      Safe 0
-      version 0.83
-  String-ShellQuote-1.04
-    pathname: R/RO/ROSCH/String-ShellQuote-1.04.tar.gz
-    provides:
-      String::ShellQuote 1.04
-    requirements:
-      ExtUtils::MakeMaker 0
-  Test-Deep-1.128
-    pathname: R/RJ/RJBS/Test-Deep-1.128.tar.gz
-    provides:
-      Test::Deep 1.128
-      Test::Deep::All undef
-      Test::Deep::Any undef
-      Test::Deep::Array undef
-      Test::Deep::ArrayEach undef
-      Test::Deep::ArrayElementsOnly undef
-      Test::Deep::ArrayLength undef
-      Test::Deep::ArrayLengthOnly undef
-      Test::Deep::Blessed undef
-      Test::Deep::Boolean undef
-      Test::Deep::Cache undef
-      Test::Deep::Cache::Simple undef
-      Test::Deep::Class undef
-      Test::Deep::Cmp undef
-      Test::Deep::Code undef
-      Test::Deep::Hash undef
-      Test::Deep::HashEach undef
-      Test::Deep::HashElements undef
-      Test::Deep::HashKeys undef
-      Test::Deep::HashKeysOnly undef
-      Test::Deep::Ignore undef
-      Test::Deep::Isa undef
-      Test::Deep::ListMethods undef
-      Test::Deep::MM undef
-      Test::Deep::Methods undef
-      Test::Deep::NoTest undef
-      Test::Deep::None undef
-      Test::Deep::Number undef
-      Test::Deep::Obj undef
-      Test::Deep::Ref undef
-      Test::Deep::RefType undef
-      Test::Deep::Regexp undef
-      Test::Deep::RegexpMatches undef
-      Test::Deep::RegexpOnly undef
-      Test::Deep::RegexpRef undef
-      Test::Deep::RegexpRefOnly undef
-      Test::Deep::RegexpVersion undef
-      Test::Deep::ScalarRef undef
-      Test::Deep::ScalarRefOnly undef
-      Test::Deep::Set undef
-      Test::Deep::Shallow undef
-      Test::Deep::Stack undef
-      Test::Deep::String undef
-      Test::Deep::SubHash undef
-      Test::Deep::SubHashElements undef
-      Test::Deep::SubHashKeys undef
-      Test::Deep::SubHashKeysOnly undef
-      Test::Deep::SuperHash undef
-      Test::Deep::SuperHashElements undef
-      Test::Deep::SuperHashKeys undef
-      Test::Deep::SuperHashKeysOnly undef
-    requirements:
-      ExtUtils::MakeMaker 0
-      List::Util 1.09
-      Scalar::Util 1.09
-      Test::Builder 0
-  Test-FailWarnings-0.008
-    pathname: D/DA/DAGOLDEN/Test-FailWarnings-0.008.tar.gz
-    provides:
-      Test::FailWarnings 0.008
-    requirements:
-      Carp 0
-      Cwd 0
-      ExtUtils::MakeMaker 6.17
-      File::Spec 0
-      Test::More 0.86
-      strict 0
-      warnings 0
-  Test-Fatal-0.014
-    pathname: R/RJ/RJBS/Test-Fatal-0.014.tar.gz
-    provides:
-      Test::Fatal 0.014
-    requirements:
-      Carp 0
-      Exporter 5.57
-      ExtUtils::MakeMaker 0
-      Test::Builder 0
-      Try::Tiny 0.07
-      strict 0
-      warnings 0
-  Test-Needs-0.002006
-    pathname: H/HA/HAARG/Test-Needs-0.002006.tar.gz
-    provides:
-      Test::Needs 0.002006
-    requirements:
-      ExtUtils::MakeMaker 0
-      perl 5.006
-  Tie-Handle-Offset-0.004
-    pathname: D/DA/DAGOLDEN/Tie-Handle-Offset-0.004.tar.gz
-    provides:
-      Tie::Handle::Offset 0.004
-      Tie::Handle::SkipHeader 0.004
-    requirements:
-      ExtUtils::MakeMaker 6.17
-      Tie::Handle 0
-      perl 5.006
-      strict 0
   TimeDate-2.30
     pathname: G/GB/GBARR/TimeDate-2.30.tar.gz
     provides:
@@ -943,10 +629,3 @@ DISTRIBUTIONS
       perl 5.008001
       strict 0
       warnings 0
-  local-lib-2.000024
-    pathname: H/HA/HAARG/local-lib-2.000024.tar.gz
-    provides:
-      lib::core::only undef
-      local::lib 2.000024
-    requirements:
-      perl 5.006

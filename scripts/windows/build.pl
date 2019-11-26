@@ -5,11 +5,13 @@ use warnings;
 use strict;
 use 5.026002;
 use FindBin;
+use lib "$FindBin::Bin/lib";
 use File::Copy;
 use LWP::UserAgent;
 use CPAN::Perl::Releases::MetaCPAN;
 use Devel::PatchPerl;
 use Try::Tiny;
+use File::pushd qw[pushd];
 
 local $| = 1;
 
@@ -59,14 +61,15 @@ sub run {
     };
 
     group "extracting..." => sub {
-        chdir $tmpdir or die "failed to cd $tmpdir: $!";
+        my $dir = pushd($tmpdir);
         system("7z", "x", $filename) == 0 or die "Failed to extract gz";
         system("7z", "x", "perl-$version.tar") == 0 or die "Failed to extract tar";
-        Devel::PatchPerl->patch_source($version, "$tmpdir\\perl-$version");
     };
 
-    group "build" => sub {
-        chdir "$tmpdir\\perl-$version" or die "failed to cd $tmpdir\\perl-$version: $!";
+    group "patching..." => sub {
+        local $ENV{PERL5_PATCHPERL_PLUGIN} = "MinGW";
+        Devel::PatchPerl->patch_source($version, "$tmpdir\\perl-$version");
+        my $dir = pushd("$tmpdir\\perl-$version");
         if (! -e "win32\\GNUMakefile") {
             copy("$FindBin::Bin\\GNUMakefile", "win32\\GNUMakefile") or die "copy failed: $!";
             Devel::PatchPerl::_patch(<<'PATCH');
@@ -120,16 +123,16 @@ sub run {
  =item constants
 PATCH
         }
+    };
 
-        chdir "$tmpdir\\perl-$version\\win32" or die "failed to cd $tmpdir\\perl-$version\\win32: $!";
-
+    group "build" => sub {
+        my $dir = pushd("$tmpdir\\perl-$version\\win32");
         system("gmake", "-f", "GNUMakefile", "INST_TOP=$install_dir", "CCHOME=C:\\strawberry\\c") == 0
             or die "Failed to build";
     };
 
     group "install" => sub {
-        local $ENV{PERL_DL_DEBUG} = 1;
-        print STDERR "start install\n";
+        my $dir = pushd("$tmpdir\\perl-$version\\win32");
         system("gmake", "-f", "GNUMakefile", "install") == 0
             or die "Failed to install";
     };
@@ -141,7 +144,7 @@ PATCH
     };
 
     group "archiving" => sub {
-        chdir $install_dir or die "failed to cd $install_dir: $!";
+        my $dir = pushd($install_dir);
         system("7z", "a", "$tmpdir\\perl.zip", ".") == 0
             or die "failed to archive";
     };

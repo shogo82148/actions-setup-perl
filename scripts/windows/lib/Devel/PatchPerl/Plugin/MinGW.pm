@@ -147,11 +147,6 @@ SHELL := cmd.exe
 #                  x86_64-w64-mingw32-gcc
 GCCBIN := gcc
 
-GCCTARGET := $(shell $(GCCBIN) -dumpmachine)
-GCCVER1   := $(shell for /f "delims=. tokens=1,2,3" %%i in ('gcc -dumpversion') do echo %%i)
-GCCVER2   := $(shell for /f "delims=. tokens=1,2,3" %%i in ('gcc -dumpversion') do echo %%j)
-GCCVER3   := $(shell for /f "delims=. tokens=1,2,3" %%i in ('gcc -dumpversion') do echo %%k)
-
 ##
 ## Build configuration.  Edit the values below to suit your needs.
 ##
@@ -452,15 +447,8 @@ BUILDOPT        += -D__USE_MINGW_ANSI_STDIO
 MINIBUILDOPT    += -D__USE_MINGW_ANSI_STDIO
 endif
 
-# If you are using GCC, 4.3 or later by default we add the -fwrapv option.
-# See https://rt.perl.org/Ticket/Display.html?id=121505
-#
-GCCWRAPV := $(shell if "$(GCCVER1)"=="4" (if "$(GCCVER2)" geq "3" echo define) else if "$(GCCVER1)" geq "5" (echo define))
-
-ifeq ($(GCCWRAPV),define)
 BUILDOPT        += -fwrapv
 MINIBUILDOPT    += -fwrapv
-endif
 
 i = .i
 o = .o

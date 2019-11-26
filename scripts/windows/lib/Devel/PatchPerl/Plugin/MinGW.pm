@@ -9,8 +9,8 @@ use File::pushd qw[pushd];
 use File::Spec;
 
 # copy utility functions from Devel::PatchPerl
-*_is = *_Devel::PatchPerl::_is;
-*_patch = *_Devel::PatchPerl::_patch;
+*_is = *Devel::PatchPerl::_is;
+*_patch = *Devel::PatchPerl::_patch;
 
 my @patch = (
     {

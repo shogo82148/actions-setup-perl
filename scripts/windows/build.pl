@@ -84,8 +84,18 @@ sub run {
     };
 
     group "install App::cpanminus and Carton" => sub {
-        local $ENV{PATH} = "$install_dir\\bin;C:\\Strawberry\\c;$ENV{PATH}";
-        system("$install_dir\\bin\\cpan", "-T", "App::cpanminus", "Carton") == 0
+        my $ua = LWP::UserAgent->new;
+        my $response = $ua->get("https://cpanmin.us");
+        if (!$response->is_success) {
+            die "download failed: " . $response->status_line;
+        }
+
+        open my $fh, ">", "$tmpdir\\cpanm" or die "$!";
+        binmode $fh;
+        print $fh $response->content;
+        close $fh;
+
+        system("$install_dir\\bin\\perl", "$tmpdir\\cpanm", "--notest", "App::cpanminus", "Carton") == 0
             or die "Failed to install App::cpanminus and Carton";
     };
 

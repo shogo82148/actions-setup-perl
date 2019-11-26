@@ -44,6 +44,7 @@ my @patch = (
             qr/^5\.20\.[0-9]+$/,
         ],
         subs => [
+            [ \&_patch_make_maker_dirfilesep ],
             [ \&_patch_gnumakefile_520 ],
         ],
     },
@@ -1245,6 +1246,32 @@ sub _patch_win32_mkstemp {
  
  static long
  find_pid(pTHX_ int pid)
+PATCH
+}
+
+sub _patch_make_maker_dirfilesep {
+    _patch(<<'PATCH');
+--- cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Win32.pm
++++ cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Win32.pm
+@@ -128,7 +128,7 @@
+ 
+ =item B<init_DIRFILESEP>
+ 
+-Using \ for Windows.
++Using \ for Windows, except for "gmake" where it is /.
+ 
+ =cut
+ 
+@@ -137,7 +137,8 @@
+ 
+     # The ^ makes sure its not interpreted as an escape in nmake
+     $self->{DIRFILESEP} = $self->is_make_type('nmake') ? '^\\' :
+-                          $self->is_make_type('dmake') ? '\\\\'
++                          $self->is_make_type('dmake') ? '\\\\' :
++                          $self->is_make_type('gmake') ? '/'
+                                                        : '\\';
+ }
+ 
 PATCH
 }
 

@@ -1227,6 +1227,24 @@ sub _patch_win32_mkstemp {
  
  #undef	 Stat
  #define  Stat		win32_stat
+--- win32/win32.c
++++ win32/win32.c
+@@ -1122,6 +1124,7 @@
+  * XXX this needs strengthening  (for PerlIO)
+  *   -- BKS, 11-11-200
+ */
++#if !defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 4
+ int mkstemp(const char *path)
+ {
+     dTHX;
+@@ -1142,6 +1145,7 @@
+ 	goto retry;
+     return fd;
+ }
++#endif
+ 
+ static long
+ find_pid(pTHX_ int pid)
 PATCH
 }
 

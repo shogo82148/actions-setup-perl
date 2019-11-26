@@ -1724,12 +1724,12 @@ UTILS		=			\
 
 CFGSH_TMPL	= config.gc
 CFGH_TMPL	= config_H.gc
-PERLIMPLIB	= $(COREDIR)\libperl522$(a)
-PERLIMPLIBBASE	= libperl522$(a)
-PERLSTATICLIB	= ..\libperl522s$(a)
+PERLIMPLIB	= $(COREDIR)\libperl520$(a)
+PERLIMPLIBBASE	= libperl520$(a)
+PERLSTATICLIB	= ..\libperl520s$(a)
 INT64		= long long
-PERLEXPLIB	= $(COREDIR)\perl522.exp
-PERLDLL		= ..\perl522.dll
+PERLEXPLIB	= $(COREDIR)\perl520.exp
+PERLDLL		= ..\perl520.dll
 
 # don't let "gmake -n all" try to run "miniperl.exe make_ext.pl"
 PLMAKE		= gmake

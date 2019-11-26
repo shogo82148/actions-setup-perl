@@ -2315,7 +2315,7 @@ installbare : utils ..\pod\perltoc.pod
 	if exist $(PERLEXESTATIC) $(XCOPY) $(PERLEXESTATIC) $(INST_BIN)\$(NULL)
 	$(XCOPY) $(GLOBEXE) $(INST_BIN)\$(NULL)
 	if exist ..\perl*.pdb $(XCOPY) ..\perl*.pdb $(INST_BIN)\$(NULL)
-    if exist ..\x2p\a2p.pdb $(XCOPY) ..\x2p\a2p.pdb $(INST_BIN)\$(NULL)
+	if exist ..\x2p\a2p.pdb $(XCOPY) ..\x2p\a2p.pdb $(INST_BIN)\$(NULL)
 	$(XCOPY) "bin\*.bat" $(INST_SCRIPT)\$(NULL)
 
 installhtml : doc

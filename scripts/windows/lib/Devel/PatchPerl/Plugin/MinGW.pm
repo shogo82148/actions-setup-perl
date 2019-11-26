@@ -1,7 +1,9 @@
 package Devel::PatchPerl::Plugin::MinGW;
 
+use utf8;
 use strict;
 use warnings;
+use 5.026002;
 use Devel::PatchPerl;
 use File::pushd qw[pushd];
 
@@ -22,8 +24,8 @@ my @patch = (
 
 sub patchperl {
     my ($class, %args) = @_;
-    my $vers = $arg{version};
-    my $source = $arg{source};
+    my $vers = $args{version};
+    my $source = $args{source};
 
     my $dir = pushd( $source );
 

@@ -36,6 +36,7 @@ my @patch = (
             qr/^5\.20\.[0-9]+$/,
         ],
         subs => [
+            [ \&_patch_win32_mkstemp ],
             [ \&_patch_gnumakefile_520 ],
         ],
     },
@@ -1202,6 +1203,24 @@ $(UNIDATAFILES) : ..\pod\perluniprops.pod
 MAKEFILE
     $makefile =~ s/__PERL_VERSION__/$version/g;
     _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
+}
+
+sub _patch_win32_mkstemp {
+    _patch(<<'PATCH');
+--- win32/win32.h
++++ win32/win32.h
+@@ -331,8 +352,10 @@
+ #endif
+ extern	char *	getlogin(void);
+ extern	int	chown(const char *p, uid_t o, gid_t g);
++#if !defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 4
+ extern  int	mkstemp(const char *path);
+ #endif
++#endif
+ 
+ #undef	 Stat
+ #define  Stat		win32_stat
+PATCH
 }
 
 sub _patch_gnumakefile_520 {

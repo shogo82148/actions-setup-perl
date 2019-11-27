@@ -92,7 +92,7 @@ sub run {
         close $fh;
 
         local $ENV{PERL_DL_DEBUG} = "10";
-        system(File::Spec->catfile($install_dir, "bin", "perl") . " $cpanm --notest App::cpanminus Carton") == 0
+        system(File::Spec->catfile($install_dir, "bin", "perl") . "-Dtls $cpanm --notest App::cpanminus Carton") == 0
             or die "Failed to install App::cpanminus and Carton";
     };
 

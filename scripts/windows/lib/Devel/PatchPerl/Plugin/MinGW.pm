@@ -1246,8 +1246,8 @@ sub _patch_win32_mkstemp {
  
  static long
  find_pid(pTHX_ int pid)
---- a/win32/config_H.gc
-+++ b/win32/config_H.gc
+--- win32/config_H.gc
++++ win32/config_H.gc
 @@ -1973,7 +1970,9 @@
   *	available to exclusively create and open a uniquely named
   *	temporary file.

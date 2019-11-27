@@ -1246,6 +1246,19 @@ sub _patch_win32_mkstemp {
  
  static long
  find_pid(pTHX_ int pid)
+--- a/win32/config_H.gc
++++ b/win32/config_H.gc
+@@ -1973,7 +1970,9 @@
+  *	available to exclusively create and open a uniquely named
+  *	temporary file.
+  */
+-/*#define HAS_MKSTEMP		/ **/
++#if __MINGW64_VERSION_MAJOR >= 4
++#define HAS_MKSTEMP
++#endif
+ 
+ /* HAS_MMAP:
+  *	This symbol, if defined, indicates that the mmap system call is
 PATCH
 }
 

@@ -119,23 +119,106 @@ sub _patch_make_maker {
  Backslashes parentheses C<()> in command line arguments.
 --- cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Win32.pm
 +++ cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Win32.pm
-@@ -232,6 +232,17 @@ sub platform_constants {
-     return $make_frag;
+@@ -128,7 +128,7 @@ sub maybe_command {
+ 
+ =item B<init_DIRFILESEP>
+ 
+-Using \ for Windows.
++Using \ for Windows, except for "gmake" where it is /.
+ 
+ =cut
+ 
+@@ -137,7 +137,8 @@ sub init_DIRFILESEP {
+ 
+     # The ^ makes sure its not interpreted as an escape in nmake
+     $self->{DIRFILESEP} = $self->is_make_type('nmake') ? '^\\' :
+-                          $self->is_make_type('dmake') ? '\\\\'
++                          $self->is_make_type('dmake') ? '\\\\' :
++                          $self->is_make_type('gmake') ? '/'
+                                                        : '\\';
  }
  
-+=item specify_shell
+@@ -154,7 +155,7 @@ sub init_tools {
+     $self->{DEV_NULL} ||= '> NUL';
+ 
+     $self->{FIXIN}    ||= $self->{PERL_CORE} ?
+-      "\$(PERLRUN) $self->{PERL_SRC}/win32/bin/pl2bat.pl" :
++      "\$(PERLRUN) $self->{PERL_SRC}\\win32\\bin\\pl2bat.pl" :
+       'pl2bat.bat';
+ 
+     $self->SUPER::init_tools;
+@@ -346,27 +347,27 @@ sub dynamic_lib {
+ OTHERLDFLAGS = '.$otherldflags.'
+ INST_DYNAMIC_DEP = '.$inst_dynamic_dep.'
+ 
+-$(INST_DYNAMIC): $(OBJECT) $(MYEXTLIB) $(BOOTSTRAP) $(INST_ARCHAUTODIR)$(DFSEP).exists $(EXPORT_LIST) $(PERL_ARCHIVE) $(INST_DYNAMIC_DEP)
++$(INST_DYNAMIC): $(OBJECT) $(MYEXTLIB) $(BOOTSTRAP) $(INST_ARCHAUTODIR)$(DFSEP).exists $(EXPORT_LIST) $(PERL_ARCHIVEDEP) $(INST_DYNAMIC_DEP)
+ ');
+     if ($GCC) {
+       push(@m,
+        q{	}.$DLLTOOL.q{ --def $(EXPORT_LIST) --output-exp dll.exp
+-	$(LD) -o $@ -Wl,--base-file -Wl,dll.base $(LDDLFLAGS) }.$ldfrom.q{ $(OTHERLDFLAGS) $(MYEXTLIB) $(PERL_ARCHIVE) $(LDLOADLIBS) dll.exp
++	$(LD) -o $@ -Wl,--base-file -Wl,dll.base $(LDDLFLAGS) }.$ldfrom.q{ $(OTHERLDFLAGS) $(MYEXTLIB) "$(PERL_ARCHIVE)" $(LDLOADLIBS) dll.exp
+ 	}.$DLLTOOL.q{ --def $(EXPORT_LIST) --base-file dll.base --output-exp dll.exp
+-	$(LD) -o $@ $(LDDLFLAGS) }.$ldfrom.q{ $(OTHERLDFLAGS) $(MYEXTLIB) $(PERL_ARCHIVE) $(LDLOADLIBS) dll.exp });
++	$(LD) -o $@ $(LDDLFLAGS) }.$ldfrom.q{ $(OTHERLDFLAGS) $(MYEXTLIB) "$(PERL_ARCHIVE)" $(LDLOADLIBS) dll.exp });
+     } elsif ($BORLAND) {
+       push(@m,
+        q{	$(LD) $(LDDLFLAGS) $(OTHERLDFLAGS) }.$ldfrom.q{,$@,,}
+        .($self->is_make_type('dmake')
+-                ? q{$(PERL_ARCHIVE:s,/,\,) $(LDLOADLIBS:s,/,\,) }
++                ? q{"$(PERL_ARCHIVE:s,/,\,)" $(LDLOADLIBS:s,/,\,) }
+ 		 .q{$(MYEXTLIB:s,/,\,),$(EXPORT_LIST:s,/,\,)}
+-		: q{$(subst /,\,$(PERL_ARCHIVE)) $(subst /,\,$(LDLOADLIBS)) }
++		: q{"$(subst /,\,$(PERL_ARCHIVE))" $(subst /,\,$(LDLOADLIBS)) }
+ 		 .q{$(subst /,\,$(MYEXTLIB)),$(subst /,\,$(EXPORT_LIST))})
+        .q{,$(RESFILES)});
+     } else {	# VC
+       push(@m,
+        q{	$(LD) -out:$@ $(LDDLFLAGS) }.$ldfrom.q{ $(OTHERLDFLAGS) }
+-      .q{$(MYEXTLIB) $(PERL_ARCHIVE) $(LDLOADLIBS) -def:$(EXPORT_LIST)});
++      .q{$(MYEXTLIB) "$(PERL_ARCHIVE)" $(LDLOADLIBS) -def:$(EXPORT_LIST)});
+ 
+       # Embed the manifest file if it exists
+       push(@m, q{
+@@ -401,6 +402,7 @@ sub init_linker {
+     my $self = shift;
+ 
+     $self->{PERL_ARCHIVE}       = "\$(PERL_INC)\\$Config{libperl}";
++    $self->{PERL_ARCHIVEDEP}    = "\$(PERL_INCDEP)\\$Config{libperl}";
+     $self->{PERL_ARCHIVE_AFTER} = '';
+     $self->{EXPORT_LIST}        = '$(BASEEXT).def';
+ }
+@@ -421,6 +423,29 @@ sub perl_script {
+     return;
+ }
+ 
++sub can_dep_space {
++    my $self = shift;
++    1; # with Win32::GetShortPathName
++}
 +
-+Set SHELL to $ENV{COMSPEC} only if make is type 'gmake'.
++=item quote_dep
 +
 +=cut
 +
-+sub specify_shell {
-+    my $self = shift;
-+    return '' unless $self->is_make_type('gmake');
-+    "\nSHELL = $ENV{COMSPEC}\n";
++sub quote_dep {
++    my ($self, $arg) = @_;
++    if ($arg =~ / / and not $self->is_make_type('gmake')) {
++        require Win32;
++        $arg = Win32::GetShortPathName($arg);
++        die <<EOF if not defined $arg or $arg =~ / /;
++Tried to use make dependency with space for non-GNU make:
++  '$arg'
++Fallback to short pathname failed.
++EOF
++        return $arg;
++    }
++    return $self->SUPER::quote_dep($arg);
 +}
  
- =item constants
+ =item xs_o
+ 
 PATCH
 }
 

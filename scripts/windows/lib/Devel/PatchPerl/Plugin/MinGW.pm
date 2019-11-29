@@ -1405,14 +1405,6 @@ sub _patch_make_maker_dirfilesep {
  	    my ($fromname, $key, $value);
  	    if ($mname eq 'podlators') {
  		# We need to special case this somewhere, and this is fewer
-@@ -366,7 +368,6 @@ sub build_extension {
- 		my $leafname = "$leaf.pm";
- 		my $pathname = join '/', @dirs, $leafname;
- 		my @locations = ($leafname, $pathname, "lib/$pathname");
--		unshift @locations, 'lib/IO/Compress/Base.pm' if $mname eq 'IO::Compress';
- 		foreach (@locations) {
- 		    if (-f $_) {
- 			$fromname = $_;
 @@ -375,11 +376,22 @@ sub build_extension {
  		}
  

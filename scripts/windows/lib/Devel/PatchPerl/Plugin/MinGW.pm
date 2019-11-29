@@ -6104,6 +6104,176 @@ sub _patch_make_maker_dirfilesep {
  
      my $bootname = "boot_$module";
      $bootname =~ s/\W/_/g;
+--- dist/IO/IO.pm
++++ dist/IO/IO.pm
+@@ -7,7 +7,7 @@ use Carp;
+ use strict;
+ use warnings;
+ 
+-our $VERSION = "1.31";
++our $VERSION = "1.35";
+ XSLoader::load 'IO', $VERSION;
+ 
+ sub import {
+--- dist/IO/IO.xs
++++ dist/IO/IO.xs
+@@ -61,6 +61,10 @@ typedef FILE * OutputStream;
+ #  define dVAR dNOOP
+ #endif
+ 
++#ifndef OpSIBLING
++#  define OpSIBLING(o) (o)->op_sibling
++#endif
++
+ static int not_here(const char *s) __attribute__noreturn__;
+ static int
+ not_here(const char *s)
+@@ -102,13 +106,19 @@ not_here(const char *s)
+ static int
+ io_blocking(pTHX_ InputStream f, int block)
+ {
++    int fd = -1;
+ #if defined(HAS_FCNTL)
+     int RETVAL;
+-    if(!f) {
++    if (!f) {
+ 	errno = EBADF;
+ 	return -1;
+     }
+-    RETVAL = fcntl(PerlIO_fileno(f), F_GETFL, 0);
++    fd = PerlIO_fileno(f);
++    if (fd < 0) {
++      errno = EBADF;
++      return -1;
++    }
++    RETVAL = fcntl(fd, F_GETFL, 0);
+     if (RETVAL >= 0) {
+ 	int mode = RETVAL;
+ 	int newmode = mode;
+@@ -143,7 +153,7 @@ io_blocking(pTHX_ InputStream f, int block)
+ 	}
+ #endif
+ 	if (newmode != mode) {
+-	    const int ret = fcntl(PerlIO_fileno(f),F_SETFL,newmode);
++            const int ret = fcntl(fd, F_SETFL, newmode);
+ 	    if (ret < 0)
+ 		RETVAL = ret;
+ 	}
+@@ -154,7 +164,7 @@ io_blocking(pTHX_ InputStream f, int block)
+     if (block >= 0) {
+ 	unsigned long flags = !block;
+ 	/* ioctl claims to take char* but really needs a u_long sized buffer */
+-	const int ret = ioctl(PerlIO_fileno(f), FIONBIO, (char*)&flags);
++	const int ret = ioctl(fd, FIONBIO, (char*)&flags);
+ 	if (ret != 0)
+ 	    return -1;
+ 	/* Win32 has no way to get the current blocking status of a socket.
+@@ -185,7 +195,7 @@ static OP *
+ io_ck_lineseq(pTHX_ OP *o)
+ {
+     OP *kid = cBINOPo->op_first;
+-    for (; kid; kid = kid->op_sibling)
++    for (; kid; kid = OpSIBLING(kid))
+ 	if (kid->op_type == OP_NEXTSTATE || kid->op_type == OP_DBSTATE)
+ 	    kid->op_ppaddr = io_pp_nextstate;
+     return o;
+@@ -524,9 +534,15 @@ fsync(arg)
+ 	handle = IoOFP(sv_2io(arg));
+ 	if (!handle)
+ 	    handle = IoIFP(sv_2io(arg));
+-	if(handle)
+-	    RETVAL = fsync(PerlIO_fileno(handle));
+-	else {
++	if (handle) {
++	    int fd = PerlIO_fileno(handle);
++	    if (fd >= 0) {
++		RETVAL = fsync(fd);
++	    } else {
++		RETVAL = -1;
++		errno = EBADF;
++	    }
++	} else {
+ 	    RETVAL = -1;
+ 	    errno = EINVAL;
+ 	}
+@@ -556,12 +572,17 @@ sockatmark (sock)
+    PREINIT:
+      int fd;
+    CODE:
+-   {
+      fd = PerlIO_fileno(sock);
++     if (fd < 0) {
++       errno = EBADF;
++       RETVAL = -1;
++     }
+ #ifdef HAS_SOCKATMARK
+-     RETVAL = sockatmark(fd);
++     else {
++       RETVAL = sockatmark(fd);
++     }
+ #else
+-     {
++     else {
+        int flag = 0;
+ #   ifdef SIOCATMARK
+ #     if defined(NETWARE) || defined(WIN32)
+@@ -576,7 +597,6 @@ sockatmark (sock)
+        RETVAL = flag;
+      }
+ #endif
+-   }
+    OUTPUT:
+      RETVAL
+ 
+--- dist/IO/lib/IO/Socket.pm
++++ dist/IO/lib/IO/Socket.pm
+@@ -24,7 +24,7 @@ require IO::Socket::UNIX if ($^O ne 'epoc' && $^O ne 'symbian');
+ 
+ @ISA = qw(IO::Handle);
+ 
+-$VERSION = "1.37";
++$VERSION = "1.38";
+ 
+ @EXPORT_OK = qw(sockatmark);
+ 
+@@ -499,8 +499,23 @@ C<use> declaration will fail at compile time.
+ 
+ =item connected
+ 
+-If the socket is in a connected state the peer address is returned.
+-If the socket is not in a connected state then undef will be returned.
++If the socket is in a connected state, the peer address is returned. If the
++socket is not in a connected state, undef is returned.
++
++Note that connected() considers a half-open TCP socket to be "in a connected
++state".  Specifically, connected() does not distinguish between the
++B<ESTABLISHED> and B<CLOSE-WAIT> TCP states; it returns the peer address,
++rather than undef, in either case.  Thus, in general, connected() cannot
++be used to reliably learn whether the peer has initiated a graceful shutdown
++because in most cases (see below) the local TCP state machine remains in
++B<CLOSE-WAIT> until the local application calls shutdown() or close();
++only at that point does connected() return undef.
++
++The "in most cases" hedge is because local TCP state machine behavior may
++depend on the peer's socket options. In particular, if the peer socket has
++SO_LINGER enabled with a zero timeout, then the peer's close() will generate
++a RST segment, upon receipt of which the local TCP transitions immediately to
++B<CLOSED>, and in that state, connected() I<will> return undef.
+ 
+ =item protocol
+ 
+--- dist/IO/poll.c
++++ dist/IO/poll.c
+@@ -54,7 +54,9 @@ poll(struct pollfd *fds, unsigned long nfds, int timeout)
+ 
+     FD_ZERO(&ifd);
+ 
++#ifdef HAS_FSTAT
+ again:
++#endif
+ 
+     FD_ZERO(&rfd);
+     FD_ZERO(&wfd);
 PATCH
 }
 

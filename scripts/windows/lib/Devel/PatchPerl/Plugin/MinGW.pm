@@ -1544,10 +1544,10 @@ sub _patch_make_maker_dirfilesep {
 -
 --- ext/DynaLoader/dl_win32.xs
 +++ ext/DynaLoader/dl_win32.xs
-@@ -126,13 +126,13 @@ dl_load_file(filename,flags=0)
+@@ -119,13 +119,13 @@ dl_load_file(filename,flags=0)
+     void *retv;
      CODE:
    {
-     PERL_UNUSED_VAR(flags);
 -    DLDEBUG(1,PerlIO_printf(Perl_debug_log,"dl_load_file(%s):\n", filename));
 +    PerlIO_printf(Perl_debug_log,"dl_load_file(%s):\n", filename);
      if (dl_static_linked(filename) == 0) {
@@ -1557,16 +1557,16 @@ sub _patch_make_maker_dirfilesep {
  	retv = (void*) Win_GetModuleHandle(NULL);
 -    DLDEBUG(2,PerlIO_printf(Perl_debug_log," libref=%x\n", retv));
 +    PerlIO_printf(Perl_debug_log," libref=%x\n", retv);
- 
-     if (retv == NULL) {
+     ST(0) = sv_newmortal() ;
+     if (retv == NULL)
  	SaveError(aTHX_ "load_file:%s",
-@@ -148,11 +148,11 @@ int
+@@ -138,11 +138,11 @@ int
  dl_unload_file(libref)
      void *	libref
    CODE:
 -    DLDEBUG(1,PerlIO_printf(Perl_debug_log, "dl_unload_file(%lx):\n", PTR2ul(libref)));
 +    PerlIO_printf(Perl_debug_log, "dl_unload_file(%lx):\n", PTR2ul(libref));
-     RETVAL = FreeLibrary((HMODULE)libref);
+     RETVAL = FreeLibrary(libref);
      if (!RETVAL)
          SaveError(aTHX_ "unload_file:%s", OS_Error_String(aTHX)) ;
 -    DLDEBUG(2,PerlIO_printf(Perl_debug_log, " retval = %d\n", RETVAL));

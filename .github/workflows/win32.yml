@@ -1,16 +1,16 @@
-name: build perl on windows
+name: build on windows
 
 on:
   pull_request:
     paths:
       - 'scripts/windows/**'
-      - '.github/workflows/windows.yml'
+      - '.github/workflows/win32.yml'
   push:
     branches:
       - 'releases/*'
 
 jobs:
-  windows:
+  build:
     runs-on: windows-latest
     strategy:
       fail-fast: false

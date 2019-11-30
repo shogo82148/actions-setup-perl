@@ -40,13 +40,29 @@ my @patch = (
             [ \&_patch_win32_mkstemp ],
         ],
     },
-	{
+    {
+        perl => [
+            qr/^5\.21\.[0-6]$/,
+            qr/^5\.20\.[0-9]+$/,
+        ],
+        subs => [
+            [ \&_patch_installperl ],
+        ],
+    },
+    {
+        perl => [
+            qr/^5\.21\.[0-5]$/,
+            qr/^5\.20\.[0-9]+$/,
+        ],
+        subs => [
+            [ \&_patch_make_maker_dirfilesep ],
+        ],
+    },
+    {
         perl => [
             qr/^5\.2[01]\.[0-9]+$/,
         ],
         subs => [
-            [ \&_patch_installperl ],
-            [ \&_patch_make_maker_dirfilesep ],
             [ \&_patch_gnumakefile_520 ],
         ],
     },

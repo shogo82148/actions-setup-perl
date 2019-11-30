@@ -4,7 +4,7 @@ on:
   pull_request:
     paths:
       - 'scripts/windows/**'
-      - '.github/workflows/windows.yml'
+      - '.github/workflows/win32.yml'
   push:
     branches:
       - 'releases/*'

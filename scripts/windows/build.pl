@@ -78,20 +78,23 @@ sub run {
             or die "Failed to install";
     };
 
-    group "install App::cpanminus and Carton" => sub {
+    my $cpanm = File::Spec->catfile($tmpdir, "cpanm");
+    group "downlod App::cpanminus" => sub {
         my $ua = LWP::UserAgent->new;
         my $response = $ua->get("https://cpanmin.us");
         if (!$response->is_success) {
             die "download failed: " . $response->status_line;
         }
-
-        my $cpanm = File::Spec->catfile($tmpdir, "cpanm");
         open my $fh, ">", $cpanm or die "$!";
         binmode $fh;
         print $fh $response->content;
         close $fh;
+    };
 
-        system(File::Spec->catfile($install_dir, "bin", "perl") . " $cpanm --notest App::cpanminus Carton") == 0
+    group "install App::cpanminus and Carton" => sub {
+        local $ENV{PERL5LIB} = ""; # ignore libraries of the host perl
+        my $perl = File::Spec->catfile($install_dir, "bin", "perl");
+        system($perl, $cpanm, "--notest", "App::cpanminus", "Carton") == 0
             or die "Failed to install App::cpanminus and Carton";
     };
 

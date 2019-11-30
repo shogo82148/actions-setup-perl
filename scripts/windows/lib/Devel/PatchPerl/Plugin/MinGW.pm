@@ -2415,6 +2415,9 @@ MAKEFILE
     $makefile =~ s/__INST_VER__/$version/g;
     $makefile =~ s/__PERL_MINOR_VERSION__/$v[0]$v[1]/g;
     $makefile =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
+    if ($v[2] >= 10) {
+        $makefile =~ s/\\mro\./\\mro_core./g;
+    }
     _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
 }
 

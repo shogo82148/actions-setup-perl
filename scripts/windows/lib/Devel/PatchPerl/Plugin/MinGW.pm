@@ -183,7 +183,7 @@ INST_TOP := $(INST_DRV)\perl
 # versioned installation can be obtained by setting INST_TOP above to a
 # path that includes an arbitrary version string.
 #
-#INST_VER	:= \5.22.0
+#INST_VER	:= \__INST_VER__
 
 #
 # Comment this out if you DON'T want your perl installation to have
@@ -1209,6 +1209,7 @@ $(UNIDATAFILES) : ..\pod\perluniprops.pod
 	$(MINIPERL) -I..\lib ..\lib\unicore\mktables -C ..\lib\unicore -P ..\pod -maketest -makelist -p
 MAKEFILE
     my @v = split /[.]/, $version;
+    $makefile =~ s/__INST_VER__/$version/g;
     $makefile =~ s/__PERL_MINOR_VERSION__/$v[0]$v[1]/g;
     $makefile =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
     _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
@@ -6280,7 +6281,6 @@ PATCH
 
 sub _patch_gnumakefile_520 {
     my $version = shift;
-    $version =~ s/[.]//g;
     my $makefile = <<'MAKEFILE';
 #
 # Makefile to build perl on Windows using GMAKE.
@@ -6323,7 +6323,7 @@ INST_TOP := $(INST_DRV)\perl
 # versioned installation can be obtained by setting INST_TOP above to a
 # path that includes an arbitrary version string.
 #
-#INST_VER	:= \5.20.0
+#INST_VER	:= \__INST_VER__
 
 #
 # Comment this out if you DON'T want your perl installation to have
@@ -7385,8 +7385,10 @@ $(UNIDATAFILES) : ..\pod\perluniprops.pod
 	$(MINIPERL) -I..\lib ..\lib\unicore\mktables -C ..\lib\unicore -P ..\pod -maketest -makelist -p
 MAKEFILE
     my @v = split /[.]/, $version;
+    $makefile =~ s/__INST_VER__/$version/g;
     $makefile =~ s/__PERL_MINOR_VERSION__/$v[0]$v[1]/g;
     $makefile =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
+    _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
 }
 
 1;

@@ -12,6 +12,7 @@ use CPAN::Perl::Releases::MetaCPAN;
 use Devel::PatchPerl;
 use Try::Tiny;
 use File::pushd qw[pushd];
+use File::Spec;
 
 local $| = 1;
 
@@ -45,7 +46,7 @@ sub run {
     my $tmpdir = $ENV{RUNNER_TEMP};
     $url =~ m/\/(perl-.*)$/;
     my $filename = $1;
-    my $install_dir = "$ENV{RUNNER_TOOL_CACHE}\\perl\\${version}\\x64";
+    my $install_dir = File::Spec->catdir($ENV{RUNNER_TOOL_CACHE}, "perl", $version, "x64");
 
     group "downloading perl $version from $url" => sub {
         my $ua = LWP::UserAgent->new;
@@ -54,7 +55,7 @@ sub run {
             die "download failed: " . $response->status_line;
         }
 
-        open my $fh, ">", "$tmpdir\\$filename" or die "$!";
+        open my $fh, ">", File::Spec->catfile($tmpdir, $filename) or die "$!";
         binmode $fh;
         print $fh $response->content;
         close $fh;
@@ -68,40 +69,38 @@ sub run {
 
     group "patching..." => sub {
         local $ENV{PERL5_PATCHPERL_PLUGIN} = "MinGW";
-        Devel::PatchPerl->patch_source($version, "$tmpdir\\perl-$version");
+        Devel::PatchPerl->patch_source($version, File::Spec->catdir($tmpdir, "perl-$version"));
     };
 
-    group "build" => sub {
-        my $dir = pushd("$tmpdir\\perl-$version\\win32");
-        system("gmake", "-f", "GNUMakefile", "INST_TOP=$install_dir", "CCHOME=C:\\strawberry\\c") == 0
-            or die "Failed to build";
-    };
-
-    group "install" => sub {
-        my $dir = pushd("$tmpdir\\perl-$version\\win32");
-        system("gmake", "-f", "GNUMakefile", "install") == 0
+    group "build and install Perl" => sub {
+        my $dir = pushd(File::Spec->catdir($tmpdir, "perl-$version", "win32"));
+        system("gmake", "-f", "GNUMakefile", "install", "INST_TOP=$install_dir", "CCHOME=C:\\strawberry\\c") == 0
             or die "Failed to install";
     };
 
-    group "install App::cpanminus and Carton" => sub {
+    my $cpanm = File::Spec->catfile($tmpdir, "cpanm");
+    group "downlod App::cpanminus" => sub {
         my $ua = LWP::UserAgent->new;
         my $response = $ua->get("https://cpanmin.us");
         if (!$response->is_success) {
             die "download failed: " . $response->status_line;
         }
-
-        open my $fh, ">", "$tmpdir\\cpanm" or die "$!";
+        open my $fh, ">", $cpanm or die "$!";
         binmode $fh;
         print $fh $response->content;
         close $fh;
+    };
 
-        system("$install_dir\\bin\\perl", "$tmpdir\\cpanm", "--notest", "App::cpanminus", "Carton") == 0
+    group "install App::cpanminus and Carton" => sub {
+        local $ENV{PERL5LIB} = ""; # ignore libraries of the host perl
+        my $perl = File::Spec->catfile($install_dir, "bin", "perl");
+        system($perl, $cpanm, "--notest", "App::cpanminus", "Carton") == 0
             or die "Failed to install App::cpanminus and Carton";
     };
 
     group "archiving" => sub {
         my $dir = pushd($install_dir);
-        system("7z", "a", "$tmpdir\\perl.zip", ".") == 0
+        system("7z", "a", File::Spec->catfile($tmpdir, "perl.zip"), ".") == 0
             or die "failed to archive";
     };
 }

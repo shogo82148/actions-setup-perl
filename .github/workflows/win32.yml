@@ -17,28 +17,43 @@ jobs:
       matrix:
         perl:
         - "5.30.1"
-        # - "5.30.0"
+        - "5.30.0"
         - "5.28.2"
-        # - "5.28.1"
-        # - "5.28.0"
+        - "5.28.1"
+        - "5.28.0"
         - "5.26.3"
-        # - "5.26.2"
-        # - "5.26.1"
-        # - "5.26.0"
+        - "5.26.2"
+        - "5.26.1"
+        - "5.26.0"
         - "5.24.4"
-        # - "5.24.3"
-        # - "5.24.2"
-        # - "5.24.1"
-        # - "5.24.0"
+        - "5.24.3"
+        - "5.24.2"
+        - "5.24.1"
+        - "5.24.0"
         - "5.22.4"
         - "5.22.3"
         - "5.22.2"
         - "5.22.1"
         - "5.22.0"
-        # - "5.20.3"
-        # - "5.20.2"
-        # - "5.20.1"
-        # - "5.20.0"
+
+        # - "5.21.11"
+        # - "5.21.10"
+        # #- "5.21.9" # failed with Devel-PatchPerl-1.80
+        # - "5.21.8"
+        # - "5.21.7"
+        # - "5.21.6"
+        # - "5.21.5"
+        # - "5.21.4"
+        # - "5.21.3"
+        # - "5.21.2"
+        # - "5.21.1"
+        # - "5.21.0"
+
+        - "5.20.3"
+        - "5.20.2"
+        - "5.20.1"
+        - "5.20.0"
+
         # - "5.18.4"
         # - "5.18.3"
         # - "5.18.2"
@@ -98,7 +113,14 @@ jobs:
         env:
           PERL_VERSION: ${{ matrix.perl }}
           PERL5LIB: ${{ github.workspace }}/scripts/windows/local/lib/perl5
+          # PERL_DL_DEBUG: "10" # enables debugging
         working-directory: ./scripts/windows
+
+      # for debugging
+      # - uses: actions/upload-artifact@v1
+      #   with:
+      #     name: perl-${{ matrix.perl }}
+      #     path: C:\hostedtoolcache\windows\perl\${{ matrix.perl }}\x64
 
       - name: upload
         shell: pwsh

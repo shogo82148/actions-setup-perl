@@ -78,9 +78,13 @@ jobs:
 
       - name: install Carton
         shell: bash
-        run: "curl -sSL https://cpanmin.us | perl - --sudo Carton"
+        run: "curl -sSL https://cpanmin.us | perl - --notest --sudo Carton"
         working-directory: ./scripts/darwin
 
+      - uses: actions/cache@v1
+        with:
+          path: scripts/darwin/local
+          key: ${{ runner.os }}-build-${{ hashFiles('scripts/linux/cpanfile.snapshot') }}
       - name: carton install --deployment
         shell: bash
         run: carton install --deployment

@@ -95,9 +95,13 @@ jobs:
 
       - name: install Carton
         shell: cmd
-        run: cpanm Carton
+        run: cpanm --notest Carton
         working-directory: ./scripts/windows
 
+      - uses: actions/cache@v1
+        with:
+          path: scripts/windows/local
+          key: ${{ runner.os }}-build-${{ hashFiles('scripts/linux/cpanfile.snapshot') }}
       - name: carton install
         shell: cmd
         run: carton install

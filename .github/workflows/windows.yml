@@ -113,10 +113,11 @@ jobs:
         working-directory: ./scripts/windows
         continue-on-error: true
 
-      - uses: actions/upload-artifact@v1
-        with:
-          name: perl-${{ matrix.perl }}
-          path: C:\hostedtoolcache\windows\perl\${{ matrix.perl }}\x64
+      # for debugging
+      # - uses: actions/upload-artifact@v1
+      #   with:
+      #     name: perl-${{ matrix.perl }}
+      #     path: C:\hostedtoolcache\windows\perl\${{ matrix.perl }}\x64
 
       - name: upload
         shell: pwsh

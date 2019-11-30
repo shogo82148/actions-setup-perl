@@ -78,6 +78,10 @@ jobs:
       - name: gcc --version
         run: gcc --version
 
+      - uses: actions/cache@v1
+        with:
+          path: path/to/dependencies
+          key: ${{ runner.os }}-build-${{ hashFiles('scripts/linux/cpanfile.snapshot') }}
       - name: install Carton
         shell: cmd
         run: cpanm Carton

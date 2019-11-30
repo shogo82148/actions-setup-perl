@@ -1,4 +1,4 @@
-name: build perl on linux
+name: build on linux
 
 on:
   pull_request:
@@ -10,7 +10,7 @@ on:
       - 'releases/*'
 
 jobs:
-  linux:
+  build:
     runs-on: ubuntu-18.04
     strategy:
       fail-fast: false

@@ -1,4 +1,4 @@
-name: build perl on darwin
+name: build on darwin
 
 on:
   pull_request:
@@ -10,7 +10,7 @@ on:
       - 'releases/*'
 
 jobs:
-  darwin:
+  build:
     runs-on: macos-latest
     strategy:
       fail-fast: false

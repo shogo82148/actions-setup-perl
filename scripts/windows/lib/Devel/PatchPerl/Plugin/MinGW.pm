@@ -44,15 +44,8 @@ my @patch = (
             qr/^5\.2[01]\.[0-9]+$/,
         ],
         subs => [
-            [ \&_patch_gnumakefile_520 ],
-        ],
-    },
-    {
-        perl => [
-            qr/^5\.20\.[0-9]+$/,
-        ],
-        subs => [
             [ \&_patch_make_maker_dirfilesep ],
+            [ \&_patch_gnumakefile_520 ],
         ],
     },
 );

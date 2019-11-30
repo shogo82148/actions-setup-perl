@@ -33,7 +33,8 @@ my @patch = (
     },
     {
         perl => [
-            qr/^5\.2[01]\.[012]$/,
+            qr/^5\.21\.[0-9]+$/,
+            qr/^5\.20\.[012]$/,
         ],
         subs => [
             [ \&_patch_win32_mkstemp ],
@@ -44,6 +45,7 @@ my @patch = (
             qr/^5\.2[01]\.[0-9]+$/,
         ],
         subs => [
+            [ \&_patch_installperl ],
             [ \&_patch_make_maker_dirfilesep ],
             [ \&_patch_gnumakefile_520 ],
         ],
@@ -1264,7 +1266,7 @@ sub _patch_win32_mkstemp {
 PATCH
 }
 
-sub _patch_make_maker_dirfilesep {
+sub _patch_installperl {
     _patch(<<'PATCH');
 --- installperl
 +++ installperl
@@ -1277,6 +1279,11 @@ sub _patch_make_maker_dirfilesep {
      }
  
      if ($dlsrc ne "dl_none.xs") {
+PATCH
+}
+
+sub _patch_make_maker_dirfilesep {
+    _patch(<<'PATCH');
 --- make_ext.pl
 +++ make_ext.pl
 @@ -2,11 +2,11 @@
@@ -7389,7 +7396,7 @@ MAKEFILE
     $makefile =~ s/__PERL_MINOR_VERSION__/$v[0]$v[1]/g;
     $makefile =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
     if ($version =~ /^5\.21\./) {
-        $makefile =~ s/\s+\.\.\\utils\\config_data\s*\\\r?\n//;
+        $makefile =~ s/\s+\.\.\\utils\\config_data\s*\\//;
     }
     _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
 }

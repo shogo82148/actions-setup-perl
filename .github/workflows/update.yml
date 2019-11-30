@@ -11,7 +11,7 @@ jobs:
 
       - name: install Carton
         shell: bash
-        run: curl -sSL https://cpanmin.us | perl - --sudo Carton
+        run: curl -sSL https://cpanmin.us | perl - --notest --sudo Carton
         working-directory: ./scripts/linux
 
       - name: carton install
@@ -36,7 +36,7 @@ jobs:
 
       - name: install Carton
         shell: bash
-        run: "curl -sSL https://cpanmin.us | perl - --sudo Carton"
+        run: "curl -sSL https://cpanmin.us | perl - --notest --sudo Carton"
         working-directory: ./scripts/darwin
 
       - name: carton install
@@ -66,7 +66,7 @@ jobs:
 
       - name: install Carton
         shell: cmd
-        run: cpanm Carton
+        run: cpanm --notest Carton
         working-directory: ./scripts/windows
 
       - name: carton install

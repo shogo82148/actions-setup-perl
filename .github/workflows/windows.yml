@@ -108,7 +108,7 @@ jobs:
         env:
           PERL_VERSION: ${{ matrix.perl }}
           PERL5LIB: ${{ github.workspace }}/scripts/windows/local/lib/perl5
-          PERL_DL_DEBUG: "10"
+          # PERL_DL_DEBUG: "10" # enables debugging
         working-directory: ./scripts/windows
         continue-on-error: true
 

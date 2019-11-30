@@ -75,7 +75,7 @@ jobs:
 
       - name: install Carton
         shell: bash
-        run: "curl -sSL https://cpanmin.us | perl - --sudo Carton"
+        run: "curl -sSL https://cpanmin.us | perl - --notest --sudo Carton"
         working-directory: ./scripts/linux
 
       - uses: actions/cache@v1

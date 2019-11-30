@@ -32,6 +32,14 @@ my @patch = (
         ],
     },
     {
+        per => [
+            qr/^5\.21\.8$/,
+        ],
+        subs => [
+            [ \&_patch_sdbm ],
+        ],
+    },
+    {
         perl => [
             qr/^5\.21\.[0-9]+$/,
             qr/^5\.20\.[012]$/,
@@ -1240,6 +1248,22 @@ MAKEFILE
     $makefile =~ s/__PERL_MINOR_VERSION__/$v[0]$v[1]/g;
     $makefile =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
     _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
+}
+
+sub _patch_sdbm {
+    _patch(<<'PATCH');
+--- ext/SDBM_File/sdbm.h
++++ ext/SDBM_File/sdbm.h
+@@ -51,7 +51,7 @@ typedef struct {
+        int dsize;
+ } datum;
+
+-EXTCONST datum nullitem
++extern const datum nullitem
+ #ifdef DOINIT
+                         = {0, 0}
+ #endif
+PATCH
 }
 
 sub _patch_win32_mkstemp {

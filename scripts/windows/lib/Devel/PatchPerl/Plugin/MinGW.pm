@@ -4641,7 +4641,7 @@ utils: $(PERLEXE) $(X2P)
 	copy ..\README.ce       ..\pod\perlce.pod
 	copy ..\README.cn       ..\pod\perlcn.pod
 	copy ..\README.cygwin   ..\pod\perlcygwin.pod
-    copy ..\README.dgux     ..\pod\perldgux.pod
+	copy ..\README.dgux     ..\pod\perldgux.pod
 	copy ..\README.dos      ..\pod\perldos.pod
 	copy ..\README.freebsd  ..\pod\perlfreebsd.pod
 	copy ..\README.haiku    ..\pod\perlhaiku.pod

@@ -40,6 +40,8 @@ sub group {
 }
 
 sub run {
+    local $ENV{PERL5LIB} = ""; # ignore libraries of the host perl
+
     my $version = $ENV{PERL_VERSION};
     my $url = perl_release($version);
 
@@ -92,7 +94,6 @@ sub run {
     };
 
     group "install App::cpanminus and Carton" => sub {
-        local $ENV{PERL5LIB} = ""; # ignore libraries of the host perl
         my $perl = File::Spec->catfile($install_dir, "bin", "perl");
         system($perl, $cpanm, "--notest", "App::cpanminus", "Carton") == 0
             or die "Failed to install App::cpanminus and Carton";

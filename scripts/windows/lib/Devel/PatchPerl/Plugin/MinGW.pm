@@ -71,7 +71,7 @@ my @patch = (
     },
     {
         perl => [
-            qr/^5\.18\./,
+            qr/^5\.1[789]\./,
         ],
         subs => [
             [ \&_patch_make_maker_dirfilesep_518 ],

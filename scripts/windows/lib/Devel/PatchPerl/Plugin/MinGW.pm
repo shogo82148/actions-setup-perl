@@ -96,7 +96,7 @@ my @patch = (
     },
     {
         perl => [
-            qr/^5\.18\./,
+            qr/^5\.1[789]\./,
         ],
         subs => [
             [ \&_patch_gnumakefile_518 ],

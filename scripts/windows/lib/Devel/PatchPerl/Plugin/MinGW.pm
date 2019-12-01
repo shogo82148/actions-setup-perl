@@ -4322,7 +4322,7 @@ $(CONFIGPM) : $(HAVEMINIPERL) ..\config.sh config_h.PL
 # See the comment in Makefile.SH explaining this seemingly cranky ordering
 ..\lib\buildcustomize.pl : $(MINI_OBJ) ..\write_buildcustomize.pl
 	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
-	$(MINIPERL) -I..\lib -f ..\write_buildcustomize.pl ..
+	$(MINIPERL) -I..\lib -f ..\write_buildcustomize.pl .. >..\lib\buildcustomize.pl
 
 #
 # Copy the template config.h and set configurables at the end of it

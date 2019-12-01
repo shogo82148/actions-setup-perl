@@ -64,10 +64,17 @@ my @patch = (
         perl => [
             qr/^5\.21\.[0-5]$/,
             qr/^5\.20\./,
-            qr/^5\.18\./,
         ],
         subs => [
             [ \&_patch_make_maker_dirfilesep ],
+        ],
+    },
+    {
+        perl => [
+            qr/^5\.18\./,
+        ],
+        subs => [
+            [ \&_patch_make_maker_dirfilesep_518 ],
         ],
     },
     {
@@ -1357,6 +1364,43 @@ sub _patch_make_maker_dirfilesep {
  
      $self->{FIXIN}    ||= $self->{PERL_CORE} ?
 -      "\$(PERLRUN) $self->{PERL_SRC}/win32/bin/pl2bat.pl" :
++      "\$(PERLRUN) $self->{PERL_SRC}\\win32\\bin\\pl2bat.pl" :
+       'pl2bat.bat';
+ 
+     $self->SUPER::init_tools;
+PATCH
+}
+
+sub _patch_make_maker_dirfilesep_518 {
+    # _patch_make_maker_dirfilesep_518 is same as _patch_make_maker_dirfilesep
+    # except ' ' after `"\$(PERLRUN) $self->{PERL_SRC}/win32/bin/pl2bat.pl" :`
+    _patch(<<'PATCH');
+--- cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Win32.pm
++++ cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Win32.pm
+@@ -128,7 +128,7 @@ sub maybe_command {
+ 
+ =item B<init_DIRFILESEP>
+ 
+-Using \ for Windows.
++Using \ for Windows, except for "gmake" where it is /.
+ 
+ =cut
+ 
+@@ -137,7 +137,8 @@ sub init_DIRFILESEP {
+ 
+     # The ^ makes sure its not interpreted as an escape in nmake
+     $self->{DIRFILESEP} = $self->is_make_type('nmake') ? '^\\' :
+-                          $self->is_make_type('dmake') ? '\\\\'
++                          $self->is_make_type('dmake') ? '\\\\' :
++                          $self->is_make_type('gmake') ? '/'
+                                                        : '\\';
+ }
+ 
+@@ -154,7 +155,7 @@ sub init_tools {
+     $self->{DEV_NULL} ||= '> NUL';
+ 
+     $self->{FIXIN}    ||= $self->{PERL_CORE} ? 
+-      "\$(PERLRUN) $self->{PERL_SRC}/win32/bin/pl2bat.pl" : 
 +      "\$(PERLRUN) $self->{PERL_SRC}\\win32\\bin\\pl2bat.pl" :
        'pl2bat.bat';
  

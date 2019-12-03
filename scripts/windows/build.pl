@@ -78,19 +78,6 @@ sub run {
             or die "Failed to install";
     };
 
-    my $cpanm = File::Spec->catfile($tmpdir, "cpanm");
-    group "downlod App::cpanminus" => sub {
-        my $ua = LWP::UserAgent->new;
-        my $response = $ua->get("https://cpanmin.us");
-        if (!$response->is_success) {
-            die "download failed: " . $response->status_line;
-        }
-        open my $fh, ">", $cpanm or die "$!";
-        binmode $fh;
-        print $fh $response->content;
-        close $fh;
-    };
-
     group "archiving" => sub {
         my $dir = pushd($install_dir);
         system("7z", "a", File::Spec->catfile($tmpdir, "perl.zip"), ".") == 0

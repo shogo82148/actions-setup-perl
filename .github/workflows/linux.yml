@@ -73,18 +73,13 @@ jobs:
       - name: gcc --version
         run: gcc --version
 
-      - name: install Carton
-        shell: bash
-        run: "curl -sSL https://cpanmin.us | perl - --notest --sudo Carton"
-        working-directory: ./scripts/linux
-
       - uses: actions/cache@v1
         with:
           path: scripts/linux/local
           key: ${{ runner.os }}-build-${{ hashFiles('scripts/linux/cpanfile.snapshot') }}
       - name: carton install --deployment
         shell: bash
-        run: carton install --deployment
+        run: ../../bin/carton install --deployment
         working-directory: ./scripts/linux
 
       - name: build

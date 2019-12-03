@@ -9,16 +9,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
 
-      - name: install Carton
-        shell: bash
-        run: curl -sSL https://cpanmin.us | perl - --notest --sudo Carton
-        working-directory: ./scripts/linux
-
       - name: carton install
         shell: bash
         run: |
           rm -f cpanfile.snapshot
-          carton install
+          ../../bin/carton install
         working-directory: ./scripts/linux
 
       - uses: actions/upload-artifact@v1
@@ -34,16 +29,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
 
-      - name: install Carton
-        shell: bash
-        run: "curl -sSL https://cpanmin.us | perl - --notest --sudo Carton"
-        working-directory: ./scripts/darwin
-
       - name: carton install
         shell: bash
         run: |
           rm -f cpanfile.snapshot
-          carton install
+          ../../bin/carton install
         working-directory: ./scripts/darwin
 
       - uses: actions/upload-artifact@v1
@@ -64,14 +54,9 @@ jobs:
       - run: "rm -f scripts/windows/cpanfile.snapshot"
         shell: bash
 
-      - name: install Carton
-        shell: cmd
-        run: cpanm --notest Carton
-        working-directory: ./scripts/windows
-
       - name: carton install
         shell: cmd
-        run: carton install
+        run: ..\..\bin\carton install
         working-directory: ./scripts/windows
 
       - uses: actions/upload-artifact@v1

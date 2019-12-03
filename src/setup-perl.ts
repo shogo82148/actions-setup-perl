@@ -14,7 +14,6 @@ async function run() {
 
     // for cpanm and carton
     core.addPath(path.join(__dirname, '..', 'bin'));
-
   } catch (error) {
     core.setFailed(error.message);
   }

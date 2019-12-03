@@ -78,6 +78,10 @@ sub run {
             or die "Failed to install";
     };
 
+    group "perl -V" => sub {
+        system File::Spec->catfile($install_dir, 'bin', 'perl'), '-V' or die "$!";
+    };
+
     group "archiving" => sub {
         my $dir = pushd($install_dir);
         system("7z", "a", File::Spec->catfile($tmpdir, "perl.zip"), ".") == 0

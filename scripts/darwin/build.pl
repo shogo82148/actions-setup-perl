@@ -44,6 +44,10 @@ sub run {
         );
     };
 
+    group "perl -V" => sub {
+        system "$install_dir/bin/perl", '-V' or die "$!";
+    };
+
     group "archiving" => sub {
         chdir $install_dir or die "failed to cd $install_dir: $!";
         system("tar", "zcf", "$tmpdir/perl.tar.gz", ".") == 0

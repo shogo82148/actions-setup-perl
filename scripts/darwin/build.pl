@@ -24,7 +24,7 @@ sub group {
 
 sub run {
     my $version = $ENV{PERL_VERSION};
-    my $install_dir = "$ENV{RUNNER_TOOL_CACHE}/perl/${version}/x64";
+    my $install_dir = File::Spec->catdir($ENV{RUNNER_TOOL_CACHE}, "perl", $version, "x64");
     my $tmpdir = $ENV{RUNNER_TEMP};
 
     group "build perl $version" => sub {

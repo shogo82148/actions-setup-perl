@@ -24,16 +24,12 @@ jobs:
       with:
         node-version: 12.x
 
-    - name: npm install
-      run: npm install
+    - run: npm install
+    - run: npm run build
+    - run: npm test
 
-    - name: Lint
-      run: npm run format-check
-
-    - name: npm test
-      run: npm test
-
-    - run: npm ci
     - name: use the action
       uses: ./
     - run: perl -V
+
+    - run: npm run format-check

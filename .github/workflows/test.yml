@@ -32,3 +32,6 @@ jobs:
 
     - name: npm test
       run: npm test
+
+    - name: use the action
+      uses: ./

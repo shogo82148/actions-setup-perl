@@ -91,13 +91,6 @@ sub run {
         close $fh;
     };
 
-    group "install App::cpanminus and Carton" => sub {
-        local $ENV{PERL5LIB} = ""; # ignore libraries of the host perl
-        my $perl = File::Spec->catfile($install_dir, "bin", "perl");
-        system($perl, $cpanm, "--notest", "App::cpanminus", "Carton") == 0
-            or die "Failed to install App::cpanminus and Carton";
-    };
-
     group "archiving" => sub {
         my $dir = pushd($install_dir);
         system("7z", "a", File::Spec->catfile($tmpdir, "perl.zip"), ".") == 0

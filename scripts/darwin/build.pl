@@ -44,11 +44,6 @@ sub run {
         );
     };
 
-    group "install App::cpanminus and Carton" => sub {
-        system("sh", "-c", "curl -L https://cpanmin.us | '$install_dir/bin/perl' - --notest App::cpanminus Carton") == 0
-            or die "Failed to install App::cpanminus and Carton";
-    };
-
     group "archiving" => sub {
         chdir $install_dir or die "failed to cd $install_dir: $!";
         system("tar", "zcf", "$tmpdir/perl.tar.gz", ".") == 0

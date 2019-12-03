@@ -33,6 +33,7 @@ jobs:
     - name: npm test
       run: npm test
 
+    - run: npm ci
     - name: use the action
       uses: ./
     - run: perl -V

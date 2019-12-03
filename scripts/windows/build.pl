@@ -79,7 +79,7 @@ sub run {
     };
 
     group "perl -V" => sub {
-        system File::Spec->catfile($install_dir, 'bin', 'perl'), '-V' or die "$!";
+        system(File::Spec->catfile($install_dir, 'bin', 'perl'), '-V') == 0 or die "$!";
     };
 
     group "archiving" => sub {

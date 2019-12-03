@@ -5,6 +5,7 @@ use warnings;
 use strict;
 use Try::Tiny;
 use Perl::Build;
+use File::Spec;
 use version 0.77 ();
 
 local $| = 1;
@@ -45,7 +46,7 @@ sub run {
     };
 
     group "perl -V" => sub {
-        system "$install_dir/bin/perl", '-V' or die "$!";
+        system(File::Spec->catfile($install_dir, 'bin', 'perl'), '-V') == 0 or die "$!";
     };
 
     group "archiving" => sub {

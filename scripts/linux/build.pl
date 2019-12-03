@@ -5,6 +5,7 @@ use warnings;
 use strict;
 use Try::Tiny;
 use Perl::Build;
+use File::Spec;
 use version 0.77 ();
 
 local $| = 1;
@@ -23,7 +24,7 @@ sub group {
 
 sub run {
     my $version = $ENV{PERL_VERSION};
-    my $install_dir = "$ENV{RUNNER_TOOL_CACHE}/perl/${version}/x64";
+    my $install_dir = File::Spec->catdir($ENV{RUNNER_TOOL_CACHE}, "perl", $version, "x64");
     my $tmpdir = $ENV{RUNNER_TEMP};
 
     group "build perl $version" => sub {
@@ -44,9 +45,8 @@ sub run {
         );
     };
 
-    group "install App::cpanminus and Carton" => sub {
-        system("sh", "-c", "curl -L https://cpanmin.us | '$install_dir/bin/perl' - --notest App::cpanminus Carton") == 0
-            or die "Failed to install App::cpanminus and Carton";
+    group "perl -V" => sub {
+        system(File::Spec->catfile($install_dir, 'bin', 'perl'), '-V') == 0 or die "$!";
     };
 
     group "archiving" => sub {

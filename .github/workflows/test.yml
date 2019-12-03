@@ -35,3 +35,4 @@ jobs:
 
     - name: use the action
       uses: ./
+    - run: perl -V

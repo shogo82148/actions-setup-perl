@@ -4857,6 +4857,9 @@ MAKEFILE
     $makefile =~ s/__INST_VER__/$version/g;
     $makefile =~ s/__PERL_MINOR_VERSION__/$v[0]$v[1]/g;
     $makefile =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
+
+    # builds fail from v5.19.2 to v5.19.11
+    # I'll try them later
     if ($version =~ /^5\.19\./) {
         $makefile =~ s/\s+\.\.\\utils\\cpanp-run-perl\s*\\//;
         $makefile =~ s/\s+\.\.\\utils\\cpanp\s*\\//;
@@ -4883,6 +4886,7 @@ MAKEFILE
         $makefile =~ s/\$\(MINIPERL\)\s+-I\.\.\\lib\s+-f\s+\.\.\\write_buildcustomize\.pl\s+.*/\$(MINIPERL) -I..\\lib -f ..\\write_buildcustomize.pl ../;
         $makefile =~ s/copy\s+\.\.\\README\.dgux\s+\.\.\\pod\\perldgux\.pod//;
     }
+
     _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
 }
 

@@ -6009,7 +6009,7 @@ utils: $(PERLEXE) $(X2P)
 	copy ..\README.linux    ..\pod\perllinux.pod
 	copy ..\README.macos    ..\pod\perlmacos.pod
 	copy ..\README.macosx   ..\pod\perlmacosx.pod
-    copy ..\README.mpeix    ..\pod\perlmpeix.pod
+	copy ..\README.mpeix    ..\pod\perlmpeix.pod
 	copy ..\README.netware  ..\pod\perlnetware.pod
 	copy ..\README.openbsd  ..\pod\perlopenbsd.pod
 	copy ..\README.os2      ..\pod\perlos2.pod
@@ -6022,8 +6022,8 @@ utils: $(PERLEXE) $(X2P)
 	copy ..\README.symbian  ..\pod\perlsymbian.pod
 	copy ..\README.tru64    ..\pod\perltru64.pod
 	copy ..\README.tw       ..\pod\perltw.pod
-    copy ..\README.uts      ..\pod\perluts.pod
-    copy ..\README.vmesa    ..\pod\perlvmesa.pod
+	copy ..\README.uts      ..\pod\perluts.pod
+	copy ..\README.vmesa    ..\pod\perlvmesa.pod
 	copy ..\README.vos      ..\pod\perlvos.pod
 	copy ..\README.win32    ..\pod\perlwin32.pod
 	copy ..\pod\perldelta.pod ..\pod\perl__PERL_VERSION__delta.pod

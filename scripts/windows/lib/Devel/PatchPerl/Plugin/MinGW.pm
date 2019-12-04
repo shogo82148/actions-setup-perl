@@ -4865,6 +4865,9 @@ MAKEFILE
     if (version->parse($version) >= version->parse("v5.19.8")) {
         $makefile =~ s/\s+\.\.\\perlsfio\.h\s*\\//;
     }
+    if (version->parse($version) >= version->parse("v5.19.4")) {
+        $makefile =~ s/^\s*CORE_NOCFG_H\s*=.*$/CORE_NOCFG_H = .\\include\\sys\\errno2.h \\/;
+    }
     if (version->parse($version) >= version->parse("v5.19.2")) {
         $makefile =~ s/^MINIMOD\s*=.*$//;
         $makefile =~ s/\$\(MINIMOD\)//g;

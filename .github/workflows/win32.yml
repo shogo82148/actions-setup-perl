@@ -116,7 +116,7 @@ jobs:
       - name: setup host perl
         shell: bash
         run: |
-          echo "::add-path::C:\strawberry\c\bin;C:\strawberry\perl\site\bin;C:\strawberry\perl\bin"
+          echo "::add-path::C:\MinGW\bin;C:\strawberry\perl\site\bin;C:\strawberry\perl\bin"
       - name: Host perl -V
         run: perl -V
       - name: gcc --version

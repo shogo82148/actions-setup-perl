@@ -372,7 +372,7 @@ CCTYPE		:= GCC
 #
 # set the install locations of the compiler include/libraries
 #
-CCHOME		:= C:\Strawberry\c
+CCHOME		:= C:\MinGW
 
 #
 # Following sets $Config{incpath} and $Config{libpth}
@@ -1587,7 +1587,7 @@ CCTYPE		:= GCC
 #
 # set the install locations of the compiler include/libraries
 #
-CCHOME		:= C:\Strawberry\c
+CCHOME		:= C:\MinGW
 
 #
 # Following sets $Config{incpath} and $Config{libpth}
@@ -2666,7 +2666,7 @@ CCTYPE		:= GCC
 #
 # set the install locations of the compiler include/libraries
 #
-CCHOME		:= C:\Strawberry\c
+CCHOME		:= C:\MinGW
 
 #
 # Following sets $Config{incpath} and $Config{libpth}
@@ -3915,7 +3915,7 @@ CCTYPE		:= GCC
 #
 # set the install locations of the compiler include/libraries
 #
-CCHOME		:= C:\Strawberry\c
+CCHOME		:= C:\MinGW
 
 #
 # Following sets $Config{incpath} and $Config{libpth}

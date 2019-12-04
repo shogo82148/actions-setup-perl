@@ -1293,7 +1293,9 @@ PATCH
 }
 
 sub _patch_win32_mkstemp {
-    _patch(<<'PATCH');
+    my $version = shift;
+    if (version->parse("v$version") >= version->parse("5.18.0")) {
+        _patch(<<'PATCH');
 --- win32/win32.h
 +++ win32/win32.h
 @@ -331,8 +352,10 @@
@@ -1338,6 +1340,59 @@ sub _patch_win32_mkstemp {
  
  /* HAS_MMAP:
   *	This symbol, if defined, indicates that the mmap system call is
+PATCH
+    return
+    }
+
+    _patch(<<'PATCH');
+--- win32/config_H.gc
++++ win32/config_H.gc
+@@ -2643,7 +2643,9 @@
+  *	available to exclusively create and open a uniquely named
+  *	temporary file.
+  */
+-/*#define HAS_MKSTEMP		/ **/
++#if __MINGW64_VERSION_MAJOR >= 4
++#define HAS_MKSTEMP
++#endif
+ 
+ /* HAS_MMAP:
+  *	This symbol, if defined, indicates that the mmap system call is
+diff --git a/win32/win32.c b/win32/win32.c
+index 89413fc28c..fd7b326466 100644
+--- win32/win32.c
++++ win32/win32.c
+@@ -1090,6 +1090,7 @@ chown(const char *path, uid_t owner, gid_t group)
+  * XXX this needs strengthening  (for PerlIO)
+  *   -- BKS, 11-11-200
+ */
++#if !defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 4
+ int mkstemp(const char *path)
+ {
+     dTHX;
+@@ -1110,6 +1111,7 @@ retry:
+ 	goto retry;
+     return fd;
+ }
++#endif
+ 
+ static long
+ find_pid(int pid)
+diff --git a/win32/win32.h b/win32/win32.h
+index e906266a4a..cc96d338f3 100644
+--- win32/win32.h
++++ win32/win32.h
+@@ -292,7 +292,9 @@ extern  void	*sbrk(ptrdiff_t need);
+ #endif
+ extern	char *	getlogin(void);
+ extern	int	chown(const char *p, uid_t o, gid_t g);
++#if !defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 4
+ extern  int	mkstemp(const char *path);
++#endif
+ 
+ #undef	 Stat
+ #define  Stat		win32_stat
+
 PATCH
 }
 

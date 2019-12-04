@@ -76,7 +76,7 @@ sub run {
 
     group "build and install Perl" => sub {
         my $dir = pushd(File::Spec->catdir($tmpdir, "perl-$version", "win32"));
-        system("gmake", "-f", "GNUMakefile", "install", "INST_TOP=$install_dir", "CCHOME=C:\\strawberry\\c") == 0
+        system("gmake", "-f", "GNUMakefile", "install", "INST_TOP=$install_dir", "CCHOME=C:\\MinGW") == 0
             or die "Failed to install";
     };
 

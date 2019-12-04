@@ -3631,17 +3631,6 @@ sub _patch_convert_errno_to_wsa_error {
  EXTERN_C void
  EndSockets(void)
  {
-@@ -194,6 +198,10 @@ convert_wsa_error_to_errno(int wsaerr)
-  * we just use ERROR_INVALID_FUNCTION for those that are missing but do not
-  * really expect to encounter them anyway in the context in which this function
-  * is called.
-+ * Some versions of MinGW/gcc-4.8 and above also define most, but not all, of
-+ * these extra Exxx values. The missing ones are all cases for which there is no
-+ * corresponding WSAExxx constant anyway, so we simply omit the cases for them
-+ * here.
-  * Other Exxx values (err < sys_nerr) are returned unchanged.
-  */
- int
 @@ -208,8 +216,10 @@ convert_errno_to_wsa_error(int err)
  	return WSAEAFNOSUPPORT;
      case EALREADY:

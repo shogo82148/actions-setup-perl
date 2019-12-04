@@ -101,6 +101,15 @@ my @patch = (
     },
     {
         perl => [
+            qr/^5\.19\.[4-9]$/,
+            qr/^5\.19\.1[0-9]+$/,
+        ],
+        subs => [
+            [ \&_patch_convert_errno_to_wsa_error ],
+        ],
+    },
+    {
+        perl => [
             qr/^5\.1[789]\./,
         ],
         subs => [
@@ -3605,6 +3614,156 @@ MAKEFILE
         $makefile =~ s/\s+\.\.\\utils\\config_data\s*\\//;
     }
     _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
+}
+
+sub _patch_convert_errno_to_wsa_error {
+    _patch(<<'PATCH');
+--- win32/win32sck.c
++++ win32/win32sck.c
+@@ -54,6 +54,10 @@ static struct servent* win32_savecopyservent(struct servent*d,
+ 
+ static int wsock_started = 0;
+ 
++#ifdef WIN32_DYN_IOINFO_SIZE
++EXTERN_C Size_t w32_ioinfo_size;
++#endif
++
+ EXTERN_C void
+ EndSockets(void)
+ {
+@@ -194,6 +198,10 @@ convert_wsa_error_to_errno(int wsaerr)
+  * we just use ERROR_INVALID_FUNCTION for those that are missing but do not
+  * really expect to encounter them anyway in the context in which this function
+  * is called.
++ * Some versions of MinGW/gcc-4.8 and above also define most, but not all, of
++ * these extra Exxx values. The missing ones are all cases for which there is no
++ * corresponding WSAExxx constant anyway, so we simply omit the cases for them
++ * here.
+  * Other Exxx values (err < sys_nerr) are returned unchanged.
+  */
+ int
+@@ -208,8 +216,10 @@ convert_errno_to_wsa_error(int err)
+ 	return WSAEAFNOSUPPORT;
+     case EALREADY:
+ 	return WSAEALREADY;
+-    case EBADMSG:
++#ifdef EBADMSG
++    case EBADMSG:			/* Not defined in gcc-4.8.0 */
+ 	return ERROR_INVALID_FUNCTION;
++#endif
+     case ECANCELED:
+ #ifdef WSAECANCELLED
+ 	return WSAECANCELLED;		/* New in WinSock2 */
+@@ -226,8 +236,10 @@ convert_errno_to_wsa_error(int err)
+ 	return WSAEDESTADDRREQ;
+     case EHOSTUNREACH:
+ 	return WSAEHOSTUNREACH;
+-    case EIDRM:
++#ifdef EIDRM
++    case EIDRM:				/* Not defined in gcc-4.8.0 */
+ 	return ERROR_INVALID_FUNCTION;
++#endif
+     case EINPROGRESS:
+ 	return WSAEINPROGRESS;
+     case EISCONN:
+@@ -244,30 +256,44 @@ convert_errno_to_wsa_error(int err)
+ 	return WSAENETUNREACH;
+     case ENOBUFS:
+ 	return WSAENOBUFS;
+-    case ENODATA:
++#ifdef ENODATA
++    case ENODATA:			/* Not defined in gcc-4.8.0 */
+ 	return ERROR_INVALID_FUNCTION;
+-    case ENOLINK:
++#endif
++#ifdef ENOLINK
++    case ENOLINK:			/* Not defined in gcc-4.8.0 */
+ 	return ERROR_INVALID_FUNCTION;
+-    case ENOMSG:
++#endif
++#ifdef ENOMSG
++    case ENOMSG:			/* Not defined in gcc-4.8.0 */
+ 	return ERROR_INVALID_FUNCTION;
++#endif
+     case ENOPROTOOPT:
+ 	return WSAENOPROTOOPT;
+-    case ENOSR:
++#ifdef ENOSR
++    case ENOSR:				/* Not defined in gcc-4.8.0 */
+ 	return ERROR_INVALID_FUNCTION;
+-    case ENOSTR:
++#endif
++#ifdef ENOSTR
++    case ENOSTR:			/* Not defined in gcc-4.8.0 */
+ 	return ERROR_INVALID_FUNCTION;
++#endif
+     case ENOTCONN:
+ 	return WSAENOTCONN;
+-    case ENOTRECOVERABLE:
++#ifdef ENOTRECOVERABLE
++    case ENOTRECOVERABLE:		/* Not defined in gcc-4.8.0 */
+ 	return ERROR_INVALID_FUNCTION;
++#endif
+     case ENOTSOCK:
+ 	return WSAENOTSOCK;
+     case ENOTSUP:
+ 	return ERROR_INVALID_FUNCTION;
+     case EOPNOTSUPP:
+ 	return WSAEOPNOTSUPP;
+-    case EOTHER:
++#ifdef EOTHER
++    case EOTHER:			/* Not defined in gcc-4.8.0 */
+ 	return ERROR_INVALID_FUNCTION;
++#endif
+     case EOVERFLOW:
+ 	return ERROR_INVALID_FUNCTION;
+     case EOWNERDEAD:
+@@ -278,12 +304,16 @@ convert_errno_to_wsa_error(int err)
+ 	return WSAEPROTONOSUPPORT;
+     case EPROTOTYPE:
+ 	return WSAEPROTOTYPE;
+-    case ETIME:
++#ifdef ETIME
++    case ETIME:				/* Not defined in gcc-4.8.0 */
+ 	return ERROR_INVALID_FUNCTION;
++#endif
+     case ETIMEDOUT:
+ 	return WSAETIMEDOUT;
+-    case ETXTBSY:
++#ifdef ETXTBSY
++    case ETXTBSY:			/* Not defined in gcc-4.8.0 */
+ 	return ERROR_INVALID_FUNCTION;
++#endif
+     case EWOULDBLOCK:
+ 	return WSAEWOULDBLOCK;
+     }
+@@ -663,8 +693,10 @@ int my_close(int fd)
+ 	int err;
+ 	err = closesocket(osf);
+ 	if (err == 0) {
+-	    (void)close(fd);	/* handle already closed, ignore error */
+-	    return 0;
++	    assert(_osfhnd(fd) == osf); /* catch a bad ioinfo struct def */
++	    /* don't close freed handle */
++	    _set_osfhnd(fd, INVALID_HANDLE_VALUE);
++	    return close(fd);
+ 	}
+ 	else if (err == SOCKET_ERROR) {
+ 	    err = get_last_socket_error();
+@@ -691,8 +723,10 @@ my_fclose (FILE *pf)
+ 	win32_fflush(pf);
+ 	err = closesocket(osf);
+ 	if (err == 0) {
+-	    (void)fclose(pf);	/* handle already closed, ignore error */
+-	    return 0;
++	    assert(_osfhnd(win32_fileno(pf)) == osf); /* catch a bad ioinfo struct def */
++	    /* don't close freed handle */
++	    _set_osfhnd(win32_fileno(pf), INVALID_HANDLE_VALUE);
++	    return fclose(pf);
+ 	}
+ 	else if (err == SOCKET_ERROR) {
+ 	    err = get_last_socket_error();
+PATCH
 }
 
 sub _patch_gnumakefile_518 {

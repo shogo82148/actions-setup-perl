@@ -4,6 +4,7 @@ use utf8;
 use strict;
 use warnings;
 use 5.026002;
+use version;
 use Devel::PatchPerl;
 use File::pushd qw[pushd];
 use File::Spec;
@@ -4709,6 +4710,9 @@ MAKEFILE
         $makefile =~ s/\s+\.\.\\utils\\cpanp-run-perl\s*\\//;
         $makefile =~ s/\s+\.\.\\utils\\cpanp\s*\\//;
         $makefile =~ s/\s+\.\.\\utils\\cpan2dist\s*\\//;
+    }
+    if (version->parse($version) >= version->parse("v5.19.8")) {
+        $makefile =~ s/\s+\.\.\\perlsfio\.h\s*\\//;
     }
     _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
 }

@@ -101,8 +101,7 @@ my @patch = (
     },
     {
         perl => [
-            qr/^5\.19\.[4-9]$/,
-            qr/^5\.19\.1[0-9]+$/,
+            qr/^5\.19\.4$/,
         ],
         subs => [
             [ \&_patch_convert_errno_to_wsa_error ],

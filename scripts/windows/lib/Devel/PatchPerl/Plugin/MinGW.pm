@@ -4706,7 +4706,7 @@ MAKEFILE
     $makefile =~ s/__PERL_MINOR_VERSION__/$v[0]$v[1]/g;
     $makefile =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
     if ($version =~ /^5\.19\./) {
-        $makefile =~ s/\s+\.\.\\utils\\cpanp-run-perldata\s*\\//;
+        $makefile =~ s/\s+\.\.\\utils\\cpanp-run-perl\s*\\//;
         $makefile =~ s/\s+\.\.\\utils\\cpanp\s*\\//;
         $makefile =~ s/\s+\.\.\\utils\\cpan2dist\s*\\//;
     }

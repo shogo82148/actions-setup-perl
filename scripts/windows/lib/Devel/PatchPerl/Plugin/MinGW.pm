@@ -4898,7 +4898,7 @@ MAKEFILE
     _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
 }
 
-sub _patch_gnumakefile_518 {
+sub _patch_gnumakefile_516 {
     my $version = shift;
     my $makefile = <<'MAKEFILE';
 #

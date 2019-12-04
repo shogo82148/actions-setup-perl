@@ -40,6 +40,8 @@ sub group {
 }
 
 sub run {
+    local $ENV{PERL5LIB} = ""; # ignore libraries of the host perl
+
     my $version = $ENV{PERL_VERSION};
     my $url = perl_release($version);
 

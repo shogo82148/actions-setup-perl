@@ -4715,7 +4715,7 @@ MAKEFILE
         $makefile =~ s/\s+\.\.\\perlsfio\.h\s*\\//;
     }
     if (version->parse($version) >= version->parse("v5.19.1")) {
-        $makefile =~ s/\$\(MINIPERL\)\s+-I\.\.\\\\lib\s+-f\s+\.\.\\write_buildcustomize\.pl\s+\.\.\s*>\.\.\\lib\\buildcustomize\.pl/$(MINIPERL) : ..\lib\buildcustomize.pl/;
+        $makefile =~ s/\$\(MINIPERL\)\s+-I\.\.\\lib\s+-f\s+\.\.\\write_buildcustomize\.pl\s+.*/\$(MINIPERL) -I..\\lib -f ..\\write_buildcustomize.pl ../;
         $makefile =~ s/copy\s+\.\.\\README\.dgux\s+\.\.\\pod\\perldgux\.pod//;
     }
     _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);

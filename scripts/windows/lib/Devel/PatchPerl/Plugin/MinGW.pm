@@ -4714,6 +4714,13 @@ MAKEFILE
     if (version->parse($version) >= version->parse("v5.19.8")) {
         $makefile =~ s/\s+\.\.\\perlsfio\.h\s*\\//;
     }
+    if (version->parse($version) >= version->parse("v5.19.2")) {
+        $makefile =~ s/^MINIMOD\s*=.*$//;
+        $makefile =~ s/\$\(MINIMOD\)//g;
+        $makefile =~ s/^.*minimod.pl.*$//g;
+        $makefile =~ s/^ICWD\s*=.*$//;
+        $makefile =~ s/\$\(ICWD\)//g;
+    }
     if (version->parse($version) >= version->parse("v5.19.1")) {
         $makefile =~ s/\$\(MINIPERL\)\s+-I\.\.\\lib\s+-f\s+\.\.\\write_buildcustomize\.pl\s+.*/\$(MINIPERL) -I..\\lib -f ..\\write_buildcustomize.pl ../;
         $makefile =~ s/copy\s+\.\.\\README\.dgux\s+\.\.\\pod\\perldgux\.pod//;

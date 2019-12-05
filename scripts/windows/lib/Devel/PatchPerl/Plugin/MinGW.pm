@@ -6683,6 +6683,7 @@ MINIWIN32_OBJ	= $(subst .\,mini\,$(WIN32_OBJ))
 MINI_OBJ	= $(MINICORE_OBJ) $(MINIWIN32_OBJ)
 DLL_OBJ		= $(DYNALOADER)
 X2P_OBJ		= $(X2P_SRC:.c=$(o))
+GENUUDMAP_OBJ	= $(GENUUDMAP:.exe=$(o))
 PERLDLL_OBJ	= $(CORE_OBJ)
 PERLEXE_OBJ	= perlmain$(o)
 PERLEXEST_OBJ	= perlmainst$(o)
@@ -7033,8 +7034,8 @@ $(UUDMAP_H) $(MG_DATA_H) : $(BITCOUNT_H)
 $(BITCOUNT_H) : $(GENUUDMAP)
 	$(GENUUDMAP) $(GENERATED_HEADERS)
 
-$(GENUUDMAP) : ..\mg_raw.h
-	$(LINK32) $(CFLAGS_O) -o..\generate_uudmap.exe ..\generate_uudmap.c \
+$(GENUUDMAP) : $(GENUUDMAP_OBJ)
+	$(LINK32) $(CFLAGS_O) -o $@ $(GENUUDMAP_OBJ) \
 	$(BLINK_FLAGS) $(LIBFILES)
 
 #This generates a stub ppport.h & creates & fills /lib/CORE to allow for XS

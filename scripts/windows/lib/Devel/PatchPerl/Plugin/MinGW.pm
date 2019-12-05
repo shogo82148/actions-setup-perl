@@ -7192,7 +7192,7 @@ MAKEFILE
 }
 
 
-sub _patch_gnumakefile_514 {
+sub _patch_gnumakefile_512 {
     my $version = shift;
     my $makefile = <<'MAKEFILE';
 #

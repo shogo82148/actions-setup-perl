@@ -57,7 +57,7 @@ sub run {
             die "download failed: " . $response->status_line;
         }
 
-        open my $fh, ">", File::Spec->catfile($tmpdir, $filename) or die "$!";
+        open my $fh, ">", File::Spec->catfile($tmpdir, $filename) or die "fail to open $filename:$!";
         binmode $fh;
         print $fh $response->content;
         close $fh;
@@ -65,8 +65,8 @@ sub run {
 
     group "extracting..." => sub {
         my $dir = pushd($tmpdir);
-        system("7z", "x", $filename) == 0 or die "Failed to extract gz";
-        system("7z", "x", "perl-$version.tar") == 0 or die "Failed to extract tar";
+        system("7z", "x", $filename) == 0 or die "Failed to extract gz: $!";
+        system("7z", "x", "perl-$version.tar") == 0 or die "Failed to extract tar: $!";
     };
 
     group "patching..." => sub {
@@ -77,7 +77,7 @@ sub run {
     group "build and install Perl" => sub {
         my $dir = pushd(File::Spec->catdir($tmpdir, "perl-$version", "win32"));
         system("gmake", "-f", "GNUMakefile", "install", "INST_TOP=$install_dir", "CCHOME=C:\\MinGW") == 0
-            or die "Failed to install";
+            or die "Failed to install: $!";
     };
 
     group "perl -V" => sub {
@@ -87,7 +87,7 @@ sub run {
     group "archiving" => sub {
         my $dir = pushd($install_dir);
         system("7z", "a", File::Spec->catfile($tmpdir, "perl.zip"), ".") == 0
-            or die "failed to archive";
+            or die "failed to archive: $!";
     };
 }
 

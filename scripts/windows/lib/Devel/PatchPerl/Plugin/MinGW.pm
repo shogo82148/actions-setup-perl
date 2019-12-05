@@ -7894,7 +7894,7 @@ all : .\config.h ..\git_version.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) \
 		$(UNIDATAFILES) MakePPPort $(PERLEXE) $(X2P) Extensions_nonxs Extensions $(PERLSTATIC)
 		@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
 
-..\regcharclass.h : $(HAVEMINIPERL) ..\Porting\regcharclass.pl Extensions
+..\regcharclass.h : $(HAVEMINIPERL) ..\Porting\regcharclass.pl
 	cd .. && miniperl.exe -Ilib Porting\regcharclass.pl && cd win32
 
 ..\regcomp$(o) : ..\regnodes.h ..\regcharclass.h
@@ -7915,9 +7915,10 @@ $(GLOBEXE) : perlglob.c
 ..\config.sh : $(CFGSH_TMPL) $(HAVEMINIPERL) config_sh.PL
 	$(MINIPERL) -I..\lib config_sh.PL $(CFG_VARS) $(CFGSH_TMPL) > ..\config.sh
 
-$(CONFIGPM) : $(HAVEMINIPERL) ..\config.sh config_h.PL
+$(CONFIGPM) : $(HAVEMINIPERL) ..\config.sh config_h.PL ..\minimod.pl
 	$(MINIPERL) -I..\lib ..\configpm --chdir=..
 	$(XCOPY) *.h $(COREDIR)\\*.*
+	$(XCOPY) ..\\ext\\re\\re.pm $(LIBDIR)\\*.*
 	$(RCOPY) include $(COREDIR)\\*.*
 	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
 	-$(MINIPERL) -I..\lib $(ICWD) config_h.PL "ARCHPREFIX=$(ARCHPREFIX)"

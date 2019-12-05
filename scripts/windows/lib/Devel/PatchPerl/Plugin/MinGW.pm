@@ -7895,7 +7895,7 @@ all : .\config.h ..\git_version.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) \
 		@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
 
 ..\regcharclass.h : $(HAVEMINIPERL) ..\Porting\regcharclass.pl
-	cd .. && miniperl.exe -Ilib Porting\regcharclass.pl && cd win32
+	cd .. && miniperl.exe -Ilib -Icpan\Encode\lib Porting\regcharclass.pl && cd win32
 
 ..\regcomp$(o) : ..\regnodes.h ..\regcharclass.h
 
@@ -8238,10 +8238,6 @@ doc: $(PERLEXE) ..\pod\perltoc.pod
 	$(PERLEXE) -I..\lib ..\installhtml --podroot=.. --htmldir=$(HTMLDIR) \
 	    --podpath=pod:lib:utils --htmlroot="file://$(subst :,|,$(INST_HTML))"\
 	    --recurse
-
-# perl 5.18.x do not need this, it is for perl 5.19.2
-..\utils\Makefile: $(HAVEMINIPERL) $(CONFIGPM) ..\utils\Makefile.PL
-	$(MINIPERL) -I..\lib ..\utils\Makefile.PL ..
 
 # Note that this next section is parsed (and regenerated) by pod/buildtoc
 # so please check that script before making structural changes here

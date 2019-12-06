@@ -133,10 +133,18 @@ my @patch = (
     },
     {
         perl => [
-            qr/^5\.1[23]\./,
+            qr/^5\.13\.[0-6]$/,
+            qr/^5\.1[12]\./,
         ],
         subs => [
             [ \&_patch_socket_h ],
+        ],
+    },
+    {
+        perl => [
+            qr/^5\.1[23]\./,
+        ],
+        subs => [
             [ \&_patch_gnumakefile_512 ],
         ],
     },
@@ -6081,21 +6089,6 @@ MAKEFILE
     _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
 }
 
-sub _patch_socket_h {
-    _patch(<<'PATCH')
---- win32/include/sys/socket.h
-+++ win32/include/sys/socket.h
-@@ -29,6 +29,7 @@ extern "C" {
- 
- #include "win32.h"
- 
-+#undef ENOTSOCK
- #define  ENOTSOCK	WSAENOTSOCK
- 
- #ifdef USE_SOCKETS_AS_HANDLES
-PATCH
-}
-
 sub _patch_gnumakefile_514 {
     my $version = shift;
     my $makefile = <<'MAKEFILE';
@@ -7206,6 +7199,20 @@ MAKEFILE
     _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
 }
 
+sub _patch_socket_h {
+    _patch(<<'PATCH')
+--- win32/include/sys/socket.h
++++ win32/include/sys/socket.h
+@@ -29,6 +29,7 @@ extern "C" {
+ 
+ #include "win32.h"
+ 
++#undef ENOTSOCK
+ #define  ENOTSOCK	WSAENOTSOCK
+ 
+ #ifdef USE_SOCKETS_AS_HANDLES
+PATCH
+}
 
 sub _patch_gnumakefile_512 {
     my $version = shift;

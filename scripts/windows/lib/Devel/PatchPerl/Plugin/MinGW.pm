@@ -7650,6 +7650,48 @@ PERLDEP = $(PERLIMPLIB)
 
 PL2BAT		= bin\pl2bat.pl
 
+UTILS		=			\
+		..\utils\h2ph		\
+		..\utils\splain		\
+		..\utils\dprofpp	\
+		..\utils\perlbug	\
+		..\utils\pl2pm 		\
+		..\utils\c2ph		\
+		..\utils\pstruct	\
+		..\utils\h2xs		\
+		..\utils\perldoc	\
+		..\utils\perlivp	\
+		..\utils\libnetcfg	\
+		..\utils\enc2xs		\
+		..\utils\piconv		\
+		..\utils\config_data	\
+		..\utils\corelist	\
+		..\utils\cpan		\
+		..\utils\xsubpp		\
+		..\utils\prove		\
+		..\utils\ptar		\
+		..\utils\ptardiff	\
+		..\utils\cpanp-run-perl	\
+		..\utils\cpanp	\
+		..\utils\cpan2dist	\
+		..\utils\shasum		\
+		..\utils\instmodsh	\
+		..\pod\pod2html		\
+		..\pod\pod2latex	\
+		..\pod\pod2man		\
+		..\pod\pod2text		\
+		..\pod\pod2usage	\
+		..\pod\podchecker	\
+		..\pod\podselect	\
+		..\x2p\find2perl	\
+		..\x2p\psed		\
+		..\x2p\s2p		\
+		bin\exetype.pl		\
+		bin\runperl.pl		\
+		bin\pl2bat.pl		\
+		bin\perlglob.pl		\
+		bin\search.pl
+
 CORE_NOCFG_H	=		\
 		..\av.h		\
 		..\cop.h	\

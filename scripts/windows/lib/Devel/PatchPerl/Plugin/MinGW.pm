@@ -8285,7 +8285,8 @@ utils: $(PERLEXE) $(X2P)
 	copy ..\README.vmesa    ..\pod\perlvmesa.pod
 	copy ..\README.vos      ..\pod\perlvos.pod
 	copy ..\README.win32    ..\pod\perlwin32.pod
-	copy ..\pod\perldelta.pod ..\pod\perl__PERL_VERSION__delta.pod
+	copy ..\pod\perl__PERL_VERSION__delta.pod ..\pod\perldelta.pod
+	$(MAKE) -f ..\win32\pod.mak converters
 	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
 	$(PERLEXE) $(ICWD) ..\autodoc.pl ..
 	$(PERLEXE) $(ICWD) ..\pod\perlmodlib.PL -q ..

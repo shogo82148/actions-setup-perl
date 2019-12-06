@@ -13,6 +13,7 @@ use Devel::PatchPerl;
 use Try::Tiny;
 use File::pushd qw[pushd];
 use File::Spec;
+use Carp qw/croak/;
 
 local $| = 1;
 
@@ -39,6 +40,14 @@ sub group {
     };
 }
 
+sub execute_or_die {
+    my $code = system(@_);
+    if ($code != 0) {
+        my $cmd = join ' ', @_;
+        croak "failed to execute $cmd: exit code $code";
+    }
+}
+
 sub run {
     local $ENV{PERL5LIB} = ""; # ignore libraries of the host perl
 
@@ -57,7 +66,8 @@ sub run {
             die "download failed: " . $response->status_line;
         }
 
-        open my $fh, ">", File::Spec->catfile($tmpdir, $filename) or die "fail to open $filename:$!";
+        my $path = File::Spec->catfile($tmpdir, $filename);
+        open my $fh, ">", $path or die "fail to open $path: $!";
         binmode $fh;
         print $fh $response->content;
         close $fh;
@@ -65,8 +75,8 @@ sub run {
 
     group "extracting..." => sub {
         my $dir = pushd($tmpdir);
-        system("7z", "x", $filename) == 0 or die "Failed to extract gz: $!";
-        system("7z", "x", "perl-$version.tar") == 0 or die "Failed to extract tar: $!";
+        execute_or_die("7z", "x", $filename);
+        execute_or_die("7z", "x", "perl-$version.tar");
     };
 
     group "patching..." => sub {
@@ -76,18 +86,16 @@ sub run {
 
     group "build and install Perl" => sub {
         my $dir = pushd(File::Spec->catdir($tmpdir, "perl-$version", "win32"));
-        system("gmake", "-f", "GNUMakefile", "install", "INST_TOP=$install_dir", "CCHOME=C:\\MinGW") == 0
-            or die "Failed to install: $!";
+        execute_or_die("gmake", "-f", "GNUMakefile", "install", "INST_TOP=$install_dir", "CCHOME=C:\\MinGW");
     };
 
     group "perl -V" => sub {
-        system(File::Spec->catfile($install_dir, 'bin', 'perl'), '-V') == 0 or die "$!";
+        execute_or_die(File::Spec->catfile($install_dir, 'bin', 'perl'), '-V');
     };
 
     group "archiving" => sub {
         my $dir = pushd($install_dir);
-        system("7z", "a", File::Spec->catfile($tmpdir, "perl.zip"), ".") == 0
-            or die "failed to archive: $!";
+        execute_or_die("7z", "a", File::Spec->catfile($tmpdir, "perl.zip"), ".");
     };
 }
 

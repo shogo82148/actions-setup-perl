@@ -8368,7 +8368,7 @@ MAKEFILE
     if (version->parse("v$version") >= version->parse("v5.13.4")) {
         _patch(<<'PATCH');
 --- win32/GNUMakefile
-+++ win32/MakefGNUMakefileile
++++ win32/GNUMakefile
 @@ -712,7 +712,7 @@
  		"ARCHPREFIX=$(ARCHPREFIX)"		\
  		"WIN64=$(WIN64)"

@@ -8380,6 +8380,37 @@ MAKEFILE
  # Top targets
 PATCH
     }
+
+    if (version->parse("v$version") >= version->parse("v5.13.6")) {
+        _patch(<<'PATCH');
+--- win32/GNUMakefile
++++ win32/GNUMakefile
+@@ -457,13 +457,6 @@
+ 		..\utils\cpan2dist	\
+ 		..\utils\shasum		\
+ 		..\utils\instmodsh	\
+-		..\pod\pod2html		\
+-		..\pod\pod2latex	\
+-		..\pod\pod2man		\
+-		..\pod\pod2text		\
+-		..\pod\pod2usage	\
+-		..\pod\podchecker	\
+-		..\pod\podselect	\
+ 		..\x2p\find2perl	\
+ 		..\x2p\psed		\
+ 		..\x2p\s2p		\
+@@ -1108,8 +1101,7 @@
+ 	copy ..\README.vmesa    ..\pod\perlvmesa.pod
+ 	copy ..\README.vos      ..\pod\perlvos.pod
+ 	copy ..\README.win32    ..\pod\perlwin32.pod
+-	copy ..\pod\perl__PERL_VERSION__delta.pod ..\pod\perldelta.pod
+-	cd ..\pod && $(PLMAKE) -f ..\win32\pod.mak converters
++	copy ..\pod\perldelta.pod ..\pod\perl__PERL_VERSION__delta.pod
+ 	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
+ 	$(PERLEXE) $(ICWD) ..\autodoc.pl ..
+ 	$(PERLEXE) $(ICWD) ..\pod\perlmodlib.PL -q ..
+PATCH
+    }
 }
 
 1;

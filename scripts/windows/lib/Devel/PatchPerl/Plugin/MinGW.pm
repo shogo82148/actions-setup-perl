@@ -8364,6 +8364,22 @@ MAKEFILE
     $makefile =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
 
     _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
+
+    if (version->parse("v$version") >= version->parse("v5.13.4")) {
+        _patch(<<'PATCH');
+--- win32/GNUMakefile
++++ win32/MakefGNUMakefileile
+@@ -712,7 +712,7 @@
+ 		"ARCHPREFIX=$(ARCHPREFIX)"		\
+ 		"WIN64=$(WIN64)"
+ 
+-ICWD = -I..\cpan\Cwd -I..\cpan\Cwd\lib
++ICWD = -I..\dist\Cwd -I..\dist\Cwd\lib
+ 
+ #
+ # Top targets
+PATCH
+    }
 }
 
 1;

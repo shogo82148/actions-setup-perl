@@ -8323,8 +8323,8 @@ perlmainst$(o) : runperl.c $(CONFIGPM)
 $(PERLEXE): $(PERLDLL) $(CONFIGPM) $(PERLEXE_OBJ) $(PERLEXE_RES) $(PERLIMPLIB)
 	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS)  \
 	    $(PERLEXE_OBJ) $(PERLEXE_RES) $(PERLIMPLIB) $(LIBFILES)
-	# copy $(PERLEXE) $(WPERLEXE)
-	# $(MINIPERL) -I..\lib bin\exetype.pl $(WPERLEXE) WINDOWS
+	copy $(PERLEXE) $(WPERLEXE)
+	$(MINIPERL) -I..\lib bin\exetype.pl $(WPERLEXE) WINDOWS
 
 $(PERLEXESTATIC): $(PERLSTATICLIB) $(CONFIGPM) $(PERLEXEST_OBJ) $(PERLEXE_RES)
 	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) \

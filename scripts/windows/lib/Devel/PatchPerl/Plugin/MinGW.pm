@@ -7636,10 +7636,12 @@ LIBFILES	= $(LIBC) -lmoldname -lkernel32 -luser32 -lgdi32 -lwinspool \
 	-luuid -lws2_32 -lmpr -lwinmm -lversion -lodbc32 -lodbccp32 -lcomctl32
 
 ifeq ($(CFG),Debug)
-OPTIMIZE	= -g -O2 -DDEBUGGING
+OPTIMIZE	= -g -O0 -DDEBUGGING
 LINK_DBG	= -g
 else
-OPTIMIZE	= -s -O2
+# It seems that there are some Undefined Behavior.
+# diable optimization to cause unexpected hebavior.
+OPTIMIZE	= -s -O0
 LINK_DBG	= -s
 endif
 
@@ -8446,36 +8448,6 @@ MAKEFILE
     $makefile =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
 
     _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
-
-    _patch(<<'PATCH');
---- win32/bin/exetype.pl
-+++ win32/bin/exetype.pl
-@@ -27,7 +27,11 @@ open EXE, "+< $ARGV[0]" or die "Cannot open $ARGV[0]: $!\n";
- binmode EXE;
- 
- # read IMAGE_DOS_HEADER structure
--read EXE, $record, 64;
-+my $ret;
-+$ret = read EXE, $record, 64;
-+if (defined $ret) {
-+    die "failed to read IMAGE_DOS_HEADER structure: $!";
-+}
- ($magic,$offset) = unpack "Sx58L", $record;
- 
- die "$ARGV[0] is not an MSDOS executable file.\n"
-@@ -35,7 +39,10 @@ die "$ARGV[0] is not an MSDOS executable file.\n"
- 
- # read signature, IMAGE_FILE_HEADER and first WORD of IMAGE_OPTIONAL_HEADER
- seek EXE, $offset, 0;
--read EXE, $record, 4+20+2;
-+$ret = read EXE, $record, 4+20+2;
-+if (!defined $ret) {
-+    die "failed to read IMAGE_FILE_HEADER and first WORD of IMAGE_OPTIONAL_HEADER: $!";
-+}
- ($signature,$size,$magic) = unpack "Lx16Sx2S", $record;
- 
- die "PE header not found" unless $signature == 0x4550; # "PE\0\0"
-PATCH
 
     if (version->parse("v$version") >= version->parse("v5.13.4")) {
         _patch(<<'PATCH');

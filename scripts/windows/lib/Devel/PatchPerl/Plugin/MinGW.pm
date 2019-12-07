@@ -8365,6 +8365,20 @@ MAKEFILE
 
     _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
 
+    _patch(<<'PATCH');
+--- win32/bin/exetype.pl
++++ win32/bin/exetype.pl
+@@ -36,6 +36,8 @@ die "$ARGV[0] is not an MSDOS executable file.\n"
+ # read signature, IMAGE_FILE_HEADER and first WORD of IMAGE_OPTIONAL_HEADER
+ seek EXE, $offset, 0;
+ read EXE, $record, 4+20+2;
++my ($hex) = unpack 'H*', $record;
++print STDERR "IMAGE_OPTIONAL_HEADER: $hex\n";
+ ($signature,$size,$magic) = unpack "Lx16Sx2S", $record;
+ 
+ die "PE header not found" unless $signature == 0x4550; # "PE\0\0"
+PATCH
+
     if (version->parse("v$version") >= version->parse("v5.13.4")) {
         _patch(<<'PATCH');
 --- win32/GNUMakefile

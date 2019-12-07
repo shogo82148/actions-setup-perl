@@ -8450,7 +8450,7 @@ MAKEFILE
     _patch(<<'PATCH');
 --- win32/bin/exetype.pl
 +++ win32/bin/exetype.pl
-@@ -27,15 +27,29 @@ open EXE, "+< $ARGV[0]" or die "Cannot open $ARGV[0]: $!\n";
+@@ -27,7 +27,11 @@ open EXE, "+< $ARGV[0]" or die "Cannot open $ARGV[0]: $!\n";
  binmode EXE;
  
  # read IMAGE_DOS_HEADER structure
@@ -8458,27 +8458,20 @@ MAKEFILE
 +my $ret;
 +$ret = read EXE, $record, 64;
 +if (defined $ret) {
-+    print STDERR "read EXE, \$record, 64: $ret\n";
-+} else {
-+    die "failed to read: $!";
++    die "failed to read IMAGE_DOS_HEADER structure: $!";
 +}
  ($magic,$offset) = unpack "Sx58L", $record;
  
  die "$ARGV[0] is not an MSDOS executable file.\n"
-     unless $magic == 0x5a4d; # "MZ"
+@@ -35,7 +39,10 @@ die "$ARGV[0] is not an MSDOS executable file.\n"
  
  # read signature, IMAGE_FILE_HEADER and first WORD of IMAGE_OPTIONAL_HEADER
-+print STDERR "OFFSET: $offset\n";
  seek EXE, $offset, 0;
 -read EXE, $record, 4+20+2;
 +$ret = read EXE, $record, 4+20+2;
-+if (defined $ret) {
-+    print STDERR "read EXE, \$record, 4+20+2: $ret\n";
-+} else {
-+    die "failed to read: $!";
++if (!defined $ret) {
++    die "failed to read IMAGE_FILE_HEADER and first WORD of IMAGE_OPTIONAL_HEADER: $!";
 +}
-+my ($hex) = unpack 'H*', $record;
-+print STDERR "IMAGE_OPTIONAL_HEADER: $hex\n";
  ($signature,$size,$magic) = unpack "Lx16Sx2S", $record;
  
  die "PE header not found" unless $signature == 0x4550; # "PE\0\0"

@@ -99,14 +99,14 @@ my @patch = (
             [ \&_patch_gnumakefile_520 ],
         ],
     },
-    {
-        perl => [
-            qr/^5\.19\.4$/,
-        ],
-        subs => [
-            [ \&_patch_convert_errno_to_wsa_error ],
-        ],
-    },
+    # {
+    #     perl => [
+    #         qr/^5\.19\.4$/,
+    #     ],
+    #     subs => [
+    #         [ \&_patch_convert_errno_to_wsa_error ],
+    #     ],
+    # },
     {
         perl => [
             qr/^5\.1[89]\./,

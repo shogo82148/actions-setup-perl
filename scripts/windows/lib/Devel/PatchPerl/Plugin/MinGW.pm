@@ -117,6 +117,15 @@ my @patch = (
     },
     {
         perl => [
+            qr/^5\.1[0-8]\./,
+            qr/^5\.[0-9]\./,
+        ],
+        subs => [
+            [ \&_patch_errno ],
+        ],
+    },
+    {
+        perl => [
             qr/^5\.1[67]\./,
         ],
         subs => [
@@ -4976,6 +4985,79 @@ MAKEFILE
     }
 
     _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
+}
+
+sub _patch_errno {
+    _patch(<<'PATCH');
+--- ext/Errno/Errno_pm.PL
++++ ext/Errno/Errno_pm.PL
+@@ -84,10 +83,6 @@ sub process_file {
+     while(<FH>) {
+ 	$err{$1} = 1
+ 	    if /^\s*#\s*define\s+(E\w+)\s+/;
+-	if ($IsMSWin32) {
+-	    $wsa{$1} = 1
+-		if /^\s*#\s*define\s+WSA(E\w+)\s+/;
+-	}
+     }
+ 
+     close(FH);
+@@ -161,8 +160,7 @@ sub get_files {
+ 	} else {
+ 	    print CPPI "#include <errno.h>\n";
+ 	    if ($IsMSWin32) {
+-		print CPPI "#define _WINSOCKAPI_\n"; # don't drag in everything
+-		print CPPI "#include <winsock.h>\n";
++		print CPPI qq[#include "../../win32/include/sys/errno2.h"\n];
+ 	    }
+ 	}
+ 
+@@ -215,16 +213,7 @@ sub write_errno_pm {
+ 	print CPPI "#include <errno.h>\n";
+     }
+     if ($IsMSWin32) {
+-	print CPPI "#include <winsock.h>\n";
+-	foreach $err (keys %wsa) {
+-	    print CPPI "#if defined($err) && $err >= 100\n";
+-	    print CPPI "#undef $err\n";
+-	    print CPPI "#endif\n";
+-	    print CPPI "#ifndef $err\n";
+-	    print CPPI "#define $err WSA$err\n";
+-	    print CPPI "#endif\n";
+-	    $err{$err} = 1;
+-	}
++	print CPPI qq[#include "../../win32/include/sys/errno2.h"\n];
+     }
+  
+     foreach $err (keys %err) {
+@@ -260,15 +249,15 @@ sub write_errno_pm {
+ 	    my($name,$expr);
+ 	    next unless ($name, $expr) = /"(.*?)"\s*\[\s*\[\s*(.*?)\s*\]\s*\]/;
+ 	    next if $name eq $expr;
+-	    $expr =~ s/\(?\([a-z_]\w*\)([^\)]*)\)?/$1/i; # ((type)0xcafebabe) at alia
+-	    $expr =~ s/((?:0x)?[0-9a-fA-F]+)[LU]+\b/$1/g; # 2147483647L et alia
++	    $expr =~ s/\(?\(\s*[a-z_]\w*\s*\)([^\)]*)\)?/$1/i; # ((type)0xcafebabe) at alia
++	    $expr =~ s/((?:0x)?[0-9a-fA-F]+)[luLU]+\b/$1/g; # 2147483647L et alia
+ 	    next if $expr =~ m/^[a-zA-Z]+$/; # skip some Win32 functions
+ 	    if($expr =~ m/^0[xX]/) {
+ 		$err{$name} = hex $expr;
+ 	    }
+ 	    else {
+ 	    $err{$name} = eval $expr;
+ 	}
+ 	    delete $err{$name} unless defined $err{$name};
+ 	}
+ 	close(CPPO);
+@@ -276,7 +265,7 @@ sub write_errno_pm {
+ 
+     # escape $Config{'archname'}
+     my $archname = $Config{'archname'};
+-    $archname =~ s/([@%\$])/\\\1/g;
++    $archname =~ s/([@%\$])/\\$1/g;
+ 
+     # Write Errno.pm
+ 
+PATCH
 }
 
 sub _patch_gnumakefile_516 {

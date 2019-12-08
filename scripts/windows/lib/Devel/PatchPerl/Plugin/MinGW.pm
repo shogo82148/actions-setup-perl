@@ -9357,7 +9357,6 @@ CORE_H		= $(CORE_NOCFG_H) .\config.h ..\git_version.h
 
 UUDMAP_H	= ..\uudmap.h
 MG_DATA_H	= ..\mg_data.h
-GENERATED_HEADERS = $(UUDMAP_H) $(BITCOUNT_H) $(MG_DATA_H)
 #a stub ppport.h must be generated so building XS modules, .c->.obj wise, will
 #work, so this target also represents creating the COREDIR and filling it
 HAVE_COREDIR	= $(COREDIR)\ppport.h
@@ -9715,7 +9714,7 @@ $(X2P) : $(HAVEMINIPERL) $(X2P_OBJ) Extensions
 	$(MINIPERL) -I..\lib ..\x2p\s2p.PL
 	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) $(LIBFILES) $(X2P_OBJ)
 
-$(MINIDIR)\globals$(o) : $(GENERATED_HEADERS)
+$(MINIDIR)\globals$(o) : $(UUDMAP_H)
 
 $(UUDMAP_H) : $(GENUUDMAP)
 	$(GENUUDMAP) > $(UUDMAP_H)

@@ -25,7 +25,15 @@ my @patch = (
     },
     {
         perl => [
-            qr/^5\.10\./,
+            qr/^5\.10\.[1-9]$/,
+        ],
+        subs => [
+            [ \&_patch_make_maker_510_1 ],
+        ],
+    },
+    {
+        perl => [
+            qr/^5\.10\.0$/,
             qr/^5\.[0-9]\./,
         ],
         subs => [
@@ -269,6 +277,91 @@ sub _patch_make_maker {
 +}
  
  =item constants
+PATCH
+}
+
+sub _patch_make_maker_510_1 {
+    # Win32 gmake needs SHELL to be specified
+    _patch(<<'PATCH');
+--- lib/ExtUtils/MM_Unix.pm
++++ lib/ExtUtils/MM_Unix.pm
+@@ -296,8 +296,8 @@ sub const_cccmd {
+ 
+ =item const_config (o)
+ 
+-Defines a couple of constants in the Makefile that are imported from
+-%Config.
++Sets SHELL if needed, then defines a couple of constants in the Makefile
++that are imported from %Config.
+ 
+ =cut
+ 
+@@ -305,7 +305,8 @@ sub const_config {
+ # --- Constants Sections ---
+ 
+     my($self) = shift;
+-    my @m = <<"END";
++    my @m = $self->specify_shell(); # Usually returns empty string
++    push @m, <<"END";
+ 
+ # These definitions are from config.sh (via $INC{'Config.pm'}).
+ # They may have been overridden via Makefile.PL or on the command line.
+@@ -3056,6 +3057,16 @@ MAKE_FRAG
+     return $m;
+ }
+ 
++=item specify_shell
++
++Specify SHELL if needed - not done on Unix.
++
++=cut
++
++sub specify_shell {
++  return '';
++}
++
+ =item quote_paren
+ 
+ Backslashes parentheses C<()> in command line arguments.
+--- lib/ExtUtils/MM_Win32.pm
++++ lib/ExtUtils/MM_Win32.pm
+@@ -128,7 +128,8 @@ sub init_DIRFILESEP {
+ 
+     # The ^ makes sure its not interpreted as an escape in nmake
+     $self->{DIRFILESEP} = $self->is_make_type('nmake') ? '^\\' :
+-                          $self->is_make_type('dmake') ? '\\\\'
++                          $self->is_make_type('dmake') ? '\\\\' :
++                          $self->is_make_type('gmake') ? '/'
+                                                        : '\\';
+ }
+ 
+@@ -153,7 +154,7 @@ sub init_others {
+     $self->{DEV_NULL} ||= '> NUL';
+ 
+     $self->{FIXIN}    ||= $self->{PERL_CORE} ? 
+-      "\$(PERLRUN) $self->{PERL_SRC}/win32/bin/pl2bat.pl" : 
++      "\$(PERLRUN) $self->{PERL_SRC}\\win32\\bin\\pl2bat.pl" :
+       'pl2bat.bat';
+ 
+     $self->{LD}     ||= 'link';
+@@ -209,6 +210,17 @@ sub platform_constants {
+     return $make_frag;
+ }
+ 
++=item specify_shell
++
++Set SHELL to $ENV{COMSPEC} only if make is type 'gmake'.
++
++=cut
++
++sub specify_shell {
++    my $self = shift;
++    return '' unless $self->is_make_type('gmake');
++    "\nSHELL = $ENV{COMSPEC}\n";
++}
+ 
+ =item special_targets
+ 
 PATCH
 }
 

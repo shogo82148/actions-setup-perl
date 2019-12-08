@@ -9013,6 +9013,7 @@ EXTDIR		= ..\ext
 DISTDIR		= ..\dist
 CPANDIR		= ..\cpan
 PODDIR		= ..\pod
+EXTUTILSDIR	= $(LIBDIR)\ExtUtils
 HTMLDIR		= .\html
 
 #
@@ -9255,6 +9256,9 @@ XCOPY		= xcopy /f /r /i /d /y
 RCOPY		= xcopy /f /r /i /e /d /y
 NOOP		= @rem
 
+XSUBPP		= ..\$(MINIPERL) -I..\..\lib ..\$(EXTUTILSDIR)\xsubpp \
+		-C++ -prototypes
+
 MICROCORE_SRC	=		\
 		..\av.c		\
 		..\deb.c	\
@@ -9400,7 +9404,7 @@ else
 STATIC_EXT	= Win32CORE
 endif
 
-DYNALOADER	= ..\DynaLoader$(o)
+DYNALOADER	= $(EXTDIR)\DynaLoader\DynaLoader
 
 # vars must be separated by "\t+~\t+", since we're using the tempfile
 # version of config_sh.pl (we were overflowing someone's buffer by
@@ -9456,6 +9460,8 @@ all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) \
 ..\regcomp$(o) : ..\regnodes.h ..\regcharclass.h
 
 ..\regexec$(o) : ..\regnodes.h ..\regcharclass.h
+
+$(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
 
 #----------------------------------------------------------------
 
@@ -9753,35 +9759,41 @@ $(PERLEXESTATIC): $(PERLSTATICLIB) $(CONFIGPM) $(PERLEXEST_OBJ) $(PERLEXE_RES)
 	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) \
 	    $(PERLEXEST_OBJ) $(PERLEXE_RES) $(PERLSTATICLIB) $(LIBFILES)
 
+$(DYNALOADER).c: $(HAVEMINIPERL) $(EXTDIR)\DynaLoader\dl_win32.xs $(CONFIGPM)
+	if not exist $(AUTODIR) mkdir $(AUTODIR)
+	cd $(EXTDIR)\DynaLoader \
+		&& ..\$(MINIPERL) -I..\..\lib DynaLoader_pm.PL \
+		&& ..\$(MINIPERL) -I..\..\lib XSLoader_pm.PL
+	$(XCOPY) $(EXTDIR)\DynaLoader\DynaLoader.pm $(LIBDIR)\$(NULL)
+	$(XCOPY) $(EXTDIR)\DynaLoader\XSLoader.pm $(LIBDIR)\$(NULL)
+	cd $(EXTDIR)\DynaLoader \
+		$(XSUBPP) dl_win32.xs > $(DYNALOADER).c
+
+$(EXTDIR)\DynaLoader\dl_win32.xs: dl_win32.xs
+	copy dl_win32.xs $(EXTDIR)\DynaLoader\dl_win32.xs
+
 #-------------------------------------------------------------------------------
 # There's no direct way to mark a dependency on
 # DynaLoader.pm, so this will have to do
 
-MakePPPort: $(HAVEMINIPERL) $(CONFIGPM) Extensions_nonxs
-	$(MINIPERL) -I..\lib $(ICWD) ..\mkppport
+MakePPPort: $(HAVEMINIPERL) $(CONFIGPM)
+	$(MINIPERL) -I..\lib ..\mkppport
 
 $(HAVEMINIPERL): $(MINI_OBJ)
 	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
 	rem . > $@
 
 #most of deps of this target are in DYNALOADER and therefore omitted here
-Extensions : ..\make_ext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM) $(DYNALOADER)
+Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
 	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
-	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --dynamic
+	$(MINIPERL) -I..\lib $(ICWD) ..\buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --dynamic
+	-if exist ext $(MINIPERL) -I..\lib $(ICWD) ..\buildext.pl "$(PLMAKE)" $(PERLDEP) ext --dynamic
 
-Extensions_static : ..\make_ext.pl $(HAVEMINIPERL) list_static_libs.pl $(CONFIGPM) Extensions_nonxs
+Extensions_static : buildext.pl $(HAVEMINIPERL) $(CONFIGPM)
 	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
-	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --static
-	$(MINIPERL) -I..\lib $(ICWD) list_static_libs.pl > Extensions_static
-
-Extensions_nonxs : ..\make_ext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM) ..\pod\perlfunc.pod
-	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
-	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --nonxs
-
-#lib must be built, it can't be buildcustomize.pl-ed, and is required for XS building
-$(DYNALOADER) : ..\make_ext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM) Extensions_nonxs
-	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
-	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(EXTDIR) --dynaloader
+	$(MINIPERL) -I..\lib $(ICWD) ..\buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --static
+	-if exist ext $(MINIPERL) -I..\lib $(ICWD) ..\buildext.pl "$(PLMAKE)" $(PERLDEP) ext --static
+	$(MINIPERL) -I..\lib buildext.pl --list-static-libs > Extensions_static
 
 #-------------------------------------------------------------------------------
 

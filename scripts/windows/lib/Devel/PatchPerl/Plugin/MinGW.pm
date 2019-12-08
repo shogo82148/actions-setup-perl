@@ -1555,8 +1555,9 @@ index e906266a4a..cc96d338f3 100644
  #define  Stat		win32_stat
 
 PATCH
+	return
 	}
-	    _patch(<<'PATCH');
+        _patch(<<'PATCH');
 --- win32/config_H.gc
 +++ win32/config_H.gc
 @@ -2356,14 +2356,18 @@

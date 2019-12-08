@@ -1065,7 +1065,7 @@ $(GLOBEXE) : perlglob.c
 	$(MINIPERL) -I..\lib config_sh.PL $(CFG_VARS) $(CFGSH_TMPL) > ..\config.sh
 
 $(CONFIGPM) : $(HAVEMINIPERL) ..\config.sh config_h.PL
-	cd .. && $(MINIPERL) -Ilib configpm
+	$(MINIPERL) -I..\lib ..\configpm --chdir=..
 	$(XCOPY) *.h $(COREDIR)\\*.*
 	$(RCOPY) include $(COREDIR)\\*.*
 	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
@@ -9468,7 +9468,7 @@ $(GLOBEXE) : perlglob.c
 	$(MINIPERL) -I..\lib config_sh.PL $(CFG_VARS) $(CFGSH_TMPL) > ..\config.sh
 
 $(CONFIGPM) : $(HAVEMINIPERL) ..\config.sh config_h.PL ..\minimod.pl
-	$(MINIPERL) -I..\lib ..\configpm --chdir=..
+	cd .. && miniperl.exe -Ilib configpm
 	$(XCOPY) *.h $(COREDIR)\\*.*
 	$(XCOPY) ..\\ext\\re\\re.pm $(LIBDIR)\\*.*
 	$(RCOPY) include $(COREDIR)\\*.*

@@ -1656,8 +1656,67 @@ index e906266a4a..cc96d338f3 100644
  #define  Stat		win32_stat
 
 PATCH
-	return
-	}
+    return
+    }
+
+    if (version->parse("v$version") >= version->parse("5.10.1")) {
+        _patch(<<'PATCH');
+--- win32/config_H.gc
++++ win32/config_H.gc
+@@ -2356,14 +2356,18 @@
+  *	This symbol, if defined, indicates that the mkdtemp routine is
+  *	available to exclusively create a uniquely named temporary directory.
+  */
+-/*#define HAS_MKDTEMP		/**/
++#if __MINGW64_VERSION_MAJOR >= 4
++#define HAS_MKSTEMP
++#endif
+ 
+ /* HAS_MKSTEMP:
+  *	This symbol, if defined, indicates that the mkstemp routine is
+  *	available to exclusively create and open a uniquely named
+  *	temporary file.
+  */
+-/*#define HAS_MKSTEMP		/**/
++#if __MINGW64_VERSION_MAJOR >= 4
++#define HAS_MKSTEMPS
++#endif
+ 
+ /* HAS_MKSTEMPS:
+  *	This symbol, if defined, indicates that the mkstemps routine is
+--- win32/win32.c
++++ win32/win32.c
+@@ -1101,6 +1101,7 @@ chown(const char *path, uid_t owner, gid_t group)
+  * XXX this needs strengthening  (for PerlIO)
+  *   -- BKS, 11-11-200
+ */
++#if !defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 4
+ int mkstemp(const char *path)
+ {
+     dTHX;
+@@ -1121,6 +1122,7 @@ retry:
+ 	goto retry;
+     return fd;
+ }
++#endif
+ 
+ static long
+ find_pid(int pid)
+--- win32/win32.h
++++ win32/win32.h
+@@ -292,7 +292,9 @@ extern  void	*sbrk(ptrdiff_t need);
+ #endif
+ extern	char *	getlogin(void);
+ extern	int	chown(const char *p, uid_t o, gid_t g);
++#if !defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 4
+ extern  int	mkstemp(const char *path);
++#endif
+ 
+ #undef	 Stat
+ #define  Stat		win32_stat
+PATCH
+        return
+    }
         _patch(<<'PATCH');
 --- win32/config_H.gc
 +++ win32/config_H.gc

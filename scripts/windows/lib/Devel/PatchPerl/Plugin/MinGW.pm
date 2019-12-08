@@ -1580,6 +1580,15 @@ PATCH
  
  /* HAS_MMAP:
   *	This symbol, if defined, indicates that the mmap system call is
+@@ -3849,7 +3849,7 @@
+  *     Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
+  *     of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.
+  */
+-/*#define HAS_QUAD     /**/
++#define HAS_QUAD
+ #ifdef HAS_QUAD
+ #   ifndef _MSC_VER
+ #      define Quad_t long long /**/
 --- win32/win32.c
 +++ win32/win32.c
 @@ -1101,6 +1101,7 @@ chown(const char *path, uid_t owner, gid_t group)

@@ -9323,6 +9323,8 @@ ifneq ($(CRYPT_SRC), "")
 WIN32_SRC	+= $(CRYPT_SRC)
 endif
 
+DLL_SRC		= $(DYNALOADER).c
+
 X2P_SRC		=		\
 		..\x2p\a2p.c	\
 		..\x2p\hash.c	\
@@ -9387,7 +9389,7 @@ MINICORE_OBJ	= $(subst ..\,mini\,$(MICROCORE_OBJ))	\
 		  $(MINIDIR)\perlio$(o)
 MINIWIN32_OBJ	= $(subst .\,mini\,$(WIN32_OBJ))
 MINI_OBJ	= $(MINICORE_OBJ) $(MINIWIN32_OBJ)
-DLL_OBJ		= $(DYNALOADER)
+DLL_OBJ		= $(DLL_SRC:.c=$(o))
 X2P_OBJ		= $(X2P_SRC:.c=$(o))
 GENUUDMAP_OBJ	= $(GENUUDMAP:.exe=$(o))
 PERLDLL_OBJ	= $(CORE_OBJ)

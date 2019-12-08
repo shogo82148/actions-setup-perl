@@ -9358,7 +9358,7 @@ CORE_NOCFG_H	=		\
 		.\include\sys\socket.h	\
 		.\win32.h
 
-CORE_H		= $(CORE_NOCFG_H) .\config.h ..\git_version.h
+CORE_H		= $(CORE_NOCFG_H) .\config.h
 
 UUDMAP_H	= ..\uudmap.h
 MG_DATA_H	= ..\mg_data.h
@@ -9449,7 +9449,7 @@ ICWD = -I..\cpan\Cwd -I..\cpan\Cwd\lib
 
 .PHONY: all
 
-all : .\config.h ..\git_version.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) \
+all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) \
 		$(UNIDATAFILES) MakePPPort $(PERLEXE) $(X2P) Extensions_nonxs Extensions $(PERLSTATIC)
 		@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
 
@@ -9462,11 +9462,7 @@ all : .\config.h ..\git_version.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) \
 $(GLOBEXE) : perlglob.c
 	$(LINK32) $(OPTIMIZE) $(BLINK_FLAGS) -mconsole -o $@ perlglob.c $(LIBFILES)
 
-..\git_version.h : $(HAVEMINIPERL) ..\make_patchnum.pl
-	$(MINIPERL) -I..\lib ..\make_patchnum.pl
-
 # make sure that we recompile perl.c if the git version changes
-..\perl$(o) : ..\git_version.h
 
 ..\config.sh : $(CFGSH_TMPL) $(HAVEMINIPERL) config_sh.PL
 	$(MINIPERL) -I..\lib config_sh.PL $(CFG_VARS) $(CFGSH_TMPL) > ..\config.sh
@@ -9657,7 +9653,6 @@ endif
 
 # 1. we don't want to rebuild miniperl.exe when config.h changes
 # 2. we don't want to rebuild miniperl.exe with non-default config.h
-# 3. we can't have miniperl.exe depend on git_version.h, as miniperl creates it
 $(MINI_OBJ)	: $(MINIDIR)\.exists $(CORE_NOCFG_H)
 
 $(WIN32_OBJ)	: $(CORE_H)

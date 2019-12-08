@@ -1504,7 +1504,7 @@ PATCH
     return
     }
 
-    if (version->parse("v$version") >= version->parse("5.11.0")) {
+    if (version->parse("v$version") >= version->parse("5.12.0")) {
 	    _patch(<<'PATCH');
 --- win32/config_H.gc
 +++ win32/config_H.gc

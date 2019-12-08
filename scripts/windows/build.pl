@@ -76,7 +76,9 @@ sub run {
     group "extracting..." => sub {
         my $dir = pushd($tmpdir);
         execute_or_die("7z", "x", $filename);
+        execute_or_die("dir");
         execute_or_die("7z", "x", "perl-$version.tar");
+        execute_or_die("dir");
     };
 
     group "patching..." => sub {

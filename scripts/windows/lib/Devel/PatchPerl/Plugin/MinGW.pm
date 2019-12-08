@@ -173,6 +173,14 @@ my @patch = (
             [ \&_patch_gnumakefile_510 ],
         ],
     },
+    {
+        perl => [
+            qr/^5\.1[01]\./,
+        ],
+        subs => [
+            [ \&_patch_perlhost ],
+        ],
+    },
 );
 
 sub patchperl {
@@ -9877,6 +9885,65 @@ MAKEFILE
     $makefile =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
 
     _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
+}
+
+sub _patch_perlhost {
+	_patch(<<'PATCH');
+--- win32/perlhost.h
++++ win32/perlhost.h
+@@ -616,14 +618,14 @@ PerlStdIOGetc(struct IPerlStdIO* piPerl, FILE* pf)
+     return win32_getc(pf);
+ }
+ 
+-char*
++STDCHAR*
+ PerlStdIOGetBase(struct IPerlStdIO* piPerl, FILE* pf)
+ {
+ #ifdef FILE_base
+     FILE *f = pf;
+     return FILE_base(f);
+ #else
+-    return Nullch;
++    return NULL;
+ #endif
+ }
+ 
+@@ -649,14 +651,14 @@ PerlStdIOGetCnt(struct IPerlStdIO* piPerl, FILE* pf)
+ #endif
+ }
+ 
+-char*
++STDCHAR*
+ PerlStdIOGetPtr(struct IPerlStdIO* piPerl, FILE* pf)
+ {
+ #ifdef USE_STDIO_PTR
+     FILE *f = pf;
+     return FILE_ptr(f);
+ #else
+-    return Nullch;
++    return NULL;
+ #endif
+ }
+ 
+@@ -742,7 +744,7 @@ PerlStdIOSetCnt(struct IPerlStdIO* piPerl, FILE* pf, int n)
+ }
+ 
+ void
+-PerlStdIOSetPtr(struct IPerlStdIO* piPerl, FILE* pf, char * ptr)
++PerlStdIOSetPtr(struct IPerlStdIO* piPerl, FILE* pf, STDCHAR * ptr)
+ {
+ #ifdef STDIO_PTR_LVALUE
+     FILE *f = pf;
+@@ -1745,7 +1747,7 @@ win32_start_child(LPVOID arg)
+     parent_message_hwnd = w32_message_hwnd;
+     w32_message_hwnd = win32_create_message_window();
+     if (parent_message_hwnd != NULL)
+-        PostMessage(parent_message_hwnd, WM_USER_MESSAGE, w32_pseudo_id, (LONG)w32_message_hwnd);
++        PostMessage(parent_message_hwnd, WM_USER_MESSAGE, w32_pseudo_id, (LPARAM)w32_message_hwnd);
+ 
+     /* push a zero on the stack (we are the child) */
+     {
+PATCH
 }
 
 1;

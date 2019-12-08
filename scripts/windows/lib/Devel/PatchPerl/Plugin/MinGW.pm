@@ -9797,6 +9797,9 @@ $(PERLSTATICLIB): $(PERLDLL_OBJ) Extensions_static
 		cd .. && rmdir /s /q $(STATICDIR)
 	$(XCOPY) $(PERLSTATICLIB) $(COREDIR)
 
+$(PERLEXE_ICO): $(HAVEMINIPERL) ..\uupacktool.pl $(PERLEXE_ICO).packd
+	$(MINIPERL) -I..\lib ..\uupacktool.pl -u $(PERLEXE_ICO).packd $(PERLEXE_ICO)
+
 $(PERLEXE_RES): perlexe.rc $(PERLEXE_ICO)
 
 $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl

@@ -1663,27 +1663,27 @@ PATCH
         _patch(<<'PATCH');
 --- win32/config_H.gc
 +++ win32/config_H.gc
-@@ -2356,14 +2356,18 @@
+@@ -3692,14 +3692,18 @@
   *	This symbol, if defined, indicates that the mkdtemp routine is
   *	available to exclusively create a uniquely named temporary directory.
   */
 -/*#define HAS_MKDTEMP		/**/
 +#if __MINGW64_VERSION_MAJOR >= 4
-+#define HAS_MKSTEMP
-+#endif
- 
- /* HAS_MKSTEMP:
-  *	This symbol, if defined, indicates that the mkstemp routine is
-  *	available to exclusively create and open a uniquely named
-  *	temporary file.
-  */
--/*#define HAS_MKSTEMP		/**/
-+#if __MINGW64_VERSION_MAJOR >= 4
-+#define HAS_MKSTEMPS
++#define HAS_MKDTEMP
 +#endif
  
  /* HAS_MKSTEMPS:
   *	This symbol, if defined, indicates that the mkstemps routine is
+  *	available to excluslvely create and open a uniquely named
+  *	(with a suffix) temporary file.
+  */
+-/*#define HAS_MKSTEMPS		/**/
++#if __MINGW64_VERSION_MAJOR >= 4
++#define HAS_MKSTEMPS
++#endif
+ 
+ /* HAS_MODFL:
+  *	This symbol, if defined, indicates that the modfl routine is
 --- win32/win32.c
 +++ win32/win32.c
 @@ -1101,6 +1101,7 @@ chown(const char *path, uid_t owner, gid_t group)

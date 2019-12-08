@@ -9306,6 +9306,10 @@ WIN32_SRC	=		\
 		.\win32thread.c	\
 		.\win32io.c
 
+ifneq ($(CRYPT_SRC), "")
+WIN32_SRC	+= $(CRYPT_SRC)
+endif
+
 X2P_SRC		=		\
 		..\x2p\a2p.c	\
 		..\x2p\hash.c	\

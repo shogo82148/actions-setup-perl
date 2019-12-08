@@ -9775,7 +9775,7 @@ $(DYNALOADER).c: $(HAVEMINIPERL) $(EXTDIR)\DynaLoader\dl_win32.xs $(CONFIGPM)
 	$(XCOPY) $(EXTDIR)\DynaLoader\DynaLoader.pm $(LIBDIR)\$(NULL)
 	$(XCOPY) $(EXTDIR)\DynaLoader\XSLoader.pm $(LIBDIR)\$(NULL)
 	cd $(EXTDIR)\DynaLoader \
-		$(XSUBPP) dl_win32.xs > $(DYNALOADER).c
+		$(XSUBPP) dl_win32.xs > ..\$(DYNALOADER).c
 
 $(EXTDIR)\DynaLoader\dl_win32.xs: dl_win32.xs
 	copy dl_win32.xs $(EXTDIR)\DynaLoader\dl_win32.xs

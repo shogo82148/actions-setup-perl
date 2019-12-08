@@ -267,10 +267,8 @@ PATCH
 sub _patch_make_maker_510 {
     # Win32 gmake needs SHELL to be specified
     _patch(<<'PATCH');
-diff --git a/lib/ExtUtils/MM_Unix.pm b/lib/ExtUtils/MM_Unix.pm
-index 296057278e..cbe25fa404 100644
---- a/lib/ExtUtils/MM_Unix.pm
-+++ b/lib/ExtUtils/MM_Unix.pm
+--- lib/ExtUtils/MM_Unix.pm
++++ lib/ExtUtils/MM_Unix.pm
 @@ -299,8 +299,8 @@ sub const_cccmd {
  
  =item const_config (o)
@@ -307,10 +305,8 @@ index 296057278e..cbe25fa404 100644
  =item quote_paren
  
  Backslashes parentheses C<()> in command line arguments.
-diff --git a/lib/ExtUtils/MM_Win32.pm b/lib/ExtUtils/MM_Win32.pm
-index 8975e31f73..4b2da89200 100644
---- a/lib/ExtUtils/MM_Win32.pm
-+++ b/lib/ExtUtils/MM_Win32.pm
+--- lib/ExtUtils/MM_Win32.pm
++++ lib/ExtUtils/MM_Win32.pm
 @@ -121,19 +121,18 @@ sub maybe_command {
  
  =item B<init_DIRFILESEP>

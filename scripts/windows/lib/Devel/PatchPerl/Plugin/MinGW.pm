@@ -9796,13 +9796,13 @@ $(HAVEMINIPERL): $(MINI_OBJ)
 #most of deps of this target are in DYNALOADER and therefore omitted here
 Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
 	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
-	$(MINIPERL) -I..\lib $(ICWD) ..\buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --dynamic
-	-if exist ext $(MINIPERL) -I..\lib $(ICWD) ..\buildext.pl "$(PLMAKE)" $(PERLDEP) ext --dynamic
+	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --dynamic
+	-if exist ext $(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext --dynamic
 
 Extensions_static : buildext.pl $(HAVEMINIPERL) $(CONFIGPM)
 	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
-	$(MINIPERL) -I..\lib $(ICWD) ..\buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --static
-	-if exist ext $(MINIPERL) -I..\lib $(ICWD) ..\buildext.pl "$(PLMAKE)" $(PERLDEP) ext --static
+	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --static
+	-if exist ext $(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext --static
 	$(MINIPERL) -I..\lib buildext.pl --list-static-libs > Extensions_static
 
 #-------------------------------------------------------------------------------

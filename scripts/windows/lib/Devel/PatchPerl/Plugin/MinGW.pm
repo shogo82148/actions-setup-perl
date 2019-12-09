@@ -10050,8 +10050,8 @@ MAKEFILE
 
     if (version->parse("v$version") >= version->parse("v5.10.1")) {
         my $patch = <<'PATCH';
---- win32/GNUMakefile	2019-12-10 07:47:55.000000000 +0900
-+++ win32/GNUMakefile	2019-12-10 07:56:03.000000000 +0900
+--- .makefiles/5.10.0/Makefile	2019-12-10 07:47:55.000000000 +0900
++++ .makefiles/5.10.1/Makefile	2019-12-10 08:45:36.000000000 +0900
 @@ -487,7 +487,6 @@
  		..\utils\cpan2dist	\
  		..\utils\shasum		\
@@ -10091,7 +10091,24 @@ MAKEFILE
  ..\config.sh : $(CFGSH_TMPL) $(HAVEMINIPERL) config_sh.PL
  	$(MINIPERL) -I..\lib config_sh.PL $(CFG_VARS) $(CFGSH_TMPL) > ..\config.sh
  
-@@ -976,7 +981,8 @@
+@@ -796,7 +801,7 @@
+ # real config.h used to build perl.exe is generated from the top-level
+ # config_h.SH by config_h.PL (run by miniperl.exe).
+ #
+-.\config.h : $(CONFIGPM)
++.\config.h : $(CFGH_TMPL)
+ $(MINIDIR)\.exists : $(CFGH_TMPL)
+ 	if not exist "$(MINIDIR)" mkdir "$(MINIDIR)"
+ 	copy $(CFGH_TMPL) config.h
+@@ -963,6 +968,7 @@
+ 
+ # 1. we don't want to rebuild miniperl.exe when config.h changes
+ # 2. we don't want to rebuild miniperl.exe with non-default config.h
++# 3. we can't have miniperl.exe depend on git_version.h, as miniperl creates it
+ $(MINI_OBJ)	: $(MINIDIR)\.exists $(CORE_NOCFG_H)
+ 
+ $(WIN32_OBJ)	: $(CORE_H)
+@@ -976,7 +982,8 @@
  perllibst.h : $(HAVEMINIPERL) $(CONFIGPM)
  	$(MINIPERL) -I..\lib buildext.pl --create-perllibst-h
  
@@ -10101,7 +10118,7 @@ MAKEFILE
  	$(MINIPERL) -I..\lib -w ..\makedef.pl PLATFORM=win32 $(OPTIMIZE) $(DEFINES) \
  	$(BUILDOPT) CCTYPE=$(CCTYPE) TARG_DIR=..\ > perldll.def
  
-@@ -1091,16 +1097,14 @@
+@@ -1091,16 +1098,14 @@
  	rem . > $@
  
  #most of deps of this target are in DYNALOADER and therefore omitted here
@@ -10123,7 +10140,7 @@ MAKEFILE
  
  #-------------------------------------------------------------------------------
  
-@@ -1125,6 +1129,7 @@
+@@ -1125,6 +1130,7 @@
  	copy ..\README.dos      ..\pod\perldos.pod
  	copy ..\README.epoc     ..\pod\perlepoc.pod
  	copy ..\README.freebsd  ..\pod\perlfreebsd.pod
@@ -10131,7 +10148,7 @@ MAKEFILE
  	copy ..\README.hpux     ..\pod\perlhpux.pod
  	copy ..\README.hurd     ..\pod\perlhurd.pod
  	copy ..\README.irix     ..\pod\perlirix.pod
-@@ -1150,7 +1155,6 @@
+@@ -1150,7 +1156,6 @@
  	copy ..\README.tw       ..\pod\perltw.pod
  	copy ..\README.uts      ..\pod\perluts.pod
  	copy ..\README.vmesa    ..\pod\perlvmesa.pod

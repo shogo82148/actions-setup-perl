@@ -189,6 +189,14 @@ my @patch = (
             [ \&_patch_perlhost ],
         ],
     },
+    {
+        perl => [
+            qr/^5\.1[01]\./,
+        ],
+        subs => [
+            [ \&_patch_threads ],
+        ],
+    },
 );
 
 sub patchperl {
@@ -10099,6 +10107,35 @@ sub _patch_perlhost {
  
      /* push a zero on the stack (we are the child) */
      {
+PATCH
+}
+
+sub _patch_threads {
+    _patch(<<'PATCH');
+--- ext/threads/threads.xs
++++ ext/threads/threads.xs
+@@ -1,11 +1,17 @@
+ #define PERL_NO_GET_CONTEXT
++/* Workaround for mingw 32-bit compiler by mingw-w64.sf.net - has to come before any #include.
++ * It also defines USE_NO_MINGW_SETJMP_TWO_ARGS for the mingw.org 32-bit compilers ... but
++ * that's ok as that compiler makes no use of that symbol anyway */
++#if defined(WIN32) && defined(__MINGW32__) && !defined(__MINGW64__)
++#  define USE_NO_MINGW_SETJMP_TWO_ARGS 1
++#endif
+ #include "EXTERN.h"
+ #include "perl.h"
+ #include "XSUB.h"
+ /* Workaround for XSUB.h bug under WIN32 */
+ #ifdef WIN32
+ #  undef setjmp
+-#  if !defined(__BORLANDC__)
++#  if defined(USE_NO_MINGW_SETJMP_TWO_ARGS) || (!defined(__BORLANDC__) && !defined(__MINGW64__))
+ #    define setjmp(x) _setjmp(x)
+ #  endif
++#  if defined(__MINGW64__)
++#    define setjmp(x) _setjmpex((x), mingw_getsp())
++#  endif
+ #endif
 PATCH
 }
 

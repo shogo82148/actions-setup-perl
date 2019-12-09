@@ -9637,8 +9637,6 @@ $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
 $(GLOBEXE) : perlglob.c
 	$(LINK32) $(OPTIMIZE) $(BLINK_FLAGS) -mconsole -o $@ perlglob.c $(LIBFILES)
 
-# make sure that we recompile perl.c if the git version changes
-
 ..\config.sh : $(CFGSH_TMPL) $(HAVEMINIPERL) config_sh.PL
 	$(MINIPERL) -I..\lib config_sh.PL $(CFG_VARS) $(CFGSH_TMPL) > ..\config.sh
 
@@ -10049,6 +10047,100 @@ MAKEFILE
     $makefile =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
 
     _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
+
+    if (version->parse("v$version") >= version->parse("v5.10.1")) {
+        _patch(<<'PATCH');
+--- win32/GNUMakefile	2019-12-10 07:47:55.000000000 +0900
++++ win32/GNUMakefile	2019-12-10 07:56:03.000000000 +0900
+@@ -487,7 +487,6 @@
+ 		..\utils\cpan2dist	\
+ 		..\utils\shasum		\
+ 		..\utils\instmodsh	\
+-		..\pod\checkpods	\
+ 		..\pod\pod2html		\
+ 		..\pod\pod2latex	\
+ 		..\pod\pod2man		\
+@@ -668,7 +667,7 @@
+ 		.\include\sys\socket.h	\
+ 		.\win32.h
+ 
+-CORE_H		= $(CORE_NOCFG_H) .\config.h
++CORE_H		= $(CORE_NOCFG_H) .\config.h ..\git_version.h
+ 
+ UUDMAP_H	= ..\uudmap.h
+ MG_DATA_H	= ..\mg_data.h
+@@ -759,7 +758,7 @@
+ 
+ .PHONY: all
+ 
+-all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) \
++all : .\config.h ..\git_version.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) \
+ 		$(UNIDATAFILES) MakePPPort $(PERLEXE) $(X2P) Extensions $(PERLSTATIC)
+ 		@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
+ 
+@@ -774,6 +773,12 @@
+ $(GLOBEXE) : perlglob.c
+ 	$(LINK32) $(OPTIMIZE) $(BLINK_FLAGS) -mconsole -o $@ perlglob.c $(LIBFILES)
+ 
++..\git_version.h : $(HAVEMINIPERL) ..\make_patchnum.pl
++	$(MINIPERL) -I..\lib ..\make_patchnum.pl
++
++# make sure that we recompile perl.c if the git version changes
++..\perl$(o) : ..\git_version.h
++
+ ..\config.sh : $(CFGSH_TMPL) $(HAVEMINIPERL) config_sh.PL
+ 	$(MINIPERL) -I..\lib config_sh.PL $(CFG_VARS) $(CFGSH_TMPL) > ..\config.sh
+ 
+@@ -976,7 +981,8 @@
+ perllibst.h : $(HAVEMINIPERL) $(CONFIGPM)
+ 	$(MINIPERL) -I..\lib buildext.pl --create-perllibst-h
+ 
+-perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\global.sym ..\pp.sym ..\makedef.pl
++perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\global.sym ..\pp.sym ..\makedef.pl create_perllibst_h.pl
++	$(MINIPERL) -I..\lib create_perllibst_h.pl
+ 	$(MINIPERL) -I..\lib -w ..\makedef.pl PLATFORM=win32 $(OPTIMIZE) $(DEFINES) \
+ 	$(BUILDOPT) CCTYPE=$(CCTYPE) TARG_DIR=..\ > perldll.def
+ 
+@@ -1091,16 +1097,14 @@
+ 	rem . > $@
+ 
+ #most of deps of this target are in DYNALOADER and therefore omitted here
+-Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
++Extensions : ..\make_ext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
+ 	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
+-	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --dynamic
+-	-if exist ext $(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext --dynamic
++	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(EXTDIR) --dynamic
+ 
+-Extensions_static : buildext.pl $(HAVEMINIPERL) $(CONFIGPM)
++Extensions_static : ..\make_ext.pl $(HAVEMINIPERL) list_static_libs.pl $(CONFIGPM)
+ 	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
+-	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --static
+-	-if exist ext $(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext --static
+-	$(MINIPERL) -I..\lib buildext.pl --list-static-libs > Extensions_static
++	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(EXTDIR) --static
++	$(MINIPERL) -I..\lib $(ICWD) list_static_libs.pl > Extensions_static
+ 
+ #-------------------------------------------------------------------------------
+ 
+@@ -1125,6 +1129,7 @@
+ 	copy ..\README.dos      ..\pod\perldos.pod
+ 	copy ..\README.epoc     ..\pod\perlepoc.pod
+ 	copy ..\README.freebsd  ..\pod\perlfreebsd.pod
++	copy ..\README.haiku    ..\pod\perlhaiku.pod
+ 	copy ..\README.hpux     ..\pod\perlhpux.pod
+ 	copy ..\README.hurd     ..\pod\perlhurd.pod
+ 	copy ..\README.irix     ..\pod\perlirix.pod
+@@ -1150,7 +1155,6 @@
+ 	copy ..\README.tw       ..\pod\perltw.pod
+ 	copy ..\README.uts      ..\pod\perluts.pod
+ 	copy ..\README.vmesa    ..\pod\perlvmesa.pod
+-	copy ..\README.vms      ..\pod\perlvms.pod
+ 	copy ..\README.vos      ..\pod\perlvos.pod
+ 	copy ..\README.win32    ..\pod\perlwin32.pod
+ 	copy ..\pod\perl__PERL_VERSION__delta.pod ..\pod\perldelta.pod
+PATCH
+    }
 }
 
 sub _patch_perlhost {

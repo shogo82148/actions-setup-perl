@@ -10049,7 +10049,7 @@ MAKEFILE
     _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
 
     if (version->parse("v$version") >= version->parse("v5.10.1")) {
-        _patch(<<'PATCH');
+        my $patch = <<'PATCH';
 --- win32/GNUMakefile	2019-12-10 07:47:55.000000000 +0900
 +++ win32/GNUMakefile	2019-12-10 07:56:03.000000000 +0900
 @@ -487,7 +487,6 @@
@@ -10140,6 +10140,10 @@ MAKEFILE
  	copy ..\README.win32    ..\pod\perlwin32.pod
  	copy ..\pod\perl__PERL_VERSION__delta.pod ..\pod\perldelta.pod
 PATCH
+        $patch =~ s/__INST_VER__/$version/g;
+        $patch =~ s/__PERL_MINOR_VERSION__/$v[0]$v[1]/g;
+        $patch =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
+        _patch($patch);
     }
 }
 

@@ -10083,7 +10083,7 @@ MAKEFILE
  	$(LINK32) $(OPTIMIZE) $(BLINK_FLAGS) -mconsole -o $@ perlglob.c $(LIBFILES)
  
 +..\git_version.h : $(HAVEMINIPERL) ..\make_patchnum.pl
-+	$(MINIPERL) -I..\lib ..\make_patchnum.pl
++	cd .. && $(MINIPERL) -Ilib make_patchnum.pl
 +
 +# make sure that we recompile perl.c if the git version changes
 +..\perl$(o) : ..\git_version.h

@@ -11137,6 +11137,9 @@ config.w32 : $(CFGSH_TMPL)
 ..\config.sh : $(HAVEMINIPERL) config.w32 config_sh.PL
 	$(MINIPERL) -I..\lib config_sh.PL $(CFG_VARS) config.w32 > ..\config.sh
 
+$(MINIDIR)\.exists :
+	if not exist "$(MINIDIR)" mkdir "$(MINIDIR)"
+
 $(CONFIGPM) : $(HAVEMINIPERL) ..\config.sh config_h.PL ..\minimod.pl
 	cd .. && miniperl.exe -Ilib configpm
 	$(XCOPY) *.h $(COREDIR)\\*.*
@@ -11303,7 +11306,6 @@ installhtml : doc
 
 inst_lib : $(CONFIGPM)
 	$(RCOPY) ..\lib $(INST_LIB)\$(NULL)
-
 MAKEFILE
     my @v = split /[.]/, $version;
     $makefile =~ s/__INST_VER__/$version/g;

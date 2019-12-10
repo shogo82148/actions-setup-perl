@@ -1798,6 +1798,7 @@ PATCH
  #undef	 Stat
  #define  Stat		win32_stat
 PATCH
+        return;
     }
 
     if (version->parse("v$version") >= version->parse("5.8.2")) {
@@ -1856,6 +1857,7 @@ PATCH
  #undef	 Stat
  #define  Stat		win32_stat
 PATCH
+        return;
     }
 
     if (version->parse("v$version") >= version->parse("5.8.1")) {
@@ -1913,6 +1915,7 @@ PATCH
  #undef	 Stat
  #define  Stat		win32_stat
 PATCH
+        return;
     }
 
     _patch(<<'PATCH');

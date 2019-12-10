@@ -219,6 +219,7 @@ sub _write_or_die {
 sub _patch_make_maker {
     # from https://github.com/Perl/perl5/commit/9cc600a92e7d683d4b053eb5e84ca8654ce82ac4
     # Win32 gmake needs SHELL to be specified
+    my $version = shift;
     if (version->parse("v$version") >= version->parse("5.11.0")) {
         _patch(<<'PATCH');
 --- cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm

@@ -10369,7 +10369,7 @@ CCTYPE		:= GCC
 # CRYPT_LIB uncommented.  The fcrypt.c file named here contains a suitable
 # version of des_fcrypt().
 #
-CRYPT_SRC	= .\fcrypt.c
+CRYPT_SRC	= fcrypt.c
 
 #
 # if you didn't set CRYPT_SRC and if you have des_fcrypt() available in a
@@ -10687,22 +10687,11 @@ UTILS		=			\
 		..\utils\pstruct	\
 		..\utils\h2xs		\
 		..\utils\perldoc	\
+		..\utils\perlcc		\
 		..\utils\perlivp	\
 		..\utils\libnetcfg	\
 		..\utils\enc2xs		\
 		..\utils\piconv		\
-		..\utils\config_data	\
-		..\utils\corelist	\
-		..\utils\cpan		\
-		..\utils\xsubpp		\
-		..\utils\prove		\
-		..\utils\ptar		\
-		..\utils\ptardiff	\
-		..\utils\cpanp-run-perl	\
-		..\utils\cpanp	\
-		..\utils\cpan2dist	\
-		..\utils\shasum		\
-		..\utils\instmodsh	\
 		..\pod\checkpods	\
 		..\pod\pod2html		\
 		..\pod\pod2latex	\
@@ -10714,51 +10703,12 @@ UTILS		=			\
 		..\x2p\find2perl	\
 		..\x2p\psed		\
 		..\x2p\s2p		\
+		..\lib\ExtUtils\xsubpp	\
 		bin\exetype.pl		\
 		bin\runperl.pl		\
 		bin\pl2bat.pl		\
 		bin\perlglob.pl		\
 		bin\search.pl
-
-CORE_NOCFG_H	=		\
-		..\av.h		\
-		..\cop.h	\
-		..\cv.h		\
-		..\dosish.h	\
-		..\embed.h	\
-		..\form.h	\
-		..\gv.h		\
-		..\handy.h	\
-		..\hv.h		\
-		..\iperlsys.h	\
-		..\mg.h		\
-		..\nostdio.h	\
-		..\op.h		\
-		..\opcode.h	\
-		..\perl.h	\
-		..\perlapi.h	\
-		..\perlsdio.h	\
-		..\perlsfio.h	\
-		..\perly.h	\
-		..\pp.h		\
-		..\proto.h	\
-		..\regcomp.h	\
-		..\regexp.h	\
-		..\scope.h	\
-		..\sv.h		\
-		..\thread.h	\
-		..\unixish.h	\
-		..\utf8.h	\
-		..\util.h	\
-		..\warnings.h	\
-		..\XSUB.h	\
-		..\EXTERN.h	\
-		..\perlvars.h	\
-		..\intrpvar.h	\
-		.\include\dirent.h	\
-		.\include\netdb.h	\
-		.\include\sys\socket.h	\
-		.\win32.h
 
 CFGSH_TMPL	= config.gc
 CFGH_TMPL	= config_H.gc
@@ -10787,14 +10737,11 @@ MICROCORE_SRC	=		\
 		..\dump.c	\
 		..\globals.c	\
 		..\gv.c		\
-		..\mro.c	\
 		..\hv.c		\
 		..\locale.c	\
-		..\mathoms.c    \
 		..\mg.c		\
 		..\numeric.c	\
 		..\op.c		\
-		..\pad.c	\
 		..\perl.c	\
 		..\perlapi.c	\
 		..\perly.c	\
@@ -10866,7 +10813,6 @@ CORE_NOCFG_H	=		\
 		..\perly.h	\
 		..\pp.h		\
 		..\proto.h	\
-		..\regcomp.h	\
 		..\regexp.h	\
 		..\scope.h	\
 		..\sv.h		\
@@ -10879,6 +10825,7 @@ CORE_NOCFG_H	=		\
 		..\EXTERN.h	\
 		..\perlvars.h	\
 		..\intrpvar.h	\
+		..\thrdvar.h	\
 		.\include\dirent.h	\
 		.\include\netdb.h	\
 		.\include\sys\socket.h	\
@@ -11335,35 +11282,24 @@ utils: $(PERLEXE) $(X2P)
 	copy ..\README.beos     ..\pod\perlbeos.pod
 	copy ..\README.bs2000   ..\pod\perlbs2000.pod
 	copy ..\README.ce       ..\pod\perlce.pod
-	copy ..\README.cn       ..\pod\perlcn.pod
 	copy ..\README.cygwin   ..\pod\perlcygwin.pod
 	copy ..\README.dgux     ..\pod\perldgux.pod
 	copy ..\README.dos      ..\pod\perldos.pod
 	copy ..\README.epoc     ..\pod\perlepoc.pod
 	copy ..\README.freebsd  ..\pod\perlfreebsd.pod
-	copy ..\README.hpux     ..\pod\perlhpux.pod
 	copy ..\README.hurd     ..\pod\perlhurd.pod
 	copy ..\README.irix     ..\pod\perlirix.pod
-	copy ..\README.jp       ..\pod\perljp.pod
-	copy ..\README.ko       ..\pod\perlko.pod
-	copy ..\README.linux    ..\pod\perllinux.pod
 	copy ..\README.machten  ..\pod\perlmachten.pod
 	copy ..\README.macos    ..\pod\perlmacos.pod
-	copy ..\README.macosx   ..\pod\perlmacosx.pod
 	copy ..\README.mint     ..\pod\perlmint.pod
 	copy ..\README.mpeix    ..\pod\perlmpeix.pod
 	copy ..\README.netware  ..\pod\perlnetware.pod
-	copy ..\README.openbsd  ..\pod\perlopenbsd.pod
 	copy ..\README.os2      ..\pod\perlos2.pod
 	copy ..\README.os390    ..\pod\perlos390.pod
-	copy ..\README.os400    ..\pod\perlos400.pod
 	copy ..\README.plan9    ..\pod\perlplan9.pod
 	copy ..\README.qnx      ..\pod\perlqnx.pod
-	copy ..\README.riscos   ..\pod\perlriscos.pod
 	copy ..\README.solaris  ..\pod\perlsolaris.pod
-	copy ..\README.symbian  ..\pod\perlsymbian.pod
 	copy ..\README.tru64    ..\pod\perltru64.pod
-	copy ..\README.tw       ..\pod\perltw.pod
 	copy ..\README.uts      ..\pod\perluts.pod
 	copy ..\README.vmesa    ..\pod\perlvmesa.pod
 	copy ..\README.vms      ..\pod\perlvms.pod

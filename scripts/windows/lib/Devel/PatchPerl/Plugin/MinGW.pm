@@ -10050,8 +10050,8 @@ MAKEFILE
 
     if (version->parse("v$version") >= version->parse("v5.10.1")) {
         my $patch = <<'PATCH';
---- .makefiles/5.10.0/Makefile	2019-12-10 07:47:55.000000000 +0900
-+++ .makefiles/5.10.1/Makefile	2019-12-10 08:45:36.000000000 +0900
+--- win32/GNUMakefile	2019-12-10 07:47:55.000000000 +0900
++++ win32/GNUMakefile	2019-12-10 08:45:36.000000000 +0900
 @@ -487,7 +487,6 @@
  		..\utils\cpan2dist	\
  		..\utils\shasum		\

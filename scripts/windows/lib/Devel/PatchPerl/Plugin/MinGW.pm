@@ -11403,6 +11403,7 @@ doc: $(PERLEXE)
 # so please check that script before making structural changes here
 utils: $(PERLEXE) $(X2P)
 	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
+	copy ..\vms\perlvms.pod .\perlvms.pod
 	copy ..\README.aix      ..\pod\perlaix.pod
 	copy ..\README.amiga    ..\pod\perlamiga.pod
 	copy ..\README.apollo   ..\pod\perlapollo.pod

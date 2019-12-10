@@ -11066,7 +11066,7 @@ $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
 #----------------------------------------------------------------
 
 $(GLOBEXE) : perlglob$(o)
-	$(LINK32) $(OPTIMIZE) $(BLINK_FLAGS) -mconsole -o $@ perlglob$(o) setargv$(o)
+	$(LINK32) $(OPTIMIZE) $(BLINK_FLAGS) -mconsole -o $@ perlglob$(o) $(LIBFILES)
 
 perlglob$(o)  : perlglob.c
 

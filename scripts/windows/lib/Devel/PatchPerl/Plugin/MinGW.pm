@@ -9016,7 +9016,7 @@ CCTYPE		:= GCC
 # CRYPT_LIB uncommented.  The fcrypt.c file named here contains a suitable
 # version of des_fcrypt().
 #
-CRYPT_SRC	= fcrypt.c
+CRYPT_SRC	= .\fcrypt.c
 
 #
 # if you didn't set CRYPT_SRC and if you have des_fcrypt() available in a

@@ -373,7 +373,10 @@ PATCH
         return;
     }
 
-    if (version->parse("v$version") >= version->parse("5.10.0")) {
+    if (
+        $version =~ /^5\.10\./ ||
+        ($version =~ /^5\.9\./ && version->parse("v$version") >= version->parse("5.9.0")) # TODO: fix the version
+    ) {
         _patch(<<'PATCH');
 --- lib/ExtUtils/MM_Unix.pm
 +++ lib/ExtUtils/MM_Unix.pm
@@ -481,13 +484,6 @@ PATCH
  
 PATCH
         return;
-    }
-
-    if (version->parse("v$version") >= version->parse("5.8.9")) {
-        _patch(<<'PATCH');
-
-PATCH
-        return
     }
 
     _patch(<<'PATCH');

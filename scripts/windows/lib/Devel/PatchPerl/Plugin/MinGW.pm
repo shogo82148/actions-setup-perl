@@ -11246,7 +11246,7 @@ $(PERLDLL): perldll.def $(PERLDLL_OBJ) $(PERLDLL_RES)
 	$(LINK32) -mdll -o $@ $(BLINK_FLAGS) $(LIBFILES) $(PERLDLL_OBJ) $(PERLDLL_RES)
 
 $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
-	cd .. && miniperl minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
+	cd .. && miniperl.exe minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
 
 ..\x2p\a2p$(o) : ..\x2p\a2p.c
 	$(CC) -I..\x2p $(CFLAGS) $(OBJOUT_FLAG)$@ -c ..\x2p\a2p.c

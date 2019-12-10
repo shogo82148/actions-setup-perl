@@ -75,8 +75,7 @@ sub run {
 
     group "extracting..." => sub {
         my $dir = pushd($tmpdir);
-        execute_or_die("7z", "x", $filename);
-        execute_or_die("7z", "x", "perl-$version.tar");
+        execute_or_die("7z x $filename -so | 7z x -si -ttar");
     };
 
     group "patching..." => sub {
@@ -86,7 +85,7 @@ sub run {
 
     group "build and install Perl" => sub {
         my $dir = pushd(File::Spec->catdir($tmpdir, "perl-$version", "win32"));
-        execute_or_die("gmake", "-f", "GNUMakefile", "install", "INST_TOP=$install_dir", "CCHOME=C:\\MinGW");
+        execute_or_die("gmake", "-d", "-f", "GNUMakefile", "install", "INST_TOP=$install_dir", "CCHOME=C:\\MinGW");
     };
 
     group "perl -V" => sub {

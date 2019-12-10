@@ -16,31 +16,6 @@ use File::Spec;
 my @patch = (
     {
         perl => [
-            qr/^5\.2[0-2]\./,
-            qr/^5\.1[1-9]\./,
-        ],
-        subs => [
-            [ \&_patch_make_maker ],
-        ],
-    },
-    {
-        perl => [
-            qr/^5\.10\.[1-9]$/,
-        ],
-        subs => [
-            [ \&_patch_make_maker_510_1 ],
-        ],
-    },
-    {
-        perl => [
-            qr/^5\.10\.0$/,
-        ],
-        subs => [
-            [ \&_patch_make_maker_510 ],
-        ],
-    },
-    {
-        perl => [
             qr/^5\.22\./,
         ],
         subs => [
@@ -75,26 +50,6 @@ my @patch = (
         ],
         subs => [
             [ \&_patch_installperl ],
-        ],
-    },
-    {
-        perl => [
-            qr/^5\.21\.[0-5]$/,
-            qr/^5\.20\./,
-            qr/^5\.19\.1[0-9]+$/,
-            qr/^5\.19\.[3-9]$/,
-        ],
-        subs => [
-            [ \&_patch_make_maker_dirfilesep ],
-        ],
-    },
-    {
-        perl => [
-            qr/^5\.19.[0-2]$/,
-            qr/^5\.1[1-8]\./,
-        ],
-        subs => [
-            [ \&_patch_make_maker_dirfilesep_518 ],
         ],
     },
     {
@@ -201,8 +156,39 @@ my @patch = (
             qr/^5\.[89]\./,
         ],
         subs => [
-            [ \&_patch_make_maker_508 ],
             [ \&_patch_gnumakefile_508 ],
+        ],
+    },
+
+    # patches for MakeMaker
+    {
+        perl => [
+            qr/^5\.21\.[0-5]$/,
+            qr/^5\.20\./,
+            qr/^5\.19\.1[0-9]+$/,
+            qr/^5\.19\.[3-9]$/,
+        ],
+        subs => [
+            [ \&_patch_make_maker_dirfilesep ],
+        ],
+    },
+    {
+        perl => [
+            qr/^5\.19.[0-2]$/,
+            qr/^5\.1[1-8]\./,
+        ],
+        subs => [
+            [ \&_patch_make_maker_dirfilesep_518 ],
+        ],
+    },
+    {
+        perl => [
+            qr/^5\.2[0-2]\./,
+            qr/^5\.1[0-9]\./,
+            qr/^5\.[0-9]\./,
+        ],
+        subs => [
+            [ \&_patch_make_maker ],
         ],
     },
 );
@@ -233,7 +219,8 @@ sub _write_or_die {
 sub _patch_make_maker {
     # from https://github.com/Perl/perl5/commit/9cc600a92e7d683d4b053eb5e84ca8654ce82ac4
     # Win32 gmake needs SHELL to be specified
-    _patch(<<'PATCH');
+    if (version->parse("v$version") >= version->parse("5.11.0")) {
+        _patch(<<'PATCH');
 --- cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm
 +++ cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm
 @@ -317,8 +317,8 @@ sub const_cccmd {
@@ -294,11 +281,14 @@ sub _patch_make_maker {
  
  =item constants
 PATCH
-}
+    return
+    }
 
-sub _patch_make_maker_510_1 {
-    # Win32 gmake needs SHELL to be specified
-    _patch(<<'PATCH');
+    if (
+        ($version =~ /^5\.10\./ && version->parse("v$version") >= version->parse("5.10.1")) ||
+        ($version =~ /^5\.8\./ && version->parse("v$version") >= version->parse("5.8.9"))
+    ) {
+        _patch(<<'PATCH');
 --- lib/ExtUtils/MM_Unix.pm
 +++ lib/ExtUtils/MM_Unix.pm
 @@ -296,8 +296,8 @@ sub const_cccmd {
@@ -379,11 +369,11 @@ sub _patch_make_maker_510_1 {
  =item special_targets
  
 PATCH
-}
+        return;
+    }
 
-sub _patch_make_maker_510 {
-    # Win32 gmake needs SHELL to be specified
-    _patch(<<'PATCH');
+    if (version->parse("v$version") >= version->parse("5.10.0")) {
+        _patch(<<'PATCH');
 --- lib/ExtUtils/MM_Unix.pm
 +++ lib/ExtUtils/MM_Unix.pm
 @@ -299,8 +299,8 @@ sub const_cccmd {
@@ -488,6 +478,81 @@ sub _patch_make_maker_510 {
  1;
  __END__
  
+PATCH
+        return;
+    }
+
+    if (version->parse("v$version") >= version->parse("5.8.9")) {
+        _patch(<<'PATCH');
+
+PATCH
+        return
+    }
+
+    _patch(<<'PATCH');
+--- lib/ExtUtils/MM_Unix.pm
++++ lib/ExtUtils/MM_Unix.pm
+@@ -415,8 +415,8 @@ sub const_cccmd {
+ 
+ =item const_config (o)
+ 
+-Defines a couple of constants in the Makefile that are imported from
+-%Config.
++Sets SHELL if needed, then defines a couple of constants in the Makefile
++that are imported from %Config.
+ 
+ =cut
+ 
+@@ -427,6 +427,7 @@ sub const_config {
+     my(@m,$m);
+     push(@m,"\n# These definitions are from config.sh (via $INC{'Config.pm'})\n");
+     push(@m,"\n# They may have been overridden via Makefile.PL or on the command line\n");
++    push(@m, $self->specify_shell()); # Usually returns empty string
+     my(%once_only);
+     foreach $m (@{$self->{CONFIG}}){
+ 	# SITE*EXP macros are defined in &constants; avoid duplicates here
+@@ -3304,6 +3305,16 @@ $target :: $plfile
+     join "", @m;
+ }
+ 
++=item specify_shell
++
++Specify SHELL if needed - not done on Unix.
++
++=cut
++
++sub specify_shell {
++  return '';
++}
++
+ =item quote_paren
+ 
+ Backslashes parentheses C<()> in command line arguments.
+--- lib/ExtUtils/MM_Win32.pm
++++ lib/ExtUtils/MM_Win32.pm
+@@ -781,6 +781,22 @@ sub pasthru {
+     return "PASTHRU = " . ($NMAKE ? "-nologo" : "");
+ }
+ 
++=item specify_shell
++
++Set SHELL to $ENV{COMSPEC} only if make is type 'gmake'.
++
++=cut
++
++sub specify_shell {
++    my $self = shift;
++    return '' unless $self->is_make_type('gmake');
++    "\nSHELL = $ENV{COMSPEC}\n";
++}
++
++sub is_make_type {
++    my($self, $type) = @_;
++    return !! ($self->make =~ /\b$type(?:\.exe)?$/);
++}
+ 
+ 1;
+ __END__
 PATCH
 }
 
@@ -10393,75 +10458,6 @@ sub _patch_threads {
  #endif
  #ifdef HAS_PPPORT_H
  #  define NEED_PL_signals
-PATCH
-}
-
-sub _patch_make_maker_508 {
-    # Win32 gmake needs SHELL to be specified
-    _patch(<<'PATCH');
---- lib/ExtUtils/MM_Unix.pm
-+++ lib/ExtUtils/MM_Unix.pm
-@@ -415,8 +415,8 @@ sub const_cccmd {
- 
- =item const_config (o)
- 
--Defines a couple of constants in the Makefile that are imported from
--%Config.
-+Sets SHELL if needed, then defines a couple of constants in the Makefile
-+that are imported from %Config.
- 
- =cut
- 
-@@ -427,6 +427,7 @@ sub const_config {
-     my(@m,$m);
-     push(@m,"\n# These definitions are from config.sh (via $INC{'Config.pm'})\n");
-     push(@m,"\n# They may have been overridden via Makefile.PL or on the command line\n");
-+    push(@m, $self->specify_shell()); # Usually returns empty string
-     my(%once_only);
-     foreach $m (@{$self->{CONFIG}}){
- 	# SITE*EXP macros are defined in &constants; avoid duplicates here
-@@ -3304,6 +3305,16 @@ $target :: $plfile
-     join "", @m;
- }
- 
-+=item specify_shell
-+
-+Specify SHELL if needed - not done on Unix.
-+
-+=cut
-+
-+sub specify_shell {
-+  return '';
-+}
-+
- =item quote_paren
- 
- Backslashes parentheses C<()> in command line arguments.
---- lib/ExtUtils/MM_Win32.pm
-+++ lib/ExtUtils/MM_Win32.pm
-@@ -781,6 +781,22 @@ sub pasthru {
-     return "PASTHRU = " . ($NMAKE ? "-nologo" : "");
- }
- 
-+=item specify_shell
-+
-+Set SHELL to $ENV{COMSPEC} only if make is type 'gmake'.
-+
-+=cut
-+
-+sub specify_shell {
-+    my $self = shift;
-+    return '' unless $self->is_make_type('gmake');
-+    "\nSHELL = $ENV{COMSPEC}\n";
-+}
-+
-+sub is_make_type {
-+    my($self, $type) = @_;
-+    return !! ($self->make =~ /\b$type(?:\.exe)?$/);
-+}
- 
- 1;
- __END__
 PATCH
 }
 

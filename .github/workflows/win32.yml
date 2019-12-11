@@ -198,21 +198,18 @@ jobs:
           PERL5LIB: ${{ github.workspace }}/scripts/windows/local/lib/perl5
           # PERL_DL_DEBUG: "10" # enables debugging
         working-directory: ./scripts/windows
-        continue-on-error: true
 
       # for debugging
       # - uses: actions/upload-artifact@v1
       #   with:
       #     name: perl-${{ matrix.perl }}
-      #     path: C:\hostedtoolcache\windows\perl\${{ matrix.perl }}\x64
-      # - uses: actions/upload-artifact@v1
-      #   with:
-      #     name: perl-${{ matrix.perl }}
       #     path: ${{ runner.temp }}/perl-${{ matrix.perl }}
+      #   if: failure()
       - uses: actions/upload-artifact@v1
         with:
           name: perl-${{ matrix.perl }}-wer
           path: ${{ runner.temp }}/perl-wer
+        if: failure()
 
       - name: upload
         shell: pwsh

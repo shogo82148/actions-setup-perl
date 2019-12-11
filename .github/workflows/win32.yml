@@ -144,11 +144,25 @@ jobs:
         - "5.10.1"
         - "5.10.0"
 
+        # TODO: fix me, builds of 5.9.x are failed
+        # - "5.9.5"
+        # - "5.9.4"
+        # - "5.9.3"
+        # - "5.9.2"
+        # - "5.9.1"
+        # - "5.9.0"
+
+        # TODO: fix me, builds of 5.8.x are failed
         # - "5.8.9"
         # - "5.8.8"
         # - "5.8.7"
         # - "5.8.6"
         # - "5.8.5"
+        # - "5.8.4"
+        # - "5.8.3"
+        # - "5.8.2"
+        # - "5.8.1"
+        # - "5.8.0"
     steps:
       - uses: actions/checkout@v1
       - name: setup host perl
@@ -159,6 +173,15 @@ jobs:
         run: perl -V
       - name: gcc --version
         run: gcc --version
+
+      # https://support.microsoft.com/en-us/help/254649/overview-of-memory-dump-file-options-for-windows
+      # https://docs.microsoft.com/en-us/windows/win32/wer/collecting-user-mode-dumps
+      - name: "enable Windows Error Reporting, WER"
+        run: |
+          mkdir "${{ runner.temp }}/perl-wer"
+          reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpType /t REG_DWORD /d 2
+          reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpFolder /t REG_EXPAND_SZ /d "${{ runner.temp }}/perl-wer"
+        shell: cmd
 
       - uses: actions/cache@v1
         with:
@@ -177,17 +200,28 @@ jobs:
           PERL5LIB: ${{ github.workspace }}/scripts/windows/local/lib/perl5
           # PERL_DL_DEBUG: "10" # enables debugging
         working-directory: ./scripts/windows
-        # continue-on-error: true
 
       # for debugging
       # - uses: actions/upload-artifact@v1
       #   with:
       #     name: perl-${{ matrix.perl }}
-      #     path: C:\hostedtoolcache\windows\perl\${{ matrix.perl }}\x64
-      # - uses: actions/upload-artifact@v1
-      #   with:
-      #     name: perl-${{ matrix.perl }}
       #     path: ${{ runner.temp }}/perl-${{ matrix.perl }}
+      #   if: failure()
+      - uses: actions/upload-artifact@v1
+        with:
+          name: perl-${{ matrix.perl }}-wer
+          path: ${{ runner.temp }}/perl-wer
+        if: failure()
+      - uses: actions/setup-python@v1
+        with:
+          python-version: '3.x'
+        if: failure()
+      - run: |
+          pip install minidump
+          minidump --all *.dmp
+        if: failure()
+        shell: bash
+        working-directory: ${{ runner.temp }}/perl-wer
 
       - name: upload
         shell: pwsh

@@ -11467,7 +11467,7 @@ inst_lib : $(CONFIGPM)
 	$(RCOPY) ..\lib $(INST_LIB)\$(NULL)
 
 $(UNIDATAFILES) : $(HAVEMINIPERL) $(CONFIGPM) ..\lib\unicore\mktables
-	$(MINIPERL) -I..\lib ..\lib\unicore\mktables -check $@ $(FIRSTUNIFILE)
+	cd ..\lib\unicore && ..\$(MINIPERL) -I.. mktables
 MAKEFILE
     my @v = split /[.]/, $version;
     $makefile =~ s/__INST_VER__/$version/g;

@@ -85,6 +85,7 @@ sub run {
 
     group "build and install Perl" => sub {
         my $dir = pushd(File::Spec->catdir($tmpdir, "perl-$version", "win32"));
+        local $ENV{PATH} = "$dir:$ENV{PATH}";
         execute_or_die("gmake", "-d", "-f", "GNUMakefile", "install", "INST_TOP=$install_dir", "CCHOME=C:\\MinGW");
     };
 

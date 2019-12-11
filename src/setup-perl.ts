@@ -11,6 +11,9 @@ async function run() {
 
     const matchersPath = path.join(__dirname, '..', '.github');
     console.log(`##[add-matcher]${path.join(matchersPath, 'perl.json')}`);
+
+    // for cpanm and carton
+    core.addPath(path.join(__dirname, '..', 'bin'));
   } catch (error) {
     core.setFailed(error.message);
   }

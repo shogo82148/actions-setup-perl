@@ -1,0 +1,239 @@
+name: build on windows
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/windows/**'
+      - '.github/workflows/win32.yml'
+  push:
+    branches:
+      - 'releases/*'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        perl:
+        - "5.30.1"
+        - "5.30.0"
+        - "5.28.2"
+        - "5.28.1"
+        - "5.28.0"
+        - "5.26.3"
+        - "5.26.2"
+        - "5.26.1"
+        - "5.26.0"
+        - "5.24.4"
+        - "5.24.3"
+        - "5.24.2"
+        - "5.24.1"
+        - "5.24.0"
+        - "5.22.4"
+        - "5.22.3"
+        - "5.22.2"
+        - "5.22.1"
+        - "5.22.0"
+
+        # - "5.21.11"
+        # - "5.21.10"
+        # #- "5.21.9" # failed with Devel-PatchPerl-1.80
+        # - "5.21.8"
+        # - "5.21.7"
+        # - "5.21.6"
+        # - "5.21.5"
+        # - "5.21.4"
+        # - "5.21.3"
+        # - "5.21.2"
+        # - "5.21.1"
+        # - "5.21.0"
+
+        - "5.20.3"
+        - "5.20.2"
+        - "5.20.1"
+        - "5.20.0"
+
+        # builds fail from v5.19.2 to v5.19.11
+        # I'll try them later
+        # - "5.19.11"
+        # - "5.19.10"
+        # - "5.19.9"
+        # - "5.19.8"
+        # - "5.19.7"
+        # - "5.19.6"
+        # - "5.19.5"
+        # - "5.19.4"
+        # - "5.19.3"
+        # - "5.19.2"
+        # - "5.19.1"
+        # - "5.19.0"
+
+        - "5.18.4"
+        - "5.18.3"
+        - "5.18.2"
+        - "5.18.1"
+        - "5.18.0"
+
+        # TODO: fix builds from v5.17.3 to v5.17.11
+        # - "5.17.11"
+        # - "5.17.10"
+        # - "5.17.9"
+        # - "5.17.8"
+        # - "5.17.7"
+        # - "5.17.6"
+        # - "5.17.5"
+        # - "5.17.4"
+        # - "5.17.3"
+        # - "5.17.2"
+        # - "5.17.1"
+        # - "5.17.0"
+
+        - "5.16.3"
+        - "5.16.2"
+        - "5.16.1"
+        - "5.16.0"
+
+        # TODO: fix builds from v5.15.0 to v5.15.9
+        # - "5.15.9"
+        # - "5.15.8"
+        # - "5.15.7"
+        # - "5.15.6"
+        # - "5.15.5"
+        # - "5.15.4"
+        # - "5.15.3"
+        # - "5.15.2"
+        # - "5.15.1"
+        # - "5.15.0"
+
+        - "5.14.4"
+        - "5.14.3"
+        - "5.14.2"
+        - "5.14.1"
+        - "5.14.0"
+
+        # TODO: fix builds from v5.13.2 to v5.13.11
+        # - "5.13.11"
+        # - "5.13.10"
+        # - "5.13.9"
+        # - "5.13.8"
+        # - "5.13.7"
+        # - "5.13.6"
+        # - "5.13.5"
+        # - "5.13.4"
+        # - "5.13.3"
+        # - "5.13.2"
+        # - "5.13.1"
+        # - "5.13.0"
+
+        - "5.12.5"
+        - "5.12.4"
+        - "5.12.3"
+        - "5.12.2"
+        - "5.12.1"
+        - "5.12.0"
+
+        # TODO: fix me https://github.com/shogo82148/actions-setup-perl/pull/60/checks?check_run_id=341423773
+        # - "5.11.5"
+        # - "5.11.4"
+        # - "5.11.3"
+        # - "5.11.2"
+        # - "5.11.1"
+        # - "5.11.0"
+
+        - "5.10.1"
+        - "5.10.0"
+
+        # TODO: fix me, builds of 5.9.x are failed
+        # - "5.9.5"
+        # - "5.9.4"
+        # - "5.9.3"
+        # - "5.9.2"
+        # - "5.9.1"
+        # - "5.9.0"
+
+        # TODO: fix me, builds of 5.8.x are failed
+        # - "5.8.9"
+        # - "5.8.8"
+        # - "5.8.7"
+        # - "5.8.6"
+        # - "5.8.5"
+        # - "5.8.4"
+        # - "5.8.3"
+        # - "5.8.2"
+        # - "5.8.1"
+        # - "5.8.0"
+    steps:
+      - uses: actions/checkout@v1
+      - name: setup host perl
+        shell: bash
+        run: |
+          echo "::add-path::C:\MinGW\bin;C:\strawberry\perl\site\bin;C:\strawberry\perl\bin"
+      - name: Host perl -V
+        run: perl -V
+      - name: gcc --version
+        run: gcc --version
+
+      # https://support.microsoft.com/en-us/help/254649/overview-of-memory-dump-file-options-for-windows
+      # https://docs.microsoft.com/en-us/windows/win32/wer/collecting-user-mode-dumps
+      - name: "enable Windows Error Reporting, WER"
+        run: |
+          mkdir "${{ runner.temp }}/perl-wer"
+          reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpType /t REG_DWORD /d 2
+          reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpFolder /t REG_EXPAND_SZ /d "${{ runner.temp }}/perl-wer"
+        shell: cmd
+
+      - uses: actions/cache@v1
+        with:
+          path: scripts/windows/local
+          key: ${{ runner.os }}-build-${{ hashFiles('scripts/linux/cpanfile.snapshot') }}
+      - name: carton install
+        shell: cmd
+        run: ../../bin/carton install
+        working-directory: ./scripts/windows
+
+      - name: build
+        shell: cmd
+        run: perl build.pl
+        env:
+          PERL_VERSION: ${{ matrix.perl }}
+          PERL5LIB: ${{ github.workspace }}/scripts/windows/local/lib/perl5
+          # PERL_DL_DEBUG: "10" # enables debugging
+        working-directory: ./scripts/windows
+
+      # for debugging
+      # - uses: actions/upload-artifact@v1
+      #   with:
+      #     name: perl-${{ matrix.perl }}
+      #     path: ${{ runner.temp }}/perl-${{ matrix.perl }}
+      #   if: failure()
+      - uses: actions/upload-artifact@v1
+        with:
+          name: perl-${{ matrix.perl }}-wer
+          path: ${{ runner.temp }}/perl-wer
+        if: failure()
+      - uses: actions/setup-python@v1
+        with:
+          python-version: '3.x'
+        if: failure()
+      - run: |
+          pip install minidump
+          minidump --all *.dmp
+        if: failure()
+        shell: bash
+        working-directory: ${{ runner.temp }}/perl-wer
+
+      - name: upload
+        shell: pwsh
+        if: startsWith(github.ref, 'refs/heads/releases/')
+        run: |
+          Set-Location ${env:RUNNER_TEMP}
+          Invoke-WebRequest -Uri https://github.com/shogo82148/s3cli-mini/releases/download/v0.0.2/s3cli-mini_windows_amd64.zip -OutFile s3cli-mini.zip
+          7z x s3cli-mini.zip
+          $pkg = Get-Content "${env:GITHUB_WORKSPACE}/package.json" -Encoding UTF8 -Raw | ConvertFrom-Json
+          $version = $pkg.version
+          s3cli-mini_windows_amd64/s3cli-mini --region us-east-1 cp --acl public-read perl.zip "s3://shogo82148-actions-setup-perl/v$version/perl-${env:PERL_VERSION}-win32-x64.tar.gz"
+        env:
+          PERL_VERSION: ${{ matrix.perl }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

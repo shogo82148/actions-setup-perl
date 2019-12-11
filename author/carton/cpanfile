@@ -1,0 +1,6 @@
+requires 'perl', '5.008005';
+
+requires 'Carton';
+requires 'Menlo::Legacy';
+requires 'Menlo';
+requires 'Menlo::Index::Mirror';

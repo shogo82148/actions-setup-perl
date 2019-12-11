@@ -1,5 +1,10 @@
 name: Main workflow
-on: [push, pull_request]
+on:
+  pull_request: {}
+  push:
+    branches-ignore:
+      - 'releases/*'
+
 jobs:
   test:
     runs-on: ${{ matrix.os }}
@@ -19,11 +24,12 @@ jobs:
       with:
         node-version: 12.x
 
-    - name: npm install
-      run: npm install
+    - run: npm install
+    - run: npm run build
+    - run: npm test
 
-    - name: Lint
-      run: npm run format-check
+    - name: use the action
+      uses: ./
+    - run: perl -V
 
-    - name: npm test
-      run: npm test
+    - run: npm run format-check

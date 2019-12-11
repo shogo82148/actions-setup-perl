@@ -1,0 +1,65 @@
+name: update cpanfile.snapshot
+on:
+  push: {}
+
+jobs:
+  linux:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: carton install
+        shell: bash
+        run: |
+          rm -f cpanfile.snapshot
+          ../../bin/carton install
+        working-directory: ./scripts/linux
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: cpanfile.snapshot-linux
+          path: scripts/linux/cpanfile.snapshot
+
+  darwin:
+    runs-on: macos-latest
+    steps:
+      - name: setup host perl
+        run: perl -MConfig -E 'say "::add-path::$Config{bin}"'
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: carton install
+        shell: bash
+        run: |
+          rm -f cpanfile.snapshot
+          ../../bin/carton install
+        working-directory: ./scripts/darwin
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: cpanfile.snapshot-darwin
+          path: scripts/darwin/cpanfile.snapshot
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - name: setup host perl
+        shell: bash
+        run: |
+          echo "::add-path::C:\strawberry\c\bin;C:\strawberry\perl\site\bin;C:\strawberry\perl\bin"
+
+      - name: Checkout
+        uses: actions/checkout@v1
+      - run: "rm -f scripts/windows/cpanfile.snapshot"
+        shell: bash
+
+      - name: carton install
+        shell: cmd
+        run: ..\..\bin\carton install
+        working-directory: ./scripts/windows
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: cpanfile.snapshot-windows
+          path: scripts/windows/cpanfile.snapshot

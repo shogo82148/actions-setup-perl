@@ -1,0 +1,8 @@
+requires "LWP::UserAgent";
+requires "LWP::Protocol::https";
+requires "CPAN::Perl::Releases::MetaCPAN";
+requires "Devel::PatchPerl" => '1.80';
+requires "Try::Tiny";
+requires "File::pushd";
+requires "File::Spec";
+requires "IO::File";

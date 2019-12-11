@@ -178,7 +178,7 @@ jobs:
         run: |
           mkdir "${{ runner.temp }}/perl-wer"
           reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpType /t REG_DWORD /d 2
-          reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpFolder /t REG_EXPAND_SZ /d "${{ runner.temp }}/perl-wer"
+          reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpFolder /t REG_EXPAND_SZ /d "${{ github.workspace }}"
         shell: cmd
 
       - uses: actions/cache@v1
@@ -216,7 +216,7 @@ jobs:
         if: failure()
       - run: |
           pip install minidump
-          minidump ${{ runner.temp }}/perl-wer/*.dmp
+          minidump *.dmp
         if: failure()
         shell: bash
 

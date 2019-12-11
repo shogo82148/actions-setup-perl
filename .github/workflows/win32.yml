@@ -172,6 +172,12 @@ jobs:
       - name: gcc --version
         run: gcc --version
 
+      - name: "enable Windows Error Reporting, WER"
+        run: |
+          reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpType /t REG_DWORD /d 2
+          reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpFolder /t REG_EXPAND_SZ /d "${{ runner.temp }}/perl-${{ matrix.perl }}"
+        shell: cmd
+
       - uses: actions/cache@v1
         with:
           path: scripts/windows/local

@@ -21,7 +21,7 @@ fatpack(
         # test modules
         'Test2,App::Prove','TAP::Harness',
         # core modules of perl 5
-        'Cwd'
+        'Cwd', 'Carp', 'Module::CoreList',
     ),
     "--shebang", '#!/usr/bin/env perl',
     "local/bin/cpanm"

@@ -210,6 +210,13 @@ jobs:
           name: perl-${{ matrix.perl }}-wer
           path: ${{ runner.temp }}/perl-wer
         if: failure()
+      - uses: actions/setup-python@v1
+        with:
+          python-version: '3.x'
+        if: failure()
+      - run: |
+          pip install minidump
+          minidump ${{ runner.temp }}/perl-wer/*.dmp
 
       - name: upload
         shell: pwsh

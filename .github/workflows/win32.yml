@@ -216,7 +216,8 @@ jobs:
         if: failure()
       - run: |
           pip install minidump
-          minidump *.dmp
+          ls -l
+          minidump $(ls *.dmp)
         if: failure()
         shell: bash
 

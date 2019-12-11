@@ -10597,7 +10597,7 @@ CCTYPE		:= GCC
 # If not enabled, we automatically try to use maximum optimization
 # with all compilers that are known to have a working optimizer.
 #
-#CFG		:= Debug
+CFG		:= Debug
 
 #
 # uncomment to enable use of PerlCRT.DLL when using the Visual C compiler.
@@ -11467,7 +11467,7 @@ inst_lib : $(CONFIGPM)
 	$(RCOPY) ..\lib $(INST_LIB)\$(NULL)
 
 $(UNIDATAFILES) : $(HAVEMINIPERL) $(CONFIGPM) ..\lib\unicore\mktables
-	cd ..\lib\unicore && ..\$(MINIPERL) -I..\lib mktables -check $@ $(FIRSTUNIFILE)
+	cd ..\lib\unicore && ..\$(MINIPERL) -Dtls -I..\lib mktables -check $@ $(FIRSTUNIFILE)
 MAKEFILE
     my @v = split /[.]/, $version;
     $makefile =~ s/__INST_VER__/$version/g;

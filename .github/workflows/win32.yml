@@ -176,6 +176,7 @@ jobs:
       # https://docs.microsoft.com/en-us/windows/win32/wer/collecting-user-mode-dumps
       - name: "enable Windows Error Reporting, WER"
         run: |
+          mkdir "${{ runner.temp }}/perl-wer"
           reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpType /t REG_DWORD /d 2
           reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpFolder /t REG_EXPAND_SZ /d "${{ runner.temp }}/perl-wer"
         shell: cmd

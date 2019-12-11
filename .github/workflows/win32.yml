@@ -173,6 +173,7 @@ jobs:
         run: gcc --version
 
       # https://support.microsoft.com/en-us/help/254649/overview-of-memory-dump-file-options-for-windows
+      # https://docs.microsoft.com/en-us/windows/win32/wer/collecting-user-mode-dumps
       - name: "enable Windows Error Reporting, WER"
         run: |
           reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpType /t REG_DWORD /d 2

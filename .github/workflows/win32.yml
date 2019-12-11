@@ -218,6 +218,7 @@ jobs:
           pip install minidump
           minidump ${{ runner.temp }}/perl-wer/*.dmp
         if: failure()
+        shell: bash
 
       - name: upload
         shell: pwsh

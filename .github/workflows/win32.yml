@@ -176,7 +176,7 @@ jobs:
       - name: "enable Windows Error Reporting, WER"
         run: |
           reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpType /t REG_DWORD /d 2
-          reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpFolder /t REG_EXPAND_SZ /d "${{ runner.temp }}/perl-${{ matrix.perl }}"
+          reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpFolder /t REG_EXPAND_SZ /d "${{ runner.temp }}/perl-wer"
         shell: cmd
 
       - uses: actions/cache@v1
@@ -203,10 +203,14 @@ jobs:
       #   with:
       #     name: perl-${{ matrix.perl }}
       #     path: C:\hostedtoolcache\windows\perl\${{ matrix.perl }}\x64
+      # - uses: actions/upload-artifact@v1
+      #   with:
+      #     name: perl-${{ matrix.perl }}
+      #     path: ${{ runner.temp }}/perl-${{ matrix.perl }}
       - uses: actions/upload-artifact@v1
         with:
-          name: perl-${{ matrix.perl }}
-          path: ${{ runner.temp }}/perl-${{ matrix.perl }}
+          name: perl-${{ matrix.perl }}-wer
+          path: ${{ runner.temp }}/perl-wer
 
       - name: upload
         shell: pwsh

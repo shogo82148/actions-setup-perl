@@ -11477,487 +11477,171 @@ MAKEFILE
     _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
 
 	_patch(<<'PATCH');
---- gv.h
-+++ gv.h
-@@ -181,6 +181,7 @@ Return the SV from the GV.
- #define DM_UID   0x003
- #define DM_RUID   0x001
- #define DM_EUID   0x002
-+#define DM_ARRAY 0x004
- #define DM_GID   0x030
- #define DM_RGID   0x010
- #define DM_EGID   0x020
---- pp_hot.c
-+++ pp_hot.c
-@@ -168,18 +168,44 @@ PP(pp_sassign)
- 	if (!got_coderef) {
- 	    /* We've been returned a constant rather than a full subroutine,
- 	       but they expect a subroutine reference to apply.  */
--	    ENTER;
--	    SvREFCNT_inc_void(SvRV(cv));
--	    /* newCONSTSUB takes a reference count on the passed in SV
--	       from us.  We set the name to NULL, otherwise we get into
--	       all sorts of fun as the reference to our new sub is
--	       donated to the GV that we're about to assign to.
--	    */
--	    SvRV_set(left, (SV *)newCONSTSUB(GvSTASH(right), NULL,
-+	    if (SvROK(cv)) {
-+		ENTER;
-+		SvREFCNT_inc_void(SvRV(cv));
-+		/* newCONSTSUB takes a reference count on the passed in SV
-+		   from us.  We set the name to NULL, otherwise we get into
-+		   all sorts of fun as the reference to our new sub is
-+		   donated to the GV that we're about to assign to.
-+		*/
-+		SvRV_set(left, (SV *)newCONSTSUB(GvSTASH(right), NULL,
- 						 SvRV(cv)));
--	    SvREFCNT_dec(cv);
--	    LEAVE;
-+		SvREFCNT_dec(cv);
-+		LEAVE;
-+	    } else {
-+		/* What can happen for the corner case *{"BONK"} = \&{"BONK"};
-+		   is that
-+		   First:   ops for \&{"BONK"}; return us the constant in the
-+			    symbol table
-+		   Second:  ops for *{"BONK"} cause that symbol table entry
-+			    (and our reference to it) to be upgraded from RV
-+			    to typeblob)
-+		   Thirdly: We get here. cv is actually PVGV now, and its
-+			    GvCV() is actually the subroutine we're looking for
-+
-+		   So change the reference so that it points to the subroutine
-+		   of that typeglob, as that's what they were after all along.
-+		*/
-+		GV *const upgraded = (GV *) cv;
-+		CV *const source = GvCV(upgraded);
-+
-+		assert(source);
-+		assert(CvFLAGS(source) & CVf_CONST);
-+
-+		SvREFCNT_inc_void(source);
-+		SvREFCNT_dec(upgraded);
-+		SvRV_set(left, (SV *)source);
-+	    }
- 	}
-+
-     }
-     SvSetMagicSV(right, left);
-     SETs(right);
-@@ -470,8 +496,11 @@ PP(pp_defined)
- 
- PP(pp_add)
- {
--    dVAR; dSP; dATARGET; bool useleft; tryAMAGICbin(add,opASSIGN);
--    useleft = USE_LEFT(TOPm1s);
-+    dVAR; dSP; dATARGET; bool useleft; SV *svl, *svr;
-+    tryAMAGICbin(add,opASSIGN);
-+    svl = sv_2num(TOPm1s);
-+    svr = sv_2num(TOPs);
-+    useleft = USE_LEFT(svl);
- #ifdef PERL_PRESERVE_IVUV
-     /* We must see if we can perform the addition with integers if possible,
-        as the integer code detects overflow while the NV code doesn't.
-@@ -519,8 +548,8 @@ PP(pp_add)
-        unsigned code below is actually shorter than the old code. :-)
-     */
- 
--    SvIV_please(TOPs);
--    if (SvIOK(TOPs)) {
-+    SvIV_please(svr);
-+    if (SvIOK(svr)) {
- 	/* Unless the left argument is integer in range we are going to have to
- 	   use NV maths. Hence only attempt to coerce the right argument if
- 	   we know the left is integer.  */
-@@ -536,12 +565,12 @@ PP(pp_add)
- 	       lots of code to speed up what is probably a rarish case.  */
- 	} else {
- 	    /* Left operand is defined, so is it IV? */
--	    SvIV_please(TOPm1s);
--	    if (SvIOK(TOPm1s)) {
--		if ((auvok = SvUOK(TOPm1s)))
--		    auv = SvUVX(TOPm1s);
-+	    SvIV_please(svl);
-+	    if (SvIOK(svl)) {
-+		if ((auvok = SvUOK(svl)))
-+		    auv = SvUVX(svl);
- 		else {
--		    register const IV aiv = SvIVX(TOPm1s);
-+		    register const IV aiv = SvIVX(svl);
- 		    if (aiv >= 0) {
- 			auv = aiv;
- 			auvok = 1;	/* Now acting as a sign flag.  */
-@@ -556,12 +585,12 @@ PP(pp_add)
- 	    bool result_good = 0;
- 	    UV result;
- 	    register UV buv;
--	    bool buvok = SvUOK(TOPs);
-+	    bool buvok = SvUOK(svr);
- 	
- 	    if (buvok)
--		buv = SvUVX(TOPs);
-+		buv = SvUVX(svr);
- 	    else {
--		register const IV biv = SvIVX(TOPs);
-+		register const IV biv = SvIVX(svr);
- 		if (biv >= 0) {
- 		    buv = biv;
- 		    buvok = 1;
-@@ -619,13 +648,14 @@ PP(pp_add)
-     }
- #endif
-     {
--	dPOPnv;
-+	NV value = SvNV(svr);
-+	(void)POPs;
- 	if (!useleft) {
- 	    /* left operand is undef, treat as zero. + 0.0 is identity. */
- 	    SETn(value);
- 	    RETURN;
- 	}
--	SETn( value + TOPn );
-+	SETn( value + SvNV(svl) );
- 	RETURN;
-     }
- }
-@@ -1005,6 +1035,8 @@ PP(pp_aassign)
- 		}
- 		TAINT_NOT;
- 	    }
-+	    if (PL_delaymagic & DM_ARRAY)
-+		SvSETMAGIC((SV*)ary);
- 	    break;
- 	case SVt_PVHV: {				/* normal hash */
- 		SV *tmpstr;
-@@ -1152,14 +1184,6 @@ PP(pp_aassign)
- 	    *relem++ = (lelem <= lastlelem) ? *lelem++ : &PL_sv_undef;
-     }
- 
--    /* This is done at the bottom and in this order because
--       mro_isa_changed_in() can throw exceptions */
--    if(PL_delayedisa) {
--        HV* stash = PL_delayedisa;
--        PL_delayedisa = NULL;
--        mro_isa_changed_in(stash);
--    }
--
-     RETURN;
- }
- 
-@@ -3019,7 +3043,7 @@ S_method_common(pTHX_ SV* meth, U32* hashp)
- 		packsv = sv;
-             else {
- 	        SV* const ref = newSViv(PTR2IV(stash));
--	        hv_store(PL_stashcache, packname, packlen, ref, 0);
-+	        (void)hv_store(PL_stashcache, packname, packlen, ref, 0);
- 	    }
- 	    goto fetch;
- 	}
-@@ -3077,16 +3101,24 @@ S_method_common(pTHX_ SV* meth, U32* hashp)
- 	}
- 	if (!sep || ((sep - name) == 5 && strnEQ(name, "SUPER", 5))) {
- 	    /* the method name is unqualified or starts with SUPER:: */
-+#ifndef USE_ITHREADS
-+	    if (sep)
-+		stash = CopSTASH(PL_curcop);
-+#else
- 	    bool need_strlen = 1;
- 	    if (sep) {
- 		packname = CopSTASHPV(PL_curcop);
- 	    }
--	    else if (stash) {
-+	    else
-+#endif
-+	    if (stash) {
- 		HEK * const packhek = HvNAME_HEK(stash);
- 		if (packhek) {
- 		    packname = HEK_KEY(packhek);
- 		    packlen = HEK_LEN(packhek);
-+#ifdef USE_ITHREADS
- 		    need_strlen = 0;
-+#endif
- 		} else {
- 		    goto croak;
- 		}
-@@ -3097,8 +3129,10 @@ S_method_common(pTHX_ SV* meth, U32* hashp)
- 		Perl_croak(aTHX_
- 			   "Can't use anonymous symbol table for method lookup");
- 	    }
--	    else if (need_strlen)
-+#ifdef USE_ITHREADS
-+	    if (need_strlen)
- 		packlen = strlen(packname);
-+#endif
- 
- 	}
- 	else {
 --- op.c
 +++ op.c
-@@ -363,10 +363,12 @@ Perl_allocmy(pTHX_ const char *const name)
-     {
- 	/* name[2] is true if strlen(name) > 2  */
- 	if (!isPRINT(name[1]) || strchr("\t\n\r\f", name[1])) {
--	    yyerror(Perl_form(aTHX_ "Can't use global %c^%c%s in \"my\"",
--			      name[0], toCTRL(name[1]), name + 2));
-+	    yyerror(Perl_form(aTHX_ "Can't use global %c^%c%s in \"%s\"",
-+			      name[0], toCTRL(name[1]), name + 2,
-+			      PL_parser->in_my == KEY_state ? "state" : "my"));
- 	} else {
--	    yyerror(Perl_form(aTHX_ "Can't use global %s in \"my\"",name));
-+	    yyerror(Perl_form(aTHX_ "Can't use global %s in \"%s\"",name,
-+			      PL_parser->in_my == KEY_state ? "state" : "my"));
- 	}
-     }
+@@ -873,6 +873,8 @@ Perl_scalarvoid(pTHX_ OP *o)
+     SV* sv;
+     U8 want;
  
-@@ -393,6 +395,12 @@ Perl_allocmy(pTHX_ const char *const name)
- 		    0, /*  not fake */
- 		    PL_parser->in_my == KEY_state
-     );
-+    /* anon sub prototypes contains state vars should always be cloned,
-+     * otherwise the state var would be shared between anon subs */
++    PerlIO_printf(Perl_debug_log, "XXXXX Perl_scalarvoid");
 +
-+    if (PL_parser->in_my == KEY_state && CvANON(PL_compcv))
-+	CvCLONE_on(PL_compcv);
-+
-     return off;
- }
+     /* trailing mad null ops don't count as "there" for void processing */
+     if (PL_madskills &&
+     	o->op_type != OP_NULL &&
+@@ -1270,6 +1272,7 @@ Perl_mod(pTHX_ OP *o, I32 type)
+     OP *kid;
+     /* -1 = error on localize, 0 = ignore localize, 1 = ok to localize */
+     int localize = -1;
++    PerlIO_printf(Perl_debug_log, "XXXXX Perl_mod");
  
-@@ -2810,7 +2818,7 @@ Perl_newMADsv(pTHX_ char key, SV* sv)
- }
- 
- MADPROP *
--Perl_newMADPROP(pTHX_ char key, char type, void* val, I32 vlen)
-+Perl_newMADPROP(pTHX_ char key, char type, const void* val, I32 vlen)
- {
-     MADPROP *mp;
-     Newxz(mp, 1, MADPROP);
-@@ -3966,12 +3974,14 @@ Perl_newASSIGNOP(pTHX_ I32 flags, OP *left, I32 optype, OP *right)
-     }
- 
-     if (is_list_assignment(left)) {
-+	static const char no_list_state[] = "Initialization of state variables"
-+	    " in list context currently forbidden";
- 	OP *curop;
- 
- 	PL_modcount = 0;
- 	/* Grandfathering $[ assignment here.  Bletch.*/
- 	/* Only simple assignments like C<< ($[) = 1 >> are allowed */
--	PL_eval_start = (left->op_type == OP_CONST) ? right : 0;
-+	PL_eval_start = (left->op_type == OP_CONST) ? right : NULL;
- 	left = mod(left, OP_AASSIGN);
- 	if (PL_eval_start)
- 	    PL_eval_start = 0;
-@@ -4059,6 +4069,54 @@ Perl_newASSIGNOP(pTHX_ I32 flags, OP *left, I32 optype, OP *right)
- 		o->op_private |= OPpASSIGN_COMMON;
- 	}
- 
-+	if ((left->op_type == OP_LIST
-+	     || (left->op_type == OP_NULL && left->op_targ == OP_LIST))) {
-+	    OP* lop = ((LISTOP*)left)->op_first;
-+	    while (lop) {
-+		if (lop->op_type == OP_PADSV ||
-+		    lop->op_type == OP_PADAV ||
-+		    lop->op_type == OP_PADHV ||
-+		    lop->op_type == OP_PADANY) {
-+		    if (lop->op_private & OPpPAD_STATE) {
-+			if (left->op_private & OPpLVAL_INTRO) {
-+			    /* Each variable in state($a, $b, $c) = ... */
-+			}
-+			else {
-+			    /* Each state variable in
-+			       (state $a, my $b, our $c, $d, undef) = ... */
-+			}
-+			yyerror(no_list_state);
-+		    } else {
-+			/* Each my variable in
-+			   (state $a, my $b, our $c, $d, undef) = ... */
-+		    }
-+		} else {
-+		    /* Other ops in the list. undef may be interesting in
-+		       (state $a, undef, state $c) */
-+		}
-+		lop = lop->op_sibling;
-+	    }
-+	}
-+	else if (((left->op_private & (OPpLVAL_INTRO | OPpPAD_STATE))
-+		    == (OPpLVAL_INTRO | OPpPAD_STATE))
-+		&& (   left->op_type == OP_PADSV
-+		    || left->op_type == OP_PADAV
-+		    || left->op_type == OP_PADHV
-+		    || left->op_type == OP_PADANY))
-+	{
-+	    /* All single variable list context state assignments, hence
-+	       state ($a) = ...
-+	       (state $a) = ...
-+	       state @a = ...
-+	       state (@a) = ...
-+	       (state @a) = ...
-+	       state %a = ...
-+	       state (%a) = ...
-+	       (state %a) = ...
-+	    */
-+	    yyerror(no_list_state);
-+	}
-+
- 	if (right && right->op_type == OP_SPLIT && !PL_madskills) {
- 	    OP* tmpop = ((LISTOP*)right)->op_first;
- 	    if (tmpop && (tmpop->op_type == OP_PUSHRE)) {
-@@ -4269,6 +4327,7 @@ S_new_logop(pTHX_ I32 type, I32 flags, OP** firstp, OP** otherp)
- 	    if ((o2->op_type == OP_PADSV || o2->op_type == OP_PADAV
- 			|| o2->op_type == OP_PADHV)
- 		&& o2->op_private & OPpLVAL_INTRO
-+		&& !(o2->op_private & OPpPAD_STATE)
- 		&& ckWARN(WARN_DEPRECATED))
- 	    {
- 		Perl_warner(aTHX_ packWARN(WARN_DEPRECATED),
-@@ -4878,6 +4937,11 @@ S_looks_like_bool(pTHX_ const OP *o)
- 	    	looks_like_bool(cLOGOPo->op_first)
- 	     && looks_like_bool(cLOGOPo->op_first->op_sibling));
- 
-+	case OP_NULL:
-+	    return (
-+		o->op_flags & OPf_KIDS
-+	    && looks_like_bool(cUNOPo->op_first));
-+
- 	case OP_ENTERSUB:
- 
- 	case OP_NOT:	case OP_XOR:
-@@ -4969,6 +5033,12 @@ void
- Perl_cv_undef(pTHX_ CV *cv)
+     if (!o || (PL_parser && PL_parser->error_count))
+ 	return o;
+@@ -1699,6 +1702,7 @@ Perl_doref(pTHX_ OP *o, I32 type, bool set_op_ref)
  {
      dVAR;
+     OP *kid;
++    PerlIO_printf(Perl_debug_log, "XXXXX Perl_doref");
+ 
+     if (!o || (PL_parser && PL_parser->error_count))
+ 	return o;
+@@ -1859,6 +1863,7 @@ S_apply_attrs_my(pTHX_ HV *stash, OP *target, OP *attrs, OP **imopsp)
+ 
+     if (!attrs)
+ 	return;
++    PerlIO_printf(Perl_debug_log, "XXXXX S_apply_attrs_my");
+ 
+     assert(target->op_type == OP_PADSV ||
+ 	   target->op_type == OP_PADHV ||
+@@ -1948,6 +1953,8 @@ S_my_kid(pTHX_ OP *o, OP *attrs, OP **imopsp)
+     dVAR;
+     I32 type;
+ 
++    PerlIO_printf(Perl_debug_log, "XXXXX S_my_kid");
 +
-+    DEBUG_X(PerlIO_printf(Perl_debug_log,
-+	  "CV undef: cv=0x%"UVxf" comppad=0x%"UVxf"\n",
-+	    PTR2UV(cv), PTR2UV(PL_comppad))
-+    );
-+
- #ifdef USE_ITHREADS
-     if (CvFILE(cv) && !CvISXSUB(cv)) {
- 	/* for XSUBs CvFILE point directly to static memory; __FILE__ */
-@@ -5515,7 +5585,8 @@ Perl_newATTRSUB(pTHX_ I32 floor, OP *o, OP *proto, OP *attrs, OP *block)
- 			   CopFILE(PL_curcop),
- 			   (long)PL_subline, (long)CopLINE(PL_curcop));
- 	    gv_efullname3(tmpstr, gv, NULL);
--	    hv_store(GvHV(PL_DBsub), SvPVX_const(tmpstr), SvCUR(tmpstr), sv, 0);
-+	    (void)hv_store(GvHV(PL_DBsub), SvPVX_const(tmpstr),
-+		    SvCUR(tmpstr), sv, 0);
- 	    hv = GvHVn(db_postponed);
- 	    if (HvFILL(hv) > 0 && hv_exists(hv, SvPVX_const(tmpstr), SvCUR(tmpstr))) {
- 		CV * const pcv = GvCV(db_postponed);
-@@ -5630,6 +5701,13 @@ Perl_newCONSTSUB(pTHX_ HV *stash, const char *name, SV *sv)
+     if (!o || (PL_parser && PL_parser->error_count))
+ 	return o;
  
-     ENTER;
+@@ -2026,6 +2033,7 @@ Perl_my_attrs(pTHX_ OP *o, OP *attrs)
+     dVAR;
+     OP *rops;
+     int maybe_scalar = 0;
++    PerlIO_printf(Perl_debug_log, "XXXXX Perl_my_attrs");
  
-+    if (IN_PERL_RUNTIME) {
-+	/* at runtime, it's not safe to manipulate PL_curcop: it may be
-+	 * an op shared between threads. Use a non-shared COP for our
-+	 * dirty work */
-+	 SAVEVPTR(PL_curcop);
-+	 PL_curcop = &PL_compiling;
-+    }
-     SAVECOPLINE(PL_curcop);
-     CopLINE_set(PL_curcop, PL_parser ? PL_parser->copline : NOLINE);
+ /* [perl #17376]: this appears to be premature, and results in code such as
+    C< our(%x); > executing in list mode rather than void mode */
+@@ -2198,6 +2206,7 @@ S_newDEFSVOP(pTHX)
+ {
+     dVAR;
+     const PADOFFSET offset = pad_findmy("$_");
++    PerlIO_printf(Perl_debug_log, "XXXXX S_newDEFSVOP");
+     if (offset == NOT_IN_PAD || PAD_COMPNAME_FLAGS_isOUR(offset)) {
+ 	return newSVREF(newGVOP(OP_GV, 0, PL_defgv));
+     }
+@@ -3389,6 +3398,7 @@ Perl_pmruntime(pTHX_ OP *o, OP *expr, bool isreg)
+     I32 repl_has_vars = 0;
+     OP* repl = NULL;
+     bool reglist;
++    PerlIO_printf(Perl_debug_log, "XXXXX Perl_pmruntime");
  
-@@ -6953,6 +7031,7 @@ Perl_ck_smartmatch(pTHX_ OP *o)
- OP *
+     if (o->op_type == OP_SUBST || o->op_type == OP_TRANS) {
+ 	/* last element in list is the replacement; pop it */
+@@ -3952,6 +3962,7 @@ Perl_newASSIGNOP(pTHX_ I32 flags, OP *left, I32 optype, OP *right)
+ {
+     dVAR;
+     OP *o;
++    PerlIO_printf(Perl_debug_log, "XXXXX Perl_newASSIGNOP");
+ 
+     if (optype) {
+ 	if (optype == OP_ANDASSIGN || optype == OP_ORASSIGN || optype == OP_DORASSIGN) {
+@@ -4214,6 +4225,7 @@ S_new_logop(pTHX_ I32 type, I32 flags, OP** firstp, OP** otherp)
+     OP *o;
+     OP *first = *firstp;
+     OP * const other = *otherp;
++    PerlIO_printf(Perl_debug_log, "XXXXX S_new_logop");
+ 
+     if (type == OP_XOR)		/* Not short circuit, but here by precedence. */
+ 	return newBINOP(type, flags, scalar(first), scalar(other));
+@@ -4636,6 +4648,7 @@ Perl_newFOROP(pTHX_ I32 flags, char *label, line_t forline, OP *sv, OP *expr, OP
+     I32 iterflags = 0;
+     I32 iterpflags = 0;
+     OP *madsv = NULL;
++    PerlIO_printf(Perl_debug_log, "XXXXX Perl_newFOROP");
+ 
+     if (sv) {
+ 	if (sv->op_type == OP_RV2SV) {	/* symbol table variable */
+@@ -5094,6 +5107,7 @@ Perl_op_const_sv(pTHX_ const OP *o, CV *cv)
+ {
+     dVAR;
+     SV *sv = NULL;
++    PerlIO_printf(Perl_debug_log, "XXXXX Perl_op_const_sv");
+ 
+     if (PL_madskills)
+ 	return NULL;
+@@ -5877,6 +5891,7 @@ OP *
+ Perl_oopsAV(pTHX_ OP *o)
+ {
+     dVAR;
++    PerlIO_printf(Perl_debug_log, "XXXXX Perl_oopsAV");
+     switch (o->op_type) {
+     case OP_PADSV:
+ 	o->op_type = OP_PADAV;
+@@ -5901,6 +5916,7 @@ OP *
+ Perl_oopsHV(pTHX_ OP *o)
+ {
+     dVAR;
++    PerlIO_printf(Perl_debug_log, "XXXXX Perl_oopsHV");
+     switch (o->op_type) {
+     case OP_PADSV:
+     case OP_PADAV:
+@@ -5975,6 +5991,7 @@ OP *
+ Perl_newSVREF(pTHX_ OP *o)
+ {
+     dVAR;
++    PerlIO_printf(Perl_debug_log, "XXXXX Perl_newSVREF");
+     if (o->op_type == OP_PADANY) {
+ 	o->op_type = OP_PADSV;
+ 	o->op_ppaddr = PL_ppaddr[OP_PADSV];
+@@ -6414,6 +6431,7 @@ Perl_ck_fun(pTHX_ OP *o)
+     dVAR;
+     const int type = o->op_type;
+     register I32 oa = PL_opargs[type] >> OASHIFT;
++    PerlIO_printf(Perl_debug_log, "XXXXX Perl_ck_fun");
+ 
+     if (o->op_flags & OPf_STACKED) {
+ 	if ((oa & OA_OPTIONAL) && (oa >> 4) && !((oa >> 4) & OA_OPTIONAL))
+@@ -6954,6 +6972,8 @@ OP *
  Perl_ck_sassign(pTHX_ OP *o)
  {
-+    dVAR;
      OP * const kid = cLISTOPo->op_first;
++        PerlIO_printf(Perl_debug_log, "XXXXX Perl_ck_sassign");
++
      /* has a disposable target? */
      if ((PL_opargs[kid->op_type] & OA_TARGLEX)
-@@ -6980,6 +7059,34 @@ Perl_ck_sassign(pTHX_ OP *o)
- 	    return kid;
- 	}
-     }
-+    if (kid->op_sibling) {
-+	OP *kkid = kid->op_sibling;
-+	if (kkid->op_type == OP_PADSV
-+		&& (kkid->op_private & OPpLVAL_INTRO)
-+		&& SvPAD_STATE(*av_fetch(PL_comppad_name, kkid->op_targ, FALSE))) {
-+	    const PADOFFSET target = kkid->op_targ;
-+	    OP *const other = newOP(OP_PADSV,
-+				    kkid->op_flags
-+				    | ((kkid->op_private & ~OPpLVAL_INTRO) << 8));
-+	    OP *const first = newOP(OP_NULL, 0);
-+	    OP *const nullop = newCONDOP(0, first, o, other);
-+	    OP *const condop = first->op_next;
-+	    /* hijacking PADSTALE for uninitialized state variables */
-+	    SvPADSTALE_on(PAD_SVl(target));
-+
-+	    condop->op_type = OP_ONCE;
-+	    condop->op_ppaddr = PL_ppaddr[OP_ONCE];
-+	    condop->op_targ = target;
-+	    other->op_targ = target;
-+
-+	    /* Because we change the type of the op here, we will skip the
-+	       assinment binop->op_last = binop->op_first->op_sibling; at the
-+	       end of Perl_newBINOP(). So need to do it here. */
-+	    cBINOPo->op_last = cBINOPo->op_first->op_sibling;
-+
-+	    return nullop;
-+	}
-+    }
-     return o;
- }
+ 	&& !(kid->op_flags & OPf_STACKED)
+@@ -7235,6 +7255,7 @@ Perl_ck_sort(pTHX_ OP *o)
+ {
+     dVAR;
+     OP *firstkid;
++        PerlIO_printf(Perl_debug_log, "XXXXX Perl_ck_sort");
  
-@@ -7117,6 +7224,8 @@ Perl_ck_require(pTHX_ OP *o)
- 	    SV * const sv = kid->op_sv;
- 	    U32 was_readonly = SvREADONLY(sv);
- 	    char *s;
-+	    STRLEN len;
-+	    const char *end;
+     if (o->op_type == OP_SORT && (PL_hints & HINT_LOCALIZE_HH) != 0) {
+ 	HV * const hinthv = GvHV(PL_hintgv);
+@@ -7473,6 +7494,7 @@ Perl_ck_subr(pTHX_ OP *o)
+     I32 contextclass = 0;
+     const char *e = NULL;
+     bool delete_op = 0;
++		        PerlIO_printf(Perl_debug_log, "XXXXX Perl_ck_subr");
  
- 	    if (was_readonly) {
- 		if (SvFAKE(sv)) {
-@@ -7128,14 +7237,17 @@ Perl_ck_require(pTHX_ OP *o)
- 		}
- 	    }   
- 
--	    for (s = SvPVX(sv); *s; s++) {
-+	    s = SvPVX(sv);
-+	    len = SvCUR(sv);
-+	    end = s + len;
-+	    for (; s < end; s++) {
- 		if (*s == ':' && s[1] == ':') {
--		    const STRLEN len = strlen(s+2)+1;
- 		    *s = '/';
--		    Move(s+2, s+1, len, char);
--		    SvCUR_set(sv, SvCUR(sv) - 1);
-+		    Move(s+2, s+1, end - s - 1, char);
-+		    --end;
- 		}
- 	    }
-+	    SvEND_set(sv, end);
- 	    sv_catpvs(sv, ".pm");
- 	    SvFLAGS(sv) |= was_readonly;
- 	}
-@@ -7978,6 +8090,7 @@ Perl_peep(pTHX_ register OP *o)
- 	case OP_DORASSIGN:
- 	case OP_COND_EXPR:
- 	case OP_RANGE:
-+	case OP_ONCE:
- 	    while (cLOGOP->op_other->op_type == OP_NULL)
- 		cLOGOP->op_other = cLOGOP->op_other->op_next;
- 	    peep(cLOGOP->op_other); /* Recursive calls are not replaced by fptr calls */
---- opnames.h
-+++ opnames.h
-@@ -375,11 +375,12 @@ typedef enum opcode {
- 	OP_GETLOGIN,	/* 357 */
- 	OP_SYSCALL,	/* 358 */
- 	OP_LOCK,	/* 359 */
--	OP_CUSTOM,	/* 360 */
-+	OP_ONCE,	/* 360 */
-+	OP_CUSTOM,	/* 361 */
- 	OP_max		
- } opcode;
- 
--#define MAXO 361
-+#define MAXO 362
- #define OP_phoney_INPUT_ONLY -1
- #define OP_phoney_OUTPUT_ONLY -2
- 
+     o->op_private |= OPpENTERSUB_HASTARG;
+     for (cvop = o2; cvop->op_sibling; cvop = cvop->op_sibling) ;
+@@ -8092,6 +8114,7 @@ Perl_peep(pTHX_ register OP *o)
+ 		rop = (UNOP*)rop->op_first;
+ 	    else {
+ 		/* @{$hash}{qw(keys here)} */
++		PerlIO_printf(Perl_debug_log, "XXXXX @{$hash}{qw(keys here)}");
+ 		if (rop->op_first->op_type == OP_SCOPE 
+ 		    && cLISTOPx(rop->op_first)->op_last->op_type == OP_PADSV)
+ 		{
 PATCH
 }
 

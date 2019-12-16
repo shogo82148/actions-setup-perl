@@ -228,7 +228,7 @@ jobs:
         if: startsWith(github.ref, 'refs/heads/releases/')
         run: |
           Set-Location ${env:RUNNER_TEMP}
-          Invoke-WebRequest -Uri https://github.com/shogo82148/s3cli-mini/releases/download/v0.0.2/s3cli-mini_windows_amd64.zip -OutFile s3cli-mini.zip
+          Invoke-WebRequest -Uri https://github.com/shogo82148/s3cli-mini/releases/download/v0.0.3/s3cli-mini_windows_amd64.zip -OutFile s3cli-mini.zip
           7z x s3cli-mini.zip
           $pkg = Get-Content "${env:GITHUB_WORKSPACE}/package.json" -Encoding UTF8 -Raw | ConvertFrom-Json
           $version = $pkg.version

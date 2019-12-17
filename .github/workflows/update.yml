@@ -63,3 +63,46 @@ jobs:
         with:
           name: cpanfile.snapshot-windows
           path: scripts/windows/cpanfile.snapshot
+
+  commit:
+    runs-on: ubuntu-latest
+    needs:
+      - linux
+      - darwin
+      - windows
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: download cpanfile.snapshot for linux
+        uses: actions/download-artifact@v1
+        with:
+          name: cpanfile.snapshot-linux
+          path: scripts/linux/cpanfile.snapshot
+      - name: download cpanfile.snapshot for darwin
+        uses: actions/download-artifact@v1
+        with:
+          name: cpanfile.snapshot-darwin
+          path: scripts/darwin/cpanfile.snapshot
+      - name: download cpanfile.snapshot for windows
+        uses: actions/download-artifact@v1
+        with:
+          name: cpanfile.snapshot-windows
+          path: scripts/windows/cpanfile.snapshot
+
+      - name: commit
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          branch=update-$(date +"%Y-%m-%d-%H-%M-%S")
+          git config --global user.name "Ichinose Shogo"
+          git config --global user.email shogo82148@gmail.com
+          git switch -c $branch
+          git add .
+          git commit -m "Update cpanfile.snapshot $(date +"%Y-%m-%d %H:%M:%S")" || exit 0
+          header=$(echo -n "${GITHUB_ACTOR}:${GITHUB_TOKEN}" | base64)
+          git -c http.extraheader="AUTHORIZATION: basic $header" push -u origin $branch
+          curl -H "Authorization: token $GITHUB_TOKEN" \
+            -d "$(jq --arg branch $branch -n '{ "title": "Auto Update", "base": "master", "head": $branch }')" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls"
+  

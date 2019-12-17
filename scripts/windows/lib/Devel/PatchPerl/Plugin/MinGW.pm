@@ -561,9 +561,27 @@ PATCH
 PATCH
 }
 
+sub _write_gnumakefile {
+    my ($version, $makefile) = @_;
+    my @v = split /[.]/, $version;
+    $makefile =~ s/__INST_VER__/$version/g;
+    $makefile =~ s/__PERL_MINOR_VERSION__/$v[0]$v[1]/g;
+    $makefile =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
+    _write_or_die(File::Spec->catfile("win32", "GNUmakefile"), $makefile);
+}
+
+sub _patch_gnumakefile {
+    my ($version, $makefile) = @_;
+    my @v = split /[.]/, $version;
+    $makefile =~ s/__INST_VER__/$version/g;
+    $makefile =~ s/__PERL_MINOR_VERSION__/$v[0]$v[1]/g;
+    $makefile =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
+    _patch($makefile);
+}
+
 sub _patch_gnumakefile_522 {
     my $version = shift;
-    my $makefile = <<'MAKEFILE';
+    _write_gnumakefile(<<'MAKEFILE');
 #
 # Makefile to build perl on Windows using GMAKE.
 # Supported compilers:
@@ -1616,11 +1634,6 @@ $(UNIDATAFILES) : ..\pod\perluniprops.pod
 ..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(HAVEMINIPERL) ..\lib\unicore\mktables Extensions_nonxs
 	$(MINIPERL) -I..\lib ..\lib\unicore\mktables -C ..\lib\unicore -P ..\pod -maketest -makelist -p
 MAKEFILE
-    my @v = split /[.]/, $version;
-    $makefile =~ s/__INST_VER__/$version/g;
-    $makefile =~ s/__PERL_MINOR_VERSION__/$v[0]$v[1]/g;
-    $makefile =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
-    _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
 }
 
 sub _patch_sdbm {
@@ -2144,7 +2157,7 @@ PATCH
 
 sub _patch_gnumakefile_521_1 {
     my $version = shift;
-    my $makefile = <<'MAKEFILE';
+    _write_gnumakefile($version, <<'MAKEFILE');
 #
 # Makefile to build perl on Windows using GMAKE.
 # Supported compilers:
@@ -3211,19 +3224,11 @@ $(UNIDATAFILES) : ..\pod\perluniprops.pod
 ..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(HAVEMINIPERL) ..\lib\unicore\mktables Extensions_nonxs
 	$(MINIPERL) -I..\lib ..\lib\unicore\mktables -C ..\lib\unicore -P ..\pod -maketest -makelist -p
 MAKEFILE
-    my @v = split /[.]/, $version;
-    $makefile =~ s/__INST_VER__/$version/g;
-    $makefile =~ s/__PERL_MINOR_VERSION__/$v[0]$v[1]/g;
-    $makefile =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
-    if ($v[2] >= 10) {
-        $makefile =~ s/\\mro\./\\mro_core./g;
-    }
-    _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
 }
 
 sub _patch_gnumakefile_520 {
     my $version = shift;
-    my $makefile = <<'MAKEFILE';
+    _write_gnumakefile($version, <<'MAKEFILE');
 #
 # Makefile to build perl on Windows using GMAKE.
 # Supported compilers:
@@ -4326,14 +4331,6 @@ $(UNIDATAFILES) : ..\pod\perluniprops.pod
 ..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(HAVEMINIPERL) ..\lib\unicore\mktables Extensions_nonxs
 	$(MINIPERL) -I..\lib ..\lib\unicore\mktables -C ..\lib\unicore -P ..\pod -maketest -makelist -p
 MAKEFILE
-    my @v = split /[.]/, $version;
-    $makefile =~ s/__INST_VER__/$version/g;
-    $makefile =~ s/__PERL_MINOR_VERSION__/$v[0]$v[1]/g;
-    $makefile =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
-    if ($version =~ /^5\.21\./) {
-        $makefile =~ s/\s+\.\.\\utils\\config_data\s*\\//;
-    }
-    _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
 }
 
 sub _patch_convert_errno_to_wsa_error {
@@ -4477,7 +4474,7 @@ PATCH
 
 sub _patch_gnumakefile_518 {
     my $version = shift;
-    my $makefile = <<'MAKEFILE';
+    _write_gnumakefile($version, <<'MAKEFILE');
 #
 # Makefile to build perl on Windows using GMAKE.
 # Supported compilers:
@@ -5574,41 +5571,6 @@ $(UNIDATAFILES) : ..\pod\perluniprops.pod
 ..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(HAVEMINIPERL) ..\lib\unicore\mktables Extensions_nonxs
 	$(MINIPERL) -I..\lib $(ICWD) ..\lib\unicore\mktables -C ..\lib\unicore -P ..\pod -maketest -makelist -p
 MAKEFILE
-    my @v = split /[.]/, $version;
-    $makefile =~ s/__INST_VER__/$version/g;
-    $makefile =~ s/__PERL_MINOR_VERSION__/$v[0]$v[1]/g;
-    $makefile =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
-
-    # builds fail from v5.19.2 to v5.19.11
-    # I'll try them later
-    if ($version =~ /^5\.19\./) {
-        $makefile =~ s/\s+\.\.\\utils\\cpanp-run-perl\s*\\//;
-        $makefile =~ s/\s+\.\.\\utils\\cpanp\s*\\//;
-        $makefile =~ s/\s+\.\.\\utils\\cpan2dist\s*\\//;
-    }
-    if (version->parse($version) >= version->parse("v5.19.8")) {
-        $makefile =~ s/\s+\.\.\\perlsfio\.h\s*\\//;
-    }
-    if (version->parse($version) >= version->parse("v5.19.6")) {
-        $makefile =~ s/^\s*MICROCORE_SRC\s*=.*$/MICROCORE_SRC = ..\\caretx.c \\/;
-    }
-    if (version->parse($version) >= version->parse("v5.19.4")) {
-        $makefile =~ s/^\s*CORE_NOCFG_H\s*=.*$/CORE_NOCFG_H = .\\include\\sys\\errno2.h \\/;
-    }
-    if (version->parse($version) >= version->parse("v5.19.2")) {
-        $makefile =~ s/^MINIMOD\s*=.*$//;
-        $makefile =~ s/\$\(MINIMOD\)//g;
-        $makefile =~ s/^.*minimod.pl.*$//g;
-        $makefile =~ s/^ICWD\s*=.*$//;
-        $makefile =~ s/\$\(ICWD\)//g;
-        $makefile =~ s/^\s*utils\s*:.*$/\$(PERLEXE) $(X2P) ..\\utils\\Makefile/;
-    }
-    if (version->parse($version) >= version->parse("v5.19.1")) {
-        $makefile =~ s/\$\(MINIPERL\)\s+-I\.\.\\lib\s+-f\s+\.\.\\write_buildcustomize\.pl\s+.*/\$(MINIPERL) -I..\\lib -f ..\\write_buildcustomize.pl ../;
-        $makefile =~ s/copy\s+\.\.\\README\.dgux\s+\.\.\\pod\\perldgux\.pod//;
-    }
-
-    _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
 }
 
 sub _patch_errno {
@@ -5686,7 +5648,7 @@ PATCH
 
 sub _patch_gnumakefile_516 {
     my $version = shift;
-    my $makefile = <<'MAKEFILE';
+    _write_gnumakefile($version, <<'MAKEFILE');
 #
 # Makefile to build perl on Windows using GMAKE.
 # Supported compilers:
@@ -6787,17 +6749,11 @@ $(UNIDATAFILES) : ..\pod\perluniprops.pod
 ..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(HAVEMINIPERL) ..\lib\unicore\mktables Extensions_nonxs
 	$(MINIPERL) -I..\lib $(ICWD) ..\lib\unicore\mktables -C ..\lib\unicore -P ..\pod -maketest -makelist -p
 MAKEFILE
-    my @v = split /[.]/, $version;
-    $makefile =~ s/__INST_VER__/$version/g;
-    $makefile =~ s/__PERL_MINOR_VERSION__/$v[0]$v[1]/g;
-    $makefile =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
-
-    _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
 }
 
 sub _patch_gnumakefile_514 {
     my $version = shift;
-    my $makefile = <<'MAKEFILE';
+    _write_gnumakefile($version, <<'MAKEFILE');
 #
 # Makefile to build perl on Windows using GMAKE.
 # Supported compilers:
@@ -7897,12 +7853,6 @@ $(UNIDATAFILES) : ..\pod\perluniprops.pod
 ..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(HAVEMINIPERL) ..\lib\unicore\mktables Extensions_nonxs
 	$(MINIPERL) -I..\lib $(ICWD) ..\lib\unicore\mktables -C ..\lib\unicore -P ..\pod -maketest -makelist -p
 MAKEFILE
-    my @v = split /[.]/, $version;
-    $makefile =~ s/__INST_VER__/$version/g;
-    $makefile =~ s/__PERL_MINOR_VERSION__/$v[0]$v[1]/g;
-    $makefile =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
-
-    _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
 }
 
 sub _patch_socket_h {
@@ -9066,17 +9016,11 @@ $(UNIDATAFILES) : ..\pod\perluniprops.pod
 ..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(HAVEMINIPERL) ..\lib\unicore\mktables Extensions_nonxs
 	$(MINIPERL) -I..\lib $(ICWD) ..\lib\unicore\mktables -C ..\lib\unicore -P ..\pod -maketest -makelist -p
 MAKEFILE
-    my @v = split /[.]/, $version;
-    $makefile =~ s/__INST_VER__/$version/g;
-    $makefile =~ s/__PERL_MINOR_VERSION__/$v[0]$v[1]/g;
-    $makefile =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
-
-    _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
 
     if (version->parse("v$version") >= version->parse("v5.13.4")) {
-        _patch(<<'PATCH');
---- win32/GNUMakefile
-+++ win32/GNUMakefile
+        _patch_gnumakefile(<<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
 @@ -712,7 +712,7 @@
  		"ARCHPREFIX=$(ARCHPREFIX)"		\
  		"WIN64=$(WIN64)"
@@ -9090,9 +9034,9 @@ PATCH
     }
 
     if (version->parse("v$version") >= version->parse("v5.13.6")) {
-        _patch(<<'PATCH');
---- win32/GNUMakefile
-+++ win32/GNUMakefile
+        _patch_gnumakefile(<<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
 @@ -457,13 +457,6 @@
  		..\utils\cpan2dist	\
  		..\utils\shasum		\
@@ -9123,7 +9067,7 @@ PATCH
 
 sub _patch_gnumakefile_510 {
     my $version = shift;
-    my $makefile = <<'MAKEFILE';
+    _write_gnumakefile($version, <<'MAKEFILE');
 #
 # Makefile to build perl on Windows using GMAKE.
 # Supported compilers:
@@ -10304,17 +10248,11 @@ inst_lib : $(CONFIGPM)
 $(UNIDATAFILES) : $(HAVEMINIPERL) $(CONFIGPM) ..\lib\unicore\mktables
 	cd ..\lib\unicore && ..\$(MINIPERL) -I.. mktables -check $@ $(FIRSTUNIFILE)
 MAKEFILE
-    my @v = split /[.]/, $version;
-    $makefile =~ s/__INST_VER__/$version/g;
-    $makefile =~ s/__PERL_MINOR_VERSION__/$v[0]$v[1]/g;
-    $makefile =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
-
-    _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
 
     if (version->parse("v$version") >= version->parse("v5.10.1")) {
-        my $patch = <<'PATCH';
---- win32/GNUMakefile	2019-12-10 07:47:55.000000000 +0900
-+++ win32/GNUMakefile	2019-12-10 08:45:36.000000000 +0900
+        _patch_gnumakefile(<<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
 @@ -487,7 +487,6 @@
  		..\utils\cpan2dist	\
  		..\utils\shasum		\
@@ -10412,10 +10350,6 @@ MAKEFILE
  	copy ..\README.win32    ..\pod\perlwin32.pod
  	copy ..\pod\perl__PERL_VERSION__delta.pod ..\pod\perldelta.pod
 PATCH
-        $patch =~ s/__INST_VER__/$version/g;
-        $patch =~ s/__PERL_MINOR_VERSION__/$v[0]$v[1]/g;
-        $patch =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
-        _patch($patch);
     }
 }
 
@@ -10468,7 +10402,7 @@ PATCH
 
 sub _patch_gnumakefile_509 {
     my $version = shift;
-    my $makefile = <<'MAKEFILE';
+    _write_gnumakefile($version, <<'MAKEFILE');
 #
 # Makefile to build perl on Windows using GMAKE.
 # Supported compilers:
@@ -11469,12 +11403,6 @@ inst_lib : $(CONFIGPM)
 $(UNIDATAFILES) : $(HAVEMINIPERL) $(CONFIGPM) ..\lib\unicore\mktables
 	cd ..\lib\unicore && ..\$(MINIPERL) -Dtls -I..\lib mktables -check $@ $(FIRSTUNIFILE)
 MAKEFILE
-    my @v = split /[.]/, $version;
-    $makefile =~ s/__INST_VER__/$version/g;
-    $makefile =~ s/__PERL_MINOR_VERSION__/$v[0]$v[1]/g;
-    $makefile =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
-
-    _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
 
 	_patch(<<'PATCH');
 --- op.c
@@ -11647,7 +11575,7 @@ PATCH
 
 sub _patch_gnumakefile_508 {
     my $version = shift;
-    my $makefile = <<'MAKEFILE';
+    _write_gnumakefile($version, <<'MAKEFILE');
 #
 # Makefile to build perl on Windows using GMAKE.
 # Supported compilers:
@@ -12694,12 +12622,6 @@ installhtml : doc
 inst_lib : $(CONFIGPM)
 	$(RCOPY) ..\lib $(INST_LIB)\$(NULL)
 MAKEFILE
-    my @v = split /[.]/, $version;
-    $makefile =~ s/__INST_VER__/$version/g;
-    $makefile =~ s/__PERL_MINOR_VERSION__/$v[0]$v[1]/g;
-    $makefile =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
-
-    _write_or_die(File::Spec->catfile("win32", "GNUMakefile"), $makefile);
 }
 
 1;

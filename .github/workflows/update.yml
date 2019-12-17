@@ -105,4 +105,3 @@ jobs:
           curl -H "Authorization: token $GITHUB_TOKEN" \
             -d "$(jq --arg branch $branch -n '{ "title": "Auto Update", "base": "master", "head": $branch }')" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls"
-  

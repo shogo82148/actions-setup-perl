@@ -11538,7 +11538,7 @@ $(PERLIMPLIB) : perldll.def
 	$(IMPLIB) -k -d perldll.def -l $(PERLIMPLIB) -e $(PERLEXPLIB)
 
 $(PERLDLL): perldll.def $(PERLDLL_OBJ) $(PERLDLL_RES)
-	$(LINK32) -mdll -o $@ $(BLINK_FLAGS) $(LIBFILES) $(PERLDLL_OBJ) $(PERLDLL_RES)
+	$(LINK32) -mdll -o $@ $(BLINK_FLAGS) $(PERLDLL_OBJ) $(PERLDLL_RES) $(LIBFILES) $(PERLEXPLIB)
 
 $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
 	cd .. && miniperl.exe minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32

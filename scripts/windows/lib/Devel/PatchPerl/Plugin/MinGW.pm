@@ -12383,6 +12383,149 @@ config.w32 : $(CFGSH_TMPL)
 
 $(MINIDIR)\.exists :
 	if not exist "$(MINIDIR)" mkdir "$(MINIDIR)"
+	copy $(CFGH_TMPL) config.h
+	@(echo.&& \
+	echo #ifndef _config_h_footer_&& \
+	echo #define _config_h_footer_&& \
+	echo #undef PTRSIZE&& \
+	echo #undef SSize_t&& \
+	echo #undef HAS_ATOLL&& \
+	echo #undef HAS_STRTOLL&& \
+	echo #undef HAS_STRTOULL&& \
+	echo #undef Size_t_size&& \
+	echo #undef IVTYPE&& \
+	echo #undef UVTYPE&& \
+	echo #undef IVSIZE&& \
+	echo #undef UVSIZE&& \
+	echo #undef NV_PRESERVES_UV&& \
+	echo #undef NV_PRESERVES_UV_BITS&& \
+	echo #undef IVdf&& \
+	echo #undef UVuf&& \
+	echo #undef UVof&& \
+	echo #undef UVxf&& \
+	echo #undef UVXf&& \
+	echo #undef USE_64_BIT_INT&& \
+	echo #undef Gconvert&& \
+	echo #undef HAS_FREXPL&& \
+	echo #undef HAS_ISNANL&& \
+	echo #undef HAS_MODFL&& \
+	echo #undef HAS_MODFL_PROTO&& \
+	echo #undef HAS_SQRTL&& \
+	echo #undef HAS_STRTOLD&& \
+	echo #undef PERL_PRIfldbl&& \
+	echo #undef PERL_PRIgldbl&& \
+	echo #undef PERL_PRIeldbl&& \
+	echo #undef PERL_SCNfldbl&& \
+	echo #undef NVTYPE&& \
+	echo #undef NVSIZE&& \
+	echo #undef LONG_DOUBLESIZE&& \
+	echo #undef NV_OVERFLOWS_INTEGERS_AT&& \
+	echo #undef NVef&& \
+	echo #undef NVff&& \
+	echo #undef NVgf&& \
+	echo #undef USE_LONG_DOUBLE)>> config.h
+ifeq ($(WIN64),define)
+	@(echo #define PTRSIZE ^8&& \
+	echo #define SSize_t $(INT64)&& \
+	echo #define HAS_ATOLL&& \
+	echo #define HAS_STRTOLL&& \
+	echo #define HAS_STRTOULL&& \
+	echo #define Size_t_size ^8)>> config.h
+else
+	@(echo #define PTRSIZE ^4&& \
+	echo #define SSize_t int&& \
+	echo #undef HAS_ATOLL&& \
+	echo #undef HAS_STRTOLL&& \
+	echo #undef HAS_STRTOULL&& \
+	echo #define Size_t_size ^4)>> config.h
+endif
+ifeq ($(USE_64_BIT_INT),define)
+	@(echo #define IVTYPE $(INT64)&& \
+	echo #define UVTYPE unsigned $(INT64)&& \
+	echo #define IVSIZE ^8&& \
+	echo #define UVSIZE ^8)>> config.h
+ifeq ($(USE_LONG_DOUBLE),define)
+	@(echo #define NV_PRESERVES_UV&& \
+	echo #define NV_PRESERVES_UV_BITS 64)>> config.h
+else
+	@(echo #undef NV_PRESERVES_UV&& \
+	echo #define NV_PRESERVES_UV_BITS 53)>> config.h
+endif
+	@(echo #define IVdf "I64d"&& \
+	echo #define UVuf "I64u"&& \
+	echo #define UVof "I64o"&& \
+	echo #define UVxf "I64x"&& \
+	echo #define UVXf "I64X"&& \
+	echo #define USE_64_BIT_INT)>> config.h
+else
+	@(echo #define IVTYPE long&& \
+	echo #define UVTYPE unsigned long&& \
+	echo #define IVSIZE ^4&& \
+	echo #define UVSIZE ^4&& \
+	echo #define NV_PRESERVES_UV&& \
+	echo #define NV_PRESERVES_UV_BITS 32&& \
+	echo #define IVdf "ld"&& \
+	echo #define UVuf "lu"&& \
+	echo #define UVof "lo"&& \
+	echo #define UVxf "lx"&& \
+	echo #define UVXf "lX"&& \
+	echo #undef USE_64_BIT_INT)>> config.h
+endif
+ifeq ($(USE_LONG_DOUBLE),define)
+	@(echo #define Gconvert^(x,n,t,b^) sprintf^(^(b^),"%%.*""Lg",^(n^),^(x^)^)&& \
+	echo #define HAS_FREXPL&& \
+	echo #define HAS_ISNANL&& \
+	echo #define HAS_MODFL&& \
+	echo #define HAS_MODFL_PROTO&& \
+	echo #define HAS_SQRTL&& \
+	echo #define HAS_STRTOLD&& \
+	echo #define PERL_PRIfldbl "Lf"&& \
+	echo #define PERL_PRIgldbl "Lg"&& \
+	echo #define PERL_PRIeldbl "Le"&& \
+	echo #define PERL_SCNfldbl "Lf"&& \
+	echo #define NVTYPE long double)>> config.h
+ifeq ($(WIN64),define)
+	@(echo #define NVSIZE ^16&& \
+	echo #define LONG_DOUBLESIZE ^16)>> config.h
+else
+	@(echo #define NVSIZE ^12&& \
+	echo #define LONG_DOUBLESIZE ^12)>> config.h
+endif
+	@(echo #define NV_OVERFLOWS_INTEGERS_AT 256.0*256.0*256.0*256.0*256.0*256.0*256.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0&& \
+	echo #define NVef "Le"&& \
+	echo #define NVff "Lf"&& \
+	echo #define NVgf "Lg"&& \
+	echo #define USE_LONG_DOUBLE)>> config.h
+else
+	@(echo #define Gconvert^(x,n,t,b^) sprintf^(^(b^),"%%.*g",^(n^),^(x^)^)&& \
+	echo #undef HAS_FREXPL&& \
+	echo #undef HAS_ISNANL&& \
+	echo #undef HAS_MODFL&& \
+	echo #undef HAS_MODFL_PROTO&& \
+	echo #undef HAS_SQRTL&& \
+	echo #undef HAS_STRTOLD&& \
+	echo #undef PERL_PRIfldbl&& \
+	echo #undef PERL_PRIgldbl&& \
+	echo #undef PERL_PRIeldbl&& \
+	echo #undef PERL_SCNfldbl&& \
+	echo #define NVTYPE double&& \
+	echo #define NVSIZE ^8&& \
+	echo #define LONG_DOUBLESIZE ^8&& \
+	echo #define NV_OVERFLOWS_INTEGERS_AT 256.0*256.0*256.0*256.0*256.0*256.0*2.0*2.0*2.0*2.0*2.0&& \
+	echo #define NVef "e"&& \
+	echo #define NVff "f"&& \
+	echo #define NVgf "g"&& \
+	echo #undef USE_LONG_DOUBLE)>> config.h
+endif
+ifeq ($(USE_CPLUSPLUS),define)
+	@(echo #define USE_CPLUSPLUS&& \
+	echo #endif)>> config.h
+else
+	@(echo #undef USE_CPLUSPLUS&& \
+	echo #endif)>> config.h
+endif
+#separate line since this is sentinal that this target is done
+	rem. > $(MINIDIR)\.exists
 
 $(CONFIGPM) : $(HAVEMINIPERL) ..\config.sh config_h.PL ..\minimod.pl
 	cd .. && miniperl.exe -Ilib configpm

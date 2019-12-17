@@ -164,6 +164,7 @@ my @patch = (
             qr/^5\.8\./,
         ],
         subs => [
+            [ \&_patch_config ],
             [ \&_patch_gnumakefile_508 ],
         ],
     },
@@ -12622,6 +12623,43 @@ installhtml : doc
 inst_lib : $(CONFIGPM)
 	$(RCOPY) ..\lib $(INST_LIB)\$(NULL)
 MAKEFILE
+}
+
+sub _patch_config {
+    my $version = shift;
+    _patch(<<'PATCH');
+diff --git a/win32/config_H.gc b/win32/config_H.gc
+index 2c2d8a43c0..944b538a3f 100644
+--- a/win32/config_H.gc
++++ b/win32/config_H.gc
+@@ -3849,21 +3849,15 @@
+  *	Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
+  *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.
+  */
+-/*#define HAS_QUAD	/**/
+-#ifdef HAS_QUAD
+-#   ifndef _MSC_VER
+-#	define Quad_t long long	/**/
+-#	define Uquad_t unsigned long long	/**/
+-#   else
+-#	define Quad_t __int64	/**/
+-#	define Uquad_t unsigned __int64	/**/
+-#   endif
+-#   define QUADKIND 5	/**/
++#define HAS_QUAD
++#   define Quad_t long long	/**/
++#   define Uquad_t unsigned long long	/**/
++#   define QUADKIND 3	/**/
+ #   define QUAD_IS_INT	1
+ #   define QUAD_IS_LONG	2
+ #   define QUAD_IS_LONG_LONG	3
+ #   define QUAD_IS_INT64_T	4
+-#endif
++#   define QUAD_IS___INT64	5
+ 
+ /* IVTYPE:
+  *	This symbol defines the C type used for Perl's IV.
+PATCH
 }
 
 1;

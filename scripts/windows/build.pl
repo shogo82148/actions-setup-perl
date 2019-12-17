@@ -54,10 +54,10 @@ sub run {
     my $version = $ENV{PERL_VERSION};
     my $url = perl_release($version);
 
-    my $tmpdir = $ENV{RUNNER_TEMP};
     $url =~ m/\/(perl-.*)$/;
     my $filename = $1;
-    my $install_dir = File::Spec->catdir($ENV{RUNNER_TOOL_CACHE}, "perl", $version, "x64");
+    my $tmpdir = $ENV{RUNNER_TEMP} || File::Spec->catdir(File::Spec->curdir(), "tmp");
+    my $install_dir = File::Spec->catdir($ENV{RUNNER_TOOL_CACHE} || $tmpdir, "perl", $version, "x64");
 
     group "downloading perl $version from $url" => sub {
         my $ua = LWP::UserAgent->new;

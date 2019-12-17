@@ -73,6 +73,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      - name: cleanup
+        run: |
+          rm -f scripts/linux/cpanfile.snapshot
+          rm -f scripts/darwin/cpanfile.snapshot
+          rm -f scripts/windows/cpanfile.snapshot
 
       - name: download cpanfile.snapshot for linux
         uses: actions/download-artifact@v1

@@ -12628,10 +12628,8 @@ MAKEFILE
 sub _patch_config {
     my $version = shift;
     _patch(<<'PATCH');
-diff --git a/win32/config_H.gc b/win32/config_H.gc
-index 2c2d8a43c0..944b538a3f 100644
---- a/win32/config_H.gc
-+++ b/win32/config_H.gc
+--- win32/config_H.gc
++++ win32/config_H.gc
 @@ -3849,21 +3849,15 @@
   *	Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
   *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.

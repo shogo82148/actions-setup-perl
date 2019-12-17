@@ -11537,7 +11537,7 @@ $(PERLEXPLIB) : $(PERLIMPLIB)
 $(PERLIMPLIB) : perldll.def
 	$(IMPLIB) -k -d perldll.def -l $(PERLIMPLIB) -e $(PERLEXPLIB)
 
-$(PERLDLL): perldll.def $(PERLDLL_OBJ) $(PERLDLL_RES)
+$(PERLDLL): perldll.def $(PERLEXPLIB) $(PERLDLL_OBJ) $(PERLDLL_RES)
 	$(LINK32) -mdll -o $@ $(BLINK_FLAGS) $(PERLDLL_OBJ) $(PERLDLL_RES) $(LIBFILES) $(PERLEXPLIB)
 
 $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl

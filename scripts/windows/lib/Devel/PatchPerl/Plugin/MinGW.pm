@@ -11537,8 +11537,19 @@ $(PERLEXPLIB) : $(PERLIMPLIB)
 $(PERLIMPLIB) : perldll.def
 	$(IMPLIB) -k -d perldll.def -l $(PERLIMPLIB) -e $(PERLEXPLIB)
 
-$(PERLDLL): perldll.def $(PERLEXPLIB) $(PERLDLL_OBJ) $(PERLDLL_RES)
-	$(LINK32) -mdll -o $@ $(BLINK_FLAGS) $(PERLDLL_OBJ) $(PERLDLL_RES) $(LIBFILES) $(PERLEXPLIB)
+$(PERLDLL): perldll.def $(PERLEXPLIB) $(PERLDLL_OBJ) Extensions_static
+	$(LINK32) -mdll -o $@ $(BLINK_FLAGS) \
+	   $(PERLDLL_OBJ) $(shell type Extensions_static) $(LIBFILES) $(PERLEXPLIB)
+
+$(PERLSTATICLIB): $(PERLDLL_OBJ) Extensions_static
+	$(LIB32) $(LIB_FLAGS) $@ $(PERLDLL_OBJ)
+	if exist $(STATICDIR) rmdir /s /q $(STATICDIR)
+	for %%i in ($(shell type Extensions_static)) do \
+		@mkdir $(STATICDIR) && cd $(STATICDIR) && \
+		$(ARCHPREFIX)ar x ..\%%i && \
+		$(ARCHPREFIX)ar q ..\$@ *$(o) && \
+		cd .. && rmdir /s /q $(STATICDIR)
+	$(XCOPY) $(PERLSTATICLIB) $(COREDIR)
 
 $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
 	cd .. && miniperl.exe minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
@@ -11599,7 +11610,15 @@ $(HAVEMINIPERL): $(MINI_OBJ)
 
 #most of deps of this target are in DYNALOADER and therefore omitted here
 Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
-	$(MINIPERL) -I..\lib buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR)
+	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
+	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --dynamic
+	-if exist ext $(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext --dynamic
+
+Extensions_static : buildext.pl $(HAVEMINIPERL) $(CONFIGPM)
+	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
+	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --static
+	-if exist ext $(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext --static
+	$(MINIPERL) -I..\lib buildext.pl --list-static-libs > Extensions_static
 
 #-------------------------------------------------------------------------------
 

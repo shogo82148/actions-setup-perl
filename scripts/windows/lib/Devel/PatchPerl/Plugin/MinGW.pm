@@ -7872,7 +7872,7 @@ PATCH
 
 sub _patch_gnumakefile_512 {
     my $version = shift;
-    my $makefile = <<'MAKEFILE';
+    _patch_gnumakefile($version, <<'MAKEFILE');
 #
 # Makefile to build perl on Windows using GMAKE.
 # Supported compilers:

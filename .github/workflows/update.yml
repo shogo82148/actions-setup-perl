@@ -1,6 +1,8 @@
 name: update cpanfile.snapshot
 on:
   push: {}
+  schedule:
+    - cron: "27 23 * * *"
 
 jobs:
   linux:

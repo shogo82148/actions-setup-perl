@@ -83,17 +83,17 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: cpanfile.snapshot-linux
-          path: scripts/linux/cpanfile.snapshot
+          path: scripts/linux
       - name: download cpanfile.snapshot for darwin
         uses: actions/download-artifact@v1
         with:
           name: cpanfile.snapshot-darwin
-          path: scripts/darwin/cpanfile.snapshot
+          path: scripts/darwin
       - name: download cpanfile.snapshot for windows
         uses: actions/download-artifact@v1
         with:
           name: cpanfile.snapshot-windows
-          path: scripts/windows/cpanfile.snapshot
+          path: scripts/windows
 
       - name: commit
         env:

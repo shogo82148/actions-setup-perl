@@ -9018,7 +9018,7 @@ $(UNIDATAFILES) : ..\pod\perluniprops.pod
 MAKEFILE
 
     if (version->parse("v$version") >= version->parse("v5.13.4")) {
-        _patch_gnumakefile(<<'PATCH');
+        _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
 @@ -712,7 +712,7 @@
@@ -9034,7 +9034,7 @@ PATCH
     }
 
     if (version->parse("v$version") >= version->parse("v5.13.6")) {
-        _patch_gnumakefile(<<'PATCH');
+        _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
 @@ -457,13 +457,6 @@
@@ -10250,7 +10250,7 @@ $(UNIDATAFILES) : $(HAVEMINIPERL) $(CONFIGPM) ..\lib\unicore\mktables
 MAKEFILE
 
     if (version->parse("v$version") >= version->parse("v5.10.1")) {
-        _patch_gnumakefile(<<'PATCH');
+        _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
 @@ -487,7 +487,6 @@

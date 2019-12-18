@@ -11592,6 +11592,11 @@ $(PERLEXE): $(PERLDLL) $(CONFIGPM) $(PERLEXE_OBJ) $(PERLEXE_RES)
 	copy splittree.pl ..
 	$(MINIPERL) -I..\lib ..\splittree.pl "../LIB" $(AUTODIR)
 
+$(PERLEXE_ICO): $(HAVEMINIPERL) ..\uupacktool.pl $(PERLEXE_ICO).packd
+	$(MINIPERL) -I..\lib ..\uupacktool.pl -u $(PERLEXE_ICO).packd $(PERLEXE_ICO)
+
+$(PERLEXE_RES): perlexe.rc $(PERLEXE_ICO)
+
 $(DYNALOADER).c: $(HAVEMINIPERL) $(EXTDIR)\DynaLoader\dl_win32.xs $(CONFIGPM)
 	if not exist $(AUTODIR) mkdir $(AUTODIR)
 	cd $(EXTDIR)\DynaLoader \

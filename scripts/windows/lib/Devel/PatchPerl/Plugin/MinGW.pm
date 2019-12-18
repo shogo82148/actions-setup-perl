@@ -10745,7 +10745,7 @@ CCTYPE		:= GCC
 # If not enabled, we automatically try to use maximum optimization
 # with all compilers that are known to have a working optimizer.
 #
-#CFG		:= Debug
+CFG		:= Debug
 
 #
 # uncomment to enable use of PerlCRT.DLL when using the Visual C compiler.

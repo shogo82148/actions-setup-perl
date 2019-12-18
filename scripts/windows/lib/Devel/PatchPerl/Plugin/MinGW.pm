@@ -11671,7 +11671,7 @@ utils: $(PERLEXE) $(X2P)
 	copy ..\README.vos      ..\pod\perlvos.pod
 	copy ..\README.win32    ..\pod\perlwin32.pod
 	copy ..\pod\perl__PERL_VERSION__delta.pod ..\pod\perldelta.pod
-	cd ..\lib && $(PERLEXE) lib_pm.PL
+	cd ..\lib && $(PERLEXE) -Dtls lib_pm.PL
 	cd ..\pod && $(PLMAKE) -f ..\win32\pod.mak converters
 	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
 

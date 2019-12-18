@@ -11327,7 +11327,7 @@ ICWD = -I..\cpan\Cwd -I..\cpan\Cwd\lib
 
 .PHONY: all
 
-all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) $(PERLEXE) $(X2P) Extensions
+all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) MakePPPort $(PERLEXE) $(X2P) Extensions
 	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
 
 $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
@@ -11609,6 +11609,9 @@ $(DYNALOADER).c: $(HAVEMINIPERL) $(EXTDIR)\DynaLoader\dl_win32.xs $(CONFIGPM)
 
 $(EXTDIR)\DynaLoader\dl_win32.xs: dl_win32.xs
 	copy dl_win32.xs $(EXTDIR)\DynaLoader\dl_win32.xs
+
+MakePPPort: $(HAVEMINIPERL) $(CONFIGPM)
+	$(MINIPERL) -I..\lib ..\mkppport
 
 $(HAVEMINIPERL): $(MINI_OBJ)
 	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)

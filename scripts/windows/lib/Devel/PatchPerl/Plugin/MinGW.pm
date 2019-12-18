@@ -138,6 +138,7 @@ my @patch = (
     {
         perl => [
             qr/^5\.1[01]\./,
+            qr/^5\.[0-9]\./,
         ],
         subs => [
             [ \&_patch_threads ],

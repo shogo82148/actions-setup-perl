@@ -11327,7 +11327,7 @@ ICWD = -I..\cpan\Cwd -I..\cpan\Cwd\lib
 
 .PHONY: all
 
-all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) MakePPPort $(PERLEXE) $(X2P) Extensions
+all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) $(UNIDATAFILES) MakePPPort $(PERLEXE) $(X2P) Extensions
 	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
 
 $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
@@ -11690,6 +11690,9 @@ installhtml : doc
 
 inst_lib : $(CONFIGPM)
 	$(RCOPY) ..\lib $(INST_LIB)\$(NULL)
+
+$(UNIDATAFILES) : $(HAVEMINIPERL) $(CONFIGPM) ..\lib\unicore\mktables
+	cd ..\lib\unicore && ..\$(MINIPERL) -I..\lib mktables -check $@ $(FIRSTUNIFILE)
 MAKEFILE
 }
 

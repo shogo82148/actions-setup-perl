@@ -11498,6 +11498,7 @@ endif
 $(CONFIGPM) : $(HAVEMINIPERL) ..\config.sh config_h.PL ..\minimod.pl
 	cd .. && miniperl.exe -Ilib configpm
 	$(XCOPY) *.h $(COREDIR)\\*.*
+	$(XCOPY) ..\\*.inc $(COREDIR)\\*.*
 	$(XCOPY) ..\\ext\\re\\re.pm $(LIBDIR)\\*.*
 	$(RCOPY) include $(COREDIR)\\*.*
 	$(XCOPY) ..\\*.h $(COREDIR)\\*.*

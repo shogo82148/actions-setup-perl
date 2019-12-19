@@ -11739,11 +11739,12 @@ sub _patch_config {
   *	This symbol defines the C type used for Perl's IV.
 --- win32/config_sh.PL
 +++ win32/config_sh.PL
-@@ -133,6 +133,55 @@ if ($opt{useithreads} eq 'define' && $opt{ccflags} =~ /-DPERL_IMPLICIT_SYS\b/) {
+@@ -133,6 +133,56 @@ if ($opt{useithreads} eq 'define' && $opt{ccflags} =~ /-DPERL_IMPLICIT_SYS\b/) {
      $opt{d_pseudofork} = 'define';
  }
  
 +# 64-bit patch is hard coded from here
++my $int64  = 'long long';
 +$opt{d_atoll} = 'define';
 +$opt{d_strtoll} = 'define';
 +$opt{d_strtoull} = 'define';

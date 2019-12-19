@@ -11096,6 +11096,10 @@ UTILS		=			\
 		..\utils\libnetcfg	\
 		..\utils\enc2xs		\
 		..\utils\piconv		\
+		..\utils\cpan		\
+		..\utils\xsubpp		\
+		..\utils\prove		\
+		..\utils\instmodsh	\
 		..\pod\checkpods	\
 		..\pod\pod2html		\
 		..\pod\pod2latex	\
@@ -11107,7 +11111,6 @@ UTILS		=			\
 		..\x2p\find2perl	\
 		..\x2p\psed		\
 		..\x2p\s2p		\
-		..\lib\ExtUtils\xsubpp	\
 		bin\exetype.pl		\
 		bin\runperl.pl		\
 		bin\pl2bat.pl		\
@@ -11143,7 +11146,6 @@ MICROCORE_SRC	=		\
 		..\gv.c		\
 		..\hv.c		\
 		..\locale.c	\
-		..\mathoms.c    \
 		..\mg.c		\
 		..\numeric.c	\
 		..\op.c		\
@@ -11693,6 +11695,40 @@ inst_lib : $(CONFIGPM)
 $(UNIDATAFILES) : $(HAVEMINIPERL) $(CONFIGPM) ..\lib\unicore\mktables
 	cd ..\lib\unicore && ..\$(MINIPERL) -I..\lib mktables -check $@ $(FIRSTUNIFILE)
 MAKEFILE
+
+    if (version->parse("v$version") >= version->parse("5.8.9")) {
+        _patch(<<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
+@@ -476,10 +476,6 @@
+ 		..\utils\libnetcfg	\
+ 		..\utils\enc2xs		\
+ 		..\utils\piconv		\
+-		..\utils\cpan		\
+-		..\utils\xsubpp		\
+-		..\utils\prove		\
+-		..\utils\instmodsh	\
+ 		..\pod\checkpods	\
+ 		..\pod\pod2html		\
+ 		..\pod\pod2latex	\
+@@ -491,6 +487,7 @@
+ 		..\x2p\find2perl	\
+ 		..\x2p\psed		\
+ 		..\x2p\s2p		\
++		..\lib\ExtUtils\xsubpp	\
+ 		bin\exetype.pl		\
+ 		bin\runperl.pl		\
+ 		bin\pl2bat.pl		\
+@@ -526,6 +523,7 @@
+ 		..\gv.c		\
+ 		..\hv.c		\
+ 		..\locale.c	\
++		..\mathoms.c    \
+ 		..\mg.c		\
+ 		..\numeric.c	\
+ 		..\op.c		\
+PATCH
+    }
 }
 
 sub _patch_config {

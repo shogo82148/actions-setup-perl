@@ -11709,35 +11709,6 @@ sub _patch_config {
  d_random_r='undef'
  d_readdir64_r='undef'
  d_readdir='define'
---- win32/config_H.gc
-+++ win32/config_H.gc
-@@ -3849,21 +3849,15 @@
-  *	Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
-  *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.
-  */
--/*#define HAS_QUAD	/**/
--#ifdef HAS_QUAD
--#   ifndef _MSC_VER
--#	define Quad_t long long	/**/
--#	define Uquad_t unsigned long long	/**/
--#   else
--#	define Quad_t __int64	/**/
--#	define Uquad_t unsigned __int64	/**/
--#   endif
--#   define QUADKIND 5	/**/
-+#define HAS_QUAD
-+#   define Quad_t long long	/**/
-+#   define Uquad_t unsigned long long	/**/
-+#   define QUADKIND 3	/**/
- #   define QUAD_IS_INT	1
- #   define QUAD_IS_LONG	2
- #   define QUAD_IS_LONG_LONG	3
- #   define QUAD_IS_INT64_T	4
--#endif
-+#   define QUAD_IS___INT64	5
- 
- /* IVTYPE:
-  *	This symbol defines the C type used for Perl's IV.
 --- win32/config_sh.PL
 +++ win32/config_sh.PL
 @@ -133,6 +133,34 @@ if ($opt{useithreads} eq 'define' && $opt{ccflags} =~ /-DPERL_IMPLICIT_SYS\b/) {
@@ -11775,6 +11746,66 @@ sub _patch_config {
  while (<>) {
      s/~([\w_]+)~/$opt{$1}/g;
      if (/^([\w_]+)=(.*)$/) {
+PATCH
+
+    if (version->parse("v$version") >= version->parse("5.8.9")) {
+        _patch(<<'PATCH');
+--- win32/config_H.gc
++++ win32/config_H.gc
+@@ -3849,21 +3849,15 @@
+  *	Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
+  *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.
+  */
+-/*#define HAS_QUAD	/**/
+-#ifdef HAS_QUAD
+-#   ifndef _MSC_VER
+-#	define Quad_t long long	/**/
+-#	define Uquad_t unsigned long long	/**/
+-#   else
+-#	define Quad_t __int64	/**/
+-#	define Uquad_t unsigned __int64	/**/
+-#   endif
+-#   define QUADKIND 5	/**/
++#define HAS_QUAD
++#   define Quad_t long long	/**/
++#   define Uquad_t unsigned long long	/**/
++#   define QUADKIND 3	/**/
+ #   define QUAD_IS_INT	1
+ #   define QUAD_IS_LONG	2
+ #   define QUAD_IS_LONG_LONG	3
+ #   define QUAD_IS_INT64_T	4
+-#endif
++#   define QUAD_IS___INT64	5
+ 
+ /* IVTYPE:
+  *	This symbol defines the C type used for Perl's IV.
+PATCH
+        return;
+    }
+
+    _patch(<<'PATCH');
+--- win32/config_H.gc
++++ win32/config_H.gc
+@@ -3150,16 +3150,15 @@
+  *	Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
+  *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.
+  */
+-/*#define HAS_QUAD	/**/
+-#ifdef HAS_QUAD
++#define HAS_QUAD
+ #   define Quad_t long long	/**/
+ #   define Uquad_t unsigned long long	/**/
+-#   define QUADKIND 5	/**/
++#   define QUADKIND 3	/**/
+ #   define QUAD_IS_INT	1
+ #   define QUAD_IS_LONG	2
+ #   define QUAD_IS_LONG_LONG	3
+ #   define QUAD_IS_INT64_T	4
+-#endif
++#   define QUAD_IS___INT64	5
+ 
+ /* IVTYPE:
+  *	This symbol defines the C type used for Perl's IV.
 PATCH
 }
 

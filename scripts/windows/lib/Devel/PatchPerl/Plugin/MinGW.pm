@@ -11693,7 +11693,7 @@ inst_lib : $(CONFIGPM)
 	$(RCOPY) ..\lib $(INST_LIB)\$(NULL)
 
 $(UNIDATAFILES) : $(HAVEMINIPERL) $(CONFIGPM) ..\lib\unicore\mktables
-	cd ..\lib\unicore && ..\$(MINIPERL) -I..\lib mktables -check $@ $(FIRSTUNIFILE)
+	cd ..\lib\unicore && ..\$(MINIPERL) -I..\lib mktables
 MAKEFILE
 
     if (version->parse("v$version") >= version->parse("5.8.9")) {
@@ -11727,6 +11727,12 @@ MAKEFILE
  		..\mg.c		\
  		..\numeric.c	\
  		..\op.c		\
+@@ -1073,4 +1071,4 @@
+ 	$(RCOPY) ..\lib $(INST_LIB)\$(NULL)
+ 
+ $(UNIDATAFILES) : $(HAVEMINIPERL) $(CONFIGPM) ..\lib\unicore\mktables
+-	cd ..\lib\unicore && ..\$(MINIPERL) -I..\lib mktables
++	cd ..\lib\unicore && ..\$(MINIPERL) -I..\lib mktables -check $@ $(FIRSTUNIFILE)
 PATCH
     }
 }

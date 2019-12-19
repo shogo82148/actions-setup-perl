@@ -11331,7 +11331,7 @@ ICWD = -I..\cpan\Cwd -I..\cpan\Cwd\lib
 
 .PHONY: all
 
-all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) $(UNIDATAFILES) MakePPPort $(PERLEXE) $(X2P) Extensions
+all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) $(UNIDATAFILES) $(PERLEXE) $(X2P) Extensions
 	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
 
 $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
@@ -11611,9 +11611,6 @@ $(DYNALOADER).c: $(HAVEMINIPERL) $(EXTDIR)\DynaLoader\dl_win32.xs $(CONFIGPM)
 $(EXTDIR)\DynaLoader\dl_win32.xs: dl_win32.xs
 	copy dl_win32.xs $(EXTDIR)\DynaLoader\dl_win32.xs
 
-MakePPPort: $(HAVEMINIPERL) $(CONFIGPM)
-	$(MINIPERL) -I..\lib ..\mkppport
-
 $(HAVEMINIPERL): $(MINI_OBJ)
 	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
 	rem . > $@
@@ -11727,7 +11724,26 @@ MAKEFILE
  		..\mg.c		\
  		..\numeric.c	\
  		..\op.c		\
-@@ -1073,4 +1071,4 @@
+@@ -711,7 +709,7 @@
+ 
+ .PHONY: all
+ 
+-all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) $(UNIDATAFILES) $(PERLEXE) $(X2P) Extensions
++all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) $(UNIDATAFILES) MakePPPort $(PERLEXE) $(X2P) Extensions
+ 	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
+ 
+ $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
+@@ -991,6 +989,9 @@
+ $(EXTDIR)\DynaLoader\dl_win32.xs: dl_win32.xs
+ 	copy dl_win32.xs $(EXTDIR)\DynaLoader\dl_win32.xs
+ 
++MakePPPort: $(HAVEMINIPERL) $(CONFIGPM)
++	$(MINIPERL) -I..\lib ..\mkppport
++
+ $(HAVEMINIPERL): $(MINI_OBJ)
+ 	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
+ 	rem . > $@
+@@ -1070,4 +1071,4 @@
  	$(RCOPY) ..\lib $(INST_LIB)\$(NULL)
  
  $(UNIDATAFILES) : $(HAVEMINIPERL) $(CONFIGPM) ..\lib\unicore\mktables

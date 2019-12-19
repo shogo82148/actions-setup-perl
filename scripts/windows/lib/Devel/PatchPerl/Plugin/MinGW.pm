@@ -11739,7 +11739,7 @@ sub _patch_config {
   *	This symbol defines the C type used for Perl's IV.
 --- win32/config_sh.PL
 +++ win32/config_sh.PL
-@@ -133,6 +133,56 @@ if ($opt{useithreads} eq 'define' && $opt{ccflags} =~ /-DPERL_IMPLICIT_SYS\b/) {
+@@ -133,6 +133,34 @@ if ($opt{useithreads} eq 'define' && $opt{ccflags} =~ /-DPERL_IMPLICIT_SYS\b/) {
      $opt{d_pseudofork} = 'define';
  }
  
@@ -11752,8 +11752,8 @@ sub _patch_config {
 +$opt{sizesize} = 8;
 +$opt{ssizetype} = $int64;
 +$opt{st_ino_size} = 8;
-+$opt{d_nv_preserves_uv} = 'define';
-+$opt{nv_preserves_uv_bits} = 64;
++$opt{d_nv_preserves_uv} = 'undef';
++$opt{nv_preserves_uv_bits} = 53;
 +$opt{ivdformat} = qq{"I64d"};
 +$opt{ivsize} = 8;
 +$opt{ivtype} = $int64;
@@ -11769,28 +11769,6 @@ sub _patch_config {
 +$opt{uvtype} = qq{unsigned $int64};
 +$opt{uvuformat} = qq{"I64u"};
 +$opt{uvxformat} = qq{"I64x"};
-+$opt{d_Gconvert} = 'sprintf((b),"%.*""Lg",(n),(x))';
-+$opt{d_PRIEUldbl} = 'define';
-+$opt{d_PRIFUldbl} = 'define';
-+$opt{d_PRIGUldbl} = 'define';
-+$opt{d_modflproto} = 'define';
-+$opt{d_strtold} = 'define';
-+$opt{d_PRIeldbl} = 'define';
-+$opt{d_PRIfldbl} = 'define';
-+$opt{d_PRIgldbl} = 'define';
-+$opt{d_SCNfldbl} = 'define';
-+$opt{nvsize} = $opt{longdblsize};
-+$opt{nvtype} = 'long double';
-+$opt{nv_overflows_integers_at} = '256.0*256.0*256.0*256.0*256.0*256.0*256.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0';
-+$opt{nvEUformat} = '"LE"';
-+$opt{nvFUformat} = '"LF"';
-+$opt{nvGUformat} = '"LG"';
-+$opt{nveformat} = '"Le"';
-+$opt{nvfformat} = '"Lf"';
-+$opt{nvgformat} = '"Lg"';
-+$opt{nvmantbits} = 64;
-+$opt{longdblkind} = 3;
-+$opt{longdblmantbits} = 64;
 +# end of 64-bit patch
 +
  while (<>) {

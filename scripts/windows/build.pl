@@ -54,10 +54,11 @@ sub run {
     my $version = $ENV{PERL_VERSION};
     my $url = perl_release($version);
 
-    my $tmpdir = $ENV{RUNNER_TEMP};
     $url =~ m/\/(perl-.*)$/;
     my $filename = $1;
-    my $install_dir = File::Spec->catdir($ENV{RUNNER_TOOL_CACHE}, "perl", $version, "x64");
+    my $tmpdir = File::Spec->rel2abs($ENV{RUNNER_TEMP} || "tmp");
+    my $install_dir = File::Spec->rel2abs(
+        File::Spec->catdir($ENV{RUNNER_TOOL_CACHE} || $tmpdir, "perl", $version, "x64"));
 
     group "downloading perl $version from $url" => sub {
         my $ua = LWP::UserAgent->new;
@@ -85,7 +86,7 @@ sub run {
 
     group "build and install Perl" => sub {
         my $dir = pushd(File::Spec->catdir($tmpdir, "perl-$version", "win32"));
-        execute_or_die("gmake", "-d", "-f", "GNUMakefile", "install", "INST_TOP=$install_dir", "CCHOME=C:\\MinGW");
+        execute_or_die("gmake", "-d", "-f", "GNUmakefile", "install", "INST_TOP=$install_dir", "CCHOME=C:\\MinGW");
     };
 
     group "perl -V" => sub {

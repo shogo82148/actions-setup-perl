@@ -11697,6 +11697,17 @@ MAKEFILE
 sub _patch_config {
     my $version = shift;
     _patch(<<'PATCH');
+--- win32/config.gc
++++ win32/config.gc
+@@ -345,7 +345,7 @@ d_pwgecos='undef'
+ d_pwpasswd='undef'
+ d_pwquota='undef'
+ d_qgcvt='undef'
+-d_quad='undef'
++d_quad='define'
+ d_random_r='undef'
+ d_readdir64_r='undef'
+ d_readdir='define'
 --- win32/config_H.gc
 +++ win32/config_H.gc
 @@ -3849,21 +3849,15 @@

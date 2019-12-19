@@ -11726,6 +11726,64 @@ sub _patch_config {
  
  /* IVTYPE:
   *	This symbol defines the C type used for Perl's IV.
+--- win32/config_sh.PL
++++ win32/config_sh.PL
+@@ -133,6 +133,55 @@ if ($opt{useithreads} eq 'define' && $opt{ccflags} =~ /-DPERL_IMPLICIT_SYS\b/) {
+     $opt{d_pseudofork} = 'define';
+ }
+ 
++# 64-bit patch is hard coded from here
++$opt{d_atoll} = 'define';
++$opt{d_strtoll} = 'define';
++$opt{d_strtoull} = 'define';
++$opt{ptrsize} = 8;
++$opt{sizesize} = 8;
++$opt{ssizetype} = $int64;
++$opt{st_ino_size} = 8;
++$opt{d_nv_preserves_uv} = 'define';
++$opt{nv_preserves_uv_bits} = 64;
++$opt{ivdformat} = qq{"I64d"};
++$opt{ivsize} = 8;
++$opt{ivtype} = $int64;
++$opt{sPRIXU64} = qq{"I64X"};
++$opt{sPRId64} = qq{"I64d"};
++$opt{sPRIi64} = qq{"I64i"};
++$opt{sPRIo64} = qq{"I64o"};
++$opt{sPRIu64} = qq{"I64u"};
++$opt{sPRIx64} = qq{"I64x"};
++$opt{uvXUformat} = qq{"I64X"};
++$opt{uvoformat} = qq{"I64o"};
++$opt{uvsize} = 8;
++$opt{uvtype} = qq{unsigned $int64};
++$opt{uvuformat} = qq{"I64u"};
++$opt{uvxformat} = qq{"I64x"};
++$opt{d_Gconvert} = 'sprintf((b),"%.*""Lg",(n),(x))';
++$opt{d_PRIEUldbl} = 'define';
++$opt{d_PRIFUldbl} = 'define';
++$opt{d_PRIGUldbl} = 'define';
++$opt{d_modflproto} = 'define';
++$opt{d_strtold} = 'define';
++$opt{d_PRIeldbl} = 'define';
++$opt{d_PRIfldbl} = 'define';
++$opt{d_PRIgldbl} = 'define';
++$opt{d_SCNfldbl} = 'define';
++$opt{nvsize} = $opt{longdblsize};
++$opt{nvtype} = 'long double';
++$opt{nv_overflows_integers_at} = '256.0*256.0*256.0*256.0*256.0*256.0*256.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0';
++$opt{nvEUformat} = '"LE"';
++$opt{nvFUformat} = '"LF"';
++$opt{nvGUformat} = '"LG"';
++$opt{nveformat} = '"Le"';
++$opt{nvfformat} = '"Lf"';
++$opt{nvgformat} = '"Lg"';
++$opt{nvmantbits} = 64;
++$opt{longdblkind} = 3;
++$opt{longdblmantbits} = 64;
++# end of 64-bit patch
++
+ while (<>) {
+     s/~([\w_]+)~/$opt{$1}/g;
+     if (/^([\w_]+)=(.*)$/) {
 PATCH
 }
 

@@ -12015,7 +12015,8 @@ PATCH
         return;
     }
 
-    _patch(<<'PATCH');
+    if (version->parse("v$version") >= version->parse("5.8.8")) {
+        _patch(<<'PATCH');
 --- win32/config_H.gc
 +++ win32/config_H.gc
 @@ -3150,16 +3150,15 @@
@@ -12038,6 +12039,33 @@ PATCH
  
  /* IVTYPE:
   *	This symbol defines the C type used for Perl's IV.
+PATCH
+        return;
+    }
+
+    _patch(<<'PATCH');
+--- win32/config_H.gc
++++ win32/config_H.gc
+@@ -911,16 +911,15 @@
+  *	Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
+  *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.
+  */
+-/*#define HAS_QUAD	/**/
+-#ifdef HAS_QUAD
++#define HAS_QUAD
+ #   define Quad_t long long	/**/
+ #   define Uquad_t unsigned long long	/**/
+-#   define QUADKIND 5	/**/
++#   define QUADKIND 3	/**/
+ #   define QUAD_IS_INT	1
+ #   define QUAD_IS_LONG	2
+ #   define QUAD_IS_LONG_LONG	3
+ #   define QUAD_IS_INT64_T	4
+-#endif
++#   define QUAD_IS___INT64	5
+ 
+ /* HAS_ACCESSX:
+  *	This symbol, if defined, indicates that the accessx routine is
 PATCH
 }
 

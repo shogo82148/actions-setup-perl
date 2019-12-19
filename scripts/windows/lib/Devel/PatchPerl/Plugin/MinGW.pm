@@ -138,7 +138,8 @@ my @patch = (
     {
         perl => [
             qr/^5\.1[01]\./,
-            qr/^5\.[0-9]\./,
+            qr/^5\.9\./,
+            qr/^5\.8\.9$/,
         ],
         subs => [
             [ \&_patch_threads ],
@@ -488,7 +489,8 @@ PATCH
         return;
     }
 
-    _patch(<<'PATCH');
+    if (version->parse("v$version") >= version->parse("5.8.9")) {
+        _patch(<<'PATCH');
 --- lib/ExtUtils/MM_Unix.pm
 +++ lib/ExtUtils/MM_Unix.pm
 @@ -415,8 +415,8 @@ sub const_cccmd {
@@ -552,6 +554,168 @@ PATCH
  
  1;
  __END__
+PATCH
+        return;
+    }
+
+    _patch(<<'PATCH');
+--- lib/ExtUtils/MM_Any.pm
++++ lib/ExtUtils/MM_Any.pm
+@@ -326,6 +326,29 @@ $self->{_MAX_EXEC_LEN} is set by this method, but only for testing purposes.
+ 
+ 
+ 
++=head3 make
++
++    my $make = $MM->make;
++
++Returns the make variant we're generating the Makefile for.  This attempts
++to do some normalization on the information from %Config or the user.
++
++=cut
++
++sub make {
++    my $self = shift;
++
++    my $make = lc $self->{MAKE};
++
++    # Truncate anything like foomake6 to just foomake.
++    $make =~ s/^(\w+make).*/$1/;
++
++    # Turn gnumake into gmake.
++    $make =~ s/^gnu/g/;
++
++    return $make;
++}
++
+ 
+ =head2 Targets
+ 
+@@ -1435,6 +1458,19 @@ sub init_platform {
+ 
+ 
+ 
++=head3 init_MAKE
++
++    $mm->init_MAKE
++
++Initialize MAKE from either a MAKE environment variable or $Config{make}.
++
++=cut
++
++sub init_MAKE {
++    my $self = shift;
++ 
++    $self->{MAKE} ||= $ENV{MAKE} || $Config{make};
++}
+ 
+ 
+ =head2 Tools
+--- lib/ExtUtils/MM_Unix.pm
++++ lib/ExtUtils/MM_Unix.pm
+@@ -295,8 +295,8 @@ sub const_cccmd {
+ 
+ =item const_config (o)
+ 
+-Defines a couple of constants in the Makefile that are imported from
+-%Config.
++Sets SHELL if needed, then defines a couple of constants in the Makefile
++that are imported from %Config.
+ 
+ =cut
+ 
+@@ -307,6 +307,7 @@ sub const_config {
+     my(@m,$m);
+     push(@m,"\n# These definitions are from config.sh (via $INC{'Config.pm'})\n");
+     push(@m,"\n# They may have been overridden via Makefile.PL or on the command line\n");
++    push(@m, $self->specify_shell()); # Usually returns empty string
+     my(%once_only);
+     foreach $m (@{$self->{CONFIG}}){
+ 	# SITE*EXP macros are defined in &constants; avoid duplicates here
+@@ -3077,6 +3078,16 @@ MAKE_FRAG
+     return $m;
+ }
+ 
++=item specify_shell
++
++Specify SHELL if needed - not done on Unix.
++
++=cut
++
++sub specify_shell {
++  return '';
++}
++
+ =item quote_paren
+ 
+ Backslashes parentheses C<()> in command line arguments.
+--- lib/ExtUtils/MM_Win32.pm
++++ lib/ExtUtils/MM_Win32.pm
+@@ -123,7 +123,7 @@ sub maybe_command {
+ 
+ =item B<init_DIRFILESEP>
+ 
+-Using \ for Windows.
++Using \ for Windows, except for "gmake" where it is /.
+ 
+ =cut
+ 
+@@ -131,9 +131,10 @@ sub init_DIRFILESEP {
+     my($self) = shift;
+ 
+     # The ^ makes sure its not interpreted as an escape in nmake
+-    $self->{DIRFILESEP} = $NMAKE ? '^\\' :
+-                          $DMAKE ? '\\\\'
+-                                 : '\\';
++    $self->{DIRFILESEP} = $self->is_make_type('nmake') ? '^\\' :
++                          $self->is_make_type('dmake') ? '\\\\' :
++                          $self->is_make_type('gmake') ? '/'
++                                                       : '\\';
+ }
+ 
+ =item B<init_others>
+@@ -168,7 +169,7 @@ sub init_others {
+     $self->{DEV_NULL} ||= '> NUL';
+ 
+     $self->{FIXIN}    ||= $self->{PERL_CORE} ? 
+-      "\$(PERLRUN) $self->{PERL_SRC}/win32/bin/pl2bat.pl" : 
++      "\$(PERLRUN) $self->{PERL_SRC}\\win32\\bin\\pl2bat.pl" :
+       'pl2bat.bat';
+ 
+     $self->{LD}     ||= $Config{ld} || 'link';
+@@ -526,6 +527,22 @@ sub os_flavor {
+     return('Win32');
+ }
+ 
++=item specify_shell
++
++Set SHELL to $ENV{COMSPEC} only if make is type 'gmake'.
++
++=cut
++
++sub specify_shell {
++    my $self = shift;
++    return '' unless $self->is_make_type('gmake');
++    "\nSHELL = $ENV{COMSPEC}\n";
++}
++
++sub is_make_type {
++    my($self, $type) = @_;
++    return !! ($self->make =~ /\b$type(?:\.exe)?$/);
++}
+ 
+ 1;
+ __END__
+--- lib/ExtUtils/MakeMaker.pm
++++ lib/ExtUtils/MakeMaker.pm
+@@ -491,6 +491,7 @@ sub new {
+ 
+     ($self->{NAME_SYM} = $self->{NAME}) =~ s/\W+/_/g;
+ 
++    $self->init_MAKE;
+     $self->init_main;
+     $self->init_VERSION;
+     $self->init_dist;
 PATCH
 }
 
@@ -11095,6 +11259,10 @@ UTILS		=			\
 		..\utils\libnetcfg	\
 		..\utils\enc2xs		\
 		..\utils\piconv		\
+		..\utils\cpan		\
+		..\utils\xsubpp		\
+		..\utils\prove		\
+		..\utils\instmodsh	\
 		..\pod\checkpods	\
 		..\pod\pod2html		\
 		..\pod\pod2latex	\
@@ -11106,7 +11274,6 @@ UTILS		=			\
 		..\x2p\find2perl	\
 		..\x2p\psed		\
 		..\x2p\s2p		\
-		..\lib\ExtUtils\xsubpp	\
 		bin\exetype.pl		\
 		bin\runperl.pl		\
 		bin\pl2bat.pl		\
@@ -11142,7 +11309,6 @@ MICROCORE_SRC	=		\
 		..\gv.c		\
 		..\hv.c		\
 		..\locale.c	\
-		..\mathoms.c    \
 		..\mg.c		\
 		..\numeric.c	\
 		..\op.c		\
@@ -11328,7 +11494,7 @@ ICWD = -I..\cpan\Cwd -I..\cpan\Cwd\lib
 
 .PHONY: all
 
-all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) $(UNIDATAFILES) MakePPPort $(PERLEXE) $(X2P) Extensions
+all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) $(UNIDATAFILES) $(PERLEXE) $(X2P) Extensions
 	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
 
 $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
@@ -11590,8 +11756,8 @@ $(PERLEXE): $(PERLDLL) $(CONFIGPM) $(PERLEXE_OBJ) $(PERLEXE_RES)
 	copy splittree.pl ..
 	$(MINIPERL) -I..\lib ..\splittree.pl "../LIB" $(AUTODIR)
 
-$(PERLEXE_ICO): $(HAVEMINIPERL) ..\uupacktool.pl $(PERLEXE_ICO).packd
-	$(MINIPERL) -I..\lib ..\uupacktool.pl -u $(PERLEXE_ICO).packd $(PERLEXE_ICO)
+$(PERLEXE_ICO): $(HAVEMINIPERL) makeico.pl
+	$(MINIPERL) makeico.pl > $@
 
 $(PERLEXE_RES): perlexe.rc $(PERLEXE_ICO)
 
@@ -11607,9 +11773,6 @@ $(DYNALOADER).c: $(HAVEMINIPERL) $(EXTDIR)\DynaLoader\dl_win32.xs $(CONFIGPM)
 
 $(EXTDIR)\DynaLoader\dl_win32.xs: dl_win32.xs
 	copy dl_win32.xs $(EXTDIR)\DynaLoader\dl_win32.xs
-
-MakePPPort: $(HAVEMINIPERL) $(CONFIGPM)
-	$(MINIPERL) -I..\lib ..\mkppport
 
 $(HAVEMINIPERL): $(MINI_OBJ)
 	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
@@ -11690,8 +11853,78 @@ inst_lib : $(CONFIGPM)
 	$(RCOPY) ..\lib $(INST_LIB)\$(NULL)
 
 $(UNIDATAFILES) : $(HAVEMINIPERL) $(CONFIGPM) ..\lib\unicore\mktables
-	cd ..\lib\unicore && ..\$(MINIPERL) -I..\lib mktables -check $@ $(FIRSTUNIFILE)
+	cd ..\lib\unicore && ..\$(MINIPERL) -I..\lib mktables
 MAKEFILE
+
+    if (version->parse("v$version") >= version->parse("5.8.9")) {
+        _patch(<<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
+@@ -476,10 +476,6 @@
+ 		..\utils\libnetcfg	\
+ 		..\utils\enc2xs		\
+ 		..\utils\piconv		\
+-		..\utils\cpan		\
+-		..\utils\xsubpp		\
+-		..\utils\prove		\
+-		..\utils\instmodsh	\
+ 		..\pod\checkpods	\
+ 		..\pod\pod2html		\
+ 		..\pod\pod2latex	\
+@@ -491,6 +487,7 @@
+ 		..\x2p\find2perl	\
+ 		..\x2p\psed		\
+ 		..\x2p\s2p		\
++		..\lib\ExtUtils\xsubpp	\
+ 		bin\exetype.pl		\
+ 		bin\runperl.pl		\
+ 		bin\pl2bat.pl		\
+@@ -526,6 +523,7 @@
+ 		..\gv.c		\
+ 		..\hv.c		\
+ 		..\locale.c	\
++		..\mathoms.c    \
+ 		..\mg.c		\
+ 		..\numeric.c	\
+ 		..\op.c		\
+@@ -711,7 +709,7 @@
+ 
+ .PHONY: all
+ 
+-all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) $(UNIDATAFILES) $(PERLEXE) $(X2P) Extensions
++all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) $(UNIDATAFILES) MakePPPort $(PERLEXE) $(X2P) Extensions
+ 	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
+ 
+ $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
+@@ -973,8 +971,8 @@
+ 	copy splittree.pl ..
+ 	$(MINIPERL) -I..\lib ..\splittree.pl "../LIB" $(AUTODIR)
+ 
+-$(PERLEXE_ICO): $(HAVEMINIPERL) makeico.pl
+-	$(MINIPERL) makeico.pl > $@
++$(PERLEXE_ICO): $(HAVEMINIPERL) ..\uupacktool.pl $(PERLEXE_ICO).packd
++	$(MINIPERL) -I..\lib ..\uupacktool.pl -u $(PERLEXE_ICO).packd $(PERLEXE_ICO)
+ 
+ $(PERLEXE_RES): perlexe.rc $(PERLEXE_ICO)
+ 
+@@ -991,6 +989,9 @@
+ $(EXTDIR)\DynaLoader\dl_win32.xs: dl_win32.xs
+ 	copy dl_win32.xs $(EXTDIR)\DynaLoader\dl_win32.xs
+ 
++MakePPPort: $(HAVEMINIPERL) $(CONFIGPM)
++	$(MINIPERL) -I..\lib ..\mkppport
++
+ $(HAVEMINIPERL): $(MINI_OBJ)
+ 	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
+ 	rem . > $@
+@@ -1070,4 +1071,4 @@
+ 	$(RCOPY) ..\lib $(INST_LIB)\$(NULL)
+ 
+ $(UNIDATAFILES) : $(HAVEMINIPERL) $(CONFIGPM) ..\lib\unicore\mktables
+-	cd ..\lib\unicore && ..\$(MINIPERL) -I..\lib mktables
++	cd ..\lib\unicore && ..\$(MINIPERL) -I..\lib mktables -check $@ $(FIRSTUNIFILE)
+PATCH
+    }
 }
 
 sub _patch_config {
@@ -11708,35 +11941,6 @@ sub _patch_config {
  d_random_r='undef'
  d_readdir64_r='undef'
  d_readdir='define'
---- win32/config_H.gc
-+++ win32/config_H.gc
-@@ -3849,21 +3849,15 @@
-  *	Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
-  *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.
-  */
--/*#define HAS_QUAD	/**/
--#ifdef HAS_QUAD
--#   ifndef _MSC_VER
--#	define Quad_t long long	/**/
--#	define Uquad_t unsigned long long	/**/
--#   else
--#	define Quad_t __int64	/**/
--#	define Uquad_t unsigned __int64	/**/
--#   endif
--#   define QUADKIND 5	/**/
-+#define HAS_QUAD
-+#   define Quad_t long long	/**/
-+#   define Uquad_t unsigned long long	/**/
-+#   define QUADKIND 3	/**/
- #   define QUAD_IS_INT	1
- #   define QUAD_IS_LONG	2
- #   define QUAD_IS_LONG_LONG	3
- #   define QUAD_IS_INT64_T	4
--#endif
-+#   define QUAD_IS___INT64	5
- 
- /* IVTYPE:
-  *	This symbol defines the C type used for Perl's IV.
 --- win32/config_sh.PL
 +++ win32/config_sh.PL
 @@ -133,6 +133,34 @@ if ($opt{useithreads} eq 'define' && $opt{ccflags} =~ /-DPERL_IMPLICIT_SYS\b/) {
@@ -11774,6 +11978,66 @@ sub _patch_config {
  while (<>) {
      s/~([\w_]+)~/$opt{$1}/g;
      if (/^([\w_]+)=(.*)$/) {
+PATCH
+
+    if (version->parse("v$version") >= version->parse("5.8.9")) {
+        _patch(<<'PATCH');
+--- win32/config_H.gc
++++ win32/config_H.gc
+@@ -3849,21 +3849,15 @@
+  *	Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
+  *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.
+  */
+-/*#define HAS_QUAD	/**/
+-#ifdef HAS_QUAD
+-#   ifndef _MSC_VER
+-#	define Quad_t long long	/**/
+-#	define Uquad_t unsigned long long	/**/
+-#   else
+-#	define Quad_t __int64	/**/
+-#	define Uquad_t unsigned __int64	/**/
+-#   endif
+-#   define QUADKIND 5	/**/
++#define HAS_QUAD
++#   define Quad_t long long	/**/
++#   define Uquad_t unsigned long long	/**/
++#   define QUADKIND 3	/**/
+ #   define QUAD_IS_INT	1
+ #   define QUAD_IS_LONG	2
+ #   define QUAD_IS_LONG_LONG	3
+ #   define QUAD_IS_INT64_T	4
+-#endif
++#   define QUAD_IS___INT64	5
+ 
+ /* IVTYPE:
+  *	This symbol defines the C type used for Perl's IV.
+PATCH
+        return;
+    }
+
+    _patch(<<'PATCH');
+--- win32/config_H.gc
++++ win32/config_H.gc
+@@ -3150,16 +3150,15 @@
+  *	Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
+  *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.
+  */
+-/*#define HAS_QUAD	/**/
+-#ifdef HAS_QUAD
++#define HAS_QUAD
+ #   define Quad_t long long	/**/
+ #   define Uquad_t unsigned long long	/**/
+-#   define QUADKIND 5	/**/
++#   define QUADKIND 3	/**/
+ #   define QUAD_IS_INT	1
+ #   define QUAD_IS_LONG	2
+ #   define QUAD_IS_LONG_LONG	3
+ #   define QUAD_IS_INT64_T	4
+-#endif
++#   define QUAD_IS___INT64	5
+ 
+ /* IVTYPE:
+  *	This symbol defines the C type used for Perl's IV.
 PATCH
 }
 

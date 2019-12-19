@@ -153,16 +153,11 @@ jobs:
         # - "5.9.0"
 
         - "5.8.9"
-        # TODO: fix me, builds of 5.8.x are failed
-        # - "5.8.8"
+        - "5.8.8"
+        # TODO: fix me
         # - "5.8.7"
         # - "5.8.6"
         # - "5.8.5"
-        # - "5.8.4"
-        # - "5.8.3"
-        # - "5.8.2"
-        # - "5.8.1"
-        # - "5.8.0"
 
     steps:
       - uses: actions/checkout@v1

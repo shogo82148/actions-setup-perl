@@ -611,19 +611,9 @@ PATCH
  
  
  =head2 Tools
---- lib/ExtUtils/MakeMaker.pm
-+++ lib/ExtUtils/MakeMaker.pm
-@@ -491,6 +491,7 @@ sub new {
- 
-     ($self->{NAME_SYM} = $self->{NAME}) =~ s/\W+/_/g;
- 
-+    $self->init_MAKE;
-     $self->init_main;
-     $self->init_VERSION;
-     $self->init_dist;
 --- lib/ExtUtils/MM_Unix.pm
 +++ lib/ExtUtils/MM_Unix.pm
-@@ -415,8 +415,8 @@ sub const_cccmd {
+@@ -295,8 +295,8 @@ sub const_cccmd {
  
  =item const_config (o)
  
@@ -634,7 +624,7 @@ PATCH
  
  =cut
  
-@@ -427,6 +427,7 @@ sub const_config {
+@@ -307,6 +307,7 @@ sub const_config {
      my(@m,$m);
      push(@m,"\n# These definitions are from config.sh (via $INC{'Config.pm'})\n");
      push(@m,"\n# They may have been overridden via Makefile.PL or on the command line\n");
@@ -642,8 +632,8 @@ PATCH
      my(%once_only);
      foreach $m (@{$self->{CONFIG}}){
  	# SITE*EXP macros are defined in &constants; avoid duplicates here
-@@ -3304,6 +3305,16 @@ $target :: $plfile
-     join "", @m;
+@@ -3077,6 +3078,16 @@ MAKE_FRAG
+     return $m;
  }
  
 +=item specify_shell
@@ -661,8 +651,40 @@ PATCH
  Backslashes parentheses C<()> in command line arguments.
 --- lib/ExtUtils/MM_Win32.pm
 +++ lib/ExtUtils/MM_Win32.pm
-@@ -781,6 +781,22 @@ sub pasthru {
-     return "PASTHRU = " . ($NMAKE ? "-nologo" : "");
+@@ -123,7 +123,7 @@ sub maybe_command {
+ 
+ =item B<init_DIRFILESEP>
+ 
+-Using \ for Windows.
++Using \ for Windows, except for "gmake" where it is /.
+ 
+ =cut
+ 
+@@ -131,9 +131,10 @@ sub init_DIRFILESEP {
+     my($self) = shift;
+ 
+     # The ^ makes sure its not interpreted as an escape in nmake
+-    $self->{DIRFILESEP} = $NMAKE ? '^\\' :
+-                          $DMAKE ? '\\\\'
+-                                 : '\\';
++    $self->{DIRFILESEP} = $self->is_make_type('nmake') ? '^\\' :
++                          $self->is_make_type('dmake') ? '\\\\' :
++                          $self->is_make_type('gmake') ? '/'
++                                                       : '\\';
+ }
+ 
+ =item B<init_others>
+@@ -168,7 +169,7 @@ sub init_others {
+     $self->{DEV_NULL} ||= '> NUL';
+ 
+     $self->{FIXIN}    ||= $self->{PERL_CORE} ? 
+-      "\$(PERLRUN) $self->{PERL_SRC}/win32/bin/pl2bat.pl" : 
++      "\$(PERLRUN) $self->{PERL_SRC}\\win32\\bin\\pl2bat.pl" :
+       'pl2bat.bat';
+ 
+     $self->{LD}     ||= $Config{ld} || 'link';
+@@ -526,6 +527,22 @@ sub os_flavor {
+     return('Win32');
  }
  
 +=item specify_shell
@@ -684,6 +706,16 @@ PATCH
  
  1;
  __END__
+--- lib/ExtUtils/MakeMaker.pm
++++ lib/ExtUtils/MakeMaker.pm
+@@ -491,6 +491,7 @@ sub new {
+ 
+     ($self->{NAME_SYM} = $self->{NAME}) =~ s/\W+/_/g;
+ 
++    $self->init_MAKE;
+     $self->init_main;
+     $self->init_VERSION;
+     $self->init_dist;
 PATCH
 }
 

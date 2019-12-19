@@ -11593,8 +11593,8 @@ $(PERLEXE): $(PERLDLL) $(CONFIGPM) $(PERLEXE_OBJ) $(PERLEXE_RES)
 	copy splittree.pl ..
 	$(MINIPERL) -I..\lib ..\splittree.pl "../LIB" $(AUTODIR)
 
-$(PERLEXE_ICO): $(HAVEMINIPERL) ..\uupacktool.pl $(PERLEXE_ICO).packd
-	$(MINIPERL) -I..\lib ..\uupacktool.pl -u $(PERLEXE_ICO).packd $(PERLEXE_ICO)
+$(PERLEXE_ICO): $(HAVEMINIPERL) makeico.pl
+	$(MINIPERL) makeico.pl > $@
 
 $(PERLEXE_RES): perlexe.rc $(PERLEXE_ICO)
 
@@ -11733,6 +11733,17 @@ MAKEFILE
  	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
  
  $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
+@@ -973,8 +971,8 @@
+ 	copy splittree.pl ..
+ 	$(MINIPERL) -I..\lib ..\splittree.pl "../LIB" $(AUTODIR)
+ 
+-$(PERLEXE_ICO): $(HAVEMINIPERL) makeico.pl
+-	$(MINIPERL) makeico.pl > $@
++$(PERLEXE_ICO): $(HAVEMINIPERL) ..\uupacktool.pl $(PERLEXE_ICO).packd
++	$(MINIPERL) -I..\lib ..\uupacktool.pl -u $(PERLEXE_ICO).packd $(PERLEXE_ICO)
+ 
+ $(PERLEXE_RES): perlexe.rc $(PERLEXE_ICO)
+ 
 @@ -991,6 +989,9 @@
  $(EXTDIR)\DynaLoader\dl_win32.xs: dl_win32.xs
  	copy dl_win32.xs $(EXTDIR)\DynaLoader\dl_win32.xs

@@ -7463,12 +7463,12 @@ LIBFILES	= $(LIBC) -lmoldname -lkernel32 -luser32 -lgdi32 -lwinspool \
 	-luuid -lws2_32 -lmpr -lwinmm -lversion -lodbc32 -lodbccp32 -lcomctl32
 
 ifeq ($(CFG),Debug)
-OPTIMIZE	= -g -O0 -DDEBUGGING
+OPTIMIZE	= -g -O2 -DDEBUGGING
 LINK_DBG	= -g
 else
 # It seems that there are some Undefined Behavior.
 # diable optimization to cause unexpected hebavior.
-OPTIMIZE	= -s -O0
+OPTIMIZE	= -s -O2
 LINK_DBG	= -s
 endif
 
@@ -8690,10 +8690,10 @@ LIBFILES	= $(LIBC) -lmoldname -lkernel32 -luser32 -lgdi32 -lwinspool \
 	-luuid -lws2_32 -lmpr -lwinmm -lversion -lodbc32 -lodbccp32
 
 ifeq ($(CFG),Debug)
-OPTIMIZE	= -g -O0 -DDEBUGGING
+OPTIMIZE	= -g -O2 -DDEBUGGING
 LINK_DBG	= -g
 else
-OPTIMIZE	= -s -O0
+OPTIMIZE	= -s -O2
 LINK_DBG	= -s
 endif
 
@@ -9784,7 +9784,7 @@ CCTYPE		:= GCC
 # If not enabled, we automatically try to use maximum optimization
 # with all compilers that are known to have a working optimizer.
 #
-CFG		:= Debug
+#CFG		:= Debug
 
 #
 # uncomment to enable use of PerlCRT.DLL when using the Visual C compiler.
@@ -10025,10 +10025,10 @@ LIBFILES	= $(LIBC) -lmoldname -lkernel32 -luser32 -lgdi32 -lwinspool \
 	-luuid -lws2_32 -lmpr -lwinmm -lversion -lodbc32 -lodbccp32
 
 ifeq ($(CFG),Debug)
-OPTIMIZE	= -g -O0 -DDEBUGGING
+OPTIMIZE	= -g -O2 -DDEBUGGING
 LINK_DBG	= -g
 else
-OPTIMIZE	= -s -O0
+OPTIMIZE	= -s -O2
 LINK_DBG	= -s
 endif
 
@@ -11198,10 +11198,10 @@ LIBFILES	= $(LIBC) -lmoldname -lkernel32 -luser32 -lgdi32 -lwinspool \
 	-luuid -lws2_32 -lmpr -lwinmm -lversion -lodbc32 -lodbccp32
 
 ifeq ($(CFG),Debug)
-OPTIMIZE	= -g -O0 -DDEBUGGING
+OPTIMIZE	= -g -O2 -DDEBUGGING
 LINK_DBG	= -g
 else
-OPTIMIZE	= -s -O0
+OPTIMIZE	= -s -O2
 LINK_DBG	= -s
 endif
 

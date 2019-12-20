@@ -11432,7 +11432,6 @@ CORE_NOCFG_H	=		\
 		..\perly.h	\
 		..\pp.h		\
 		..\proto.h	\
-		..\regcomp.h	\
 		..\regexp.h	\
 		..\scope.h	\
 		..\sv.h		\
@@ -11490,7 +11489,7 @@ STATIC_EXT	= * !Win32 !SDBM_File !Encode
 else
 # specify static extensions here, for example:
 #STATIC_EXT	= Cwd Compress/Raw/Zlib
-STATIC_EXT	= Win32CORE
+STATIC_EXT	=
 endif
 
 DYNALOADER	= $(EXTDIR)\DynaLoader\DynaLoader
@@ -11750,19 +11749,9 @@ $(PERLEXPLIB) : $(PERLIMPLIB)
 $(PERLIMPLIB) : perldll.def
 	$(IMPLIB) -k -d perldll.def -l $(PERLIMPLIB) -e $(PERLEXPLIB)
 
-$(PERLDLL): perldll.def $(PERLEXPLIB) $(PERLDLL_OBJ) Extensions_static
+$(PERLDLL): perldll.def $(PERLEXPLIB) $(PERLDLL_OBJ)
 	$(LINK32) -mdll -o $@ $(BLINK_FLAGS) \
-	   $(PERLDLL_OBJ) $(shell type Extensions_static) $(LIBFILES) $(PERLEXPLIB)
-
-$(PERLSTATICLIB): $(PERLDLL_OBJ) Extensions_static
-	$(LIB32) $(LIB_FLAGS) $@ $(PERLDLL_OBJ)
-	if exist $(STATICDIR) rmdir /s /q $(STATICDIR)
-	for %%i in ($(shell type Extensions_static)) do \
-		@mkdir $(STATICDIR) && cd $(STATICDIR) && \
-		$(ARCHPREFIX)ar x ..\%%i && \
-		$(ARCHPREFIX)ar q ..\$@ *$(o) && \
-		cd .. && rmdir /s /q $(STATICDIR)
-	$(XCOPY) $(PERLSTATICLIB) $(COREDIR)
+	   $(PERLDLL_OBJ) $(LIBFILES) $(PERLEXPLIB)
 
 $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
 	cd .. && miniperl.exe minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
@@ -11828,15 +11817,8 @@ $(HAVEMINIPERL): $(MINI_OBJ)
 
 #most of deps of this target are in DYNALOADER and therefore omitted here
 Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
-	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
-	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --dynamic
-	-if exist ext $(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext --dynamic
-
-Extensions_static : buildext.pl $(HAVEMINIPERL) $(CONFIGPM)
-	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
-	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --static
-	-if exist ext $(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext --static
-	$(MINIPERL) -I..\lib buildext.pl --list-static-libs > Extensions_static
+	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR)
+	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext
 
 #-------------------------------------------------------------------------------
 
@@ -11855,24 +11837,31 @@ utils: $(PERLEXE) $(X2P)
 	copy ..\README.beos     ..\pod\perlbeos.pod
 	copy ..\README.bs2000   ..\pod\perlbs2000.pod
 	copy ..\README.ce       ..\pod\perlce.pod
+	copy ..\README.cn       ..\pod\perlcn.pod
 	copy ..\README.cygwin   ..\pod\perlcygwin.pod
 	copy ..\README.dgux     ..\pod\perldgux.pod
 	copy ..\README.dos      ..\pod\perldos.pod
 	copy ..\README.epoc     ..\pod\perlepoc.pod
 	copy ..\README.freebsd  ..\pod\perlfreebsd.pod
+	copy ..\README.hpux     ..\pod\perlhpux.pod
 	copy ..\README.hurd     ..\pod\perlhurd.pod
 	copy ..\README.irix     ..\pod\perlirix.pod
+	copy ..\README.jp       ..\pod\perljp.pod
+	copy ..\README.ko       ..\pod\perlko.pod
 	copy ..\README.machten  ..\pod\perlmachten.pod
 	copy ..\README.macos    ..\pod\perlmacos.pod
+	copy ..\README.macosx   ..\pod\perlmacosx.pod
 	copy ..\README.mint     ..\pod\perlmint.pod
 	copy ..\README.mpeix    ..\pod\perlmpeix.pod
 	copy ..\README.netware  ..\pod\perlnetware.pod
 	copy ..\README.os2      ..\pod\perlos2.pod
 	copy ..\README.os390    ..\pod\perlos390.pod
+	copy ..\README.os400    ..\pod\perlos400.pod
 	copy ..\README.plan9    ..\pod\perlplan9.pod
 	copy ..\README.qnx      ..\pod\perlqnx.pod
 	copy ..\README.solaris  ..\pod\perlsolaris.pod
 	copy ..\README.tru64    ..\pod\perltru64.pod
+	copy ..\README.tw       ..\pod\perltw.pod
 	copy ..\README.uts      ..\pod\perluts.pod
 	copy ..\README.vmesa    ..\pod\perlvmesa.pod
 	copy ..\README.vms      ..\pod\perlvms.pod
@@ -11904,7 +11893,7 @@ $(UNIDATAFILES) : $(HAVEMINIPERL) $(CONFIGPM) ..\lib\unicore\mktables
 	cd ..\lib\unicore && ..\$(MINIPERL) -I..\lib mktables
 MAKEFILE
 
-    if (version->parse("v$version") >= version->parse("5.8.9")) {
+    if (_ge($version, "5.8.9")) {
         _patch(<<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
@@ -11935,7 +11924,24 @@ MAKEFILE
  		..\mg.c		\
  		..\numeric.c	\
  		..\op.c		\
-@@ -711,7 +709,7 @@
+@@ -601,6 +599,7 @@
+ 		..\perly.h	\
+ 		..\pp.h		\
+ 		..\proto.h	\
++		..\regcomp.h	\
+ 		..\regexp.h	\
+ 		..\scope.h	\
+ 		..\sv.h		\
+@@ -658,7 +657,7 @@
+ else
+ # specify static extensions here, for example:
+ #STATIC_EXT	= Cwd Compress/Raw/Zlib
+-STATIC_EXT	=
++STATIC_EXT	= Win32CORE
+ endif
+ 
+ DYNALOADER	= $(EXTDIR)\DynaLoader\DynaLoader
+@@ -710,7 +709,7 @@
  
  .PHONY: all
  
@@ -11944,7 +11950,29 @@ MAKEFILE
  	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
  
  $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
-@@ -973,8 +971,8 @@
+@@ -918,9 +917,19 @@
+ $(PERLIMPLIB) : perldll.def
+ 	$(IMPLIB) -k -d perldll.def -l $(PERLIMPLIB) -e $(PERLEXPLIB)
+ 
+-$(PERLDLL): perldll.def $(PERLEXPLIB) $(PERLDLL_OBJ)
++$(PERLDLL): perldll.def $(PERLEXPLIB) $(PERLDLL_OBJ) Extensions_static
+ 	$(LINK32) -mdll -o $@ $(BLINK_FLAGS) \
+-	   $(PERLDLL_OBJ) $(LIBFILES) $(PERLEXPLIB)
++	   $(PERLDLL_OBJ) $(shell type Extensions_static) $(LIBFILES) $(PERLEXPLIB)
++
++$(PERLSTATICLIB): $(PERLDLL_OBJ) Extensions_static
++	$(LIB32) $(LIB_FLAGS) $@ $(PERLDLL_OBJ)
++	if exist $(STATICDIR) rmdir /s /q $(STATICDIR)
++	for %%i in ($(shell type Extensions_static)) do \
++		@mkdir $(STATICDIR) && cd $(STATICDIR) && \
++		$(ARCHPREFIX)ar x ..\%%i && \
++		$(ARCHPREFIX)ar q ..\$@ *$(o) && \
++		cd .. && rmdir /s /q $(STATICDIR)
++	$(XCOPY) $(PERLSTATICLIB) $(COREDIR)
+ 
+ $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
+ 	cd .. && miniperl.exe minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
+@@ -962,8 +971,8 @@
  	copy splittree.pl ..
  	$(MINIPERL) -I..\lib ..\splittree.pl "../LIB" $(AUTODIR)
  
@@ -11955,7 +11983,7 @@ MAKEFILE
  
  $(PERLEXE_RES): perlexe.rc $(PERLEXE_ICO)
  
-@@ -991,6 +989,9 @@
+@@ -980,14 +989,24 @@
  $(EXTDIR)\DynaLoader\dl_win32.xs: dl_win32.xs
  	copy dl_win32.xs $(EXTDIR)\DynaLoader\dl_win32.xs
  
@@ -11965,12 +11993,158 @@ MAKEFILE
  $(HAVEMINIPERL): $(MINI_OBJ)
  	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
  	rem . > $@
-@@ -1070,4 +1071,4 @@
+ 
+ #most of deps of this target are in DYNALOADER and therefore omitted here
+ Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
+-	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR)
+-	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext
++	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
++	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --dynamic
++	-if exist ext $(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext --dynamic
++
++Extensions_static : buildext.pl $(HAVEMINIPERL) $(CONFIGPM)
++	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
++	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --static
++	-if exist ext $(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext --static
++	$(MINIPERL) -I..\lib buildext.pl --list-static-libs > Extensions_static
+ 
+ #-------------------------------------------------------------------------------
+ 
+@@ -1006,31 +1025,24 @@
+ 	copy ..\README.beos     ..\pod\perlbeos.pod
+ 	copy ..\README.bs2000   ..\pod\perlbs2000.pod
+ 	copy ..\README.ce       ..\pod\perlce.pod
+-	copy ..\README.cn       ..\pod\perlcn.pod
+ 	copy ..\README.cygwin   ..\pod\perlcygwin.pod
+ 	copy ..\README.dgux     ..\pod\perldgux.pod
+ 	copy ..\README.dos      ..\pod\perldos.pod
+ 	copy ..\README.epoc     ..\pod\perlepoc.pod
+ 	copy ..\README.freebsd  ..\pod\perlfreebsd.pod
+-	copy ..\README.hpux     ..\pod\perlhpux.pod
+ 	copy ..\README.hurd     ..\pod\perlhurd.pod
+ 	copy ..\README.irix     ..\pod\perlirix.pod
+-	copy ..\README.jp       ..\pod\perljp.pod
+-	copy ..\README.ko       ..\pod\perlko.pod
+ 	copy ..\README.machten  ..\pod\perlmachten.pod
+ 	copy ..\README.macos    ..\pod\perlmacos.pod
+-	copy ..\README.macosx   ..\pod\perlmacosx.pod
+ 	copy ..\README.mint     ..\pod\perlmint.pod
+ 	copy ..\README.mpeix    ..\pod\perlmpeix.pod
+ 	copy ..\README.netware  ..\pod\perlnetware.pod
+ 	copy ..\README.os2      ..\pod\perlos2.pod
+ 	copy ..\README.os390    ..\pod\perlos390.pod
+-	copy ..\README.os400    ..\pod\perlos400.pod
+ 	copy ..\README.plan9    ..\pod\perlplan9.pod
+ 	copy ..\README.qnx      ..\pod\perlqnx.pod
+ 	copy ..\README.solaris  ..\pod\perlsolaris.pod
+ 	copy ..\README.tru64    ..\pod\perltru64.pod
+-	copy ..\README.tw       ..\pod\perltw.pod
+ 	copy ..\README.uts      ..\pod\perluts.pod
+ 	copy ..\README.vmesa    ..\pod\perlvmesa.pod
+ 	copy ..\README.vms      ..\pod\perlvms.pod
+@@ -1059,4 +1071,4 @@
  	$(RCOPY) ..\lib $(INST_LIB)\$(NULL)
  
  $(UNIDATAFILES) : $(HAVEMINIPERL) $(CONFIGPM) ..\lib\unicore\mktables
 -	cd ..\lib\unicore && ..\$(MINIPERL) -I..\lib mktables
 +	cd ..\lib\unicore && ..\$(MINIPERL) -I..\lib mktables -check $@ $(FIRSTUNIFILE)
+PATCH
+        return;
+    }
+
+    if (_ge($version, "5.8.7")) {
+        _patch(<<'PATCH');
+--- 5.8.6/Makefile	2019-12-20 20:03:03.000000000 +0900
++++ 5.8.8/Makefile	2019-12-19 21:23:09.000000000 +0900
+@@ -601,6 +601,7 @@
+ 		..\perly.h	\
+ 		..\pp.h		\
+ 		..\proto.h	\
++		..\regcomp.h	\
+ 		..\regexp.h	\
+ 		..\scope.h	\
+ 		..\sv.h		\
+@@ -658,7 +659,7 @@
+ else
+ # specify static extensions here, for example:
+ #STATIC_EXT	= Cwd Compress/Raw/Zlib
+-STATIC_EXT	=
++STATIC_EXT	= Win32CORE
+ endif
+ 
+ DYNALOADER	= $(EXTDIR)\DynaLoader\DynaLoader
+@@ -918,9 +919,19 @@
+ $(PERLIMPLIB) : perldll.def
+ 	$(IMPLIB) -k -d perldll.def -l $(PERLIMPLIB) -e $(PERLEXPLIB)
+ 
+-$(PERLDLL): perldll.def $(PERLEXPLIB) $(PERLDLL_OBJ)
++$(PERLDLL): perldll.def $(PERLEXPLIB) $(PERLDLL_OBJ) Extensions_static
+ 	$(LINK32) -mdll -o $@ $(BLINK_FLAGS) \
+-	   $(PERLDLL_OBJ) $(LIBFILES) $(PERLEXPLIB)
++	   $(PERLDLL_OBJ) $(shell type Extensions_static) $(LIBFILES) $(PERLEXPLIB)
++
++$(PERLSTATICLIB): $(PERLDLL_OBJ) Extensions_static
++	$(LIB32) $(LIB_FLAGS) $@ $(PERLDLL_OBJ)
++	if exist $(STATICDIR) rmdir /s /q $(STATICDIR)
++	for %%i in ($(shell type Extensions_static)) do \
++		@mkdir $(STATICDIR) && cd $(STATICDIR) && \
++		$(ARCHPREFIX)ar x ..\%%i && \
++		$(ARCHPREFIX)ar q ..\$@ *$(o) && \
++		cd .. && rmdir /s /q $(STATICDIR)
++	$(XCOPY) $(PERLSTATICLIB) $(COREDIR)
+ 
+ $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
+ 	cd .. && miniperl.exe minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
+@@ -986,8 +997,15 @@
+ 
+ #most of deps of this target are in DYNALOADER and therefore omitted here
+ Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
+-	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR)
+-	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext
++	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
++	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --dynamic
++	-if exist ext $(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext --dynamic
++
++Extensions_static : buildext.pl $(HAVEMINIPERL) $(CONFIGPM)
++	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
++	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --static
++	-if exist ext $(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext --static
++	$(MINIPERL) -I..\lib buildext.pl --list-static-libs > Extensions_static
+ 
+ #-------------------------------------------------------------------------------
+ 
+@@ -1006,31 +1024,24 @@
+ 	copy ..\README.beos     ..\pod\perlbeos.pod
+ 	copy ..\README.bs2000   ..\pod\perlbs2000.pod
+ 	copy ..\README.ce       ..\pod\perlce.pod
+-	copy ..\README.cn       ..\pod\perlcn.pod
+ 	copy ..\README.cygwin   ..\pod\perlcygwin.pod
+ 	copy ..\README.dgux     ..\pod\perldgux.pod
+ 	copy ..\README.dos      ..\pod\perldos.pod
+ 	copy ..\README.epoc     ..\pod\perlepoc.pod
+ 	copy ..\README.freebsd  ..\pod\perlfreebsd.pod
+-	copy ..\README.hpux     ..\pod\perlhpux.pod
+ 	copy ..\README.hurd     ..\pod\perlhurd.pod
+ 	copy ..\README.irix     ..\pod\perlirix.pod
+-	copy ..\README.jp       ..\pod\perljp.pod
+-	copy ..\README.ko       ..\pod\perlko.pod
+ 	copy ..\README.machten  ..\pod\perlmachten.pod
+ 	copy ..\README.macos    ..\pod\perlmacos.pod
+-	copy ..\README.macosx   ..\pod\perlmacosx.pod
+ 	copy ..\README.mint     ..\pod\perlmint.pod
+ 	copy ..\README.mpeix    ..\pod\perlmpeix.pod
+ 	copy ..\README.netware  ..\pod\perlnetware.pod
+ 	copy ..\README.os2      ..\pod\perlos2.pod
+ 	copy ..\README.os390    ..\pod\perlos390.pod
+-	copy ..\README.os400    ..\pod\perlos400.pod
+ 	copy ..\README.plan9    ..\pod\perlplan9.pod
+ 	copy ..\README.qnx      ..\pod\perlqnx.pod
+ 	copy ..\README.solaris  ..\pod\perlsolaris.pod
+ 	copy ..\README.tru64    ..\pod\perltru64.pod
+-	copy ..\README.tw       ..\pod\perltw.pod
+ 	copy ..\README.uts      ..\pod\perluts.pod
+ 	copy ..\README.vmesa    ..\pod\perlvmesa.pod
+ 	copy ..\README.vms      ..\pod\perlvms.pod
 PATCH
     }
 }

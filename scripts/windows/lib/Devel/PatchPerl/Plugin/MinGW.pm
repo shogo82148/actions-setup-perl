@@ -16,6 +16,14 @@ use File::Spec;
 my @patch = (
     {
         perl => [
+            qr/.*/,
+        ],
+        subs => [
+            [ \&_patch_config ],
+        ],
+    },
+    {
+        perl => [
             qr/^5\.22\./,
         ],
         subs => [
@@ -158,7 +166,6 @@ my @patch = (
             qr/^5\.8\./,
         ],
         subs => [
-            [ \&_patch_config ],
             [ \&_patch_gnumakefile_508 ],
         ],
     },
@@ -213,6 +220,12 @@ sub patchperl {
     }
 }
 
+# it is same as ge operator of strings but it assumes the strings are versions
+sub _ge {
+    my ($v1, $v2) = @_;
+    return version->parse("v$v1") >= version->parse("v$v2");
+}
+
 sub _write_or_die {
     my($file, $data) = @_;
     my $fh = IO::File->new(">$file") or die "$file: $!\n";
@@ -223,7 +236,7 @@ sub _patch_make_maker {
     # from https://github.com/Perl/perl5/commit/9cc600a92e7d683d4b053eb5e84ca8654ce82ac4
     # Win32 gmake needs SHELL to be specified
     my $version = shift;
-    if (version->parse("v$version") >= version->parse("5.11.0")) {
+    if (_ge($version, "5.11.0")) {
         _patch(<<'PATCH');
 --- cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm
 +++ cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm
@@ -558,7 +571,8 @@ PATCH
         return;
     }
 
-    _patch(<<'PATCH');
+    if (version->parse("v$version") >= version->parse("5.8.8")) {
+        _patch(<<'PATCH');
 --- lib/ExtUtils/MM_Any.pm
 +++ lib/ExtUtils/MM_Any.pm
 @@ -326,6 +326,29 @@ $self->{_MAX_EXEC_LEN} is set by this method, but only for testing purposes.
@@ -716,6 +730,234 @@ PATCH
      $self->init_main;
      $self->init_VERSION;
      $self->init_dist;
+PATCH
+        return;
+    }
+
+    _patch(<<'PATCH');
+--- lib/ExtUtils/MM_Any.pm
++++ lib/ExtUtils/MM_Any.pm
+@@ -339,6 +339,29 @@ END_OF_TARGET
+ 
+ }
+ 
++=head3 make
++
++    my $make = $MM->make;
++
++Returns the make variant we're generating the Makefile for.  This attempts
++to do some normalization on the information from %Config or the user.
++
++=cut
++
++sub make {
++    my $self = shift;
++
++    my $make = lc $self->{MAKE};
++
++    # Truncate anything like foomake6 to just foomake.
++    $make =~ s/^(\w+make).*/$1/;
++
++    # Turn gnumake into gmake.
++    $make =~ s/^gnu/g/;
++
++    return $make;
++}
++
+ 
+ =item manifypods_target
+ 
+@@ -847,6 +870,19 @@ Michael G Schwern <schwern@pobox.com> and the denizens of
+ makemaker@perl.org with code from ExtUtils::MM_Unix and
+ ExtUtils::MM_Win32.
+ 
++=head3 init_MAKE
++
++    $mm->init_MAKE
++
++Initialize MAKE from either a MAKE environment variable or $Config{make}.
++
++=cut
++
++sub init_MAKE {
++    my $self = shift;
++ 
++    $self->{MAKE} ||= $ENV{MAKE} || $Config{make};
++}
+ 
+ =cut
+ 
+--- lib/ExtUtils/MM_Unix.pm
++++ lib/ExtUtils/MM_Unix.pm
+@@ -372,8 +372,8 @@ sub const_cccmd {
+ 
+ =item const_config (o)
+ 
+-Defines a couple of constants in the Makefile that are imported from
+-%Config.
++Sets SHELL if needed, then defines a couple of constants in the Makefile
++that are imported from %Config.
+ 
+ =cut
+ 
+@@ -384,6 +384,7 @@ sub const_config {
+     my(@m,$m);
+     push(@m,"\n# These definitions are from config.sh (via $INC{'Config.pm'})\n");
+     push(@m,"\n# They may have been overridden via Makefile.PL or on the command line\n");
++    push(@m, $self->specify_shell()); # Usually returns empty string
+     my(%once_only);
+     foreach $m (@{$self->{CONFIG}}){
+ 	# SITE*EXP macros are defined in &constants; avoid duplicates here
+@@ -433,9 +434,11 @@ sub constants {
+     my($self) = @_;
+     my @m = ();
+ 
++    $self->{DFSEP} = '$(DIRFILESEP)';  # alias for internal use
++
+     for my $macro (qw(
+ 
+-              AR_STATIC_ARGS DIRFILESEP
++              AR_STATIC_ARGS DIRFILESEP DFSEP
+               NAME NAME_SYM 
+               VERSION    VERSION_MACRO    VERSION_SYM DEFINE_VERSION
+               XS_VERSION XS_VERSION_MACRO             XS_DEFINE_VERSION
+@@ -591,7 +594,7 @@ sub dir_target {
+ 	}
+ 	next if $self->{DIR_TARGET}{$self}{$targdir}++;
+ 	push @m, qq{
+-$targ :: $src
++$dir\$(DFSEP).exists :: $src
+ 	\$(NOECHO) \$(MKPATH) $targdir
+ 	\$(NOECHO) \$(EQUALIZE_TIMESTAMP) $src $targ
+ };
+@@ -2633,7 +2636,7 @@ realclean ::
+ 	last unless defined $from;
+ 	my $todir = dirname($to);
+ 	push @m, "
+-$to: $from \$(FIRST_MAKEFILE) " . $self->catdir($todir,'.exists') . "
++$to: $from \$(FIRST_MAKEFILE) $todir\$(DFSEP).exists
+ 	\$(NOECHO) \$(RM_F) $to
+ 	\$(CP) $from $to
+ 	\$(FIXIN) $to
+@@ -3470,6 +3473,16 @@ $target :: $plfile
+     join "", @m;
+ }
+ 
++=item specify_shell
++
++Specify SHELL if needed - not done on Unix.
++
++=cut
++
++sub specify_shell {
++  return '';
++}
++
+ =item quote_paren
+ 
+ Backslashes parentheses C<()> in command line arguments.
+--- lib/ExtUtils/MM_Win32.pm
++++ lib/ExtUtils/MM_Win32.pm
+@@ -137,7 +137,7 @@ sub find_tests {
+ 
+ =item B<init_DIRFILESEP>
+ 
+-Using \ for Windows.
++Using \ for Windows, except for "gmake" where it is /.
+ 
+ =cut
+ 
+@@ -145,9 +145,10 @@ sub init_DIRFILESEP {
+     my($self) = shift;
+ 
+     # The ^ makes sure its not interpreted as an escape in nmake
+-    $self->{DIRFILESEP} = $NMAKE ? '^\\' :
+-                          $DMAKE ? '\\\\'
+-                                 : '\\';
++    $self->{DIRFILESEP} = $self->is_make_type('nmake') ? '^\\' :
++                          $self->is_make_type('dmake') ? '\\\\' :
++                          $self->is_make_type('gmake') ? '/'
++                                                       : '\\';
+ }
+ 
+ =item B<init_others>
+@@ -510,6 +511,22 @@ sub os_flavor {
+     return('Win32');
+ }
+ 
++=item specify_shell
++
++Set SHELL to $ENV{COMSPEC} only if make is type 'gmake'.
++
++=cut
++
++sub specify_shell {
++    my $self = shift;
++    return '' unless $self->is_make_type('gmake');
++    "\nSHELL = $ENV{COMSPEC}\n";
++}
++
++sub is_make_type {
++    my($self, $type) = @_;
++    return !! ($self->make =~ /\b$type(?:\.exe)?$/);
++}
+ 
+ 1;
+ __END__
+--- lib/ExtUtils/MakeMaker.pm
++++ lib/ExtUtils/MakeMaker.pm
+@@ -482,6 +482,7 @@ sub new {
+ 
+     ($self->{NAME_SYM} = $self->{NAME}) =~ s/\W+/_/g;
+ 
++    $self->init_MAKE;
+     $self->init_main;
+     $self->init_VERSION;
+     $self->init_dist;
+--- win32/config_H.gc
++++ win32/config_H.gc
+@@ -911,16 +911,15 @@
+  *	Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
+  *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.
+  */
+-/*#define HAS_QUAD	/**/
+-#ifdef HAS_QUAD
++#define HAS_QUAD
+ #   define Quad_t long long	/**/
+ #   define Uquad_t unsigned long long	/**/
+-#   define QUADKIND 5	/**/
++#   define QUADKIND 3	/**/
+ #   define QUAD_IS_INT	1
+ #   define QUAD_IS_LONG	2
+ #   define QUAD_IS_LONG_LONG	3
+ #   define QUAD_IS_INT64_T	4
+-#endif
++#   define QUAD_IS___INT64	5
+ 
+ /* HAS_ACCESSX:
+  *	This symbol, if defined, indicates that the accessx routine is
+@@ -1825,7 +1824,9 @@
+  *	available to exclusively create and open a uniquely named
+  *	temporary file.
+  */
+-/*#define HAS_MKSTEMP		/**/
++#if __MINGW64_VERSION_MAJOR >= 4
++#define HAS_MKSTEMP
++#endif
+ 
+ /* HAS_MMAP:
+  *	This symbol, if defined, indicates that the mmap system call is
+@@ -2614,7 +2615,9 @@
+  *	available to excluslvely create and open a uniquely named
+  *	(with a suffix) temporary file.
+  */
+-/*#define HAS_MKSTEMPS		/**/
++#if __MINGW64_VERSION_MAJOR >= 4
++#define HAS_MKSTEMPS
++#endif
+ 
+ /* HAS_MODFL:
+  *	This symbol, if defined, indicates that the modfl routine is
 PATCH
 }
 
@@ -1812,7 +2054,7 @@ PATCH
 
 sub _patch_win32_mkstemp {
     my $version = shift;
-    if (version->parse("v$version") >= version->parse("5.18.0")) {
+    if (_ge($version, "5.18.0")) {
         _patch(<<'PATCH');
 --- win32/win32.h
 +++ win32/win32.h
@@ -1845,38 +2087,12 @@ sub _patch_win32_mkstemp {
  
  static long
  find_pid(pTHX_ int pid)
---- win32/config_H.gc
-+++ win32/config_H.gc
-@@ -1973,7 +1970,9 @@
-  *	available to exclusively create and open a uniquely named
-  *	temporary file.
-  */
--/*#define HAS_MKSTEMP		/ **/
-+#if __MINGW64_VERSION_MAJOR >= 4
-+#define HAS_MKSTEMP
-+#endif
- 
- /* HAS_MMAP:
-  *	This symbol, if defined, indicates that the mmap system call is
 PATCH
     return
     }
 
-    if (version->parse("v$version") >= version->parse("5.12.0")) {
+    if (_ge($version, "5.12.0")) {
 	    _patch(<<'PATCH');
---- win32/config_H.gc
-+++ win32/config_H.gc
-@@ -2643,7 +2643,9 @@
-  *	available to exclusively create and open a uniquely named
-  *	temporary file.
-  */
--/*#define HAS_MKSTEMP		/ **/
-+#if __MINGW64_VERSION_MAJOR >= 4
-+#define HAS_MKSTEMP
-+#endif
- 
- /* HAS_MMAP:
-  *	This symbol, if defined, indicates that the mmap system call is
 diff --git a/win32/win32.c b/win32/win32.c
 index 89413fc28c..fd7b326466 100644
 --- win32/win32.c
@@ -1916,31 +2132,8 @@ PATCH
     return
     }
 
-    if (version->parse("v$version") >= version->parse("5.10.1")) {
+    if (_ge($version, "5.10.1")) {
         _patch(<<'PATCH');
---- win32/config_H.gc
-+++ win32/config_H.gc
-@@ -3692,14 +3692,18 @@
-  *	This symbol, if defined, indicates that the mkdtemp routine is
-  *	available to exclusively create a uniquely named temporary directory.
-  */
--/*#define HAS_MKDTEMP		/**/
-+#if __MINGW64_VERSION_MAJOR >= 4
-+#define HAS_MKDTEMP
-+#endif
- 
- /* HAS_MKSTEMPS:
-  *	This symbol, if defined, indicates that the mkstemps routine is
-  *	available to excluslvely create and open a uniquely named
-  *	(with a suffix) temporary file.
-  */
--/*#define HAS_MKSTEMPS		/**/
-+#if __MINGW64_VERSION_MAJOR >= 4
-+#define HAS_MKSTEMPS
-+#endif
- 
- /* HAS_MODFL:
-  *	This symbol, if defined, indicates that the modfl routine is
 --- win32/win32.c
 +++ win32/win32.c
 @@ -1101,6 +1101,7 @@ chown(const char *path, uid_t owner, gid_t group)
@@ -1974,40 +2167,8 @@ PATCH
 PATCH
         return
     }
-    if (version->parse("v$version") >= version->parse("5.10.0")) {
+    if (_ge($version, "5.10.0")) {
         _patch(<<'PATCH');
---- win32/config_H.gc
-+++ win32/config_H.gc
-@@ -2356,14 +2356,18 @@
-  *	This symbol, if defined, indicates that the mkdtemp routine is
-  *	available to exclusively create a uniquely named temporary directory.
-  */
--/*#define HAS_MKDTEMP		/**/
-+#if __MINGW64_VERSION_MAJOR >= 4
-+#define HAS_MKSTEMP
-+#endif
- 
- /* HAS_MKSTEMP:
-  *	This symbol, if defined, indicates that the mkstemp routine is
-  *	available to exclusively create and open a uniquely named
-  *	temporary file.
-  */
--/*#define HAS_MKSTEMP		/**/
-+#if __MINGW64_VERSION_MAJOR >= 4
-+#define HAS_MKSTEMPS
-+#endif
- 
- /* HAS_MKSTEMPS:
-  *	This symbol, if defined, indicates that the mkstemps routine is
-@@ -3849,7 +3853,7 @@
-  *	Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
-  *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.
-  */
--/*#define HAS_QUAD	/**/
-+#define HAS_QUAD
- #ifdef HAS_QUAD
- #   ifndef _MSC_VER
- #	define Quad_t long long	/**/
 --- win32/win32.c
 +++ win32/win32.c
 @@ -1101,6 +1101,7 @@ chown(const char *path, uid_t owner, gid_t group)
@@ -2042,156 +2203,8 @@ PATCH
         return;
     }
 
-    if (version->parse("v$version") >= version->parse("5.8.2")) {
-        _patch(<<'PATCH');
---- win32/config_H.gc
-+++ win32/config_H.gc
-@@ -2363,14 +2363,18 @@
-  *	available to exclusively create and open a uniquely named
-  *	temporary file.
-  */
--/*#define HAS_MKSTEMP		/**/
-+#if __MINGW64_VERSION_MAJOR >= 4
-+#define HAS_MKSTEMP
-+#endif
- 
- /* HAS_MKSTEMPS:
-  *	This symbol, if defined, indicates that the mkstemps routine is
-  *	available to excluslvely create and open a uniquely named
-  *	(with a suffix) temporary file.
-  */
--/*#define HAS_MKSTEMPS		/**/
-+#if __MINGW64_VERSION_MAJOR >= 4
-+#define HAS_MKSTEMPS
-+#endif
- 
- /* HAS_MMAP:
-  *	This symbol, if defined, indicates that the mmap system call is
---- win32/win32.c
-+++ win32/win32.c
-@@ -1094,6 +1094,7 @@ chown(const char *path, uid_t owner, gid_t group)
-  * XXX this needs strengthening  (for PerlIO)
-  *   -- BKS, 11-11-200
- */
-+#if !defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 4
- int mkstemp(const char *path)
- {
-     dTHX;
-@@ -1114,6 +1115,7 @@ retry:
- 	goto retry;
-     return fd;
- }
-+#endif
- 
- static long
- find_pid(int pid)
---- win32/win32.h
-+++ win32/win32.h
-@@ -292,7 +292,9 @@ extern  void	*sbrk(ptrdiff_t need);
- #endif
- extern	char *	getlogin(void);
- extern	int	chown(const char *p, uid_t o, gid_t g);
-+#if !defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 4
- extern  int	mkstemp(const char *path);
-+#endif
- 
- #undef	 Stat
- #define  Stat		win32_stat
-PATCH
-        return;
-    }
-
-    if (version->parse("v$version") >= version->parse("5.8.1")) {
-        _patch(<<'PATCH');
---- win32/config_H.gc
-+++ win32/config_H.gc
-@@ -905,7 +905,7 @@
-  *	Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
-  *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.
-  */
--/*#define HAS_QUAD	/**/
-+#define HAS_QUAD
- #ifdef HAS_QUAD
- #   define Quad_t long long	/**/
- #   define Uquad_t unsigned long long	/**/
-@@ -1819,7 +1819,9 @@
-  *	available to exclusively create and open a uniquely named
-  *	temporary file.
-  */
--/*#define HAS_MKSTEMP		/**/
-+#if __MINGW64_VERSION_MAJOR >= 4
-+#define HAS_MKSTEMP
-+#endif
- 
- /* HAS_MMAP:
-  *	This symbol, if defined, indicates that the mmap system call is
---- win32/win32.c
-+++ win32/win32.c
-@@ -986,6 +986,7 @@ chown(const char *path, uid_t owner, gid_t group)
-  * XXX this needs strengthening  (for PerlIO)
-  *   -- BKS, 11-11-200
- */
-+#if !defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 4
- int mkstemp(const char *path)
- {
-     dTHX;
-@@ -1006,6 +1007,7 @@ retry:
- 	goto retry;
-     return fd;
- }
-+#endif
- 
- static long
- find_pid(int pid)
---- win32/win32.h
-+++ win32/win32.h
-@@ -266,7 +266,9 @@ extern  void	*sbrk(ptrdiff_t need);
- #endif
- extern	char *	getlogin(void);
- extern	int	chown(const char *p, uid_t o, gid_t g);
-+#if !defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 4
- extern  int	mkstemp(const char *path);
-+#endif
- 
- #undef	 Stat
- #define  Stat		win32_stat
-PATCH
-        return;
-    }
-
+    if(_ge($version, "5.8.8")) {
     _patch(<<'PATCH');
---- win32/config_H.gc
-+++ win32/config_H.gc
-@@ -908,7 +908,7 @@
-  *	Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
-  *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.
-  */
--/*#define HAS_QUAD	/**/
-+#define HAS_QUAD
- #ifdef HAS_QUAD
- #   define Quad_t long long	/**/
- #   define Uquad_t unsigned long long	/**/
-@@ -1906,14 +1906,18 @@
-  *	available to exclusively create and open a uniquely named
-  *	temporary file.
-  */
--/*#define HAS_MKSTEMP		/**/
-+#if __MINGW64_VERSION_MAJOR >= 4
-+#define HAS_MKSTEMP
-+#endif
- 
- /* HAS_MKSTEMPS:
-  *	This symbol, if defined, indicates that the mkstemps routine is
-  *	available to excluslvely create and open a uniquely named
-  *	(with a suffix) temporary file.
-  */
--/*#define HAS_MKSTEMPS		/**/
-+#if __MINGW64_VERSION_MAJOR >= 4
-+#define HAS_MKSTEMPS
-+#endif
- 
- /* HAS_MMAP:
-  *	This symbol, if defined, indicates that the mmap system call is
 --- win32/win32.c
 +++ win32/win32.c
 @@ -985,6 +985,7 @@ chown(const char *path, uid_t owner, gid_t group)
@@ -2213,6 +2226,41 @@ PATCH
 --- win32/win32.h
 +++ win32/win32.h
 @@ -264,7 +264,9 @@ extern  void	*sbrk(ptrdiff_t need);
+ #endif
+ extern	char *	getlogin(void);
+ extern	int	chown(const char *p, uid_t o, gid_t g);
++#if !defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 4
+ extern  int	mkstemp(const char *path);
++#endif
+ 
+ #undef	 Stat
+ #define  Stat		win32_stat
+PATCH
+        return;
+    }
+
+    _patch(<<'PATCH');
+--- win32/win32.c
++++ win32/win32.c
+@@ -1094,6 +1094,7 @@ chown(const char *path, uid_t owner, gid_t group)
+  * XXX this needs strengthening  (for PerlIO)
+  *   -- BKS, 11-11-200
+ */
++#if !defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 4
+ int mkstemp(const char *path)
+ {
+     dTHX;
+@@ -1114,6 +1115,7 @@ retry:
+ 	goto retry;
+     return fd;
+ }
++#endif
+ 
+ static long
+ find_pid(int pid)
+--- win32/win32.h
++++ win32/win32.h
+@@ -292,7 +292,9 @@ extern  void	*sbrk(ptrdiff_t need);
  #endif
  extern	char *	getlogin(void);
  extern	int	chown(const char *p, uid_t o, gid_t g);
@@ -11929,7 +11977,150 @@ PATCH
 
 sub _patch_config {
     my $version = shift;
+
+    if (_ge($version, "5.20.3")) {
+        return;
+    }
+
+    if (_ge($version, "5.18.0")) {
+        _patch(<<'PATCH');
+--- win32/config_H.gc
++++ win32/config_H.gc
+@@ -1973,7 +1970,9 @@
+  *	available to exclusively create and open a uniquely named
+  *	temporary file.
+  */
+-/*#define HAS_MKSTEMP		/ **/
++#if __MINGW64_VERSION_MAJOR >= 4
++#define HAS_MKSTEMP
++#endif
+ 
+ /* HAS_MMAP:
+  *	This symbol, if defined, indicates that the mmap system call is
+PATCH
+        return;
+    }
+
+    if (_ge($version, "5.12.0")) {
+	    _patch(<<'PATCH');
+--- win32/config_H.gc
++++ win32/config_H.gc
+@@ -2643,7 +2643,9 @@
+  *	available to exclusively create and open a uniquely named
+  *	temporary file.
+  */
+-/*#define HAS_MKSTEMP		/ **/
++#if __MINGW64_VERSION_MAJOR >= 4
++#define HAS_MKSTEMP
++#endif
+ 
+ /* HAS_MMAP:
+  *	This symbol, if defined, indicates that the mmap system call is
+PATCH
+        return;
+    }
+
+    if (_ge($version, "5.10.1")) {
+        _patch(<<'PATCH');
+--- win32/config_H.gc
++++ win32/config_H.gc
+@@ -3692,14 +3692,18 @@
+  *	This symbol, if defined, indicates that the mkdtemp routine is
+  *	available to exclusively create a uniquely named temporary directory.
+  */
+-/*#define HAS_MKDTEMP		/**/
++#if __MINGW64_VERSION_MAJOR >= 4
++#define HAS_MKDTEMP
++#endif
+ 
+ /* HAS_MKSTEMPS:
+  *	This symbol, if defined, indicates that the mkstemps routine is
+  *	available to excluslvely create and open a uniquely named
+  *	(with a suffix) temporary file.
+  */
+-/*#define HAS_MKSTEMPS		/**/
++#if __MINGW64_VERSION_MAJOR >= 4
++#define HAS_MKSTEMPS
++#endif
+ 
+ /* HAS_MODFL:
+  *	This symbol, if defined, indicates that the modfl routine is
+PATCH
+        return;
+    }
+
+    if (_ge($version, "5.10.0")) {
+        _patch(<<'PATCH');
+--- win32/config_H.gc
++++ win32/config_H.gc
+@@ -2356,14 +2356,18 @@
+  *	This symbol, if defined, indicates that the mkdtemp routine is
+  *	available to exclusively create a uniquely named temporary directory.
+  */
+-/*#define HAS_MKDTEMP		/**/
++#if __MINGW64_VERSION_MAJOR >= 4
++#define HAS_MKSTEMP
++#endif
+ 
+ /* HAS_MKSTEMP:
+  *	This symbol, if defined, indicates that the mkstemp routine is
+  *	available to exclusively create and open a uniquely named
+  *	temporary file.
+  */
+-/*#define HAS_MKSTEMP		/**/
++#if __MINGW64_VERSION_MAJOR >= 4
++#define HAS_MKSTEMPS
++#endif
+ 
+ /* HAS_MKSTEMPS:
+  *	This symbol, if defined, indicates that the mkstemps routine is
+@@ -3849,7 +3853,7 @@
+  *	Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
+  *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.
+  */
+-/*#define HAS_QUAD	/**/
++#define HAS_QUAD
+ #ifdef HAS_QUAD
+ #   ifndef _MSC_VER
+ #	define Quad_t long long	/**/
+PATCH
+        return;
+    }
+
     _patch(<<'PATCH');
+PATCH
+
+    if (_ge($version, "5.8.9")) {
+        _patch(<<'PATCH');
+--- win32/config_H.gc
++++ win32/config_H.gc
+@@ -3849,21 +3849,15 @@
+  *	Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
+  *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.
+  */
+-/*#define HAS_QUAD	/**/
+-#ifdef HAS_QUAD
+-#   ifndef _MSC_VER
+-#	define Quad_t long long	/**/
+-#	define Uquad_t unsigned long long	/**/
+-#   else
+-#	define Quad_t __int64	/**/
+-#	define Uquad_t unsigned __int64	/**/
+-#   endif
+-#   define QUADKIND 5	/**/
++#define HAS_QUAD
++#   define Quad_t long long	/**/
++#   define Uquad_t unsigned long long	/**/
++#   define QUADKIND 3	/**/
+ #   define QUAD_IS_INT	1
+ #   define QUAD_IS_LONG	2
+ #   define QUAD_IS_LONG_LONG	3
+ #   define QUAD_IS_INT64_T	4
+-#endif
++#   define QUAD_IS___INT64	5
+ 
+ /* IVTYPE:
+  *	This symbol defines the C type used for Perl's IV.
 --- win32/config.gc
 +++ win32/config.gc
 @@ -345,7 +345,7 @@ d_pwgecos='undef'
@@ -11979,43 +12170,11 @@ sub _patch_config {
      s/~([\w_]+)~/$opt{$1}/g;
      if (/^([\w_]+)=(.*)$/) {
 PATCH
-
-    if (version->parse("v$version") >= version->parse("5.8.9")) {
-        _patch(<<'PATCH');
---- win32/config_H.gc
-+++ win32/config_H.gc
-@@ -3849,21 +3849,15 @@
-  *	Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
-  *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.
-  */
--/*#define HAS_QUAD	/**/
--#ifdef HAS_QUAD
--#   ifndef _MSC_VER
--#	define Quad_t long long	/**/
--#	define Uquad_t unsigned long long	/**/
--#   else
--#	define Quad_t __int64	/**/
--#	define Uquad_t unsigned __int64	/**/
--#   endif
--#   define QUADKIND 5	/**/
-+#define HAS_QUAD
-+#   define Quad_t long long	/**/
-+#   define Uquad_t unsigned long long	/**/
-+#   define QUADKIND 3	/**/
- #   define QUAD_IS_INT	1
- #   define QUAD_IS_LONG	2
- #   define QUAD_IS_LONG_LONG	3
- #   define QUAD_IS_INT64_T	4
--#endif
-+#   define QUAD_IS___INT64	5
- 
- /* IVTYPE:
-  *	This symbol defines the C type used for Perl's IV.
-PATCH
         return;
     }
 
-    _patch(<<'PATCH');
+    if (_ge($version, "5.8.8")) {
+        _patch(<<'PATCH');
 --- win32/config_H.gc
 +++ win32/config_H.gc
 @@ -3150,16 +3150,15 @@
@@ -12038,6 +12197,151 @@ PATCH
  
  /* IVTYPE:
   *	This symbol defines the C type used for Perl's IV.
+--- win32/config.gc
++++ win32/config.gc
+@@ -345,7 +345,7 @@ d_pwgecos='undef'
+ d_pwpasswd='undef'
+ d_pwquota='undef'
+ d_qgcvt='undef'
+-d_quad='undef'
++d_quad='define'
+ d_random_r='undef'
+ d_readdir64_r='undef'
+ d_readdir='define'
+--- win32/config_sh.PL
++++ win32/config_sh.PL
+@@ -133,6 +133,34 @@ if ($opt{useithreads} eq 'define' && $opt{ccflags} =~ /-DPERL_IMPLICIT_SYS\b/) {
+     $opt{d_pseudofork} = 'define';
+ }
+ 
++# 64-bit patch is hard coded from here
++my $int64  = 'long long';
++$opt{d_atoll} = 'define';
++$opt{d_strtoll} = 'define';
++$opt{d_strtoull} = 'define';
++$opt{ptrsize} = 8;
++$opt{sizesize} = 8;
++$opt{ssizetype} = $int64;
++$opt{st_ino_size} = 8;
++$opt{d_nv_preserves_uv} = 'undef';
++$opt{nv_preserves_uv_bits} = 53;
++$opt{ivdformat} = qq{"I64d"};
++$opt{ivsize} = 8;
++$opt{ivtype} = $int64;
++$opt{sPRIXU64} = qq{"I64X"};
++$opt{sPRId64} = qq{"I64d"};
++$opt{sPRIi64} = qq{"I64i"};
++$opt{sPRIo64} = qq{"I64o"};
++$opt{sPRIu64} = qq{"I64u"};
++$opt{sPRIx64} = qq{"I64x"};
++$opt{uvXUformat} = qq{"I64X"};
++$opt{uvoformat} = qq{"I64o"};
++$opt{uvsize} = 8;
++$opt{uvtype} = qq{unsigned $int64};
++$opt{uvuformat} = qq{"I64u"};
++$opt{uvxformat} = qq{"I64x"};
++# end of 64-bit patch
++
+ while (<>) {
+     s/~([\w_]+)~/$opt{$1}/g;
+     if (/^([\w_]+)=(.*)$/) {
+PATCH
+        return;
+    }
+
+    _patch(<<'PATCH');
+--- win32/config_H.gc
++++ win32/config_H.gc
+@@ -911,16 +911,15 @@
+  *	Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
+  *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.
+  */
+-/*#define HAS_QUAD	/**/
+-#ifdef HAS_QUAD
++#define HAS_QUAD
+ #   define Quad_t long long	/**/
+ #   define Uquad_t unsigned long long	/**/
+-#   define QUADKIND 5	/**/
++#   define QUADKIND 3	/**/
+ #   define QUAD_IS_INT	1
+ #   define QUAD_IS_LONG	2
+ #   define QUAD_IS_LONG_LONG	3
+ #   define QUAD_IS_INT64_T	4
+-#endif
++#   define QUAD_IS___INT64	5
+ 
+ /* HAS_ACCESSX:
+  *	This symbol, if defined, indicates that the accessx routine is
+@@ -1825,7 +1824,9 @@
+  *	available to exclusively create and open a uniquely named
+  *	temporary file.
+  */
+-/*#define HAS_MKSTEMP		/**/
++#if __MINGW64_VERSION_MAJOR >= 4
++#define HAS_MKSTEMP
++#endif
+ 
+ /* HAS_MMAP:
+  *	This symbol, if defined, indicates that the mmap system call is
+@@ -2614,7 +2615,9 @@
+  *	available to excluslvely create and open a uniquely named
+  *	(with a suffix) temporary file.
+  */
+-/*#define HAS_MKSTEMPS		/**/
++#if __MINGW64_VERSION_MAJOR >= 4
++#define HAS_MKSTEMPS
++#endif
+ 
+ /* HAS_MODFL:
+  *	This symbol, if defined, indicates that the modfl routine is
+--- win32/config.gc
++++ win32/config.gc
+@@ -345,7 +345,7 @@ d_pwgecos='undef'
+ d_pwpasswd='undef'
+ d_pwquota='undef'
+ d_qgcvt='undef'
+-d_quad='undef'
++d_quad='define'
+ d_random_r='undef'
+ d_readdir64_r='undef'
+ d_readdir='define'
+--- win32/config_sh.PL
++++ win32/config_sh.PL
+@@ -133,6 +133,34 @@ if ($opt{useithreads} eq 'define' && $opt{ccflags} =~ /-DPERL_IMPLICIT_SYS\b/) {
+     $opt{d_pseudofork} = 'define';
+ }
+ 
++# 64-bit patch is hard coded from here
++my $int64  = 'long long';
++$opt{d_atoll} = 'define';
++$opt{d_strtoll} = 'define';
++$opt{d_strtoull} = 'define';
++$opt{ptrsize} = 8;
++$opt{sizesize} = 8;
++$opt{ssizetype} = $int64;
++$opt{st_ino_size} = 8;
++$opt{d_nv_preserves_uv} = 'undef';
++$opt{nv_preserves_uv_bits} = 53;
++$opt{ivdformat} = qq{"I64d"};
++$opt{ivsize} = 8;
++$opt{ivtype} = $int64;
++$opt{sPRIXU64} = qq{"I64X"};
++$opt{sPRId64} = qq{"I64d"};
++$opt{sPRIi64} = qq{"I64i"};
++$opt{sPRIo64} = qq{"I64o"};
++$opt{sPRIu64} = qq{"I64u"};
++$opt{sPRIx64} = qq{"I64x"};
++$opt{uvXUformat} = qq{"I64X"};
++$opt{uvoformat} = qq{"I64o"};
++$opt{uvsize} = 8;
++$opt{uvtype} = qq{unsigned $int64};
++$opt{uvuformat} = qq{"I64u"};
++$opt{uvxformat} = qq{"I64x"};
++# end of 64-bit patch
++
+ while (<>) {
+     s/~([\w_]+)~/$opt{$1}/g;
+     if (/^([\w_]+)=(.*)$/) {
 PATCH
 }
 

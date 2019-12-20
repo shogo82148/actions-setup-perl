@@ -86,7 +86,7 @@ sub run {
 
     group "build and install Perl" => sub {
         my $dir = pushd(File::Spec->catdir($tmpdir, "perl-$version", "win32"));
-        execute_or_die("gmake", "-d", "-f", "GNUmakefile", "install", "INST_TOP=$install_dir", "CCHOME=C:\\MinGW");
+        execute_or_die("gmake", "-f", "GNUmakefile", "install", "INST_TOP=$install_dir", "CCHOME=C:\\MinGW");
     };
 
     group "perl -V" => sub {

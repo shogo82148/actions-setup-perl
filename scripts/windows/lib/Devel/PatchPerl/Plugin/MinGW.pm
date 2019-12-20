@@ -11198,10 +11198,10 @@ LIBFILES	= $(LIBC) -lmoldname -lkernel32 -luser32 -lgdi32 -lwinspool \
 	-luuid -lws2_32 -lmpr -lwinmm -lversion -lodbc32 -lodbccp32
 
 ifeq ($(CFG),Debug)
-OPTIMIZE	= -g -O2 -DDEBUGGING
+OPTIMIZE	= -g -O0 -DDEBUGGING
 LINK_DBG	= -g
 else
-OPTIMIZE	= -s -O2
+OPTIMIZE	= -s -O0
 LINK_DBG	= -s
 endif
 
@@ -11741,7 +11741,6 @@ $(DLL_OBJ)	: $(CORE_H)
 $(X2P_OBJ)	: $(CORE_H)
 
 perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\global.sym ..\pp.sym ..\makedef.pl
-	$(MINIPERL) -I..\lib buildext.pl --create-perllibst-h
 	$(MINIPERL) -I..\lib -w ..\makedef.pl PLATFORM=win32 $(OPTIMIZE) $(DEFINES) $(BUILDOPT) CCTYPE=$(CCTYPE) > perldll.def
 
 $(PERLEXPLIB) : $(PERLIMPLIB)
@@ -11950,7 +11949,15 @@ MAKEFILE
  	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
  
  $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
-@@ -918,9 +917,19 @@
+@@ -910,6 +909,7 @@
+ $(X2P_OBJ)	: $(CORE_H)
+ 
+ perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\global.sym ..\pp.sym ..\makedef.pl
++	$(MINIPERL) -I..\lib buildext.pl --create-perllibst-h
+ 	$(MINIPERL) -I..\lib -w ..\makedef.pl PLATFORM=win32 $(OPTIMIZE) $(DEFINES) $(BUILDOPT) CCTYPE=$(CCTYPE) > perldll.def
+ 
+ $(PERLEXPLIB) : $(PERLIMPLIB)
+@@ -917,9 +917,19 @@
  $(PERLIMPLIB) : perldll.def
  	$(IMPLIB) -k -d perldll.def -l $(PERLIMPLIB) -e $(PERLEXPLIB)
  
@@ -11972,7 +11979,7 @@ MAKEFILE
  
  $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
  	cd .. && miniperl.exe minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
-@@ -962,8 +971,8 @@
+@@ -961,8 +971,8 @@
  	copy splittree.pl ..
  	$(MINIPERL) -I..\lib ..\splittree.pl "../LIB" $(AUTODIR)
  
@@ -11983,7 +11990,7 @@ MAKEFILE
  
  $(PERLEXE_RES): perlexe.rc $(PERLEXE_ICO)
  
-@@ -980,14 +989,24 @@
+@@ -979,14 +989,24 @@
  $(EXTDIR)\DynaLoader\dl_win32.xs: dl_win32.xs
  	copy dl_win32.xs $(EXTDIR)\DynaLoader\dl_win32.xs
  
@@ -12010,7 +12017,7 @@ MAKEFILE
  
  #-------------------------------------------------------------------------------
  
-@@ -1006,31 +1025,24 @@
+@@ -1005,31 +1025,24 @@
  	copy ..\README.beos     ..\pod\perlbeos.pod
  	copy ..\README.bs2000   ..\pod\perlbs2000.pod
  	copy ..\README.ce       ..\pod\perlce.pod
@@ -12042,7 +12049,7 @@ MAKEFILE
  	copy ..\README.uts      ..\pod\perluts.pod
  	copy ..\README.vmesa    ..\pod\perlvmesa.pod
  	copy ..\README.vms      ..\pod\perlvms.pod
-@@ -1059,4 +1071,4 @@
+@@ -1058,4 +1071,4 @@
  	$(RCOPY) ..\lib $(INST_LIB)\$(NULL)
  
  $(UNIDATAFILES) : $(HAVEMINIPERL) $(CONFIGPM) ..\lib\unicore\mktables
@@ -12073,7 +12080,15 @@ PATCH
  endif
  
  DYNALOADER	= $(EXTDIR)\DynaLoader\DynaLoader
-@@ -918,9 +919,19 @@
+@@ -910,6 +911,7 @@
+ $(X2P_OBJ)	: $(CORE_H)
+ 
+ perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\global.sym ..\pp.sym ..\makedef.pl
++	$(MINIPERL) -I..\lib buildext.pl --create-perllibst-h
+ 	$(MINIPERL) -I..\lib -w ..\makedef.pl PLATFORM=win32 $(OPTIMIZE) $(DEFINES) $(BUILDOPT) CCTYPE=$(CCTYPE) > perldll.def
+ 
+ $(PERLEXPLIB) : $(PERLIMPLIB)
+@@ -917,9 +919,19 @@
  $(PERLIMPLIB) : perldll.def
  	$(IMPLIB) -k -d perldll.def -l $(PERLIMPLIB) -e $(PERLEXPLIB)
  
@@ -12095,7 +12110,7 @@ PATCH
  
  $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
  	cd .. && miniperl.exe minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
-@@ -986,8 +997,15 @@
+@@ -985,8 +997,15 @@
  
  #most of deps of this target are in DYNALOADER and therefore omitted here
  Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
@@ -12113,7 +12128,7 @@ PATCH
  
  #-------------------------------------------------------------------------------
  
-@@ -1006,31 +1024,24 @@
+@@ -1005,31 +1024,24 @@
  	copy ..\README.beos     ..\pod\perlbeos.pod
  	copy ..\README.bs2000   ..\pod\perlbs2000.pod
  	copy ..\README.ce       ..\pod\perlce.pod
@@ -12146,6 +12161,23 @@ PATCH
  	copy ..\README.vmesa    ..\pod\perlvmesa.pod
  	copy ..\README.vms      ..\pod\perlvms.pod
 PATCH
+        return;
+    }
+
+    if (_ge($version, "5.8.6")) {
+        _patch(<<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
+@@ -910,6 +910,7 @@
+ $(X2P_OBJ)	: $(CORE_H)
+ 
+ perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\global.sym ..\pp.sym ..\makedef.pl
++	$(MINIPERL) -I..\lib buildext.pl --create-perllibst-h
+ 	$(MINIPERL) -I..\lib -w ..\makedef.pl PLATFORM=win32 $(OPTIMIZE) $(DEFINES) $(BUILDOPT) CCTYPE=$(CCTYPE) > perldll.def
+ 
+ $(PERLEXPLIB) : $(PERLIMPLIB)
+PATCH
+        return;
     }
 }
 

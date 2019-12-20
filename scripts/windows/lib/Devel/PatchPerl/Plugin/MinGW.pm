@@ -11978,7 +11978,7 @@ PATCH
 sub _patch_config {
     my $version = shift;
 
-    if (_ge($version, "5.22.0")) {
+    if (_ge($version, "5.20.3")) {
         return;
     }
 

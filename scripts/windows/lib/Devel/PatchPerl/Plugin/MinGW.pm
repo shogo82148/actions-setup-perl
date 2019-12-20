@@ -12054,8 +12054,8 @@ PATCH
 
     if (_ge($version, "5.8.7")) {
         _patch(<<'PATCH');
---- 5.8.6/Makefile	2019-12-20 20:03:03.000000000 +0900
-+++ 5.8.8/Makefile	2019-12-19 21:23:09.000000000 +0900
+--- win32/GNUmakefile
++++ win32/GNUmakefile
 @@ -601,6 +601,7 @@
  		..\perly.h	\
  		..\pp.h		\

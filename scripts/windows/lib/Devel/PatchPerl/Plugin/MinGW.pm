@@ -558,7 +558,8 @@ PATCH
         return;
     }
 
-    _patch(<<'PATCH');
+    if (version->parse("v$version") >= version->parse("5.8.8")) {
+        _patch(<<'PATCH');
 --- lib/ExtUtils/MM_Any.pm
 +++ lib/ExtUtils/MM_Any.pm
 @@ -326,6 +326,29 @@ $self->{_MAX_EXEC_LEN} is set by this method, but only for testing purposes.
@@ -716,6 +717,212 @@ PATCH
      $self->init_main;
      $self->init_VERSION;
      $self->init_dist;
+PATCH
+        return;
+    }
+
+    _patch(<<'PATCH');
+--- lib/ExtUtils/MM_Any.pm
++++ lib/ExtUtils/MM_Any.pm
+@@ -339,6 +339,29 @@ END_OF_TARGET
+ 
+ }
+ 
++=head3 make
++
++    my $make = $MM->make;
++
++Returns the make variant we're generating the Makefile for.  This attempts
++to do some normalization on the information from %Config or the user.
++
++=cut
++
++sub make {
++    my $self = shift;
++
++    my $make = lc $self->{MAKE};
++
++    # Truncate anything like foomake6 to just foomake.
++    $make =~ s/^(\w+make).*/$1/;
++
++    # Turn gnumake into gmake.
++    $make =~ s/^gnu/g/;
++
++    return $make;
++}
++
+ 
+ =item manifypods_target
+ 
+@@ -847,6 +870,19 @@ Michael G Schwern <schwern@pobox.com> and the denizens of
+ makemaker@perl.org with code from ExtUtils::MM_Unix and
+ ExtUtils::MM_Win32.
+ 
++=head3 init_MAKE
++
++    $mm->init_MAKE
++
++Initialize MAKE from either a MAKE environment variable or $Config{make}.
++
++=cut
++
++sub init_MAKE {
++    my $self = shift;
++ 
++    $self->{MAKE} ||= $ENV{MAKE} || $Config{make};
++}
+ 
+ =cut
+ 
+--- lib/ExtUtils/MM_Unix.pm
++++ lib/ExtUtils/MM_Unix.pm
+@@ -372,8 +372,8 @@ sub const_cccmd {
+ 
+ =item const_config (o)
+ 
+-Defines a couple of constants in the Makefile that are imported from
+-%Config.
++Sets SHELL if needed, then defines a couple of constants in the Makefile
++that are imported from %Config.
+ 
+ =cut
+ 
+@@ -384,6 +384,7 @@ sub const_config {
+     my(@m,$m);
+     push(@m,"\n# These definitions are from config.sh (via $INC{'Config.pm'})\n");
+     push(@m,"\n# They may have been overridden via Makefile.PL or on the command line\n");
++    push(@m, $self->specify_shell()); # Usually returns empty string
+     my(%once_only);
+     foreach $m (@{$self->{CONFIG}}){
+ 	# SITE*EXP macros are defined in &constants; avoid duplicates here
+@@ -591,7 +592,7 @@ sub dir_target {
+ 	}
+ 	next if $self->{DIR_TARGET}{$self}{$targdir}++;
+ 	push @m, qq{
+-$targ :: $src
++$dir\$(DIRFILESEP).exists :: $src
+ 	\$(NOECHO) \$(MKPATH) $targdir
+ 	\$(NOECHO) \$(EQUALIZE_TIMESTAMP) $src $targ
+ };
+@@ -3470,6 +3471,16 @@ $target :: $plfile
+     join "", @m;
+ }
+ 
++=item specify_shell
++
++Specify SHELL if needed - not done on Unix.
++
++=cut
++
++sub specify_shell {
++  return '';
++}
++
+ =item quote_paren
+ 
+ Backslashes parentheses C<()> in command line arguments.
+--- lib/ExtUtils/MM_Win32.pm
++++ lib/ExtUtils/MM_Win32.pm
+@@ -137,7 +137,7 @@ sub find_tests {
+ 
+ =item B<init_DIRFILESEP>
+ 
+-Using \ for Windows.
++Using \ for Windows, except for "gmake" where it is /.
+ 
+ =cut
+ 
+@@ -145,9 +145,10 @@ sub init_DIRFILESEP {
+     my($self) = shift;
+ 
+     # The ^ makes sure its not interpreted as an escape in nmake
+-    $self->{DIRFILESEP} = $NMAKE ? '^\\' :
+-                          $DMAKE ? '\\\\'
+-                                 : '\\';
++    $self->{DIRFILESEP} = $self->is_make_type('nmake') ? '^\\' :
++                          $self->is_make_type('dmake') ? '\\\\' :
++                          $self->is_make_type('gmake') ? '/'
++                                                       : '\\';
+ }
+ 
+ =item B<init_others>
+@@ -510,6 +511,22 @@ sub os_flavor {
+     return('Win32');
+ }
+ 
++=item specify_shell
++
++Set SHELL to $ENV{COMSPEC} only if make is type 'gmake'.
++
++=cut
++
++sub specify_shell {
++    my $self = shift;
++    return '' unless $self->is_make_type('gmake');
++    "\nSHELL = $ENV{COMSPEC}\n";
++}
++
++sub is_make_type {
++    my($self, $type) = @_;
++    return !! ($self->make =~ /\b$type(?:\.exe)?$/);
++}
+ 
+ 1;
+ __END__
+--- lib/ExtUtils/MakeMaker.pm
++++ lib/ExtUtils/MakeMaker.pm
+@@ -482,6 +482,7 @@ sub new {
+ 
+     ($self->{NAME_SYM} = $self->{NAME}) =~ s/\W+/_/g;
+ 
++    $self->init_MAKE;
+     $self->init_main;
+     $self->init_VERSION;
+     $self->init_dist;
+--- win32/config_H.gc
++++ win32/config_H.gc
+@@ -911,16 +911,15 @@
+  *	Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
+  *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.
+  */
+-/*#define HAS_QUAD	/**/
+-#ifdef HAS_QUAD
++#define HAS_QUAD
+ #   define Quad_t long long	/**/
+ #   define Uquad_t unsigned long long	/**/
+-#   define QUADKIND 5	/**/
++#   define QUADKIND 3	/**/
+ #   define QUAD_IS_INT	1
+ #   define QUAD_IS_LONG	2
+ #   define QUAD_IS_LONG_LONG	3
+ #   define QUAD_IS_INT64_T	4
+-#endif
++#   define QUAD_IS___INT64	5
+ 
+ /* HAS_ACCESSX:
+  *	This symbol, if defined, indicates that the accessx routine is
+@@ -1825,7 +1824,9 @@
+  *	available to exclusively create and open a uniquely named
+  *	temporary file.
+  */
+-/*#define HAS_MKSTEMP		/**/
++#if __MINGW64_VERSION_MAJOR >= 4
++#define HAS_MKSTEMP
++#endif
+ 
+ /* HAS_MMAP:
+  *	This symbol, if defined, indicates that the mmap system call is
+@@ -2614,7 +2615,9 @@
+  *	available to excluslvely create and open a uniquely named
+  *	(with a suffix) temporary file.
+  */
+-/*#define HAS_MKSTEMPS		/**/
++#if __MINGW64_VERSION_MAJOR >= 4
++#define HAS_MKSTEMPS
++#endif
+ 
+ /* HAS_MODFL:
+  *	This symbol, if defined, indicates that the modfl routine is
 PATCH
 }
 

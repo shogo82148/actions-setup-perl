@@ -12177,36 +12177,26 @@ PATCH
         _patch(<<'PATCH');
 --- win32/config_H.gc
 +++ win32/config_H.gc
-@@ -908,7 +908,7 @@
+@@ -3150,16 +3150,15 @@
   *	Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
   *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.
   */
 -/*#define HAS_QUAD	/**/
+-#ifdef HAS_QUAD
 +#define HAS_QUAD
- #ifdef HAS_QUAD
  #   define Quad_t long long	/**/
  #   define Uquad_t unsigned long long	/**/
-@@ -1906,14 +1906,18 @@
-  *	available to exclusively create and open a uniquely named
-  *	temporary file.
-  */
--/*#define HAS_MKSTEMP		/**/
-+#if __MINGW64_VERSION_MAJOR >= 4
-+#define HAS_MKSTEMP
-+#endif
+-#   define QUADKIND 5	/**/
++#   define QUADKIND 3	/**/
+ #   define QUAD_IS_INT	1
+ #   define QUAD_IS_LONG	2
+ #   define QUAD_IS_LONG_LONG	3
+ #   define QUAD_IS_INT64_T	4
+-#endif
++#   define QUAD_IS___INT64	5
  
- /* HAS_MKSTEMPS:
-  *	This symbol, if defined, indicates that the mkstemps routine is
-  *	available to excluslvely create and open a uniquely named
-  *	(with a suffix) temporary file.
-  */
--/*#define HAS_MKSTEMPS		/**/
-+#if __MINGW64_VERSION_MAJOR >= 4
-+#define HAS_MKSTEMPS
-+#endif
- 
- /* HAS_MMAP:
-  *	This symbol, if defined, indicates that the mmap system call is
+ /* IVTYPE:
+  *	This symbol defines the C type used for Perl's IV.
 --- win32/config.gc
 +++ win32/config.gc
 @@ -345,7 +345,7 @@ d_pwgecos='undef'

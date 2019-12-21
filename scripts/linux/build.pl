@@ -32,11 +32,9 @@ sub run {
     group "build perl $version" => sub {
         local $ENV{PERL5_PATCHPERL_PLUGIN} = "GitHubActions";
 
-        my $jobs = 2; # from https://help.github.com/en/actions/automating-your-workflow-with-github-actions/virtual-environments-for-github-hosted-runners#supported-runners-and-hardware-resources
-        if (version->parse("v$version") < version->parse("v5.12.0") ) {
-            # Makefiles older than v5.12.0 could break parallel make.
-            # it fixed by https://github.com/Perl/perl5/commit/0f13ebd5d71f81771c1044e2c89aff29b408bfec and
-            # https://github.com/Perl/perl5/commit/2b63e250843b907e476587f037c0784d701fca62
+        my $jobs = `nproc`;
+        if (version->parse("v$version") < version->parse("v5.20.0") ) {
+            # Makefiles older than v5.20.0 could break parallel make.
             $jobs = 1;
         }
 

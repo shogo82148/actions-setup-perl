@@ -10,7 +10,7 @@ all: carton carton.bat
 
 .PHONY: image
 image: .image.exists ## build docker image of packing environment
-.image.exists:
+.image.exists: Dockerfile
 	docker build -t $(IMAGE_NAME) .
 	touch .image.exists
 

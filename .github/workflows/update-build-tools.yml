@@ -1,6 +1,9 @@
-name: update cpanfile.snapshot
+name: update cpanfile.snapshot of build tools
 on:
-  push: {}
+  push:
+    paths:
+      - 'scripts/*/cpanfile'
+      - '.github/workflows/update-build-tools.yml'
   schedule:
     - cron: "27 23 * * *"
 
@@ -110,5 +113,5 @@ jobs:
           header=$(echo -n "${GITHUB_ACTOR}:${GITHUB_TOKEN}" | base64)
           git -c http.extraheader="AUTHORIZATION: basic $header" push -u origin $branch
           curl -H "Authorization: token $GITHUB_TOKEN" \
-            -d "$(jq --arg branch $branch -n '{ "title": "Auto Update", "base": "master", "head": $branch }')" \
+            -d "$(jq --arg branch $branch -n '{ "title": "Auto Update build tools", "base": "master", "head": $branch }')" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls"

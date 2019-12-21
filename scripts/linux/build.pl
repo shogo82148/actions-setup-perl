@@ -3,6 +3,8 @@
 use utf8;
 use warnings;
 use strict;
+use FindBin;
+use lib "$FindBin::Bin/../lib";
 use Try::Tiny;
 use Perl::Build;
 use File::Spec;
@@ -28,6 +30,8 @@ sub run {
     my $tmpdir = $ENV{RUNNER_TEMP};
 
     group "build perl $version" => sub {
+        local $ENV{PERL5_PATCHPERL_PLUGIN} = "GitHubActions";
+
         my $jobs = 2; # from https://help.github.com/en/actions/automating-your-workflow-with-github-actions/virtual-environments-for-github-hosted-runners#supported-runners-and-hardware-resources
         if (version->parse("v$version") < version->parse("v5.12.0") ) {
             # Makefiles older than v5.12.0 could break parallel make.

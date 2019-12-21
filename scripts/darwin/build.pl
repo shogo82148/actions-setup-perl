@@ -3,9 +3,12 @@
 use utf8;
 use warnings;
 use strict;
+use FindBin;
+use lib "$FindBin::Bin/../lib";
 use Try::Tiny;
 use Perl::Build;
 use File::Spec;
+use File::Path qw/make_path/;
 use version 0.77 ();
 
 local $| = 1;
@@ -24,10 +27,14 @@ sub group {
 
 sub run {
     my $version = $ENV{PERL_VERSION};
-    my $install_dir = File::Spec->catdir($ENV{RUNNER_TOOL_CACHE}, "perl", $version, "x64");
-    my $tmpdir = $ENV{RUNNER_TEMP};
+    my $tmpdir = File::Spec->rel2abs($ENV{RUNNER_TEMP} || "tmp");
+    make_path($tmpdir);
+    my $install_dir = File::Spec->rel2abs(
+        File::Spec->catdir($ENV{RUNNER_TOOL_CACHE} || $tmpdir, "perl", $version, "x64"));
 
     group "build perl $version" => sub {
+        local $ENV{PERL5_PATCHPERL_PLUGIN} = "GitHubActions";
+
         my $jobs = 2; # from https://help.github.com/en/actions/automating-your-workflow-with-github-actions/virtual-environments-for-github-hosted-runners#supported-runners-and-hardware-resources
         if (version->parse("v$version") < version->parse("v5.12.0") ) {
             # Makefiles older than v5.12.0 could break parallel make.

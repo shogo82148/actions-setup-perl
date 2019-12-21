@@ -3,9 +3,12 @@
 use utf8;
 use warnings;
 use strict;
+use FindBin;
+use lib "$FindBin::Bin/../lib";
 use Try::Tiny;
 use Perl::Build;
 use File::Spec;
+use File::Path qw/make_path/;
 use version 0.77 ();
 
 local $| = 1;
@@ -24,15 +27,17 @@ sub group {
 
 sub run {
     my $version = $ENV{PERL_VERSION};
-    my $install_dir = File::Spec->catdir($ENV{RUNNER_TOOL_CACHE}, "perl", $version, "x64");
-    my $tmpdir = $ENV{RUNNER_TEMP};
+    my $tmpdir = File::Spec->rel2abs($ENV{RUNNER_TEMP} || "tmp");
+    make_path($tmpdir);
+    my $install_dir = File::Spec->rel2abs(
+        File::Spec->catdir($ENV{RUNNER_TOOL_CACHE} || $tmpdir, "perl", $version, "x64"));
 
     group "build perl $version" => sub {
-        my $jobs = 2; # from https://help.github.com/en/actions/automating-your-workflow-with-github-actions/virtual-environments-for-github-hosted-runners#supported-runners-and-hardware-resources
-        if (version->parse("v$version") < version->parse("v5.12.0") ) {
-            # Makefiles older than v5.12.0 could break parallel make.
-            # it fixed by https://github.com/Perl/perl5/commit/0f13ebd5d71f81771c1044e2c89aff29b408bfec and
-            # https://github.com/Perl/perl5/commit/2b63e250843b907e476587f037c0784d701fca62
+        local $ENV{PERL5_PATCHPERL_PLUGIN} = "GitHubActions";
+
+        my $jobs = `nproc` + 0; # evaluate `nproc` in number context
+        if ($jobs <= 0 || version->parse("v$version") < version->parse("v5.20.0") ) {
+            # Makefiles older than v5.20.0 could break parallel make.
             $jobs = 1;
         }
 

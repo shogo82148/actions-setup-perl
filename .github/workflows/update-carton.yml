@@ -8,7 +8,7 @@ on:
     - cron: "41 16 * * *"
 
 jobs:
-  linux:
+  carton:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

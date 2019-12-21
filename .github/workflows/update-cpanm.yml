@@ -8,7 +8,7 @@ on:
     - cron: "22 6 * * *"
 
 jobs:
-  linux:
+  cpanm:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

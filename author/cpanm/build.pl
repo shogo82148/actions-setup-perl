@@ -19,7 +19,7 @@ fatpack(
         'ExtUtils::MakeMaker', 'Module::Build',
         'App::cpanminus::fatscript',
         # test modules
-        'Test2,App::Prove','TAP::Harness',
+        'Test2', 'App::Prove','TAP::Harness',
         # core modules of perl 5
         'Cwd', 'Carp', 'Module::CoreList',
     ),

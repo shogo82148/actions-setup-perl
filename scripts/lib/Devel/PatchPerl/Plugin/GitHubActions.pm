@@ -3,7 +3,7 @@ package Devel::PatchPerl::Plugin::GitHubActions;
 use utf8;
 use strict;
 use warnings;
-use 5.026002;
+use 5.026001;
 use File::pushd qw[pushd];
 use File::Basename;
 use File::Slurp qw/read_file/;

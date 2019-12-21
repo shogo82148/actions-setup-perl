@@ -3,7 +3,7 @@ package Devel::PatchPerl::Plugin::MinGW;
 use utf8;
 use strict;
 use warnings;
-use 5.026002;
+use 5.026001;
 use version;
 use Devel::PatchPerl;
 use File::pushd qw[pushd];

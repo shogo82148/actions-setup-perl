@@ -35,8 +35,8 @@ sub run {
     group "build perl $version" => sub {
         local $ENV{PERL5_PATCHPERL_PLUGIN} = "GitHubActions";
 
-        my $jobs = `nproc`;
-        if (version->parse("v$version") < version->parse("v5.20.0") ) {
+        my $jobs = `nproc` + 0; # evaluate `nproc` in number context
+        if ($jobs <= 0 || version->parse("v$version") < version->parse("v5.20.0") ) {
             # Makefiles older than v5.20.0 could break parallel make.
             $jobs = 1;
         }

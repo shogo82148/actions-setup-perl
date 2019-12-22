@@ -5,7 +5,7 @@ use warnings;
 use strict;
 use 5.026002;
 use FindBin;
-use lib "$FindBin::Bin/lib";
+use lib "$FindBin::Bin/../lib";
 use File::Copy;
 use LWP::UserAgent;
 use CPAN::Perl::Releases::MetaCPAN;
@@ -13,6 +13,7 @@ use Devel::PatchPerl;
 use Try::Tiny;
 use File::pushd qw[pushd];
 use File::Spec;
+use File::Path qw/make_path/;
 use Carp qw/croak/;
 
 local $| = 1;
@@ -54,10 +55,12 @@ sub run {
     my $version = $ENV{PERL_VERSION};
     my $url = perl_release($version);
 
-    my $tmpdir = $ENV{RUNNER_TEMP};
     $url =~ m/\/(perl-.*)$/;
     my $filename = $1;
-    my $install_dir = File::Spec->catdir($ENV{RUNNER_TOOL_CACHE}, "perl", $version, "x64");
+    my $tmpdir = File::Spec->rel2abs($ENV{RUNNER_TEMP} || "tmp");
+    make_path($tmpdir);
+    my $install_dir = File::Spec->rel2abs(
+        File::Spec->catdir($ENV{RUNNER_TOOL_CACHE} || $tmpdir, "perl", $version, "x64"));
 
     group "downloading perl $version from $url" => sub {
         my $ua = LWP::UserAgent->new;
@@ -79,13 +82,14 @@ sub run {
     };
 
     group "patching..." => sub {
-        local $ENV{PERL5_PATCHPERL_PLUGIN} = "MinGW";
-        Devel::PatchPerl->patch_source($version, File::Spec->catdir($tmpdir, "perl-$version"));
+        local $ENV{PERL5_PATCHPERL_PLUGIN} = "GitHubActions";
+        my $dir = pushd(File::Spec->catdir($tmpdir, "perl-$version"));
+        Devel::PatchPerl->patch_source($version);
     };
 
     group "build and install Perl" => sub {
         my $dir = pushd(File::Spec->catdir($tmpdir, "perl-$version", "win32"));
-        execute_or_die("gmake", "-d", "-f", "GNUMakefile", "install", "INST_TOP=$install_dir", "CCHOME=C:\\MinGW");
+        execute_or_die("gmake", "-f", "GNUmakefile", "install", "INST_TOP=$install_dir", "CCHOME=C:\\MinGW");
     };
 
     group "perl -V" => sub {

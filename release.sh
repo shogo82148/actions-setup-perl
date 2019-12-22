@@ -15,11 +15,18 @@ rm -rf "$WORKING"
 git clone "$ORIGIN" "$WORKING"
 cd "$WORKING"
 
+: update the version of package.json
+jq ".version=\"$MAJOR.$MINOR.$PATCH\"" < package.json > .tmp.json
+mv .tmp.json package.json
+jq ".version=\"$MAJOR.$MINOR.$PATCH\"" < package-lock.json > .tmp.json
+mv .tmp.json package-lock.json
+git add package.json package-lock.json
+git commit -m "bump up to v$MAJOR.$MINOR.$PATCH"
+git push origin master
+
 : build the action
 git checkout -b "releases/v$MAJOR" "origin/releases/v$MAJOR" || git git checkout -b "releases/v$MAJOR" master
 git merge -X theirs -m "Merge branch 'master' into releases/v$MAJOR" master || true
-jq ".version=\"$MAJOR.$MINOR.$PATCH\"" < package.json > .tmp.json
-mv .tmp.json package.json
 npm install
 npm run build
 
@@ -29,7 +36,7 @@ perl -ne 'print unless m(^/node_modules/|/lib/$)' -i .gitignore
 
 : publish to GitHub
 git add .
-git commit -m "bump up to v$MAJOR.$MINOR.$PATCH" || true
+git commit -m "build v$MAJOR.$MINOR.$PATCH" || true
 git push origin "releases/v$MAJOR"
 git tag -a "v$MAJOR.$MINOR.$PATCH" -m "release v$MAJOR.$MINOR.$PATCH"
 git push origin "v$MAJOR.$MINOR.$PATCH"

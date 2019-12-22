@@ -95,6 +95,24 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       HTTP::Date 6
       perl 5.006002
+  File-Slurp-9999.29
+    pathname: C/CA/CAPOEIRAB/File-Slurp-9999.29.tar.gz
+    provides:
+      File::Slurp 9999.29
+    requirements:
+      B 0
+      Carp 0
+      Errno 0
+      Exporter 5.57
+      ExtUtils::MakeMaker 0
+      Fcntl 0
+      File::Basename 0
+      File::Spec 3.01
+      File::Temp 0
+      IO::Handle 0
+      POSIX 0
+      strict 0
+      warnings 0
   File-Which-1.23
     pathname: P/PL/PLICEASE/File-Which-1.23.tar.gz
     provides:
@@ -139,12 +157,12 @@ DISTRIBUTIONS
       HTML::Tagset 3.20
     requirements:
       ExtUtils::MakeMaker 0
-  HTTP-Cookies-6.07
-    pathname: O/OA/OALDERS/HTTP-Cookies-6.07.tar.gz
+  HTTP-Cookies-6.08
+    pathname: O/OA/OALDERS/HTTP-Cookies-6.08.tar.gz
     provides:
-      HTTP::Cookies 6.07
-      HTTP::Cookies::Microsoft 6.07
-      HTTP::Cookies::Netscape 6.07
+      HTTP::Cookies 6.08
+      HTTP::Cookies::Microsoft 6.08
+      HTTP::Cookies::Netscape 6.08
     requirements:
       Carp 0
       ExtUtils::MakeMaker 0
@@ -283,6 +301,14 @@ DISTRIBUTIONS
       Time::HiRes 0
       Win32 0
       Win32::ShellQuote 0
+  JSON-4.02
+    pathname: I/IS/ISHIGAKI/JSON-4.02.tar.gz
+    provides:
+      JSON 4.02
+      JSON::Backend::PP 4.02
+    requirements:
+      ExtUtils::MakeMaker 0
+      Test::More 0
   LWP-MediaTypes-6.04
     pathname: O/OA/OALDERS/LWP-MediaTypes-6.04.tar.gz
     provides:
@@ -567,32 +593,32 @@ DISTRIBUTIONS
       Win32::ShellQuote 0.003001
     requirements:
       perl 5.006
-  libwww-perl-6.42
-    pathname: O/OA/OALDERS/libwww-perl-6.42.tar.gz
+  libwww-perl-6.43
+    pathname: O/OA/OALDERS/libwww-perl-6.43.tar.gz
     provides:
-      LWP 6.42
-      LWP::Authen::Basic 6.42
-      LWP::Authen::Digest 6.42
-      LWP::Authen::Ntlm 6.42
-      LWP::ConnCache 6.42
-      LWP::Debug 6.42
-      LWP::Debug::TraceHTTP 6.42
-      LWP::DebugFile 6.42
-      LWP::MemberMixin 6.42
-      LWP::Protocol 6.42
-      LWP::Protocol::cpan 6.42
-      LWP::Protocol::data 6.42
-      LWP::Protocol::file 6.42
-      LWP::Protocol::ftp 6.42
-      LWP::Protocol::gopher 6.42
-      LWP::Protocol::http 6.42
-      LWP::Protocol::loopback 6.42
-      LWP::Protocol::mailto 6.42
-      LWP::Protocol::nntp 6.42
-      LWP::Protocol::nogo 6.42
-      LWP::RobotUA 6.42
-      LWP::Simple 6.42
-      LWP::UserAgent 6.42
+      LWP 6.43
+      LWP::Authen::Basic 6.43
+      LWP::Authen::Digest 6.43
+      LWP::Authen::Ntlm 6.43
+      LWP::ConnCache 6.43
+      LWP::Debug 6.43
+      LWP::Debug::TraceHTTP 6.43
+      LWP::DebugFile 6.43
+      LWP::MemberMixin 6.43
+      LWP::Protocol 6.43
+      LWP::Protocol::cpan 6.43
+      LWP::Protocol::data 6.43
+      LWP::Protocol::file 6.43
+      LWP::Protocol::ftp 6.43
+      LWP::Protocol::gopher 6.43
+      LWP::Protocol::http 6.43
+      LWP::Protocol::loopback 6.43
+      LWP::Protocol::mailto 6.43
+      LWP::Protocol::nntp 6.43
+      LWP::Protocol::nogo 6.43
+      LWP::RobotUA 6.43
+      LWP::Simple 6.43
+      LWP::UserAgent 6.43
       libwww::perl undef
     requirements:
       CPAN::Meta::Requirements 2.120620

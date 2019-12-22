@@ -1,9 +1,9 @@
 # carton snapshot format: version 1.0
 DISTRIBUTIONS
-  CPAN-Perl-Releases-4.22
-    pathname: B/BI/BINGOS/CPAN-Perl-Releases-4.22.tar.gz
+  CPAN-Perl-Releases-5.20191220
+    pathname: B/BI/BINGOS/CPAN-Perl-Releases-5.20191220.tar.gz
     provides:
-      CPAN::Perl::Releases 4.22
+      CPAN::Perl::Releases 5.20191220
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0.47
@@ -31,6 +31,24 @@ DISTRIBUTIONS
       MIME::Base64 0
       Module::Pluggable 0
       perl 5.006000
+  File-Slurp-9999.29
+    pathname: C/CA/CAPOEIRAB/File-Slurp-9999.29.tar.gz
+    provides:
+      File::Slurp 9999.29
+    requirements:
+      B 0
+      Carp 0
+      Errno 0
+      Exporter 5.57
+      ExtUtils::MakeMaker 0
+      Fcntl 0
+      File::Basename 0
+      File::Spec 3.01
+      File::Temp 0
+      IO::Handle 0
+      POSIX 0
+      strict 0
+      warnings 0
   File-Which-1.23
     pathname: P/PL/PLICEASE/File-Which-1.23.tar.gz
     provides:
@@ -78,6 +96,14 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Test::More 0.31
       Time::HiRes 0
+  JSON-4.02
+    pathname: I/IS/ISHIGAKI/JSON-4.02.tar.gz
+    provides:
+      JSON 4.02
+      JSON::Backend::PP 4.02
+    requirements:
+      ExtUtils::MakeMaker 0
+      Test::More 0
   Module-Pluggable-5.2
     pathname: S/SI/SIMONW/Module-Pluggable-5.2.tar.gz
     provides:

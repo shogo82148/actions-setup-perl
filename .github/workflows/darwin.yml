@@ -98,7 +98,7 @@ jobs:
         run: |
           # there is no aws cli in macOS, so use https://github.com/shogo82148/s3cli-mini
           ACTIONS_VERSION=v$(cat "$GITHUB_WORKSPACE/package.json" | jq -r .version)
-          curl -sSL https://github.com/shogo82148/s3cli-mini/releases/download/v0.0.2/s3cli-mini_darwin_amd64.tar.gz -o s3cli-mini.tar.gz
+          curl -sSL https://github.com/shogo82148/s3cli-mini/releases/download/v0.0.3/s3cli-mini_darwin_amd64.tar.gz -o s3cli-mini.tar.gz
           tar xzvf s3cli-mini.tar.gz
 
           # upload

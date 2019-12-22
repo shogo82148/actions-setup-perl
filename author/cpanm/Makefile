@@ -3,31 +3,34 @@ help: ## show this text
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 IMAGE_NAME = cpanm-packer
-DOCKER_RUN = docker run --rm -v $(PWD):/tmp/cpanm -w /tmp/cpanm $(IMAGE_NAME)
 
 .PHONY: all
 all: cpanm cpanm.bat
 
 .PHONY: image
 image: .image.exists ## build docker image of packing environment
-.image.exists: Dockerfile
+.image.exists: Dockerfile cpanfile cpanfile.snapshot build.pl
+	-docker rmi $(IMAGE_NAME)
 	docker build -t $(IMAGE_NAME) .
 	touch .image.exists
 
-cpanm: .image.exists local/bin/cpanm build.pl ## generate fat-packed cpanm
-	$(DOCKER_RUN) perl build.pl
-	chmod +w cpanm
+.container.exists: .image.exists
+	-docker rm $(IMAGE_NAME)-tmp
+	docker run --name $(IMAGE_NAME)-tmp $(IMAGE_NAME) perl build.pl
+	touch .container.exists
 
-cpanm.bat: .image.exists cpanm
-	$(DOCKER_RUN) perl -MExtUtils::PL2Bat -e 'pl2bat(in=>"cpanm")'
+cpanm: .container.exists ## generate fat-packed cpanm
+	docker cp $(IMAGE_NAME)-tmp:/tmp/cpanm/cpanm cpanm
 
-local/bin/cpanm: .image.exists cpanfile.snapshot
-	$(DOCKER_RUN) carton install --deployment
+cpanm.bat: .container.exists ## generate fat-packed cpanm batch file
+	docker cp $(IMAGE_NAME)-tmp:/tmp/cpanm/cpanm.bat cpanm.bat
 
 .PHONY: update
 update: .image.exists ## download dependencies and update cpanfile.snapshot
-	rm -f cpanfile.snapshot
-	$(DOCKER_RUN) carton install
+	-docker rm $(IMAGE_NAME)-update
+	docker run --name $(IMAGE_NAME)-update $(IMAGE_NAME) \
+		sh -c "rm -f cpanfile.snapshot && rm -rf local && carton install"
+	docker cp $(IMAGE_NAME)-update:/tmp/cpanm/cpanfile.snapshot cpanfile.snapshot
 
 .PHONY: install
 install: all ## installs into the bin directory of this repository
@@ -36,6 +39,8 @@ install: all ## installs into the bin directory of this repository
 
 .PHONY: clean
 clean:
-	rm -rf local/
-	rm -f cpanm cpanm.bat .image.exists
-	docker rmi $(IMAGE_NAME)
+	rm -f carton carton.bat
+	rm -f .image.exists .container.exists
+	-docker rm $(IMAGE_NAME)-tmp
+	-docker rm $(IMAGE_NAME)-update
+	-docker rmi $(IMAGE_NAME)

@@ -5,6 +5,7 @@ use warnings;
 use FindBin;
 use App::FatPacker::Simple;
 use Carton::Snapshot;
+use ExtUtils::PL2Bat qw/pl2bat/;
 
 sub fatpack {
     App::FatPacker::Simple->new->parse_options(@_)->run
@@ -29,3 +30,7 @@ fatpack(
     "--shebang", '#!/usr/bin/env perl',
     "local/bin/carton"
 );
+
+pl2bat(in=>"carton");
+
+1;

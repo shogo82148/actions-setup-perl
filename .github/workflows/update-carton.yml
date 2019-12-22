@@ -1,0 +1,43 @@
+name: update carton
+on:
+  push:
+    paths:
+      - 'author/carton/**'
+      - '.github/workflows/update-carton.yml'
+  schedule:
+    - cron: "41 16 * * *"
+
+jobs:
+  carton:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: update cpanfile.snapshot
+        run: make update
+        working-directory: ./author/carton
+
+      - name: build carton
+        run: |
+          git diff
+          if [[ -n "$(git status --short)" ]]; then
+            make install
+          fi
+        working-directory: ./author/carton
+
+      - name: commit
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          branch=update-carton-$(date +"%Y-%m-%d-%H-%M-%S")
+          git config --global user.name "Ichinose Shogo"
+          git config --global user.email shogo82148@gmail.com
+          git switch -c $branch
+          git add .
+          git commit -m "Update cpan $(date +"%Y-%m-%d %H:%M:%S")" || exit 0
+          header=$(echo -n "${GITHUB_ACTOR}:${GITHUB_TOKEN}" | base64)
+          git -c http.extraheader="AUTHORIZATION: basic $header" push -u origin $branch
+          curl -H "Authorization: token $GITHUB_TOKEN" \
+            -d "$(jq --arg branch $branch -n '{ "title": "Auto Update carton", "base": "master", "head": $branch }')" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls"

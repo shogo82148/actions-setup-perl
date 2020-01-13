@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       - name: update cpanfile.snapshot
         run: make update
@@ -28,16 +28,15 @@ jobs:
 
       - name: commit
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           branch=update-cpanm-$(date +"%Y-%m-%d-%H-%M-%S")
           git config --global user.name "Ichinose Shogo"
           git config --global user.email shogo82148@gmail.com
-          git switch -c $branch
+          git switch -c "$branch"
           git add .
           git commit -m "Update cpanm $(date +"%Y-%m-%d %H:%M:%S")" || exit 0
-          header=$(echo -n "${GITHUB_ACTOR}:${GITHUB_TOKEN}" | base64)
-          git -c http.extraheader="AUTHORIZATION: basic $header" push -u origin $branch
+          git push -u origin $branch
           curl -H "Authorization: token $GITHUB_TOKEN" \
             -d "$(jq --arg branch $branch -n '{ "title": "Auto Update cpanm", "base": "master", "head": $branch }')" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls"

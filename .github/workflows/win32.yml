@@ -159,7 +159,7 @@ jobs:
         - "5.8.5"
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: setup host perl
         shell: bash
         run: |

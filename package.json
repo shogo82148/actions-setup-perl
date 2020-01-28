@@ -28,7 +28,7 @@
   "devDependencies": {
     "@types/jest": "^24.9.0",
     "@types/js-yaml": "^3.12.1",
-    "@types/node": "^13.1.8",
+    "@types/node": "^13.5.1",
     "@types/semver": "^6.2.0",
     "jest": "^24.9.0",
     "jest-circus": "^25.1.0",

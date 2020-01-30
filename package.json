@@ -30,10 +30,10 @@
     "@types/js-yaml": "^3.12.2",
     "@types/node": "^13.1.8",
     "@types/semver": "^6.2.1",
-    "jest": "^24.9.0",
+    "jest": "^25.1.0",
     "jest-circus": "^25.1.0",
     "prettier": "^1.19.1",
-    "ts-jest": "^24.3.0",
+    "ts-jest": "^25.0.0",
     "typescript": "^3.7.5"
   }
 }

@@ -10,12 +10,12 @@ DISTRIBUTIONS
       JSON::PP 0
       Module::Build::Tiny 0.034
       perl 5.008001
-  Devel-PatchPerl-1.80
-    pathname: B/BI/BINGOS/Devel-PatchPerl-1.80.tar.gz
+  Devel-PatchPerl-1.84
+    pathname: B/BI/BINGOS/Devel-PatchPerl-1.84.tar.gz
     provides:
-      Devel::PatchPerl 1.80
-      Devel::PatchPerl::Hints 1.80
-      Devel::PatchPerl::Plugin 1.80
+      Devel::PatchPerl 1.84
+      Devel::PatchPerl::Hints 1.84
+      Devel::PatchPerl::Plugin 1.84
     requirements:
       ExtUtils::MakeMaker 0
       File::pushd 1.00
@@ -333,28 +333,28 @@ DISTRIBUTIONS
       Mozilla::CA 20110101
       Net::HTTPS 6
       perl 5.008001
-  Module-Build-0.4229
-    pathname: L/LE/LEONT/Module-Build-0.4229.tar.gz
+  Module-Build-0.4231
+    pathname: L/LE/LEONT/Module-Build-0.4231.tar.gz
     provides:
-      Module::Build 0.4229
-      Module::Build::Base 0.4229
-      Module::Build::Compat 0.4229
-      Module::Build::Config 0.4229
-      Module::Build::Cookbook 0.4229
-      Module::Build::Dumper 0.4229
-      Module::Build::Notes 0.4229
-      Module::Build::PPMMaker 0.4229
-      Module::Build::Platform::Default 0.4229
-      Module::Build::Platform::MacOS 0.4229
-      Module::Build::Platform::Unix 0.4229
-      Module::Build::Platform::VMS 0.4229
-      Module::Build::Platform::VOS 0.4229
-      Module::Build::Platform::Windows 0.4229
-      Module::Build::Platform::aix 0.4229
-      Module::Build::Platform::cygwin 0.4229
-      Module::Build::Platform::darwin 0.4229
-      Module::Build::Platform::os2 0.4229
-      Module::Build::PodParser 0.4229
+      Module::Build 0.4231
+      Module::Build::Base 0.4231
+      Module::Build::Compat 0.4231
+      Module::Build::Config 0.4231
+      Module::Build::Cookbook 0.4231
+      Module::Build::Dumper 0.4231
+      Module::Build::Notes 0.4231
+      Module::Build::PPMMaker 0.4231
+      Module::Build::Platform::Default 0.4231
+      Module::Build::Platform::MacOS 0.4231
+      Module::Build::Platform::Unix 0.4231
+      Module::Build::Platform::VMS 0.4231
+      Module::Build::Platform::VOS 0.4231
+      Module::Build::Platform::Windows 0.4231
+      Module::Build::Platform::aix 0.4231
+      Module::Build::Platform::cygwin 0.4231
+      Module::Build::Platform::darwin 0.4231
+      Module::Build::Platform::os2 0.4231
+      Module::Build::PodParser 0.4231
     requirements:
       CPAN::Meta 2.142060
       Cwd 0
@@ -363,6 +363,7 @@ DISTRIBUTIONS
       ExtUtils::Install 0
       ExtUtils::Manifest 0
       ExtUtils::Mkbootstrap 0
+      ExtUtils::PL2Bat 0
       ExtUtils::ParseXS 2.21
       File::Basename 0
       File::Compare 0
@@ -456,8 +457,8 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       MIME::Base64 0
       perl 5.008001
-  TimeDate-2.30
-    pathname: G/GB/GBARR/TimeDate-2.30.tar.gz
+  TimeDate-2.31
+    pathname: A/AT/ATOOMIC/TimeDate-2.31.tar.gz
     provides:
       Date::Format 2.24
       Date::Format::Generic 2.24
@@ -482,6 +483,7 @@ DISTRIBUTIONS
       Date::Language::Icelandic 1.01
       Date::Language::Italian 1.01
       Date::Language::Norwegian 1.01
+      Date::Language::Occitan 1.04
       Date::Language::Oromo 0.99
       Date::Language::Romanian 1.01
       Date::Language::Russian 1.01
@@ -495,8 +497,9 @@ DISTRIBUTIONS
       Date::Language::TigrinyaEritrean 1.00
       Date::Language::TigrinyaEthiopian 1.00
       Date::Language::Turkish 1.0
-      Date::Parse 2.30
+      Date::Parse 2.31
       Time::Zone 2.24
+      TimeDate 1.21
     requirements:
       ExtUtils::MakeMaker 0
   Try-Tiny-0.30

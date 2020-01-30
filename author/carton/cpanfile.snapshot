@@ -260,44 +260,44 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  ExtUtils-MakeMaker-7.42
-    pathname: B/BI/BINGOS/ExtUtils-MakeMaker-7.42.tar.gz
+  ExtUtils-MakeMaker-7.44
+    pathname: B/BI/BINGOS/ExtUtils-MakeMaker-7.44.tar.gz
     provides:
-      ExtUtils::Command 7.42
-      ExtUtils::Command::MM 7.42
-      ExtUtils::Liblist 7.42
-      ExtUtils::Liblist::Kid 7.42
-      ExtUtils::MM 7.42
-      ExtUtils::MM_AIX 7.42
-      ExtUtils::MM_Any 7.42
-      ExtUtils::MM_BeOS 7.42
-      ExtUtils::MM_Cygwin 7.42
-      ExtUtils::MM_DOS 7.42
-      ExtUtils::MM_Darwin 7.42
-      ExtUtils::MM_MacOS 7.42
-      ExtUtils::MM_NW5 7.42
-      ExtUtils::MM_OS2 7.42
-      ExtUtils::MM_QNX 7.42
-      ExtUtils::MM_UWIN 7.42
-      ExtUtils::MM_Unix 7.42
-      ExtUtils::MM_VMS 7.42
-      ExtUtils::MM_VOS 7.42
-      ExtUtils::MM_Win32 7.42
-      ExtUtils::MM_Win95 7.42
-      ExtUtils::MY 7.42
-      ExtUtils::MakeMaker 7.42
-      ExtUtils::MakeMaker::Config 7.42
-      ExtUtils::MakeMaker::Locale 7.42
-      ExtUtils::MakeMaker::_version 7.42
-      ExtUtils::MakeMaker::charstar 7.42
-      ExtUtils::MakeMaker::version 7.42
-      ExtUtils::MakeMaker::version::regex 7.42
-      ExtUtils::MakeMaker::version::vpp 7.42
-      ExtUtils::Mkbootstrap 7.42
-      ExtUtils::Mksymlists 7.42
-      ExtUtils::testlib 7.42
-      MM 7.42
-      MY 7.42
+      ExtUtils::Command 7.44
+      ExtUtils::Command::MM 7.44
+      ExtUtils::Liblist 7.44
+      ExtUtils::Liblist::Kid 7.44
+      ExtUtils::MM 7.44
+      ExtUtils::MM_AIX 7.44
+      ExtUtils::MM_Any 7.44
+      ExtUtils::MM_BeOS 7.44
+      ExtUtils::MM_Cygwin 7.44
+      ExtUtils::MM_DOS 7.44
+      ExtUtils::MM_Darwin 7.44
+      ExtUtils::MM_MacOS 7.44
+      ExtUtils::MM_NW5 7.44
+      ExtUtils::MM_OS2 7.44
+      ExtUtils::MM_QNX 7.44
+      ExtUtils::MM_UWIN 7.44
+      ExtUtils::MM_Unix 7.44
+      ExtUtils::MM_VMS 7.44
+      ExtUtils::MM_VOS 7.44
+      ExtUtils::MM_Win32 7.44
+      ExtUtils::MM_Win95 7.44
+      ExtUtils::MY 7.44
+      ExtUtils::MakeMaker 7.44
+      ExtUtils::MakeMaker::Config 7.44
+      ExtUtils::MakeMaker::Locale 7.44
+      ExtUtils::MakeMaker::_version 7.44
+      ExtUtils::MakeMaker::charstar 7.44
+      ExtUtils::MakeMaker::version 7.44
+      ExtUtils::MakeMaker::version::regex 7.44
+      ExtUtils::MakeMaker::version::vpp 7.44
+      ExtUtils::Mkbootstrap 7.44
+      ExtUtils::Mksymlists 7.44
+      ExtUtils::testlib 7.44
+      MM 7.44
+      MY 7.44
     requirements:
       Data::Dumper 0
       Encode 0
@@ -539,11 +539,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20191220
-    pathname: B/BI/BINGOS/Module-CoreList-5.20191220.tar.gz
+  Module-CoreList-5.20200120
+    pathname: B/BI/BINGOS/Module-CoreList-5.20200120.tar.gz
     provides:
-      Module::CoreList 5.20191220
-      Module::CoreList::Utils 5.20191220
+      Module::CoreList 5.20200120
+      Module::CoreList::Utils 5.20200120
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0
@@ -604,11 +604,11 @@ DISTRIBUTIONS
       JSON::PP 2.00
       Safe 0
       version 0.83
-  Path-Tiny-0.108
-    pathname: D/DA/DAGOLDEN/Path-Tiny-0.108.tar.gz
+  Path-Tiny-0.112
+    pathname: D/DA/DAGOLDEN/Path-Tiny-0.112.tar.gz
     provides:
-      Path::Tiny 0.108
-      Path::Tiny::Error 0.108
+      Path::Tiny 0.112
+      Path::Tiny::Error 0.112
     requirements:
       Carp 0
       Cwd 0
@@ -651,76 +651,76 @@ DISTRIBUTIONS
       Sub::Exporter::Progressive 0.001013
     requirements:
       ExtUtils::MakeMaker 0
-  Test-Simple-1.302170
-    pathname: E/EX/EXODIST/Test-Simple-1.302170.tar.gz
+  Test-Simple-1.302171
+    pathname: E/EX/EXODIST/Test-Simple-1.302171.tar.gz
     provides:
-      Test2 1.302170
-      Test2::API 1.302170
-      Test2::API::Breakage 1.302170
-      Test2::API::Context 1.302170
-      Test2::API::Instance 1.302170
-      Test2::API::Stack 1.302170
-      Test2::Event 1.302170
-      Test2::Event::Bail 1.302170
-      Test2::Event::Diag 1.302170
-      Test2::Event::Encoding 1.302170
-      Test2::Event::Exception 1.302170
-      Test2::Event::Fail 1.302170
-      Test2::Event::Generic 1.302170
-      Test2::Event::Note 1.302170
-      Test2::Event::Ok 1.302170
-      Test2::Event::Pass 1.302170
-      Test2::Event::Plan 1.302170
-      Test2::Event::Skip 1.302170
-      Test2::Event::Subtest 1.302170
-      Test2::Event::TAP::Version 1.302170
-      Test2::Event::V2 1.302170
-      Test2::Event::Waiting 1.302170
-      Test2::EventFacet 1.302170
-      Test2::EventFacet::About 1.302170
-      Test2::EventFacet::Amnesty 1.302170
-      Test2::EventFacet::Assert 1.302170
-      Test2::EventFacet::Control 1.302170
-      Test2::EventFacet::Error 1.302170
-      Test2::EventFacet::Hub 1.302170
-      Test2::EventFacet::Info 1.302170
-      Test2::EventFacet::Info::Table 1.302170
-      Test2::EventFacet::Meta 1.302170
-      Test2::EventFacet::Parent 1.302170
-      Test2::EventFacet::Plan 1.302170
-      Test2::EventFacet::Render 1.302170
-      Test2::EventFacet::Trace 1.302170
-      Test2::Formatter 1.302170
-      Test2::Formatter::TAP 1.302170
-      Test2::Hub 1.302170
-      Test2::Hub::Interceptor 1.302170
-      Test2::Hub::Interceptor::Terminator 1.302170
-      Test2::Hub::Subtest 1.302170
-      Test2::IPC 1.302170
-      Test2::IPC::Driver 1.302170
-      Test2::IPC::Driver::Files 1.302170
-      Test2::Tools::Tiny 1.302170
-      Test2::Util 1.302170
-      Test2::Util::ExternalMeta 1.302170
-      Test2::Util::Facets2Legacy 1.302170
-      Test2::Util::HashBase 1.302170
-      Test2::Util::Trace 1.302170
-      Test::Builder 1.302170
-      Test::Builder::Formatter 1.302170
+      Test2 1.302171
+      Test2::API 1.302171
+      Test2::API::Breakage 1.302171
+      Test2::API::Context 1.302171
+      Test2::API::Instance 1.302171
+      Test2::API::Stack 1.302171
+      Test2::Event 1.302171
+      Test2::Event::Bail 1.302171
+      Test2::Event::Diag 1.302171
+      Test2::Event::Encoding 1.302171
+      Test2::Event::Exception 1.302171
+      Test2::Event::Fail 1.302171
+      Test2::Event::Generic 1.302171
+      Test2::Event::Note 1.302171
+      Test2::Event::Ok 1.302171
+      Test2::Event::Pass 1.302171
+      Test2::Event::Plan 1.302171
+      Test2::Event::Skip 1.302171
+      Test2::Event::Subtest 1.302171
+      Test2::Event::TAP::Version 1.302171
+      Test2::Event::V2 1.302171
+      Test2::Event::Waiting 1.302171
+      Test2::EventFacet 1.302171
+      Test2::EventFacet::About 1.302171
+      Test2::EventFacet::Amnesty 1.302171
+      Test2::EventFacet::Assert 1.302171
+      Test2::EventFacet::Control 1.302171
+      Test2::EventFacet::Error 1.302171
+      Test2::EventFacet::Hub 1.302171
+      Test2::EventFacet::Info 1.302171
+      Test2::EventFacet::Info::Table 1.302171
+      Test2::EventFacet::Meta 1.302171
+      Test2::EventFacet::Parent 1.302171
+      Test2::EventFacet::Plan 1.302171
+      Test2::EventFacet::Render 1.302171
+      Test2::EventFacet::Trace 1.302171
+      Test2::Formatter 1.302171
+      Test2::Formatter::TAP 1.302171
+      Test2::Hub 1.302171
+      Test2::Hub::Interceptor 1.302171
+      Test2::Hub::Interceptor::Terminator 1.302171
+      Test2::Hub::Subtest 1.302171
+      Test2::IPC 1.302171
+      Test2::IPC::Driver 1.302171
+      Test2::IPC::Driver::Files 1.302171
+      Test2::Tools::Tiny 1.302171
+      Test2::Util 1.302171
+      Test2::Util::ExternalMeta 1.302171
+      Test2::Util::Facets2Legacy 1.302171
+      Test2::Util::HashBase 1.302171
+      Test2::Util::Trace 1.302171
+      Test::Builder 1.302171
+      Test::Builder::Formatter 1.302171
       Test::Builder::IO::Scalar 2.114
-      Test::Builder::Module 1.302170
-      Test::Builder::Tester 1.302170
-      Test::Builder::Tester::Color 1.302170
-      Test::Builder::Tester::Tie 1.302170
-      Test::Builder::TodoDiag 1.302170
-      Test::More 1.302170
-      Test::Simple 1.302170
-      Test::Tester 1.302170
-      Test::Tester::Capture 1.302170
-      Test::Tester::CaptureRunner 1.302170
-      Test::Tester::Delegate 1.302170
-      Test::use::ok 1.302170
-      ok 1.302170
+      Test::Builder::Module 1.302171
+      Test::Builder::Tester 1.302171
+      Test::Builder::Tester::Color 1.302171
+      Test::Builder::Tester::Tie 1.302171
+      Test::Builder::TodoDiag 1.302171
+      Test::More 1.302171
+      Test::Simple 1.302171
+      Test::Tester 1.302171
+      Test::Tester::Capture 1.302171
+      Test::Tester::CaptureRunner 1.302171
+      Test::Tester::Delegate 1.302171
+      Test::use::ok 1.302171
+      ok 1.302171
     requirements:
       ExtUtils::MakeMaker 0
       File::Spec 0

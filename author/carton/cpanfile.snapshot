@@ -828,13 +828,12 @@ DISTRIBUTIONS
       local::lib 2.000024
     requirements:
       perl 5.006
-  parent-0.237
-    pathname: C/CO/CORION/parent-0.237.tar.gz
+  parent-0.238
+    pathname: C/CO/CORION/parent-0.238.tar.gz
     provides:
-      parent 0.237
+      parent 0.238
     requirements:
       ExtUtils::MakeMaker 0
-      Test::More 0.4
       perl 5.006
   version-0.9924
     pathname: J/JP/JPEACOCK/version-0.9924.tar.gz

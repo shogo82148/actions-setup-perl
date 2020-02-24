@@ -203,23 +203,23 @@ DISTRIBUTIONS
       Time::Zone 0
       perl 5.006002
       strict 0
-  HTTP-Message-6.18
-    pathname: O/OA/OALDERS/HTTP-Message-6.18.tar.gz
+  HTTP-Message-6.22
+    pathname: O/OA/OALDERS/HTTP-Message-6.22.tar.gz
     provides:
-      HTTP::Config 6.18
-      HTTP::Headers 6.18
-      HTTP::Headers::Auth 6.18
-      HTTP::Headers::ETag 6.18
-      HTTP::Headers::Util 6.18
-      HTTP::Message 6.18
-      HTTP::Request 6.18
-      HTTP::Request::Common 6.18
-      HTTP::Response 6.18
-      HTTP::Status 6.18
+      HTTP::Config 6.22
+      HTTP::Headers 6.22
+      HTTP::Headers::Auth 6.22
+      HTTP::Headers::ETag 6.22
+      HTTP::Headers::Util 6.22
+      HTTP::Message 6.22
+      HTTP::Request 6.22
+      HTTP::Request::Common 6.22
+      HTTP::Response 6.22
+      HTTP::Status 6.22
     requirements:
       Carp 0
       Compress::Raw::Zlib 0
-      Encode 2.21
+      Encode 3.01
       Encode::Locale 1
       Exporter 5.57
       ExtUtils::MakeMaker 0

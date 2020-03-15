@@ -1,9 +1,9 @@
 # carton snapshot format: version 1.0
 DISTRIBUTIONS
-  CPAN-Perl-Releases-5.20200120
-    pathname: B/BI/BINGOS/CPAN-Perl-Releases-5.20200120.tar.gz
+  CPAN-Perl-Releases-5.20200314
+    pathname: B/BI/BINGOS/CPAN-Perl-Releases-5.20200314.tar.gz
     provides:
-      CPAN::Perl::Releases 5.20200120
+      CPAN::Perl::Releases 5.20200314
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0.47
@@ -18,12 +18,12 @@ DISTRIBUTIONS
       JSON::PP 0
       Module::Build::Tiny 0.034
       perl 5.008001
-  Devel-PatchPerl-1.84
-    pathname: B/BI/BINGOS/Devel-PatchPerl-1.84.tar.gz
+  Devel-PatchPerl-1.90
+    pathname: B/BI/BINGOS/Devel-PatchPerl-1.90.tar.gz
     provides:
-      Devel::PatchPerl 1.84
-      Devel::PatchPerl::Hints 1.84
-      Devel::PatchPerl::Plugin 1.84
+      Devel::PatchPerl 1.90
+      Devel::PatchPerl::Hints 1.90
+      Devel::PatchPerl::Plugin 1.90
     requirements:
       ExtUtils::MakeMaker 0
       File::pushd 1.00
@@ -31,10 +31,10 @@ DISTRIBUTIONS
       MIME::Base64 0
       Module::Pluggable 0
       perl 5.006000
-  File-Slurp-9999.29
-    pathname: C/CA/CAPOEIRAB/File-Slurp-9999.29.tar.gz
+  File-Slurp-9999.30
+    pathname: C/CA/CAPOEIRAB/File-Slurp-9999.30.tar.gz
     provides:
-      File::Slurp 9999.29
+      File::Slurp 9999.30
     requirements:
       B 0
       Carp 0

@@ -24,12 +24,14 @@ jobs:
       with:
         node-version: 12.x
 
-    - run: npm install
+    - run: npm ci
     - run: npm run build
     - run: npm test
 
     - name: use the action
       uses: ./
+      with:
+        perl-version: "5.30.0"
     - run: perl -V
 
     - run: npm run format-check

@@ -10,12 +10,12 @@ DISTRIBUTIONS
       JSON::PP 0
       Module::Build::Tiny 0.034
       perl 5.008001
-  Devel-PatchPerl-1.84
-    pathname: B/BI/BINGOS/Devel-PatchPerl-1.84.tar.gz
+  Devel-PatchPerl-1.90
+    pathname: B/BI/BINGOS/Devel-PatchPerl-1.90.tar.gz
     provides:
-      Devel::PatchPerl 1.84
-      Devel::PatchPerl::Hints 1.84
-      Devel::PatchPerl::Plugin 1.84
+      Devel::PatchPerl 1.90
+      Devel::PatchPerl::Hints 1.90
+      Devel::PatchPerl::Plugin 1.90
     requirements:
       ExtUtils::MakeMaker 0
       File::pushd 1.00
@@ -95,10 +95,10 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       HTTP::Date 6
       perl 5.006002
-  File-Slurp-9999.29
-    pathname: C/CA/CAPOEIRAB/File-Slurp-9999.29.tar.gz
+  File-Slurp-9999.30
+    pathname: C/CA/CAPOEIRAB/File-Slurp-9999.30.tar.gz
     provides:
-      File::Slurp 9999.29
+      File::Slurp 9999.30
     requirements:
       B 0
       Carp 0
@@ -203,23 +203,23 @@ DISTRIBUTIONS
       Time::Zone 0
       perl 5.006002
       strict 0
-  HTTP-Message-6.18
-    pathname: O/OA/OALDERS/HTTP-Message-6.18.tar.gz
+  HTTP-Message-6.22
+    pathname: O/OA/OALDERS/HTTP-Message-6.22.tar.gz
     provides:
-      HTTP::Config 6.18
-      HTTP::Headers 6.18
-      HTTP::Headers::Auth 6.18
-      HTTP::Headers::ETag 6.18
-      HTTP::Headers::Util 6.18
-      HTTP::Message 6.18
-      HTTP::Request 6.18
-      HTTP::Request::Common 6.18
-      HTTP::Response 6.18
-      HTTP::Status 6.18
+      HTTP::Config 6.22
+      HTTP::Headers 6.22
+      HTTP::Headers::Auth 6.22
+      HTTP::Headers::ETag 6.22
+      HTTP::Headers::Util 6.22
+      HTTP::Message 6.22
+      HTTP::Request 6.22
+      HTTP::Request::Common 6.22
+      HTTP::Response 6.22
+      HTTP::Status 6.22
     requirements:
       Carp 0
       Compress::Raw::Zlib 0
-      Encode 2.21
+      Encode 3.01
       Encode::Locale 1
       Exporter 5.57
       ExtUtils::MakeMaker 0
@@ -274,17 +274,17 @@ DISTRIBUTIONS
       Encode 2.10
       Exporter 5.57
       ExtUtils::MakeMaker 6.30
-  IO-Socket-SSL-2.066
-    pathname: S/SU/SULLR/IO-Socket-SSL-2.066.tar.gz
+  IO-Socket-SSL-2.067
+    pathname: S/SU/SULLR/IO-Socket-SSL-2.067.tar.gz
     provides:
-      IO::Socket::SSL 2.066
+      IO::Socket::SSL 2.067
       IO::Socket::SSL::Intercept 2.056
-      IO::Socket::SSL::OCSP_Cache 2.066
-      IO::Socket::SSL::OCSP_Resolver 2.066
+      IO::Socket::SSL::OCSP_Cache 2.067
+      IO::Socket::SSL::OCSP_Resolver 2.067
       IO::Socket::SSL::PublicSuffix undef
-      IO::Socket::SSL::SSL_Context 2.066
-      IO::Socket::SSL::SSL_HANDLE 2.066
-      IO::Socket::SSL::Session_Cache 2.066
+      IO::Socket::SSL::SSL_Context 2.067
+      IO::Socket::SSL::SSL_HANDLE 2.067
+      IO::Socket::SSL::Session_Cache 2.067
       IO::Socket::SSL::Utils 2.014
     requirements:
       ExtUtils::MakeMaker 0
@@ -457,8 +457,8 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       MIME::Base64 0
       perl 5.008001
-  TimeDate-2.31
-    pathname: A/AT/ATOOMIC/TimeDate-2.31.tar.gz
+  TimeDate-2.32
+    pathname: A/AT/ATOOMIC/TimeDate-2.32.tar.gz
     provides:
       Date::Format 2.24
       Date::Format::Generic 2.24
@@ -497,7 +497,7 @@ DISTRIBUTIONS
       Date::Language::TigrinyaEritrean 1.00
       Date::Language::TigrinyaEthiopian 1.00
       Date::Language::Turkish 1.0
-      Date::Parse 2.31
+      Date::Parse 2.32
       Time::Zone 2.24
       TimeDate 1.21
     requirements:

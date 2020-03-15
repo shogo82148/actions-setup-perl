@@ -30,6 +30,8 @@ jobs:
 
     - name: use the action
       uses: ./
+      with:
+        node-version: "5.30.0"
     - run: perl -V
 
     - run: npm run format-check

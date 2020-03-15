@@ -27,7 +27,7 @@ git push origin master
 : build the action
 git checkout -b "releases/v$MAJOR" "origin/releases/v$MAJOR" || git git checkout -b "releases/v$MAJOR" master
 git merge -X theirs -m "Merge branch 'master' into releases/v$MAJOR" master || true
-npm install
+npm ci
 npm run build
 
 : remove development packages from node_modules

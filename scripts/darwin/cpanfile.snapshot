@@ -1,9 +1,9 @@
 # carton snapshot format: version 1.0
 DISTRIBUTIONS
-  CPAN-Perl-Releases-5.20200314
-    pathname: B/BI/BINGOS/CPAN-Perl-Releases-5.20200314.tar.gz
+  CPAN-Perl-Releases-5.20200320
+    pathname: B/BI/BINGOS/CPAN-Perl-Releases-5.20200320.tar.gz
     provides:
-      CPAN::Perl::Releases 5.20200314
+      CPAN::Perl::Releases 5.20200320
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0.47

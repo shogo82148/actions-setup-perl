@@ -274,17 +274,17 @@ DISTRIBUTIONS
       Encode 2.10
       Exporter 5.57
       ExtUtils::MakeMaker 6.30
-  IO-Socket-SSL-2.067
-    pathname: S/SU/SULLR/IO-Socket-SSL-2.067.tar.gz
+  IO-Socket-SSL-2.068
+    pathname: S/SU/SULLR/IO-Socket-SSL-2.068.tar.gz
     provides:
-      IO::Socket::SSL 2.067
+      IO::Socket::SSL 2.068
       IO::Socket::SSL::Intercept 2.056
-      IO::Socket::SSL::OCSP_Cache 2.067
-      IO::Socket::SSL::OCSP_Resolver 2.067
+      IO::Socket::SSL::OCSP_Cache 2.068
+      IO::Socket::SSL::OCSP_Resolver 2.068
       IO::Socket::SSL::PublicSuffix undef
-      IO::Socket::SSL::SSL_Context 2.067
-      IO::Socket::SSL::SSL_HANDLE 2.067
-      IO::Socket::SSL::Session_Cache 2.067
+      IO::Socket::SSL::SSL_Context 2.068
+      IO::Socket::SSL::SSL_HANDLE 2.068
+      IO::Socket::SSL::Session_Cache 2.068
       IO::Socket::SSL::Utils 2.014
     requirements:
       ExtUtils::MakeMaker 0

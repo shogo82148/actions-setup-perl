@@ -177,10 +177,10 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Scalar::Util 0
       perl 5.006
-  Class-C3-XS-0.14
-    pathname: E/ET/ETHER/Class-C3-XS-0.14.tar.gz
+  Class-C3-XS-0.15
+    pathname: E/ET/ETHER/Class-C3-XS-0.15.tar.gz
     provides:
-      Class::C3::XS 0.14
+      Class::C3::XS 0.15
     requirements:
       ExtUtils::MakeMaker 0
       XSLoader 0

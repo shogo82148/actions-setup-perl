@@ -10,12 +10,12 @@ DISTRIBUTIONS
       JSON::PP 0
       Module::Build::Tiny 0.034
       perl 5.008001
-  Devel-PatchPerl-1.90
-    pathname: B/BI/BINGOS/Devel-PatchPerl-1.90.tar.gz
+  Devel-PatchPerl-1.92
+    pathname: B/BI/BINGOS/Devel-PatchPerl-1.92.tar.gz
     provides:
-      Devel::PatchPerl 1.90
-      Devel::PatchPerl::Hints 1.90
-      Devel::PatchPerl::Plugin 1.90
+      Devel::PatchPerl 1.92
+      Devel::PatchPerl::Hints 1.92
+      Devel::PatchPerl::Plugin 1.92
     requirements:
       ExtUtils::MakeMaker 0
       File::pushd 1.00

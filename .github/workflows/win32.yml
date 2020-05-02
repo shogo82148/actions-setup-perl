@@ -160,6 +160,9 @@ jobs:
         - "5.8.5"
 
     steps:
+      - name: disable autocrlf
+        run: git config --global core.autocrlf false
+
       - uses: actions/checkout@v2
       - name: setup host perl
         shell: bash

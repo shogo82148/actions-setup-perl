@@ -36,7 +36,7 @@ jobs:
     name: Perl ${{ matrix.perl }} on ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v1
-      - name: Setup perl
+      - name: Set up perl
         uses: shogo82148/actions-setup-perl@v1
         with:
           perl-version: ${{ matrix.perl }}

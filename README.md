@@ -7,7 +7,7 @@
 This action sets by perl environment for use in actions by:
 
 - optionally downloading and caching a version of perl
-- registering problem matchers for error output 
+- registering problem matchers for error output
 
 # Usage
 
@@ -17,7 +17,7 @@ Basic:
 ```yaml
 steps:
 - uses: actions/checkout@v2
-- uses: shogo82148/actions-setup-perl@v1
+- uses: shogo82148/actions-setup-perl@v1.3.0
   with:
     perl-version: '5.30'
 - run: cpanm --installdeps .
@@ -37,7 +37,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up perl
-        uses: shogo82148/actions-setup-perl@v1
+        uses: shogo82148/actions-setup-perl@v1.3.0
         with:
           perl-version: ${{ matrix.perl }}
       - run: perl -V

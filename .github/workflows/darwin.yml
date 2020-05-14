@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'scripts/darwin/**'
+      - 'scripts/lib/**'
       - '.github/workflows/darwin.yml'
   push:
     branches:

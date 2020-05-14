@@ -53,16 +53,6 @@ my @patch = (
     },
     {
         perl => [
-            qr/^5\.21\.[0-6]$/,
-            qr/^5\.20\.[01]$/,
-            qr/^5\.18\./,
-        ],
-        subs => [
-            [ \&_patch_installperl ],
-        ],
-    },
-    {
-        perl => [
             qr/^5\.21\./,
             qr/^5\.20\./,
         ],
@@ -2278,22 +2268,6 @@ PATCH
  
  #undef	 Stat
  #define  Stat		win32_stat
-PATCH
-}
-
-sub _patch_installperl {
-    _patch(<<'PATCH');
---- installperl
-+++ installperl
-@@ -260,7 +259,7 @@ if (($Is_W32 and ! $Is_NetWare) or $Is_Cygwin) {
-     if ($Is_Cygwin) {
- 	$perldll = $libperl;
-     } else {
--	$perldll = 'perl5'.$Config{patchlevel}.'.'.$dlext;
-+	$perldll = 'perl5'.$Config{patchlevel}.'.'.$so;
-     }
- 
-     if ($dlsrc ne "dl_none.xs") {
 PATCH
 }
 

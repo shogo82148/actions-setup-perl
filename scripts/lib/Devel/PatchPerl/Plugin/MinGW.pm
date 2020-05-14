@@ -12539,7 +12539,8 @@ sub _patch_installperl {
         return;
     }
 
-    _patch(<<'PATCH');
+    if (_ge($version, "5.20.2")) {
+        _patch(<<'PATCH');
 --- installperl
 +++ installperl
 @@ -365,6 +365,8 @@ elsif ($Is_Cygwin) { # On Cygwin symlink it to CORE to make Makefile happy
@@ -12577,6 +12578,66 @@ sub _patch_installperl {
      # ignore the build support code
      return if $name =~ /\bbuildcustomize\.pl$/;
 @@ -703,6 +712,9 @@ sub installlib {
+ 
+     return if $name eq 'ExtUtils/XSSymSet.pm' and !$Is_VMS;
+ 
++    #blead comes with version, blead isn't 5.8/5.6
++    return if $name eq 'ExtUtils/MakeMaker/version/regex.pm';
++
+     my $installlib = $installprivlib;
+     if ($dir =~ /^auto\// ||
+ 	  ($name =~ /^(.*)\.(?:pm|pod)$/ && $archpms{$1}) ||
+PATCH
+        return;
+    }
+
+    _patch(<<'PATCH');
+--- installperl
++++ installperl
+@@ -260,7 +260,7 @@ if (($Is_W32 and ! $Is_NetWare) or $Is_Cygwin) {
+     if ($Is_Cygwin) {
+ 	$perldll = $libperl;
+     } else {
+-	$perldll = 'perl5'.$Config{patchlevel}.'.'.$dlext;
++	$perldll = 'perl5'.$Config{patchlevel}.'.'.$so;
+     }
+ 
+     if ($dlsrc ne "dl_none.xs") {
+@@ -370,6 +370,8 @@ elsif ($Is_Cygwin) { # On Cygwin symlink it to CORE to make Makefile happy
+     ( copy("$installbin/$libperl", $coredll) &&
+       push(@corefiles, $instcoredll)
+     )
++} elsif ($Is_W32) {
++    @corefiles = <*.h>;
+ } else {
+     # [als] hard-coded 'libperl' name... not good!
+     @corefiles = <*.h libperl*.* perl*$Config{lib_ext}>;
+@@ -390,6 +392,13 @@ foreach my $file (@corefiles) {
+     }
+ }
+ 
++if ($Is_W32) { #linking lib isn't made in root but in CORE on Win32
++    @corefiles = <lib/CORE/libperl*.* lib/CORE/perl*$Config{lib_ext}>;
++    my $dest;
++    copy_if_diff($_,($dest = $installarchlib.substr($_,3))) &&
++    chmod(0444, $dest) foreach @corefiles;
++}
++
+ # Install main perl executables
+ # Make links to ordinary names if installbin directory isn't current directory.
+ 
+@@ -677,8 +686,8 @@ sub installlib {
+     return if $name =~ /^(?:cpan|instmodsh|prove|corelist|ptar|ptardiff|ptargrep|config_data|zipdetails)\z/;
+     # ignore the Makefiles
+     return if $name =~ /^makefile$/i;
+-    # ignore the test extensions
+-    return if $dir =~ m{\bXS/(?:APItest|Typemap)\b};
++    # ignore the test extensions, dont install PPPort.so/.dll
++    return if $dir =~ m{\b(?:XS/(?:APItest|Typemap)|Devel/PPPort)\b};
+     return if $name =~ m{\b(?:APItest|Typemap)\.pm$};
+     # ignore the build support code
+     return if $name =~ /\bbuildcustomize\.pl$/;
+@@ -721,6 +730,9 @@ sub installlib {
  
      return if $name eq 'ExtUtils/XSSymSet.pm' and !$Is_VMS;
  

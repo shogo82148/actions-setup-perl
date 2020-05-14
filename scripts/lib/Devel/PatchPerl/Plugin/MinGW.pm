@@ -12652,7 +12652,8 @@ PATCH
         return;
     }
 
-    _patch(<<'PATCH');
+    if (_ge($version, "5.8.9")) {
+        _patch(<<'PATCH');
 --- installperl
 +++ installperl
 @@ -395,6 +395,9 @@ if ($Is_VMS) {  # We did core file selection during build
@@ -12691,6 +12692,58 @@ PATCH
      # ignore the demo files
      return if $dir =~ /\b(?:demos?|eg)\b/;
 @@ -826,6 +836,9 @@ sub installlib {
+ 
+     $name = "$dir/$name" if $dir ne '';
+ 
++    #blead comes with version, blead isn't 5.8/5.6
++    return if $name eq 'ExtUtils/MakeMaker/version/regex.pm';
++
+     my $installlib = $installprivlib;
+     if ($dir =~ /^auto/ ||
+ 	  ($name =~ /^(.*)\.(?:pm|pod)$/ && $archpms{$1}) ||
+PATCH
+		return;
+	}
+
+	_patch(<<'PATCH');
+--- installperl
++++ installperl
+@@ -404,6 +404,9 @@ if ($Is_VMS) {  # We did core file selection during build
+     $coredir =~ tr/./_/;
+     map { s|^$coredir/||i; } @corefiles = <$coredir/*.*>;
+ }
++elsif ($Is_W32) {
++    @corefiles = <*.h>;
++}
+ else {
+     # [als] hard-coded 'libperl' name... not good!
+     @corefiles = <*.h *.inc libperl*.* perl*$Config{lib_ext}>;
+@@ -442,6 +445,13 @@ if ($Config{use5005threads}) {
+     }
+ }
+ 
++if ($Is_W32) { #linking lib isn't made in root but in CORE on Win32
++    @corefiles = <lib/CORE/libperl*.* lib/CORE/perl*$Config{lib_ext}>;
++    my $dest;
++    copy_if_diff($_,($dest = $installarchlib.substr($_,3))) &&
++    chmod(0444, $dest) foreach @corefiles;
++}
++
+ # Install main perl executables
+ # Make links to ordinary names if installbin directory isn't current directory.
+ 
+@@ -825,8 +835,8 @@ sub installlib {
+ 
+     # ignore the Makefiles
+     return if $name =~ /^makefile$/i;
+-    # ignore the test extensions
+-    return if $dir =~ m{ext/XS/(?:APItest|Typemap)/};
++    # ignore the test extensions, dont install PPPort.so/.dll
++    return if $dir =~ m{\b(?:XS/(?:APItest|Typemap)|Devel/PPPort)\b};
+     # ignore the demo files
+     return if $dir =~ /\bdemos?\b/;
+ 
+@@ -838,6 +848,9 @@ sub installlib {
  
      $name = "$dir/$name" if $dir ne '';
  

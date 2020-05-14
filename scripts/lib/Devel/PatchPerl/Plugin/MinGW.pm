@@ -12559,7 +12559,7 @@ PATCH
 PATCH
 }
 
-sub _patch_make_maker {
+sub _patch_installperl {
     my $version = shift;
     if (_ge($version, "5.24.0")) {
         return;
@@ -12568,31 +12568,7 @@ sub _patch_make_maker {
     _patch(<<'PATCH');
 --- installperl
 +++ installperl
-@@ -11,7 +11,7 @@ BEGIN {
- }
- 
- use strict;
--use vars qw($Is_VMS $Is_W32 $Is_OS2 $Is_Cygwin $Is_Darwin $Is_NetWare
-+use vars qw($Is_VMS $Is_W32 $Is_OS2 $Is_Cygwin $Is_Darwin $Is_NetWare $Is_AmigaOS
- 	    %opts $packlist);
- my $versiononly;
- 
-@@ -19,6 +19,14 @@ BEGIN {
-     if ($Is_VMS) { eval 'use VMS::Filespec;' }
- }
- 
-+# HP-UX (at least) needs to maintain execute permissions
-+# on dynamically-loadable libraries. So we do it for all.
-+#
-+# In AmigaOS, the 0777 means 'rwed' (e = execute, d = delete),
-+# (not 'rwx') and having the 'd' makes updates more convenient.
-+my $SO_MODE     = $Is_AmigaOS ? 0777 : 0555;
-+my $NON_SO_MODE = $Is_AmigaOS ? 0666 : 0444;
-+
- my $scr_ext = ($Is_VMS ? '.Com' : $Is_W32 ? '.bat' : '');
- 
- use File::Find;
-@@ -365,6 +373,8 @@ elsif ($Is_Cygwin) { # On Cygwin symlink it to CORE to make Makefile happy
+@@ -365,6 +365,8 @@ elsif ($Is_Cygwin) { # On Cygwin symlink it to CORE to make Makefile happy
      ( copy("$installbin/$libperl", $coredll) &&
        push(@corefiles, $instcoredll)
      )
@@ -12601,24 +12577,7 @@ sub _patch_make_maker {
  } else {
      # [als] hard-coded 'libperl' name... not good!
      @corefiles = <*.h libperl*.* perl*$Config{lib_ext}>;
-@@ -372,19 +382,26 @@ elsif ($Is_Cygwin) { # On Cygwin symlink it to CORE to make Makefile happy
-     # AIX needs perl.exp installed as well.
-     push(@corefiles,'perl.exp') if $^O eq 'aix';
- }
-+
-+
- foreach my $file (@corefiles) {
--    # HP-UX (at least) needs to maintain execute permissions
--    # on dynamically-loadable libraries. So we do it for all.
-     if (copy_if_diff($file,"$installarchlib/CORE/$file")) {
- 	if ($file =~ /\.(\Q$so\E|\Q$dlext\E)$/) {
- 	    strip("-S", "$installarchlib/CORE/$file") if $^O eq 'darwin';
--	    chmod(0555, "$installarchlib/CORE/$file");
-+	    chmod($SO_MODE, "$installarchlib/CORE/$file");
- 	} else {
--	    chmod(0444, "$installarchlib/CORE/$file");
-+	    chmod($NON_SO_MODE, "$installarchlib/CORE/$file");
- 	}
+@@ -385,6 +387,13 @@ foreach my $file (@corefiles) {
      }
  }
  
@@ -12626,24 +12585,13 @@ sub _patch_make_maker {
 +    @corefiles = <lib/CORE/libperl*.* lib/CORE/perl*$Config{lib_ext}>;
 +    my $dest;
 +    copy_if_diff($_,($dest = $installarchlib.substr($_,3))) &&
-+	chmod($NON_SO_MODE, $dest) foreach @corefiles;
++    chmod(0444, $dest) foreach @corefiles;
 +}
 +
  # Install main perl executables
  # Make links to ordinary names if installbin directory isn't current directory.
  
-@@ -495,6 +512,10 @@ if ($versiononly) {
- 	(my $base = $_) =~ s#.*/##;
- 	copy($_, "$installscript/$base");
- 	chmod(0755, "$installscript/$base");
-+	if ($Is_AmigaOS) {
-+            my $amigapath = unixtoamiga("$installscript/$base");
-+            amigaprotect($amigapath,"+s");
-+        }
-     }
- 
-     for (@tolink) {
-@@ -659,8 +680,8 @@ sub installlib {
+@@ -659,8 +668,8 @@ sub installlib {
      return if $name =~ /^(?:cpan|instmodsh|prove|corelist|ptar|ptardiff|ptargrep|zipdetails)\z/;
      # ignore the Makefiles
      return if $name =~ /^makefile$/i;
@@ -12654,7 +12602,7 @@ sub _patch_make_maker {
      return if $name =~ m{\b(?:APItest|Typemap)\.pm$};
      # ignore the build support code
      return if $name =~ /\bbuildcustomize\.pl$/;
-@@ -703,6 +724,9 @@ sub installlib {
+@@ -703,6 +712,9 @@ sub installlib {
  
      return if $name eq 'ExtUtils/XSSymSet.pm' and !$Is_VMS;
  
@@ -12664,16 +12612,6 @@ sub _patch_make_maker {
      my $installlib = $installprivlib;
      if ($dir =~ /^auto\// ||
  	  ($name =~ /^(.*)\.(?:pm|pod)$/ && $archpms{$1}) ||
-@@ -735,7 +759,8 @@ sub installlib {
-             if (copy_if_diff($_, "$installlib/$name")) {
-                 strip("-S", "$installlib/$name")
-                     if $^O eq 'darwin' and /\.(?:so|$dlext|a)$/;
--                chmod(/\.(so|$dlext)$/ ? 0555 : 0444, "$installlib/$name");
-+                chmod(/\.(so|$dlext)$/ ? $SO_MODE : $NON_SO_MODE,
-+                      "$installlib/$name");
-             }
- 	}
-     }
 PATCH
 }
 

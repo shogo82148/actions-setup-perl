@@ -12591,7 +12591,8 @@ PATCH
         return;
     }
 
-    _patch(<<'PATCH');
+    if (_ge($version, "5.10.1")) {
+        _patch(<<'PATCH');
 --- installperl
 +++ installperl
 @@ -260,7 +260,7 @@ if (($Is_W32 and ! $Is_NetWare) or $Is_Cygwin) {
@@ -12646,6 +12647,58 @@ PATCH
 +
      my $installlib = $installprivlib;
      if ($dir =~ /^auto\// ||
+ 	  ($name =~ /^(.*)\.(?:pm|pod)$/ && $archpms{$1}) ||
+PATCH
+        return;
+    }
+
+    _patch(<<'PATCH');
+--- installperl
++++ installperl
+@@ -395,6 +395,9 @@ if ($Is_VMS) {  # We did core file selection during build
+     $coredir =~ tr/./_/;
+     map { s|^$coredir/||i; } @corefiles = <$coredir/*.*>;
+ }
++elsif ($Is_W32) {
++    @corefiles = <*.h>;
++}
+ else {
+     # [als] hard-coded 'libperl' name... not good!
+     @corefiles = <*.h libperl*.* perl*$Config{lib_ext}>;
+@@ -422,6 +425,13 @@ foreach my $file (@corefiles) {
+     }
+ }
+ 
++if ($Is_W32) { #linking lib isn't made in root but in CORE on Win32
++    @corefiles = <lib/CORE/libperl*.* lib/CORE/perl*$Config{lib_ext}>;
++    my $dest;
++    copy_if_diff($_,($dest = $installarchlib.substr($_,3))) &&
++    chmod(0444, $dest) foreach @corefiles;
++}
++
+ # Install main perl executables
+ # Make links to ordinary names if installbin directory isn't current directory.
+ 
+@@ -802,8 +812,8 @@ sub installlib {
+     return if $name =~ /^(?:cpan|instmodsh|prove|corelist|ptar|cpan2dist|cpanp|cpanp-run-perl|ptardiff|config_data)\z/;
+     # ignore the Makefiles
+     return if $name =~ /^makefile$/i;
+-    # ignore the test extensions
+-    return if $dir =~ m{\bXS/(?:APItest|Typemap)\b};
++    # ignore the test extensions, dont install PPPort.so/.dll
++    return if $dir =~ m{\b(?:XS/(?:APItest|Typemap)|Devel/PPPort)\b};
+     return if $name =~ m{\b(?:APItest|Typemap)\.pm$};
+     # ignore the demo files
+     return if $dir =~ /\b(?:demos?|eg)\b/;
+@@ -826,6 +836,9 @@ sub installlib {
+ 
+     $name = "$dir/$name" if $dir ne '';
+ 
++    #blead comes with version, blead isn't 5.8/5.6
++    return if $name eq 'ExtUtils/MakeMaker/version/regex.pm';
++
+     my $installlib = $installprivlib;
+     if ($dir =~ /^auto/ ||
  	  ($name =~ /^(.*)\.(?:pm|pod)$/ && $archpms{$1}) ||
 PATCH
 }

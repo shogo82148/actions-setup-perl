@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'scripts/linux/**'
+      - 'scripts/lib/**'
       - '.github/workflows/linux.yml'
   push:
     branches:

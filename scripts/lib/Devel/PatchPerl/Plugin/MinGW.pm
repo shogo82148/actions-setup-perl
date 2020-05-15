@@ -12759,10 +12759,8 @@ PATCH
     }
 
     _patch(<<'PATCH');
-diff --git a/installperl b/installperl
-index 98c8e33adf..18e5ad5f38 100755
---- a/installperl
-+++ b/installperl
+--- installperl
++++ installperl
 @@ -404,6 +404,9 @@ if ($Is_VMS) {  # We did core file selection during build
      $coredir =~ tr/./_/;
      map { s|^$coredir/||i; } @corefiles = <$coredir/*.*>;

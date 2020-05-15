@@ -1,9 +1,9 @@
 # carton snapshot format: version 1.0
 DISTRIBUTIONS
-  CPAN-Perl-Releases-5.20200314
-    pathname: B/BI/BINGOS/CPAN-Perl-Releases-5.20200314.tar.gz
+  CPAN-Perl-Releases-5.20200428
+    pathname: B/BI/BINGOS/CPAN-Perl-Releases-5.20200428.tar.gz
     provides:
-      CPAN::Perl::Releases 5.20200314
+      CPAN::Perl::Releases 5.20200428
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0.47
@@ -18,12 +18,12 @@ DISTRIBUTIONS
       JSON::PP 0
       Module::Build::Tiny 0.034
       perl 5.008001
-  Devel-PatchPerl-1.90
-    pathname: B/BI/BINGOS/Devel-PatchPerl-1.90.tar.gz
+  Devel-PatchPerl-1.92
+    pathname: B/BI/BINGOS/Devel-PatchPerl-1.92.tar.gz
     provides:
-      Devel::PatchPerl 1.90
-      Devel::PatchPerl::Hints 1.90
-      Devel::PatchPerl::Plugin 1.90
+      Devel::PatchPerl 1.92
+      Devel::PatchPerl::Hints 1.92
+      Devel::PatchPerl::Plugin 1.92
     requirements:
       ExtUtils::MakeMaker 0
       File::pushd 1.00
@@ -72,10 +72,10 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  HTTP-Tinyish-0.15
-    pathname: M/MI/MIYAGAWA/HTTP-Tinyish-0.15.tar.gz
+  HTTP-Tinyish-0.16
+    pathname: M/MI/MIYAGAWA/HTTP-Tinyish-0.16.tar.gz
     provides:
-      HTTP::Tinyish 0.15
+      HTTP::Tinyish 0.16
       HTTP::Tinyish::Base undef
       HTTP::Tinyish::Curl undef
       HTTP::Tinyish::HTTPTiny undef

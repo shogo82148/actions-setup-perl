@@ -16,7 +16,7 @@ See [action.yml](action.yml)
 Basic:
 ```yaml
 steps:
-- uses: actions/checkout@master
+- uses: actions/checkout@v2
 - uses: shogo82148/actions-setup-perl@v1
   with:
     perl-version: '5.30'
@@ -35,8 +35,8 @@ jobs:
         perl: [ '5.30', '5.28' ]
     name: Perl ${{ matrix.perl }} on ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v1
-      - name: Setup perl
+      - uses: actions/checkout@v2
+      - name: Set up perl
         uses: shogo82148/actions-setup-perl@v1
         with:
           perl-version: ${{ matrix.perl }}

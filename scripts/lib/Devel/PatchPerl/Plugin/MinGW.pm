@@ -959,11 +959,9 @@ sub _write_gnumakefile {
     $makefile =~ s/__PERL_MINOR_VERSION__/$v[0]$v[1]/g;
     $makefile =~ s/__PERL_VERSION__/$v[0]$v[1]$v[2]/g;
 
-    # disable optimize because the their builds fail.
+    # disable optimize because the the builds fail with ExceptionCode.EXCEPTION_ACCESS_VIOLATION.
     # they maybe contain undefined behavior???
-    if($version eq "5.10.0" || $version eq "5.12.5") {
-        $makefile =~ s/-O2/-O0/g;
-    }
+	$makefile =~ s/-O2/-O0/g;
 
     _write_or_die(File::Spec->catfile("win32", "GNUmakefile"), $makefile);
 }

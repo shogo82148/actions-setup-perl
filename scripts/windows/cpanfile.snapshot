@@ -427,10 +427,10 @@ DISTRIBUTIONS
       if 0
       perl 5.00503
       strict 0
-  Mozilla-CA-20180117
-    pathname: A/AB/ABH/Mozilla-CA-20180117.tar.gz
+  Mozilla-CA-20200520
+    pathname: A/AB/ABH/Mozilla-CA-20200520.tar.gz
     provides:
-      Mozilla::CA 20180117
+      Mozilla::CA 20200520
     requirements:
       ExtUtils::MakeMaker 0
       Test 0

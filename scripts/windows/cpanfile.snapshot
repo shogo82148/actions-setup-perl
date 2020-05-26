@@ -180,10 +180,10 @@ DISTRIBUTIONS
       locale 0
       perl 5.008001
       strict 0
-  HTTP-Daemon-6.06
-    pathname: O/OA/OALDERS/HTTP-Daemon-6.06.tar.gz
+  HTTP-Daemon-6.10
+    pathname: O/OA/OALDERS/HTTP-Daemon-6.10.tar.gz
     provides:
-      HTTP::Daemon 6.06
+      HTTP::Daemon 6.10
     requirements:
       Carp 0
       ExtUtils::MakeMaker 0
@@ -191,11 +191,10 @@ DISTRIBUTIONS
       HTTP::Request 6
       HTTP::Response 6
       HTTP::Status 6
-      IO::Socket::IP 0
+      IO::Socket::IP 0.25
       LWP::MediaTypes 6
       Module::Build::Tiny 0.034
       Socket 0
-      Sys::Hostname 0
       perl 5.006
       strict 0
       warnings 0

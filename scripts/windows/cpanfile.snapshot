@@ -16,15 +16,16 @@ DISTRIBUTIONS
       Clone 0.45
     requirements:
       ExtUtils::MakeMaker 0
-  Devel-PatchPerl-1.94
-    pathname: B/BI/BINGOS/Devel-PatchPerl-1.94.tar.gz
+  Devel-PatchPerl-1.98
+    pathname: B/BI/BINGOS/Devel-PatchPerl-1.98.tar.gz
     provides:
-      Devel::PatchPerl 1.94
-      Devel::PatchPerl::Hints 1.94
-      Devel::PatchPerl::Plugin 1.94
+      Devel::PatchPerl 1.98
+      Devel::PatchPerl::Hints 1.98
+      Devel::PatchPerl::Plugin 1.98
     requirements:
       ExtUtils::MakeMaker 0
       File::pushd 1.00
+      Getopt::Long 0
       IO::File 0
       MIME::Base64 0
       Module::Pluggable 0

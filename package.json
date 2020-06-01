@@ -31,7 +31,7 @@
     "@types/node": "^13.13.4",
     "@types/semver": "^7.1.0",
     "jest": "^25.5.3",
-    "jest-circus": "^25.5.3",
+    "jest-circus": "^26.0.1",
     "prettier": "^2.0.5",
     "ts-jest": "^25.4.0",
     "typescript": "^3.8.3"

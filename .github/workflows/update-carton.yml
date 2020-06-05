@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.SHOGO_GITHUB_TOKEN }}
 
       - name: update cpanfile.snapshot
         run: make update
@@ -28,7 +30,7 @@ jobs:
 
       - name: commit
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          TOKEN: ${{ secrets.SHOGO_GITHUB_TOKEN }}
         run: |
           branch=update-carton-$(date +"%Y-%m-%d-%H-%M-%S")
           git config --global user.name "Ichinose Shogo"
@@ -37,6 +39,6 @@ jobs:
           git add .
           git commit -m "Update carton $(date +"%Y-%m-%d %H:%M:%S")" || exit 0
           git push -u origin "$branch"
-          curl -H "Authorization: token $GITHUB_TOKEN" \
+          curl -H "Authorization: token $TOKEN" \
             -d "$(jq --arg branch $branch -n '{ "title": "Auto Update carton", "base": "master", "head": $branch }')" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls"

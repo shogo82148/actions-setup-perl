@@ -1,12 +1,11 @@
 # carton snapshot format: version 1.0
 DISTRIBUTIONS
-  CPAN-Perl-Releases-5.20200428
-    pathname: B/BI/BINGOS/CPAN-Perl-Releases-5.20200428.tar.gz
+  CPAN-Perl-Releases-5.20200601
+    pathname: B/BI/BINGOS/CPAN-Perl-Releases-5.20200601.tar.gz
     provides:
-      CPAN::Perl::Releases 5.20200428
+      CPAN::Perl::Releases 5.20200601
     requirements:
       ExtUtils::MakeMaker 0
-      Test::More 0.47
       perl 5.006000
   CPAN-Perl-Releases-MetaCPAN-0.006
     pathname: S/SK/SKAJI/CPAN-Perl-Releases-MetaCPAN-0.006.tar.gz
@@ -18,15 +17,16 @@ DISTRIBUTIONS
       JSON::PP 0
       Module::Build::Tiny 0.034
       perl 5.008001
-  Devel-PatchPerl-1.92
-    pathname: B/BI/BINGOS/Devel-PatchPerl-1.92.tar.gz
+  Devel-PatchPerl-2.00
+    pathname: B/BI/BINGOS/Devel-PatchPerl-2.00.tar.gz
     provides:
-      Devel::PatchPerl 1.92
-      Devel::PatchPerl::Hints 1.92
-      Devel::PatchPerl::Plugin 1.92
+      Devel::PatchPerl 2.00
+      Devel::PatchPerl::Hints 2.00
+      Devel::PatchPerl::Plugin 2.00
     requirements:
       ExtUtils::MakeMaker 0
       File::pushd 1.00
+      Getopt::Long 0
       IO::File 0
       MIME::Base64 0
       Module::Pluggable 0

@@ -16,15 +16,16 @@ DISTRIBUTIONS
       Clone 0.45
     requirements:
       ExtUtils::MakeMaker 0
-  Devel-PatchPerl-1.92
-    pathname: B/BI/BINGOS/Devel-PatchPerl-1.92.tar.gz
+  Devel-PatchPerl-2.00
+    pathname: B/BI/BINGOS/Devel-PatchPerl-2.00.tar.gz
     provides:
-      Devel::PatchPerl 1.92
-      Devel::PatchPerl::Hints 1.92
-      Devel::PatchPerl::Plugin 1.92
+      Devel::PatchPerl 2.00
+      Devel::PatchPerl::Hints 2.00
+      Devel::PatchPerl::Plugin 2.00
     requirements:
       ExtUtils::MakeMaker 0
       File::pushd 1.00
+      Getopt::Long 0
       IO::File 0
       MIME::Base64 0
       Module::Pluggable 0
@@ -179,10 +180,10 @@ DISTRIBUTIONS
       locale 0
       perl 5.008001
       strict 0
-  HTTP-Daemon-6.06
-    pathname: O/OA/OALDERS/HTTP-Daemon-6.06.tar.gz
+  HTTP-Daemon-6.12
+    pathname: O/OA/OALDERS/HTTP-Daemon-6.12.tar.gz
     provides:
-      HTTP::Daemon 6.06
+      HTTP::Daemon 6.12
     requirements:
       Carp 0
       ExtUtils::MakeMaker 0
@@ -190,11 +191,10 @@ DISTRIBUTIONS
       HTTP::Request 6
       HTTP::Response 6
       HTTP::Status 6
-      IO::Socket::IP 0
+      IO::Socket::IP 0.25
       LWP::MediaTypes 6
       Module::Build::Tiny 0.034
       Socket 0
-      Sys::Hostname 0
       perl 5.006
       strict 0
       warnings 0
@@ -427,10 +427,10 @@ DISTRIBUTIONS
       if 0
       perl 5.00503
       strict 0
-  Mozilla-CA-20180117
-    pathname: A/AB/ABH/Mozilla-CA-20180117.tar.gz
+  Mozilla-CA-20200520
+    pathname: A/AB/ABH/Mozilla-CA-20200520.tar.gz
     provides:
-      Mozilla::CA 20180117
+      Mozilla::CA 20200520
     requirements:
       ExtUtils::MakeMaker 0
       Test 0
@@ -463,8 +463,8 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       MIME::Base64 0
       perl 5.008001
-  TimeDate-2.32
-    pathname: A/AT/ATOOMIC/TimeDate-2.32.tar.gz
+  TimeDate-2.33
+    pathname: A/AT/ATOOMIC/TimeDate-2.33.tar.gz
     provides:
       Date::Format 2.24
       Date::Format::Generic 2.24
@@ -503,7 +503,7 @@ DISTRIBUTIONS
       Date::Language::TigrinyaEritrean 1.00
       Date::Language::TigrinyaEthiopian 1.00
       Date::Language::Turkish 1.0
-      Date::Parse 2.32
+      Date::Parse 2.33
       Time::Zone 2.24
       TimeDate 1.21
     requirements:

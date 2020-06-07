@@ -4,6 +4,8 @@ on:
     paths:
       - 'author/cpanm/**'
       - '.github/workflows/update-cpanm.yml'
+    branches-ignore:
+      - 'update-cpanm-*'
   schedule:
     - cron: "22 6 * * *"
 

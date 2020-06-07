@@ -4,6 +4,7 @@ on:
   push:
     branches-ignore:
       - 'releases/*'
+      - 'master'
 
 jobs:
   test:

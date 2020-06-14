@@ -126,7 +126,7 @@ const availableVersions: PerlVersion[] = [
   // I don't know why, but 5.18.3 is missing.
   // {
   //   version: '5.18.3',
-  //   path: 'strawberry-perl-5.18.0.1-64bit-portable.zip'
+  //   path: 'strawberry-perl-5.18.3.1-64bit-portable.zip'
   // },
   {
     version: '5.18.2',
@@ -136,18 +136,18 @@ const availableVersions: PerlVersion[] = [
     version: '5.18.1',
     path: 'strawberry-perl-5.18.1.1-64bit-portable.zip'
   },
-  // {
-  //   version: '5.18.0',
-  //   path: 'strawberry-perl-5.18.0.1-64bit-portable.zip'
-  // },
+  {
+    version: '5.18.0',
+    path: 'strawberry-perl-5.18.0.1-64bit-portable.zip'
+  },
   {
     version: '5.16.2',
     path: 'strawberry-perl-5.16.2.2-64bit-portable.zip'
   },
-  // {
-  //   version: '5.16.1',
-  //   path: 'strawberry-perl-5.16.1.1-64bit-portable.zip'
-  // },
+  {
+    version: '5.16.1',
+    path: 'strawberry-perl-5.16.1.1-64bit-portable.zip'
+  },
   {
     version: '5.16.0',
     path: 'strawberry-perl-5.16.0.1-64bit-portable.zip'

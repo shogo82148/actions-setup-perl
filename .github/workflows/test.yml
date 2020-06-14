@@ -4,17 +4,22 @@ on:
   push:
     branches-ignore:
       - 'releases/*'
+      - 'master'
 
 jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os:
           - ubuntu-18.04
           - ubuntu-16.04
           - windows-latest
           - macos-latest
+        dist:
+          - default
+          - strawberry
     steps:
       - name: disable autocrlf
         run: git config --global core.autocrlf false
@@ -35,6 +40,7 @@ jobs:
         uses: ./
         with:
           perl-version: "5.30.0"
+          distribution: ${{ matrix.dist }}
       - run: perl -V
 
       - run: npm run format-check

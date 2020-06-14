@@ -45,6 +45,24 @@ jobs:
       - run: prove -lv t
 ```
 
+## Use Strawberry Perl on Windows
+
+actions-setup-perl uses the binaries customized for GitHub Actions by default.
+If you want to use [Strawberry Perl](http://strawberryperl.com/) on Windows, add `distribution: strawberry` into the "with" section.
+
+```yaml
+steps:
+- uses: actions/checkout@v2
+- uses: shogo82148/actions-setup-perl@v1
+  with:
+    perl-version: '5.30'
+    distribution: strawberry
+- run: cpanm --installdeps .
+- run: prove -lv t
+```
+
+This option is available on Windows and falls back to the default customized binaries on other platforms.
+
 # License
 
 The scripts and documentation in this project are released under the [MIT License](LICENSE.md)

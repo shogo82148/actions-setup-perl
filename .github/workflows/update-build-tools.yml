@@ -4,6 +4,8 @@ on:
     paths:
       - 'scripts/*/cpanfile'
       - '.github/workflows/update-build-tools.yml'
+    branches-ignore:
+      - 'update-build-tools-*'
   schedule:
     - cron: "27 23 * * *"
 
@@ -78,6 +80,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.SHOGO_GITHUB_TOKEN }}
       - name: cleanup
         run: |
           rm -f scripts/linux/cpanfile.snapshot
@@ -102,15 +106,15 @@ jobs:
 
       - name: commit
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          TOKEN: ${{ secrets.SHOGO_GITHUB_TOKEN }}
         run: |
-          branch=update-$(date +"%Y-%m-%d-%H-%M-%S")
+          branch=update-build-tools-$(date +"%Y-%m-%d-%H-%M-%S")
           git config --global user.name "Ichinose Shogo"
           git config --global user.email shogo82148@gmail.com
           git switch -c "$branch"
           git add .
           git commit -m "Update cpanfile.snapshot $(date +"%Y-%m-%d %H:%M:%S")" || exit 0
           git push -u origin "$branch"
-          curl -H "Authorization: token $GITHUB_TOKEN" \
+          curl -H "Authorization: token $TOKEN" \
             -d "$(jq --arg branch $branch -n '{ "title": "Auto Update build tools", "base": "master", "head": $branch }')" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls"

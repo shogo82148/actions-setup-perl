@@ -60,11 +60,10 @@ export async function getPerl(version: string) {
     core.debug('Perl tool is cached under ' + toolPath);
   }
 
-  toolPath = path.join(toolPath, 'bin');
-  //
-  // prepend the tools path. instructs the agent to prepend for future tasks
-  //
-  core.addPath(toolPath);
+  const perlPath = path.join(toolPath, 'perl', 'bin');
+  const cPath = path.join(toolPath, 'c', 'bin');
+  core.addPath(perlPath);
+  core.addPath(cPath); // for gcc-mingw bundled with strawberry perl
 }
 
 async function acquirePerl(version: PerlVersion): Promise<string> {

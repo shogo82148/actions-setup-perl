@@ -91,10 +91,10 @@ const availableVersions: PerlVersion[] = [
     version: '5.22.3',
     path: 'strawberry-perl-5.22.3.1-64bit-portable.zip'
   },
-  // {
-  //   version: '5.22.2',
-  //   path: 'strawberry-perl-5.22.2.1-64bit-portable.zip'
-  // },
+  {
+    version: '5.22.2',
+    path: 'strawberry-perl-5.22.2.1-64bit-portable.zip'
+  },
   {
     version: '5.22.1',
     path: 'strawberry-perl-5.22.1.3-64bit-portable.zip'

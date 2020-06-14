@@ -5,6 +5,13 @@ inputs:
   perl-version:
     description: 'The Perl version to download (if necessary) and use. Example: 5.30.0'
     default: '5'
+  distribution:
+    description: |
+      The distribution of Perl binary.
+      "default" and "strawberry" are accepted.
+      "default" is the custom binaries for actions-setup-perl. It is available on Linux, macOS, and Windows.
+      "strawberry" is from http://strawberryperl.com/ . It is available on Windows and falls back to default on other platform.
+    default: 'default'
 runs:
   using: 'node12'
   main: 'lib/setup-perl.js'

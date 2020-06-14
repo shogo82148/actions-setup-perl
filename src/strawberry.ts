@@ -151,19 +151,20 @@ const availableVersions: PerlVersion[] = [
   {
     version: '5.16.0',
     path: 'strawberry-perl-5.16.0.1-64bit-portable.zip'
-  }
-  // {
-  //   version: '5.14.4',
-  //   path: 'strawberry-perl-5.14.4.1-64bit-portable.zip'
-  // },
-  // {
-  //   version: '5.14.3',
-  //   path: 'strawberry-perl-5.14.3.1-64bit-portable.zip'
-  // },
-  // {
-  //   version: '5.14.2',
-  //   path: 'strawberry-perl-5.14.2.1-64bit-portable.zip'
-  // },
+  },
+  {
+    version: '5.14.4',
+    path: 'strawberry-perl-5.14.4.1-64bit-portable.zip'
+  },
+  {
+    version: '5.14.3',
+    path: 'strawberry-perl-5.14.3.1-64bit-portable.zip'
+  },
+  {
+    version: '5.14.2',
+    path: 'strawberry-perl-5.14.2.1-64bit-portable.zip'
+  },
+  // I don't know why, but 5.14.1 and 5.14.0 are missing.
   // {
   //   version: '5.14.1',
   //   path: 'strawberry-perl-5.14.1.1-64bit-portable.zip'

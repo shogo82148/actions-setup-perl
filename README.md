@@ -19,7 +19,7 @@ steps:
 - uses: actions/checkout@v2
 - uses: shogo82148/actions-setup-perl@v1
   with:
-    perl-version: '5.30'
+    perl-version: '5.32'
 - run: cpanm --installdeps .
 - run: prove -lv t
 ```
@@ -32,7 +32,7 @@ jobs:
     strategy:
       matrix:
         os: ['ubuntu-latest', 'macos-latest', 'windows-latest']
-        perl: [ '5.30', '5.28' ]
+        perl: [ '5.32', '5.30', '5.28' ]
     name: Perl ${{ matrix.perl }} on ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2

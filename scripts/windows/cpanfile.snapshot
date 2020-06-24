@@ -602,32 +602,32 @@ DISTRIBUTIONS
       Win32::ShellQuote 0.003001
     requirements:
       perl 5.006
-  libwww-perl-6.45
-    pathname: O/OA/OALDERS/libwww-perl-6.45.tar.gz
+  libwww-perl-6.46
+    pathname: O/OA/OALDERS/libwww-perl-6.46.tar.gz
     provides:
-      LWP 6.45
-      LWP::Authen::Basic 6.45
-      LWP::Authen::Digest 6.45
-      LWP::Authen::Ntlm 6.45
-      LWP::ConnCache 6.45
-      LWP::Debug 6.45
-      LWP::Debug::TraceHTTP 6.45
-      LWP::DebugFile 6.45
-      LWP::MemberMixin 6.45
-      LWP::Protocol 6.45
-      LWP::Protocol::cpan 6.45
-      LWP::Protocol::data 6.45
-      LWP::Protocol::file 6.45
-      LWP::Protocol::ftp 6.45
-      LWP::Protocol::gopher 6.45
-      LWP::Protocol::http 6.45
-      LWP::Protocol::loopback 6.45
-      LWP::Protocol::mailto 6.45
-      LWP::Protocol::nntp 6.45
-      LWP::Protocol::nogo 6.45
-      LWP::RobotUA 6.45
-      LWP::Simple 6.45
-      LWP::UserAgent 6.45
+      LWP 6.46
+      LWP::Authen::Basic 6.46
+      LWP::Authen::Digest 6.46
+      LWP::Authen::Ntlm 6.46
+      LWP::ConnCache 6.46
+      LWP::Debug 6.46
+      LWP::Debug::TraceHTTP 6.46
+      LWP::DebugFile 6.46
+      LWP::MemberMixin 6.46
+      LWP::Protocol 6.46
+      LWP::Protocol::cpan 6.46
+      LWP::Protocol::data 6.46
+      LWP::Protocol::file 6.46
+      LWP::Protocol::ftp 6.46
+      LWP::Protocol::gopher 6.46
+      LWP::Protocol::http 6.46
+      LWP::Protocol::loopback 6.46
+      LWP::Protocol::mailto 6.46
+      LWP::Protocol::nntp 6.46
+      LWP::Protocol::nogo 6.46
+      LWP::RobotUA 6.46
+      LWP::Simple 6.46
+      LWP::UserAgent 6.46
       libwww::perl undef
     requirements:
       CPAN::Meta::Requirements 2.120620

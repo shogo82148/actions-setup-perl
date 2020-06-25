@@ -556,10 +556,10 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0.94
-  Module-Load-Conditional-0.70
-    pathname: B/BI/BINGOS/Module-Load-Conditional-0.70.tar.gz
+  Module-Load-Conditional-0.72
+    pathname: B/BI/BINGOS/Module-Load-Conditional-0.72.tar.gz
     provides:
-      Module::Load::Conditional 0.70
+      Module::Load::Conditional 0.72
     requirements:
       ExtUtils::MakeMaker 0
       Locale::Maketext::Simple 0

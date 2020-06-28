@@ -10,12 +10,6 @@ DISTRIBUTIONS
       JSON::PP 0
       Module::Build::Tiny 0.034
       perl 5.008001
-  Clone-0.45
-    pathname: A/AT/ATOOMIC/Clone-0.45.tar.gz
-    provides:
-      Clone 0.45
-    requirements:
-      ExtUtils::MakeMaker 0
   Devel-PatchPerl-2.00
     pathname: B/BI/BINGOS/Devel-PatchPerl-2.00.tar.gz
     provides:
@@ -102,10 +96,10 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       HTTP::Date 6
       perl 5.006002
-  File-Slurp-9999.30
-    pathname: C/CA/CAPOEIRAB/File-Slurp-9999.30.tar.gz
+  File-Slurp-9999.31
+    pathname: C/CA/CAPOEIRAB/File-Slurp-9999.31.tar.gz
     provides:
-      File::Slurp 9999.30
+      File::Slurp 9999.31
     requirements:
       B 0
       Carp 0
@@ -209,22 +203,21 @@ DISTRIBUTIONS
       Time::Zone 0
       perl 5.006002
       strict 0
-  HTTP-Message-6.24
-    pathname: O/OA/OALDERS/HTTP-Message-6.24.tar.gz
+  HTTP-Message-6.25
+    pathname: E/ET/ETHER/HTTP-Message-6.25.tar.gz
     provides:
-      HTTP::Config 6.24
-      HTTP::Headers 6.24
-      HTTP::Headers::Auth 6.24
-      HTTP::Headers::ETag 6.24
-      HTTP::Headers::Util 6.24
-      HTTP::Message 6.24
-      HTTP::Request 6.24
-      HTTP::Request::Common 6.24
-      HTTP::Response 6.24
-      HTTP::Status 6.24
+      HTTP::Config 6.25
+      HTTP::Headers 6.25
+      HTTP::Headers::Auth 6.25
+      HTTP::Headers::ETag 6.25
+      HTTP::Headers::Util 6.25
+      HTTP::Message 6.25
+      HTTP::Request 6.25
+      HTTP::Request::Common 6.25
+      HTTP::Response 6.25
+      HTTP::Status 6.25
     requirements:
       Carp 0
-      Clone 0
       Compress::Raw::Zlib 0
       Encode 3.01
       Encode::Locale 1

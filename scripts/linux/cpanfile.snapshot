@@ -31,10 +31,10 @@ DISTRIBUTIONS
       MIME::Base64 0
       Module::Pluggable 0
       perl 5.006000
-  File-Slurp-9999.31
-    pathname: C/CA/CAPOEIRAB/File-Slurp-9999.31.tar.gz
+  File-Slurp-9999.32
+    pathname: C/CA/CAPOEIRAB/File-Slurp-9999.32.tar.gz
     provides:
-      File::Slurp 9999.31
+      File::Slurp 9999.32
     requirements:
       B 0
       Carp 0

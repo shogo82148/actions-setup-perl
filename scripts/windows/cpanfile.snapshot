@@ -96,10 +96,10 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       HTTP::Date 6
       perl 5.006002
-  File-Slurp-9999.31
-    pathname: C/CA/CAPOEIRAB/File-Slurp-9999.31.tar.gz
+  File-Slurp-9999.32
+    pathname: C/CA/CAPOEIRAB/File-Slurp-9999.32.tar.gz
     provides:
-      File::Slurp 9999.31
+      File::Slurp 9999.32
     requirements:
       B 0
       Carp 0

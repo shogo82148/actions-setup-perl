@@ -120,11 +120,11 @@ DISTRIBUTIONS
       if 0
       perl 5.00503
       strict 0
-  Perl-Build-1.30
-    pathname: S/SK/SKAJI/Perl-Build-1.30.tar.gz
+  Perl-Build-1.31
+    pathname: S/SK/SKAJI/Perl-Build-1.31.tar.gz
     provides:
-      Perl::Build 1.30
-      Perl::Build::Built 1.30
+      Perl::Build 1.31
+      Perl::Build::Built 1.31
     requirements:
       CPAN::Perl::Releases 3.58
       CPAN::Perl::Releases::MetaCPAN 0.006
@@ -132,7 +132,7 @@ DISTRIBUTIONS
       File::Temp 0
       File::pushd 0
       Getopt::Long 0
-      HTTP::Tinyish 0.15
+      HTTP::Tinyish 0.17
       JSON::PP 0
       Module::Build 0.4005
       Pod::Usage 1.63

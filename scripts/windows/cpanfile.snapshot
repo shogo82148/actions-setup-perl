@@ -73,13 +73,14 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  ExtUtils-PL2Bat-0.002
-    pathname: L/LE/LEONT/ExtUtils-PL2Bat-0.002.tar.gz
+  ExtUtils-PL2Bat-0.003
+    pathname: L/LE/LEONT/ExtUtils-PL2Bat-0.003.tar.gz
     provides:
-      ExtUtils::PL2Bat 0.002
+      ExtUtils::PL2Bat 0.003
     requirements:
       Carp 0
       ExtUtils::MakeMaker 0
+      Getopt::Std 0
       perl 5.006
       strict 0
       warnings 0
@@ -320,18 +321,21 @@ DISTRIBUTIONS
       Scalar::Util 0
       perl 5.006002
       strict 0
-  LWP-Protocol-https-6.07
-    pathname: O/OA/OALDERS/LWP-Protocol-https-6.07.tar.gz
+  LWP-Protocol-https-6.09
+    pathname: O/OA/OALDERS/LWP-Protocol-https-6.09.tar.gz
     provides:
-      LWP::Protocol::https 6.07
-      LWP::Protocol::https::Socket 6.07
+      LWP::Protocol::https 6.09
+      LWP::Protocol::https::Socket 6.09
     requirements:
       ExtUtils::MakeMaker 0
       IO::Socket::SSL 1.54
+      LWP::Protocol::http 0
       LWP::UserAgent 6.06
-      Mozilla::CA 20110101
+      Mozilla::CA 20180117
       Net::HTTPS 6
+      base 0
       perl 5.008001
+      strict 0
   Module-Build-0.4231
     pathname: L/LE/LEONT/Module-Build-0.4231.tar.gz
     provides:

@@ -28,6 +28,14 @@ interface PerlVersion {
 // availableVersions must be sorted in descending order by the version.
 const availableVersions: PerlVersion[] = [
   {
+    version: '5.32.0',
+    path: 'strawberry-perl-5.32.0.1-64bit-portable.zip'
+  },
+  {
+    version: '5.30.3',
+    path: 'strawberry-perl-5.30.3.1-64bit-portable.zip'
+  },
+  {
     version: '5.30.2',
     path: 'strawberry-perl-5.30.2.1-64bit-portable.zip'
   },

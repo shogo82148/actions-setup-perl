@@ -1,9 +1,9 @@
 # carton snapshot format: version 1.0
 DISTRIBUTIONS
-  CPAN-Perl-Releases-5.20200607
-    pathname: B/BI/BINGOS/CPAN-Perl-Releases-5.20200607.tar.gz
+  CPAN-Perl-Releases-5.20200717
+    pathname: B/BI/BINGOS/CPAN-Perl-Releases-5.20200717.tar.gz
     provides:
-      CPAN::Perl::Releases 5.20200607
+      CPAN::Perl::Releases 5.20200717
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006000
@@ -31,10 +31,10 @@ DISTRIBUTIONS
       MIME::Base64 0
       Module::Pluggable 0
       perl 5.006000
-  File-Slurp-9999.30
-    pathname: C/CA/CAPOEIRAB/File-Slurp-9999.30.tar.gz
+  File-Slurp-9999.32
+    pathname: C/CA/CAPOEIRAB/File-Slurp-9999.32.tar.gz
     provides:
-      File::Slurp 9999.30
+      File::Slurp 9999.32
     requirements:
       B 0
       Carp 0
@@ -72,10 +72,10 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  HTTP-Tinyish-0.16
-    pathname: M/MI/MIYAGAWA/HTTP-Tinyish-0.16.tar.gz
+  HTTP-Tinyish-0.17
+    pathname: M/MI/MIYAGAWA/HTTP-Tinyish-0.17.tar.gz
     provides:
-      HTTP::Tinyish 0.16
+      HTTP::Tinyish 0.17
       HTTP::Tinyish::Base undef
       HTTP::Tinyish::Curl undef
       HTTP::Tinyish::HTTPTiny undef
@@ -120,11 +120,11 @@ DISTRIBUTIONS
       if 0
       perl 5.00503
       strict 0
-  Perl-Build-1.30
-    pathname: S/SK/SKAJI/Perl-Build-1.30.tar.gz
+  Perl-Build-1.31
+    pathname: S/SK/SKAJI/Perl-Build-1.31.tar.gz
     provides:
-      Perl::Build 1.30
-      Perl::Build::Built 1.30
+      Perl::Build 1.31
+      Perl::Build::Built 1.31
     requirements:
       CPAN::Perl::Releases 3.58
       CPAN::Perl::Releases::MetaCPAN 0.006
@@ -132,7 +132,7 @@ DISTRIBUTIONS
       File::Temp 0
       File::pushd 0
       Getopt::Long 0
-      HTTP::Tinyish 0.15
+      HTTP::Tinyish 0.17
       JSON::PP 0
       Module::Build 0.4005
       Pod::Usage 1.63

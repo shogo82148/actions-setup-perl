@@ -388,12 +388,12 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  Getopt-Long-2.51
-    pathname: J/JV/JV/Getopt-Long-2.51.tar.gz
+  Getopt-Long-2.52
+    pathname: J/JV/JV/Getopt-Long-2.52.tar.gz
     provides:
-      Getopt::Long 2.51
-      Getopt::Long::CallBack 2.51
-      Getopt::Long::Parser 2.51
+      Getopt::Long 2.52
+      Getopt::Long::CallBack 2.52
+      Getopt::Long::Parser 2.52
     requirements:
       ExtUtils::MakeMaker 0
       Pod::Usage 1.14
@@ -539,11 +539,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20200717
-    pathname: B/BI/BINGOS/Module-CoreList-5.20200717.tar.gz
+  Module-CoreList-5.20200820
+    pathname: B/BI/BINGOS/Module-CoreList-5.20200820.tar.gz
     provides:
-      Module::CoreList 5.20200717
-      Module::CoreList::Utils 5.20200717
+      Module::CoreList 5.20200820
+      Module::CoreList::Utils 5.20200820
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0
@@ -556,10 +556,10 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0.94
-  Module-Load-Conditional-0.72
-    pathname: B/BI/BINGOS/Module-Load-Conditional-0.72.tar.gz
+  Module-Load-Conditional-0.74
+    pathname: B/BI/BINGOS/Module-Load-Conditional-0.74.tar.gz
     provides:
-      Module::Load::Conditional 0.72
+      Module::Load::Conditional 0.74
     requirements:
       ExtUtils::MakeMaker 0
       Locale::Maketext::Simple 0
@@ -835,13 +835,13 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006
-  version-0.9924
-    pathname: J/JP/JPEACOCK/version-0.9924.tar.gz
+  version-0.9927
+    pathname: L/LE/LEONT/version-0.9927.tar.gz
     provides:
-      version 0.9924
-      version::regex 0.9924
-      version::vpp 0.9924
-      version::vxs 0.9924
+      version 0.9927
+      version::regex 0.9927
+      version::vpp 0.9927
+      version::vxs 0.9927
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006002

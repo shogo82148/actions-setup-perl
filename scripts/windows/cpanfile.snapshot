@@ -138,16 +138,16 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  HTML-Parser-3.72
-    pathname: G/GA/GAAS/HTML-Parser-3.72.tar.gz
+  HTML-Parser-3.73
+    pathname: C/CA/CAPOEIRAB/HTML-Parser-3.73.tar.gz
     provides:
-      HTML::Entities 3.69
-      HTML::Filter 3.72
-      HTML::HeadParser 3.71
-      HTML::LinkExtor 3.69
-      HTML::Parser 3.72
-      HTML::PullParser 3.57
-      HTML::TokeParser 3.69
+      HTML::Entities 3.73
+      HTML::Filter 3.73
+      HTML::HeadParser 3.73
+      HTML::LinkExtor 3.73
+      HTML::Parser 3.73
+      HTML::PullParser 3.73
+      HTML::TokeParser 3.73
     requirements:
       ExtUtils::MakeMaker 0
       HTML::Tagset 3

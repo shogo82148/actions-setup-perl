@@ -75,6 +75,7 @@ All inputs are **optional**. If not set, sensible defaults will be used.
 # Known Issues
 
 - On Windows, `shell: bash` steps continue to use the system perl [#328](https://github.com/shogo82148/actions-setup-perl/issues/328)
+- Perl 5.12, 5.10, and 5.8 of the default distribution on Windows sometimes cause `EXCEPTION_ACCESS_VIOLATION` [#225](https://github.com/shogo82148/actions-setup-perl/issues/225)
 
 # License
 

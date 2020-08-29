@@ -218,9 +218,10 @@ export async function getPerl(version: string) {
   pathEnv = pathEnv.filter(p => !p.match(/.*(?:Strawberry|mingw).*/i));
 
   // add our new Strawberry Portable Perl Paths
-  pathEnv.unshift(path.join(toolPath, 'site', 'bin'));
+  // from portableshell.bat https://github.com/StrawberryPerl/Perl-Dist-Strawberry/blob/9fb00a653ce2e6ed336045dd0a180409b98a72a9/share/portable/portableshell.bat#L5
   pathEnv.unshift(path.join(toolPath, 'c', 'bin'));
   pathEnv.unshift(path.join(toolPath, 'perl', 'bin'));
+  pathEnv.unshift(path.join(toolPath, 'perl', 'site', 'bin'));
   core.exportVariable('PATH', pathEnv.join(path.delimiter));
 }
 

@@ -63,6 +63,20 @@ steps:
 
 This option is available on Windows and falls back to the default customized binaries on other platforms.
 
+### Action inputs
+
+All inputs are **optional**. If not set, sensible defaults will be used.
+
+| Name | Description | Default |
+| --- | --- | --- |
+| `perl-version` | Specifies the Perl version to setup. Minor version and patch level can be omitted. The action uses the latest Perl version available that matches the specified value. This defaults to 5, which results in the latest available version of Perl 5. | 5 |
+| `distribution` | Specify the distribution to use, this is either `default` or `strawberry`. (The value `strawberry` is ignored on anything but Windows.) | `default` |
+
+# Known Issues
+
+- On Windows, `shell: bash` steps continue to use the system perl [#328](https://github.com/shogo82148/actions-setup-perl/issues/328)
+- Perl 5.12, 5.10, and 5.8 of the default distribution on Windows sometimes cause `EXCEPTION_ACCESS_VIOLATION` [#225](https://github.com/shogo82148/actions-setup-perl/issues/225)
+
 # License
 
 The scripts and documentation in this project are released under the [MIT License](LICENSE.md)

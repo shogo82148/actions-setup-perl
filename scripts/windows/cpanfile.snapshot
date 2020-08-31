@@ -138,21 +138,28 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  HTML-Parser-3.73
-    pathname: C/CA/CAPOEIRAB/HTML-Parser-3.73.tar.gz
+  HTML-Parser-3.75
+    pathname: C/CA/CAPOEIRAB/HTML-Parser-3.75.tar.gz
     provides:
-      HTML::Entities 3.73
-      HTML::Filter 3.73
-      HTML::HeadParser 3.73
-      HTML::LinkExtor 3.73
-      HTML::Parser 3.73
-      HTML::PullParser 3.73
-      HTML::TokeParser 3.73
+      HTML::Entities 3.75
+      HTML::Filter 3.75
+      HTML::HeadParser 3.75
+      HTML::LinkExtor 3.75
+      HTML::Parser 3.75
+      HTML::PullParser 3.75
+      HTML::TokeParser 3.75
     requirements:
-      ExtUtils::MakeMaker 0
-      HTML::Tagset 3
+      Carp 0
+      Exporter 0
+      ExtUtils::MakeMaker 6.52
+      HTML::Tagset 0
+      HTTP::Headers 0
+      IO::File 0
+      URI 0
+      URI::URL 0
       XSLoader 0
-      perl 5.008
+      strict 0
+      vars 0
   HTML-Tagset-3.20
     pathname: P/PE/PETDANCE/HTML-Tagset-3.20.tar.gz
     provides:

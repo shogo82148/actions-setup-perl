@@ -187,11 +187,11 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  Class-Tiny-1.006
-    pathname: D/DA/DAGOLDEN/Class-Tiny-1.006.tar.gz
+  Class-Tiny-1.008
+    pathname: D/DA/DAGOLDEN/Class-Tiny-1.008.tar.gz
     provides:
-      Class::Tiny 1.006
-      Class::Tiny::Object 1.006
+      Class::Tiny 1.008
+      Class::Tiny::Object 1.008
     requirements:
       Carp 0
       Devel::GlobalDestruction 0

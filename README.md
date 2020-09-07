@@ -72,6 +72,24 @@ All inputs are **optional**. If not set, sensible defaults will be used.
 | `perl-version` | Specifies the Perl version to setup. Minor version and patch level can be omitted. The action uses the latest Perl version available that matches the specified value. This defaults to 5, which results in the latest available version of Perl 5. | 5 |
 | `distribution` | Specify the distribution to use, this is either `default` or `strawberry`. (The value `strawberry` is ignored on anything but Windows.) | `default` |
 
+# Supported Shells
+
+The Github runner come with a preinstalled version of Perl, used by the system Git. Unfortunately, some shell types prepend the directory containing the system Perl to the `PATH` which makes it impossible to use the Perl installed by this action.
+
+`shell` parameter | Linux | macOS | Windows (default) | Windows (Strawberry)
+--- | --- | --- | --- | ---
+`bash` | :heavy_check_mark: | :heavy_check_mark: | :x:<sup>1)</sup> | :x:<sup>1)</sup>
+`pwsh` | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
+`python` | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
+`sh` | :heavy_check_mark: | :heavy_check_mark: | n/a | n/a
+`cmd` | n/a | n/a | :heavy_check_mark: | :heavy_check_mark:
+`powershell` | n/a |  n/a | :heavy_check_mark: | :heavy_check_mark:
+custom shell `perl {0}` | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:<sup>2)</sup>
+
+1) On Windows, the bash shell always gets `/usr/bin` prepended to the `PATH` which contains the system Perl.
+
+2) A custom shell with `perl {0}` finds the correct Perl in the `PATH` but for some reason it gets run with the wrong Perl with the strawberry distribution.
+
 # Known Issues
 
 - On Windows, `shell: bash` steps continue to use the system perl [#328](https://github.com/shogo82148/actions-setup-perl/issues/328)

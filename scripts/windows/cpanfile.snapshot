@@ -272,15 +272,16 @@ DISTRIBUTIONS
       IPC::Run3 0
       parent 0
       perl 5.008001
-  IO-HTML-1.001
-    pathname: C/CJ/CJM/IO-HTML-1.001.tar.gz
+  IO-HTML-1.004
+    pathname: C/CJ/CJM/IO-HTML-1.004.tar.gz
     provides:
-      IO::HTML 1.001
+      IO::HTML 1.004
     requirements:
       Carp 0
       Encode 2.10
       Exporter 5.57
-      ExtUtils::MakeMaker 6.30
+      ExtUtils::MakeMaker 0
+      perl 5.008
   IO-Socket-SSL-2.068
     pathname: S/SU/SULLR/IO-Socket-SSL-2.068.tar.gz
     provides:

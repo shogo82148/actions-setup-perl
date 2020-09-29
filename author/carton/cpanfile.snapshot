@@ -549,10 +549,10 @@ DISTRIBUTIONS
       List::Util 0
       Test::More 0
       version 0.88
-  Module-Load-0.34
-    pathname: B/BI/BINGOS/Module-Load-0.34.tar.gz
+  Module-Load-0.36
+    pathname: B/BI/BINGOS/Module-Load-0.36.tar.gz
     provides:
-      Module::Load 0.34
+      Module::Load 0.36
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0.94

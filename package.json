@@ -26,7 +26,7 @@
     "semver": "^7.3.2"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.12",
+    "@types/jest": "^26.0.14",
     "@types/js-yaml": "^3.12.5",
     "@types/node": "^14.6.2",
     "@types/semver": "^7.3.3",

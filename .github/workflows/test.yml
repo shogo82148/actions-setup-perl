@@ -55,7 +55,7 @@ jobs:
       - name: run perl -V on python
         run: |
           import subprocess
-          subprocess.run(['perl', '-V'])
+          subprocess.call(['perl', '-V'])
         shell: python
       - name: run perl -V on sh
         run: perl -V

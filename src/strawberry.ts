@@ -186,6 +186,11 @@ const availableVersions: PerlVersion[] = [
 ];
 
 function determineVersion(version: string): PerlVersion {
+  // stable latest version
+  if (version === "latest") {
+    return availableVersions[0];
+  }
+
   for (let v of availableVersions) {
     if (semver.satisfies(v.version, version)) {
       return v;

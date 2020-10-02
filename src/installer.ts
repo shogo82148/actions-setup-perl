@@ -64,6 +64,12 @@ async function getAvailableVersions(): Promise<string[]> {
 
 async function determineVersion(version: string): Promise<string> {
   const availableVersions = await getAvailableVersions();
+
+  // stable latest version
+  if (version === "latest") {
+    return availableVersions[0];
+  }
+
   for (let v of availableVersions) {
     if (semver.satisfies(v, version)) {
       return v;

@@ -187,7 +187,7 @@ const availableVersions: PerlVersion[] = [
 
 function determineVersion(version: string): PerlVersion {
   // stable latest version
-  if (version === "latest") {
+  if (version === 'latest') {
     return availableVersions[0];
   }
 

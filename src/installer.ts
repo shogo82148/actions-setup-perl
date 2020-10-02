@@ -66,7 +66,7 @@ async function determineVersion(version: string): Promise<string> {
   const availableVersions = await getAvailableVersions();
 
   // stable latest version
-  if (version === "latest") {
+  if (version === 'latest') {
     return availableVersions[0];
   }
 

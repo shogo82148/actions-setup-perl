@@ -8,6 +8,7 @@ on:
       - "update-build-tools-*"
   schedule:
     - cron: "27 23 * * *"
+  workflow_dispatch:
 
 jobs:
   linux:

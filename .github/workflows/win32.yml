@@ -9,7 +9,9 @@ on:
   push:
     branches:
       - "releases/*"
-      - "main"
+  schedule:
+    - cron: "29 0 * * 2"
+  workflow_dispatch:
 
 jobs:
   build:

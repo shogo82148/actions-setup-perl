@@ -5,6 +5,7 @@ on:
     branches-ignore:
       - "releases/*"
       - "main"
+  workflow_dispatch:
 
 jobs:
   test:

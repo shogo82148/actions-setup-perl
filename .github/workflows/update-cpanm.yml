@@ -8,6 +8,7 @@ on:
       - "update-cpanm-*"
   schedule:
     - cron: "22 6 * * *"
+  workflow_dispatch:
 
 jobs:
   cpanm:

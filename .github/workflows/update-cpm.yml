@@ -1,0 +1,47 @@
+name: update cpm
+on:
+  push:
+    paths:
+      - "author/cpm/**"
+      - ".github/workflows/update-cpm.yml"
+    branches-ignore:
+      - "update-cpm-*"
+  schedule:
+    - cron: "21 15 * * *"
+  workflow_dispatch:
+
+jobs:
+  cpm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.SHOGO_GITHUB_TOKEN }}
+
+      - name: update cpanfile.snapshot
+        run: make update
+        working-directory: ./author/cpm
+
+      - name: build cpm
+        run: |
+          git diff
+          if [[ -n "$(git status --short)" ]]; then
+            make install
+          fi
+        working-directory: ./author/cpm
+
+      - name: commit
+        env:
+          TOKEN: ${{ secrets.SHOGO_GITHUB_TOKEN }}
+        run: |
+          branch=update-cpm-$(date +"%Y-%m-%d-%H-%M-%S")
+          git config --global user.name "Ichinose Shogo"
+          git config --global user.email shogo82148@gmail.com
+          git switch -c "$branch"
+          git add .
+          git commit -m "Update cpm $(date +"%Y-%m-%d %H:%M:%S")" || exit 0
+          git push -u origin $branch
+          curl -H "Authorization: token $TOKEN" \
+            -d "$(jq --arg branch $branch -n '{ "title": "Auto Update cpm", "base": "main", "head": $branch }')" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls"

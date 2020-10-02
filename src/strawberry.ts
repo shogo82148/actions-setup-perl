@@ -223,6 +223,10 @@ export async function getPerl(version: string) {
   pathEnv.unshift(path.join(toolPath, 'perl', 'bin'));
   pathEnv.unshift(path.join(toolPath, 'perl', 'site', 'bin'));
   core.exportVariable('PATH', pathEnv.join(path.delimiter));
+
+  core.addPath(path.join(toolPath, 'c', 'bin'));
+  core.addPath(path.join(toolPath, 'perl', 'bin'));
+  core.addPath(path.join(toolPath, 'perl', 'site', 'bin'));
 }
 
 async function acquirePerl(version: PerlVersion): Promise<string> {

@@ -84,11 +84,9 @@ The Github runner come with a preinstalled version of Perl, used by the system G
 `sh` | :heavy_check_mark: | :heavy_check_mark: | n/a | n/a
 `cmd` | n/a | n/a | :heavy_check_mark: | :heavy_check_mark:
 `powershell` | n/a |  n/a | :heavy_check_mark: | :heavy_check_mark:
-custom shell `perl {0}` | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:<sup>2)</sup>
+custom shell `perl {0}` | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
 
 1) On Windows, the bash shell always gets `/usr/bin` prepended to the `PATH` which contains the system Perl.
-
-2) A custom shell with `perl {0}` finds the correct Perl in the `PATH` but for some reason it gets run with the wrong Perl with the strawberry distribution.
 
 # Known Issues
 

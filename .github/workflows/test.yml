@@ -2,8 +2,8 @@ name: Main workflow
 on:
   pull_request: {}
   push:
-    branches-ignore:
-      - "releases/*"
+    branches:
+      - "main"
   workflow_dispatch:
 
 jobs:

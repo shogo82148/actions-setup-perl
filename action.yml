@@ -1,20 +1,20 @@
-name: 'Setup Perl environment'
-description: 'Setup a Perl environment and add it to the PATH'
-author: 'Ichinose Shogo'
-inputs: 
+name: "Setup Perl environment"
+description: "Setup a Perl environment and add it to the PATH"
+author: "Ichinose Shogo"
+inputs:
   perl-version:
-    description: 'The Perl version to download (if necessary) and use. Example: 5.30.0'
-    default: '5'
+    description: "The Perl version to download (if necessary) and use. Example: 5.30.0"
+    default: "5"
   distribution:
     description: |
       The distribution of Perl binary.
       "default" and "strawberry" are accepted.
       "default" is the custom binaries for actions-setup-perl. It is available on Linux, macOS, and Windows.
       "strawberry" is from http://strawberryperl.com/ . It is available on Windows and falls back to default on other platform.
-    default: 'default'
+    default: "default"
 runs:
-  using: 'node12'
-  main: 'lib/setup-perl.js'
+  using: "node12"
+  main: "dist/index.js"
 branding:
-  icon: 'play'
-  color: 'blue'
+  icon: "play"
+  color: "blue"

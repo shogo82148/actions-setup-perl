@@ -2,10 +2,10 @@ name: update cpanfile.snapshot of build tools
 on:
   push:
     paths:
-      - 'scripts/*/cpanfile'
-      - '.github/workflows/update-build-tools.yml'
+      - "scripts/*/cpanfile"
+      - ".github/workflows/update-build-tools.yml"
     branches-ignore:
-      - 'update-build-tools-*'
+      - "update-build-tools-*"
   schedule:
     - cron: "27 23 * * *"
 
@@ -116,5 +116,5 @@ jobs:
           git commit -m "Update cpanfile.snapshot $(date +"%Y-%m-%d %H:%M:%S")" || exit 0
           git push -u origin "$branch"
           curl -H "Authorization: token $TOKEN" \
-            -d "$(jq --arg branch $branch -n '{ "title": "Auto Update build tools", "base": "master", "head": $branch }')" \
+            -d "$(jq --arg branch $branch -n '{ "title": "Auto Update build tools", "base": "main", "head": $branch }')" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls"

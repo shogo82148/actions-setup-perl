@@ -2,10 +2,10 @@ name: update cpanm
 on:
   push:
     paths:
-      - 'author/cpanm/**'
-      - '.github/workflows/update-cpanm.yml'
+      - "author/cpanm/**"
+      - ".github/workflows/update-cpanm.yml"
     branches-ignore:
-      - 'update-cpanm-*'
+      - "update-cpanm-*"
   schedule:
     - cron: "22 6 * * *"
 
@@ -42,5 +42,5 @@ jobs:
           git commit -m "Update cpanm $(date +"%Y-%m-%d %H:%M:%S")" || exit 0
           git push -u origin $branch
           curl -H "Authorization: token $TOKEN" \
-            -d "$(jq --arg branch $branch -n '{ "title": "Auto Update cpanm", "base": "master", "head": $branch }')" \
+            -d "$(jq --arg branch $branch -n '{ "title": "Auto Update cpanm", "base": "main", "head": $branch }')" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls"

@@ -1,0 +1,10 @@
+requires 'perl', '5.008001';
+requires "ExtUtils::MakeMaker", "7.46";
+requires "Devel::GlobalDestruction::XS";
+requires "Module::Build::Tiny";
+
+requires "App::cpm";
+requires "Class::C3";
+requires "Devel::GlobalDestruction";
+requires "ExtUtils::PL2Bat";
+requires "MRO::Compat";

@@ -1,8 +1,6 @@
 # actions-setup-perl
 
-<p align="left">
-  <a href="https://github.com/shogo82148/actions-setup-perl/actions"><img alt="GitHub Actions status" src="https://github.com/shogo82148/actions-setup-perl/workflows/Main%20workflow/badge.svg"></a>
-</p>
+![Main workflow](https://github.com/shogo82148/actions-setup-perl/workflows/Main%20workflow/badge.svg)
 
 This action sets by perl environment for use in actions by:
 

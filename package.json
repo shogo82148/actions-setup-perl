@@ -23,12 +23,10 @@
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/tool-cache": "^1.6.0",
-    "js-yaml": "^3.14.0",
     "semver": "^7.3.2"
   },
   "devDependencies": {
     "@types/jest": "^26.0.14",
-    "@types/js-yaml": "^3.12.5",
     "@types/node": "^14.11.2",
     "@types/semver": "^7.3.4",
     "@vercel/ncc": "^0.24.1",

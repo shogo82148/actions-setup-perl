@@ -9,20 +9,7 @@ use Try::Tiny;
 use Perl::Build;
 use File::Spec;
 use version 0.77 ();
-
-local $| = 1;
-
-sub group {
-    my ($name, $sub) = @_;
-    try {
-        print "::group::$name\n";
-        $sub->();
-    } catch {
-        die $_;
-    } finally {
-        print "::endgroup::\n";
-    };
-}
+use Actions::Core qw/group set_failed/;
 
 sub run {
     my $version = $ENV{PERL_VERSION};
@@ -61,8 +48,7 @@ sub run {
 try {
     run();
 } catch {
-    print "::error::$_\n";
-    exit 1;
+    set_failed("$_");
 };
 
 1;

@@ -15,8 +15,7 @@ use File::pushd qw[pushd];
 use File::Spec;
 use File::Path qw/make_path/;
 use Carp qw/croak/;
-
-local $| = 1;
+use Actions::Core qw/group set_failed/;
 
 sub perl_release {
     my $version = shift;
@@ -27,18 +26,6 @@ sub perl_release {
         }
     }
     die "not found the tarball for perl-$version\n";
-}
-
-sub group {
-    my ($name, $sub) = @_;
-    try {
-        print "::group::$name\n";
-        $sub->();
-    } catch {
-        die $_;
-    } finally {
-        print "::endgroup::\n";
-    };
 }
 
 sub execute_or_die {
@@ -105,8 +92,7 @@ sub run {
 try {
     run();
 } catch {
-    print "::error::$_\n";
-    exit 1;
+    set_failed("$_");
 };
 
 1;

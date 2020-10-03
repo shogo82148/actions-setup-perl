@@ -87,7 +87,7 @@ jobs:
       - uses: actions/cache@v1
         with:
           path: scripts/darwin/local
-          key: ${{ runner.os }}-build-${{ hashFiles('scripts/linux/cpanfile.snapshot') }}
+          key: ${{ runner.os }}-build-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
       - name: carton install --deployment
         shell: bash
         run: ../../bin/carton install --deployment

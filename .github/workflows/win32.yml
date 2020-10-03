@@ -189,7 +189,7 @@ jobs:
       - uses: actions/cache@v1
         with:
           path: scripts/windows/local
-          key: ${{ runner.os }}-build-${{ hashFiles('scripts/linux/cpanfile.snapshot') }}
+          key: ${{ runner.os }}-build-${{ hashFiles('scripts/windows/cpanfile.snapshot') }}
       - name: carton install
         shell: cmd
         run: ../../bin/carton install

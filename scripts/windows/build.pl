@@ -77,8 +77,8 @@ sub run {
     group "build and install Perl" => sub {
         # get the number of CPU cores to parallel make
         my $jobs = ($ENV{NUMBER_OF_PROCESSORS} || 1) + 0;
-        if ($jobs <= 0 || version->parse("v$version") < version->parse("v5.20.0") ) {
-            # Makefiles older than v5.20.0 could break parallel make.
+        if ($jobs <= 0 || version->parse("v$version") < version->parse("v5.22.0") ) {
+            # Makefiles older than v5.22.0 could break parallel make.
             $jobs = 1;
         }
 

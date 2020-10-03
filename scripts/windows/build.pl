@@ -15,8 +15,7 @@ use File::pushd qw[pushd];
 use File::Spec;
 use File::Path qw/make_path/;
 use Carp qw/croak/;
-
-local $| = 1;
+use Actions::Core qw/group set_failed/;
 
 sub perl_release {
     my $version = shift;
@@ -27,18 +26,6 @@ sub perl_release {
         }
     }
     die "not found the tarball for perl-$version\n";
-}
-
-sub group {
-    my ($name, $sub) = @_;
-    try {
-        print "::group::$name\n";
-        $sub->();
-    } catch {
-        die $_;
-    } finally {
-        print "::endgroup::\n";
-    };
 }
 
 sub execute_or_die {
@@ -88,8 +75,15 @@ sub run {
     };
 
     group "build and install Perl" => sub {
+        # get the number of CPU cores to parallel make
+        my $jobs = ($ENV{NUMBER_OF_PROCESSORS} || 1) + 0;
+        if ($jobs <= 0 || version->parse("v$version") < version->parse("v5.22.0") ) {
+            # Makefiles older than v5.22.0 could break parallel make.
+            $jobs = 1;
+        }
+
         my $dir = pushd(File::Spec->catdir($tmpdir, "perl-$version", "win32"));
-        execute_or_die("gmake", "-f", "GNUmakefile", "install", "INST_TOP=$install_dir", "CCHOME=C:\\MinGW");
+        execute_or_die("gmake", "-f", "GNUmakefile", "install", "INST_TOP=$install_dir", "CCHOME=C:\\MinGW", "-j", $jobs);
     };
 
     group "perl -V" => sub {
@@ -105,8 +99,7 @@ sub run {
 try {
     run();
 } catch {
-    print "::error::$_\n";
-    exit 1;
+    set_failed("$_");
 };
 
 1;

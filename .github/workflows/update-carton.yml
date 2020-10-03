@@ -2,12 +2,13 @@ name: update carton
 on:
   push:
     paths:
-      - 'author/carton/**'
-      - '.github/workflows/update-carton.yml'
+      - "author/carton/**"
+      - ".github/workflows/update-carton.yml"
     branches-ignore:
-      - 'update-carton-*'
+      - "update-carton-*"
   schedule:
     - cron: "41 16 * * *"
+  workflow_dispatch:
 
 jobs:
   carton:
@@ -42,5 +43,5 @@ jobs:
           git commit -m "Update carton $(date +"%Y-%m-%d %H:%M:%S")" || exit 0
           git push -u origin "$branch"
           curl -H "Authorization: token $TOKEN" \
-            -d "$(jq --arg branch $branch -n '{ "title": "Auto Update carton", "base": "master", "head": $branch }')" \
+            -d "$(jq --arg branch $branch -n '{ "title": "Auto Update carton", "base": "main", "head": $branch }')" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls"

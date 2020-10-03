@@ -1,17 +1,17 @@
-name: update cpanm
+name: update cpm
 on:
   push:
     paths:
-      - "author/cpanm/**"
-      - ".github/workflows/update-cpanm.yml"
+      - "author/cpm/**"
+      - ".github/workflows/update-cpm.yml"
     branches-ignore:
-      - "update-cpanm-*"
+      - "update-cpm-*"
   schedule:
-    - cron: "22 6 * * *"
+    - cron: "21 15 * * *"
   workflow_dispatch:
 
 jobs:
-  cpanm:
+  cpm:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -21,27 +21,27 @@ jobs:
 
       - name: update cpanfile.snapshot
         run: make update
-        working-directory: ./author/cpanm
+        working-directory: ./author/cpm
 
-      - name: build cpanm
+      - name: build cpm
         run: |
           git diff
           if [[ -n "$(git status --short)" ]]; then
             make install
           fi
-        working-directory: ./author/cpanm
+        working-directory: ./author/cpm
 
       - name: commit
         env:
           TOKEN: ${{ secrets.SHOGO_GITHUB_TOKEN }}
         run: |
-          branch=update-cpanm-$(date +"%Y-%m-%d-%H-%M-%S")
+          branch=update-cpm-$(date +"%Y-%m-%d-%H-%M-%S")
           git config --global user.name "Ichinose Shogo"
           git config --global user.email shogo82148@gmail.com
           git switch -c "$branch"
           git add .
-          git commit -m "Update cpanm $(date +"%Y-%m-%d %H:%M:%S")" || exit 0
+          git commit -m "Update cpm $(date +"%Y-%m-%d %H:%M:%S")" || exit 0
           git push -u origin $branch
           curl -H "Authorization: token $TOKEN" \
-            -d "$(jq --arg branch $branch -n '{ "title": "Auto Update cpanm", "base": "main", "head": $branch }')" \
+            -d "$(jq --arg branch $branch -n '{ "title": "Auto Update cpm", "base": "main", "head": $branch }')" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls"

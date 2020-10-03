@@ -22,17 +22,14 @@ jq ".version=\"$MAJOR.$MINOR.$PATCH\"" < package-lock.json > .tmp.json
 mv .tmp.json package-lock.json
 git add package.json package-lock.json
 git commit -m "bump up to v$MAJOR.$MINOR.$PATCH"
-git push origin master
+git push origin main
 
 : build the action
-git checkout -b "releases/v$MAJOR" "origin/releases/v$MAJOR" || git git checkout -b "releases/v$MAJOR" master
-git merge -X theirs -m "Merge branch 'master' into releases/v$MAJOR" master || true
+git checkout -b "releases/v$MAJOR" "origin/releases/v$MAJOR" || git git checkout -b "releases/v$MAJOR" main
+git merge -X theirs -m "Merge branch 'main' into releases/v$MAJOR" main || true
 npm ci
-npm run build
-
-: remove development packages from node_modules
-npm prune --production
-perl -ne 'print unless m(^/node_modules/|/lib/$)' -i .gitignore
+npm run package
+perl -ne 'print unless m(^/dist/$)' -i .gitignore
 
 : publish to GitHub
 git add .

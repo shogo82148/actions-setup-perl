@@ -23,8 +23,14 @@ async function run() {
     const matchersPath = path.join(__dirname, '..', '.github');
     console.log(`##[add-matcher]${path.join(matchersPath, 'perl.json')}`);
 
-    // for cpanm and carton
+    // for pre-installed scripts
     core.addPath(path.join(__dirname, '..', 'bin'));
+
+    // for pre-installed modules
+    core.exportVariable(
+      'PERL5LIB',
+      path.join(__dirname, '..', 'scripts', 'lib')
+    );
   } catch (error) {
     core.setFailed(error.message);
   }

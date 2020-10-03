@@ -7,7 +7,6 @@ import * as os from 'os';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as semver from 'semver';
-import * as yaml from 'js-yaml';
 
 const osPlat = os.platform();
 const osArch = os.arch();
@@ -25,40 +24,18 @@ if (!tempDirectory) {
   tempDirectory = path.join(baseLocation, 'actions', 'temp');
 }
 
-interface Workflow {
-  jobs: Jobs;
-}
-
-interface Jobs {
-  build: Job;
-}
-
-interface Job {
-  strategy: Strategy;
-}
-
-interface Strategy {
-  matrix: Matrix;
-}
-
-interface Matrix {
-  perl: string[];
-}
-
 async function getAvailableVersions(): Promise<string[]> {
-  return new Promise<Workflow>((resolve, reject) => {
+  return new Promise<string[]>((resolve, reject) => {
     fs.readFile(
-      path.join(__dirname, '..', '.github', 'workflows', `${osPlat}.yml`),
+      path.join(__dirname, '..', 'versions', `${osPlat}.json`),
       (err, data) => {
         if (err) {
           reject(err);
         }
-        const info = yaml.safeLoad(data.toString()) as Workflow;
+        const info = JSON.parse(data.toString()) as string[];
         resolve(info);
       }
     );
-  }).then((info: Workflow) => {
-    return info.jobs.build.strategy.matrix.perl;
   });
 }
 

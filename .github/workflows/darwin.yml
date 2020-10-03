@@ -3,8 +3,9 @@ name: build on darwin
 on:
   pull_request:
     paths:
+      - "versions/darwin.json"
       - "scripts/darwin/**"
-      - "scripts/lib/**"
+      - "scripts/lib/Devel/**"
       - ".github/workflows/darwin.yml"
   push:
     branches:
@@ -14,80 +15,36 @@ on:
   workflow_dispatch:
 
 jobs:
+  list:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - id: set-matrix
+        name: list available perl versions
+        run: |
+          echo "::set-output name=matrix::$(cat versions/darwin.json | jq -c '{perl: .}')"
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+
   build:
-    runs-on: macos-latest
+    runs-on: macos-10.15
+    needs: list
     strategy:
       fail-fast: false
-      matrix:
-        perl:
-          - "5.32.0"
-          - "5.30.3"
-          - "5.30.2"
-          - "5.30.1"
-          - "5.30.0"
-          - "5.28.3"
-          - "5.28.2"
-          - "5.28.1"
-          - "5.28.0"
-          - "5.26.3"
-          - "5.26.2"
-          - "5.26.1"
-          - "5.26.0"
-          - "5.24.4"
-          - "5.24.3"
-          - "5.24.2"
-          - "5.24.1"
-          - "5.24.0"
-          - "5.22.4"
-          - "5.22.3"
-          - "5.22.2"
-          - "5.22.1"
-          - "5.22.0"
-          - "5.20.3"
-          - "5.20.2"
-          - "5.20.1"
-          - "5.20.0"
-          - "5.18.4"
-          - "5.18.3"
-          - "5.18.2"
-          - "5.18.1"
-          - "5.18.0"
-          - "5.16.3"
-          - "5.16.2"
-          - "5.16.1"
-          - "5.16.0"
-          - "5.14.4"
-          - "5.14.3"
-          - "5.14.2"
-          - "5.14.1"
-          - "5.14.0"
-          - "5.12.5"
-          - "5.12.4"
-          - "5.12.3"
-          - "5.12.2"
-          - "5.12.1"
-          - "5.12.0"
-          - "5.10.1"
-          - "5.10.1"
-          - "5.10.0"
-          - "5.8.9"
-          - "5.8.8"
-          - "5.8.7"
-          - "5.8.6"
-          - "5.8.5"
+      matrix: ${{fromJson(needs.list.outputs.matrix)}}
     steps:
       - uses: actions/checkout@v2
       - name: setup host perl
-        run: perl -MConfig -E 'say "::add-path::$Config{bin}"'
+        run: perl -MConfig -E 'say "$Config{bin}"' >> $GITHUB_PATH
       - name: Host perl -V
         run: perl -V
       - name: gcc --version
         run: gcc --version
 
-      - uses: actions/cache@v1
+      - uses: actions/cache@v2
         with:
           path: scripts/darwin/local
-          key: ${{ runner.os }}-build-${{ hashFiles('scripts/linux/cpanfile.snapshot') }}
+          key: ${{ runner.os }}-build-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
       - name: carton install --deployment
         shell: bash
         run: ../../bin/carton install --deployment

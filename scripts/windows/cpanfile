@@ -8,3 +8,4 @@ requires "File::Spec";
 requires "File::Slurp";
 requires "IO::File";
 requires "JSON";
+requires "JSON::XS";

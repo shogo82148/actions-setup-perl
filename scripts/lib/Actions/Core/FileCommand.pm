@@ -6,6 +6,7 @@ use warnings;
 use strict;
 
 use IO::Handle;
+use Encode qw(encode_utf8);
 use Actions::Core::Utils qw(to_command_value);
 
 use Exporter 'import';

@@ -6,6 +6,7 @@ use warnings;
 use strict;
 
 use IO::Handle;
+use Encode qw(encode_utf8);
 
 use Exporter 'import';
 our @EXPORT_OK = qw(issue_command issue);

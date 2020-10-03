@@ -121,9 +121,11 @@ sub group {
         } else {
             $sub->();
         }
+        return 1;
     };
+    my $err = $@;
     end_group();
-    die $@ if $failed;
+    die $err if $failed;
     return $wantarray ? @ret : $ret[0];
 }
 

@@ -72,7 +72,7 @@ All inputs are **optional**. If not set, sensible defaults will be used.
 
 # Supported Shells
 
-The Github runner come with a preinstalled version of Perl, used by the system Git. Unfortunately, some shell types prepend the directory containing the system Perl to the `PATH` which makes it impossible to use the Perl installed by this action.
+The GitHub runner come with a preinstalled version of Perl, used by the system Git. Unfortunately, some shell types prepend the directory containing the system Perl to the `PATH` which makes it impossible to use the Perl installed by this action.
 
 `shell` parameter | Linux | macOS | Windows (default) | Windows (Strawberry)
 --- | --- | --- | --- | ---
@@ -85,6 +85,14 @@ The Github runner come with a preinstalled version of Perl, used by the system G
 custom shell `perl {0}` | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
 
 1) On Windows, the bash shell always gets `/usr/bin` prepended to the `PATH` which contains the system Perl.
+
+# Pre-installed Scripts
+
+The following Perl scripts are pre-installed for convenience.
+
+- [carton](https://metacpan.org/pod/distribution/Carton/script/carton)
+- [cpanm](https://metacpan.org/pod/distribution/App-cpanminus/bin/cpanm)
+- [cpm](https://metacpan.org/pod/distribution/App-cpm/script/cpm)
 
 # Known Issues
 

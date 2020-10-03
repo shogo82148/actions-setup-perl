@@ -24,7 +24,7 @@ sub issue {
 
 use Actions::Core::Utils qw(to_command_value);
 use constant CMD_STRING => "::";
-use overload '""' => \&string;
+use overload '""' => \&stringify;
 
 sub new {
     my ($class, $command, $properties, $message) = @_;
@@ -51,7 +51,7 @@ sub message {
     return $self->{message};
 }
 
-sub string {
+sub stringify {
     my $self = shift;
     my $cmdstr = CMD_STRING . $self->command;
 

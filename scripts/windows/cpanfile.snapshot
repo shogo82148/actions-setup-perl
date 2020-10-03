@@ -10,6 +10,12 @@ DISTRIBUTIONS
       JSON::PP 0
       Module::Build::Tiny 0.034
       perl 5.008001
+  Canary-Stability-2013
+    pathname: M/ML/MLEHMANN/Canary-Stability-2013.tar.gz
+    provides:
+      Canary::Stability 2013
+    requirements:
+      ExtUtils::MakeMaker 0
   Devel-PatchPerl-2.00
     pathname: B/BI/BINGOS/Devel-PatchPerl-2.00.tar.gz
     provides:
@@ -84,18 +90,21 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  File-Listing-6.04
-    pathname: G/GA/GAAS/File-Listing-6.04.tar.gz
+  File-Listing-6.07
+    pathname: P/PL/PLICEASE/File-Listing-6.07.tar.gz
     provides:
-      File::Listing 6.04
-      File::Listing::apache 6.04
-      File::Listing::dosftp 6.04
-      File::Listing::netware 6.04
-      File::Listing::unix 6.04
-      File::Listing::vms 6.04
+      File::Listing 6.07
+      File::Listing::apache 6.07
+      File::Listing::dosftp 6.07
+      File::Listing::netware 6.07
+      File::Listing::unix 6.07
+      File::Listing::vms 6.07
     requirements:
+      Exporter 0
       ExtUtils::MakeMaker 0
-      HTTP::Date 6
+      HTTP::Date 6.00
+      Time::Local 0
+      base 0
       perl 5.006002
   File-Slurp-9999.32
     pathname: C/CA/CAPOEIRAB/File-Slurp-9999.32.tar.gz
@@ -317,6 +326,15 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
+  JSON-XS-4.02
+    pathname: M/ML/MLEHMANN/JSON-XS-4.02.tar.gz
+    provides:
+      JSON::XS 4.02
+    requirements:
+      Canary::Stability 0
+      ExtUtils::MakeMaker 6.52
+      Types::Serialiser 0
+      common::sense 0
   LWP-MediaTypes-6.04
     pathname: O/OA/OALDERS/LWP-MediaTypes-6.04.tar.gz
     provides:
@@ -459,15 +477,6 @@ DISTRIBUTIONS
       strict 0
       vars 0
       warnings 0
-  Net-SSLeay-1.88
-    pathname: C/CH/CHRISN/Net-SSLeay-1.88.tar.gz
-    provides:
-      Net::SSLeay 1.88
-      Net::SSLeay::Handle 1.88
-    requirements:
-      ExtUtils::MakeMaker 0
-      MIME::Base64 0
-      perl 5.008001
   TimeDate-2.33
     pathname: A/AT/ATOOMIC/TimeDate-2.33.tar.gz
     provides:
@@ -525,6 +534,16 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
+  Types-Serialiser-1.0
+    pathname: M/ML/MLEHMANN/Types-Serialiser-1.0.tar.gz
+    provides:
+      JSON::PP::Boolean 1.0
+      Types::Serialiser 1.0
+      Types::Serialiser::BooleanBase 1.0
+      Types::Serialiser::Error 1.0
+    requirements:
+      ExtUtils::MakeMaker 0
+      common::sense 0
   URI-1.76
     pathname: O/OA/OALDERS/URI-1.76.tar.gz
     provides:
@@ -607,6 +626,12 @@ DISTRIBUTIONS
       Win32::ShellQuote 0.003001
     requirements:
       perl 5.006
+  common-sense-3.75
+    pathname: M/ML/MLEHMANN/common-sense-3.75.tar.gz
+    provides:
+      common::sense 3.75
+    requirements:
+      ExtUtils::MakeMaker 0
   libwww-perl-6.49
     pathname: O/OA/OALDERS/libwww-perl-6.49.tar.gz
     provides:

@@ -27,8 +27,10 @@ async function run() {
     core.addPath(path.join(__dirname, '..', 'bin'));
 
     // for pre-installed modules
-    core.exportVariable('PERL5LIB', path.join(__dirname, '..', 'scripts', 'lib'));
-
+    core.exportVariable(
+      'PERL5LIB',
+      path.join(__dirname, '..', 'scripts', 'lib')
+    );
   } catch (error) {
     core.setFailed(error.message);
   }

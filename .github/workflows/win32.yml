@@ -37,7 +37,11 @@ jobs:
       - name: setup host perl
         shell: bash
         run: |
-          echo "::add-path::C:\MinGW\bin;C:\strawberry\perl\site\bin;C:\strawberry\perl\bin"
+          cat << 'END_OF_PATH' >> $GITHUB_PATH
+          C:\MinGW\bin
+          C:\strawberry\perl\site\bin
+          C:\strawberry\perl\bin
+          END_OF_PATH
       - name: Host perl -V
         run: perl -V
       - name: gcc --version

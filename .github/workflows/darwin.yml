@@ -35,7 +35,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: setup host perl
-        run: perl -MConfig -E 'say "::add-path::$Config{bin}"'
+        run: perl -MConfig -E 'say "$Config{bin}"' >> $GITHUB_PATH
       - name: Host perl -V
         run: perl -V
       - name: gcc --version

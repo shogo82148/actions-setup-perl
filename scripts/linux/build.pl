@@ -19,6 +19,7 @@ sub run {
     group "build perl $version" => sub {
         local $ENV{PERL5_PATCHPERL_PLUGIN} = "GitHubActions";
 
+        # get the number of CPU cores to parallel make
         my $jobs = `nproc` + 0; # evaluate `nproc` in number context
         if ($jobs <= 0 || version->parse("v$version") < version->parse("v5.20.0") ) {
             # Makefiles older than v5.20.0 could break parallel make.

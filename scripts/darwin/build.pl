@@ -22,7 +22,12 @@ sub run {
     group "build perl $version" => sub {
         local $ENV{PERL5_PATCHPERL_PLUGIN} = "GitHubActions";
 
-        my $jobs = 1;
+        # get the number of CPU cores to parallel make
+        my $jobs = `sysctl -n hw.logicalcpu_max` + 0;
+        if ($jobs <= 0 || version->parse("v$version") < version->parse("v5.20.0") ) {
+            # Makefiles older than v5.20.0 could break parallel make.
+            $jobs = 1;
+        }
 
         Perl::Build->install_from_cpan(
             $version => (

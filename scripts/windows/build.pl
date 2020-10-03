@@ -75,8 +75,15 @@ sub run {
     };
 
     group "build and install Perl" => sub {
+        # get the number of CPU cores to parallel make
+        my $jobs = ($ENV{NUMBER_OF_PROCESSORS} || 1) + 0;
+        if ($jobs <= 0 || version->parse("v$version") < version->parse("v5.20.0") ) {
+            # Makefiles older than v5.20.0 could break parallel make.
+            $jobs = 1;
+        }
+
         my $dir = pushd(File::Spec->catdir($tmpdir, "perl-$version", "win32"));
-        execute_or_die("gmake", "-f", "GNUmakefile", "install", "INST_TOP=$install_dir", "CCHOME=C:\\MinGW");
+        execute_or_die("gmake", "-f", "GNUmakefile", "install", "INST_TOP=$install_dir", "CCHOME=C:\\MinGW", "-j", $jobs);
     };
 
     group "perl -V" => sub {

@@ -1,4 +1,4 @@
-package Actions::Core::Command;
+package Actions::Core::FileCommand;
 
 use 5.8.5;
 use utf8;

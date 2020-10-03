@@ -78,6 +78,20 @@ jobs:
           print myconfig();
         shell: "perl {0}"
 
+      - name: "Actions::Core"
+        run: prove -lv t
+        working-directory: ./scripts
+      - name: list perl versions
+        id: versions
+        run: |
+          use Actions::Core;
+          set_output(versions => [perl_versions()]);
+        shell: "perl {0}"
+      - name: result of list perl versions
+        run: echo "$VERSIONS" | jq .
+        env:
+          VERSIONS: ${{ steps.versions.outputs.versions }}
+
   format:
     runs-on: ubuntu-latest
     steps:

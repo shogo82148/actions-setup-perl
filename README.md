@@ -94,6 +94,93 @@ The following Perl scripts are pre-installed for convenience.
 - [cpanm](https://metacpan.org/pod/distribution/App-cpanminus/bin/cpanm)
 - [cpm](https://metacpan.org/pod/distribution/App-cpm/script/cpm)
 
+# Pre-installed Modules
+
+## Actions::Core
+
+Perl port of [@actions/core](https://github.com/actions/toolkit/tree/main/packages/core).
+
+### SYNOPSIS
+```perl
+use Actions::Core;
+
+# Inputs/Outputs
+my $input = get_input('inputName', { required: true });
+set_output('outputKey', 'outputVal');
+
+# Exporting variables
+export_variable('envVar', 'Val');
+
+# Setting a secret
+set_secret('myPassword');
+
+# PATH Manipulation
+add_path('/path/to/mytool');
+
+# Exit codes
+set_failed(`Action failed with error ${err}`);
+
+# Logging
+debug('debug message');
+warning('warning');
+if (is_debug()) {
+  # print verbose log
+}
+info('Output to the actions build log');
+
+# Manually wrap output
+start_group('Do some function');
+do_some_function();
+end_group();
+
+# Wrap Subroutines
+my $result = group 'Do something async' => sub {
+  return 'some results';
+}
+
+# Custom Functions of actions-setup-perl
+# List Available Perl Versions
+my @available_perls_on_current_platform = perl_versions(); # ('5.32.0', '5.30.3', '5.28.3', ...)
+my @available_perls_on_linux   = perl_versions(platform => 'linux');
+my @available_perls_on_darwin  = perl_versions(platform => 'darwin');
+my @available_perls_on_win32   = perl_versions(platform => 'win32');
+my @available_strawberry_perls = perl_versions(platform => 'win32', distribution => 'strawberry');
+my @including_patch_versions   = perl_versions(patch => 1); # ('5.32.0', '5.30.3', '5.30.2', ...)
+```
+
+### List Available Perl Versions
+
+Example matrix workflow of using `perl_versions`:
+
+```yaml
+jobs:
+  list:
+    name: list available perl versions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: shogo82148/actions-setup-perl@v1
+      - id: set-matrix
+        name: list available perl versions
+        shell: perl {0}
+        run: |
+          use Actions::Core;
+          set_output(matrix => {perl => [perl_versions()]});
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+
+  run:
+    runs-on: ubuntu-latest
+    needs: list
+    strategy:
+      fail-fast: false
+      matrix: ${{fromJson(needs.list.outputs.matrix)}}
+    steps:
+      - uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl_version: ${{ matrix.perl }}
+      # do something
+```
+
 # Known Issues
 
 - On Windows, `shell: bash` steps continue to use the system perl [#328](https://github.com/shogo82148/actions-setup-perl/issues/328)

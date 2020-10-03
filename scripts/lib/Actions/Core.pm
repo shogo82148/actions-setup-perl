@@ -6,10 +6,14 @@ use warnings;
 use strict;
 
 use Exporter 'import';
-our @EXPORT = qw(export_variable add_secret add_path get_input set_output set_command_echo set_failed is_debug debug error warning info start_group end_group group);
+our @EXPORT = qw(export_variable add_secret add_path get_input set_output set_command_echo set_failed is_debug debug error warning info start_group end_group group perl_versions);
 
 use IO::Handle;
-use Carp 'croak';
+use Encode qw(decode_utf8 encode_utf8);
+use JSON::PP qw(decode_json);
+use File::Basename qw(dirname);
+use File::Spec;
+use Carp qw(croak carp);
 use Actions::Core::Utils qw(to_command_value);
 use Actions::Core::Command qw(issue_command issue);
 use Actions::Core::FileCommand qw();
@@ -127,6 +131,74 @@ sub group {
     end_group();
     die $err if $failed;
     return $wantarray ? @ret : $ret[0];
+}
+
+sub _perl_versions_default {
+    my ($platform, $patch) = @_;
+    my $path = File::Spec->catfile(dirname(__FILE__), ("..") x 3, 'versions', "$platform.json");
+    open my $fh, '<', $path or die "failed to open $path: $!";
+    my $contents = decode_utf8(scalar do { local $/; <$fh> });
+    close($fh);
+
+    my $ret = decode_json($contents);
+    if (!$patch) {
+        # get latest versions for each minor versions
+        my %seen;
+        my @latest;
+        for my $v (@$ret) {
+            my ($major, $minor) = split /\./, $v;
+            if (!$seen{"$major.$minor"}) {
+                push @latest, $v;
+            }
+            $seen{"$major.$minor"} = 1;
+        }
+        $ret = \@latest;
+    }
+    return wantarray ? @$ret : $ret;
+}
+
+sub _perl_versions_strawberry {
+    my ($platform, $patch) = @_;
+    my $path = File::Spec->catfile(dirname(__FILE__), ("..") x 3, 'versions', 'strawberry.json');
+    open my $fh, '<', $path or die "failed to open $path: $!";
+    my $contents = decode_utf8(scalar do { local $/; <$fh> });
+    close($fh);
+
+    my $ret = [map { $_->{version} } @{decode_json($contents)}];
+    if (!$patch) {
+        # get latest versions for each minor versions
+        my %seen;
+        my @latest;
+        for my $v (@$ret) {
+            my ($major, $minor) = split /\./, $v;
+            if (!$seen{"$major.$minor"}) {
+                push @latest, $v;
+            }
+            $seen{"$major.$minor"} = 1;
+        }
+        $ret = \@latest;
+    }
+    return wantarray ? @$ret : $ret;
+}
+
+sub perl_versions {
+    my $args = ref $_[0] ? $_[0] : +{@_};
+    my $platform = $args->{platform} || $^O;
+    $platform = 'win32' if $platform eq 'MSWin32';
+    my $distribution = $args->{distribution} || 'default';
+    my $patch = $args->{patch} || 0;
+
+    if ($distribution eq 'default') {
+        return _perl_versions_default($platform, $patch);
+    } elsif ($distribution eq 'strawberry') {
+        if ($platform ne 'win32') {
+            carp "distribution '$distribution' is not available on $platform, fallback to the default distribution";
+            return _perl_versions_default($platform, $patch);
+        }
+        return _perl_versions_strawberry($platform, $patch);
+    } else {
+        croak "unknown distribution: '$distribution'";
+    }
 }
 
 1;

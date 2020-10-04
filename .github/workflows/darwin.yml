@@ -13,6 +13,11 @@ on:
   schedule:
     - cron: "10 15 * * 5"
   workflow_dispatch:
+    inputs:
+      perl-versions:
+        description: perl versions to build (JSON Array)
+        required: false
+        default: ""
 
 jobs:
   list:
@@ -22,7 +27,13 @@ jobs:
       - id: set-matrix
         name: list available perl versions
         run: |
-          echo "::set-output name=matrix::$(cat versions/darwin.json | jq -c '{perl: .}')"
+          if [ -n "$PERL_VERSIONS" ]; then
+            echo "::set-output name=matrix::$(printenv PERL_VERSIONS | jq -c '{perl: .}')"
+          else
+            echo "::set-output name=matrix::$(cat versions/linux.json | jq -c '{perl: .}')"
+          fi
+        env:
+          PERL_VERSIONS: ${{ github.event.inputs.perl-versions }}
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
 

@@ -25,7 +25,7 @@ git commit -m "bump up to v$MAJOR.$MINOR.$PATCH"
 git push origin main
 
 : build the action
-git checkout -b "releases/v$MAJOR" "origin/releases/v$MAJOR" || git git checkout -b "releases/v$MAJOR" main
+git checkout -b "releases/v$MAJOR" "origin/releases/v$MAJOR" || git checkout -b "releases/v$MAJOR" main
 git merge -X theirs -m "Merge branch 'main' into releases/v$MAJOR" main || true
 npm ci
 npm run package

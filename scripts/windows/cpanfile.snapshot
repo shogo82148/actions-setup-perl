@@ -90,22 +90,23 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  File-Listing-6.07
-    pathname: P/PL/PLICEASE/File-Listing-6.07.tar.gz
+  File-Listing-6.10
+    pathname: P/PL/PLICEASE/File-Listing-6.10.tar.gz
     provides:
-      File::Listing 6.07
-      File::Listing::apache 6.07
-      File::Listing::dosftp 6.07
-      File::Listing::netware 6.07
-      File::Listing::unix 6.07
-      File::Listing::vms 6.07
+      File::Listing 6.10
+      File::Listing::apache 6.10
+      File::Listing::dosftp 6.10
+      File::Listing::netware 6.10
+      File::Listing::unix 6.10
+      File::Listing::vms 6.10
     requirements:
+      Carp 0
       Exporter 0
       ExtUtils::MakeMaker 0
-      HTTP::Date 6.00
+      HTTP::Date 0
       Time::Local 0
       base 0
-      perl 5.006002
+      perl 5.006
   File-Slurp-9999.32
     pathname: C/CA/CAPOEIRAB/File-Slurp-9999.32.tar.gz
     provides:

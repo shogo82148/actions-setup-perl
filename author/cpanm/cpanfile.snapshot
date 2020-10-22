@@ -7,45 +7,45 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.008001
-  ExtUtils-MakeMaker-7.48
-    pathname: B/BI/BINGOS/ExtUtils-MakeMaker-7.48.tar.gz
+  ExtUtils-MakeMaker-7.50
+    pathname: B/BI/BINGOS/ExtUtils-MakeMaker-7.50.tar.gz
     provides:
-      ExtUtils::Command 7.48
-      ExtUtils::Command::MM 7.48
-      ExtUtils::Liblist 7.48
-      ExtUtils::Liblist::Kid 7.48
-      ExtUtils::MM 7.48
-      ExtUtils::MM_AIX 7.48
-      ExtUtils::MM_Any 7.48
-      ExtUtils::MM_BeOS 7.48
-      ExtUtils::MM_Cygwin 7.48
-      ExtUtils::MM_DOS 7.48
-      ExtUtils::MM_Darwin 7.48
-      ExtUtils::MM_MacOS 7.48
-      ExtUtils::MM_NW5 7.48
-      ExtUtils::MM_OS2 7.48
-      ExtUtils::MM_OS390 7.48
-      ExtUtils::MM_QNX 7.48
-      ExtUtils::MM_UWIN 7.48
-      ExtUtils::MM_Unix 7.48
-      ExtUtils::MM_VMS 7.48
-      ExtUtils::MM_VOS 7.48
-      ExtUtils::MM_Win32 7.48
-      ExtUtils::MM_Win95 7.48
-      ExtUtils::MY 7.48
-      ExtUtils::MakeMaker 7.48
-      ExtUtils::MakeMaker::Config 7.48
-      ExtUtils::MakeMaker::Locale 7.48
-      ExtUtils::MakeMaker::_version 7.48
-      ExtUtils::MakeMaker::charstar 7.48
-      ExtUtils::MakeMaker::version 7.48
-      ExtUtils::MakeMaker::version::regex 7.48
-      ExtUtils::MakeMaker::version::vpp 7.48
-      ExtUtils::Mkbootstrap 7.48
-      ExtUtils::Mksymlists 7.48
-      ExtUtils::testlib 7.48
-      MM 7.48
-      MY 7.48
+      ExtUtils::Command 7.50
+      ExtUtils::Command::MM 7.50
+      ExtUtils::Liblist 7.50
+      ExtUtils::Liblist::Kid 7.50
+      ExtUtils::MM 7.50
+      ExtUtils::MM_AIX 7.50
+      ExtUtils::MM_Any 7.50
+      ExtUtils::MM_BeOS 7.50
+      ExtUtils::MM_Cygwin 7.50
+      ExtUtils::MM_DOS 7.50
+      ExtUtils::MM_Darwin 7.50
+      ExtUtils::MM_MacOS 7.50
+      ExtUtils::MM_NW5 7.50
+      ExtUtils::MM_OS2 7.50
+      ExtUtils::MM_OS390 7.50
+      ExtUtils::MM_QNX 7.50
+      ExtUtils::MM_UWIN 7.50
+      ExtUtils::MM_Unix 7.50
+      ExtUtils::MM_VMS 7.50
+      ExtUtils::MM_VOS 7.50
+      ExtUtils::MM_Win32 7.50
+      ExtUtils::MM_Win95 7.50
+      ExtUtils::MY 7.50
+      ExtUtils::MakeMaker 7.50
+      ExtUtils::MakeMaker::Config 7.50
+      ExtUtils::MakeMaker::Locale 7.50
+      ExtUtils::MakeMaker::_version 7.50
+      ExtUtils::MakeMaker::charstar 7.50
+      ExtUtils::MakeMaker::version 7.50
+      ExtUtils::MakeMaker::version::regex 7.50
+      ExtUtils::MakeMaker::version::vpp 7.50
+      ExtUtils::Mkbootstrap 7.50
+      ExtUtils::Mksymlists 7.50
+      ExtUtils::testlib 7.50
+      MM 7.50
+      MY 7.50
     requirements:
       Data::Dumper 0
       Encode 0

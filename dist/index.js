@@ -28,8 +28,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getPerl = void 0;
-// Load tempDirectory before it gets wiped by tool-cache
-let tempDirectory = process.env['RUNNER_TEMPDIRECTORY'] || '';
 const core = __importStar(__webpack_require__(2186));
 const tc = __importStar(__webpack_require__(7784));
 const os = __importStar(__webpack_require__(2087));
@@ -38,20 +36,6 @@ const path = __importStar(__webpack_require__(5622));
 const semver = __importStar(__webpack_require__(1383));
 const osPlat = os.platform();
 const osArch = os.arch();
-if (!tempDirectory) {
-    let baseLocation;
-    if (process.platform === 'win32') {
-        // On windows use the USERPROFILE env variable
-        baseLocation = process.env['USERPROFILE'] || 'C:\\';
-    }
-    else if (process.platform === 'darwin') {
-        baseLocation = '/Users';
-    }
-    else {
-        baseLocation = '/home';
-    }
-    tempDirectory = path.join(baseLocation, 'actions', 'temp');
-}
 async function getAvailableVersions() {
     return new Promise((resolve, reject) => {
         fs.readFile(path.join(__dirname, '..', 'versions', `${osPlat}.json`), (err, data) => {
@@ -107,23 +91,11 @@ async function acquirePerl(version) {
         core.debug(error);
         throw `Failed to download version ${version}: ${error}`;
     }
-    //
-    // Extract
-    //
-    let extPath = tempDirectory;
-    if (!extPath) {
-        throw new Error('Temp directory not set');
-    }
-    if (osPlat == 'win32') {
-        extPath = await tc.extractZip(downloadPath);
-    }
-    else {
-        extPath = await tc.extractTar(downloadPath);
-    }
+    const extPath = await tc.extractTar(downloadPath, "", "xJ");
     return await tc.cacheDir(extPath, 'perl', version);
 }
 function getFileName(version) {
-    return `perl-${version}-${osPlat}-${osArch}.tar.gz`;
+    return `perl-${version}-${osPlat}-${osArch}.tar.xz`;
 }
 async function getDownloadUrl(filename) {
     return new Promise((resolve, reject) => {

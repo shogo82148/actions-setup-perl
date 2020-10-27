@@ -260,44 +260,45 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  ExtUtils-MakeMaker-7.46
-    pathname: B/BI/BINGOS/ExtUtils-MakeMaker-7.46.tar.gz
+  ExtUtils-MakeMaker-7.50
+    pathname: B/BI/BINGOS/ExtUtils-MakeMaker-7.50.tar.gz
     provides:
-      ExtUtils::Command 7.46
-      ExtUtils::Command::MM 7.46
-      ExtUtils::Liblist 7.46
-      ExtUtils::Liblist::Kid 7.46
-      ExtUtils::MM 7.46
-      ExtUtils::MM_AIX 7.46
-      ExtUtils::MM_Any 7.46
-      ExtUtils::MM_BeOS 7.46
-      ExtUtils::MM_Cygwin 7.46
-      ExtUtils::MM_DOS 7.46
-      ExtUtils::MM_Darwin 7.46
-      ExtUtils::MM_MacOS 7.46
-      ExtUtils::MM_NW5 7.46
-      ExtUtils::MM_OS2 7.46
-      ExtUtils::MM_QNX 7.46
-      ExtUtils::MM_UWIN 7.46
-      ExtUtils::MM_Unix 7.46
-      ExtUtils::MM_VMS 7.46
-      ExtUtils::MM_VOS 7.46
-      ExtUtils::MM_Win32 7.46
-      ExtUtils::MM_Win95 7.46
-      ExtUtils::MY 7.46
-      ExtUtils::MakeMaker 7.46
-      ExtUtils::MakeMaker::Config 7.46
-      ExtUtils::MakeMaker::Locale 7.46
-      ExtUtils::MakeMaker::_version 7.46
-      ExtUtils::MakeMaker::charstar 7.46
-      ExtUtils::MakeMaker::version 7.46
-      ExtUtils::MakeMaker::version::regex 7.46
-      ExtUtils::MakeMaker::version::vpp 7.46
-      ExtUtils::Mkbootstrap 7.46
-      ExtUtils::Mksymlists 7.46
-      ExtUtils::testlib 7.46
-      MM 7.46
-      MY 7.46
+      ExtUtils::Command 7.50
+      ExtUtils::Command::MM 7.50
+      ExtUtils::Liblist 7.50
+      ExtUtils::Liblist::Kid 7.50
+      ExtUtils::MM 7.50
+      ExtUtils::MM_AIX 7.50
+      ExtUtils::MM_Any 7.50
+      ExtUtils::MM_BeOS 7.50
+      ExtUtils::MM_Cygwin 7.50
+      ExtUtils::MM_DOS 7.50
+      ExtUtils::MM_Darwin 7.50
+      ExtUtils::MM_MacOS 7.50
+      ExtUtils::MM_NW5 7.50
+      ExtUtils::MM_OS2 7.50
+      ExtUtils::MM_OS390 7.50
+      ExtUtils::MM_QNX 7.50
+      ExtUtils::MM_UWIN 7.50
+      ExtUtils::MM_Unix 7.50
+      ExtUtils::MM_VMS 7.50
+      ExtUtils::MM_VOS 7.50
+      ExtUtils::MM_Win32 7.50
+      ExtUtils::MM_Win95 7.50
+      ExtUtils::MY 7.50
+      ExtUtils::MakeMaker 7.50
+      ExtUtils::MakeMaker::Config 7.50
+      ExtUtils::MakeMaker::Locale 7.50
+      ExtUtils::MakeMaker::_version 7.50
+      ExtUtils::MakeMaker::charstar 7.50
+      ExtUtils::MakeMaker::version 7.50
+      ExtUtils::MakeMaker::version::regex 7.50
+      ExtUtils::MakeMaker::version::vpp 7.50
+      ExtUtils::Mkbootstrap 7.50
+      ExtUtils::Mksymlists 7.50
+      ExtUtils::testlib 7.50
+      MM 7.50
+      MY 7.50
     requirements:
       Data::Dumper 0
       Encode 0
@@ -539,11 +540,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20200920
-    pathname: B/BI/BINGOS/Module-CoreList-5.20200920.tar.gz
+  Module-CoreList-5.20201020
+    pathname: B/BI/BINGOS/Module-CoreList-5.20201020.tar.gz
     provides:
-      Module::CoreList 5.20200920
-      Module::CoreList::Utils 5.20200920
+      Module::CoreList 5.20201020
+      Module::CoreList::Utils 5.20201020
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0
@@ -651,81 +652,81 @@ DISTRIBUTIONS
       Sub::Exporter::Progressive 0.001013
     requirements:
       ExtUtils::MakeMaker 0
-  Test-Simple-1.302181
-    pathname: E/EX/EXODIST/Test-Simple-1.302181.tar.gz
+  Test-Simple-1.302183
+    pathname: E/EX/EXODIST/Test-Simple-1.302183.tar.gz
     provides:
-      Test2 1.302181
-      Test2::API 1.302181
-      Test2::API::Breakage 1.302181
-      Test2::API::Context 1.302181
-      Test2::API::Instance 1.302181
-      Test2::API::InterceptResult 1.302181
-      Test2::API::InterceptResult::Event 1.302181
-      Test2::API::InterceptResult::Facet 1.302181
-      Test2::API::InterceptResult::Hub 1.302181
-      Test2::API::InterceptResult::Squasher 1.302181
-      Test2::API::Stack 1.302181
-      Test2::Event 1.302181
-      Test2::Event::Bail 1.302181
-      Test2::Event::Diag 1.302181
-      Test2::Event::Encoding 1.302181
-      Test2::Event::Exception 1.302181
-      Test2::Event::Fail 1.302181
-      Test2::Event::Generic 1.302181
-      Test2::Event::Note 1.302181
-      Test2::Event::Ok 1.302181
-      Test2::Event::Pass 1.302181
-      Test2::Event::Plan 1.302181
-      Test2::Event::Skip 1.302181
-      Test2::Event::Subtest 1.302181
-      Test2::Event::TAP::Version 1.302181
-      Test2::Event::V2 1.302181
-      Test2::Event::Waiting 1.302181
-      Test2::EventFacet 1.302181
-      Test2::EventFacet::About 1.302181
-      Test2::EventFacet::Amnesty 1.302181
-      Test2::EventFacet::Assert 1.302181
-      Test2::EventFacet::Control 1.302181
-      Test2::EventFacet::Error 1.302181
-      Test2::EventFacet::Hub 1.302181
-      Test2::EventFacet::Info 1.302181
-      Test2::EventFacet::Info::Table 1.302181
-      Test2::EventFacet::Meta 1.302181
-      Test2::EventFacet::Parent 1.302181
-      Test2::EventFacet::Plan 1.302181
-      Test2::EventFacet::Render 1.302181
-      Test2::EventFacet::Trace 1.302181
-      Test2::Formatter 1.302181
-      Test2::Formatter::TAP 1.302181
-      Test2::Hub 1.302181
-      Test2::Hub::Interceptor 1.302181
-      Test2::Hub::Interceptor::Terminator 1.302181
-      Test2::Hub::Subtest 1.302181
-      Test2::IPC 1.302181
-      Test2::IPC::Driver 1.302181
-      Test2::IPC::Driver::Files 1.302181
-      Test2::Tools::Tiny 1.302181
-      Test2::Util 1.302181
-      Test2::Util::ExternalMeta 1.302181
-      Test2::Util::Facets2Legacy 1.302181
-      Test2::Util::HashBase 1.302181
-      Test2::Util::Trace 1.302181
-      Test::Builder 1.302181
-      Test::Builder::Formatter 1.302181
+      Test2 1.302183
+      Test2::API 1.302183
+      Test2::API::Breakage 1.302183
+      Test2::API::Context 1.302183
+      Test2::API::Instance 1.302183
+      Test2::API::InterceptResult 1.302183
+      Test2::API::InterceptResult::Event 1.302183
+      Test2::API::InterceptResult::Facet 1.302183
+      Test2::API::InterceptResult::Hub 1.302183
+      Test2::API::InterceptResult::Squasher 1.302183
+      Test2::API::Stack 1.302183
+      Test2::Event 1.302183
+      Test2::Event::Bail 1.302183
+      Test2::Event::Diag 1.302183
+      Test2::Event::Encoding 1.302183
+      Test2::Event::Exception 1.302183
+      Test2::Event::Fail 1.302183
+      Test2::Event::Generic 1.302183
+      Test2::Event::Note 1.302183
+      Test2::Event::Ok 1.302183
+      Test2::Event::Pass 1.302183
+      Test2::Event::Plan 1.302183
+      Test2::Event::Skip 1.302183
+      Test2::Event::Subtest 1.302183
+      Test2::Event::TAP::Version 1.302183
+      Test2::Event::V2 1.302183
+      Test2::Event::Waiting 1.302183
+      Test2::EventFacet 1.302183
+      Test2::EventFacet::About 1.302183
+      Test2::EventFacet::Amnesty 1.302183
+      Test2::EventFacet::Assert 1.302183
+      Test2::EventFacet::Control 1.302183
+      Test2::EventFacet::Error 1.302183
+      Test2::EventFacet::Hub 1.302183
+      Test2::EventFacet::Info 1.302183
+      Test2::EventFacet::Info::Table 1.302183
+      Test2::EventFacet::Meta 1.302183
+      Test2::EventFacet::Parent 1.302183
+      Test2::EventFacet::Plan 1.302183
+      Test2::EventFacet::Render 1.302183
+      Test2::EventFacet::Trace 1.302183
+      Test2::Formatter 1.302183
+      Test2::Formatter::TAP 1.302183
+      Test2::Hub 1.302183
+      Test2::Hub::Interceptor 1.302183
+      Test2::Hub::Interceptor::Terminator 1.302183
+      Test2::Hub::Subtest 1.302183
+      Test2::IPC 1.302183
+      Test2::IPC::Driver 1.302183
+      Test2::IPC::Driver::Files 1.302183
+      Test2::Tools::Tiny 1.302183
+      Test2::Util 1.302183
+      Test2::Util::ExternalMeta 1.302183
+      Test2::Util::Facets2Legacy 1.302183
+      Test2::Util::HashBase 1.302183
+      Test2::Util::Trace 1.302183
+      Test::Builder 1.302183
+      Test::Builder::Formatter 1.302183
       Test::Builder::IO::Scalar 2.114
-      Test::Builder::Module 1.302181
-      Test::Builder::Tester 1.302181
-      Test::Builder::Tester::Color 1.302181
-      Test::Builder::Tester::Tie 1.302181
-      Test::Builder::TodoDiag 1.302181
-      Test::More 1.302181
-      Test::Simple 1.302181
-      Test::Tester 1.302181
-      Test::Tester::Capture 1.302181
-      Test::Tester::CaptureRunner 1.302181
-      Test::Tester::Delegate 1.302181
-      Test::use::ok 1.302181
-      ok 1.302181
+      Test::Builder::Module 1.302183
+      Test::Builder::Tester 1.302183
+      Test::Builder::Tester::Color 1.302183
+      Test::Builder::Tester::Tie 1.302183
+      Test::Builder::TodoDiag 1.302183
+      Test::More 1.302183
+      Test::Simple 1.302183
+      Test::Tester 1.302183
+      Test::Tester::Capture 1.302183
+      Test::Tester::CaptureRunner 1.302183
+      Test::Tester::Delegate 1.302183
+      Test::use::ok 1.302183
+      ok 1.302183
     requirements:
       ExtUtils::MakeMaker 0
       File::Spec 0
@@ -756,52 +757,52 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  URI-1.76
-    pathname: O/OA/OALDERS/URI-1.76.tar.gz
+  URI-5.05
+    pathname: O/OA/OALDERS/URI-5.05.tar.gz
     provides:
-      URI 1.76
-      URI::Escape 3.31
-      URI::Heuristic 4.20
-      URI::IRI 1.76
-      URI::QueryParam 1.76
-      URI::Split 1.76
-      URI::URL 5.04
-      URI::WithBase 2.20
-      URI::data 1.76
-      URI::file 4.21
-      URI::file::Base 1.76
-      URI::file::FAT 1.76
-      URI::file::Mac 1.76
-      URI::file::OS2 1.76
-      URI::file::QNX 1.76
-      URI::file::Unix 1.76
-      URI::file::Win32 1.76
-      URI::ftp 1.76
-      URI::gopher 1.76
-      URI::http 1.76
-      URI::https 1.76
-      URI::ldap 1.76
-      URI::ldapi 1.76
-      URI::ldaps 1.76
-      URI::mailto 1.76
-      URI::mms 1.76
-      URI::news 1.76
-      URI::nntp 1.76
-      URI::pop 1.76
-      URI::rlogin 1.76
-      URI::rsync 1.76
-      URI::rtsp 1.76
-      URI::rtspu 1.76
-      URI::sftp 1.76
-      URI::sip 1.76
-      URI::sips 1.76
-      URI::snews 1.76
-      URI::ssh 1.76
-      URI::telnet 1.76
-      URI::tn3270 1.76
-      URI::urn 1.76
-      URI::urn::isbn 1.76
-      URI::urn::oid 1.76
+      URI 5.05
+      URI::Escape 5.05
+      URI::Heuristic 5.05
+      URI::IRI 5.05
+      URI::QueryParam 5.05
+      URI::Split 5.05
+      URI::URL 5.05
+      URI::WithBase 5.05
+      URI::data 5.05
+      URI::file 5.05
+      URI::file::Base 5.05
+      URI::file::FAT 5.05
+      URI::file::Mac 5.05
+      URI::file::OS2 5.05
+      URI::file::QNX 5.05
+      URI::file::Unix 5.05
+      URI::file::Win32 5.05
+      URI::ftp 5.05
+      URI::gopher 5.05
+      URI::http 5.05
+      URI::https 5.05
+      URI::ldap 5.05
+      URI::ldapi 5.05
+      URI::ldaps 5.05
+      URI::mailto 5.05
+      URI::mms 5.05
+      URI::news 5.05
+      URI::nntp 5.05
+      URI::pop 5.05
+      URI::rlogin 5.05
+      URI::rsync 5.05
+      URI::rtsp 5.05
+      URI::rtspu 5.05
+      URI::sftp 5.05
+      URI::sip 5.05
+      URI::sips 5.05
+      URI::snews 5.05
+      URI::ssh 5.05
+      URI::telnet 5.05
+      URI::tn3270 5.05
+      URI::urn 5.05
+      URI::urn::isbn 5.05
+      URI::urn::oid 5.05
     requirements:
       Carp 0
       Cwd 0

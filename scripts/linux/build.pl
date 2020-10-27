@@ -41,7 +41,7 @@ sub run {
 
     group "archiving" => sub {
         chdir $install_dir or die "failed to cd $install_dir: $!";
-        system("tar", "zcf", "$tmpdir/perl.tar.gz", ".") == 0
+        system("tar", "Jcvf", "$tmpdir/perl.tar.xz", ".") == 0
             or die "failed to archive";
     };
 }

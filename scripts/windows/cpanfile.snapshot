@@ -90,22 +90,23 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  File-Listing-6.07
-    pathname: P/PL/PLICEASE/File-Listing-6.07.tar.gz
+  File-Listing-6.11
+    pathname: P/PL/PLICEASE/File-Listing-6.11.tar.gz
     provides:
-      File::Listing 6.07
-      File::Listing::apache 6.07
-      File::Listing::dosftp 6.07
-      File::Listing::netware 6.07
-      File::Listing::unix 6.07
-      File::Listing::vms 6.07
+      File::Listing 6.11
+      File::Listing::apache 6.11
+      File::Listing::dosftp 6.11
+      File::Listing::netware 6.11
+      File::Listing::unix 6.11
+      File::Listing::vms 6.11
     requirements:
+      Carp 0
       Exporter 0
       ExtUtils::MakeMaker 0
-      HTTP::Date 6.00
+      HTTP::Date 0
       Time::Local 0
       base 0
-      perl 5.006002
+      perl 5.006
   File-Slurp-9999.32
     pathname: C/CA/CAPOEIRAB/File-Slurp-9999.32.tar.gz
     provides:
@@ -544,52 +545,52 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       common::sense 0
-  URI-1.76
-    pathname: O/OA/OALDERS/URI-1.76.tar.gz
+  URI-5.05
+    pathname: O/OA/OALDERS/URI-5.05.tar.gz
     provides:
-      URI 1.76
-      URI::Escape 3.31
-      URI::Heuristic 4.20
-      URI::IRI 1.76
-      URI::QueryParam 1.76
-      URI::Split 1.76
-      URI::URL 5.04
-      URI::WithBase 2.20
-      URI::data 1.76
-      URI::file 4.21
-      URI::file::Base 1.76
-      URI::file::FAT 1.76
-      URI::file::Mac 1.76
-      URI::file::OS2 1.76
-      URI::file::QNX 1.76
-      URI::file::Unix 1.76
-      URI::file::Win32 1.76
-      URI::ftp 1.76
-      URI::gopher 1.76
-      URI::http 1.76
-      URI::https 1.76
-      URI::ldap 1.76
-      URI::ldapi 1.76
-      URI::ldaps 1.76
-      URI::mailto 1.76
-      URI::mms 1.76
-      URI::news 1.76
-      URI::nntp 1.76
-      URI::pop 1.76
-      URI::rlogin 1.76
-      URI::rsync 1.76
-      URI::rtsp 1.76
-      URI::rtspu 1.76
-      URI::sftp 1.76
-      URI::sip 1.76
-      URI::sips 1.76
-      URI::snews 1.76
-      URI::ssh 1.76
-      URI::telnet 1.76
-      URI::tn3270 1.76
-      URI::urn 1.76
-      URI::urn::isbn 1.76
-      URI::urn::oid 1.76
+      URI 5.05
+      URI::Escape 5.05
+      URI::Heuristic 5.05
+      URI::IRI 5.05
+      URI::QueryParam 5.05
+      URI::Split 5.05
+      URI::URL 5.05
+      URI::WithBase 5.05
+      URI::data 5.05
+      URI::file 5.05
+      URI::file::Base 5.05
+      URI::file::FAT 5.05
+      URI::file::Mac 5.05
+      URI::file::OS2 5.05
+      URI::file::QNX 5.05
+      URI::file::Unix 5.05
+      URI::file::Win32 5.05
+      URI::ftp 5.05
+      URI::gopher 5.05
+      URI::http 5.05
+      URI::https 5.05
+      URI::ldap 5.05
+      URI::ldapi 5.05
+      URI::ldaps 5.05
+      URI::mailto 5.05
+      URI::mms 5.05
+      URI::news 5.05
+      URI::nntp 5.05
+      URI::pop 5.05
+      URI::rlogin 5.05
+      URI::rsync 5.05
+      URI::rtsp 5.05
+      URI::rtspu 5.05
+      URI::sftp 5.05
+      URI::sip 5.05
+      URI::sips 5.05
+      URI::snews 5.05
+      URI::ssh 5.05
+      URI::telnet 5.05
+      URI::tn3270 5.05
+      URI::urn 5.05
+      URI::urn::isbn 5.05
+      URI::urn::oid 5.05
     requirements:
       Carp 0
       Cwd 0

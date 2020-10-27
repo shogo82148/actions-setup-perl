@@ -78,7 +78,7 @@ jobs:
           tar xzvf s3cli-mini.tar.gz
 
           # upload
-          s3cli-mini_darwin_amd64/s3cli-mini --region us-east-1 cp --acl public-read "$RUNNER_TEMP/perl.tar.gz" "s3://shogo82148-actions-setup-perl/$ACTIONS_VERSION/perl-$PERL_VERSION-darwin-x64.tar.gz"
+          s3cli-mini_darwin_amd64/s3cli-mini --region us-east-1 cp --acl public-read "$RUNNER_TEMP/perl.tar.xz" "s3://shogo82148-actions-setup-perl/$ACTIONS_VERSION/perl-$PERL_VERSION-darwin-x64.tar.xz"
         env:
           PERL_VERSION: ${{ matrix.perl }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

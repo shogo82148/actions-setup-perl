@@ -71,7 +71,7 @@ jobs:
         if: startsWith(github.ref, 'refs/heads/releases/')
         run: |
           ACTIONS_VERSION=v$(cat "$GITHUB_WORKSPACE/package.json" | jq -r .version)
-          aws --region us-east-1 s3 cp --acl public-read "$RUNNER_TEMP/perl.tar.gz" "s3://shogo82148-actions-setup-perl/$ACTIONS_VERSION/perl-$PERL_VERSION-linux-x64.tar.gz"
+          aws --region us-east-1 s3 cp --acl public-read "$RUNNER_TEMP/perl.tar.xz" "s3://shogo82148-actions-setup-perl/$ACTIONS_VERSION/perl-$PERL_VERSION-linux-x64.tar.xz"
         env:
           PERL_VERSION: ${{ matrix.perl }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

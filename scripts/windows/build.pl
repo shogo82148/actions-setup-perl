@@ -92,7 +92,8 @@ sub run {
 
     group "archiving" => sub {
         chdir $install_dir or die "failed to cd $install_dir: $!";
-        execute_or_die("tar", "Jcvf", "$tmpdir/perl.tar.xz", ".");
+        execute_or_die("7z", "a", File::Spec->catfile($tmpdir, "perl.tar"), ".");
+        execute_or_die("7z", "a", File::Spec->catfile($tmpdir, "perl.tar.xz"), File::Spec->catfile($tmpdir, "perl.tar"));
     };
 }
 

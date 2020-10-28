@@ -116,7 +116,7 @@ jobs:
           7z x s3cli-mini.zip
           $pkg = Get-Content "${env:GITHUB_WORKSPACE}/package.json" -Encoding UTF8 -Raw | ConvertFrom-Json
           $version = $pkg.version
-          s3cli-mini_windows_amd64/s3cli-mini --region us-east-1 cp --acl public-read perl.tar.xz "s3://shogo82148-actions-setup-perl/v$version/perl-${env:PERL_VERSION}-win32-x64.tar.xz"
+          s3cli-mini_windows_amd64/s3cli-mini --region us-east-1 cp --acl public-read perl.zip "s3://shogo82148-actions-setup-perl/v$version/perl-${env:PERL_VERSION}-win32-x64.zip"
         env:
           PERL_VERSION: ${{ matrix.perl }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

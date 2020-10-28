@@ -74,11 +74,17 @@ async function acquirePerl(version: string): Promise<string> {
     throw `Failed to download version ${version}: ${error}`;
   }
 
-  const extPath = await tc.extractTar(downloadPath, "", "xJ");
+  const extPath =
+    osPlat === 'win32'
+      ? await tc.extractZip(downloadPath)
+      : await tc.extractTar(downloadPath, '', 'xJ');
   return await tc.cacheDir(extPath, 'perl', version);
 }
 
 function getFileName(version: string): string {
+  if (osPlat === 'win32') {
+    return `perl-${version}-${osPlat}-${osArch}.zip`;
+  }
   return `perl-${version}-${osPlat}-${osArch}.tar.xz`;
 }
 

@@ -74,7 +74,7 @@ async function acquirePerl(version: string): Promise<string> {
     throw `Failed to download version ${version}: ${error}`;
   }
 
-  const extPath = await tc.extractTar(downloadPath, "", "xJ");
+  const extPath = await tc.extractTar(downloadPath, '', 'xJ');
   return await tc.cacheDir(extPath, 'perl', version);
 }
 

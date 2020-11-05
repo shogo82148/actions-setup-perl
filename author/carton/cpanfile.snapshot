@@ -260,45 +260,45 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  ExtUtils-MakeMaker-7.50
-    pathname: B/BI/BINGOS/ExtUtils-MakeMaker-7.50.tar.gz
+  ExtUtils-MakeMaker-7.52
+    pathname: B/BI/BINGOS/ExtUtils-MakeMaker-7.52.tar.gz
     provides:
-      ExtUtils::Command 7.50
-      ExtUtils::Command::MM 7.50
-      ExtUtils::Liblist 7.50
-      ExtUtils::Liblist::Kid 7.50
-      ExtUtils::MM 7.50
-      ExtUtils::MM_AIX 7.50
-      ExtUtils::MM_Any 7.50
-      ExtUtils::MM_BeOS 7.50
-      ExtUtils::MM_Cygwin 7.50
-      ExtUtils::MM_DOS 7.50
-      ExtUtils::MM_Darwin 7.50
-      ExtUtils::MM_MacOS 7.50
-      ExtUtils::MM_NW5 7.50
-      ExtUtils::MM_OS2 7.50
-      ExtUtils::MM_OS390 7.50
-      ExtUtils::MM_QNX 7.50
-      ExtUtils::MM_UWIN 7.50
-      ExtUtils::MM_Unix 7.50
-      ExtUtils::MM_VMS 7.50
-      ExtUtils::MM_VOS 7.50
-      ExtUtils::MM_Win32 7.50
-      ExtUtils::MM_Win95 7.50
-      ExtUtils::MY 7.50
-      ExtUtils::MakeMaker 7.50
-      ExtUtils::MakeMaker::Config 7.50
-      ExtUtils::MakeMaker::Locale 7.50
-      ExtUtils::MakeMaker::_version 7.50
-      ExtUtils::MakeMaker::charstar 7.50
-      ExtUtils::MakeMaker::version 7.50
-      ExtUtils::MakeMaker::version::regex 7.50
-      ExtUtils::MakeMaker::version::vpp 7.50
-      ExtUtils::Mkbootstrap 7.50
-      ExtUtils::Mksymlists 7.50
-      ExtUtils::testlib 7.50
-      MM 7.50
-      MY 7.50
+      ExtUtils::Command 7.52
+      ExtUtils::Command::MM 7.52
+      ExtUtils::Liblist 7.52
+      ExtUtils::Liblist::Kid 7.52
+      ExtUtils::MM 7.52
+      ExtUtils::MM_AIX 7.52
+      ExtUtils::MM_Any 7.52
+      ExtUtils::MM_BeOS 7.52
+      ExtUtils::MM_Cygwin 7.52
+      ExtUtils::MM_DOS 7.52
+      ExtUtils::MM_Darwin 7.52
+      ExtUtils::MM_MacOS 7.52
+      ExtUtils::MM_NW5 7.52
+      ExtUtils::MM_OS2 7.52
+      ExtUtils::MM_OS390 7.52
+      ExtUtils::MM_QNX 7.52
+      ExtUtils::MM_UWIN 7.52
+      ExtUtils::MM_Unix 7.52
+      ExtUtils::MM_VMS 7.52
+      ExtUtils::MM_VOS 7.52
+      ExtUtils::MM_Win32 7.52
+      ExtUtils::MM_Win95 7.52
+      ExtUtils::MY 7.52
+      ExtUtils::MakeMaker 7.52
+      ExtUtils::MakeMaker::Config 7.52
+      ExtUtils::MakeMaker::Locale 7.52
+      ExtUtils::MakeMaker::_version 7.52
+      ExtUtils::MakeMaker::charstar 7.52
+      ExtUtils::MakeMaker::version 7.52
+      ExtUtils::MakeMaker::version::regex 7.52
+      ExtUtils::MakeMaker::version::vpp 7.52
+      ExtUtils::Mkbootstrap 7.52
+      ExtUtils::Mksymlists 7.52
+      ExtUtils::testlib 7.52
+      MM 7.52
+      MY 7.52
     requirements:
       Data::Dumper 0
       Encode 0
@@ -333,10 +333,10 @@ DISTRIBUTIONS
       Module::Load::Conditional 0.66
       Params::Check 0.07
       Test::More 0
-  File-Path-2.17
-    pathname: J/JK/JKEENAN/File-Path-2.17.tar.gz
+  File-Path-2.18
+    pathname: J/JK/JKEENAN/File-Path-2.18.tar.gz
     provides:
-      File::Path 2.17
+      File::Path 2.18
     requirements:
       Cwd 0
       Exporter 0

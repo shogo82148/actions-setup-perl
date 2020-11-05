@@ -17,7 +17,7 @@ fatpack(
     "-e", join(
         ',',
         # configure modules
-        'ExtUtils::MakeMaker', 'Module::Build',
+        'Module::Build',
         # test modules
         'Test2,App::Prove','TAP::Harness',
         # core modules of perl 5

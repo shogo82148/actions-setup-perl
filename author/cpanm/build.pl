@@ -17,7 +17,7 @@ fatpack(
     "-e", join(
         ',',
         # configure modules
-        'ExtUtils::MakeMaker', 'Module::Build',
+        'Module::Build',
         'App::cpanminus::fatscript',
         # test modules
         'Test2', 'App::Prove','TAP::Harness',

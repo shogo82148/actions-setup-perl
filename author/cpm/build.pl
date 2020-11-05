@@ -17,7 +17,6 @@ fatpack(
     "-e", join(
         ',',
         # configure modules
-        'ExtUtils::MakeMaker',
         'ExtUtils::CBuilder', 'ExtUtils::MakeMaker::CPANfile',
         'Module::Build::Tiny', 'ExtUtils::ParseXS',
         'Devel::GlobalDestruction::XS',

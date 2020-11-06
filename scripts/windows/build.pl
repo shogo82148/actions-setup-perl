@@ -41,6 +41,7 @@ sub run {
 
     my $version = $ENV{PERL_VERSION};
     my $url = perl_release($version);
+    my $OPENSSL_VERSION = "1_1_1h";
 
     $url =~ m/\/(perl-.*)$/;
     my $filename = $1;
@@ -56,7 +57,6 @@ sub run {
     };
 
     group "downloading OpenSSL" => sub {
-        my $OPENSSL_VERSION = "1_1_1h";
         my $ua = LWP::UserAgent->new;
         my $response = $ua->get("https://github.com/openssl/openssl/archive/OpenSSL_$OPENSSL_VERSION.zip");
         if (!$response->is_success) {
@@ -76,6 +76,7 @@ sub run {
     };
 
     group "build and install OpenSSL" => sub {
+        my $dir = pushd(File::Spec->catdir($tmpdir, "openssl-OpenSSL_$OPENSSL_VERSION");
         # get the number of CPU cores to parallel make
         my $jobs = ($ENV{NUMBER_OF_PROCESSORS} || 1) + 0;
         if ($jobs <= 0) {

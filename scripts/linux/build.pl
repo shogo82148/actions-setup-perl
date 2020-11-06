@@ -39,6 +39,19 @@ sub run {
         system(File::Spec->catfile($install_dir, 'bin', 'perl'), '-V') == 0 or die "$!";
     };
 
+    group "install common CPAN modules" => sub {
+        my $perl = File::Spec->catfile($install_dir, 'bin', 'perl.exe');
+        my $cpanm = File::Spec->catfile($FindBin::Bin, '..', '..', 'bin', 'cpanm');
+
+        # JSON and YAML
+        execute_or_die($perl, $cpanm, '-n', 'JSON', 'Cpanel::JSON::XS', 'JSON::XS', 'JSON::MaybeXS', 'YAML', 'YAML::Tiny', 'YAML::XS');
+
+        # SSL/TLS
+        execute_or_die($perl, $cpanm, '-n', 'Net::SSLeay');
+        execute_or_die($perl, $cpanm, '-n', 'IO::Socket::SSL');
+        execute_or_die($perl, $cpanm, '-n', 'Mozilla::CA');
+    };
+
     group "archiving" => sub {
         chdir $install_dir or die "failed to cd $install_dir: $!";
         system("tar", "Jcvf", "$tmpdir/perl.tar.xz", ".") == 0

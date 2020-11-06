@@ -92,6 +92,11 @@ sub run {
     };
 
     group "install common CPAN modules" => sub {
+        # skip installing CPAN modules
+        # see https://github.com/shogo82148/actions-setup-perl/pull/432
+        # and https://github.com/shogo82148/actions-setup-perl/issues/225
+        return if version->parse("v$version") < version->parse("v5.14.0");
+
         my $perl = File::Spec->catfile($install_dir, 'bin', 'perl.exe');
         my $cpanm = File::Spec->catfile($FindBin::Bin, '..', '..', 'bin', 'cpanm');
 

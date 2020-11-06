@@ -10,6 +10,7 @@ use Perl::Build;
 use File::Spec;
 use File::Path qw/make_path/;
 use version 0.77 ();
+use Carp qw/croak/;
 use Actions::Core qw/group set_failed/;
 
 sub execute_or_die {

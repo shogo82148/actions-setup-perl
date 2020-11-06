@@ -9,6 +9,7 @@ use Try::Tiny;
 use Perl::Build;
 use File::Spec;
 use version 0.77 ();
+use Carp qw/croak/;
 use Actions::Core qw/group set_failed/;
 
 sub execute_or_die {

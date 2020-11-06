@@ -82,7 +82,7 @@ sub run {
             $jobs = 1;
         }
         execute_or_die('C:\strawberry\perl\bin\perl.exe Configure --prefix="' . $install_dir . '" mingw64');
-        execute_or_die('gmake');
+        execute_or_die("gmake -j$jobs");
         execute_or_die('gmake install_sw');
     };
 

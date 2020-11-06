@@ -100,6 +100,9 @@ sub run {
         my $perl = File::Spec->catfile($install_dir, 'bin', 'perl.exe');
         my $cpanm = File::Spec->catfile($FindBin::Bin, '..', '..', 'bin', 'cpanm');
 
+        # JSON and YAML
+        execute_or_die($perl, $cpanm, '-n', 'JSON', 'Cpanel::JSON::XS', 'JSON::XS', 'JSON::MaybeXS', 'YAML', 'YAML::Tiny', 'YAML::XS');
+
         # SSL/TLS
         execute_or_die($perl, $cpanm, '-n', 'Net::SSLeay');
         execute_or_die($perl, $cpanm, '-n', 'IO::Socket::SSL');

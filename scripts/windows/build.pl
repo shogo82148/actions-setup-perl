@@ -16,6 +16,7 @@ use File::Spec;
 use File::Path qw/make_path/;
 use Carp qw/croak/;
 use Actions::Core qw/group set_failed/;
+use File::Basename qw(dirname);
 
 sub perl_release {
     my $version = shift;
@@ -88,6 +89,16 @@ sub run {
 
     group "perl -V" => sub {
         execute_or_die(File::Spec->catfile($install_dir, 'bin', 'perl'), '-V');
+    };
+
+    group "install common CPAN modules" => sub {
+        my $perl = File::Spec->catfile($install_dir, 'bin', 'perl');
+        my $cpanm = File::Spec->catfile(dirname(__FILE__), '..', '..', 'bin', 'cpanm');
+
+        # SSL/TLS
+        execute_or_die($perl, $cpanm, '-n', 'Net::SSLeay');
+        execute_or_die($perl, $cpanm, '-n', 'IO::Socket::SSL');
+        execute_or_die($perl, $cpanm, '-n', 'Mozilla::CA');
     };
 
     group "archiving" => sub {

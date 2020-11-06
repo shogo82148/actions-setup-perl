@@ -318,6 +318,22 @@ DISTRIBUTIONS
       Module::CPANfile 0
       Test::More 0.88
       version 0.76
+  ExtUtils-Manifest-1.72
+    pathname: E/ET/ETHER/ExtUtils-Manifest-1.72.tar.gz
+    provides:
+      ExtUtils::Manifest 1.72
+    requirements:
+      Carp 0
+      Exporter 0
+      ExtUtils::MakeMaker 0
+      File::Basename 0
+      File::Copy 0
+      File::Find 0
+      File::Path 0
+      File::Spec 0.8
+      perl 5.006
+      strict 0
+      warnings 0
   File-Fetch-0.56
     pathname: B/BI/BINGOS/File-Fetch-0.56.tar.gz
     provides:

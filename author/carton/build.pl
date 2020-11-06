@@ -19,7 +19,7 @@ fatpack(
         # configure modules
         'Module::Build',
         # test modules
-        'Test2,App::Prove','TAP::Harness',
+        'Test2','App::Prove','TAP::Harness',
         # XS modules
         'Devel::GlobalDestruction::XS','Class::C3::XS',
         # the Carton does not use Path::Tiny->digest, so we can remove it

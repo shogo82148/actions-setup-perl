@@ -9,7 +9,16 @@ use Try::Tiny;
 use Perl::Build;
 use File::Spec;
 use version 0.77 ();
+use Carp qw/croak/;
 use Actions::Core qw/group set_failed/;
+
+sub execute_or_die {
+    my $code = system(@_);
+    if ($code != 0) {
+        my $cmd = join ' ', @_;
+        croak "failed to execute $cmd: exit code $code";
+    }
+}
 
 sub run {
     my $version = $ENV{PERL_VERSION};
@@ -37,6 +46,19 @@ sub run {
 
     group "perl -V" => sub {
         system(File::Spec->catfile($install_dir, 'bin', 'perl'), '-V') == 0 or die "$!";
+    };
+
+    group "install common CPAN modules" => sub {
+        my $perl = File::Spec->catfile($install_dir, 'bin', 'perl');
+        my $cpanm = File::Spec->catfile($FindBin::Bin, '..', '..', 'bin', 'cpanm');
+
+        # JSON and YAML
+        execute_or_die($perl, $cpanm, '-n', 'JSON', 'Cpanel::JSON::XS', 'JSON::XS', 'JSON::MaybeXS', 'YAML', 'YAML::Tiny', 'YAML::XS');
+
+        # SSL/TLS
+        execute_or_die($perl, $cpanm, '-n', 'Net::SSLeay');
+        execute_or_die($perl, $cpanm, '-n', 'IO::Socket::SSL');
+        execute_or_die($perl, $cpanm, '-n', 'Mozilla::CA');
     };
 
     group "archiving" => sub {

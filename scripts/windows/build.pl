@@ -16,6 +16,7 @@ use File::Spec;
 use File::Path qw/make_path/;
 use Carp qw/croak/;
 use Actions::Core qw/group set_failed/;
+use File::Basename qw(dirname);
 
 sub perl_release {
     my $version = shift;
@@ -87,7 +88,25 @@ sub run {
     };
 
     group "perl -V" => sub {
-        execute_or_die(File::Spec->catfile($install_dir, 'bin', 'perl'), '-V');
+        execute_or_die(File::Spec->catfile($install_dir, 'bin', 'perl.exe'), '-V');
+    };
+
+    group "install common CPAN modules" => sub {
+        # skip installing CPAN modules
+        # see https://github.com/shogo82148/actions-setup-perl/pull/432
+        # and https://github.com/shogo82148/actions-setup-perl/issues/225
+        return if version->parse("v$version") < version->parse("v5.14.0");
+
+        my $perl = File::Spec->catfile($install_dir, 'bin', 'perl.exe');
+        my $cpanm = File::Spec->catfile($FindBin::Bin, '..', '..', 'bin', 'cpanm');
+
+        # JSON and YAML
+        execute_or_die($perl, $cpanm, '-n', 'JSON', 'Cpanel::JSON::XS', 'JSON::XS', 'JSON::MaybeXS', 'YAML', 'YAML::Tiny', 'YAML::XS');
+
+        # SSL/TLS
+        execute_or_die($perl, $cpanm, '-n', 'Net::SSLeay');
+        execute_or_die($perl, $cpanm, '-n', 'IO::Socket::SSL');
+        execute_or_die($perl, $cpanm, '-n', 'Mozilla::CA');
     };
 
     group "archiving" => sub {

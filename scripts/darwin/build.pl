@@ -52,7 +52,7 @@ sub run {
     };
 
     group "install common CPAN modules" => sub {
-        my $perl = File::Spec->catfile($install_dir, 'bin', 'perl.exe');
+        my $perl = File::Spec->catfile($install_dir, 'bin', 'perl');
         my $cpanm = File::Spec->catfile($FindBin::Bin, '..', '..', 'bin', 'cpanm');
 
         # JSON and YAML

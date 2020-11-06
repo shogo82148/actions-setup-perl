@@ -88,12 +88,12 @@ sub run {
     };
 
     group "perl -V" => sub {
-        execute_or_die(File::Spec->catfile($install_dir, 'bin', 'perl'), '-V');
+        execute_or_die(File::Spec->catfile($install_dir, 'bin', 'perl.exe'), '-V');
     };
 
     group "install common CPAN modules" => sub {
-        my $perl = File::Spec->catfile($install_dir, 'bin', 'perl');
-        my $cpanm = File::Spec->catfile(dirname(__FILE__), '..', '..', 'bin', 'cpanm');
+        my $perl = File::Spec->catfile($install_dir, 'bin', 'perl.exe');
+        my $cpanm = File::Spec->catfile(dirname($FindBin::Bin), '..', '..', 'bin', 'cpanm');
 
         # SSL/TLS
         execute_or_die($perl, $cpanm, '-n', 'Net::SSLeay');

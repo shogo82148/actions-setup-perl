@@ -12,6 +12,14 @@ use File::Path qw/make_path/;
 use version 0.77 ();
 use Actions::Core qw/group set_failed/;
 
+sub execute_or_die {
+    my $code = system(@_);
+    if ($code != 0) {
+        my $cmd = join ' ', @_;
+        croak "failed to execute $cmd: exit code $code";
+    }
+}
+
 sub run {
     my $version = $ENV{PERL_VERSION};
     my $tmpdir = File::Spec->rel2abs($ENV{RUNNER_TEMP} || "tmp");

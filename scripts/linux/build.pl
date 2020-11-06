@@ -11,6 +11,14 @@ use File::Spec;
 use version 0.77 ();
 use Actions::Core qw/group set_failed/;
 
+sub execute_or_die {
+    my $code = system(@_);
+    if ($code != 0) {
+        my $cmd = join ' ', @_;
+        croak "failed to execute $cmd: exit code $code";
+    }
+}
+
 sub run {
     my $version = $ENV{PERL_VERSION};
     my $install_dir = File::Spec->catdir($ENV{RUNNER_TOOL_CACHE}, "perl", $version, "x64");

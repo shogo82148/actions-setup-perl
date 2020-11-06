@@ -4,3 +4,5 @@ requires 'Carton';
 requires 'Menlo::Legacy';
 requires 'Menlo';
 requires 'Menlo::Index::Mirror';
+requires 'ExtUtils::Manifest', '1.70';
+requires 'ExtUtils::MakeMaker', '7.52';

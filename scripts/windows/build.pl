@@ -58,7 +58,7 @@ sub run {
 
     group "downloading OpenSSL" => sub {
         my $ua = LWP::UserAgent->new;
-        my $response = $ua->get("https://github.com/openssl/openssl/archive/OpenSSL_$OPENSSL_VERSION.zip");
+        my $response = $ua->get("https://github.com/openssl/openssl/archive/OpenSSL_$OPENSSL_VERSION.tar.gz");
         if (!$response->is_success) {
             die "download failed: " . $response->status_line;
         }

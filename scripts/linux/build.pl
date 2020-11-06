@@ -35,10 +35,16 @@ sub run {
             $jobs = 1;
         }
 
+        my @options = ("-de", "-Dman1dir=none", "-Dman3dir=none");
+        if ($ENV{PERL_MULTI_THREAD}) {
+            # enable multi threading
+            push @options, "-Duseshrplib", "-Duseithreads";
+        }
+
         Perl::Build->install_from_cpan(
             $version => (
                 dst_path          => $install_dir,
-                configure_options => ["-de", "-Dman1dir=none", "-Dman3dir=none"],
+                configure_options => \@options,
                 jobs              => $jobs,
             )
         );

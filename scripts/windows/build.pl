@@ -76,7 +76,7 @@ sub run {
     };
 
     group "build and install OpenSSL" => sub {
-        my $dir = pushd(File::Spec->catdir($tmpdir, "openssl-OpenSSL_$OPENSSL_VERSION");
+        my $dir = pushd(File::Spec->catdir($tmpdir, "openssl-OpenSSL_$OPENSSL_VERSION"));
         # get the number of CPU cores to parallel make
         my $jobs = ($ENV{NUMBER_OF_PROCESSORS} || 1) + 0;
         if ($jobs <= 0) {

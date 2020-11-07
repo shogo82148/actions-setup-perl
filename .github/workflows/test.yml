@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  test-linux:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -16,9 +16,139 @@ jobs:
           - ubuntu-20.04
           - ubuntu-18.04
           - ubuntu-16.04
-          - windows-2019
+        multi-thread:
+          - false
+          - true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - run: npm ci
+      - run: npm run build
+      - run: npm run package
+      - run: npm test
+
+      - name: use the action
+        uses: ./
+        with:
+          perl-version: "5.30.0"
+          multi-thread: ${{ matrix.multi-thread }}
+
+      - run: gcc --version
+
+      - name: run perl -V on bash
+        run: perl -V
+        shell: bash
+      - name: run perl -V on pwsh
+        run: perl -V
+        shell: pwsh
+      - name: run perl -V on python
+        run: |
+          import subprocess
+          subprocess.call(['perl', '-V'])
+        shell: python
+      - name: run perl -V on sh
+        run: perl -V
+        shell: sh
+      - name: run perl -V on perl {0}
+        run: |
+          use Config qw(myconfig);
+          print myconfig();
+        shell: "perl {0}"
+
+      - name: "Actions::Core"
+        run: prove -lv t
+        working-directory: ./scripts
+      - name: list perl versions
+        id: versions
+        run: |
+          use Actions::Core;
+          set_output(versions => [perl_versions()]);
+        shell: "perl {0}"
+      - name: result of list perl versions
+        run: echo "$VERSIONS" | jq .
+        env:
+          VERSIONS: ${{ steps.versions.outputs.versions }}
+
+  test-darwin:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
           - macos-11.0
           - macos-10.15
+        multi-thread:
+          - false
+          - true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - run: npm ci
+      - run: npm run build
+      - run: npm run package
+      - run: npm test
+
+      - name: use the action
+        uses: ./
+        with:
+          perl-version: "5.30.0"
+          multi-thread: ${{ matrix.multi-thread }}
+
+      - run: gcc --version
+
+      - name: run perl -V on bash
+        run: perl -V
+        shell: bash
+      - name: run perl -V on pwsh
+        run: perl -V
+        shell: pwsh
+      - name: run perl -V on python
+        run: |
+          import subprocess
+          subprocess.call(['perl', '-V'])
+        shell: python
+      - name: run perl -V on sh
+        run: perl -V
+        shell: sh
+      - name: run perl -V on perl {0}
+        run: |
+          use Config qw(myconfig);
+          print myconfig();
+        shell: "perl {0}"
+
+      - name: "Actions::Core"
+        run: prove -lv t
+        working-directory: ./scripts
+      - name: list perl versions
+        id: versions
+        run: |
+          use Actions::Core;
+          set_output(versions => [perl_versions()]);
+        shell: "perl {0}"
+      - name: result of list perl versions
+        run: echo "$VERSIONS" | jq .
+        env:
+          VERSIONS: ${{ steps.versions.outputs.versions }}
+
+  test-windows:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - windows-2019
         dist:
           - default
           - strawberry
@@ -58,21 +188,12 @@ jobs:
           import subprocess
           subprocess.call(['perl', '-V'])
         shell: python
-      - name: run perl -V on sh
-        run: perl -V
-        shell: sh
-        # sh is available on Linux and macOS
-        if: ${{ startsWith(matrix.os, 'ubuntu-') || startsWith(matrix.os, 'macos-') }}
       - name: run perl -V on cmd
         run: perl -V
         shell: cmd
-        # cmd is available on Windows
-        if: ${{ startsWith(matrix.os, 'windows-') }}
       - name: run perl -V on powershell
         run: perl -V
         shell: powershell
-        # powershell is available on Windows
-        if: ${{ startsWith(matrix.os, 'windows-') }}
       - name: run perl -V on perl {0}
         run: |
           use Config qw(myconfig);

@@ -17,16 +17,11 @@ fatpack(
     "-e", join(
         ',',
         # configure modules
-        'ExtUtils::MakeMaker',
         'ExtUtils::CBuilder', 'ExtUtils::MakeMaker::CPANfile',
         'Module::Build::Tiny', 'ExtUtils::ParseXS',
         'Devel::GlobalDestruction::XS',
         # test modules
         'Test2', 'App::Prove','TAP::Harness', 'Perl::OSType',
-        # core modules of perl 5
-        'Cwd', 'Module::CoreList',
-        'File::Spec',
-        'Params::Check',
         # XS
         'Class::C3::XS',
     ),

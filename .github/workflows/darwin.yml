@@ -83,3 +83,51 @@ jobs:
           PERL_VERSION: ${{ matrix.perl }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  build-multi-thread:
+    runs-on: macos-10.15
+    needs: list
+    strategy:
+      fail-fast: false
+      matrix: ${{fromJson(needs.list.outputs.matrix)}}
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup host perl
+        run: perl -MConfig -E 'say "$Config{bin}"' >> $GITHUB_PATH
+      - name: Host perl -V
+        run: perl -V
+      - name: gcc --version
+        run: gcc --version
+
+      - uses: actions/cache@v2
+        with:
+          path: scripts/darwin/local
+          key: ${{ runner.os }}-build-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
+      - name: carton install --deployment
+        shell: bash
+        run: ../../bin/carton install --deployment
+        working-directory: ./scripts/darwin
+
+      - name: build
+        shell: bash
+        run: perl build.pl
+        env:
+          PERL5LIB: ${{ github.workspace }}/scripts/darwin/local/lib/perl5
+          PERL_VERSION: ${{ matrix.perl }}
+          PERL_MULTI_THREAD: "1"
+        working-directory: ./scripts/darwin
+
+      - name: upload
+        if: startsWith(github.ref, 'refs/heads/releases/')
+        run: |
+          # there is no aws cli in macOS, so use https://github.com/shogo82148/s3cli-mini
+          ACTIONS_VERSION=v$(cat "$GITHUB_WORKSPACE/package.json" | jq -r .version)
+          curl -sSL https://github.com/shogo82148/s3cli-mini/releases/download/v0.0.6/s3cli-mini_darwin_amd64.tar.gz -o s3cli-mini.tar.gz
+          tar xzvf s3cli-mini.tar.gz
+
+          # upload
+          s3cli-mini_darwin_amd64/s3cli-mini --region us-east-1 cp --acl public-read "$RUNNER_TEMP/perl.tar.xz" "s3://shogo82148-actions-setup-perl/$ACTIONS_VERSION/perl-$PERL_VERSION-darwin-x64-multi-thread.tar.xz"
+        env:
+          PERL_VERSION: ${{ matrix.perl }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

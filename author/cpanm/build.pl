@@ -17,12 +17,10 @@ fatpack(
     "-e", join(
         ',',
         # configure modules
-        'ExtUtils::MakeMaker', 'Module::Build',
+        'Module::Build',
         'App::cpanminus::fatscript',
         # test modules
         'Test2', 'App::Prove','TAP::Harness',
-        # core modules of perl 5
-        'Cwd', 'Carp', 'Module::CoreList',
     ),
     "--shebang", '#!/usr/bin/env perl',
     "local/bin/cpanm"

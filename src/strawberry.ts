@@ -5,7 +5,6 @@ import * as core from '@actions/core';
 import * as tc from '@actions/tool-cache';
 import * as path from 'path';
 import * as semver from 'semver';
-import * as installer from './installer';
 import * as fs from 'fs';
 
 if (!tempDirectory) {
@@ -73,13 +72,6 @@ async function determineVersion(version: string): Promise<PerlVersion> {
 }
 
 export async function getPerl(version: string) {
-  if (process.platform !== 'win32') {
-    core.info('The strawberry distribution is not available on this platform');
-    core.info('fallback to the default distribution');
-    installer.getPerl(version);
-    return;
-  }
-
   // check cache
   const selected = await determineVersion(version);
   let toolPath: string;

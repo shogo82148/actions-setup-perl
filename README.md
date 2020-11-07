@@ -69,6 +69,7 @@ All inputs are **optional**. If not set, sensible defaults will be used.
 | --- | --- | --- |
 | `perl-version` | Specifies the Perl version to setup. Minor version and patch level can be omitted. The action uses the latest Perl version available that matches the specified value. This defaults to `5`, which results in the latest available version of Perl 5. In addition, the value `latest` is available, the actions uses the latest available version of Perl including `5`, `7` or later major versions. | `5` |
 | `distribution` | Specify the distribution to use, this is either `default` or `strawberry`. (The value `strawberry` is ignored on anything but Windows.) | `default` |
+| `multi-thread` | Enables multi threading options(-Duseshrplib -Duseithreads). "true" and "false" are accepted. On Linux and macOS, the default value is false (multi threading is disabled). On Windows, this option is ignored, multi-threading is always enabled. | depends on platform |
 
 # Supported Shells
 
@@ -95,6 +96,19 @@ The following Perl scripts are pre-installed for convenience.
 - [cpm](https://metacpan.org/pod/distribution/App-cpm/script/cpm)
 
 # Pre-installed Modules
+
+## CPAN Modules
+
+- JSON
+- Cpanel::JSON::XS
+- JSON::XS
+- JSON::MaybeXS
+- YAML
+- YAML::Tiny
+- YAML::XS
+- Net::SSLeay
+- IO::Socket::SSL
+- Mozilla::CA
 
 ## Actions::Core
 

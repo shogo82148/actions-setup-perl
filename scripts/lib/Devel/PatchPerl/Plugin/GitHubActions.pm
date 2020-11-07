@@ -91,6 +91,7 @@ sub _ge {
 }
 
 sub _patch_useshrplib {
+    # from https://github.com/Perl/perl5/commit/191f8909fa4eca1db16a91ada42dd4a065c04890
     _patch(<<'END');
 diff --git a/Makefile.SH b/Makefile.SH
 index 6e4d5ee684f..bebe50dc131 100755

@@ -60,14 +60,14 @@ async function determineVersion(version) {
     }
     throw new Error('unable to get latest version');
 }
-async function getPerl(version) {
+async function getPerl(version, thread) {
     const selected = await determineVersion(version);
     // check cache
     let toolPath;
     toolPath = tc.find('perl', selected);
     if (!toolPath) {
         // download, extract, cache
-        toolPath = await acquirePerl(selected);
+        toolPath = await acquirePerl(selected, thread);
         core.debug('Perl tool is cached under ' + toolPath);
     }
     toolPath = path.join(toolPath, 'bin');
@@ -77,11 +77,11 @@ async function getPerl(version) {
     core.addPath(toolPath);
 }
 exports.getPerl = getPerl;
-async function acquirePerl(version) {
+async function acquirePerl(version, thread) {
     //
     // Download - a tool installer intimately knows how to get the tool (and construct urls)
     //
-    const fileName = getFileName(version);
+    const fileName = getFileName(version, thread);
     const downloadUrl = await getDownloadUrl(fileName);
     let downloadPath = null;
     try {
@@ -91,16 +91,24 @@ async function acquirePerl(version) {
         core.debug(error);
         throw `Failed to download version ${version}: ${error}`;
     }
-    const extPath = osPlat === 'win32'
+    //
+    // Extract compressed archive
+    //
+    const extPath = downloadUrl.endsWith('.zip')
         ? await tc.extractZip(downloadPath)
-        : await tc.extractTar(downloadPath, '', 'xJ');
+        : downloadUrl.endsWith('.tar.xz')
+            ? await tc.extractTar(downloadPath, '', 'xJ')
+            : downloadUrl.endsWith('.tar.bz2')
+                ? await tc.extractTar(downloadPath, '', 'xj')
+                : await tc.extractTar(downloadPath);
     return await tc.cacheDir(extPath, 'perl', version);
 }
-function getFileName(version) {
+function getFileName(version, thread) {
     if (osPlat === 'win32') {
         return `perl-${version}-${osPlat}-${osArch}.zip`;
     }
-    return `perl-${version}-${osPlat}-${osArch}.tar.xz`;
+    const suffix = thread ? '-multi-thread' : '';
+    return `perl-${version}-${osPlat}-${osArch}${suffix}.tar.xz`;
 }
 async function getDownloadUrl(filename) {
     return new Promise((resolve, reject) => {
@@ -151,15 +159,32 @@ const path = __importStar(__webpack_require__(5622));
 const strawberry = __importStar(__webpack_require__(3776));
 async function run() {
     try {
-        const dist = core.getInput('distribution');
+        const platform = process.platform;
+        let dist = core.getInput('distribution');
+        const multiThread = core.getInput('multi-thread');
         const version = core.getInput('perl-version');
+        let thread;
+        if (platform === 'win32') {
+            if (!parseBoolean(multiThread || 'true')) {
+                core.warning('disabling multi-thread is ignored on Windows');
+            }
+            thread = true;
+        }
+        else {
+            if (dist === 'strawberry') {
+                core.warning('The strawberry distribution is not available on this platform');
+                core.warning('fallback to the default distribution');
+                dist = 'default';
+            }
+            thread = parseBoolean(multiThread || 'false');
+        }
         if (version) {
             switch (dist) {
                 case 'strawberry':
                     await strawberry.getPerl(version);
                     break;
                 case 'default':
-                    await installer.getPerl(version);
+                    await installer.getPerl(version, thread);
                     break;
                 default:
                     throw new Error(`unknown distribution: ${dist}`);
@@ -175,6 +200,30 @@ async function run() {
     catch (error) {
         core.setFailed(error.message);
     }
+}
+function parseBoolean(s) {
+    // YAML 1.0 compatible boolean values
+    switch (s) {
+        case 'y':
+        case 'Y':
+        case 'yes':
+        case 'Yes':
+        case 'YES':
+        case 'true':
+        case 'True':
+        case 'TRUE':
+            return true;
+        case 'n':
+        case 'N':
+        case 'no':
+        case 'No':
+        case 'NO':
+        case 'false':
+        case 'False':
+        case 'FALSE':
+            return false;
+    }
+    throw `invalid boolean value: ${s}`;
 }
 run();
 
@@ -213,7 +262,6 @@ const core = __importStar(__webpack_require__(2186));
 const tc = __importStar(__webpack_require__(7784));
 const path = __importStar(__webpack_require__(5622));
 const semver = __importStar(__webpack_require__(1383));
-const installer = __importStar(__webpack_require__(1480));
 const fs = __importStar(__webpack_require__(5747));
 if (!tempDirectory) {
     let baseLocation;
@@ -270,12 +318,6 @@ async function determineVersion(version) {
     throw new Error('unable to get latest version');
 }
 async function getPerl(version) {
-    if (process.platform !== 'win32') {
-        core.info('The strawberry distribution is not available on this platform');
-        core.info('fallback to the default distribution');
-        installer.getPerl(version);
-        return;
-    }
     // check cache
     const selected = await determineVersion(version);
     let toolPath;
@@ -2715,7 +2757,7 @@ class HTTPError extends Error {
     constructor(httpStatusCode) {
         super(`Unexpected HTTP response: ${httpStatusCode}`);
         this.httpStatusCode = httpStatusCode;
-        Object.setPrototypeOf(this, /* unsupported import.meta.prototype */ undefined);
+        Object.setPrototypeOf(this, new.target.prototype);
     }
 }
 exports.HTTPError = HTTPError;
@@ -7400,7 +7442,7 @@ module.exports = v4;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("assert");
+module.exports = require("assert");;
 
 /***/ }),
 
@@ -7408,7 +7450,7 @@ module.exports = require("assert");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("child_process");
+module.exports = require("child_process");;
 
 /***/ }),
 
@@ -7416,7 +7458,7 @@ module.exports = require("child_process");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("crypto");
+module.exports = require("crypto");;
 
 /***/ }),
 
@@ -7424,7 +7466,7 @@ module.exports = require("crypto");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("events");
+module.exports = require("events");;
 
 /***/ }),
 
@@ -7432,7 +7474,7 @@ module.exports = require("events");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("fs");
+module.exports = require("fs");;
 
 /***/ }),
 
@@ -7440,7 +7482,7 @@ module.exports = require("fs");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("http");
+module.exports = require("http");;
 
 /***/ }),
 
@@ -7448,7 +7490,7 @@ module.exports = require("http");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("https");
+module.exports = require("https");;
 
 /***/ }),
 
@@ -7456,7 +7498,7 @@ module.exports = require("https");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("net");
+module.exports = require("net");;
 
 /***/ }),
 
@@ -7464,7 +7506,7 @@ module.exports = require("net");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("os");
+module.exports = require("os");;
 
 /***/ }),
 
@@ -7472,7 +7514,7 @@ module.exports = require("os");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("path");
+module.exports = require("path");;
 
 /***/ }),
 
@@ -7480,7 +7522,7 @@ module.exports = require("path");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("stream");
+module.exports = require("stream");;
 
 /***/ }),
 
@@ -7488,7 +7530,7 @@ module.exports = require("stream");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("tls");
+module.exports = require("tls");;
 
 /***/ }),
 
@@ -7496,7 +7538,7 @@ module.exports = require("tls");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("url");
+module.exports = require("url");;
 
 /***/ }),
 
@@ -7504,7 +7546,7 @@ module.exports = require("url");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("util");
+module.exports = require("util");;
 
 /***/ })
 

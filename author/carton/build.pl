@@ -21,6 +21,7 @@ fatpack(
         # test modules
         'Test2','App::Prove','TAP::Harness',
         # XS modules
+        'Cwd',
         'Devel::GlobalDestruction::XS','Class::C3::XS',
         # the Carton does not use Path::Tiny->digest, so we can remove it
         'Digest::SHA'

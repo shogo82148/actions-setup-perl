@@ -33,19 +33,15 @@ sub run {
 
         # get the number of CPU cores to parallel make
         my $jobs = `sysctl -n hw.logicalcpu_max` + 0;
-        if ($jobs <= 0 || version->parse("v$version") < version->parse("v5.20.0")) {
-            # Makefiles older than v5.20.0 could break parallel make.
-            $jobs = 1;
-        }
-        if ($version =~ /^5\.28\./ && $ENV{PERL_MULTI_THREAD}) {
-            # I don't know why, but Perl 5.28.x builds fail with -Duseshrplib
+        if ($jobs <= 0 || version->parse("v$version") < version->parse("v5.30.0")) {
+            # Makefiles older than v5.30.0 could break parallel make.
             $jobs = 1;
         }
 
         my @options = ("-de", "-Dman1dir=none", "-Dman3dir=none");
         if ($ENV{PERL_MULTI_THREAD}) {
             # enable multi threading
-            push @options, "-Duseshrplib", "-Duseithreads";
+            push @options, "-Duseithreads";
         }
 
         Perl::Build->install_from_cpan(

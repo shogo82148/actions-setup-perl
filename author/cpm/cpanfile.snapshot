@@ -9,10 +9,10 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Test::More 0.47
       perl 5.006
-  App-cpm-0.993
-    pathname: S/SK/SKAJI/App-cpm-0.993.tar.gz
+  App-cpm-0.994
+    pathname: S/SK/SKAJI/App-cpm-0.994.tar.gz
     provides:
-      App::cpm 0.993
+      App::cpm 0.994
       App::cpm::CLI undef
       App::cpm::CircularDependency undef
       App::cpm::DistNotation undef

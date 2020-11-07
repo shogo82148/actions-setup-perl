@@ -97,6 +97,19 @@ The following Perl scripts are pre-installed for convenience.
 
 # Pre-installed Modules
 
+## CPAN Modules
+
+- JSON
+- Cpanel::JSON::XS
+- JSON::XS
+- JSON::MaybeXS
+- YAML
+- YAML::Tiny
+- YAML::XS
+- Net::SSLeay
+- IO::Socket::SSL
+- Mozilla::CA
+
 ## Actions::Core
 
 Perl port of [@actions/core](https://github.com/actions/toolkit/tree/main/packages/core).

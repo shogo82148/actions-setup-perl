@@ -12,6 +12,12 @@ inputs:
       "default" is the custom binaries for actions-setup-perl. It is available on Linux, macOS, and Windows.
       "strawberry" is from http://strawberryperl.com/ . It is available on Windows and falls back to default on other platform.
     default: "default"
+  multi-thread:
+    description: |
+      enables multi threading options(-Duseshrplib -Duseithreads).
+      "true" and "false" are accepted.
+      On Linux and macOS, the default value is false (multi threading is disabled).
+      On Windows, this option is ignored, multi-threading is always enabled.
 runs:
   using: "node12"
   main: "dist/index.js"

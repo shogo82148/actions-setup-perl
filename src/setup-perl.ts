@@ -5,15 +5,33 @@ import * as strawberry from './strawberry';
 
 async function run() {
   try {
-    const dist = core.getInput('distribution');
+    const platform = process.platform;
+    let dist = core.getInput('distribution');
+    const multiThread = core.getInput('multi-thread');
     const version = core.getInput('perl-version');
+
+    let thread: boolean
+    if (platform === 'win32') {
+      if (!parseBoolean(multiThread || "true")) {
+        core.warning('disabling multi-thread is ignored on Windows');
+      }
+      thread = true;
+    } else {
+      if (dist === 'strawberry') {
+        core.warning('The strawberry distribution is not available on this platform');
+        core.warning('fallback to the default distribution');  
+        dist = 'default';
+      }
+      thread = parseBoolean(multiThread || "false")
+    }
+  
     if (version) {
       switch (dist) {
         case 'strawberry':
           await strawberry.getPerl(version);
           break;
         case 'default':
-          await installer.getPerl(version);
+          await installer.getPerl(version, thread);
           break;
         default:
           throw new Error(`unknown distribution: ${dist}`);
@@ -34,6 +52,31 @@ async function run() {
   } catch (error) {
     core.setFailed(error.message);
   }
+}
+
+function parseBoolean(s: string): boolean {
+  // YAML 1.0 compatible boolean values
+  switch (s) {
+    case 'y':
+    case 'Y':
+    case 'yes':
+    case 'Yes':
+    case 'YES':
+    case 'true':
+    case 'True':
+    case 'TRUE':
+      return true
+    case 'n':
+    case 'N':
+    case 'no':
+    case 'No':
+    case 'NO':
+    case 'false':
+    case 'False':
+    case 'FALSE':
+      return false
+  }
+  throw `invalid boolean value: ${s}`
 }
 
 run();

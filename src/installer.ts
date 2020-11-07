@@ -39,7 +39,7 @@ async function determineVersion(version: string): Promise<string> {
   throw new Error('unable to get latest version');
 }
 
-export async function getPerl(version: string) {
+export async function getPerl(version: string, thread: boolean) {
   const selected = await determineVersion(version);
 
   // check cache
@@ -48,7 +48,7 @@ export async function getPerl(version: string) {
 
   if (!toolPath) {
     // download, extract, cache
-    toolPath = await acquirePerl(selected);
+    toolPath = await acquirePerl(selected, thread);
     core.debug('Perl tool is cached under ' + toolPath);
   }
 
@@ -59,11 +59,11 @@ export async function getPerl(version: string) {
   core.addPath(toolPath);
 }
 
-async function acquirePerl(version: string): Promise<string> {
+async function acquirePerl(version: string, thread: boolean): Promise<string> {
   //
   // Download - a tool installer intimately knows how to get the tool (and construct urls)
   //
-  const fileName = getFileName(version);
+  const fileName = getFileName(version, thread);
   const downloadUrl = await getDownloadUrl(fileName);
   let downloadPath: string | null = null;
   try {
@@ -74,18 +74,25 @@ async function acquirePerl(version: string): Promise<string> {
     throw `Failed to download version ${version}: ${error}`;
   }
 
-  const extPath =
-    osPlat === 'win32'
-      ? await tc.extractZip(downloadPath)
-      : await tc.extractTar(downloadPath, '', 'xJ');
+  //
+  // Extract compressed archive
+  //
+  const extPath = downloadUrl.endsWith('.zip')
+    ? await tc.extractZip(downloadPath)
+    : downloadUrl.endsWith('.tar.xz')
+    ? await tc.extractTar(downloadPath, '', 'xJ')
+    : downloadUrl.endsWith('.tar.bz2')
+    ? await tc.extractTar(downloadPath, '', 'xj')
+    : await tc.extractTar(downloadPath)
   return await tc.cacheDir(extPath, 'perl', version);
 }
 
-function getFileName(version: string): string {
+function getFileName(version: string, thread: boolean): string {
   if (osPlat === 'win32') {
     return `perl-${version}-${osPlat}-${osArch}.zip`;
   }
-  return `perl-${version}-${osPlat}-${osArch}.tar.xz`;
+  const suffix = thread ? '-multi-thread' : '';
+  return `perl-${version}-${osPlat}-${osArch}${suffix}.tar.xz`;
 }
 
 interface PackageVersion {

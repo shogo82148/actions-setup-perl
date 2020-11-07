@@ -21,6 +21,8 @@ fatpack(
         'App::cpanminus::fatscript',
         # test modules
         'Test2', 'App::Prove','TAP::Harness',
+        # XS modules
+        'Cwd',
     ),
     "--shebang", '#!/usr/bin/env perl',
     "local/bin/cpanm"

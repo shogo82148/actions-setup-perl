@@ -23,6 +23,7 @@ fatpack(
         # test modules
         'Test2', 'App::Prove','TAP::Harness', 'Perl::OSType',
         # XS
+        'Cwd',
         'Class::C3::XS',
     ),
     "--shebang", '#!/usr/bin/env perl',

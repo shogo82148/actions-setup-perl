@@ -1,11 +1,5 @@
 name: update cpm
 on:
-  push:
-    paths:
-      - "author/cpm/**"
-      - ".github/workflows/update-cpm.yml"
-    branches-ignore:
-      - "update-cpm-*"
   schedule:
     - cron: "21 15 * * *"
   workflow_dispatch:

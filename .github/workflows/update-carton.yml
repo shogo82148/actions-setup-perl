@@ -1,11 +1,5 @@
 name: update carton
 on:
-  push:
-    paths:
-      - "author/carton/**"
-      - ".github/workflows/update-carton.yml"
-    branches-ignore:
-      - "update-carton-*"
   schedule:
     - cron: "41 16 * * *"
   workflow_dispatch:

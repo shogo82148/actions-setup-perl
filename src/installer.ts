@@ -83,7 +83,7 @@ async function acquirePerl(version: string, thread: boolean): Promise<string> {
     ? await tc.extractTar(downloadPath, '', 'xJ')
     : downloadUrl.endsWith('.tar.bz2')
     ? await tc.extractTar(downloadPath, '', 'xj')
-    : await tc.extractTar(downloadPath)
+    : await tc.extractTar(downloadPath);
   return await tc.cacheDir(extPath, 'perl', version);
 }
 

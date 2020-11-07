@@ -10,21 +10,23 @@ async function run() {
     const multiThread = core.getInput('multi-thread');
     const version = core.getInput('perl-version');
 
-    let thread: boolean
+    let thread: boolean;
     if (platform === 'win32') {
-      if (!parseBoolean(multiThread || "true")) {
+      if (!parseBoolean(multiThread || 'true')) {
         core.warning('disabling multi-thread is ignored on Windows');
       }
       thread = true;
     } else {
       if (dist === 'strawberry') {
-        core.warning('The strawberry distribution is not available on this platform');
-        core.warning('fallback to the default distribution');  
+        core.warning(
+          'The strawberry distribution is not available on this platform'
+        );
+        core.warning('fallback to the default distribution');
         dist = 'default';
       }
-      thread = parseBoolean(multiThread || "false")
+      thread = parseBoolean(multiThread || 'false');
     }
-  
+
     if (version) {
       switch (dist) {
         case 'strawberry':
@@ -65,7 +67,7 @@ function parseBoolean(s: string): boolean {
     case 'true':
     case 'True':
     case 'TRUE':
-      return true
+      return true;
     case 'n':
     case 'N':
     case 'no':
@@ -74,9 +76,9 @@ function parseBoolean(s: string): boolean {
     case 'false':
     case 'False':
     case 'FALSE':
-      return false
+      return false;
   }
-  throw `invalid boolean value: ${s}`
+  throw `invalid boolean value: ${s}`;
 }
 
 run();

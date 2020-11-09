@@ -167,10 +167,10 @@ DISTRIBUTIONS
       parent 0.223
       perl 5.008005
       version 0.77
-  Class-C3-0.34
-    pathname: H/HA/HAARG/Class-C3-0.34.tar.gz
+  Class-C3-0.35
+    pathname: H/HA/HAARG/Class-C3-0.35.tar.gz
     provides:
-      Class::C3 0.34
+      Class::C3 0.35
     requirements:
       Algorithm::C3 0.07
       Class::C3::XS 0.13

@@ -178,10 +178,10 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  Class-C3-0.34
-    pathname: H/HA/HAARG/Class-C3-0.34.tar.gz
+  Class-C3-0.35
+    pathname: H/HA/HAARG/Class-C3-0.35.tar.gz
     provides:
-      Class::C3 0.34
+      Class::C3 0.35
     requirements:
       Algorithm::C3 0.07
       Class::C3::XS 0.13

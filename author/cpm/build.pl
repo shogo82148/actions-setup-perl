@@ -30,6 +30,4 @@ fatpack(
     "local/bin/cpm"
 );
 
-pl2bat(in=>"cpm");
-
 1;

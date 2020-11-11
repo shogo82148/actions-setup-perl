@@ -5,7 +5,7 @@ help: ## show this text
 IMAGE_NAME = carton-packer
 
 .PHONY: all
-all: carton carton.bat
+all: carton
 
 .PHONY: image
 image: .image.exists ## build docker image of packing environment
@@ -22,9 +22,6 @@ image: .image.exists ## build docker image of packing environment
 carton: .container.exists ## generate fat-packed carton
 	docker cp $(IMAGE_NAME)-tmp:/tmp/carton/carton carton
 
-carton.bat: .container.exists ## generate fat-packed carton batch file
-	docker cp $(IMAGE_NAME)-tmp:/tmp/carton/carton.bat carton.bat
-
 .PHONY: update
 update: .image.exists ## download dependencies and update cpanfile.snapshot
 	-docker rm $(IMAGE_NAME)-update
@@ -35,7 +32,6 @@ update: .image.exists ## download dependencies and update cpanfile.snapshot
 .PHONY: install
 install: all ## installs into the bin directory of this repository
 	cp carton ../../bin/
-	cp carton.bat ../../bin/
 
 .PHONY: clean
 clean:

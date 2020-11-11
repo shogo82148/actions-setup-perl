@@ -75,6 +75,12 @@ jobs:
         env:
           VERSIONS: ${{ steps.versions.outputs.versions }}
 
+      - name: run preinstalled script files
+        run: |
+          carton --help
+          cpanm --help
+          cpm --help
+
   test-darwin:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -141,6 +147,12 @@ jobs:
         run: echo "$VERSIONS" | jq .
         env:
           VERSIONS: ${{ steps.versions.outputs.versions }}
+
+      - name: run preinstalled script files
+        run: |
+          carton --help
+          cpanm --help
+          cpm --help
 
   test-windows:
     runs-on: ${{ matrix.os }}
@@ -213,6 +225,12 @@ jobs:
         run: echo "$VERSIONS" | jq .
         env:
           VERSIONS: ${{ steps.versions.outputs.versions }}
+
+      - name: run preinstalled script files
+        run: |
+          carton --help
+          cpanm --help
+          cpm --help
 
   format:
     runs-on: ubuntu-latest

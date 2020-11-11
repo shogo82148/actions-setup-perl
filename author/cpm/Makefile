@@ -5,7 +5,7 @@ help: ## show this text
 IMAGE_NAME = cpm-packer
 
 .PHONY: all
-all: cpm cpm.bat
+all: cpm
 
 .PHONY: image
 image: .image.exists ## build docker image of packing environment
@@ -22,9 +22,6 @@ image: .image.exists ## build docker image of packing environment
 cpm: .container.exists ## generate fat-packed cpm
 	docker cp $(IMAGE_NAME)-tmp:/tmp/cpm/cpm cpm
 
-cpm.bat: .container.exists ## generate fat-packed cpm batch file
-	docker cp $(IMAGE_NAME)-tmp:/tmp/cpm/cpm.bat cpm.bat
-
 .PHONY: update
 update: .image.exists ## download dependencies and update cpanfile.snapshot
 	-docker rm $(IMAGE_NAME)-update
@@ -35,7 +32,6 @@ update: .image.exists ## download dependencies and update cpanfile.snapshot
 .PHONY: install
 install: all ## installs into the bin directory of this repository
 	cp cpm ../../bin/
-	cp cpm.bat ../../bin/
 
 .PHONY: clean
 clean:

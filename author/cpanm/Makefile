@@ -5,7 +5,7 @@ help: ## show this text
 IMAGE_NAME = cpanm-packer
 
 .PHONY: all
-all: cpanm cpanm.bat
+all: cpanm
 
 .PHONY: image
 image: .image.exists ## build docker image of packing environment
@@ -22,9 +22,6 @@ image: .image.exists ## build docker image of packing environment
 cpanm: .container.exists ## generate fat-packed cpanm
 	docker cp $(IMAGE_NAME)-tmp:/tmp/cpanm/cpanm cpanm
 
-cpanm.bat: .container.exists ## generate fat-packed cpanm batch file
-	docker cp $(IMAGE_NAME)-tmp:/tmp/cpanm/cpanm.bat cpanm.bat
-
 .PHONY: update
 update: .image.exists ## download dependencies and update cpanfile.snapshot
 	-docker rm $(IMAGE_NAME)-update
@@ -35,7 +32,6 @@ update: .image.exists ## download dependencies and update cpanfile.snapshot
 .PHONY: install
 install: all ## installs into the bin directory of this repository
 	cp cpanm ../../bin/
-	cp cpanm.bat ../../bin/
 
 .PHONY: clean
 clean:

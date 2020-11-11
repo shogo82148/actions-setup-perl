@@ -30,6 +30,4 @@ fatpack(
     "local/bin/carton"
 );
 
-pl2bat(in=>"carton");
-
 1;

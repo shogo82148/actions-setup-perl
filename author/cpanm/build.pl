@@ -28,6 +28,4 @@ fatpack(
     "local/bin/cpanm"
 );
 
-pl2bat(in=>"cpanm");
-
 1;

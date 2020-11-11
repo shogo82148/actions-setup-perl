@@ -1,13 +1,12 @@
 # carton snapshot format: version 1.0
 DISTRIBUTIONS
-  Algorithm-C3-0.10
-    pathname: H/HA/HAARG/Algorithm-C3-0.10.tar.gz
+  Algorithm-C3-0.11
+    pathname: H/HA/HAARG/Algorithm-C3-0.11.tar.gz
     provides:
-      Algorithm::C3 0.10
+      Algorithm::C3 0.11
     requirements:
       Carp 0.01
       ExtUtils::MakeMaker 0
-      Test::More 0.47
       perl 5.006
   CPAN-Common-Index-0.010
     pathname: D/DA/DAGOLDEN/CPAN-Common-Index-0.010.tar.gz
@@ -334,10 +333,10 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  File-Fetch-0.56
-    pathname: B/BI/BINGOS/File-Fetch-0.56.tar.gz
+  File-Fetch-1.00
+    pathname: B/BI/BINGOS/File-Fetch-1.00.tar.gz
     provides:
-      File::Fetch 0.56
+      File::Fetch 1.00
     requirements:
       ExtUtils::MakeMaker 0
       File::Basename 0

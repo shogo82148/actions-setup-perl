@@ -71,7 +71,7 @@ sub cpan_install {
     execute_or_die("7z x $filename -so | 7z x -si -ttar");
     chdir File::Spec->catfile($tmpdir, $dirname) or die "failed to cd $dirname: $!";
     execute_or_die($perl, 'Makefile.PL');
-    execute_or_die('make', 'install');
+    execute_or_die('gmake', 'install');
 }
 
 sub run {

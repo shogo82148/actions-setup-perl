@@ -3,14 +3,14 @@ use Actions::Core qw(perl_versions);
 
 # use in array context
 my @versions = perl_versions();
-is $versions[-1], '5.8.9', 'the latest version of 5.8.x';
+is $versions[-1], ($^O eq 'MSWin32' ? '5.8.9' : '5.6.1'), 'the oldest version of perl';
 
 # use in scalar context
 my $versions = perl_versions();
-is $versions->[-1], '5.8.9', 'the latest version of 5.8.x';
+is $versions->[-1], ($^O eq 'MSWin32' ? '5.8.9' : '5.6.1'), 'the oldest version of perl';
 
 $versions = perl_versions(patch => 1);
-is $versions->[-1], '5.8.5', 'the oldest version of 5.8.x';
+is $versions->[-1], ($^O eq 'MSWin32' ? '5.8.5' : '5.6.0'), 'the oldest version of perl';
 
 # distribution: 'stawberry'
 $versions = perl_versions( platform => 'win32', distribution => 'strawberry' );

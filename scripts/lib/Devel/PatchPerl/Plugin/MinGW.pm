@@ -78,7 +78,7 @@ my @patch = (
     },
     {
         perl => [
-            qr/^5\.1[0-8]\./,
+            qr/^5\.1[0-9]\./,
             qr/^5\.[0-9]\./,
         ],
         subs => [
@@ -4807,49 +4807,13 @@ MAKEFILE
 }
 
 sub _patch_errno {
+    # Silence noise from Errno_pm.PL on Windows
+    # from https://github.com/Perl/perl5/commit/7bf140906596458f94aa2d5969d3067c0d6441a4
+    # and https://github.com/Perl/perl5/commit/f974e9b91d22c1ef2d849ded64674df4f1b18bad
     _patch(<<'PATCH');
 --- ext/Errno/Errno_pm.PL
 +++ ext/Errno/Errno_pm.PL
-@@ -84,10 +83,6 @@ sub process_file {
-     while(<FH>) {
- 	$err{$1} = 1
- 	    if /^\s*#\s*define\s+(E\w+)\s+/;
--	if ($IsMSWin32) {
--	    $wsa{$1} = 1
--		if /^\s*#\s*define\s+WSA(E\w+)\s+/;
--	}
-     }
- 
-     close(FH);
-@@ -161,8 +160,7 @@ sub get_files {
- 	} else {
- 	    print CPPI "#include <errno.h>\n";
- 	    if ($IsMSWin32) {
--		print CPPI "#define _WINSOCKAPI_\n"; # don't drag in everything
--		print CPPI "#include <winsock.h>\n";
-+		print CPPI qq[#include "../../win32/include/sys/errno2.h"\n];
- 	    }
- 	}
- 
-@@ -215,16 +213,7 @@ sub write_errno_pm {
- 	print CPPI "#include <errno.h>\n";
-     }
-     if ($IsMSWin32) {
--	print CPPI "#include <winsock.h>\n";
--	foreach $err (keys %wsa) {
--	    print CPPI "#if defined($err) && $err >= 100\n";
--	    print CPPI "#undef $err\n";
--	    print CPPI "#endif\n";
--	    print CPPI "#ifndef $err\n";
--	    print CPPI "#define $err WSA$err\n";
--	    print CPPI "#endif\n";
--	    $err{$err} = 1;
--	}
-+	print CPPI qq[#include "../../win32/include/sys/errno2.h"\n];
-     }
-  
-     foreach $err (keys %err) {
-@@ -260,15 +249,15 @@ sub write_errno_pm {
+@@ -245,7 +245,7 @@ sub write_errno_pm {
  	    my($name,$expr);
  	    next unless ($name, $expr) = /"(.*?)"\s*\[\s*\[\s*(.*?)\s*\]\s*\]/;
  	    next if $name eq $expr;
@@ -4859,23 +4823,6 @@ sub _patch_errno {
 +	    $expr =~ s/((?:0x)?[0-9a-fA-F]+)[luLU]+\b/$1/g; # 2147483647L et alia
  	    next if $expr =~ m/^[a-zA-Z]+$/; # skip some Win32 functions
  	    if($expr =~ m/^0[xX]/) {
- 		$err{$name} = hex $expr;
- 	    }
- 	    else {
- 	    $err{$name} = eval $expr;
- 	}
- 	    delete $err{$name} unless defined $err{$name};
- 	}
- 	close(CPPO);
-@@ -276,7 +265,7 @@ sub write_errno_pm {
- 
-     # escape $Config{'archname'}
-     my $archname = $Config{'archname'};
--    $archname =~ s/([@%\$])/\\\1/g;
-+    $archname =~ s/([@%\$])/\\$1/g;
- 
-     # Write Errno.pm
- 
 PATCH
 }
 

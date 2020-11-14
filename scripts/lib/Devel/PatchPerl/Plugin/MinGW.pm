@@ -7441,7 +7441,7 @@ MICROCORE_SRC	=		\
 		..\mro.c	\
 		..\hv.c		\
 		..\locale.c	\
-		..\mathoms.c    \
+		..\mathoms.c	\
 		..\mg.c		\
 		..\numeric.c	\
 		..\op.c		\
@@ -7994,28 +7994,17 @@ $(UNIDATAFILES) : ..\pod\perluniprops.pod
 ..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(HAVEMINIPERL) ..\lib\unicore\mktables Extensions_nonxs
 	$(MINIPERL) -I..\lib $(ICWD) ..\lib\unicore\mktables -C ..\lib\unicore -P ..\pod -maketest -makelist -p
 MAKEFILE
-
-    if (version->parse("v$version") >= version->parse("v5.13.4")) {
-        _patch_gnumakefile($version, <<'PATCH');
+    if (_ge($version, "5.13.10")) {
+        _patch(<<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
-@@ -712,7 +712,7 @@
- 		"ARCHPREFIX=$(ARCHPREFIX)"		\
- 		"WIN64=$(WIN64)"
- 
--ICWD = -I..\cpan\Cwd -I..\cpan\Cwd\lib
-+ICWD = -I..\dist\Cwd -I..\dist\Cwd\lib
- 
- #
- # Top targets
-PATCH
-    }
-
-    if (version->parse("v$version") >= version->parse("v5.13.6")) {
-        _patch_gnumakefile($version, <<'PATCH');
---- win32/GNUmakefile
-+++ win32/GNUmakefile
-@@ -457,13 +457,6 @@
+@@ -286,18 +286,12 @@
+ 		..\utils\prove		\
+ 		..\utils\ptar		\
+ 		..\utils\ptardiff	\
++		..\utils\ptargrep	\
+ 		..\utils\cpanp-run-perl	\
+ 		..\utils\cpanp	\
  		..\utils\cpan2dist	\
  		..\utils\shasum		\
  		..\utils\instmodsh	\
@@ -8029,7 +8018,125 @@ PATCH
  		..\x2p\find2perl	\
  		..\x2p\psed		\
  		..\x2p\s2p		\
-@@ -1108,8 +1101,7 @@
+@@ -374,6 +368,7 @@
+ 		..\mro.c	\
+ 		..\hv.c		\
+ 		..\locale.c	\
++		..\keywords.c	\
+ 		..\mathoms.c	\
+ 		..\mg.c		\
+ 		..\numeric.c	\
+@@ -412,6 +407,7 @@
+ 		.\win32.c	\
+ 		.\win32sck.c	\
+ 		.\win32thread.c	\
++		.\fcrypt.c	\
+ 		.\win32io.c
+ 
+ X2P_SRC		=		\
+@@ -465,8 +461,6 @@
+ 
+ UUDMAP_H	= ..\uudmap.h
+ BITCOUNT_H	= ..\bitcount.h
+-MG_DATA_H	= ..\mg_data.h
+-GENERATED_HEADERS = $(UUDMAP_H) $(BITCOUNT_H) $(MG_DATA_H)
+ HAVE_COREDIR	= $(COREDIR)\ppport.h
+ 
+ MICROCORE_OBJ	= $(MICROCORE_SRC:.c=$(o))
+@@ -530,7 +524,7 @@
+ 		"ARCHPREFIX=$(ARCHPREFIX)"		\
+ 		"WIN64=$(WIN64)"
+ 
+-ICWD = -I..\cpan\Cwd -I..\cpan\Cwd\lib
++ICWD = -I..\dist\Cwd -I..\dist\Cwd\lib
+ 
+ #
+ # Top targets
+@@ -557,17 +551,19 @@
+ # make sure that we recompile perl.c if the git version changes
+ ..\perl$(o) : ..\git_version.h
+ 
+-..\config.sh : $(CFGSH_TMPL) $(HAVEMINIPERL) config_sh.PL
++..\config.sh : $(CFGSH_TMPL) $(HAVEMINIPERL) config_sh.PL FindExt.pm
+ 	$(MINIPERL) -I..\lib config_sh.PL $(CFG_VARS) $(CFGSH_TMPL) > ..\config.sh
+ 
+ $(CONFIGPM) : $(HAVEMINIPERL) ..\config.sh config_h.PL ..\minimod.pl
+ 	$(MINIPERL) -I..\lib ..\configpm --chdir=..
+ 	$(XCOPY) *.h $(COREDIR)\\*.*
+-	$(XCOPY) ..\\ext\\re\\re.pm $(LIBDIR)\\*.*
+ 	$(RCOPY) include $(COREDIR)\\*.*
+ 	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
+ 	-$(MINIPERL) -I..\lib $(ICWD) config_h.PL "ARCHPREFIX=$(ARCHPREFIX)"
+ 
++..\lib\buildcustomize.pl: $(HAVEMINIPERL) ..\write_buildcustomize.pl
++	$(MINIPERL) -I..\lib ..\write_buildcustomize.pl .. > ..\lib\buildcustomize.pl
++
+ .\config.h : $(CONFIGPM)
+ $(MINIDIR)\.exists : $(CFGH_TMPL)
+ 	if not exist "$(MINIDIR)" mkdir "$(MINIDIR)"
+@@ -741,7 +737,7 @@
+ perllibst.h : $(HAVEMINIPERL) $(CONFIGPM) create_perllibst_h.pl
+ 	$(MINIPERL) -I..\lib create_perllibst_h.pl
+ 
+-perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\global.sym ..\pp.sym ..\makedef.pl create_perllibst_h.pl
++perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\global.sym ..\makedef.pl create_perllibst_h.pl
+ 	$(MINIPERL) -I..\lib -w ..\makedef.pl PLATFORM=win32 $(OPTIMIZE) $(DEFINES) \
+ 	$(BUILDOPT) CCTYPE=$(CCTYPE) TARG_DIR=..\ > perldll.def
+ 
+@@ -789,12 +785,10 @@
+ 	$(MINIPERL) -I..\lib ..\x2p\s2p.PL
+ 	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) $(LIBFILES) $(X2P_OBJ)
+ 
+-$(MINIDIR)\globals$(o) : $(GENERATED_HEADERS)
+-
+-$(UUDMAP_H) $(MG_DATA_H) : $(BITCOUNT_H)
++$(MINIDIR)\globals$(o) : $(UUDMAP_H) $(BITCOUNT_H)
+ 
+-$(BITCOUNT_H) : $(GENUUDMAP)
+-	$(GENUUDMAP) $(GENERATED_HEADERS)
++$(UUDMAP_H) $(BITCOUNT_H) : $(GENUUDMAP)
++	$(GENUUDMAP) $(UUDMAP_H) $(BITCOUNT_H)
+ 
+ $(GENUUDMAP) : $(GENUUDMAP_OBJ)
+ 	$(LINK32) $(CFLAGS_O) -o $@ $(GENUUDMAP_OBJ) \
+@@ -832,20 +826,24 @@
+ 	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
+ 	rem . > $@
+ 
+-Extensions : ..\make_ext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM) $(DYNALOADER)
++Extensions : ..\make_ext.pl $(HAVEMINIPERL) ..\lib\buildcustomize.pl $(PERLDEP) $(CONFIGPM) $(DYNALOADER)
+ 	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
+ 	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --dynamic
+ 
+-Extensions_static : ..\make_ext.pl $(HAVEMINIPERL) list_static_libs.pl $(CONFIGPM) Extensions_nonxs
++Extensions_reonly : ..\make_ext.pl $(HAVEMINIPERL) ..\lib\buildcustomize.pl $(PERLDEP) $(CONFIGPM) $(DYNALOADER)
++	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
++	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --dynamic +re
++
++Extensions_static : ..\make_ext.pl $(HAVEMINIPERL) ..\lib\buildcustomize.pl list_static_libs.pl $(CONFIGPM) Extensions_nonxs
+ 	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
+ 	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --static
+ 	$(MINIPERL) -I..\lib $(ICWD) list_static_libs.pl > Extensions_static
+ 
+-Extensions_nonxs : ..\make_ext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM) ..\pod\perlfunc.pod
++Extensions_nonxs : ..\make_ext.pl $(HAVEMINIPERL) ..\lib\buildcustomize.pl $(PERLDEP) $(CONFIGPM) ..\pod\perlfunc.pod
+ 	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
+ 	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --nonxs
+ 
+-$(DYNALOADER) : ..\make_ext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM) Extensions_nonxs
++$(DYNALOADER) : ..\make_ext.pl $(HAVEMINIPERL) ..\lib\buildcustomize.pl $(PERLDEP) $(CONFIGPM) Extensions_nonxs
+ 	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
+ 	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(EXTDIR) --dynaloader
+ 
+@@ -860,7 +858,6 @@
+ 	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
+ 	copy ..\README.aix      ..\pod\perlaix.pod
+ 	copy ..\README.amiga    ..\pod\perlamiga.pod
+-	copy ..\README.apollo   ..\pod\perlapollo.pod
+ 	copy ..\README.beos     ..\pod\perlbeos.pod
+ 	copy ..\README.bs2000   ..\pod\perlbs2000.pod
+ 	copy ..\README.ce       ..\pod\perlce.pod
+@@ -896,8 +893,7 @@
  	copy ..\README.vmesa    ..\pod\perlvmesa.pod
  	copy ..\README.vos      ..\pod\perlvos.pod
  	copy ..\README.win32    ..\pod\perlwin32.pod
@@ -8039,6 +8146,20 @@ PATCH
  	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
  	$(PERLEXE) $(ICWD) ..\autodoc.pl ..
  	$(PERLEXE) $(ICWD) ..\pod\perlmodlib.PL -q ..
+PATCH
+    }
+    if (_ge($version, "5.13.11")) {
+        _patch(<<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
+@@ -292,6 +292,7 @@
+ 		..\utils\cpan2dist	\
+ 		..\utils\shasum		\
+ 		..\utils\instmodsh	\
++		..\utils\json_pp	\
+ 		..\x2p\find2perl	\
+ 		..\x2p\psed		\
+ 		..\x2p\s2p		\
 PATCH
     }
 }

@@ -39,7 +39,7 @@ sub cpan_install {
 
     my @path = split m(/), $url;
     my $filename = $path[-1];
-    my @ext = split /[.]/, $filename;
+    my @ext = split /[.]tar[.]/, $filename;
     my $dirname = $ext[0];
 
     info "installing $url";

@@ -19,7 +19,8 @@ use Actions::Core qw/group set_failed/;
 use File::Basename qw(dirname);
 
 my $version = $ENV{PERL_VERSION};
-my $tmpdir = File::Spec->rel2abs($ENV{RUNNER_TEMP} || "tmp");
+my $tmpdir = File::Spec->rel2abs(
+    File::Spec->catdir($ENV{RUNNER_TEMP} || "tmp", "build-perl-$$"));
 make_path($tmpdir);
 remove_tree($tmpdir, {keep_root => 1});
 my $install_dir = File::Spec->rel2abs(

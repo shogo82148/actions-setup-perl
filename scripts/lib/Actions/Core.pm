@@ -1,6 +1,6 @@
 package Actions::Core;
 
-use 5.8.5;
+use 5.006_001;
 use utf8;
 use warnings;
 use strict;

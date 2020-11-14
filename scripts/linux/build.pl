@@ -82,9 +82,6 @@ sub run {
     };
 
     group "install common CPAN modules" => sub {
-        # some modules require newer version of ExtUtils::MakeMaker
-        cpan_install('5.6.0', 'https://cpan.metacpan.org/authors/id/B/BI/BINGOS/ExtUtils-MakeMaker-7.54.tar.gz');
-
         # JSON
         cpan_install('5.6.0', 'https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-4.02.tar.gz');
 

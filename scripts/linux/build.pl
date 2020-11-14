@@ -97,6 +97,10 @@ sub run {
         cpan_install('5.8.3', 'https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/JSON-XS-4.03.tar.gz');
 
         # JSON::PP
+        if (version->parse("v$version") < version->parse("v5.6.1")) {
+            # File::Temp is a core module from perl v5.6.1
+            cpan_install('5.6.0', 'https://cpan.metacpan.org/authors/id/E/ET/ETHER/File-Temp-0.2311.tar.gz');
+        }
         cpan_install('5.6.0', 'https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-PP-4.05.tar.gz');
 
         # JSON::MaybeXS

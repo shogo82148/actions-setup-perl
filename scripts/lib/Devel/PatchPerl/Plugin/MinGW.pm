@@ -7065,204 +7065,36 @@ PATCH
 sub _patch_gnumakefile_512 {
     my $version = shift;
     _write_gnumakefile($version, <<'MAKEFILE');
-#
-# Makefile to build perl on Windows using GMAKE.
-# Supported compilers:
-#	MinGW with gcc-8.3.0 or later
-
-##
-## Make sure you read README.win32 *before* you mess with anything here!
-##
-
-#
-# We set this to point to cmd.exe in case GNU Make finds sh.exe in the path.
-# Comment this line out if necessary
-#
 SHELL := cmd.exe
-
-# define whether you want to use native gcc compiler or cross-compiler
-# possible values: gcc
-#                  i686-w64-mingw32-gcc
-#                  x86_64-w64-mingw32-gcc
 GCCBIN := gcc
-
-##
-## Build configuration.  Edit the values below to suit your needs.
-##
-
-#
-# Set these to wherever you want "gmake install" to put your
-# newly built perl.
-#
 INST_DRV := c:
 INST_TOP := $(INST_DRV)\perl
-
-#
-# Comment this out if you DON'T want your perl installation to be versioned.
-# This means that the new installation will overwrite any files from the
-# old installation at the same INST_TOP location.  Leaving it enabled is
-# the safest route, as perl adds the extra version directory to all the
-# locations it installs files to.  If you disable it, an alternative
-# versioned installation can be obtained by setting INST_TOP above to a
-# path that includes an arbitrary version string.
-#
 #INST_VER	:= \__INST_VER__
-
-#
-# Comment this out if you DON'T want your perl installation to have
-# architecture specific components.  This means that architecture-
-# specific files will be installed along with the architecture-neutral
-# files.  Leaving it enabled is safer and more flexible, in case you
-# want to build multiple flavors of perl and install them together in
-# the same location.  Commenting it out gives you a simpler
-# installation that is easier to understand for beginners.
-#
 #INST_ARCH	:= \$(ARCHNAME)
-
-#
-# Uncomment this if you want perl to run
-# 	$Config{sitelibexp}\sitecustomize.pl
-# before anything else.  This script can then be set up, for example,
-# to add additional entries to @INC.
-#
 #USE_SITECUST	:= define
-
-#
-# uncomment to enable multiple interpreters.  This is needed for fork()
-# emulation and for thread support, and is auto-enabled by USE_IMP_SYS
-# and USE_ITHREADS below.
-#
 USE_MULTI	:= define
-
-#
-# Interpreter cloning/threads; now reasonably complete.
-# This should be enabled to get the fork() emulation.  This needs (and
-# will auto-enable) USE_MULTI above.
-#
 USE_ITHREADS	:= define
-
-#
-# uncomment to enable the implicit "host" layer for all system calls
-# made by perl.  This is also needed to get fork().  This needs (and
-# will auto-enable) USE_MULTI above.
-#
 USE_IMP_SYS	:= define
-
-#
-# Comment out next assign to disable perl's I/O subsystem and use compiler's
-# stdio for IO - depending on your compiler vendor and run time library you may
-# then get a number of fails from make test i.e. bugs - complain to them not us ;-).
-# You will also be unable to take full advantage of perl5.8's support for multiple
-# encodings and may see lower IO performance. You have been warned.
-#
 USE_PERLIO	:= define
-
-#
-# Comment this out if you don't want to enable large file support for
-# some reason.  Should normally only be changed to maintain compatibility
-# with an older release of perl.
-#
 USE_LARGE_FILES	:= define
-
-#
-# Uncomment this if you're building a 32-bit perl and want 64-bit integers.
-# (If you're building a 64-bit perl then you will have 64-bit integers whether
-# or not this is uncommented.)
-# Note: This option is not supported in 32-bit MSVC60 builds.
-#
 #USE_64_BIT_INT	:= define
-
-#
-# Uncomment this if you want to support the use of long doubles in GCC builds.
-# This option is not supported for MSVC builds.
-#
 #USE_LONG_DOUBLE :=define
-
-#
-# Uncomment this if you want to disable looking up values from
-# HKEY_CURRENT_USER\Software\Perl and HKEY_LOCAL_MACHINE\Software\Perl in
-# the Registry.
-#
-#USE_NO_REGISTRY := define
-
-# MinGW or mingw-w64 with gcc-8.3.0 or later
 CCTYPE		:= GCC
-
-#
-# uncomment next line if you want debug version of perl (big/slow)
-# If not enabled, we automatically try to use maximum optimization
-# with all compilers that are known to have a working optimizer.
-#
 #CFG		:= Debug
-
-#
-# uncomment to enable linking with setargv.obj under the Visual C
-# compiler. Setting this options enables perl to expand wildcards in
-# arguments, but it may be harder to use alternate methods like
-# File::DosGlob that are more powerful.  This option is supported only with
-# Visual C.
-#
 #USE_SETARGV	:= define
-
-#
-# set this if you wish to use perl's malloc
-# WARNING: Turning this on/off WILL break binary compatibility with extensions
-# you may have compiled with/without it.  Be prepared to recompile all
-# extensions if you change the default.  Currently, this cannot be enabled
-# if you ask for USE_IMP_SYS above.
-#
 #PERL_MALLOC	:= define
-
-#
-# set this to enable debugging mstats
-# This must be enabled to use the Devel::Peek::mstat() function.  This cannot
-# be enabled without PERL_MALLOC as well.
-#
 #DEBUG_MSTATS	:= define
-
-#
-# set the install locations of the compiler include/libraries
-#
 CCHOME		:= C:\MinGW
-
-#
-# Following sets $Config{incpath} and $Config{libpth}
-#
 
 CCINCDIR := $(CCHOME)\include
 CCLIBDIR := $(CCHOME)\lib
 CCDLLDIR := $(CCHOME)\bin
 ARCHPREFIX :=
-
-#
-# Additional compiler flags can be specified here.
-#
 BUILDOPT	:= $(BUILDOPTEXTRA)
-
-#
-# Perl needs to read scripts in text mode so that the DATA filehandle
-# works correctly with seek() and tell(), or around auto-flushes of
-# all filehandles (e.g. by system(), backticks, fork(), etc).
-#
-# The current version on the ByteLoader module on CPAN however only
-# works if scripts are read in binary mode.  But before you disable text
-# mode script reading (and break some DATA filehandle functionality)
-# please check first if an updated ByteLoader isn't available on CPAN.
-#
 BUILDOPT	+= -DPERL_TEXTMODE_SCRIPTS
 
-#
-# specify semicolon-separated list of extra directories that modules will
-# look for libraries (spaces in path names need not be quoted)
-#
 EXTRALIBDIRS	:=
 
-
-##
-## Build configuration ends.
-##
-
-##################### CHANGE THESE ONLY IF YOU MUST #####################
 
 PERL_MALLOC	?= undef
 DEBUG_MSTATS	?= undef
@@ -7702,8 +7534,6 @@ UUDMAP_H	= ..\uudmap.h
 BITCOUNT_H	= ..\bitcount.h
 MG_DATA_H	= ..\mg_data.h
 GENERATED_HEADERS = $(UUDMAP_H) $(BITCOUNT_H) $(MG_DATA_H)
-#a stub ppport.h must be generated so building XS modules, .c->.obj wise, will
-#work, so this target also represents creating the COREDIR and filling it
 HAVE_COREDIR	= $(COREDIR)\ppport.h
 
 MICROCORE_OBJ	= $(MICROCORE_SRC:.c=$(o))
@@ -7728,24 +7558,10 @@ ifneq ($(USE_SETARGV),)
 SETARGV_OBJ	= setargv$(o)
 endif
 
-ifeq ($(ALL_STATIC),define)
-# some exclusions, unfortunately, until fixed:
-#  - Win32 extension contains overlapped symbols with win32.c (BUG!)
-#  - MakeMaker isn't capable enough for SDBM_File (smaller bug)
-#  - Encode (encoding search algorithm relies on shared library?)
-STATIC_EXT	= * !Win32 !SDBM_File !Encode
-else
-# specify static extensions here, for example:
-#STATIC_EXT	= Cwd Compress/Raw/Zlib
 STATIC_EXT	= Win32CORE
-endif
 
 DYNALOADER	= ..\DynaLoader$(o)
 
-# vars must be separated by "\t+~\t+", since we're using the tempfile
-# version of config_sh.pl (we were overflowing someone's buffer by
-# trying to fit them all on the command line)
-#	-- BKS 10-17-1999
 CFG_VARS	=					\
 		"INST_TOP=$(INST_TOP)"			\
 		"INST_VER=$(INST_VER)"			\
@@ -7819,17 +7635,6 @@ $(CONFIGPM) : $(HAVEMINIPERL) ..\config.sh config_h.PL ..\minimod.pl
 	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
 	-$(MINIPERL) -I..\lib $(ICWD) config_h.PL "ARCHPREFIX=$(ARCHPREFIX)"
 
-# See the comment in Makefile.SH explaining this seemingly cranky ordering
-
-#
-# Copy the template config.h and set configurables at the end of it
-# as per the options chosen and compiler used.
-# Note: This config.h is only used to build miniperl.exe anyway, but
-# it's as well to have its options correct to be sure that it builds
-# and so that it's "-V" options are correct for use by makedef.pl. The
-# real config.h used to build perl.exe is generated from the top-level
-# config_h.SH by config_h.PL (run by miniperl.exe).
-#
 .\config.h : $(CONFIGPM)
 $(MINIDIR)\.exists : $(CFGH_TMPL)
 	if not exist "$(MINIDIR)" mkdir "$(MINIDIR)"
@@ -7983,11 +7788,6 @@ $(MINICORE_OBJ) : $(CORE_NOCFG_H)
 $(MINIWIN32_OBJ) : $(CORE_NOCFG_H)
 	$(CC) -c $(CFLAGS) $(MINIBUILDOPT) -DPERL_IS_MINIPERL $(OBJOUT_FLAG)$@ $(PDBOUT) $(*F).c
 
-# -DPERL_IMPLICIT_SYS needs C++ for perllib.c
-# rules wrapped in .IFs break Win9X build (we end up with unbalanced []s unless
-# unless the .IF is true), so instead we use a .ELSE with the default.
-# This is the only file that depends on perlhost.h, vmem.h, and vdir.h
-
 perllib$(o)	: perllib.c perllibst.h .\perlhost.h .\vdir.h .\vmem.h
 ifeq ($(USE_IMP_SYS),define)
 	$(CC) -c -I. $(CFLAGS_O) $(CXX_FLAG) $(OBJOUT_FLAG)$@ $(PDBOUT) perllib.c
@@ -7995,9 +7795,6 @@ else
 	$(CC) -c -I. $(CFLAGS_O) $(OBJOUT_FLAG)$@ $(PDBOUT) perllib.c
 endif
 
-# 1. we don't want to rebuild miniperl.exe when config.h changes
-# 2. we don't want to rebuild miniperl.exe with non-default config.h
-# 3. we can't have miniperl.exe depend on git_version.h, as miniperl creates it
 $(MINI_OBJ)	: $(MINIDIR)\.exists $(CORE_NOCFG_H)
 
 $(WIN32_OBJ)	: $(CORE_H)
@@ -8070,9 +7867,6 @@ $(GENUUDMAP) : $(GENUUDMAP_OBJ)
 	$(LINK32) $(CFLAGS_O) -o $@ $(GENUUDMAP_OBJ) \
 	$(BLINK_FLAGS) $(LIBFILES)
 
-#This generates a stub ppport.h & creates & fills /lib/CORE to allow for XS
-#building .c->.obj wise (linking is a different thing). This target is AKA
-#$(HAVE_COREDIR).
 $(COREDIR)\ppport.h : $(CORE_H)
 	$(XCOPY) *.h $(COREDIR)\\*.*
 	$(RCOPY) include $(COREDIR)\\*.*
@@ -8098,10 +7892,6 @@ $(PERLEXESTATIC): $(PERLSTATICLIB) $(CONFIGPM) $(PERLEXEST_OBJ) $(PERLEXE_RES)
 	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) \
 	    $(PERLEXEST_OBJ) $(PERLEXE_RES) $(PERLSTATICLIB) $(LIBFILES)
 
-#-------------------------------------------------------------------------------
-# There's no direct way to mark a dependency on
-# DynaLoader.pm, so this will have to do
-
 MakePPPort: $(HAVEMINIPERL) $(CONFIGPM) Extensions_nonxs
 	$(MINIPERL) -I..\lib $(ICWD) ..\mkppport
 
@@ -8109,7 +7899,6 @@ $(HAVEMINIPERL): $(MINI_OBJ)
 	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
 	rem . > $@
 
-#most of deps of this target are in DYNALOADER and therefore omitted here
 Extensions : ..\make_ext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM) $(DYNALOADER)
 	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
 	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --dynamic
@@ -8123,7 +7912,6 @@ Extensions_nonxs : ..\make_ext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM) ..\pod\
 	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
 	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --nonxs
 
-#lib must be built, it can't be buildcustomize.pl-ed, and is required for XS building
 $(DYNALOADER) : ..\make_ext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM) Extensions_nonxs
 	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
 	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(EXTDIR) --dynaloader
@@ -8135,8 +7923,6 @@ doc: $(PERLEXE) ..\pod\perltoc.pod
 	    --podpath=pod:lib:utils --htmlroot="file://$(subst :,|,$(INST_HTML))"\
 	    --recurse
 
-# Note that this next section is parsed (and regenerated) by pod/buildtoc
-# so please check that script before making structural changes here
 utils: $(PERLEXE) $(X2P)
 	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
 	copy ..\README.aix      ..\pod\perlaix.pod

@@ -1980,7 +1980,7 @@ $(UNIDATAFILES) : ..\pod\perluniprops.pod
 ..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(HAVEMINIPERL) ..\lib\unicore\mktables Extensions_nonxs
 	$(MINIPERL) -I..\lib ..\lib\unicore\mktables -C ..\lib\unicore -P ..\pod -maketest -makelist -p
 MAKEFILE
-    if (_ge($version, "5.20.1")) {
+    if (_ge($version, "5.21.1")) {
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile

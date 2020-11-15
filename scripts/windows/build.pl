@@ -151,9 +151,9 @@ sub run {
         cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-PP-4.05.tar.gz', '5.6.0');
 
         # JSON::MaybeXS
-        # unknown error with perl v5.12.x and v5.13.0
+        # EXCEPTION_ACCESS_VIOLATION with perl v5.11.5, v5.12.x and v5.13.0
         cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004003.tar.gz', '5.13.1');
-        cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004003.tar.gz', '5.6.0', '5.12.0');
+        cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004003.tar.gz', '5.6.0', '5.11.5');
 
         # YAML
         cpan_install('https://cpan.metacpan.org/authors/id/T/TI/TINITA/YAML-1.30.tar.gz', '5.8.1');

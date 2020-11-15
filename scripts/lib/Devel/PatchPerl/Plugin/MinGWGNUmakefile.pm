@@ -7002,7 +7002,7 @@ $(UNIDATAFILES): ..\lib\unicore\mktables $(CONFIGPM) $(HAVEMINIPERL)
 	cd ..\lib\unicore && \
 		..\$(MINIPERL) -I.. mktables -check $@ $(FIRSTUNIFILE)
 MAKEFILE
-    if (_ge($version, "5.11.2")) {
+    if (_ge($version, "5.11.0")) {
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile

@@ -9102,7 +9102,40 @@ PATCH
  	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
  
  $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
-@@ -774,6 +773,9 @@
+@@ -712,9 +711,19 @@
+ $(PERLIMPLIB) : perldll.def
+ 	$(IMPLIB) -k -d perldll.def -l $(PERLIMPLIB) -e $(PERLEXPLIB)
+ 
+-$(PERLDLL): perldll.def $(PERLEXPLIB) $(PERLDLL_OBJ)
++$(PERLDLL): perldll.def $(PERLEXPLIB) $(PERLDLL_OBJ) Extensions_static
+ 	$(LINK32) -mdll -o $@ $(BLINK_FLAGS) \
+-	   $(PERLDLL_OBJ) $(LIBFILES) $(PERLEXPLIB)
++	   $(PERLDLL_OBJ) $(shell type Extensions_static) $(LIBFILES) $(PERLEXPLIB)
++
++$(PERLSTATICLIB): $(PERLDLL_OBJ) Extensions_static
++	$(LIB32) $(LIB_FLAGS) $@ $(PERLDLL_OBJ)
++	if exist $(STATICDIR) rmdir /s /q $(STATICDIR)
++	for %%i in ($(shell type Extensions_static)) do \
++		@mkdir $(STATICDIR) && cd $(STATICDIR) && \
++		$(ARCHPREFIX)ar x ..\%%i && \
++		$(ARCHPREFIX)ar q ..\$@ *$(o) && \
++		cd .. && rmdir /s /q $(STATICDIR)
++	$(XCOPY) $(PERLSTATICLIB) $(COREDIR)
+ 
+ $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
+ 	cd .. && miniperl.exe minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
+@@ -756,8 +765,8 @@
+ 	copy splittree.pl ..
+ 	$(MINIPERL) -I..\lib ..\splittree.pl "../LIB" $(AUTODIR)
+ 
+-$(PERLEXE_ICO): $(HAVEMINIPERL) makeico.pl
+-	$(MINIPERL) makeico.pl > $@
++$(PERLEXE_ICO): $(HAVEMINIPERL) ..\uupacktool.pl $(PERLEXE_ICO).packd
++	$(MINIPERL) -I..\lib ..\uupacktool.pl -u $(PERLEXE_ICO).packd $(PERLEXE_ICO)
+ 
+ $(PERLEXE_RES): perlexe.rc $(PERLEXE_ICO)
+ 
+@@ -774,14 +783,24 @@
  $(EXTDIR)\DynaLoader\dl_win32.xs: dl_win32.xs
  	copy dl_win32.xs $(EXTDIR)\DynaLoader\dl_win32.xs
  
@@ -9112,7 +9145,24 @@ PATCH
  $(HAVEMINIPERL): $(MINI_OBJ)
  	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
  	rem . > $@
-@@ -851,4 +853,4 @@
+ 
+ #most of deps of this target are in DYNALOADER and therefore omitted here
+ Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
+-	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR)
+-	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext
++	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
++	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --dynamic
++	-if exist ext $(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext --dynamic
++
++Extensions_static : buildext.pl $(HAVEMINIPERL) $(CONFIGPM)
++	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
++	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --static
++	-if exist ext $(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext --static
++	$(MINIPERL) -I..\lib buildext.pl --list-static-libs > Extensions_static
+ 
+ #-------------------------------------------------------------------------------
+ 
+@@ -851,4 +870,4 @@
  	$(RCOPY) ..\lib $(INST_LIB)\$(NULL)
  
  $(UNIDATAFILES) : $(HAVEMINIPERL) $(CONFIGPM) ..\lib\unicore\mktables

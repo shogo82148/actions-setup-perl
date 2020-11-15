@@ -5836,11 +5836,48 @@ $(UNIDATAFILES) : ..\pod\perluniprops.pod
 ..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(HAVEMINIPERL) ..\lib\unicore\mktables Extensions_nonxs
 	$(MINIPERL) -I..\lib $(ICWD) ..\lib\unicore\mktables -C ..\lib\unicore -P ..\pod -maketest -makelist -p
 MAKEFILE
-    if (_ge($version, "5.13.8")) {
+    if (_ge($version, "5.13.7")) {
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
-@@ -286,18 +286,12 @@
+@@ -15,6 +15,8 @@
+ CCTYPE		:= GCC
+ #CFG		:= Debug
+ #USE_SETARGV	:= define
++CRYPT_SRC      = fcrypt.c
++#CRYPT_LIB     = -lfcrypt
+ #PERL_MALLOC	:= define
+ #DEBUG_MSTATS	:= define
+ CCHOME		:= C:\MinGW
+@@ -70,6 +72,13 @@
+ BUILDOPT	+= -DPERL_IMPLICIT_CONTEXT
+ endif
+ 
++ifeq ("$(CRYPT_SRC)$(CRYPT_LIB)","")
++D_CRYPT		= undef
++else
++D_CRYPT		= define
++CRYPT_FLAG	= -DHAVE_DES_FCRYPT
++endif
++
+ ifneq ($(USE_IMP_SYS),undef)
+ BUILDOPT	+= -DPERL_IMPLICIT_SYS
+ endif
+@@ -158,11 +167,11 @@
+ #
+ 
+ INCLUDES	= -I.\include -I. -I..
+-DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE
++DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE $(CRYPT_FLAG)
+ LOCDEFS		= -DPERLDLL -DPERL_CORE
+ CXX_FLAG	= -xc++
+ LIBC		=
+-LIBFILES	= $(LIBC) -lmoldname -lkernel32 -luser32 -lgdi32 -lwinspool \
++LIBFILES	= $(LIBC) $(CRYPT_LIB) -lmoldname -lkernel32 -luser32 -lgdi32 -lwinspool \
+ 	-lcomdlg32 -ladvapi32 -lshell32 -lole32 -loleaut32 -lnetapi32 \
+ 	-luuid -lws2_32 -lmpr -lwinmm -lversion -lodbc32 -lodbccp32 -lcomctl32
+ 
+@@ -286,18 +295,12 @@
  		..\utils\prove		\
  		..\utils\ptar		\
  		..\utils\ptardiff	\
@@ -5860,15 +5897,7 @@ MAKEFILE
  		..\x2p\find2perl	\
  		..\x2p\psed		\
  		..\x2p\s2p		\
-@@ -412,6 +406,7 @@
- 		.\win32.c	\
- 		.\win32sck.c	\
- 		.\win32thread.c	\
-+		.\fcrypt.c	\
- 		.\win32io.c
- 
- X2P_SRC		=		\
-@@ -465,8 +460,6 @@
+@@ -465,8 +468,6 @@
  
  UUDMAP_H	= ..\uudmap.h
  BITCOUNT_H	= ..\bitcount.h
@@ -5877,7 +5906,7 @@ MAKEFILE
  HAVE_COREDIR	= $(COREDIR)\ppport.h
  
  MICROCORE_OBJ	= $(MICROCORE_SRC:.c=$(o))
-@@ -530,7 +523,7 @@
+@@ -530,7 +531,7 @@
  		"ARCHPREFIX=$(ARCHPREFIX)"		\
  		"WIN64=$(WIN64)"
  
@@ -5886,7 +5915,7 @@ MAKEFILE
  
  #
  # Top targets
-@@ -557,7 +550,7 @@
+@@ -557,7 +558,7 @@
  # make sure that we recompile perl.c if the git version changes
  ..\perl$(o) : ..\git_version.h
  
@@ -5895,7 +5924,7 @@ MAKEFILE
  	$(MINIPERL) -I..\lib config_sh.PL $(CFG_VARS) $(CFGSH_TMPL) > ..\config.sh
  
  $(CONFIGPM) : $(HAVEMINIPERL) ..\config.sh config_h.PL ..\minimod.pl
-@@ -789,12 +782,10 @@
+@@ -789,12 +790,10 @@
  	$(MINIPERL) -I..\lib ..\x2p\s2p.PL
  	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) $(LIBFILES) $(X2P_OBJ)
  
@@ -5911,7 +5940,7 @@ MAKEFILE
  
  $(GENUUDMAP) : $(GENUUDMAP_OBJ)
  	$(LINK32) $(CFLAGS_O) -o $@ $(GENUUDMAP_OBJ) \
-@@ -836,6 +827,10 @@
+@@ -836,6 +835,10 @@
  	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
  	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --dynamic
  
@@ -5922,7 +5951,7 @@ MAKEFILE
  Extensions_static : ..\make_ext.pl $(HAVEMINIPERL) list_static_libs.pl $(CONFIGPM) Extensions_nonxs
  	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
  	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --static
-@@ -896,8 +891,7 @@
+@@ -896,8 +899,7 @@
  	copy ..\README.vmesa    ..\pod\perlvmesa.pod
  	copy ..\README.vos      ..\pod\perlvos.pod
  	copy ..\README.win32    ..\pod\perlwin32.pod
@@ -5932,6 +5961,57 @@ MAKEFILE
  	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
  	$(PERLEXE) $(ICWD) ..\autodoc.pl ..
  	$(PERLEXE) $(ICWD) ..\pod\perlmodlib.PL -q ..
+PATCH
+    }
+    if (_ge($version, "5.13.8")) {
+        _patch_gnumakefile($version, <<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
+@@ -15,8 +15,6 @@
+ CCTYPE		:= GCC
+ #CFG		:= Debug
+ #USE_SETARGV	:= define
+-CRYPT_SRC      = fcrypt.c
+-#CRYPT_LIB     = -lfcrypt
+ #PERL_MALLOC	:= define
+ #DEBUG_MSTATS	:= define
+ CCHOME		:= C:\MinGW
+@@ -72,13 +70,6 @@
+ BUILDOPT	+= -DPERL_IMPLICIT_CONTEXT
+ endif
+ 
+-ifeq ("$(CRYPT_SRC)$(CRYPT_LIB)","")
+-D_CRYPT		= undef
+-else
+-D_CRYPT		= define
+-CRYPT_FLAG	= -DHAVE_DES_FCRYPT
+-endif
+-
+ ifneq ($(USE_IMP_SYS),undef)
+ BUILDOPT	+= -DPERL_IMPLICIT_SYS
+ endif
+@@ -167,11 +158,11 @@
+ #
+ 
+ INCLUDES	= -I.\include -I. -I..
+-DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE $(CRYPT_FLAG)
++DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE
+ LOCDEFS		= -DPERLDLL -DPERL_CORE
+ CXX_FLAG	= -xc++
+ LIBC		=
+-LIBFILES	= $(LIBC) $(CRYPT_LIB) -lmoldname -lkernel32 -luser32 -lgdi32 -lwinspool \
++LIBFILES	= $(LIBC) -lmoldname -lkernel32 -luser32 -lgdi32 -lwinspool \
+ 	-lcomdlg32 -ladvapi32 -lshell32 -lole32 -loleaut32 -lnetapi32 \
+ 	-luuid -lws2_32 -lmpr -lwinmm -lversion -lodbc32 -lodbccp32 -lcomctl32
+ 
+@@ -415,6 +406,7 @@
+ 		.\win32.c	\
+ 		.\win32sck.c	\
+ 		.\win32thread.c	\
++		.\fcrypt.c	\
+ 		.\win32io.c
+ 
+ X2P_SRC		=		\
 PATCH
     }
     if (_ge($version, "5.13.9")) {

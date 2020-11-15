@@ -72,7 +72,8 @@ my @patch = (
     },
     {
         perl => [
-            qr/^5\.1[01]\./,
+            qr/^5\.11\.[01]/,
+            qr/^5\.10\./,
         ],
         subs => [
             [ \&_patch_perlhost ],
@@ -1391,7 +1392,9 @@ PATCH
 }
 
 sub _patch_perlhost {
-	_patch(<<'PATCH');
+    my $version = shift;
+
+    _patch(<<'PATCH');
 --- win32/perlhost.h
 +++ win32/perlhost.h
 @@ -1745,7 +1747,7 @@ win32_start_child(LPVOID arg)
@@ -1478,6 +1481,36 @@ PATCH
  
  /* HAS_MMAP:
   *	This symbol, if defined, indicates that the mmap system call is
+PATCH
+        return;
+    }
+
+    if (_ge($version, "5.11.4")) {
+        _patch(<<'PATCH');
+--- win32/config_H.gc
++++ win32/config_H.gc
+@@ -3746,14 +3746,18 @@
+  *	This symbol, if defined, indicates that the mkdtemp routine is
+  *	available to exclusively create a uniquely named temporary directory.
+  */
+-/*#define HAS_MKDTEMP		/ **/
++#if __MINGW64_VERSION_MAJOR >= 4
++#define HAS_MKDTEMP
++#endif
+ 
+ /* HAS_MKSTEMPS:
+  *	This symbol, if defined, indicates that the mkstemps routine is
+  *	available to excluslvely create and open a uniquely named
+  *	(with a suffix) temporary file.
+  */
+-/*#define HAS_MKSTEMPS		/ **/
++#if __MINGW64_VERSION_MAJOR >= 4
++#define HAS_MKSTEMPS
++#endif
+ 
+ /* HAS_MODFL:
+  *	This symbol, if defined, indicates that the modfl routine is
+
 PATCH
         return;
     }

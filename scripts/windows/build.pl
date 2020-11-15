@@ -128,8 +128,8 @@ sub run {
         cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-4.02.tar.gz', '5.5.3');
 
         # Cpanel::JSON::XS
-        # install fails with perl v.5.13.6, v.5.13.7 and v.5.13.8
-        cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.25.tar.gz', '5.6.2', '5.13.6');
+        # install fails with perl v5.13.4, v5.13.5, v.5.13.6, v.5.13.7 and v.5.13.8
+        cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.25.tar.gz', '5.6.2', '5.13.4');
         cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.25.tar.gz', '5.13.9');
 
         # some requirements of JSON::XS

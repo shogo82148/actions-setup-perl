@@ -6033,17 +6033,6 @@ PATCH
  		..\utils\cpanp-run-perl	\
  		..\utils\cpanp	\
  		..\utils\cpan2dist	\
-@@ -416,10 +417,6 @@
- 		.\win32thread.c	\
- 		.\win32io.c
- 
--ifneq ("$(CRYPT_SRC)", "")
--WIN32_SRC	+= .\$(CRYPT_SRC)
--endif
--
- X2P_SRC		=		\
- 		..\x2p\a2p.c	\
- 		..\x2p\hash.c	\
 PATCH
     }
     if (_ge($version, "5.13.8")) {
@@ -6087,14 +6076,20 @@ PATCH
  	-lcomdlg32 -ladvapi32 -lshell32 -lole32 -loleaut32 -lnetapi32 \
  	-luuid -lws2_32 -lmpr -lwinmm -lversion -lodbc32 -lodbccp32 -lcomctl32
  
-@@ -415,6 +406,7 @@
+@@ -415,12 +406,9 @@
  		.\win32.c	\
  		.\win32sck.c	\
  		.\win32thread.c	\
 +		.\fcrypt.c	\
  		.\win32io.c
  
+-ifneq ("$(CRYPT_SRC)", "")
+-WIN32_SRC	+= .\$(CRYPT_SRC)
+-endif
+-
  X2P_SRC		=		\
+ 		..\x2p\a2p.c	\
+ 		..\x2p\hash.c	\
 PATCH
     }
     if (_ge($version, "5.13.9")) {

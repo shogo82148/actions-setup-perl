@@ -4923,7 +4923,10 @@ USE_LARGE_FILES	:= define
 #USE_LONG_DOUBLE :=define
 CCTYPE		:= GCC
 #CFG		:= Debug
+#USE_PERLCRT	= define
 #USE_SETARGV	:= define
+CRYPT_SRC      = fcrypt.c
+#CRYPT_LIB     = -lfcrypt
 #PERL_MALLOC	:= define
 #DEBUG_MSTATS	:= define
 CCHOME		:= C:\MinGW
@@ -4940,6 +4943,7 @@ EXTRALIBDIRS	:=
 
 PERL_MALLOC	?= undef
 DEBUG_MSTATS	?= undef
+USE_PERLCRT	?= undef
 
 USE_SITECUST	?= undef
 USE_MULTI	?= undef
@@ -4977,6 +4981,13 @@ endif
 
 ifneq ($(USE_MULTI),undef)
 BUILDOPT	+= -DPERL_IMPLICIT_CONTEXT
+endif
+
+ifeq ("$(CRYPT_SRC)$(CRYPT_LIB)","")
+D_CRYPT		= undef
+else
+D_CRYPT		= define
+CRYPT_FLAG	= -DHAVE_DES_FCRYPT
 endif
 
 ifneq ($(USE_IMP_SYS),undef)
@@ -5067,11 +5078,11 @@ a = .a
 #
 
 INCLUDES	= -I.\include -I. -I..
-DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE
+DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE -DNO_STRICT $(CRYPT_FLAG)
 LOCDEFS		= -DPERLDLL -DPERL_CORE
 CXX_FLAG	= -xc++
 LIBC		=
-LIBFILES	= $(LIBC) -lmoldname -lkernel32 -luser32 -lgdi32 -lwinspool \
+LIBFILES	= $(LIBC) $(CRYPT_LIB) -lmoldname -lkernel32 -luser32 -lgdi32 -lwinspool \
 	-lcomdlg32 -ladvapi32 -lshell32 -lole32 -loleaut32 -lnetapi32 \
 	-luuid -lws2_32 -lmpr -lwinmm -lversion -lodbc32 -lodbccp32 -lcomctl32
 
@@ -5324,7 +5335,7 @@ WIN32_SRC	=		\
 		.\win32io.c
 
 ifneq ("$(CRYPT_SRC)", "")
-WIN32_SRC	= $(WIN32_SRC) .\$(CRYPT_SRC)
+WIN32_SRC	+= .\$(CRYPT_SRC)
 endif
 
 X2P_SRC		=		\
@@ -5378,8 +5389,6 @@ CORE_H		= $(CORE_NOCFG_H) .\config.h ..\git_version.h
 
 UUDMAP_H	= ..\uudmap.h
 BITCOUNT_H	= ..\bitcount.h
-MG_DATA_H	= ..\mg_data.h
-GENERATED_HEADERS = $(UUDMAP_H) $(BITCOUNT_H) $(MG_DATA_H)
 HAVE_COREDIR	= $(COREDIR)\ppport.h
 
 MICROCORE_OBJ	= $(MICROCORE_SRC:.c=$(o))
@@ -5470,7 +5479,7 @@ $(GLOBEXE) : perlglob.c
 # make sure that we recompile perl.c if the git version changes
 ..\perl$(o) : ..\git_version.h
 
-..\config.sh : $(CFGSH_TMPL) $(HAVEMINIPERL) config_sh.PL
+..\config.sh : $(CFGSH_TMPL) $(HAVEMINIPERL) config_sh.PL FindExt.pm
 	$(MINIPERL) -I..\lib config_sh.PL $(CFG_VARS) $(CFGSH_TMPL) > ..\config.sh
 
 $(CONFIGPM) : $(HAVEMINIPERL) ..\config.sh config_h.PL ..\minimod.pl
@@ -5702,12 +5711,10 @@ $(X2P) : $(HAVEMINIPERL) $(X2P_OBJ) Extensions
 	$(MINIPERL) -I..\lib ..\x2p\s2p.PL
 	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) $(LIBFILES) $(X2P_OBJ)
 
-$(MINIDIR)\globals$(o) : $(GENERATED_HEADERS)
+$(MINIDIR)\globals$(o) : $(UUDMAP_H) $(BITCOUNT_H)
 
-$(UUDMAP_H) $(MG_DATA_H) : $(BITCOUNT_H)
-
-$(BITCOUNT_H) : $(GENUUDMAP)
-	$(GENUUDMAP) $(GENERATED_HEADERS)
+$(UUDMAP_H) $(BITCOUNT_H) : $(GENUUDMAP)
+	$(GENUUDMAP) $(UUDMAP_H) $(BITCOUNT_H)
 
 $(GENUUDMAP) : $(GENUUDMAP_OBJ)
 	$(LINK32) $(CFLAGS_O) -o $@ $(GENUUDMAP_OBJ) \
@@ -5748,6 +5755,10 @@ $(HAVEMINIPERL): $(MINI_OBJ)
 Extensions : ..\make_ext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM) $(DYNALOADER)
 	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
 	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --dynamic
+
+Extensions_reonly : ..\make_ext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM) $(DYNALOADER)
+	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
+	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --dynamic +re
 
 Extensions_static : ..\make_ext.pl $(HAVEMINIPERL) list_static_libs.pl $(CONFIGPM) Extensions_nonxs
 	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
@@ -5840,113 +5851,6 @@ $(UNIDATAFILES) : ..\pod\perluniprops.pod
 ..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(HAVEMINIPERL) ..\lib\unicore\mktables Extensions_nonxs
 	$(MINIPERL) -I..\lib $(ICWD) ..\lib\unicore\mktables -C ..\lib\unicore -P ..\pod -maketest -makelist -p
 MAKEFILE
-    if (_ge($version, "5.13.3")) {
-        _patch_gnumakefile($version, <<'PATCH');
---- win32/GNUmakefile
-+++ win32/GNUmakefile
-@@ -14,7 +14,10 @@
- #USE_LONG_DOUBLE :=define
- CCTYPE		:= GCC
- #CFG		:= Debug
-+#USE_PERLCRT	= define
- #USE_SETARGV	:= define
-+CRYPT_SRC      = fcrypt.c
-+#CRYPT_LIB     = -lfcrypt
- #PERL_MALLOC	:= define
- #DEBUG_MSTATS	:= define
- CCHOME		:= C:\MinGW
-@@ -31,6 +34,7 @@
- 
- PERL_MALLOC	?= undef
- DEBUG_MSTATS	?= undef
-+USE_PERLCRT	?= undef
- 
- USE_SITECUST	?= undef
- USE_MULTI	?= undef
-@@ -70,6 +74,13 @@
- BUILDOPT	+= -DPERL_IMPLICIT_CONTEXT
- endif
- 
-+ifeq ("$(CRYPT_SRC)$(CRYPT_LIB)","")
-+D_CRYPT		= undef
-+else
-+D_CRYPT		= define
-+CRYPT_FLAG	= -DHAVE_DES_FCRYPT
-+endif
-+
- ifneq ($(USE_IMP_SYS),undef)
- BUILDOPT	+= -DPERL_IMPLICIT_SYS
- endif
-@@ -158,11 +169,11 @@
- #
- 
- INCLUDES	= -I.\include -I. -I..
--DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE
-+DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE -DNO_STRICT $(CRYPT_FLAG)
- LOCDEFS		= -DPERLDLL -DPERL_CORE
- CXX_FLAG	= -xc++
- LIBC		=
--LIBFILES	= $(LIBC) -lmoldname -lkernel32 -luser32 -lgdi32 -lwinspool \
-+LIBFILES	= $(LIBC) $(CRYPT_LIB) -lmoldname -lkernel32 -luser32 -lgdi32 -lwinspool \
- 	-lcomdlg32 -ladvapi32 -lshell32 -lole32 -loleaut32 -lnetapi32 \
- 	-luuid -lws2_32 -lmpr -lwinmm -lversion -lodbc32 -lodbccp32 -lcomctl32
- 
-@@ -415,7 +426,7 @@
- 		.\win32io.c
- 
- ifneq ("$(CRYPT_SRC)", "")
--WIN32_SRC	= $(WIN32_SRC) .\$(CRYPT_SRC)
-+WIN32_SRC	+= .\$(CRYPT_SRC)
- endif
- 
- X2P_SRC		=		\
-@@ -469,8 +480,6 @@
- 
- UUDMAP_H	= ..\uudmap.h
- BITCOUNT_H	= ..\bitcount.h
--MG_DATA_H	= ..\mg_data.h
--GENERATED_HEADERS = $(UUDMAP_H) $(BITCOUNT_H) $(MG_DATA_H)
- HAVE_COREDIR	= $(COREDIR)\ppport.h
- 
- MICROCORE_OBJ	= $(MICROCORE_SRC:.c=$(o))
-@@ -561,7 +570,7 @@
- # make sure that we recompile perl.c if the git version changes
- ..\perl$(o) : ..\git_version.h
- 
--..\config.sh : $(CFGSH_TMPL) $(HAVEMINIPERL) config_sh.PL
-+..\config.sh : $(CFGSH_TMPL) $(HAVEMINIPERL) config_sh.PL FindExt.pm
- 	$(MINIPERL) -I..\lib config_sh.PL $(CFG_VARS) $(CFGSH_TMPL) > ..\config.sh
- 
- $(CONFIGPM) : $(HAVEMINIPERL) ..\config.sh config_h.PL ..\minimod.pl
-@@ -793,12 +802,10 @@
- 	$(MINIPERL) -I..\lib ..\x2p\s2p.PL
- 	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) $(LIBFILES) $(X2P_OBJ)
- 
--$(MINIDIR)\globals$(o) : $(GENERATED_HEADERS)
-+$(MINIDIR)\globals$(o) : $(UUDMAP_H) $(BITCOUNT_H)
- 
--$(UUDMAP_H) $(MG_DATA_H) : $(BITCOUNT_H)
--
--$(BITCOUNT_H) : $(GENUUDMAP)
--	$(GENUUDMAP) $(GENERATED_HEADERS)
-+$(UUDMAP_H) $(BITCOUNT_H) : $(GENUUDMAP)
-+	$(GENUUDMAP) $(UUDMAP_H) $(BITCOUNT_H)
- 
- $(GENUUDMAP) : $(GENUUDMAP_OBJ)
- 	$(LINK32) $(CFLAGS_O) -o $@ $(GENUUDMAP_OBJ) \
-@@ -840,6 +847,10 @@
- 	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
- 	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --dynamic
- 
-+Extensions_reonly : ..\make_ext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM) $(DYNALOADER)
-+	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
-+	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --dynamic +re
-+
- Extensions_static : ..\make_ext.pl $(HAVEMINIPERL) list_static_libs.pl $(CONFIGPM) Extensions_nonxs
- 	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
- 	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --static
-PATCH
-    }
     if (_ge($version, "5.13.4")) {
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile

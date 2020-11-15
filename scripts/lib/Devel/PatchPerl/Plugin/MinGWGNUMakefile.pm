@@ -25,7 +25,6 @@ my @patch = (
     {
         perl => [
             qr/^5\.2[01]\./,
-            qr/^5\.20\./,
         ],
         subs => [
             [ \&_patch_gnumakefile_520 ],
@@ -1982,7 +1981,7 @@ $(UNIDATAFILES) : ..\pod\perluniprops.pod
 	$(MINIPERL) -I..\lib ..\lib\unicore\mktables -C ..\lib\unicore -P ..\pod -maketest -makelist -p
 MAKEFILE
     if (_ge($version, "5.20.1")) {
-        _patch_gnumakefile(<<'PATCH');
+        _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
 @@ -279,7 +279,6 @@
@@ -5838,7 +5837,7 @@ $(UNIDATAFILES) : ..\pod\perluniprops.pod
 	$(MINIPERL) -I..\lib $(ICWD) ..\lib\unicore\mktables -C ..\lib\unicore -P ..\pod -maketest -makelist -p
 MAKEFILE
     if (_ge($version, "5.13.8")) {
-        _patch_gnumakefile(<<'PATCH');
+        _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
 @@ -286,18 +286,12 @@
@@ -5936,7 +5935,7 @@ MAKEFILE
 PATCH
     }
     if (_ge($version, "5.13.9")) {
-        _patch_gnumakefile(<<'PATCH');
+        _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
 @@ -734,7 +734,7 @@
@@ -5959,7 +5958,7 @@ PATCH
 PATCH
     }
     if (_ge($version, "5.13.10")) {
-        _patch_gnumakefile(<<'PATCH');
+        _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
 @@ -368,6 +368,7 @@
@@ -6018,7 +6017,7 @@ PATCH
 PATCH
     }
     if (_ge($version, "5.13.11")) {
-        _patch_gnumakefile(<<'PATCH');
+        _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
 @@ -292,6 +292,7 @@
@@ -8819,7 +8818,7 @@ $(UNIDATAFILES) : $(HAVEMINIPERL) $(CONFIGPM) ..\lib\unicore\mktables
 	cd ..\lib\unicore && ..\$(MINIPERL) -I..\lib mktables
 MAKEFILE
     if (_ge($version, "5.8.6")) {
-        _patch_gnumakefile(<<'PATCH');
+        _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
 @@ -411,6 +411,7 @@
@@ -8913,7 +8912,7 @@ MAKEFILE
 PATCH
     }
     if (_ge($version, "5.8.7")) {
-        _patch_gnumakefile(<<'PATCH');
+        _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
 @@ -411,7 +411,6 @@
@@ -8999,7 +8998,7 @@ PATCH
 PATCH
     }
     if (_ge($version, "5.8.9")) {
-        _patch_gnumakefile(<<'PATCH');
+        _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
 @@ -286,10 +286,6 @@

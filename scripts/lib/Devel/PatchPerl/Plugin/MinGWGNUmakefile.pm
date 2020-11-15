@@ -5945,14 +5945,6 @@ MAKEFILE
  Extensions_static : ..\make_ext.pl $(HAVEMINIPERL) list_static_libs.pl $(CONFIGPM) Extensions_nonxs
  	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
  	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --static
-@@ -901,7 +912,6 @@
- 	copy ..\README.vos      ..\pod\perlvos.pod
- 	copy ..\README.win32    ..\pod\perlwin32.pod
- 	copy ..\pod\perl__PERL_VERSION__delta.pod ..\pod\perldelta.pod
--	cd ..\pod && $(PLMAKE) -f ..\win32\pod.mak converters
- 	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
- 	$(PERLEXE) $(ICWD) ..\autodoc.pl ..
- 	$(PERLEXE) $(ICWD) ..\pod\perlmodlib.PL -q ..
 PATCH
     }
     if (_ge($version, "5.13.4")) {
@@ -5996,9 +5988,9 @@ PATCH
  	copy ..\README.win32    ..\pod\perlwin32.pod
 -	copy ..\pod\perl__PERL_VERSION__delta.pod ..\pod\perldelta.pod
 +	copy ..\pod\perldelta.pod ..\pod\perl__PERL_VERSION__delta.pod
+ 	cd ..\pod && $(PLMAKE) -f ..\win32\pod.mak converters
  	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
  	$(PERLEXE) $(ICWD) ..\autodoc.pl ..
- 	$(PERLEXE) $(ICWD) ..\pod\perlmodlib.PL -q ..
 PATCH
     }
     if (_ge($version, "5.13.6")) {
@@ -6019,6 +6011,14 @@ PATCH
  		..\x2p\find2perl	\
  		..\x2p\psed		\
  		..\x2p\s2p		\
+@@ -910,7 +903,6 @@
+ 	copy ..\README.vos      ..\pod\perlvos.pod
+ 	copy ..\README.win32    ..\pod\perlwin32.pod
+ 	copy ..\pod\perldelta.pod ..\pod\perl__PERL_VERSION__delta.pod
+-	cd ..\pod && $(PLMAKE) -f ..\win32\pod.mak converters
+ 	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
+ 	$(PERLEXE) $(ICWD) ..\autodoc.pl ..
+ 	$(PERLEXE) $(ICWD) ..\pod\perlmodlib.PL -q ..
 PATCH
     }
     if (_ge($version, "5.13.7")) {

@@ -11,7 +11,7 @@ use File::Spec;
 use JSON qw/encode_json decode_json/;
 use Devel::PatchPerl;
 
-use Devel::PatchPerl::Plugin::MinGWGNUMakefile;
+use Devel::PatchPerl::Plugin::MinGWGNUmakefile;
 use Devel::PatchPerl::Plugin::MinGW;
 
 # copy utility functions from Devel::PatchPerl
@@ -28,7 +28,7 @@ sub patchperl {
     my $dir = pushd( $source );
 
     if ($^O eq 'MSWin32') {
-        Devel::PatchPerl::Plugin::MinGWGNUMakefile->patchperl(%args);
+        Devel::PatchPerl::Plugin::MinGWGNUmakefile->patchperl(%args);
         Devel::PatchPerl::Plugin::MinGW->patchperl(%args);
     }
 

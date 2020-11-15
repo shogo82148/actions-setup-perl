@@ -1329,6 +1329,8 @@ PATCH
 }
 
 sub _patch_errno {
+    my $version = shift;
+
     # Silence noise from Errno_pm.PL on Windows
     # from https://github.com/Perl/perl5/commit/7bf140906596458f94aa2d5969d3067c0d6441a4
     # and https://github.com/Perl/perl5/commit/f974e9b91d22c1ef2d849ded64674df4f1b18bad

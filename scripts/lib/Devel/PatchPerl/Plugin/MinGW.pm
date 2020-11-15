@@ -1346,6 +1346,29 @@ sub _patch_errno {
  	    next if $expr =~ m/^[a-zA-Z]+$/; # skip some Win32 functions
  	    if($expr =~ m/^0[xX]/) {
 PATCH
+
+    if (_ge($version, "5.13.5")) {
+        return;
+    }
+
+    # Sanity check on Errno values.
+    # https://github.com/Perl/perl5/commit/be54382c6ee2d28448a2bfa85dedcbb6144583ae
+    _patch(<<'PATCH');
+--- ext/Errno/Errno_pm.PL
++++ ext/Errno/Errno_pm.PL
+@@ -357,8 +357,9 @@ my %err;
+ BEGIN {
+     %err = (
+ EDQ
+-   
+-    my @err = sort { $err{$a} <=> $err{$b} } keys %err;
++
++    my @err = sort { $err{$a} <=> $err{$b} }
++	grep { $err{$_} =~ /-?\d+$/ } keys %err;
+ 
+     foreach $err (@err) {
+ 	print "\t$err => $err{$err},\n";
+PATCH
 }
 
 sub _patch_socket_h {

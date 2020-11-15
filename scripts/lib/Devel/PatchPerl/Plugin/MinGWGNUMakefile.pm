@@ -321,7 +321,7 @@ a = .a
 #
 
 INCLUDES	= -I.\include -I. -I..
-DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE
+DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE -DNO_STRICT
 LOCDEFS		= -DPERLDLL -DPERL_CORE
 CXX_FLAG	= -xc++
 LIBC		=
@@ -1211,7 +1211,7 @@ a = .a
 #
 
 INCLUDES	= -I.\include -I. -I..
-DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE
+DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE -DNO_STRICT
 LOCDEFS		= -DPERLDLL -DPERL_CORE
 CXX_FLAG	= -xc++
 LIBC		=
@@ -2251,7 +2251,7 @@ a = .a
 #
 
 INCLUDES	= -I.\include -I. -I..
-DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE
+DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE -DNO_STRICT
 LOCDEFS		= -DPERLDLL -DPERL_CORE
 CXX_FLAG	= -xc++
 LIBC		=
@@ -3189,7 +3189,7 @@ a = .a
 #
 
 INCLUDES	= -I.\include -I. -I..
-DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE
+DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE -DNO_STRICT
 LOCDEFS		= -DPERLDLL -DPERL_CORE
 CXX_FLAG	= -xc++
 LIBC		=
@@ -4131,7 +4131,7 @@ a = .a
 #
 
 INCLUDES	= -I.\include -I. -I..
-DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE
+DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE -DNO_STRICT
 LOCDEFS		= -DPERLDLL -DPERL_CORE
 CXX_FLAG	= -xc++
 LIBC		=
@@ -5323,6 +5323,10 @@ WIN32_SRC	=		\
 		.\win32thread.c	\
 		.\win32io.c
 
+ifneq ("$(CRYPT_SRC)", "")
+WIN32_SRC	= $(WIN32_SRC) .\$(CRYPT_SRC)
+endif
+
 X2P_SRC		=		\
 		..\x2p\a2p.c	\
 		..\x2p\hash.c	\
@@ -5868,7 +5872,7 @@ MAKEFILE
  
  INCLUDES	= -I.\include -I. -I..
 -DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE
-+DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE $(CRYPT_FLAG)
++DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE -DNO_STRICT $(CRYPT_FLAG)
  LOCDEFS		= -DPERLDLL -DPERL_CORE
  CXX_FLAG	= -xc++
  LIBC		=
@@ -5877,7 +5881,7 @@ MAKEFILE
  	-lcomdlg32 -ladvapi32 -lshell32 -lole32 -loleaut32 -lnetapi32 \
  	-luuid -lws2_32 -lmpr -lwinmm -lversion -lodbc32 -lodbccp32 -lcomctl32
  
-@@ -465,8 +474,6 @@
+@@ -469,8 +478,6 @@
  
  UUDMAP_H	= ..\uudmap.h
  BITCOUNT_H	= ..\bitcount.h
@@ -5886,7 +5890,7 @@ MAKEFILE
  HAVE_COREDIR	= $(COREDIR)\ppport.h
  
  MICROCORE_OBJ	= $(MICROCORE_SRC:.c=$(o))
-@@ -530,7 +537,7 @@
+@@ -534,7 +541,7 @@
  		"ARCHPREFIX=$(ARCHPREFIX)"		\
  		"WIN64=$(WIN64)"
  
@@ -5895,7 +5899,7 @@ MAKEFILE
  
  #
  # Top targets
-@@ -557,7 +564,7 @@
+@@ -561,7 +568,7 @@
  # make sure that we recompile perl.c if the git version changes
  ..\perl$(o) : ..\git_version.h
  
@@ -5904,7 +5908,7 @@ MAKEFILE
  	$(MINIPERL) -I..\lib config_sh.PL $(CFG_VARS) $(CFGSH_TMPL) > ..\config.sh
  
  $(CONFIGPM) : $(HAVEMINIPERL) ..\config.sh config_h.PL ..\minimod.pl
-@@ -789,12 +796,10 @@
+@@ -793,12 +800,10 @@
  	$(MINIPERL) -I..\lib ..\x2p\s2p.PL
  	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) $(LIBFILES) $(X2P_OBJ)
  
@@ -5920,7 +5924,7 @@ MAKEFILE
  
  $(GENUUDMAP) : $(GENUUDMAP_OBJ)
  	$(LINK32) $(CFLAGS_O) -o $@ $(GENUUDMAP_OBJ) \
-@@ -836,6 +841,10 @@
+@@ -840,6 +845,10 @@
  	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
  	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --dynamic
  
@@ -5931,7 +5935,7 @@ MAKEFILE
  Extensions_static : ..\make_ext.pl $(HAVEMINIPERL) list_static_libs.pl $(CONFIGPM) Extensions_nonxs
  	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
  	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --static
-@@ -896,8 +905,7 @@
+@@ -900,8 +909,7 @@
  	copy ..\README.vmesa    ..\pod\perlvmesa.pod
  	copy ..\README.vos      ..\pod\perlvos.pod
  	copy ..\README.win32    ..\pod\perlwin32.pod
@@ -5975,6 +5979,17 @@ PATCH
  		..\utils\cpanp-run-perl	\
  		..\utils\cpanp	\
  		..\utils\cpan2dist	\
+@@ -416,10 +417,6 @@
+ 		.\win32thread.c	\
+ 		.\win32io.c
+ 
+-ifneq ("$(CRYPT_SRC)", "")
+-WIN32_SRC	= $(WIN32_SRC) .\$(CRYPT_SRC)
+-endif
+-
+ X2P_SRC		=		\
+ 		..\x2p\a2p.c	\
+ 		..\x2p\hash.c	\
 PATCH
     }
     if (_ge($version, "5.13.8")) {
@@ -6008,8 +6023,8 @@ PATCH
  #
  
  INCLUDES	= -I.\include -I. -I..
--DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE $(CRYPT_FLAG)
-+DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE
+-DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE -DNO_STRICT $(CRYPT_FLAG)
++DEFINES		= -DWIN32 -DWIN64 -DCONSERVATIVE -DNO_STRICT
  LOCDEFS		= -DPERLDLL -DPERL_CORE
  CXX_FLAG	= -xc++
  LIBC		=
@@ -10885,4 +10900,3 @@ $(UNIDATAFILES) : $(HAVEMINIPERL) $(CONFIGPM) ..\lib\unicore\mktables
 	cd ..\lib\unicore && ..\$(MINIPERL) -I..\lib mktables
 MAKEFILE
 }
-s

@@ -5227,46 +5227,6 @@ UTILS		=			\
 		bin\perlglob.pl		\
 		bin\search.pl
 
-CORE_NOCFG_H	=		\
-		..\av.h		\
-		..\cop.h	\
-		..\cv.h		\
-		..\dosish.h	\
-		..\embed.h	\
-		..\form.h	\
-		..\gv.h		\
-		..\handy.h	\
-		..\hv.h		\
-		..\iperlsys.h	\
-		..\mg.h		\
-		..\nostdio.h	\
-		..\op.h		\
-		..\opcode.h	\
-		..\perl.h	\
-		..\perlapi.h	\
-		..\perlsdio.h	\
-		..\perlsfio.h	\
-		..\perly.h	\
-		..\pp.h		\
-		..\proto.h	\
-		..\regcomp.h	\
-		..\regexp.h	\
-		..\scope.h	\
-		..\sv.h		\
-		..\thread.h	\
-		..\unixish.h	\
-		..\utf8.h	\
-		..\util.h	\
-		..\warnings.h	\
-		..\XSUB.h	\
-		..\EXTERN.h	\
-		..\perlvars.h	\
-		..\intrpvar.h	\
-		.\include\dirent.h	\
-		.\include\netdb.h	\
-		.\include\sys\socket.h	\
-		.\win32.h
-
 CFGSH_TMPL	= config.gc
 CFGH_TMPL	= config_H.gc
 PERLIMPLIB	= $(COREDIR)\libperl__PERL_MINOR_VERSION__$(a)
@@ -5871,7 +5831,7 @@ MAKEFILE
  
  USE_SITECUST	?= undef
  USE_MULTI	?= undef
-@@ -543,7 +541,7 @@
+@@ -503,7 +501,7 @@
  		"ARCHPREFIX=$(ARCHPREFIX)"		\
  		"WIN64=$(WIN64)"
  
@@ -5886,7 +5846,7 @@ PATCH
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
-@@ -909,7 +909,7 @@
+@@ -869,7 +869,7 @@
  	copy ..\README.vmesa    ..\pod\perlvmesa.pod
  	copy ..\README.vos      ..\pod\perlvos.pod
  	copy ..\README.win32    ..\pod\perlwin32.pod
@@ -5915,7 +5875,7 @@ PATCH
  		..\x2p\find2perl	\
  		..\x2p\psed		\
  		..\x2p\s2p		\
-@@ -910,7 +903,6 @@
+@@ -870,7 +863,6 @@
  	copy ..\README.vos      ..\pod\perlvos.pod
  	copy ..\README.win32    ..\pod\perlwin32.pod
  	copy ..\pod\perldelta.pod ..\pod\perl__PERL_VERSION__delta.pod
@@ -5980,7 +5940,7 @@ PATCH
  	-lcomdlg32 -ladvapi32 -lshell32 -lole32 -loleaut32 -lnetapi32 \
  	-luuid -lws2_32 -lmpr -lwinmm -lversion -lodbc32 -lodbccp32 -lcomctl32
  
-@@ -415,12 +406,9 @@
+@@ -375,12 +366,9 @@
  		.\win32.c	\
  		.\win32sck.c	\
  		.\win32thread.c	\
@@ -6000,7 +5960,7 @@ PATCH
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
-@@ -734,7 +734,7 @@
+@@ -694,7 +694,7 @@
  perllibst.h : $(HAVEMINIPERL) $(CONFIGPM) create_perllibst_h.pl
  	$(MINIPERL) -I..\lib create_perllibst_h.pl
  
@@ -6009,7 +5969,7 @@ PATCH
  	$(MINIPERL) -I..\lib -w ..\makedef.pl PLATFORM=win32 $(OPTIMIZE) $(DEFINES) \
  	$(BUILDOPT) CCTYPE=$(CCTYPE) TARG_DIR=..\ > perldll.def
  
-@@ -855,7 +855,6 @@
+@@ -815,7 +815,6 @@
  	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
  	copy ..\README.aix      ..\pod\perlaix.pod
  	copy ..\README.amiga    ..\pod\perlamiga.pod
@@ -6023,7 +5983,7 @@ PATCH
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
-@@ -368,6 +368,7 @@
+@@ -328,6 +328,7 @@
  		..\mro.c	\
  		..\hv.c		\
  		..\locale.c	\
@@ -6031,7 +5991,7 @@ PATCH
  		..\mathoms.c	\
  		..\mg.c		\
  		..\numeric.c	\
-@@ -556,11 +557,13 @@
+@@ -516,11 +517,13 @@
  $(CONFIGPM) : $(HAVEMINIPERL) ..\config.sh config_h.PL ..\minimod.pl
  	$(MINIPERL) -I..\lib ..\configpm --chdir=..
  	$(XCOPY) *.h $(COREDIR)\\*.*
@@ -6046,7 +6006,7 @@ PATCH
  .\config.h : $(CONFIGPM)
  $(MINIDIR)\.exists : $(CFGH_TMPL)
  	if not exist "$(MINIDIR)" mkdir "$(MINIDIR)"
-@@ -823,24 +826,24 @@
+@@ -783,24 +786,24 @@
  	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
  	rem . > $@
  

@@ -74,6 +74,7 @@ my @patch = (
         perl => [
             qr/^5\.11\.[01]/,
             qr/^5\.10\./,
+            qr/^5\.9\.5$/,
         ],
         subs => [
             [ \&_patch_perlhost ],

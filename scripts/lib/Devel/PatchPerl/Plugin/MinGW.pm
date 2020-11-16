@@ -20,7 +20,7 @@ my @patch = (
             qr/.*/,
         ],
         subs => [
-            [ \&_patch_config ],
+            [ \&_patch_config_h_gc ],
             [ \&_patch_config_gc ],
             [ \&_patch_config_sh_pl ],
             [ \&_patch_installperl ],

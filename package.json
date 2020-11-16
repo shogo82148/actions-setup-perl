@@ -22,7 +22,7 @@
   "homepage": "https://github.com/shogo82148/actions-setup-perl#readme",
   "dependencies": {
     "@actions/core": "^1.2.6",
-    "@actions/tool-cache": "^1.6.0",
+    "@actions/tool-cache": "^1.6.1",
     "semver": "^7.3.2"
   },
   "devDependencies": {

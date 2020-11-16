@@ -8,6 +8,7 @@ use version;
 use Devel::PatchPerl;
 use File::pushd qw[pushd];
 use File::Spec;
+use Try::Tiny;
 
 # copy utility functions from Devel::PatchPerl
 *_is = *Devel::PatchPerl::_is;
@@ -111,13 +112,17 @@ sub patchperl {
 
     my $dir = pushd( $source );
 
-    # copy from https://github.com/bingos/devel-patchperl/blob/acdcf1d67ae426367f42ca763b9ba6b92dd90925/lib/Devel/PatchPerl.pm#L301-L307
+    # based on https://github.com/bingos/devel-patchperl/blob/acdcf1d67ae426367f42ca763b9ba6b92dd90925/lib/Devel/PatchPerl.pm#L301-L307
     for my $p ( grep { _is( $_->{perl}, $vers ) } @patch ) {
-       for my $s (@{$p->{subs}}) {
-         my($sub, @args) = @$s;
-         push @args, $vers unless scalar @args;
-         $sub->(@args);
-       }
+        for my $s (@{$p->{subs}}) {
+            my($sub, @args) = @$s;
+            push @args, $vers unless scalar @args;
+            try {
+                $sub->(@args);
+            } catch {
+                warn "caught error: $_";
+            };
+        }
     }
 }
 

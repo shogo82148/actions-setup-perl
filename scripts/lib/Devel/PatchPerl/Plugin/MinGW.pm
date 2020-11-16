@@ -1719,7 +1719,8 @@ PATCH
         return;
     }
 
-    _patch(<<'PATCH');
+    if (_ge($version, "5.8.6")) {
+        _patch(<<'PATCH');
 --- win32/config_H.gc
 +++ win32/config_H.gc
 @@ -911,16 +911,15 @@
@@ -1765,6 +1766,14 @@ PATCH
  /* HAS_MODFL:
   *	This symbol, if defined, indicates that the modfl routine is
 PATCH
+        return;
+    }
+
+    if (_ge($version, "5.8.5")) {
+        _patch(<<'PATCH');
+PATCH
+        return;
+    }
 }
 
 sub _patch_config_gc {
@@ -1954,7 +1963,7 @@ PATCH
         return;
     }
 
-    if ($version eq "5.9.4")) {
+    if ($version eq "5.9.4") {
         _patch(<<'PATCH');
 --- installperl
 +++ installperl

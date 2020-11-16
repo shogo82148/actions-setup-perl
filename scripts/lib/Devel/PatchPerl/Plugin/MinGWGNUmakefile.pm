@@ -6735,15 +6735,15 @@ $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
 ..\x2p\walk$(o) : ..\x2p\walk.c
 	$(CC) -I..\x2p $(CFLAGS) $(OBJOUT_FLAG)$@ -c ..\x2p\walk.c
 
-$(X2P) : $(HAVEMINIPERL) $(X2P_OBJ) Extensions
-	$(MINIPERL) -I..\lib ..\x2p\find2perl.PL
-	$(MINIPERL) -I..\lib ..\x2p\s2p.PL
+$(X2P) : $(HAVEMINIPERL) $(X2P_OBJ)
+	$(MINIPERL) ..\x2p\find2perl.PL
+	$(MINIPERL) ..\x2p\s2p.PL
 	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) $(LIBFILES) $(X2P_OBJ)
 
-$(MINIDIR)\globals$(o) : $(UUDMAP_H) $(BITCOUNT_H)
+$(MINIDIR)\globals$(o) : $(UUDMAP_H)
 
-$(UUDMAP_H) $(BITCOUNT_H) : $(GENUUDMAP)
-	$(GENUUDMAP) $(UUDMAP_H) $(BITCOUNT_H)
+$(UUDMAP_H) : $(GENUUDMAP)
+	$(GENUUDMAP) > $(UUDMAP_H)
 
 $(GENUUDMAP) : $(GENUUDMAP_OBJ)
 	$(LINK32) $(CFLAGS_O) -o $@ $(GENUUDMAP_OBJ) \
@@ -6968,6 +6968,15 @@ MAKEFILE
  
  .\config.h : $(CONFIGPM)
  $(MINIDIR)\.exists : $(CFGH_TMPL)
+@@ -603,7 +611,7 @@
+ 	rem. > $(MINIDIR)\.exists
+ 
+ $(MINICORE_OBJ) : $(CORE_NOCFG_H)
+-	$(CC) -c $(CFLAGS) $(MINIBUILDOPT) -DPERL_EXTERNAL_GLOB $(OBJOUT_FLAG)$@ $(PDBOUT) ..\$(*F).c
++	$(CC) -c $(CFLAGS) $(MINIBUILDOPT) -DPERL_EXTERNAL_GLOB -DPERL_IS_MINIPERL $(OBJOUT_FLAG)$@ $(PDBOUT) ..\$(*F).c
+ 
+ $(MINIWIN32_OBJ) : $(CORE_NOCFG_H)
+ 	$(CC) -c $(CFLAGS) $(MINIBUILDOPT) -DPERL_IS_MINIPERL $(OBJOUT_FLAG)$@ $(PDBOUT) $(*F).c
 @@ -628,9 +636,10 @@
  perllibst.h : $(HAVEMINIPERL) $(CONFIGPM) create_perllibst_h.pl
  	$(MINIPERL) -I..\lib create_perllibst_h.pl
@@ -6992,28 +7001,6 @@ MAKEFILE
  $(PERLEXE_RES): perlexe.rc $(PERLEXE_MANIFEST) $(PERLEXE_ICO)
  
  $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
-@@ -671,15 +683,15 @@
- ..\x2p\walk$(o) : ..\x2p\walk.c
- 	$(CC) -I..\x2p $(CFLAGS) $(OBJOUT_FLAG)$@ -c ..\x2p\walk.c
- 
--$(X2P) : $(HAVEMINIPERL) $(X2P_OBJ) Extensions
--	$(MINIPERL) -I..\lib ..\x2p\find2perl.PL
--	$(MINIPERL) -I..\lib ..\x2p\s2p.PL
-+$(X2P) : $(HAVEMINIPERL) $(X2P_OBJ)
-+	$(MINIPERL) ..\x2p\find2perl.PL
-+	$(MINIPERL) ..\x2p\s2p.PL
- 	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) $(LIBFILES) $(X2P_OBJ)
- 
--$(MINIDIR)\globals$(o) : $(UUDMAP_H) $(BITCOUNT_H)
-+$(MINIDIR)\globals$(o) : $(UUDMAP_H)
- 
--$(UUDMAP_H) $(BITCOUNT_H) : $(GENUUDMAP)
--	$(GENUUDMAP) $(UUDMAP_H) $(BITCOUNT_H)
-+$(UUDMAP_H) : $(GENUUDMAP)
-+	$(GENUUDMAP) > $(UUDMAP_H)
- 
- $(GENUUDMAP) : $(GENUUDMAP_OBJ)
- 	$(LINK32) $(CFLAGS_O) -o $@ $(GENUUDMAP_OBJ) \
 @@ -705,13 +717,25 @@
  	    $(PERLEXE_OBJ) $(PERLEXE_RES) $(PERLIMPLIB) $(LIBFILES)
  	copy $(PERLEXE) $(WPERLEXE)
@@ -7211,15 +7198,6 @@ PATCH
  	$(XCOPY) *.h $(COREDIR)\\*.*
  	$(XCOPY) ..\\ext\\re\\re.pm $(LIBDIR)\\*.*
  	$(RCOPY) include $(COREDIR)\\*.*
-@@ -611,7 +606,7 @@
- 	rem. > $(MINIDIR)\.exists
- 
- $(MINICORE_OBJ) : $(CORE_NOCFG_H)
--	$(CC) -c $(CFLAGS) $(MINIBUILDOPT) -DPERL_EXTERNAL_GLOB $(OBJOUT_FLAG)$@ $(PDBOUT) ..\$(*F).c
-+	$(CC) -c $(CFLAGS) $(MINIBUILDOPT) -DPERL_EXTERNAL_GLOB -DPERL_IS_MINIPERL $(OBJOUT_FLAG)$@ $(PDBOUT) ..\$(*F).c
- 
- $(MINIWIN32_OBJ) : $(CORE_NOCFG_H)
- 	$(CC) -c $(CFLAGS) $(MINIBUILDOPT) -DPERL_IS_MINIPERL $(OBJOUT_FLAG)$@ $(PDBOUT) $(*F).c
 @@ -636,10 +631,9 @@
  perllibst.h : $(HAVEMINIPERL) $(CONFIGPM) create_perllibst_h.pl
  	$(MINIPERL) -I..\lib create_perllibst_h.pl

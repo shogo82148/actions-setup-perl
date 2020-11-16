@@ -21,6 +21,8 @@ my @patch = (
         ],
         subs => [
             [ \&_patch_config ],
+            [ \&_patch_config_gc ],
+            [ \&_patch_config_sh_pl ],
             [ \&_patch_installperl ],
         ],
     },
@@ -1447,7 +1449,7 @@ sub _patch_threads {
 PATCH
 }
 
-sub _patch_config {
+sub _patch_config_h_gc {
     my $version = shift;
 
     if (_ge($version, "5.20.3")) {
@@ -1592,6 +1594,68 @@ PATCH
     _patch(<<'PATCH');
 PATCH
 
+    if (_ge($version, "5.9.4")) {
+        _patch(<<'PATCH');
+--- win32/config_H.gc
++++ win32/config_H.gc
+@@ -3849,21 +3849,15 @@
+  *	Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
+  *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.
+  */
+-/*#define HAS_QUAD	/**/
+-#ifdef HAS_QUAD
+-#   ifndef _MSC_VER
+-#	define Quad_t long long	/**/
+-#	define Uquad_t unsigned long long	/**/
+-#   else
+-#	define Quad_t __int64	/**/
+-#	define Uquad_t unsigned __int64	/**/
+-#   endif
+-#   define QUADKIND 5	/**/
++#define HAS_QUAD
++#   define Quad_t long long	/**/
++#   define Uquad_t unsigned long long	/**/
++#   define QUADKIND 3	/**/
+ #   define QUAD_IS_INT	1
+ #   define QUAD_IS_LONG	2
+ #   define QUAD_IS_LONG_LONG	3
+ #   define QUAD_IS_INT64_T	4
+-#endif
++#   define QUAD_IS___INT64	5
+ 
+ /* IVTYPE:
+  *	This symbol defines the C type used for Perl's IV.
+PATCH
+        return;
+    }
+
+    if (_ge($version, "5.9.0")) {
+        _patch(<<'PATCH');
+--- win32/config_H.gc
++++ win32/config_H.gc
+@@ -3161,16 +3161,14 @@
+  *	Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
+  *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.
+  */
+-/*#define HAS_QUAD	/**/
+-#ifdef HAS_QUAD
++#define HAS_QUAD
+ #   define Quad_t long long	/**/
+ #   define Uquad_t unsigned long long	/**/
+-#   define QUADKIND 5	/**/
++#   define QUADKIND 3	/**/
+ #   define QUAD_IS_INT	1
+ #   define QUAD_IS_LONG	2
+ #   define QUAD_IS_LONG_LONG	3
+ #   define QUAD_IS_INT64_T	4
+-#endif
+ 
+ /* IVTYPE:
+  *	This symbol defines the C type used for Perl's IV.
+PATCH
+        return;
+    }
+
     if (_ge($version, "5.8.9")) {
         _patch(<<'PATCH');
 --- win32/config_H.gc
@@ -1623,54 +1687,6 @@ PATCH
  
  /* IVTYPE:
   *	This symbol defines the C type used for Perl's IV.
---- win32/config.gc
-+++ win32/config.gc
-@@ -345,7 +345,7 @@ d_pwgecos='undef'
- d_pwpasswd='undef'
- d_pwquota='undef'
- d_qgcvt='undef'
--d_quad='undef'
-+d_quad='define'
- d_random_r='undef'
- d_readdir64_r='undef'
- d_readdir='define'
---- win32/config_sh.PL
-+++ win32/config_sh.PL
-@@ -133,6 +133,34 @@ if ($opt{useithreads} eq 'define' && $opt{ccflags} =~ /-DPERL_IMPLICIT_SYS\b/) {
-     $opt{d_pseudofork} = 'define';
- }
- 
-+# 64-bit patch is hard coded from here
-+my $int64  = 'long long';
-+$opt{d_atoll} = 'define';
-+$opt{d_strtoll} = 'define';
-+$opt{d_strtoull} = 'define';
-+$opt{ptrsize} = 8;
-+$opt{sizesize} = 8;
-+$opt{ssizetype} = $int64;
-+$opt{st_ino_size} = 8;
-+$opt{d_nv_preserves_uv} = 'undef';
-+$opt{nv_preserves_uv_bits} = 53;
-+$opt{ivdformat} = qq{"I64d"};
-+$opt{ivsize} = 8;
-+$opt{ivtype} = $int64;
-+$opt{sPRIXU64} = qq{"I64X"};
-+$opt{sPRId64} = qq{"I64d"};
-+$opt{sPRIi64} = qq{"I64i"};
-+$opt{sPRIo64} = qq{"I64o"};
-+$opt{sPRIu64} = qq{"I64u"};
-+$opt{sPRIx64} = qq{"I64x"};
-+$opt{uvXUformat} = qq{"I64X"};
-+$opt{uvoformat} = qq{"I64o"};
-+$opt{uvsize} = 8;
-+$opt{uvtype} = qq{unsigned $int64};
-+$opt{uvuformat} = qq{"I64u"};
-+$opt{uvxformat} = qq{"I64x"};
-+# end of 64-bit patch
-+
- while (<>) {
-     s/~([\w_]+)~/$opt{$1}/g;
-     if (/^([\w_]+)=(.*)$/) {
 PATCH
         return;
     }
@@ -1699,54 +1715,6 @@ PATCH
  
  /* IVTYPE:
   *	This symbol defines the C type used for Perl's IV.
---- win32/config.gc
-+++ win32/config.gc
-@@ -345,7 +345,7 @@ d_pwgecos='undef'
- d_pwpasswd='undef'
- d_pwquota='undef'
- d_qgcvt='undef'
--d_quad='undef'
-+d_quad='define'
- d_random_r='undef'
- d_readdir64_r='undef'
- d_readdir='define'
---- win32/config_sh.PL
-+++ win32/config_sh.PL
-@@ -133,6 +133,34 @@ if ($opt{useithreads} eq 'define' && $opt{ccflags} =~ /-DPERL_IMPLICIT_SYS\b/) {
-     $opt{d_pseudofork} = 'define';
- }
- 
-+# 64-bit patch is hard coded from here
-+my $int64  = 'long long';
-+$opt{d_atoll} = 'define';
-+$opt{d_strtoll} = 'define';
-+$opt{d_strtoull} = 'define';
-+$opt{ptrsize} = 8;
-+$opt{sizesize} = 8;
-+$opt{ssizetype} = $int64;
-+$opt{st_ino_size} = 8;
-+$opt{d_nv_preserves_uv} = 'undef';
-+$opt{nv_preserves_uv_bits} = 53;
-+$opt{ivdformat} = qq{"I64d"};
-+$opt{ivsize} = 8;
-+$opt{ivtype} = $int64;
-+$opt{sPRIXU64} = qq{"I64X"};
-+$opt{sPRId64} = qq{"I64d"};
-+$opt{sPRIi64} = qq{"I64i"};
-+$opt{sPRIo64} = qq{"I64o"};
-+$opt{sPRIu64} = qq{"I64u"};
-+$opt{sPRIx64} = qq{"I64x"};
-+$opt{uvXUformat} = qq{"I64X"};
-+$opt{uvoformat} = qq{"I64o"};
-+$opt{uvsize} = 8;
-+$opt{uvtype} = qq{unsigned $int64};
-+$opt{uvuformat} = qq{"I64u"};
-+$opt{uvxformat} = qq{"I64x"};
-+# end of 64-bit patch
-+
- while (<>) {
-     s/~([\w_]+)~/$opt{$1}/g;
-     if (/^([\w_]+)=(.*)$/) {
 PATCH
         return;
     }
@@ -1796,6 +1764,16 @@ PATCH
  
  /* HAS_MODFL:
   *	This symbol, if defined, indicates that the modfl routine is
+PATCH
+}
+
+sub _patch_config_gc {
+    my $version = shift;
+    if (_ge($version, "5.10.0")) {
+        return;
+    }
+
+    _patch(<<'PATCH');
 --- win32/config.gc
 +++ win32/config.gc
 @@ -345,7 +345,7 @@ d_pwgecos='undef'
@@ -1807,6 +1785,16 @@ PATCH
  d_random_r='undef'
  d_readdir64_r='undef'
  d_readdir='define'
+PATCH
+}
+
+sub _patch_config_sh_pl {
+    my $version = shift;
+    if (_ge($version, "5.10.0")) {
+        return;
+    }
+
+    _patch(<<'PATCH');
 --- win32/config_sh.PL
 +++ win32/config_sh.PL
 @@ -133,6 +133,34 @@ if ($opt{useithreads} eq 'define' && $opt{ccflags} =~ /-DPERL_IMPLICIT_SYS\b/) {

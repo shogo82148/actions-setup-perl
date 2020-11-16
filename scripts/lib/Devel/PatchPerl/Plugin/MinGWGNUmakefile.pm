@@ -6657,7 +6657,7 @@ endif
 	echo #define NVef "e"&& \
 	echo #define NVff "f"&& \
 	echo #define NVgf "g"&& \
-	echo #undef USE_LONG_DOUBLE)>> config.h
+	echo #endif)>> config.h
 #separate line since this is sentinal that this target is done
 	rem. > $(MINIDIR)\.exists
 

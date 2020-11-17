@@ -2303,6 +2303,35 @@ PATCH
 PATCH
         return;
     }
+
+    _patch(<<'PATCH');
+--- installperl
++++ installperl
+@@ -359,6 +359,9 @@ if ($Is_VMS) {  # We did core file selection during build
+     $coredir =~ tr/./_/;
+     map { s|^$coredir/||i; } @corefiles = <$coredir/*.*>;
+ }
++elsif ($Is_W32) {
++    @corefiles = <*.h>;
++}
+ else {
+     # [als] hard-coded 'libperl' name... not good!
+     @corefiles = <*.h libperl*.*>;
+@@ -386,6 +389,13 @@ foreach my $file (@corefiles) {
+     }
+ }
+ 
++if ($Is_W32) { #linking lib isn't made in root but in CORE on Win32
++    @corefiles = <lib/CORE/libperl*.* lib/CORE/perl*$Config{lib_ext}>;
++    my $dest;
++    copy_if_diff($_,($dest = $installarchlib.substr($_,3))) &&
++    chmod(0444, $dest) foreach @corefiles;
++}
++
+ # Install main perl executables
+ # Make links to ordinary names if installbin directory isn't current directory.
+ 
+PATCH
 }
 
 1;

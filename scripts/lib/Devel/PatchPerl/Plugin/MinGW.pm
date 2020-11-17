@@ -1782,7 +1782,8 @@ sub _patch_config_gc {
         return;
     }
 
-    _patch(<<'PATCH');
+    if (_ge($version, "5.8.0")) {
+        _patch(<<'PATCH');
 --- win32/config.gc
 +++ win32/config.gc
 @@ -345,7 +345,7 @@ d_pwgecos='undef'
@@ -1795,6 +1796,42 @@ sub _patch_config_gc {
  d_readdir64_r='undef'
  d_readdir='define'
 PATCH
+        return;
+    }
+
+    if (_ge($version, "5.7.1")) {
+        _patch(<<'PATCH');
+--- win32/config.gc
++++ win32/config.gc
+@@ -280,7 +280,7 @@ d_pwgecos='undef'
+ d_pwpasswd='undef'
+ d_pwquota='undef'
+ d_qgcvt='undef'
+-d_quad='undef'
++d_quad='define'
+ d_readdir='define'
+ d_readlink='undef'
+ d_readv='undef'
+PATCH
+        return;
+    }
+
+    if (_ge($version, "5.7.0")) {
+        _patch(<<'PATCH');
+--- win32/config.gc
++++ win32/config.gc
+@@ -258,7 +258,7 @@ d_pwgecos='undef'
+ d_pwpasswd='undef'
+ d_pwquota='undef'
+ d_qgcvt='undef'
+-d_quad='undef'
++d_quad='define'
+ d_readdir='define'
+ d_readlink='undef'
+ d_rename='define'
+PATCH
+        return;
+    }
 }
 
 sub _patch_config_sh_pl {
@@ -2220,10 +2257,8 @@ PATCH
 
     if (_ge($version, "5.8.0")) {
         _patch(<<'PATCH');
-diff --git a/installperl b/installperl
-index 9e06145df7..943b74f839 100755
---- a/installperl
-+++ b/installperl
+--- installperl
++++ installperl
 @@ -359,6 +359,9 @@ if ($Is_VMS) {  # We did core file selection during build
      $coredir =~ tr/./_/;
      map { s|^$coredir/||i; } @corefiles = <$coredir/*.*>;

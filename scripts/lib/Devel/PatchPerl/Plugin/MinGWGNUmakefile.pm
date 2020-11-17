@@ -6548,7 +6548,7 @@ ICWD = -I..\cpan\Cwd -I..\cpan\Cwd\lib
 .PHONY: all
 
 all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) \
-		$(UNIDATAFILES) MakePPPort $(PERLEXE) $(X2P) Extensions_nonxs Extensions $(PERLSTATIC)
+		$(UNIDATAFILES) MakePPPort $(PERLEXE) $(X2P) Extensions $(PERLSTATIC)
 		@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
 
 ..\regcomp$(o) : ..\regnodes.h ..\regcharclass.h
@@ -6774,29 +6774,23 @@ $(PERLEXESTATIC): $(PERLSTATICLIB) $(CONFIGPM) $(PERLEXEST_OBJ) $(PERLEXE_RES)
 	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) \
 	    $(PERLEXEST_OBJ) $(PERLEXE_RES) $(PERLSTATICLIB) $(LIBFILES)
 
-MakePPPort: $(HAVEMINIPERL) $(CONFIGPM) Extensions_nonxs
+MakePPPort: $(HAVEMINIPERL) $(CONFIGPM)
 	$(MINIPERL) -I..\lib $(ICWD) ..\mkppport
 
 $(HAVEMINIPERL): $(MINI_OBJ)
 	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
 	rem . > $@
 
-Extensions : ..\make_ext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM) $(DYNALOADER)
+Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
 	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
-	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --dynamic
+	$(MINIPERL) -I..\lib $(ICWD) buildext.pl $(PLMAKE) $(PERLDEP) $(EXTDIR) --dynamic
+	-if exist ext $(MINIPERL) -I..\lib buildext.pl $(PLMAKE) $(PERLDEP) ext --dynamic
 
-Extensions_static : ..\make_ext.pl $(HAVEMINIPERL) list_static_libs.pl $(CONFIGPM) Extensions_nonxs
+Extensions_static : buildext.pl $(HAVEMINIPERL) list_static_libs.pl $(CONFIGPM)
 	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
-	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --static
-	$(MINIPERL) -I..\lib $(ICWD) list_static_libs.pl > Extensions_static
-
-Extensions_nonxs : ..\make_ext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM) ..\pod\perlfunc.pod
-	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
-	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --nonxs
-
-$(DYNALOADER) : ..\make_ext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM) Extensions_nonxs
-	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
-	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(EXTDIR) --dynaloader
+	$(MINIPERL) -I..\lib buildext.pl $(PLMAKE) $(PERLDEP) $(EXTDIR) --static
+	-if exist ext $(MINIPERL) -I..\lib buildext.pl $(PLMAKE) $(PERLDEP) ext --static
+	$(MINIPERL) -I..\lib buildext.pl --list-static-libs > Extensions_static
 
 #-------------------------------------------------------------------------------
 
@@ -6853,7 +6847,7 @@ utils: $(PERLEXE) $(X2P)
 	cd ..\lib && $(PERLEXE) lib_pm.PL
 	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
 
-..\pod\perltoc.pod: $(PERLEXE) Extensions Extensions_nonxs
+..\pod\perltoc.pod: $(PERLEXE) Extensions
 	$(PERLEXE) -f ..\pod\buildtoc -q
 
 install : all installbare installhtml
@@ -6935,17 +6929,15 @@ MAKEFILE
  
  CFG_VARS	=					\
  		"INST_DRV=$(INST_DRV)"			\
-@@ -483,8 +485,8 @@
+@@ -483,7 +485,7 @@
  
  .PHONY: all
  
 -all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) \
--		$(UNIDATAFILES) MakePPPort $(PERLEXE) $(X2P) Extensions_nonxs Extensions $(PERLSTATIC)
 +all : .\config.h ..\git_version.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) \
-+		$(UNIDATAFILES) MakePPPort $(PERLEXE) $(X2P) Extensions $(PERLSTATIC)
+ 		$(UNIDATAFILES) MakePPPort $(PERLEXE) $(X2P) Extensions $(PERLSTATIC)
  		@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
  
- ..\regcomp$(o) : ..\regnodes.h ..\regcharclass.h
 @@ -498,6 +500,12 @@
  $(GLOBEXE) : perlglob.c
  	$(LINK32) $(OPTIMIZE) $(BLINK_FLAGS) -mconsole -o $@ perlglob.c $(LIBFILES)
@@ -7001,7 +6993,7 @@ MAKEFILE
  $(PERLEXE_RES): perlexe.rc $(PERLEXE_MANIFEST) $(PERLEXE_ICO)
  
  $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
-@@ -705,13 +717,25 @@
+@@ -705,28 +717,38 @@
  	    $(PERLEXE_OBJ) $(PERLEXE_RES) $(PERLIMPLIB) $(LIBFILES)
  	copy $(PERLEXE) $(WPERLEXE)
  	$(MINIPERL) -I..\lib bin\exetype.pl $(WPERLEXE) WINDOWS
@@ -7012,8 +7004,6 @@ MAKEFILE
  	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) \
  	    $(PERLEXEST_OBJ) $(PERLEXE_RES) $(PERLSTATICLIB) $(LIBFILES)
  
--MakePPPort: $(HAVEMINIPERL) $(CONFIGPM) Extensions_nonxs
--	$(MINIPERL) -I..\lib $(ICWD) ..\mkppport
 +$(DYNALOADER).c: $(HAVEMINIPERL) $(EXTDIR)\DynaLoader\dl_win32.xs $(CONFIGPM)
 +	if not exist $(AUTODIR) mkdir $(AUTODIR)
 +	cd $(EXTDIR)\DynaLoader && ..\$(MINIPERL) -I..\..\lib DynaLoader_pm.PL && ..\$(MINIPERL) -I..\..\lib XSLoader_pm.PL
@@ -7024,41 +7014,38 @@ MAKEFILE
 +$(EXTDIR)\DynaLoader\dl_win32.xs: dl_win32.xs
 +	copy dl_win32.xs $(EXTDIR)\DynaLoader\dl_win32.xs
 +
-+MakePPPort: $(HAVEMINIPERL) $(CONFIGPM)
+ MakePPPort: $(HAVEMINIPERL) $(CONFIGPM)
+-	$(MINIPERL) -I..\lib $(ICWD) ..\mkppport
 +	$(MINIPERL) -I..\lib ..\mkppport
  
  $(HAVEMINIPERL): $(MINI_OBJ)
  	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
-@@ -719,21 +743,13 @@
+ 	rem . > $@
  
- Extensions : ..\make_ext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM) $(DYNALOADER)
+-Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
++Extensions : ..\make_ext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM) $(DYNALOADER)
  	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
--	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --dynamic
+-	$(MINIPERL) -I..\lib $(ICWD) buildext.pl $(PLMAKE) $(PERLDEP) $(EXTDIR) --dynamic
+-	-if exist ext $(MINIPERL) -I..\lib buildext.pl $(PLMAKE) $(PERLDEP) ext --dynamic
 +	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(MAKE)" --dir=$(EXTDIR) --dynamic
  
- Extensions_static : ..\make_ext.pl $(HAVEMINIPERL) list_static_libs.pl $(CONFIGPM) Extensions_nonxs
+-Extensions_static : buildext.pl $(HAVEMINIPERL) list_static_libs.pl $(CONFIGPM)
++Extensions_static : ..\make_ext.pl $(HAVEMINIPERL) list_static_libs.pl $(CONFIGPM) Extensions_nonxs
  	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
--	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --static
+-	$(MINIPERL) -I..\lib buildext.pl $(PLMAKE) $(PERLDEP) $(EXTDIR) --static
+-	-if exist ext $(MINIPERL) -I..\lib buildext.pl $(PLMAKE) $(PERLDEP) ext --static
+-	$(MINIPERL) -I..\lib buildext.pl --list-static-libs > Extensions_static
 +	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(MAKE)" --dir=$(EXTDIR) --static
- 	$(MINIPERL) -I..\lib $(ICWD) list_static_libs.pl > Extensions_static
++	$(MINIPERL) -I..\lib $(ICWD) list_static_libs.pl > Extensions_static
  
--Extensions_nonxs : ..\make_ext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM) ..\pod\perlfunc.pod
--	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
--	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --nonxs
--
--$(DYNALOADER) : ..\make_ext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM) Extensions_nonxs
--	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
--	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(EXTDIR) --dynaloader
--
  #-------------------------------------------------------------------------------
  
- doc: $(PERLEXE) ..\pod\perltoc.pod
-@@ -788,13 +804,13 @@
+@@ -782,13 +804,13 @@
  	cd ..\pod && $(PLMAKE) -f ..\win32\pod.mak converters
  	cd ..\lib && $(PERLEXE) lib_pm.PL
  	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
 -
--..\pod\perltoc.pod: $(PERLEXE) Extensions Extensions_nonxs
+-..\pod\perltoc.pod: $(PERLEXE) Extensions
 -	$(PERLEXE) -f ..\pod\buildtoc -q
 +	$(PERLEXE) ..\autodoc.pl ..
 +	$(PERLEXE) ..\pod\perlmodlib.pl -q
@@ -7071,7 +7058,7 @@ MAKEFILE
  	$(PERLEXE) ..\installperl
  	if exist $(WPERLEXE) $(XCOPY) $(WPERLEXE) $(INST_BIN)\$(NULL)
  	if exist $(PERLEXESTATIC) $(XCOPY) $(PERLEXESTATIC) $(INST_BIN)\$(NULL)
-@@ -807,10 +823,9 @@
+@@ -801,10 +823,9 @@
  	$(RCOPY) $(HTMLDIR)\*.* $(INST_HTML)\$(NULL)
  
  inst_lib : $(CONFIGPM)
@@ -7634,7 +7621,6 @@ GLOBEXE		= ..\perlglob.exe
 CONFIGPM	= ..\lib\Config.pm
 MINIMOD	= ..\lib\ExtUtils\Miniperl.pm
 X2P		= ..\x2p\a2p.exe
-GENUUDMAP	= ..\generate_uudmap.exe
 PERLSTATIC	=
 
 # Unicode data files generated by mktables
@@ -7867,7 +7853,6 @@ CORE_NOCFG_H	=		\
 
 CORE_H		= $(CORE_NOCFG_H) .\config.h
 
-UUDMAP_H	= ..\uudmap.h
 MG_DATA_H	= ..\mg_data.h
 #a stub ppport.h must be generated so building XS modules, .c->.obj wise, will
 #work, so this target also represents creating the COREDIR and filling it
@@ -7884,7 +7869,6 @@ MINIWIN32_OBJ	= $(subst .\,mini\,$(WIN32_OBJ))
 MINI_OBJ	= $(MINICORE_OBJ) $(MINIWIN32_OBJ)
 DLL_OBJ		= $(DLL_SRC:.c=$(o))
 X2P_OBJ		= $(X2P_SRC:.c=$(o))
-GENUUDMAP_OBJ	= $(GENUUDMAP:.exe=$(o))
 PERLDLL_OBJ	= $(CORE_OBJ)
 PERLEXE_OBJ	= perlmain$(o)
 PERLEXEST_OBJ	= perlmainst$(o)
@@ -8204,15 +8188,6 @@ $(X2P) : $(HAVEMINIPERL) $(X2P_OBJ) Extensions
 	$(MINIPERL) -I..\lib ..\x2p\s2p.PL
 	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) $(LIBFILES) $(X2P_OBJ)
 
-$(MINIDIR)\globals$(o) : $(UUDMAP_H)
-
-$(UUDMAP_H) : $(GENUUDMAP)
-	$(GENUUDMAP) > $(UUDMAP_H)
-
-$(GENUUDMAP) : $(GENUUDMAP_OBJ)
-	$(LINK32) $(CFLAGS_O) -o $@ $(GENUUDMAP_OBJ) \
-	$(BLINK_FLAGS) $(LIBFILES)
-
 #This generates a stub ppport.h & creates & fills /lib/CORE to allow for XS
 #building .c->.obj wise (linking is a different thing). This target is AKA
 #$(HAVE_COREDIR).
@@ -8348,7 +8323,7 @@ inst_lib : $(CONFIGPM)
 	$(RCOPY) ..\lib $(INST_LIB)\$(NULL)
 
 $(UNIDATAFILES) : $(HAVEMINIPERL) $(CONFIGPM) ..\lib\unicore\mktables
-	cd ..\lib\unicore && ..\$(MINIPERL) -I.. mktables -check $@ $(FIRSTUNIFILE)
+	cd ..\lib\unicore && ..\$(MINIPERL) -I..\lib mktables -check $@ $(FIRSTUNIFILE)
 MAKEFILE
 }
 
@@ -8606,7 +8581,6 @@ GLOBEXE		= ..\perlglob.exe
 CONFIGPM	= ..\lib\Config.pm
 MINIMOD	= ..\lib\ExtUtils\Miniperl.pm
 X2P		= ..\x2p\a2p.exe
-GENUUDMAP	= ..\generate_uudmap.exe
 PERLSTATIC	=
 
 # Unicode data files generated by mktables
@@ -8788,7 +8762,6 @@ CORE_NOCFG_H	=		\
 
 CORE_H		= $(CORE_NOCFG_H) .\config.h
 
-UUDMAP_H	= ..\uudmap.h
 MG_DATA_H	= ..\mg_data.h
 #a stub ppport.h must be generated so building XS modules, .c->.obj wise, will
 #work, so this target also represents creating the COREDIR and filling it
@@ -8805,7 +8778,6 @@ MINIWIN32_OBJ	= $(subst .\,mini\,$(WIN32_OBJ))
 MINI_OBJ	= $(MINICORE_OBJ) $(MINIWIN32_OBJ)
 DLL_OBJ		= $(DLL_SRC:.c=$(o))
 X2P_OBJ		= $(X2P_SRC:.c=$(o))
-GENUUDMAP_OBJ	= $(GENUUDMAP:.exe=$(o))
 PERLDLL_OBJ	= $(CORE_OBJ)
 PERLEXE_OBJ	= perlmain$(o)
 PERLEXEST_OBJ	= perlmainst$(o)
@@ -9213,7 +9185,7 @@ MAKEFILE
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
-@@ -411,6 +411,7 @@
+@@ -410,6 +410,7 @@
  		..\perly.h	\
  		..\pp.h		\
  		..\proto.h	\
@@ -9221,7 +9193,7 @@ MAKEFILE
  		..\regexp.h	\
  		..\scope.h	\
  		..\sv.h		\
-@@ -489,9 +490,10 @@
+@@ -486,9 +487,10 @@
  		"obj_ext=$(o)"				\
  		"_a=$(a)"				\
  		"lib_ext=$(a)"				\
@@ -9233,7 +9205,7 @@ MAKEFILE
  		"usemultiplicity=$(USE_MULTI)"		\
  		"useperlio=$(USE_PERLIO)"		\
  		"use64bitint=$(USE_64_BIT_INT)"		\
-@@ -704,6 +706,7 @@
+@@ -701,6 +703,7 @@
  $(X2P_OBJ)	: $(CORE_H)
  
  perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\global.sym ..\pp.sym ..\makedef.pl
@@ -9241,7 +9213,7 @@ MAKEFILE
  	$(MINIPERL) -I..\lib -w ..\makedef.pl PLATFORM=win32 $(OPTIMIZE) $(DEFINES) $(BUILDOPT) CCTYPE=$(CCTYPE) > perldll.def
  
  $(PERLEXPLIB) : $(PERLIMPLIB)
-@@ -711,9 +714,19 @@
+@@ -708,9 +711,19 @@
  $(PERLIMPLIB) : perldll.def
  	$(IMPLIB) -k -d perldll.def -l $(PERLIMPLIB) -e $(PERLEXPLIB)
  
@@ -9263,7 +9235,7 @@ MAKEFILE
  
  $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
  	cd .. && miniperl.exe minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
-@@ -779,8 +792,15 @@
+@@ -776,8 +789,15 @@
  
  #most of deps of this target are in DYNALOADER and therefore omitted here
  Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
@@ -9281,7 +9253,7 @@ MAKEFILE
  
  #-------------------------------------------------------------------------------
  
-@@ -797,31 +817,24 @@
+@@ -794,31 +814,24 @@
  	copy ..\README.beos     ..\pod\perlbeos.pod
  	copy ..\README.bs2000   ..\pod\perlbs2000.pod
  	copy ..\README.ce       ..\pod\perlce.pod
@@ -9397,8 +9369,8 @@ PATCH
  ifeq ($(CFG),Debug)
  OPTIMIZE	= -g -O0 -DDEBUGGING
  LINK_DBG	= -g
-@@ -252,20 +237,6 @@
- GENUUDMAP	= ..\generate_uudmap.exe
+@@ -251,20 +236,6 @@
+ X2P		= ..\x2p\a2p.exe
  PERLSTATIC	=
  
 -# Unicode data files generated by mktables
@@ -9418,7 +9390,7 @@ PATCH
  PERLDEP = $(PERLIMPLIB)
  
  
-@@ -470,6 +441,7 @@
+@@ -467,6 +438,7 @@
  DYNALOADER	= $(EXTDIR)\DynaLoader\DynaLoader
  
  CFG_VARS	=					\
@@ -9426,7 +9398,7 @@ PATCH
  		"INST_TOP=$(INST_TOP)"			\
  		"INST_VER=$(INST_VER)"			\
  		"INST_ARCH=$(INST_ARCH)"		\
-@@ -496,14 +468,9 @@
+@@ -493,14 +465,9 @@
  		"usethreads=$(USE_5005THREADS)"		\
  		"usemultiplicity=$(USE_MULTI)"		\
  		"useperlio=$(USE_PERLIO)"		\
@@ -9442,7 +9414,7 @@ PATCH
  
  ICWD = -I..\cpan\Cwd -I..\cpan\Cwd\lib
  
-@@ -513,7 +480,7 @@
+@@ -510,7 +477,7 @@
  
  .PHONY: all
  
@@ -9451,7 +9423,7 @@ PATCH
  	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
  
  $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
-@@ -861,6 +828,3 @@
+@@ -858,6 +825,3 @@
  
  inst_lib : $(CONFIGPM)
  	$(RCOPY) ..\lib $(INST_LIB)\$(NULL)
@@ -9542,8 +9514,8 @@ PATCH
  ifeq ($(CFG),Debug)
  OPTIMIZE	= -g -O0 -DDEBUGGING
  LINK_DBG	= -g
-@@ -237,6 +252,20 @@
- GENUUDMAP	= ..\generate_uudmap.exe
+@@ -236,6 +251,20 @@
+ X2P		= ..\x2p\a2p.exe
  PERLSTATIC	=
  
 +# Unicode data files generated by mktables
@@ -9563,7 +9535,7 @@ PATCH
  PERLDEP = $(PERLIMPLIB)
  
  
-@@ -441,7 +470,6 @@
+@@ -438,7 +467,6 @@
  DYNALOADER	= $(EXTDIR)\DynaLoader\DynaLoader
  
  CFG_VARS	=					\
@@ -9571,7 +9543,7 @@ PATCH
  		"INST_TOP=$(INST_TOP)"			\
  		"INST_VER=$(INST_VER)"			\
  		"INST_ARCH=$(INST_ARCH)"		\
-@@ -462,15 +490,19 @@
+@@ -459,15 +487,19 @@
  		"obj_ext=$(o)"				\
  		"_a=$(a)"				\
  		"lib_ext=$(a)"				\
@@ -9594,7 +9566,7 @@ PATCH
  
  ICWD = -I..\cpan\Cwd -I..\cpan\Cwd\lib
  
-@@ -480,7 +512,7 @@
+@@ -477,7 +509,7 @@
  
  .PHONY: all
  
@@ -9603,7 +9575,7 @@ PATCH
  	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
  
  $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
-@@ -828,3 +860,6 @@
+@@ -825,3 +857,6 @@
  
  inst_lib : $(CONFIGPM)
  	$(RCOPY) ..\lib $(INST_LIB)\$(NULL)
@@ -9616,7 +9588,7 @@ PATCH
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
-@@ -411,7 +411,6 @@
+@@ -410,7 +410,6 @@
  		..\perly.h	\
  		..\pp.h		\
  		..\proto.h	\
@@ -9624,7 +9596,7 @@ PATCH
  		..\regexp.h	\
  		..\scope.h	\
  		..\sv.h		\
-@@ -713,19 +712,9 @@
+@@ -710,19 +709,9 @@
  $(PERLIMPLIB) : perldll.def
  	$(IMPLIB) -k -d perldll.def -l $(PERLIMPLIB) -e $(PERLEXPLIB)
  
@@ -9646,7 +9618,7 @@ PATCH
  
  $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
  	cd .. && miniperl.exe minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
-@@ -791,15 +780,8 @@
+@@ -788,15 +777,8 @@
  
  #most of deps of this target are in DYNALOADER and therefore omitted here
  Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
@@ -9664,7 +9636,7 @@ PATCH
  
  #-------------------------------------------------------------------------------
  
-@@ -816,24 +798,31 @@
+@@ -813,24 +795,31 @@
  	copy ..\README.beos     ..\pod\perlbeos.pod
  	copy ..\README.bs2000   ..\pod\perlbs2000.pod
  	copy ..\README.ce       ..\pod\perlce.pod
@@ -9702,7 +9674,7 @@ PATCH
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
-@@ -286,10 +286,6 @@
+@@ -285,10 +285,6 @@
  		..\utils\libnetcfg	\
  		..\utils\enc2xs		\
  		..\utils\piconv		\
@@ -9713,7 +9685,7 @@ PATCH
  		..\pod\checkpods	\
  		..\pod\pod2html		\
  		..\pod\pod2latex	\
-@@ -301,6 +297,7 @@
+@@ -300,6 +296,7 @@
  		..\x2p\find2perl	\
  		..\x2p\psed		\
  		..\x2p\s2p		\
@@ -9721,7 +9693,7 @@ PATCH
  		bin\exetype.pl		\
  		bin\runperl.pl		\
  		bin\pl2bat.pl		\
-@@ -336,6 +333,7 @@
+@@ -335,6 +332,7 @@
  		..\gv.c		\
  		..\hv.c		\
  		..\locale.c	\
@@ -9729,7 +9701,7 @@ PATCH
  		..\mg.c		\
  		..\numeric.c	\
  		..\op.c		\
-@@ -411,6 +409,7 @@
+@@ -410,6 +408,7 @@
  		..\perly.h	\
  		..\pp.h		\
  		..\proto.h	\
@@ -9737,7 +9709,7 @@ PATCH
  		..\regexp.h	\
  		..\scope.h	\
  		..\sv.h		\
-@@ -463,7 +462,7 @@
+@@ -460,7 +459,7 @@
  STATIC_EXT	= * !Win32 !SDBM_File !Encode
  else
  #STATIC_EXT	= Cwd Compress/Raw/Zlib
@@ -9746,7 +9718,7 @@ PATCH
  endif
  
  DYNALOADER	= $(EXTDIR)\DynaLoader\DynaLoader
-@@ -511,7 +510,7 @@
+@@ -508,7 +507,7 @@
  
  .PHONY: all
  
@@ -9755,7 +9727,7 @@ PATCH
  	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
  
  $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
-@@ -712,9 +711,19 @@
+@@ -709,9 +708,19 @@
  $(PERLIMPLIB) : perldll.def
  	$(IMPLIB) -k -d perldll.def -l $(PERLIMPLIB) -e $(PERLEXPLIB)
  
@@ -9777,7 +9749,7 @@ PATCH
  
  $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
  	cd .. && miniperl.exe minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
-@@ -756,8 +765,8 @@
+@@ -753,8 +762,8 @@
  	copy splittree.pl ..
  	$(MINIPERL) -I..\lib ..\splittree.pl "../LIB" $(AUTODIR)
  
@@ -9788,7 +9760,7 @@ PATCH
  
  $(PERLEXE_RES): perlexe.rc $(PERLEXE_ICO)
  
-@@ -774,14 +783,24 @@
+@@ -771,14 +780,24 @@
  $(EXTDIR)\DynaLoader\dl_win32.xs: dl_win32.xs
  	copy dl_win32.xs $(EXTDIR)\DynaLoader\dl_win32.xs
  
@@ -9815,7 +9787,7 @@ PATCH
  
  #-------------------------------------------------------------------------------
  
-@@ -851,4 +870,4 @@
+@@ -848,4 +867,4 @@
  	$(RCOPY) ..\lib $(INST_LIB)\$(NULL)
  
  $(UNIDATAFILES) : $(HAVEMINIPERL) $(CONFIGPM) ..\lib\unicore\mktables
@@ -10079,7 +10051,6 @@ GLOBEXE		= ..\perlglob.exe
 CONFIGPM	= ..\lib\Config.pm
 MINIMOD	= ..\lib\ExtUtils\Miniperl.pm
 X2P		= ..\x2p\a2p.exe
-GENUUDMAP	= ..\generate_uudmap.exe
 PERLSTATIC	=
 
 # Unicode data files generated by mktables
@@ -10261,7 +10232,6 @@ CORE_NOCFG_H	=		\
 
 CORE_H		= $(CORE_NOCFG_H) .\config.h
 
-UUDMAP_H	= ..\uudmap.h
 MG_DATA_H	= ..\mg_data.h
 #a stub ppport.h must be generated so building XS modules, .c->.obj wise, will
 #work, so this target also represents creating the COREDIR and filling it
@@ -10278,7 +10248,6 @@ MINIWIN32_OBJ	= $(subst .\,mini\,$(WIN32_OBJ))
 MINI_OBJ	= $(MINICORE_OBJ) $(MINIWIN32_OBJ)
 DLL_OBJ		= $(DLL_SRC:.c=$(o))
 X2P_OBJ		= $(X2P_SRC:.c=$(o))
-GENUUDMAP_OBJ	= $(GENUUDMAP:.exe=$(o))
 PERLDLL_OBJ	= $(CORE_OBJ)
 PERLEXE_OBJ	= perlmain$(o)
 PERLEXEST_OBJ	= perlmainst$(o)
@@ -10938,7 +10907,6 @@ GLOBEXE		= ..\perlglob.exe
 CONFIGPM	= ..\lib\Config.pm
 MINIMOD	= ..\lib\ExtUtils\Miniperl.pm
 X2P		= ..\x2p\a2p.exe
-GENUUDMAP	= ..\generate_uudmap.exe
 PERLSTATIC	=
 
 # Unicode data files generated by mktables
@@ -11120,7 +11088,6 @@ CORE_NOCFG_H	=		\
 
 CORE_H		= $(CORE_NOCFG_H) .\config.h
 
-UUDMAP_H	= ..\uudmap.h
 MG_DATA_H	= ..\mg_data.h
 #a stub ppport.h must be generated so building XS modules, .c->.obj wise, will
 #work, so this target also represents creating the COREDIR and filling it
@@ -11137,7 +11104,6 @@ MINIWIN32_OBJ	= $(subst .\,mini\,$(WIN32_OBJ))
 MINI_OBJ	= $(MINICORE_OBJ) $(MINIWIN32_OBJ)
 DLL_OBJ		= $(DLL_SRC:.c=$(o))
 X2P_OBJ		= $(X2P_SRC:.c=$(o))
-GENUUDMAP_OBJ	= $(GENUUDMAP:.exe=$(o))
 PERLDLL_OBJ	= $(CORE_OBJ)
 PERLEXE_OBJ	= perlmain$(o)
 PERLEXEST_OBJ	= perlmainst$(o)

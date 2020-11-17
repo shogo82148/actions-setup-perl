@@ -7085,7 +7085,7 @@ MAKEFILE
 +$(UNIDATAFILES) : ..\pod\perluniprops.pod
 +
 +..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(HAVEMINIPERL) ..\lib\unicore\mktables
-+	$(MINIPERL) -I..\lib $(ICWD) ..\lib\unicore\mktables
++	cd ..\lib\unicore && ..\$(MINIPERL) -I.. -I..\..\cpan\Cwd\lib mktables
 PATCH
     }
     if (_ge($version, "5.11.0")) {
@@ -7355,7 +7355,7 @@ PATCH
  
 -..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(HAVEMINIPERL) ..\lib\unicore\mktables
 +..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(HAVEMINIPERL) ..\lib\unicore\mktables Extensions_nonxs
- 	$(MINIPERL) -I..\lib $(ICWD) ..\lib\unicore\mktables
+ 	cd ..\lib\unicore && ..\$(MINIPERL) -I.. -I..\..\cpan\Cwd\lib mktables
 PATCH
     }
     if (_ge($version, "5.11.3")) {
@@ -7382,7 +7382,7 @@ PATCH
  $(UNIDATAFILES) : ..\pod\perluniprops.pod
  
  ..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(HAVEMINIPERL) ..\lib\unicore\mktables Extensions_nonxs
--	$(MINIPERL) -I..\lib $(ICWD) ..\lib\unicore\mktables
+-	cd ..\lib\unicore && ..\$(MINIPERL) -I.. -I..\..\cpan\Cwd\lib mktables
 +	$(MINIPERL) -I..\lib $(ICWD) ..\lib\unicore\mktables -C ..\lib\unicore -P ..\pod -maketest -makelist -p
 PATCH
     }

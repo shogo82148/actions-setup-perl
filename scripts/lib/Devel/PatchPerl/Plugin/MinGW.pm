@@ -2122,7 +2122,8 @@ PATCH
         return;
     }
 
-    _patch(<<'PATCH');
+    if (_ge($version, "5.8.2")) {
+        _patch(<<'PATCH');
 --- installperl
 +++ installperl
 @@ -404,6 +404,9 @@ if ($Is_VMS) {  # We did core file selection during build
@@ -2166,6 +2167,107 @@ PATCH
      if ($dir =~ /^auto/ ||
  	  ($name =~ /^(.*)\.(?:pm|pod)$/ && $archpms{$1}) ||
 PATCH
+        return;
+    }
+
+    if (_ge($version, "5.8.1")) {
+        _patch(<<'PATCH');
+--- installperl
++++ installperl
+@@ -401,6 +401,9 @@ if ($Is_VMS) {  # We did core file selection during build
+     $coredir =~ tr/./_/;
+     map { s|^$coredir/||i; } @corefiles = <$coredir/*.*>;
+ }
++elsif ($Is_W32) {
++    @corefiles = <*.h>;
++}
+ else {
+     # [als] hard-coded 'libperl' name... not good!
+     @corefiles = <*.h libperl*.*>;
+@@ -438,6 +441,12 @@ if ($Config{use5005threads}) {
+ 	chmod(0444, $t);
+     }
+ }
++if ($Is_W32) { #linking lib isn't made in root but in CORE on Win32
++    @corefiles = <lib/CORE/libperl*.* lib/CORE/perl*$Config{lib_ext}>;
++    my $dest;
++    copy_if_diff($_,($dest = $installarchlib.substr($_,3))) &&
++    chmod(0444, $dest) foreach @corefiles;
++}
+ 
+ # Install main perl executables
+ # Make links to ordinary names if installbin directory isn't current directory.
+@@ -808,11 +817,14 @@ sub installlib {
+ 	      $dir  =~ m{/t(?:/|$)};
+     # ignore the cpan script in lib/CPAN/bin (installed later with other utils)
+     return if $name eq 'cpan';
+-    # ignore the test extensions
+-    return if $dir =~ m{ext/XS/(?:APItest|Typemap)/};
++    # ignore the test extensions, dont install PPPort.so/.dll
++    return if $dir =~ m{\b(?:XS/(?:APItest|Typemap)|Devel/PPPort)\b};
+ 
+     $name = "$dir/$name" if $dir ne '';
+ 
++    #blead comes with version, blead isn't 5.8/5.6
++    return if $name eq 'ExtUtils/MakeMaker/version/regex.pm';
++
+     my $installlib = $installprivlib;
+     if ($dir =~ /^auto/ ||
+ 	  ($name =~ /^(.*)\.(?:pm|pod)$/ && $archpms{$1}) ||
+PATCH
+        return;
+    }
+
+    if (_ge($version, "5.8.0")) {
+        _patch(<<'PATCH');
+diff --git a/installperl b/installperl
+index 9e06145df7..943b74f839 100755
+--- a/installperl
++++ b/installperl
+@@ -359,6 +359,9 @@ if ($Is_VMS) {  # We did core file selection during build
+     $coredir =~ tr/./_/;
+     map { s|^$coredir/||i; } @corefiles = <$coredir/*.*>;
+ }
++elsif ($Is_W32) {
++    @corefiles = <*.h>;
++}
+ else {
+     # [als] hard-coded 'libperl' name... not good!
+     @corefiles = <*.h libperl*.*>;
+@@ -397,6 +400,13 @@ if ($Config{use5005threads}) {
+     }
+ }
+ 
++if ($Is_W32) { #linking lib isn't made in root but in CORE on Win32
++    @corefiles = <lib/CORE/libperl*.* lib/CORE/perl*$Config{lib_ext}>;
++    my $dest;
++    copy_if_diff($_,($dest = $installarchlib.substr($_,3))) &&
++    chmod(0444, $dest) foreach @corefiles;
++}
++
+ # Install main perl executables
+ # Make links to ordinary names if installbin directory isn't current directory.
+ 
+@@ -757,11 +767,14 @@ sub installlib {
+     # .exists files, .PL files, and .t files.
+     return if $name =~ m{\.orig$|~$|^#.+#$|,v$|^\.exists|\.PL$|\.t$} ||
+               $dir  =~ m{/t(?:/|$)};
+-    # ignore the test extensions
+-    return if $dir =~ m{ext/XS/(?:APItest|Typemap)/};
++    # ignore the test extensions, dont install PPPort.so/.dll
++    return if $dir =~ m{\b(?:XS/(?:APItest|Typemap)|Devel/PPPort)\b};
+ 
+     $name = "$dir/$name" if $dir ne '';
+ 
++    #blead comes with version, blead isn't 5.8/5.6
++    return if $name eq 'ExtUtils/MakeMaker/version/regex.pm';
++
+     my $installlib = $installprivlib;
+     if ($dir =~ /^auto/ ||
+ 	  ($name =~ /^(.*)\.(?:pm|pod)$/ && $archpms{$1}) ||
+PATCH
+        return;
+    }
 }
 
 1;

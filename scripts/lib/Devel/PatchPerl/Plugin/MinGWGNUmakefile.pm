@@ -7018,7 +7018,7 @@ MAKEFILE
 +	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(MAKE)" --dir=$(EXTDIR) --dynamic
  
 -Extensions_static : buildext.pl $(HAVEMINIPERL) list_static_libs.pl $(CONFIGPM)
-+Extensions_static : ..\make_ext.pl $(HAVEMINIPERL) list_static_libs.pl $(CONFIGPM) Extensions_nonxs
++Extensions_static : ..\make_ext.pl $(HAVEMINIPERL) list_static_libs.pl $(CONFIGPM)
  	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
 -	$(MINIPERL) -I..\lib buildext.pl $(PLMAKE) $(PERLDEP) $(EXTDIR) --static
 -	-if exist ext $(MINIPERL) -I..\lib buildext.pl $(PLMAKE) $(PERLDEP) ext --static
@@ -7256,7 +7256,8 @@ PATCH
 -	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(MAKE)" --dir=$(EXTDIR) --dynamic
 +	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --dynamic
  
- Extensions_static : ..\make_ext.pl $(HAVEMINIPERL) list_static_libs.pl $(CONFIGPM) Extensions_nonxs
+-Extensions_static : ..\make_ext.pl $(HAVEMINIPERL) list_static_libs.pl $(CONFIGPM)
++Extensions_static : ..\make_ext.pl $(HAVEMINIPERL) list_static_libs.pl $(CONFIGPM) Extensions_nonxs
  	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
 -	$(MINIPERL) -I..\lib ..\make_ext.pl "MAKE=$(MAKE)" --dir=$(EXTDIR) --static
 +	$(MINIPERL) -I..\lib $(ICWD) ..\make_ext.pl "MAKE=$(PLMAKE)" --dir=$(CPANDIR) --dir=$(DISTDIR) --dir=$(EXTDIR) --static

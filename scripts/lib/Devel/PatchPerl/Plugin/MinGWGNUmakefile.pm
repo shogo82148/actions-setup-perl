@@ -6774,10 +6774,13 @@ $(PERLEXESTATIC): $(PERLSTATICLIB) $(CONFIGPM) $(PERLEXEST_OBJ) $(PERLEXE_RES)
 
 $(DYNALOADER).c: $(HAVEMINIPERL) $(EXTDIR)\DynaLoader\dl_win32.xs $(CONFIGPM)
 	if not exist $(AUTODIR) mkdir $(AUTODIR)
-	cd $(EXTDIR)\DynaLoader && ..\$(MINIPERL) -I..\..\lib DynaLoader_pm.PL && ..\$(MINIPERL) -I..\..\lib XSLoader_pm.PL
+	cd $(EXTDIR)\DynaLoader \
+		&& ..\$(MINIPERL) -I..\..\lib DynaLoader_pm.PL \
+		&& ..\$(MINIPERL) -I..\..\lib XSLoader_pm.PL
 	$(XCOPY) $(EXTDIR)\DynaLoader\DynaLoader.pm $(LIBDIR)\$(NULL)
 	$(XCOPY) $(EXTDIR)\DynaLoader\XSLoader.pm $(LIBDIR)\$(NULL)
-	cd $(EXTDIR)\DynaLoader && $(XSUBPP) dl_win32.xs > $(DYNALOADER).c
+	cd $(EXTDIR)\DynaLoader \
+		&& $(XSUBPP) dl_win32.xs > ..\$(DYNALOADER).c
 
 $(EXTDIR)\DynaLoader\dl_win32.xs: dl_win32.xs
 	copy dl_win32.xs $(EXTDIR)\DynaLoader\dl_win32.xs
@@ -6999,7 +7002,7 @@ MAKEFILE
  
  $(PERLEXESTATIC): $(PERLSTATICLIB) $(CONFIGPM) $(PERLEXEST_OBJ) $(PERLEXE_RES)
  	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) \
-@@ -719,22 +731,20 @@
+@@ -722,22 +734,20 @@
  	copy dl_win32.xs $(EXTDIR)\DynaLoader\dl_win32.xs
  
  MakePPPort: $(HAVEMINIPERL) $(CONFIGPM)
@@ -7028,7 +7031,22 @@ MAKEFILE
  
  #-------------------------------------------------------------------------------
  
-@@ -790,13 +800,13 @@
+@@ -761,6 +771,7 @@
+ 	copy ..\README.dos      ..\pod\perldos.pod
+ 	copy ..\README.epoc     ..\pod\perlepoc.pod
+ 	copy ..\README.freebsd  ..\pod\perlfreebsd.pod
++	copy ..\README.haiku    ..\pod\perlhaiku.pod
+ 	copy ..\README.hpux     ..\pod\perlhpux.pod
+ 	copy ..\README.hurd     ..\pod\perlhurd.pod
+ 	copy ..\README.irix     ..\pod\perlirix.pod
+@@ -786,20 +797,19 @@
+ 	copy ..\README.tw       ..\pod\perltw.pod
+ 	copy ..\README.uts      ..\pod\perluts.pod
+ 	copy ..\README.vmesa    ..\pod\perlvmesa.pod
+-	copy ..\README.vms      ..\pod\perlvms.pod
+ 	copy ..\README.vos      ..\pod\perlvos.pod
+ 	copy ..\README.win32    ..\pod\perlwin32.pod
+ 	copy ..\pod\perl__PERL_VERSION__delta.pod ..\pod\perldelta.pod
  	cd ..\pod && $(PLMAKE) -f ..\win32\pod.mak converters
  	cd ..\lib && $(PERLEXE) lib_pm.PL
  	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
@@ -7046,7 +7064,7 @@ MAKEFILE
  	$(PERLEXE) ..\installperl
  	if exist $(WPERLEXE) $(XCOPY) $(WPERLEXE) $(INST_BIN)\$(NULL)
  	if exist $(PERLEXESTATIC) $(XCOPY) $(PERLEXESTATIC) $(INST_BIN)\$(NULL)
-@@ -809,10 +819,9 @@
+@@ -812,10 +822,9 @@
  	$(RCOPY) $(HTMLDIR)\*.* $(INST_HTML)\$(NULL)
  
  inst_lib : $(CONFIGPM)
@@ -7221,7 +7239,7 @@ PATCH
  
  $(GENUUDMAP) : $(GENUUDMAP_OBJ)
  	$(LINK32) $(CFLAGS_O) -o $@ $(GENUUDMAP_OBJ) \
-@@ -713,25 +707,13 @@
+@@ -713,28 +707,13 @@
  	    $(PERLEXE_OBJ) $(PERLEXE_RES) $(PERLIMPLIB) $(LIBFILES)
  	copy $(PERLEXE) $(WPERLEXE)
  	$(MINIPERL) -I..\lib bin\exetype.pl $(WPERLEXE) WINDOWS
@@ -7234,10 +7252,13 @@ PATCH
  
 -$(DYNALOADER).c: $(HAVEMINIPERL) $(EXTDIR)\DynaLoader\dl_win32.xs $(CONFIGPM)
 -	if not exist $(AUTODIR) mkdir $(AUTODIR)
--	cd $(EXTDIR)\DynaLoader && ..\$(MINIPERL) -I..\..\lib DynaLoader_pm.PL && ..\$(MINIPERL) -I..\..\lib XSLoader_pm.PL
+-	cd $(EXTDIR)\DynaLoader \
+-		&& ..\$(MINIPERL) -I..\..\lib DynaLoader_pm.PL \
+-		&& ..\$(MINIPERL) -I..\..\lib XSLoader_pm.PL
 -	$(XCOPY) $(EXTDIR)\DynaLoader\DynaLoader.pm $(LIBDIR)\$(NULL)
 -	$(XCOPY) $(EXTDIR)\DynaLoader\XSLoader.pm $(LIBDIR)\$(NULL)
--	cd $(EXTDIR)\DynaLoader && $(XSUBPP) dl_win32.xs > $(DYNALOADER).c
+-	cd $(EXTDIR)\DynaLoader \
+-		&& $(XSUBPP) dl_win32.xs > ..\$(DYNALOADER).c
 -
 -$(EXTDIR)\DynaLoader\dl_win32.xs: dl_win32.xs
 -	copy dl_win32.xs $(EXTDIR)\DynaLoader\dl_win32.xs
@@ -7249,7 +7270,7 @@ PATCH
  
  $(HAVEMINIPERL): $(MINI_OBJ)
  	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
-@@ -739,13 +721,21 @@
+@@ -742,13 +721,21 @@
  
  Extensions : ..\make_ext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM) $(DYNALOADER)
  	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
@@ -7274,7 +7295,7 @@ PATCH
  #-------------------------------------------------------------------------------
  
  doc: $(PERLEXE) ..\pod\perltoc.pod
-@@ -755,7 +745,6 @@
+@@ -758,7 +745,6 @@
  
  utils: $(PERLEXE) $(X2P)
  	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
@@ -7282,14 +7303,7 @@ PATCH
  	copy ..\README.aix      ..\pod\perlaix.pod
  	copy ..\README.amiga    ..\pod\perlamiga.pod
  	copy ..\README.apollo   ..\pod\perlapollo.pod
-@@ -768,16 +757,15 @@
- 	copy ..\README.dos      ..\pod\perldos.pod
- 	copy ..\README.epoc     ..\pod\perlepoc.pod
- 	copy ..\README.freebsd  ..\pod\perlfreebsd.pod
-+	copy ..\README.haiku    ..\pod\perlhaiku.pod
- 	copy ..\README.hpux     ..\pod\perlhpux.pod
- 	copy ..\README.hurd     ..\pod\perlhurd.pod
- 	copy ..\README.irix     ..\pod\perlirix.pod
+@@ -778,10 +764,8 @@
  	copy ..\README.jp       ..\pod\perljp.pod
  	copy ..\README.ko       ..\pod\perlko.pod
  	copy ..\README.linux    ..\pod\perllinux.pod
@@ -7300,12 +7314,7 @@ PATCH
  	copy ..\README.mpeix    ..\pod\perlmpeix.pod
  	copy ..\README.netware  ..\pod\perlnetware.pod
  	copy ..\README.openbsd  ..\pod\perlopenbsd.pod
-@@ -793,20 +781,20 @@
- 	copy ..\README.tw       ..\pod\perltw.pod
- 	copy ..\README.uts      ..\pod\perluts.pod
- 	copy ..\README.vmesa    ..\pod\perlvmesa.pod
--	copy ..\README.vms      ..\pod\perlvms.pod
- 	copy ..\README.vos      ..\pod\perlvos.pod
+@@ -801,15 +785,16 @@
  	copy ..\README.win32    ..\pod\perlwin32.pod
  	copy ..\pod\perl__PERL_VERSION__delta.pod ..\pod\perldelta.pod
  	cd ..\pod && $(PLMAKE) -f ..\win32\pod.mak converters
@@ -7327,7 +7336,7 @@ PATCH
  	$(PERLEXE) ..\installperl
  	if exist $(WPERLEXE) $(XCOPY) $(WPERLEXE) $(INST_BIN)\$(NULL)
  	if exist $(PERLEXESTATIC) $(XCOPY) $(PERLEXESTATIC) $(INST_BIN)\$(NULL)
-@@ -823,5 +811,5 @@
+@@ -826,5 +811,5 @@
  
  $(UNIDATAFILES) : ..\pod\perluniprops.pod
  

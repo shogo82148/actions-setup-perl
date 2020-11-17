@@ -6689,12 +6689,10 @@ $(DLL_OBJ)	: $(CORE_H)
 
 $(X2P_OBJ)	: $(CORE_H)
 
-perllibst.h : $(HAVEMINIPERL) $(CONFIGPM) create_perllibst_h.pl
-	$(MINIPERL) -I..\lib create_perllibst_h.pl
-
-perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\global.sym ..\pp.sym ..\makedef.pl create_perllibst_h.pl
-	$(MINIPERL) -I..\lib -w ..\makedef.pl PLATFORM=win32 $(OPTIMIZE) $(DEFINES) \
-	$(BUILDOPT) CCTYPE=$(CCTYPE) TARG_DIR=..\ > perldll.def
+perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\global.sym ..\pp.sym ..\makedef.pl
+	$(MINIPERL) -I..\lib buildext.pl --create-perllibst-h
+	$(MINIPERL) -w ..\makedef.pl PLATFORM=win32 $(OPTIMIZE) $(DEFINES) $(BUILDOPT) \
+		CCTYPE=$(CCTYPE) > perldll.def
 
 $(PERLEXPLIB) : $(PERLIMPLIB)
 
@@ -6773,6 +6771,13 @@ $(PERLEXE): $(PERLDLL) $(CONFIGPM) $(PERLEXE_OBJ) $(PERLEXE_RES) $(PERLIMPLIB)
 $(PERLEXESTATIC): $(PERLSTATICLIB) $(CONFIGPM) $(PERLEXEST_OBJ) $(PERLEXE_RES)
 	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) \
 	    $(PERLEXEST_OBJ) $(PERLEXE_RES) $(PERLSTATICLIB) $(LIBFILES)
+
+$(DYNALOADER).c: $(HAVEMINIPERL) $(EXTDIR)\DynaLoader\dl_win32.xs $(CONFIGPM)
+	if not exist $(AUTODIR) mkdir $(AUTODIR)
+	cd $(EXTDIR)\DynaLoader && ..\$(MINIPERL) -I..\..\lib DynaLoader_pm.PL && ..\$(MINIPERL) -I..\..\lib XSLoader_pm.PL
+	$(XCOPY) $(EXTDIR)\DynaLoader\DynaLoader.pm $(LIBDIR)\$(NULL)
+	$(XCOPY) $(EXTDIR)\DynaLoader\XSLoader.pm $(LIBDIR)\$(NULL)
+	cd $(EXTDIR)\DynaLoader && $(XSUBPP) dl_win32.xs > $(DYNALOADER).c
 
 MakePPPort: $(HAVEMINIPERL) $(CONFIGPM)
 	$(MINIPERL) -I..\lib $(ICWD) ..\mkppport
@@ -6969,21 +6974,17 @@ MAKEFILE
  
  $(MINIWIN32_OBJ) : $(CORE_NOCFG_H)
  	$(CC) -c $(CFLAGS) $(MINIBUILDOPT) -DPERL_IS_MINIPERL $(OBJOUT_FLAG)$@ $(PDBOUT) $(*F).c
-@@ -628,9 +636,10 @@
- perllibst.h : $(HAVEMINIPERL) $(CONFIGPM) create_perllibst_h.pl
- 	$(MINIPERL) -I..\lib create_perllibst_h.pl
+@@ -625,6 +633,9 @@
  
--perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\global.sym ..\pp.sym ..\makedef.pl create_perllibst_h.pl
--	$(MINIPERL) -I..\lib -w ..\makedef.pl PLATFORM=win32 $(OPTIMIZE) $(DEFINES) \
--	$(BUILDOPT) CCTYPE=$(CCTYPE) TARG_DIR=..\ > perldll.def
-+perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\global.sym ..\pp.sym ..\makedef.pl
-+	$(MINIPERL) -I..\lib buildext.pl --create-perllibst-h
-+	$(MINIPERL) -w ..\makedef.pl PLATFORM=win32 $(OPTIMIZE) $(DEFINES) $(BUILDOPT) \
-+		CCTYPE=$(CCTYPE) > perldll.def
+ $(X2P_OBJ)	: $(CORE_H)
  
- $(PERLEXPLIB) : $(PERLIMPLIB)
- 
-@@ -651,6 +660,9 @@
++perllibst.h : $(HAVEMINIPERL) $(CONFIGPM) create_perllibst_h.pl
++	$(MINIPERL) -I..\lib create_perllibst_h.pl
++
+ perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\global.sym ..\pp.sym ..\makedef.pl
+ 	$(MINIPERL) -I..\lib buildext.pl --create-perllibst-h
+ 	$(MINIPERL) -w ..\makedef.pl PLATFORM=win32 $(OPTIMIZE) $(DEFINES) $(BUILDOPT) \
+@@ -649,6 +660,9 @@
  		cd .. && rmdir /s /q $(STATICDIR)
  	$(XCOPY) $(PERLSTATICLIB) $(COREDIR)
  
@@ -6993,7 +6994,7 @@ MAKEFILE
  $(PERLEXE_RES): perlexe.rc $(PERLEXE_MANIFEST) $(PERLEXE_ICO)
  
  $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
-@@ -705,28 +717,38 @@
+@@ -703,6 +717,8 @@
  	    $(PERLEXE_OBJ) $(PERLEXE_RES) $(PERLIMPLIB) $(LIBFILES)
  	copy $(PERLEXE) $(WPERLEXE)
  	$(MINIPERL) -I..\lib bin\exetype.pl $(WPERLEXE) WINDOWS
@@ -7002,15 +7003,10 @@ MAKEFILE
  
  $(PERLEXESTATIC): $(PERLSTATICLIB) $(CONFIGPM) $(PERLEXEST_OBJ) $(PERLEXE_RES)
  	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) \
- 	    $(PERLEXEST_OBJ) $(PERLEXE_RES) $(PERLSTATICLIB) $(LIBFILES)
+@@ -715,23 +731,24 @@
+ 	$(XCOPY) $(EXTDIR)\DynaLoader\XSLoader.pm $(LIBDIR)\$(NULL)
+ 	cd $(EXTDIR)\DynaLoader && $(XSUBPP) dl_win32.xs > $(DYNALOADER).c
  
-+$(DYNALOADER).c: $(HAVEMINIPERL) $(EXTDIR)\DynaLoader\dl_win32.xs $(CONFIGPM)
-+	if not exist $(AUTODIR) mkdir $(AUTODIR)
-+	cd $(EXTDIR)\DynaLoader && ..\$(MINIPERL) -I..\..\lib DynaLoader_pm.PL && ..\$(MINIPERL) -I..\..\lib XSLoader_pm.PL
-+	$(XCOPY) $(EXTDIR)\DynaLoader\DynaLoader.pm $(LIBDIR)\$(NULL)
-+	$(XCOPY) $(EXTDIR)\DynaLoader\XSLoader.pm $(LIBDIR)\$(NULL)
-+	cd $(EXTDIR)\DynaLoader && $(XSUBPP) dl_win32.xs > $(DYNALOADER).c
-+
 +$(EXTDIR)\DynaLoader\dl_win32.xs: dl_win32.xs
 +	copy dl_win32.xs $(EXTDIR)\DynaLoader\dl_win32.xs
 +
@@ -7040,7 +7036,7 @@ MAKEFILE
  
  #-------------------------------------------------------------------------------
  
-@@ -782,13 +804,13 @@
+@@ -787,13 +804,13 @@
  	cd ..\pod && $(PLMAKE) -f ..\win32\pod.mak converters
  	cd ..\lib && $(PERLEXE) lib_pm.PL
  	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
@@ -7058,7 +7054,7 @@ MAKEFILE
  	$(PERLEXE) ..\installperl
  	if exist $(WPERLEXE) $(XCOPY) $(WPERLEXE) $(INST_BIN)\$(NULL)
  	if exist $(PERLEXESTATIC) $(XCOPY) $(PERLEXESTATIC) $(INST_BIN)\$(NULL)
-@@ -801,10 +823,9 @@
+@@ -806,10 +823,9 @@
  	$(RCOPY) $(HTMLDIR)\*.* $(INST_HTML)\$(NULL)
  
  inst_lib : $(CONFIGPM)
@@ -10144,7 +10140,6 @@ MICROCORE_SRC	=		\
 		..\mg.c		\
 		..\numeric.c	\
 		..\op.c		\
-		..\pad.c	\
 		..\perl.c	\
 		..\perlapi.c	\
 		..\perly.c	\
@@ -10152,9 +10147,7 @@ MICROCORE_SRC	=		\
 		..\pp_ctl.c	\
 		..\pp_hot.c	\
 		..\pp_pack.c	\
-		..\pp_sort.c	\
 		..\pp_sys.c	\
-		..\reentr.c	\
 		..\regcomp.c	\
 		..\regexec.c	\
 		..\run.c	\

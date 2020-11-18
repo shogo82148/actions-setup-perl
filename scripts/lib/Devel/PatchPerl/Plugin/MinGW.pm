@@ -1420,8 +1420,10 @@ PATCH
 }
 
 sub _patch_threads {
+    my $version = shift;
+
     if (_ge($version, "5.11.0")) {
-    _patch(<<'PATCH');
+        _patch(<<'PATCH');
 --- dist/threads/threads.xs
 +++ dist/threads/threads.xs
 @@ -1,13 +1,22 @@

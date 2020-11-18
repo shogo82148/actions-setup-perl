@@ -130,7 +130,10 @@ sub run {
         # Cpanel::JSON::XS
         # install fails with perl v5.13.0 - v.5.13.8
         # XS.xs:540:61: error: 'UTF8_DISALLOW_SUPER' undeclared (first use in this function); did you mean 'UNICODE_ALLOW_SUPER'?
-        cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.25.tar.gz', '5.6.2', '5.13.0');
+        # perl v5.11.0
+        # XS.o:XS.c:(.text+0x394c): undefined reference to `Perl_ck_warner_d'
+        cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.25.tar.gz', '5.6.2', '5.11.0');
+        cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.25.tar.gz', '5.11.1', '5.13.0');
         cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.25.tar.gz', '5.13.9');
 
         # some requirements of JSON::XS

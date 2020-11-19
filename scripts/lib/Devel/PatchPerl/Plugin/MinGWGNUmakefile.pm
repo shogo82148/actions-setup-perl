@@ -8386,7 +8386,7 @@ $(MINIWIN32_OBJ) : $(CORE_NOCFG_H)
 # unless the .IF is true), so instead we use a .ELSE with the default.
 # This is the only file that depends on perlhost.h, vmem.h, and vdir.h
 
-perllib$(o)	: perllib.c perllibst.h .\perlhost.h .\vdir.h .\vmem.h
+perllib$(o)	: perllib.c .\perlhost.h .\vdir.h .\vmem.h
 ifeq ($(USE_IMP_SYS),define)
 	$(CC) -c -I. $(CFLAGS_O) $(CXX_FLAG) $(OBJOUT_FLAG)$@ $(PDBOUT) perllib.c
 else

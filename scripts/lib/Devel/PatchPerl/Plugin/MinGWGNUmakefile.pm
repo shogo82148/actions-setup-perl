@@ -9111,7 +9111,6 @@ MICROCORE_SRC	=		\
 		..\mg.c		\
 		..\numeric.c	\
 		..\op.c		\
-		..\pad.c	\
 		..\perl.c	\
 		..\perlapi.c	\
 		..\perly.c	\
@@ -9627,7 +9626,15 @@ MAKEFILE
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
-@@ -410,6 +410,7 @@
+@@ -338,6 +338,7 @@
+ 		..\mg.c		\
+ 		..\numeric.c	\
+ 		..\op.c		\
++		..\pad.c	\
+ 		..\perl.c	\
+ 		..\perlapi.c	\
+ 		..\perly.c	\
+@@ -409,6 +410,7 @@
  		..\perly.h	\
  		..\pp.h		\
  		..\proto.h	\
@@ -9635,7 +9642,7 @@ MAKEFILE
  		..\regexp.h	\
  		..\scope.h	\
  		..\sv.h		\
-@@ -486,9 +487,10 @@
+@@ -485,9 +487,10 @@
  		"obj_ext=$(o)"				\
  		"_a=$(a)"				\
  		"lib_ext=$(a)"				\
@@ -9647,7 +9654,7 @@ MAKEFILE
  		"usemultiplicity=$(USE_MULTI)"		\
  		"useperlio=$(USE_PERLIO)"		\
  		"use64bitint=$(USE_64_BIT_INT)"		\
-@@ -709,9 +711,19 @@
+@@ -708,9 +711,19 @@
  $(PERLIMPLIB) : perldll.def
  	$(IMPLIB) -k -d perldll.def -l $(PERLIMPLIB) -e $(PERLEXPLIB)
  
@@ -9669,7 +9676,7 @@ MAKEFILE
  
  $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
  	cd .. && miniperl.exe minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
-@@ -777,8 +789,15 @@
+@@ -776,8 +789,15 @@
  
  #most of deps of this target are in DYNALOADER and therefore omitted here
  Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
@@ -9687,7 +9694,7 @@ MAKEFILE
  
  #-------------------------------------------------------------------------------
  
-@@ -795,31 +814,24 @@
+@@ -794,31 +814,24 @@
  	copy ..\README.beos     ..\pod\perlbeos.pod
  	copy ..\README.bs2000   ..\pod\perlbs2000.pod
  	copy ..\README.ce       ..\pod\perlce.pod

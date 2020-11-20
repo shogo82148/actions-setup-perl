@@ -1,15 +1,15 @@
 name: build on windows
 
 on:
-  # pull_request:
-  #   paths:
-  #     - "versions/win32.json"
-  #     - "scripts/windows/**"
-  #     - "scripts/lib/Devel/**"
-  #     - ".github/workflows/win32.yml"
-  # push:
-  #   branches:
-  #     - "releases/*"
+  pull_request:
+    paths:
+      - "versions/win32.json"
+      - "scripts/windows/**"
+      - "scripts/lib/Devel/**"
+      - ".github/workflows/win32.yml"
+  push:
+    branches:
+      - "releases/*"
   schedule:
     - cron: "29 0 * * 2"
   workflow_dispatch:

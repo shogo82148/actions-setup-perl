@@ -123,65 +123,65 @@ sub run {
         execute_or_die(File::Spec->catfile($install_dir, 'bin', 'perl.exe'), '-V');
     };
 
-    group "install common CPAN modules" => sub {
-        # JSON
-        cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-4.02.tar.gz', '5.5.3');
+    # group "install common CPAN modules" => sub {
+    #     # JSON
+    #     cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-4.02.tar.gz', '5.5.3');
 
-        # Cpanel::JSON::XS
-        # install fails with perl v5.13.0 - v.5.13.8
-        # XS.xs:540:61: error: 'UTF8_DISALLOW_SUPER' undeclared (first use in this function); did you mean 'UNICODE_ALLOW_SUPER'?
-        # perl v5.11.0
-        # XS.o:XS.c:(.text+0x394c): undefined reference to `Perl_ck_warner_d'
-        cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.25.tar.gz', '5.6.2', '5.11.0');
-        cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.25.tar.gz', '5.11.1', '5.13.0');
-        cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.25.tar.gz', '5.13.9');
+    #     # Cpanel::JSON::XS
+    #     # install fails with perl v5.13.0 - v.5.13.8
+    #     # XS.xs:540:61: error: 'UTF8_DISALLOW_SUPER' undeclared (first use in this function); did you mean 'UNICODE_ALLOW_SUPER'?
+    #     # perl v5.11.0
+    #     # XS.o:XS.c:(.text+0x394c): undefined reference to `Perl_ck_warner_d'
+    #     cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.25.tar.gz', '5.6.2', '5.11.0');
+    #     cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.25.tar.gz', '5.11.1', '5.13.0');
+    #     cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.25.tar.gz', '5.13.9');
 
-        # some requirements of JSON::XS
-        cpan_install('https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/Canary-Stability-2013.tar.gz', '5.8.3');
-        cpan_install('https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/common-sense-3.75.tar.gz', '5.8.3');
-        cpan_install('https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/Types-Serialiser-1.0.tar.gz', '5.8.3');
-        # JSON::XS
-        cpan_install('https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/JSON-XS-4.03.tar.gz', '5.8.3');
+    #     # some requirements of JSON::XS
+    #     cpan_install('https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/Canary-Stability-2013.tar.gz', '5.8.3');
+    #     cpan_install('https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/common-sense-3.75.tar.gz', '5.8.3');
+    #     cpan_install('https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/Types-Serialiser-1.0.tar.gz', '5.8.3');
+    #     # JSON::XS
+    #     cpan_install('https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/JSON-XS-4.03.tar.gz', '5.8.3');
 
-        # some requirements of JSON::PP
-        cpan_install('https://cpan.metacpan.org/authors/id/C/CO/CORION/parent-0.238.tar.gz', '5.6.0', '5.10.1');
-        cpan_install('https://cpan.metacpan.org/authors/id/J/JK/JKEENAN/File-Path-2.18.tar.gz', '5.6.0', '5.6.1');
-        cpan_install('https://cpan.metacpan.org/authors/id/P/PE/PEVANS/Scalar-List-Utils-1.55.tar.gz', '5.6.0', '5.8.1');
-        cpan_install('https://cpan.metacpan.org/authors/id/T/TO/TODDR/Exporter-5.74.tar.gz', '5.6.0', '5.6.1');
-        cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/File-Temp-0.2311.tar.gz', '5.6.0', '5.6.1');
-        cpan_install('https://cpan.metacpan.org/authors/id/M/MA/MAKAMAKA/JSON-PP-Compat5006-1.09.tar.gz', '5.6.0', '5.8.0');
-        # JSON::PP
-        cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-PP-4.05.tar.gz', '5.6.0');
+    #     # some requirements of JSON::PP
+    #     cpan_install('https://cpan.metacpan.org/authors/id/C/CO/CORION/parent-0.238.tar.gz', '5.6.0', '5.10.1');
+    #     cpan_install('https://cpan.metacpan.org/authors/id/J/JK/JKEENAN/File-Path-2.18.tar.gz', '5.6.0', '5.6.1');
+    #     cpan_install('https://cpan.metacpan.org/authors/id/P/PE/PEVANS/Scalar-List-Utils-1.55.tar.gz', '5.6.0', '5.8.1');
+    #     cpan_install('https://cpan.metacpan.org/authors/id/T/TO/TODDR/Exporter-5.74.tar.gz', '5.6.0', '5.6.1');
+    #     cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/File-Temp-0.2311.tar.gz', '5.6.0', '5.6.1');
+    #     cpan_install('https://cpan.metacpan.org/authors/id/M/MA/MAKAMAKA/JSON-PP-Compat5006-1.09.tar.gz', '5.6.0', '5.8.0');
+    #     # JSON::PP
+    #     cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-PP-4.05.tar.gz', '5.6.0');
 
-        # JSON::MaybeXS
-        # EXCEPTION_ACCESS_VIOLATION with perl v5.10.1 - v5.11.5, v5.12.x and v5.13.0
-        cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004003.tar.gz', '5.6.0', '5.10.1');
-        cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004003.tar.gz', '5.13.1');
+    #     # JSON::MaybeXS
+    #     # EXCEPTION_ACCESS_VIOLATION with perl v5.10.1 - v5.11.5, v5.12.x and v5.13.0
+    #     cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004003.tar.gz', '5.6.0', '5.10.1');
+    #     cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004003.tar.gz', '5.13.1');
 
-        # YAML
-        cpan_install('https://cpan.metacpan.org/authors/id/T/TI/TINITA/YAML-1.30.tar.gz', '5.8.1');
+    #     # YAML
+    #     cpan_install('https://cpan.metacpan.org/authors/id/T/TI/TINITA/YAML-1.30.tar.gz', '5.8.1');
 
-        # YAML::Tiny
-        cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/YAML-Tiny-1.73.tar.gz', '5.8.1');
+    #     # YAML::Tiny
+    #     cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/YAML-Tiny-1.73.tar.gz', '5.8.1');
 
-        # YAML::XS
-        cpan_install('https://cpan.metacpan.org/authors/id/T/TI/TINITA/YAML-LibYAML-0.82.tar.gz', '5.8.1');
+    #     # YAML::XS
+    #     cpan_install('https://cpan.metacpan.org/authors/id/T/TI/TINITA/YAML-LibYAML-0.82.tar.gz', '5.8.1');
 
-        ### SSL/TLS
+    #     ### SSL/TLS
 
-        # Net::SSLeay
-        cpan_install('https://cpan.metacpan.org/authors/id/C/CH/CHRISN/Net-SSLeay-1.88.tar.gz', '5.8.1');
+    #     # Net::SSLeay
+    #     cpan_install('https://cpan.metacpan.org/authors/id/C/CH/CHRISN/Net-SSLeay-1.88.tar.gz', '5.8.1');
 
-        # Mozilla::CA
-        cpan_install('https://cpan.metacpan.org/authors/id/A/AB/ABH/Mozilla-CA-20200520.tar.gz', '5.6.0');
+    #     # Mozilla::CA
+    #     cpan_install('https://cpan.metacpan.org/authors/id/A/AB/ABH/Mozilla-CA-20200520.tar.gz', '5.6.0');
 
-        # IO::Socket::SSL
-        # EXCEPTION_ACCESS_VIOLATION with perl v5.10.1 - v5.11.5, v5.12.x and v5.13.0
-        local $ENV{NO_NETWORK_TESTING} = 1;
-        local $ENV{PERL_MM_USE_DEFAULT} = 1;
-        cpan_install('https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-2.068.tar.gz', '5.8.0', '5.10.1');
-        cpan_install('https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-2.068.tar.gz', '5.13.1');
-    };
+    #     # IO::Socket::SSL
+    #     # EXCEPTION_ACCESS_VIOLATION with perl v5.10.1 - v5.11.5, v5.12.x and v5.13.0
+    #     local $ENV{NO_NETWORK_TESTING} = 1;
+    #     local $ENV{PERL_MM_USE_DEFAULT} = 1;
+    #     cpan_install('https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-2.068.tar.gz', '5.8.0', '5.10.1');
+    #     cpan_install('https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-2.068.tar.gz', '5.13.1');
+    # };
 
     group "archiving" => sub {
         my $dir = pushd($install_dir);

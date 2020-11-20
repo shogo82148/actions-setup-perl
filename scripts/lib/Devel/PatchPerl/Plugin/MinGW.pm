@@ -227,13 +227,10 @@ sub _patch_make_maker {
  
  =item constants
 PATCH
-    return
+        return
     }
 
-    if (
-        ($version =~ /^5\.10\./ && version->parse("v$version") >= version->parse("5.10.1")) ||
-        ($version =~ /^5\.8\./ && version->parse("v$version") >= version->parse("5.8.9"))
-    ) {
+    if (_ge($version, "5.10.1")) {
         _patch(<<'PATCH');
 --- lib/ExtUtils/MM_Unix.pm
 +++ lib/ExtUtils/MM_Unix.pm
@@ -318,10 +315,7 @@ PATCH
         return;
     }
 
-    if (
-        $version =~ /^5\.10\./ ||
-        ($version =~ /^5\.9\./ && version->parse("v$version") >= version->parse("5.9.0")) # TODO: fix the version
-    ) {
+    if (_ge($version, "5.9.4")) {
         _patch(<<'PATCH');
 --- lib/ExtUtils/MM_Unix.pm
 +++ lib/ExtUtils/MM_Unix.pm
@@ -431,11 +425,11 @@ PATCH
         return;
     }
 
-    if (version->parse("v$version") >= version->parse("5.8.9")) {
+    if (_ge($version, "5.8.9")) {
         _patch(<<'PATCH');
 --- lib/ExtUtils/MM_Unix.pm
 +++ lib/ExtUtils/MM_Unix.pm
-@@ -415,8 +415,8 @@ sub const_cccmd {
+@@ -296,8 +296,8 @@ sub const_cccmd {
  
  =item const_config (o)
  
@@ -446,136 +440,17 @@ PATCH
  
  =cut
  
-@@ -427,6 +427,7 @@ sub const_config {
-     my(@m,$m);
-     push(@m,"\n# These definitions are from config.sh (via $INC{'Config.pm'})\n");
-     push(@m,"\n# They may have been overridden via Makefile.PL or on the command line\n");
-+    push(@m, $self->specify_shell()); # Usually returns empty string
-     my(%once_only);
-     foreach $m (@{$self->{CONFIG}}){
- 	# SITE*EXP macros are defined in &constants; avoid duplicates here
-@@ -3304,6 +3305,16 @@ $target :: $plfile
-     join "", @m;
- }
+@@ -305,7 +305,8 @@ sub const_config {
+ # --- Constants Sections ---
  
-+=item specify_shell
-+
-+Specify SHELL if needed - not done on Unix.
-+
-+=cut
-+
-+sub specify_shell {
-+  return '';
-+}
-+
- =item quote_paren
+     my($self) = shift;
+-    my @m = <<"END";
++    my @m = $self->specify_shell(); # Usually returns empty string
++    push @m, <<"END";
  
- Backslashes parentheses C<()> in command line arguments.
---- lib/ExtUtils/MM_Win32.pm
-+++ lib/ExtUtils/MM_Win32.pm
-@@ -781,6 +781,22 @@ sub pasthru {
-     return "PASTHRU = " . ($NMAKE ? "-nologo" : "");
- }
- 
-+=item specify_shell
-+
-+Set SHELL to $ENV{COMSPEC} only if make is type 'gmake'.
-+
-+=cut
-+
-+sub specify_shell {
-+    my $self = shift;
-+    return '' unless $self->is_make_type('gmake');
-+    "\nSHELL = $ENV{COMSPEC}\n";
-+}
-+
-+sub is_make_type {
-+    my($self, $type) = @_;
-+    return !! ($self->make =~ /\b$type(?:\.exe)?$/);
-+}
- 
- 1;
- __END__
-PATCH
-        return;
-    }
-
-    if (version->parse("v$version") >= version->parse("5.8.8")) {
-        _patch(<<'PATCH');
---- lib/ExtUtils/MM_Any.pm
-+++ lib/ExtUtils/MM_Any.pm
-@@ -326,6 +326,29 @@ $self->{_MAX_EXEC_LEN} is set by this method, but only for testing purposes.
- 
- 
- 
-+=head3 make
-+
-+    my $make = $MM->make;
-+
-+Returns the make variant we're generating the Makefile for.  This attempts
-+to do some normalization on the information from %Config or the user.
-+
-+=cut
-+
-+sub make {
-+    my $self = shift;
-+
-+    my $make = lc $self->{MAKE};
-+
-+    # Truncate anything like foomake6 to just foomake.
-+    $make =~ s/^(\w+make).*/$1/;
-+
-+    # Turn gnumake into gmake.
-+    $make =~ s/^gnu/g/;
-+
-+    return $make;
-+}
-+
- 
- =head2 Targets
- 
-@@ -1435,6 +1458,19 @@ sub init_platform {
- 
- 
- 
-+=head3 init_MAKE
-+
-+    $mm->init_MAKE
-+
-+Initialize MAKE from either a MAKE environment variable or $Config{make}.
-+
-+=cut
-+
-+sub init_MAKE {
-+    my $self = shift;
-+ 
-+    $self->{MAKE} ||= $ENV{MAKE} || $Config{make};
-+}
- 
- 
- =head2 Tools
---- lib/ExtUtils/MM_Unix.pm
-+++ lib/ExtUtils/MM_Unix.pm
-@@ -295,8 +295,8 @@ sub const_cccmd {
- 
- =item const_config (o)
- 
--Defines a couple of constants in the Makefile that are imported from
--%Config.
-+Sets SHELL if needed, then defines a couple of constants in the Makefile
-+that are imported from %Config.
- 
- =cut
- 
-@@ -307,6 +307,7 @@ sub const_config {
-     my(@m,$m);
-     push(@m,"\n# These definitions are from config.sh (via $INC{'Config.pm'})\n");
-     push(@m,"\n# They may have been overridden via Makefile.PL or on the command line\n");
-+    push(@m, $self->specify_shell()); # Usually returns empty string
-     my(%once_only);
-     foreach $m (@{$self->{CONFIG}}){
- 	# SITE*EXP macros are defined in &constants; avoid duplicates here
-@@ -3077,6 +3078,16 @@ MAKE_FRAG
+ # These definitions are from config.sh (via $INC{'Config.pm'}).
+ # They may have been overridden via Makefile.PL or on the command line.
+@@ -3056,6 +3057,16 @@ MAKE_FRAG
      return $m;
  }
  
@@ -594,30 +469,17 @@ PATCH
  Backslashes parentheses C<()> in command line arguments.
 --- lib/ExtUtils/MM_Win32.pm
 +++ lib/ExtUtils/MM_Win32.pm
-@@ -123,7 +123,7 @@ sub maybe_command {
- 
- =item B<init_DIRFILESEP>
- 
--Using \ for Windows.
-+Using \ for Windows, except for "gmake" where it is /.
- 
- =cut
- 
-@@ -131,9 +131,10 @@ sub init_DIRFILESEP {
-     my($self) = shift;
+@@ -128,7 +128,8 @@ sub init_DIRFILESEP {
  
      # The ^ makes sure its not interpreted as an escape in nmake
--    $self->{DIRFILESEP} = $NMAKE ? '^\\' :
--                          $DMAKE ? '\\\\'
--                                 : '\\';
-+    $self->{DIRFILESEP} = $self->is_make_type('nmake') ? '^\\' :
+     $self->{DIRFILESEP} = $self->is_make_type('nmake') ? '^\\' :
+-                          $self->is_make_type('dmake') ? '\\\\'
 +                          $self->is_make_type('dmake') ? '\\\\' :
 +                          $self->is_make_type('gmake') ? '/'
-+                                                       : '\\';
+                                                        : '\\';
  }
  
- =item B<init_others>
-@@ -168,7 +169,7 @@ sub init_others {
+@@ -153,7 +154,7 @@ sub init_others {
      $self->{DEV_NULL} ||= '> NUL';
  
      $self->{FIXIN}    ||= $self->{PERL_CORE} ? 
@@ -625,9 +487,9 @@ PATCH
 +      "\$(PERLRUN) $self->{PERL_SRC}\\win32\\bin\\pl2bat.pl" :
        'pl2bat.bat';
  
-     $self->{LD}     ||= $Config{ld} || 'link';
-@@ -526,6 +527,22 @@ sub os_flavor {
-     return('Win32');
+     $self->{LD}     ||= 'link';
+@@ -209,6 +210,17 @@ sub platform_constants {
+     return $make_frag;
  }
  
 +=item specify_shell
@@ -641,24 +503,9 @@ PATCH
 +    return '' unless $self->is_make_type('gmake');
 +    "\nSHELL = $ENV{COMSPEC}\n";
 +}
-+
-+sub is_make_type {
-+    my($self, $type) = @_;
-+    return !! ($self->make =~ /\b$type(?:\.exe)?$/);
-+}
  
- 1;
- __END__
---- lib/ExtUtils/MakeMaker.pm
-+++ lib/ExtUtils/MakeMaker.pm
-@@ -491,6 +491,7 @@ sub new {
+ =item special_targets
  
-     ($self->{NAME_SYM} = $self->{NAME}) =~ s/\W+/_/g;
- 
-+    $self->init_MAKE;
-     $self->init_main;
-     $self->init_VERSION;
-     $self->init_dist;
 PATCH
         return;
     }

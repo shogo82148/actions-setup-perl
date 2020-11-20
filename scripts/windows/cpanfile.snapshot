@@ -16,12 +16,12 @@ DISTRIBUTIONS
       Canary::Stability 2013
     requirements:
       ExtUtils::MakeMaker 0
-  Devel-PatchPerl-2.02
-    pathname: B/BI/BINGOS/Devel-PatchPerl-2.02.tar.gz
+  Devel-PatchPerl-2.04
+    pathname: B/BI/BINGOS/Devel-PatchPerl-2.04.tar.gz
     provides:
-      Devel::PatchPerl 2.02
-      Devel::PatchPerl::Hints 2.02
-      Devel::PatchPerl::Plugin 2.02
+      Devel::PatchPerl 2.04
+      Devel::PatchPerl::Hints 2.04
+      Devel::PatchPerl::Plugin 2.04
     requirements:
       ExtUtils::MakeMaker 0
       File::pushd 1.00

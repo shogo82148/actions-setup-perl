@@ -8535,6 +8535,28 @@ installbare : utils
 installhtml : doc
 	$(RCOPY) $(HTMLDIR)\*.* $(INST_HTML)\$(NULL)
 MAKEFILE
+    if (_ge($version, "5.9.4")) {
+        _patch_gnumakefile($version, <<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
+@@ -311,6 +311,7 @@
+ 		..\gv.c		\
+ 		..\hv.c		\
+ 		..\locale.c	\
++		..\mathoms.c	\
+ 		..\mg.c		\
+ 		..\numeric.c	\
+ 		..\op.c		\
+@@ -386,6 +387,7 @@
+ 		..\perly.h	\
+ 		..\pp.h		\
+ 		..\proto.h	\
++		..\regcomp.h	\
+ 		..\regexp.h	\
+ 		..\scope.h	\
+ 		..\sv.h		\
+PATCH
+    }
     if (_ge($version, "5.9.5")) {
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
@@ -8609,26 +8631,15 @@ MAKEFILE
  INT64		= long long
  PERLEXPLIB	= $(COREDIR)\perl__PERL_MINOR_VERSION__.exp
  PERLDLL		= ..\perl__PERL_MINOR_VERSION__.dll
-@@ -309,8 +332,10 @@
+@@ -309,6 +332,7 @@
  		..\dump.c	\
  		..\globals.c	\
  		..\gv.c		\
 +		..\mro.c	\
  		..\hv.c		\
  		..\locale.c	\
-+		..\mathoms.c	\
- 		..\mg.c		\
- 		..\numeric.c	\
- 		..\op.c		\
-@@ -386,6 +411,7 @@
- 		..\perly.h	\
- 		..\pp.h		\
- 		..\proto.h	\
-+		..\regcomp.h	\
- 		..\regexp.h	\
- 		..\scope.h	\
- 		..\sv.h		\
-@@ -398,7 +424,6 @@
+ 		..\mathoms.c	\
+@@ -400,7 +424,6 @@
  		..\EXTERN.h	\
  		..\perlvars.h	\
  		..\intrpvar.h	\
@@ -8636,7 +8647,7 @@ MAKEFILE
  		.\include\dirent.h	\
  		.\include\netdb.h	\
  		.\include\sys\socket.h	\
-@@ -406,6 +431,8 @@
+@@ -408,6 +431,8 @@
  
  CORE_H		= $(CORE_NOCFG_H) .\config.h
  
@@ -8645,7 +8656,7 @@ MAKEFILE
  MICROCORE_OBJ	= $(MICROCORE_SRC:.c=$(o))
  CORE_OBJ	= $(MICROCORE_OBJ) $(EXTRACORE_SRC:.c=$(o))
  WIN32_OBJ	= $(WIN32_SRC:.c=$(o))
-@@ -417,6 +444,7 @@
+@@ -419,6 +444,7 @@
  MINI_OBJ	= $(MINICORE_OBJ) $(MINIWIN32_OBJ)
  DLL_OBJ		= $(DLL_SRC:.c=$(o))
  X2P_OBJ		= $(X2P_SRC:.c=$(o))
@@ -8653,7 +8664,7 @@ MAKEFILE
  PERLDLL_OBJ	= $(CORE_OBJ)
  PERLEXE_OBJ	= perlmain$(o)
  PERLEXEST_OBJ	= perlmainst$(o)
-@@ -482,6 +510,10 @@
+@@ -484,6 +510,10 @@
  all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) $(PERLEXE) $(X2P) Extensions
  	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
  
@@ -8664,7 +8675,7 @@ MAKEFILE
  $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
  
  #----------------------------------------------------------------
-@@ -673,6 +705,7 @@
+@@ -675,6 +705,7 @@
  $(X2P_OBJ)	: $(CORE_H)
  
  perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\global.sym ..\pp.sym ..\makedef.pl
@@ -8672,7 +8683,7 @@ MAKEFILE
  	$(MINIPERL) -w ..\makedef.pl PLATFORM=win32 $(OPTIMIZE) $(DEFINES) $(BUILDOPT) \
  	    CCTYPE=$(CCTYPE) > perldll.def
  
-@@ -681,9 +714,24 @@
+@@ -683,9 +714,24 @@
  $(PERLIMPLIB) : perldll.def
  	$(IMPLIB) -k -d perldll.def -l $(PERLIMPLIB) -e $(PERLEXPLIB)
  
@@ -8699,7 +8710,7 @@ MAKEFILE
  
  $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
  	cd .. && miniperl minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
-@@ -708,6 +756,15 @@
+@@ -710,6 +756,15 @@
  	$(MINIPERL) -I..\lib ..\x2p\s2p.PL
  	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) $(LIBFILES) $(X2P_OBJ)
  
@@ -8715,7 +8726,7 @@ MAKEFILE
  perlmain.c : runperl.c
  	copy runperl.c perlmain.c
  
-@@ -725,6 +782,10 @@
+@@ -727,6 +782,10 @@
  	copy splittree.pl ..
  	$(MINIPERL) -I..\lib ..\splittree.pl "../LIB" $(AUTODIR)
  
@@ -8726,7 +8737,7 @@ MAKEFILE
  $(DYNALOADER).c: $(HAVEMINIPERL) $(EXTDIR)\DynaLoader\dl_win32.xs $(CONFIGPM)
  	if not exist $(AUTODIR) mkdir $(AUTODIR)
  	cd $(EXTDIR)\DynaLoader \
-@@ -738,13 +799,25 @@
+@@ -740,13 +799,25 @@
  $(EXTDIR)\DynaLoader\dl_win32.xs: dl_win32.xs
  	copy dl_win32.xs $(EXTDIR)\DynaLoader\dl_win32.xs
  
@@ -8753,7 +8764,7 @@ MAKEFILE
  
  #-------------------------------------------------------------------------------
  
-@@ -801,7 +874,10 @@
+@@ -803,7 +874,10 @@
  installbare : utils
  	$(PERLEXE) ..\installperl
  	if exist $(WPERLEXE) $(XCOPY) $(WPERLEXE) $(INST_BIN)\$(NULL)

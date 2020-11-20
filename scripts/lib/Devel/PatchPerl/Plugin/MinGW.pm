@@ -1285,10 +1285,11 @@ PATCH
 sub _patch_errno {
     my $version = shift;
 
-    # Silence noise from Errno_pm.PL on Windows
-    # from https://github.com/Perl/perl5/commit/7bf140906596458f94aa2d5969d3067c0d6441a4
-    # and https://github.com/Perl/perl5/commit/f974e9b91d22c1ef2d849ded64674df4f1b18bad
-    _patch(<<'PATCH');
+    if (_ge($version, "5.9.2")) {
+        # Silence noise from Errno_pm.PL on Windows
+        # from https://github.com/Perl/perl5/commit/7bf140906596458f94aa2d5969d3067c0d6441a4
+        # and https://github.com/Perl/perl5/commit/f974e9b91d22c1ef2d849ded64674df4f1b18bad
+        _patch(<<'PATCH');
 --- ext/Errno/Errno_pm.PL
 +++ ext/Errno/Errno_pm.PL
 @@ -245,7 +245,7 @@ sub write_errno_pm {
@@ -1302,6 +1303,23 @@ sub _patch_errno {
  	    next if $expr =~ m/^[a-zA-Z]+$/; # skip some Win32 functions
  	    if($expr =~ m/^0[xX]/) {
 PATCH
+    } else {
+        _patch(<<'PATCH');
+--- ext/Errno/Errno_pm.PL
++++ ext/Errno/Errno_pm.PL
+@@ -229,8 +229,8 @@ sub write_errno_pm {
+ 	    my($name,$expr);
+ 	    next unless ($name, $expr) = /"(.*?)"\s*\[\s*\[\s*(.*?)\s*\]\s*\]/;
+ 	    next if $name eq $expr;
+-	    $expr =~ s/\(?\(\w+\)([^\)]*)\)?/$1/; # ((type)0xcafebabe) at alia
+-	    $expr =~ s/((?:0x)?[0-9a-fA-F]+)[LU]+\b/$1/g; # 2147483647L et alia
++	    $expr =~ s/\(?\(\s*[a-z_]\w*\s*\)([^\)]*)\)?/$1/i; # ((type)0xcafebabe) at alia
++	    $expr =~ s/((?:0x)?[0-9a-fA-F]+)[luLU]+\b/$1/g; # 2147483647L et alia
+ 	    next if $expr =~ m/^[a-zA-Z]+$/; # skip some Win32 functions
+ 	    if($expr =~ m/^0[xX]/) {
+ 		$err{$name} = hex $expr;
+PATCH
+    }
 
     if (_ge($version, "5.13.5")) {
         return;

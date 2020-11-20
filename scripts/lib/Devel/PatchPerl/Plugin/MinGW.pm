@@ -472,6 +472,15 @@ PATCH
  Backslashes parentheses C<()> in command line arguments.
 --- lib/ExtUtils/MM_Win32.pm
 +++ lib/ExtUtils/MM_Win32.pm
+@@ -24,7 +24,7 @@ use File::Basename;
+ use File::Spec;
+ use ExtUtils::MakeMaker qw( neatvalue );
+ 
+-use vars qw(@ISA $VERSION $BORLAND $GCC $DMAKE $NMAKE);
++use vars qw(@ISA $VERSION $BORLAND $GCC $DMAKE $NMAKE $GMAKE);
+ 
+ require ExtUtils::MM_Any;
+ require ExtUtils::MM_Unix;
 @@ -36,6 +36,7 @@ $ENV{EMXSHELL} = 'sh'; # to run `commands`
  $BORLAND = 1 if $Config{'cc'} =~ /^bcc/i;
  $GCC     = 1 if $Config{'cc'} =~ /^gcc/i;

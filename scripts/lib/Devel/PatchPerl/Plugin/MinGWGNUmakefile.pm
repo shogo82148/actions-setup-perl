@@ -8535,11 +8535,34 @@ installbare : utils
 installhtml : doc
 	$(RCOPY) $(HTMLDIR)\*.* $(INST_HTML)\$(NULL)
 MAKEFILE
-    if (_ge($version, "5.9.4")) {
+    if (_ge($version, "5.9.3")) {
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
-@@ -311,6 +311,7 @@
+@@ -264,7 +264,14 @@
+ 		..\utils\libnetcfg	\
+ 		..\utils\enc2xs		\
+ 		..\utils\piconv		\
++		..\utils\corelist	\
+ 		..\utils\cpan		\
++		..\utils\xsubpp		\
++		..\utils\prove		\
++		..\utils\ptar		\
++		..\utils\ptardiff	\
++		..\utils\shasum		\
++		..\utils\instmodsh	\
+ 		..\pod\checkpods	\
+ 		..\pod\pod2html		\
+ 		..\pod\pod2latex	\
+@@ -276,7 +283,6 @@
+ 		..\x2p\find2perl	\
+ 		..\x2p\psed		\
+ 		..\x2p\s2p		\
+-		..\lib\ExtUtils\xsubpp	\
+ 		bin\exetype.pl		\
+ 		bin\runperl.pl		\
+ 		bin\pl2bat.pl		\
+@@ -311,6 +317,7 @@
  		..\gv.c		\
  		..\hv.c		\
  		..\locale.c	\
@@ -8547,7 +8570,7 @@ MAKEFILE
  		..\mg.c		\
  		..\numeric.c	\
  		..\op.c		\
-@@ -386,6 +387,7 @@
+@@ -386,6 +393,7 @@
  		..\perly.h	\
  		..\pp.h		\
  		..\proto.h	\
@@ -8555,7 +8578,7 @@ MAKEFILE
  		..\regexp.h	\
  		..\scope.h	\
  		..\sv.h		\
-@@ -673,6 +675,7 @@
+@@ -673,6 +681,7 @@
  $(X2P_OBJ)	: $(CORE_H)
  
  perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\global.sym ..\pp.sym ..\makedef.pl
@@ -8563,6 +8586,20 @@ MAKEFILE
  	$(MINIPERL) -w ..\makedef.pl PLATFORM=win32 $(OPTIMIZE) $(DEFINES) $(BUILDOPT) \
  	    CCTYPE=$(CCTYPE) > perldll.def
  
+PATCH
+    }
+    if (_ge($version, "5.9.4")) {
+        _patch_gnumakefile($version, <<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
+@@ -264,6 +264,7 @@
+ 		..\utils\libnetcfg	\
+ 		..\utils\enc2xs		\
+ 		..\utils\piconv		\
++		..\utils\config_data	\
+ 		..\utils\corelist	\
+ 		..\utils\cpan		\
+ 		..\utils\xsubpp		\
 PATCH
     }
     if (_ge($version, "5.9.5")) {
@@ -8599,7 +8636,7 @@ PATCH
  
  PERLDEP = $(PERLIMPLIB)
  
-@@ -259,12 +272,22 @@
+@@ -259,7 +272,6 @@
  		..\utils\pstruct	\
  		..\utils\h2xs		\
  		..\utils\perldoc	\
@@ -8607,31 +8644,17 @@ PATCH
  		..\utils\perlivp	\
  		..\utils\libnetcfg	\
  		..\utils\enc2xs		\
- 		..\utils\piconv		\
-+		..\utils\config_data	\
-+		..\utils\corelist	\
- 		..\utils\cpan		\
-+		..\utils\xsubpp		\
-+		..\utils\prove		\
-+		..\utils\ptar		\
-+		..\utils\ptardiff	\
+@@ -271,6 +283,9 @@
+ 		..\utils\prove		\
+ 		..\utils\ptar		\
+ 		..\utils\ptardiff	\
 +		..\utils\cpanp-run-perl	\
-+		..\utils\cpanp		\
++		..\utils\cpanp	\
 +		..\utils\cpan2dist	\
-+		..\utils\shasum		\
-+		..\utils\instmodsh	\
+ 		..\utils\shasum		\
+ 		..\utils\instmodsh	\
  		..\pod\checkpods	\
- 		..\pod\pod2html		\
- 		..\pod\pod2latex	\
-@@ -276,7 +299,6 @@
- 		..\x2p\find2perl	\
- 		..\x2p\psed		\
- 		..\x2p\s2p		\
--		..\lib\ExtUtils\xsubpp	\
- 		bin\exetype.pl		\
- 		bin\runperl.pl		\
- 		bin\pl2bat.pl		\
-@@ -287,6 +309,7 @@
+@@ -294,6 +309,7 @@
  CFGH_TMPL	= config_H.gc
  PERLIMPLIB	= $(COREDIR)\libperl__PERL_MINOR_VERSION__$(a)
  PERLIMPLIBBASE	= libperl__PERL_MINOR_VERSION__$(a)
@@ -8639,7 +8662,7 @@ PATCH
  INT64		= long long
  PERLEXPLIB	= $(COREDIR)\perl__PERL_MINOR_VERSION__.exp
  PERLDLL		= ..\perl__PERL_MINOR_VERSION__.dll
-@@ -309,6 +332,7 @@
+@@ -316,6 +332,7 @@
  		..\dump.c	\
  		..\globals.c	\
  		..\gv.c		\
@@ -8647,7 +8670,7 @@ PATCH
  		..\hv.c		\
  		..\locale.c	\
  		..\mathoms.c	\
-@@ -400,7 +424,6 @@
+@@ -407,7 +424,6 @@
  		..\EXTERN.h	\
  		..\perlvars.h	\
  		..\intrpvar.h	\
@@ -8655,7 +8678,7 @@ PATCH
  		.\include\dirent.h	\
  		.\include\netdb.h	\
  		.\include\sys\socket.h	\
-@@ -408,6 +431,8 @@
+@@ -415,6 +431,8 @@
  
  CORE_H		= $(CORE_NOCFG_H) .\config.h
  
@@ -8664,7 +8687,7 @@ PATCH
  MICROCORE_OBJ	= $(MICROCORE_SRC:.c=$(o))
  CORE_OBJ	= $(MICROCORE_OBJ) $(EXTRACORE_SRC:.c=$(o))
  WIN32_OBJ	= $(WIN32_SRC:.c=$(o))
-@@ -419,6 +444,7 @@
+@@ -426,6 +444,7 @@
  MINI_OBJ	= $(MINICORE_OBJ) $(MINIWIN32_OBJ)
  DLL_OBJ		= $(DLL_SRC:.c=$(o))
  X2P_OBJ		= $(X2P_SRC:.c=$(o))
@@ -8672,7 +8695,7 @@ PATCH
  PERLDLL_OBJ	= $(CORE_OBJ)
  PERLEXE_OBJ	= perlmain$(o)
  PERLEXEST_OBJ	= perlmainst$(o)
-@@ -484,6 +510,10 @@
+@@ -491,6 +510,10 @@
  all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) $(PERLEXE) $(X2P) Extensions
  	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
  
@@ -8683,7 +8706,7 @@ PATCH
  $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
  
  #----------------------------------------------------------------
-@@ -684,9 +714,24 @@
+@@ -691,9 +714,24 @@
  $(PERLIMPLIB) : perldll.def
  	$(IMPLIB) -k -d perldll.def -l $(PERLIMPLIB) -e $(PERLEXPLIB)
  
@@ -8710,7 +8733,7 @@ PATCH
  
  $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
  	cd .. && miniperl minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
-@@ -711,6 +756,15 @@
+@@ -718,6 +756,15 @@
  	$(MINIPERL) -I..\lib ..\x2p\s2p.PL
  	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) $(LIBFILES) $(X2P_OBJ)
  
@@ -8726,7 +8749,7 @@ PATCH
  perlmain.c : runperl.c
  	copy runperl.c perlmain.c
  
-@@ -728,6 +782,10 @@
+@@ -735,6 +782,10 @@
  	copy splittree.pl ..
  	$(MINIPERL) -I..\lib ..\splittree.pl "../LIB" $(AUTODIR)
  
@@ -8737,7 +8760,7 @@ PATCH
  $(DYNALOADER).c: $(HAVEMINIPERL) $(EXTDIR)\DynaLoader\dl_win32.xs $(CONFIGPM)
  	if not exist $(AUTODIR) mkdir $(AUTODIR)
  	cd $(EXTDIR)\DynaLoader \
-@@ -741,13 +799,25 @@
+@@ -748,13 +799,25 @@
  $(EXTDIR)\DynaLoader\dl_win32.xs: dl_win32.xs
  	copy dl_win32.xs $(EXTDIR)\DynaLoader\dl_win32.xs
  
@@ -8764,7 +8787,7 @@ PATCH
  
  #-------------------------------------------------------------------------------
  
-@@ -804,7 +874,10 @@
+@@ -811,7 +874,10 @@
  installbare : utils
  	$(PERLEXE) ..\installperl
  	if exist $(WPERLEXE) $(XCOPY) $(WPERLEXE) $(INST_BIN)\$(NULL)

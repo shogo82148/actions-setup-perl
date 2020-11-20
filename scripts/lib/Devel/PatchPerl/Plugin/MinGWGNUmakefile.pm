@@ -8555,6 +8555,14 @@ MAKEFILE
  		..\regexp.h	\
  		..\scope.h	\
  		..\sv.h		\
+@@ -673,6 +675,7 @@
+ $(X2P_OBJ)	: $(CORE_H)
+ 
+ perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\global.sym ..\pp.sym ..\makedef.pl
++	$(MINIPERL) -I..\lib buildext.pl --create-perllibst-h
+ 	$(MINIPERL) -w ..\makedef.pl PLATFORM=win32 $(OPTIMIZE) $(DEFINES) $(BUILDOPT) \
+ 	    CCTYPE=$(CCTYPE) > perldll.def
+ 
 PATCH
     }
     if (_ge($version, "5.9.5")) {
@@ -8675,15 +8683,7 @@ PATCH
  $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
  
  #----------------------------------------------------------------
-@@ -675,6 +705,7 @@
- $(X2P_OBJ)	: $(CORE_H)
- 
- perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\global.sym ..\pp.sym ..\makedef.pl
-+	$(MINIPERL) -I..\lib buildext.pl --create-perllibst-h
- 	$(MINIPERL) -w ..\makedef.pl PLATFORM=win32 $(OPTIMIZE) $(DEFINES) $(BUILDOPT) \
- 	    CCTYPE=$(CCTYPE) > perldll.def
- 
-@@ -683,9 +714,24 @@
+@@ -684,9 +714,24 @@
  $(PERLIMPLIB) : perldll.def
  	$(IMPLIB) -k -d perldll.def -l $(PERLIMPLIB) -e $(PERLEXPLIB)
  
@@ -8710,7 +8710,7 @@ PATCH
  
  $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
  	cd .. && miniperl minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
-@@ -710,6 +756,15 @@
+@@ -711,6 +756,15 @@
  	$(MINIPERL) -I..\lib ..\x2p\s2p.PL
  	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) $(LIBFILES) $(X2P_OBJ)
  
@@ -8726,7 +8726,7 @@ PATCH
  perlmain.c : runperl.c
  	copy runperl.c perlmain.c
  
-@@ -727,6 +782,10 @@
+@@ -728,6 +782,10 @@
  	copy splittree.pl ..
  	$(MINIPERL) -I..\lib ..\splittree.pl "../LIB" $(AUTODIR)
  
@@ -8737,7 +8737,7 @@ PATCH
  $(DYNALOADER).c: $(HAVEMINIPERL) $(EXTDIR)\DynaLoader\dl_win32.xs $(CONFIGPM)
  	if not exist $(AUTODIR) mkdir $(AUTODIR)
  	cd $(EXTDIR)\DynaLoader \
-@@ -740,13 +799,25 @@
+@@ -741,13 +799,25 @@
  $(EXTDIR)\DynaLoader\dl_win32.xs: dl_win32.xs
  	copy dl_win32.xs $(EXTDIR)\DynaLoader\dl_win32.xs
  
@@ -8764,7 +8764,7 @@ PATCH
  
  #-------------------------------------------------------------------------------
  
-@@ -803,7 +874,10 @@
+@@ -804,7 +874,10 @@
  installbare : utils
  	$(PERLEXE) ..\installperl
  	if exist $(WPERLEXE) $(XCOPY) $(WPERLEXE) $(INST_BIN)\$(NULL)

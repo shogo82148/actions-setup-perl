@@ -11021,8 +11021,8 @@ $(DLL_OBJ)	: $(CORE_H)
 $(X2P_OBJ)	: $(CORE_H)
 
 perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\global.sym ..\pp.sym ..\makedef.pl
-	$(MINIPERL) -w ..\makedef.pl PLATFORM=win32 $(OPTIMIZE) $(DEFINES) $(BUILDOPT) \
-	    CCTYPE=$(CCTYPE) > perldll.def
+	cd .. && miniperl -w makedef.pl PLATFORM=win32 $(OPTIMIZE) $(DEFINES) $(BUILDOPT) \
+	    CCTYPE=$(CCTYPE) > win32\perldll.def
 
 $(PERLEXPLIB) : $(PERLIMPLIB)
 

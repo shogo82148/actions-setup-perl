@@ -818,7 +818,8 @@ PATCH
         return;
     }
 
-    _patch(<<'PATCH');
+    if (_ge($version, "5.8.1")) {
+        _patch(<<'PATCH');
 --- lib/ExtUtils/MM_Any.pm
 +++ lib/ExtUtils/MM_Any.pm
 @@ -339,6 +339,29 @@ END_OF_TARGET
@@ -999,6 +1000,258 @@ PATCH
      $self->init_VERSION;
      $self->init_dist;
 PATCH
+        return;
+    }
+
+    if (_ge($version, "5.8.0")) {
+        _patch(<<'PATCH');
+--- lib/ExtUtils/MM_Any.pm
++++ lib/ExtUtils/MM_Any.pm
+@@ -169,6 +169,43 @@ sub test_via_script {
+ 
+ =back
+ 
++=head3 make
++
++    my $make = $MM->make;
++
++Returns the make variant we're generating the Makefile for.  This attempts
++to do some normalization on the information from %Config or the user.
++
++=cut
++
++sub make {
++    my $self = shift;
++
++    my $make = lc $self->{MAKE};
++
++    # Truncate anything like foomake6 to just foomake.
++    $make =~ s/^(\w+make).*/$1/;
++
++    # Turn gnumake into gmake.
++    $make =~ s/^gnu/g/;
++
++    return $make;
++}
++
++=head3 init_MAKE
++
++    $mm->init_MAKE
++
++Initialize MAKE from either a MAKE environment variable or $Config{make}.
++
++=cut
++
++sub init_MAKE {
++    my $self = shift;
++
++    $self->{MAKE} ||= $ENV{MAKE} || $Config{make};
++}
++
+ =head1 AUTHOR
+ 
+ Michael G Schwern <schwern@pobox.com> with code from ExtUtils::MM_Unix
+--- lib/ExtUtils/MM_Unix.pm
++++ lib/ExtUtils/MM_Unix.pm
+@@ -415,8 +415,8 @@ sub const_cccmd {
+ 
+ =item const_config (o)
+ 
+-Defines a couple of constants in the Makefile that are imported from
+-%Config.
++Sets SHELL if needed, then defines a couple of constants in the Makefile
++that are imported from %Config.
+ 
+ =cut
+ 
+@@ -427,6 +427,7 @@ sub const_config {
+     my(@m,$m);
+     push(@m,"\n# These definitions are from config.sh (via $INC{'Config.pm'})\n");
+     push(@m,"\n# They may have been overridden via Makefile.PL or on the command line\n");
++    push(@m, $self->specify_shell()); # Usually returns empty string
+     my(%once_only);
+     foreach $m (@{$self->{CONFIG}}){
+ 	# SITE*EXP macros are defined in &constants; avoid duplicates here
+@@ -474,9 +475,12 @@ sub constants {
+     my($self) = @_;
+     my(@m,$tmp);
+ 
++    $self->{DFSEP} = '$(DIRFILESEP)';  # alias for internal use
++
+     for $tmp (qw/
+ 
+ 	      AR_STATIC_ARGS NAME DISTNAME NAME_SYM VERSION
++          DIRFILESEP DFSEP
+ 	      VERSION_SYM XS_VERSION 
+ 	      INST_ARCHLIB INST_SCRIPT INST_BIN INST_LIB
+               INSTALLDIRS
+@@ -582,7 +586,7 @@ makemakerdflt: all
+ .PHONY: all config static dynamic test linkext manifest
+ 
+ # Where is the Config information that we are using/depend on
+-CONFIGDEP = \$(PERL_ARCHLIB)/Config.pm \$(PERL_INC)/config.h
++CONFIGDEP = \$(PERL_ARCHLIB)/Config.pm \$(PERL_INC)\$(DIRFILESEP)config.h
+ };
+ 
+     my @parentdir = split(/::/, $self->{PARENT_NAME});
+@@ -942,7 +946,7 @@ BOOTSTRAP = '."$self->{BASEEXT}.bs".'
+ # As Mkbootstrap might not write a file (if none is required)
+ # we use touch to prevent make continually trying to remake it.
+ # The DynaLoader only reads a non-empty file.
+-$(BOOTSTRAP): '."$self->{MAKEFILE} $self->{BOOTDEP}".' $(INST_ARCHAUTODIR)/.exists
++$(BOOTSTRAP): '."$self->{MAKEFILE} $self->{BOOTDEP}".' $(INST_ARCHAUTODIR)$(DIRFILESEP).exists
+ 	'.$self->{NOECHO}.'echo "Running Mkbootstrap for $(NAME) ($(BSLOADLIBS))"
+ 	'.$self->{NOECHO}.'$(PERLRUN) \
+ 		"-MExtUtils::Mkbootstrap" \
+@@ -950,7 +954,7 @@ $(BOOTSTRAP): '."$self->{MAKEFILE} $self->{BOOTDEP}".' $(INST_ARCHAUTODIR)/.exis
+ 	'.$self->{NOECHO}.'$(TOUCH) $(BOOTSTRAP)
+ 	$(CHMOD) $(PERM_RW) $@
+ 
+-$(INST_BOOT): $(BOOTSTRAP) $(INST_ARCHAUTODIR)/.exists
++$(INST_BOOT): $(BOOTSTRAP) $(INST_ARCHAUTODIR)$(DIRFILESEP).exists
+ 	'."$self->{NOECHO}$self->{RM_RF}".' $(INST_BOOT)
+ 	-'.$self->{CP}.' $(BOOTSTRAP) $(INST_BOOT)
+ 	$(CHMOD) $(PERM_RW) $@
+@@ -983,7 +987,7 @@ ARMAYBE = '.$armaybe.'
+ OTHERLDFLAGS = '.$ld_opt.$otherldflags.'
+ INST_DYNAMIC_DEP = '.$inst_dynamic_dep.'
+ 
+-$(INST_DYNAMIC): $(OBJECT) $(MYEXTLIB) $(BOOTSTRAP) $(INST_ARCHAUTODIR)/.exists $(EXPORT_LIST) $(PERL_ARCHIVE) $(PERL_ARCHIVE_AFTER) $(INST_DYNAMIC_DEP)
++$(INST_DYNAMIC): $(OBJECT) $(MYEXTLIB) $(BOOTSTRAP) $(INST_ARCHAUTODIR)$(DIRFILESEP).exists $(EXPORT_LIST) $(PERL_ARCHIVE) $(PERL_ARCHIVE_AFTER) $(INST_DYNAMIC_DEP)
+ ');
+     if ($armaybe ne ':'){
+ 	$ldfrom = 'tmp$(LIB_EXT)';
+@@ -1492,6 +1496,16 @@ sub init_dirscan {	# --- File and Directory Lists (.xs .pm .pod etc)
+     }
+ }
+ 
++=item init_DIRFILESEP
++Using / for Unix.  Called by init_main.
++=cut
++
++sub init_DIRFILESEP {
++    my($self) = shift;
++
++    $self->{DIRFILESEP} = '/';
++}
++
+ =item init_main
+ 
+ Initializes AR, AR_STATIC_ARGS, BASEEXT, CONFIG, DISTNAME, DLBASE,
+@@ -2615,7 +2629,7 @@ LLIBPERL    = $llibperl
+ ";
+ 
+     push @m, "
+-\$(INST_ARCHAUTODIR)/extralibs.all: \$(INST_ARCHAUTODIR)/.exists ".join(" \\\n\t", @$extra)."
++\$(INST_ARCHAUTODIR)/extralibs.all: \$(INST_ARCHAUTODIR)\$(DIRFILESEP).exists ".join(" \\\n\t", @$extra)."
+ 	$self->{NOECHO}$self->{RM_F} \$\@
+ 	$self->{NOECHO}\$(TOUCH) \$\@
+ ";
+@@ -3434,7 +3448,7 @@ sub static_lib {
+ 
+     my(@m);
+     push(@m, <<'END');
+-$(INST_STATIC): $(OBJECT) $(MYEXTLIB) $(INST_ARCHAUTODIR)/.exists
++$(INST_STATIC): $(OBJECT) $(MYEXTLIB) $(INST_ARCHAUTODIR)$(DIRFILESEP).exists
+ 	$(RM_RF) $@
+ END
+     # If this extension has its own library (eg SDBM_File)
+@@ -3887,13 +3901,13 @@ pure_all :: config pm_to_blib subdirs linkext
+ subdirs :: $(MYEXTLIB)
+ 	'.$self->{NOECHO}.'$(NOOP)
+ 
+-config :: '.$self->{MAKEFILE}.' $(INST_LIBDIR)/.exists
++config :: '.$self->{MAKEFILE}.' $(INST_LIBDIR)$(DIRFILESEP).exists
+ 	'.$self->{NOECHO}.'$(NOOP)
+ 
+-config :: $(INST_ARCHAUTODIR)/.exists
++config :: $(INST_ARCHAUTODIR)$(DIRFILESEP).exists
+ 	'.$self->{NOECHO}.'$(NOOP)
+ 
+-config :: $(INST_AUTODIR)/.exists
++config :: $(INST_AUTODIR)$(DIRFILESEP).exists
+ 	'.$self->{NOECHO}.'$(NOOP)
+ ';
+ 
+@@ -3901,7 +3915,7 @@ config :: $(INST_AUTODIR)/.exists
+ 
+     if (%{$self->{MAN1PODS}}) {
+ 	push @m, qq[
+-config :: \$(INST_MAN1DIR)/.exists
++config :: \$(INST_MAN1DIR)$(DIRFILESEP).exists
+ 	$self->{NOECHO}\$(NOOP)
+ 
+ ];
+@@ -3909,7 +3923,7 @@ config :: \$(INST_MAN1DIR)/.exists
+     }
+     if (%{$self->{MAN3PODS}}) {
+ 	push @m, qq[
+-config :: \$(INST_MAN3DIR)/.exists
++config :: \$(INST_MAN3DIR)$(DIRFILESEP).exists
+ 	$self->{NOECHO}\$(NOOP)
+ 
+ ];
+--- lib/ExtUtils/MM_Win32.pm
++++ lib/ExtUtils/MM_Win32.pm
+@@ -147,6 +147,19 @@ sub find_tests {
+     return join(' ', <t\\*.t>);
+ }
+ 
++=item B<init_DIRFILESEP>
++Using \ for Windows.
++=cut
++
++sub init_DIRFILESEP {
++    my($self) = shift;
++
++    # The ^ makes sure its not interpreted as an escape in nmake
++    $self->{DIRFILESEP} = $self->is_make_type('nmake') ? '^\\' :
++                          $self->is_make_type('dmake') ? '\\\\' :
++                          $self->is_make_type('gmake') ? '/'
++                                                       : '\\';
++}
+ 
+ sub init_others
+ {
+@@ -781,6 +794,22 @@ sub pasthru {
+     return "PASTHRU = " . ($NMAKE ? "-nologo" : "");
+ }
+ 
++=item specify_shell
++
++Set SHELL to $ENV{COMSPEC} only if make is type 'gmake'.
++
++=cut
++
++sub specify_shell {
++    my $self = shift;
++    return '' unless $self->is_make_type('gmake');
++    "\nSHELL = $ENV{COMSPEC}\n";
++}
++
++sub is_make_type {
++    my($self, $type) = @_;
++    return !! ($self->make =~ /\b$type(?:\.exe)?$/);
++}
+ 
+ 1;
+ __END__
+--- lib/ExtUtils/MakeMaker.pm
++++ lib/ExtUtils/MakeMaker.pm
+@@ -520,7 +520,9 @@ sub new {
+ 
+     ($self->{NAME_SYM} = $self->{NAME}) =~ s/\W+/_/g;
+ 
+-    $self->init_main();
++    $self->init_main;
++    $self->init_MAKE;
++    $self->init_DIRFILESEP;
+ 
+     if (! $self->{PERL_SRC} ) {
+         require VMS::Filespec if $Is_VMS;
+PATCH
+        return;
+    }
 }
 
 sub _patch_sdbm {

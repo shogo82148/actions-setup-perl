@@ -595,10 +595,8 @@ PATCH
  =item quote_paren
  
  Backslashes parentheses C<()> in command line arguments.
-diff --git a/lib/ExtUtils/MM_Win32.pm b/lib/ExtUtils/MM_Win32.pm
-index 8fe0b96d95..188bec9ea4 100644
---- a/lib/ExtUtils/MM_Win32.pm
-+++ b/lib/ExtUtils/MM_Win32.pm
+--- lib/ExtUtils/MM_Win32.pm
++++ lib/ExtUtils/MM_Win32.pm
 @@ -24,7 +24,7 @@ use File::Basename;
  use File::Spec;
  use ExtUtils::MakeMaker qw( neatvalue );
@@ -913,50 +911,6 @@ PATCH
      $self->init_main;
      $self->init_VERSION;
      $self->init_dist;
---- win32/config_H.gc
-+++ win32/config_H.gc
-@@ -911,16 +911,15 @@
-  *	Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
-  *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.
-  */
--/*#define HAS_QUAD	/**/
--#ifdef HAS_QUAD
-+#define HAS_QUAD
- #   define Quad_t long long	/**/
- #   define Uquad_t unsigned long long	/**/
--#   define QUADKIND 5	/**/
-+#   define QUADKIND 3	/**/
- #   define QUAD_IS_INT	1
- #   define QUAD_IS_LONG	2
- #   define QUAD_IS_LONG_LONG	3
- #   define QUAD_IS_INT64_T	4
--#endif
-+#   define QUAD_IS___INT64	5
- 
- /* HAS_ACCESSX:
-  *	This symbol, if defined, indicates that the accessx routine is
-@@ -1825,7 +1824,9 @@
-  *	available to exclusively create and open a uniquely named
-  *	temporary file.
-  */
--/*#define HAS_MKSTEMP		/**/
-+#if __MINGW64_VERSION_MAJOR >= 4
-+#define HAS_MKSTEMP
-+#endif
- 
- /* HAS_MMAP:
-  *	This symbol, if defined, indicates that the mmap system call is
-@@ -2614,7 +2615,9 @@
-  *	available to excluslvely create and open a uniquely named
-  *	(with a suffix) temporary file.
-  */
--/*#define HAS_MKSTEMPS		/**/
-+#if __MINGW64_VERSION_MAJOR >= 4
-+#define HAS_MKSTEMPS
-+#endif
- 
- /* HAS_MODFL:
-  *	This symbol, if defined, indicates that the modfl routine is
 PATCH
 }
 

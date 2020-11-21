@@ -9085,7 +9085,6 @@ UTILS		=			\
 		..\utils\libnetcfg	\
 		..\utils\enc2xs		\
 		..\utils\piconv		\
-		..\utils\cpan		\
 		..\pod\checkpods	\
 		..\pod\pod2html		\
 		..\pod\pod2latex	\
@@ -9636,7 +9635,15 @@ MAKEFILE
  #CRYPT_LIB	= fcrypt.lib
  #PERL_MALLOC	:= define
  #DEBUG_MSTATS	:= define
-@@ -315,6 +315,7 @@
+@@ -265,6 +265,7 @@
+ 		..\utils\libnetcfg	\
+ 		..\utils\enc2xs		\
+ 		..\utils\piconv		\
++		..\utils\cpan		\
+ 		..\pod\checkpods	\
+ 		..\pod\pod2html		\
+ 		..\pod\pod2latex	\
+@@ -314,6 +315,7 @@
  		..\mg.c		\
  		..\numeric.c	\
  		..\op.c		\
@@ -9644,7 +9651,7 @@ MAKEFILE
  		..\perl.c	\
  		..\perlapi.c	\
  		..\perly.c	\
-@@ -764,6 +765,7 @@
+@@ -763,6 +765,7 @@
  	copy ..\README.beos     ..\pod\perlbeos.pod
  	copy ..\README.bs2000   ..\pod\perlbs2000.pod
  	copy ..\README.ce       ..\pod\perlce.pod
@@ -9652,7 +9659,7 @@ MAKEFILE
  	copy ..\README.cygwin   ..\pod\perlcygwin.pod
  	copy ..\README.dgux     ..\pod\perldgux.pod
  	copy ..\README.dos      ..\pod\perldos.pod
-@@ -772,20 +774,25 @@
+@@ -771,20 +774,25 @@
  	copy ..\README.hpux     ..\pod\perlhpux.pod
  	copy ..\README.hurd     ..\pod\perlhurd.pod
  	copy ..\README.irix     ..\pod\perlirix.pod

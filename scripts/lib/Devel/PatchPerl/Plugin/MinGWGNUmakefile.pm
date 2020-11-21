@@ -8838,7 +8838,7 @@ CCTYPE		:= GCC
 #USE_PERLCRT	= define
 #USE_SETARGV	:= define
 #USE_5005THREADS:= define
-CRYPT_SRC	= .\fcrypt.c
+#CRYPT_SRC	= .\fcrypt.c
 #CRYPT_LIB	= fcrypt.lib
 #PERL_MALLOC	:= define
 #DEBUG_MSTATS	:= define
@@ -9568,7 +9568,6 @@ $(HAVEMINIPERL): $(MINI_OBJ)
 #most of deps of this target are in DYNALOADER and therefore omitted here
 Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
 	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR)
-	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext
 
 #-------------------------------------------------------------------------------
 
@@ -9634,6 +9633,15 @@ MAKEFILE
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
+@@ -18,7 +18,7 @@
+ #USE_PERLCRT	= define
+ #USE_SETARGV	:= define
+ #USE_5005THREADS:= define
+-#CRYPT_SRC	= .\fcrypt.c
++CRYPT_SRC	= .\fcrypt.c
+ #CRYPT_LIB	= fcrypt.lib
+ #PERL_MALLOC	:= define
+ #DEBUG_MSTATS	:= define
 @@ -315,6 +315,7 @@
  		..\mg.c		\
  		..\numeric.c	\
@@ -9642,14 +9650,6 @@ MAKEFILE
  		..\perl.c	\
  		..\perlapi.c	\
  		..\perly.c	\
-@@ -748,7 +749,6 @@
- #most of deps of this target are in DYNALOADER and therefore omitted here
- Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
- 	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR)
--	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext
- 
- #-------------------------------------------------------------------------------
- 
 PATCH
     }
     if (_ge($version, "5.8.3")) {

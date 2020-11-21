@@ -11126,7 +11126,7 @@ installbare : utils
 installhtml : doc
 	$(RCOPY) $(HTMLDIR)\*.* $(INST_HTML)\$(NULL)
 MAKEFILE
-    if (_ge($version, "5.7.3")) {
+    if (_ge($version, "5.7.2")) {
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
@@ -11177,7 +11177,7 @@ MAKEFILE
  ifneq ($(CRYPT_SRC), "")
  WIN32_SRC	+= $(CRYPT_SRC)
  endif
-@@ -744,13 +755,33 @@
+@@ -744,13 +755,32 @@
  
  utils: $(PERLEXE) $(X2P)
  	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
@@ -11186,7 +11186,6 @@ MAKEFILE
 +	copy ..\README.apollo   ..\pod\perlapollo.pod
 +	copy ..\README.beos     ..\pod\perlbeos.pod
 +	copy ..\README.bs2000   ..\pod\perlbs2000.pod
-+	copy ..\README.ce       ..\pod\perlce.pod
  	copy ..\README.cygwin   ..\pod\perlcygwin.pod
 +	copy ..\README.dgux     ..\pod\perldgux.pod
  	copy ..\README.dos      ..\pod\perldos.pod
@@ -11211,6 +11210,20 @@ MAKEFILE
  	copy ..\README.win32    ..\pod\perlwin32.pod
  	cd ..\lib && $(PERLEXE) -Dtls lib_pm.PL
  	cd ..\pod && $(PLMAKE) -f ..\win32\pod.mak converters
+PATCH
+    }
+    if (_ge($version, "5.7.3")) {
+        _patch_gnumakefile($version, <<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
+@@ -760,6 +760,7 @@
+ 	copy ..\README.apollo   ..\pod\perlapollo.pod
+ 	copy ..\README.beos     ..\pod\perlbeos.pod
+ 	copy ..\README.bs2000   ..\pod\perlbs2000.pod
++	copy ..\README.ce       ..\pod\perlce.pod
+ 	copy ..\README.cygwin   ..\pod\perlcygwin.pod
+ 	copy ..\README.dgux     ..\pod\perldgux.pod
+ 	copy ..\README.dos      ..\pod\perldos.pod
 PATCH
     }
 }

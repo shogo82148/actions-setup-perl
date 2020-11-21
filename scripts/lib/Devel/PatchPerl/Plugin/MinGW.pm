@@ -1458,6 +1458,7 @@ PATCH
         return;
     }
 
+    if(_ge($version, "5.8.0")) {
     _patch(<<'PATCH');
 --- win32/win32.c
 +++ win32/win32.c
@@ -1489,6 +1490,30 @@ PATCH
  
  #undef	 Stat
  #define  Stat		win32_stat
+PATCH
+        return;
+    }
+
+    _patch(<<'PATCH');
+--- win32/win32.c
++++ win32/win32.c
+@@ -1633,11 +1633,13 @@ win32_uname(struct utsname *name)
+ 	char *arch;
+ 	GetSystemInfo(&info);
+ 
+-#if defined(__BORLANDC__) || defined(__MINGW32__)
+-	switch (info.u.s.wProcessorArchitecture) {
++#if (defined(__BORLANDC__)&&(__BORLANDC__<=0x520)) \
++ || (defined(__MINGW32__) && !defined(_ANONYMOUS_UNION))
++	procarch = info.u.s.wProcessorArchitecture;
+ #else
+-	switch (info.wProcessorArchitecture) {
++	procarch = info.wProcessorArchitecture;
+ #endif
++	switch (procarch) {
+ 	case PROCESSOR_ARCHITECTURE_INTEL:
+ 	    arch = "x86"; break;
+ 	case PROCESSOR_ARCHITECTURE_MIPS:
 PATCH
 }
 

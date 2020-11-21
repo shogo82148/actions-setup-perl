@@ -9747,16 +9747,17 @@ PATCH
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
-@@ -17,7 +17,7 @@
+@@ -17,7 +17,8 @@
  #CFG		:= Debug
  #USE_PERLCRT	= define
  #USE_SETARGV	:= define
 -CRYPT_SRC	= fcrypt.c
++#USE_5005THREADS:= define
 +CRYPT_SRC	= .\fcrypt.c
  #CRYPT_LIB	= fcrypt.lib
  #PERL_MALLOC	:= define
  #DEBUG_MSTATS	:= define
-@@ -35,8 +35,6 @@
+@@ -35,8 +36,6 @@
  EXTRALIBDIRS	:=
  
  
@@ -9765,7 +9766,15 @@ PATCH
  D_CRYPT		?= undef
  PERL_MALLOC	?= undef
  DEBUG_MSTATS	?= undef
-@@ -97,7 +95,9 @@
+@@ -50,6 +49,7 @@
+ USE_64_BIT_INT	?= undef
+ USE_LONG_DOUBLE	?= undef
+ USE_NO_REGISTRY	?= undef
++USE_5005THREADS ?= undef
+ 
+ ifneq ("$(CRYPT_SRC)$(CRYPT_LIB)", "")
+ D_CRYPT		= define
+@@ -97,7 +97,9 @@
  USE_64_BIT_INT = define
  ARCHITECTURE = x64
  
@@ -9776,7 +9785,7 @@ PATCH
  ARCHNAME	= MSWin32-$(ARCHITECTURE)-multi
  else
  ifeq ($(USE_PERLIO),define)
-@@ -182,10 +182,10 @@
+@@ -182,10 +184,10 @@
  	-luuid -lws2_32 -lmpr -lwinmm -lversion -lodbc32 -lodbccp32
  
  ifeq ($(CFG),Debug)
@@ -9789,7 +9798,7 @@ PATCH
  LINK_DBG	= -s
  endif
  
-@@ -232,27 +232,32 @@
+@@ -232,27 +234,32 @@
  %.res: %.rc
  	$(RSC) --use-temp-file --include-dir=. --include-dir=.. -O COFF -D INCLUDE_MANIFEST -i $< -o $@
  
@@ -9831,7 +9840,7 @@ PATCH
  PERLDEP = $(PERLIMPLIB)
  
  
-@@ -298,7 +303,6 @@
+@@ -298,7 +305,6 @@
  CFGH_TMPL	= config_H.gc
  PERLIMPLIB	= $(COREDIR)\libperl__PERL_MINOR_VERSION__$(a)
  PERLIMPLIBBASE	= libperl__PERL_MINOR_VERSION__$(a)
@@ -9839,7 +9848,7 @@ PATCH
  INT64		= long long
  PERLEXPLIB	= $(COREDIR)\perl__PERL_MINOR_VERSION__.exp
  PERLDLL		= ..\perl__PERL_MINOR_VERSION__.dll
-@@ -443,12 +447,13 @@
+@@ -443,12 +449,13 @@
  STATIC_EXT	= * !Win32 !SDBM_File !Encode
  else
  #STATIC_EXT	= Cwd Compress/Raw/Zlib
@@ -9854,7 +9863,7 @@ PATCH
  		"INST_TOP=$(INST_TOP)"			\
  		"INST_VER=$(INST_VER)"			\
  		"INST_ARCH=$(INST_ARCH)"		\
-@@ -456,8 +461,8 @@
+@@ -456,8 +463,8 @@
  		"cc=$(CC)"				\
  		"ld=$(LINK32)"				\
  		"ccflags=$(subst ",\",$(EXTRACFLAGS) $(OPTIMIZE) $(DEFINES) $(BUILDOPT))" \
@@ -9865,7 +9874,7 @@ PATCH
  		"d_mymalloc=$(PERL_MALLOC)"		\
  		"libs=$(LIBFILES)"			\
  		"incpath=$(subst ",\",$(CCINCDIR))"			\
-@@ -465,24 +470,15 @@
+@@ -465,24 +472,15 @@
  		"libpth=$(subst ",\",$(CCLIBDIR);$(EXTRALIBDIRS))"	\
  		"libc=$(LIBC)"				\
  		"make=$(PLMAKE)"				\
@@ -9891,7 +9900,7 @@ PATCH
  
  ICWD = -I..\cpan\Cwd -I..\cpan\Cwd\lib
  
-@@ -492,26 +488,29 @@
+@@ -492,26 +490,29 @@
  
  .PHONY: all
  
@@ -9931,7 +9940,7 @@ PATCH
  	if not exist "$(MINIDIR)" mkdir "$(MINIDIR)"
  	copy $(CFGH_TMPL) config.h
  	@(echo.&& \
-@@ -672,9 +671,16 @@
+@@ -672,9 +673,16 @@
  $(MINIWIN32_OBJ) : $(CORE_NOCFG_H)
  	$(CC) -c $(CFLAGS) $(MINIBUILDOPT) -DPERL_IS_MINIPERL $(OBJOUT_FLAG)$@ $(PDBOUT) $(*F).c
  
@@ -9950,7 +9959,7 @@ PATCH
  endif
  
  $(MINI_OBJ)	: $(MINIDIR)\.exists $(CORE_NOCFG_H)
-@@ -693,22 +699,12 @@
+@@ -693,22 +701,12 @@
  $(PERLIMPLIB) : perldll.def
  	$(IMPLIB) -k -d perldll.def -l $(PERLIMPLIB) -e $(PERLEXPLIB)
  
@@ -9976,7 +9985,7 @@ PATCH
  
  ..\x2p\a2p$(o) : ..\x2p\a2p.c
  	$(CC) -I..\x2p $(CFLAGS) $(OBJOUT_FLAG)$@ -c ..\x2p\a2p.c
-@@ -739,9 +735,9 @@
+@@ -739,9 +737,9 @@
  perlmainst$(o) : runperl.c $(CONFIGPM)
  	$(CC) $(CFLAGS_O) $(OBJOUT_FLAG)$@ $(PDBOUT) -c runperl.c
  
@@ -9988,7 +9997,7 @@ PATCH
  	copy $(PERLEXE) $(WPERLEXE)
  	$(MINIPERL) -I..\lib bin\exetype.pl $(WPERLEXE) WINDOWS
  	copy splittree.pl ..
-@@ -771,15 +767,8 @@
+@@ -771,15 +769,8 @@
  
  #most of deps of this target are in DYNALOADER and therefore omitted here
  Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
@@ -10006,7 +10015,7 @@ PATCH
  
  #-------------------------------------------------------------------------------
  
-@@ -790,7 +779,6 @@
+@@ -790,7 +781,6 @@
  
  utils: $(PERLEXE) $(X2P)
  	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
@@ -10014,7 +10023,7 @@ PATCH
  	copy ..\README.aix      ..\pod\perlaix.pod
  	copy ..\README.amiga    ..\pod\perlamiga.pod
  	copy ..\README.apollo   ..\pod\perlapollo.pod
-@@ -842,3 +830,6 @@
+@@ -842,3 +832,6 @@
  
  installhtml : doc
  	$(RCOPY) $(HTMLDIR)\*.* $(INST_HTML)\$(NULL)
@@ -10027,16 +10036,17 @@ PATCH
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
-@@ -17,7 +17,7 @@
+@@ -17,8 +17,7 @@
  #CFG		:= Debug
  #USE_PERLCRT	= define
  #USE_SETARGV	:= define
+-#USE_5005THREADS:= define
 -CRYPT_SRC	= .\fcrypt.c
 +CRYPT_SRC	= fcrypt.c
  #CRYPT_LIB	= fcrypt.lib
  #PERL_MALLOC	:= define
  #DEBUG_MSTATS	:= define
-@@ -35,6 +35,8 @@
+@@ -36,6 +35,8 @@
  EXTRALIBDIRS	:=
  
  
@@ -10045,7 +10055,15 @@ PATCH
  D_CRYPT		?= undef
  PERL_MALLOC	?= undef
  DEBUG_MSTATS	?= undef
-@@ -95,9 +97,7 @@
+@@ -49,7 +50,6 @@
+ USE_64_BIT_INT	?= undef
+ USE_LONG_DOUBLE	?= undef
+ USE_NO_REGISTRY	?= undef
+-USE_5005THREADS ?= undef
+ 
+ ifneq ("$(CRYPT_SRC)$(CRYPT_LIB)", "")
+ D_CRYPT		= define
+@@ -97,9 +97,7 @@
  USE_64_BIT_INT = define
  ARCHITECTURE = x64
  
@@ -10056,7 +10074,7 @@ PATCH
  ARCHNAME	= MSWin32-$(ARCHITECTURE)-multi
  else
  ifeq ($(USE_PERLIO),define)
-@@ -182,10 +182,10 @@
+@@ -184,10 +182,10 @@
  	-luuid -lws2_32 -lmpr -lwinmm -lversion -lodbc32 -lodbccp32
  
  ifeq ($(CFG),Debug)
@@ -10069,7 +10087,7 @@ PATCH
  LINK_DBG	= -s
  endif
  
-@@ -232,16 +232,24 @@
+@@ -234,16 +232,24 @@
  %.res: %.rc
  	$(RSC) --use-temp-file --include-dir=. --include-dir=.. -O COFF -D INCLUDE_MANIFEST -i $< -o $@
  
@@ -10094,7 +10112,7 @@ PATCH
  
  # Unicode data files generated by mktables
  FIRSTUNIFILE     = ..\lib\unicore\Canonical.pl
-@@ -257,7 +265,6 @@
+@@ -259,7 +265,6 @@
  PERLEXE_RES	= .\perlexe.res
  PERLDLL_RES	=
  
@@ -10102,7 +10120,7 @@ PATCH
  PERLDEP = $(PERLIMPLIB)
  
  
-@@ -303,6 +310,7 @@
+@@ -305,6 +310,7 @@
  CFGH_TMPL	= config_H.gc
  PERLIMPLIB	= $(COREDIR)\libperl__PERL_MINOR_VERSION__$(a)
  PERLIMPLIBBASE	= libperl__PERL_MINOR_VERSION__$(a)
@@ -10110,7 +10128,7 @@ PATCH
  INT64		= long long
  PERLEXPLIB	= $(COREDIR)\perl__PERL_MINOR_VERSION__.exp
  PERLDLL		= ..\perl__PERL_MINOR_VERSION__.dll
-@@ -402,6 +410,7 @@
+@@ -404,6 +410,7 @@
  		..\perly.h	\
  		..\pp.h		\
  		..\proto.h	\
@@ -10118,7 +10136,7 @@ PATCH
  		..\regexp.h	\
  		..\scope.h	\
  		..\sv.h		\
-@@ -422,6 +431,11 @@
+@@ -424,6 +431,11 @@
  
  CORE_H		= $(CORE_NOCFG_H) .\config.h
  
@@ -10130,7 +10148,7 @@ PATCH
  MICROCORE_OBJ	= $(MICROCORE_SRC:.c=$(o))
  CORE_OBJ	= $(MICROCORE_OBJ) $(EXTRACORE_SRC:.c=$(o))
  WIN32_OBJ	= $(WIN32_SRC:.c=$(o))
-@@ -447,13 +461,12 @@
+@@ -449,13 +461,12 @@
  STATIC_EXT	= * !Win32 !SDBM_File !Encode
  else
  #STATIC_EXT	= Cwd Compress/Raw/Zlib
@@ -10145,7 +10163,7 @@ PATCH
  		"INST_TOP=$(INST_TOP)"			\
  		"INST_VER=$(INST_VER)"			\
  		"INST_ARCH=$(INST_ARCH)"		\
-@@ -461,8 +474,8 @@
+@@ -463,8 +474,8 @@
  		"cc=$(CC)"				\
  		"ld=$(LINK32)"				\
  		"ccflags=$(subst ",\",$(EXTRACFLAGS) $(OPTIMIZE) $(DEFINES) $(BUILDOPT))" \
@@ -10156,7 +10174,7 @@ PATCH
  		"d_mymalloc=$(PERL_MALLOC)"		\
  		"libs=$(LIBFILES)"			\
  		"incpath=$(subst ",\",$(CCINCDIR))"			\
-@@ -470,15 +483,23 @@
+@@ -472,15 +483,23 @@
  		"libpth=$(subst ",\",$(CCLIBDIR);$(EXTRALIBDIRS))"	\
  		"libc=$(LIBC)"				\
  		"make=$(PLMAKE)"				\
@@ -10183,7 +10201,7 @@ PATCH
  
  ICWD = -I..\cpan\Cwd -I..\cpan\Cwd\lib
  
-@@ -495,22 +516,19 @@
+@@ -497,22 +516,19 @@
  
  #----------------------------------------------------------------
  
@@ -10215,7 +10233,7 @@ PATCH
  	if not exist "$(MINIDIR)" mkdir "$(MINIDIR)"
  	copy $(CFGH_TMPL) config.h
  	@(echo.&& \
-@@ -671,16 +689,9 @@
+@@ -673,16 +689,9 @@
  $(MINIWIN32_OBJ) : $(CORE_NOCFG_H)
  	$(CC) -c $(CFLAGS) $(MINIBUILDOPT) -DPERL_IS_MINIPERL $(OBJOUT_FLAG)$@ $(PDBOUT) $(*F).c
  
@@ -10234,7 +10252,7 @@ PATCH
  endif
  
  $(MINI_OBJ)	: $(MINIDIR)\.exists $(CORE_NOCFG_H)
-@@ -691,20 +702,30 @@
+@@ -693,20 +702,30 @@
  $(X2P_OBJ)	: $(CORE_H)
  
  perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\global.sym ..\pp.sym ..\makedef.pl
@@ -10270,7 +10288,7 @@ PATCH
  
  ..\x2p\a2p$(o) : ..\x2p\a2p.c
  	$(CC) -I..\x2p $(CFLAGS) $(OBJOUT_FLAG)$@ -c ..\x2p\a2p.c
-@@ -735,9 +756,9 @@
+@@ -737,9 +756,9 @@
  perlmainst$(o) : runperl.c $(CONFIGPM)
  	$(CC) $(CFLAGS_O) $(OBJOUT_FLAG)$@ $(PDBOUT) -c runperl.c
  
@@ -10282,7 +10300,7 @@ PATCH
  	copy $(PERLEXE) $(WPERLEXE)
  	$(MINIPERL) -I..\lib bin\exetype.pl $(WPERLEXE) WINDOWS
  	copy splittree.pl ..
-@@ -767,8 +788,15 @@
+@@ -769,8 +788,15 @@
  
  #most of deps of this target are in DYNALOADER and therefore omitted here
  Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
@@ -10300,7 +10318,7 @@ PATCH
  
  #-------------------------------------------------------------------------------
  
-@@ -785,31 +813,24 @@
+@@ -787,31 +813,24 @@
  	copy ..\README.beos     ..\pod\perlbeos.pod
  	copy ..\README.bs2000   ..\pod\perlbs2000.pod
  	copy ..\README.ce       ..\pod\perlce.pod
@@ -10332,7 +10350,7 @@ PATCH
  	copy ..\README.uts      ..\pod\perluts.pod
  	copy ..\README.vmesa    ..\pod\perlvmesa.pod
  	copy ..\README.vms      ..\pod\perlvms.pod
-@@ -825,11 +846,17 @@
+@@ -827,11 +846,17 @@
  installbare : utils
  	$(PERLEXE) ..\installperl
  	if exist $(WPERLEXE) $(XCOPY) $(WPERLEXE) $(INST_BIN)\$(NULL)

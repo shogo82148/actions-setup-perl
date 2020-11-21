@@ -9666,47 +9666,44 @@ PATCH
  		bin\exetype.pl		\
  		bin\runperl.pl		\
  		bin\pl2bat.pl		\
-@@ -760,39 +762,13 @@
+@@ -749,7 +751,6 @@
+ #most of deps of this target are in DYNALOADER and therefore omitted here
+ Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
+ 	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR)
+-	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext
+ 
+ #-------------------------------------------------------------------------------
+ 
+@@ -760,6 +761,7 @@
  
  utils: $(PERLEXE) $(X2P)
  	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
--	copy ..\README.aix      ..\pod\perlaix.pod
++	copy ..\vms\perlvms.pod .\perlvms.pod
+ 	copy ..\README.aix      ..\pod\perlaix.pod
  	copy ..\README.amiga    ..\pod\perlamiga.pod
--	copy ..\README.apollo   ..\pod\perlapollo.pod
--	copy ..\README.beos     ..\pod\perlbeos.pod
--	copy ..\README.bs2000   ..\pod\perlbs2000.pod
--	copy ..\README.ce       ..\pod\perlce.pod
--	copy ..\README.cn       ..\pod\perlcn.pod
- 	copy ..\README.cygwin   ..\pod\perlcygwin.pod
--	copy ..\README.dgux     ..\pod\perldgux.pod
- 	copy ..\README.dos      ..\pod\perldos.pod
--	copy ..\README.epoc     ..\pod\perlepoc.pod
- 	copy ..\README.freebsd  ..\pod\perlfreebsd.pod
- 	copy ..\README.hpux     ..\pod\perlhpux.pod
--	copy ..\README.hurd     ..\pod\perlhurd.pod
--	copy ..\README.irix     ..\pod\perlirix.pod
--	copy ..\README.jp       ..\pod\perljp.pod
--	copy ..\README.ko       ..\pod\perlko.pod
--	copy ..\README.machten  ..\pod\perlmachten.pod
--	copy ..\README.macos    ..\pod\perlmacos.pod
--	copy ..\README.macosx   ..\pod\perlmacosx.pod
--	copy ..\README.mint     ..\pod\perlmint.pod
--	copy ..\README.mpeix    ..\pod\perlmpeix.pod
--	copy ..\README.netware  ..\pod\perlnetware.pod
-+	copy ..\README.netware  ..\pod\perlnw5.pod
- 	copy ..\README.os2      ..\pod\perlos2.pod
--	copy ..\README.os390    ..\pod\perlos390.pod
--	copy ..\README.os400    ..\pod\perlos400.pod
--	copy ..\README.plan9    ..\pod\perlplan9.pod
--	copy ..\README.qnx      ..\pod\perlqnx.pod
--	copy ..\README.solaris  ..\pod\perlsolaris.pod
--	copy ..\README.tru64    ..\pod\perltru64.pod
--	copy ..\README.tw       ..\pod\perltw.pod
--	copy ..\README.uts      ..\pod\perluts.pod
--	copy ..\README.vmesa    ..\pod\perlvmesa.pod
+ 	copy ..\README.apollo   ..\pod\perlapollo.pod
+@@ -796,6 +798,7 @@
  	copy ..\README.vms      ..\pod\perlvms.pod
  	copy ..\README.vos      ..\pod\perlvos.pod
  	copy ..\README.win32    ..\pod\perlwin32.pod
++	copy ..\pod\perl__PERL_VERSION__delta.pod ..\pod\perldelta.pod
+ 	cd ..\lib && $(PERLEXE) -Dtls lib_pm.PL
+ 	cd ..\pod && $(PLMAKE) -f ..\win32\pod.mak converters
+ 	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
+PATCH
+    }
+    if (_ge($version, "5.8.4")) {
+        _patch_gnumakefile($version, <<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
+@@ -751,6 +751,7 @@
+ #most of deps of this target are in DYNALOADER and therefore omitted here
+ Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
+ 	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR)
++	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext
+ 
+ #-------------------------------------------------------------------------------
+ 
 PATCH
     }
     if (_ge($version, "5.8.5")) {
@@ -9766,52 +9763,15 @@ PATCH
  $(DYNALOADER).c: $(HAVEMINIPERL) $(EXTDIR)\DynaLoader\dl_win32.xs $(CONFIGPM)
  	if not exist $(AUTODIR) mkdir $(AUTODIR)
  	cd $(EXTDIR)\DynaLoader \
-@@ -762,16 +782,43 @@
+@@ -762,7 +782,6 @@
  
  utils: $(PERLEXE) $(X2P)
  	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
-+	copy ..\README.aix      ..\pod\perlaix.pod
+-	copy ..\vms\perlvms.pod .\perlvms.pod
+ 	copy ..\README.aix      ..\pod\perlaix.pod
  	copy ..\README.amiga    ..\pod\perlamiga.pod
-+	copy ..\README.apollo   ..\pod\perlapollo.pod
-+	copy ..\README.beos     ..\pod\perlbeos.pod
-+	copy ..\README.bs2000   ..\pod\perlbs2000.pod
-+	copy ..\README.ce       ..\pod\perlce.pod
-+	copy ..\README.cn       ..\pod\perlcn.pod
- 	copy ..\README.cygwin   ..\pod\perlcygwin.pod
-+	copy ..\README.dgux     ..\pod\perldgux.pod
- 	copy ..\README.dos      ..\pod\perldos.pod
-+	copy ..\README.epoc     ..\pod\perlepoc.pod
- 	copy ..\README.freebsd  ..\pod\perlfreebsd.pod
- 	copy ..\README.hpux     ..\pod\perlhpux.pod
--	copy ..\README.netware  ..\pod\perlnw5.pod
-+	copy ..\README.hurd     ..\pod\perlhurd.pod
-+	copy ..\README.irix     ..\pod\perlirix.pod
-+	copy ..\README.jp       ..\pod\perljp.pod
-+	copy ..\README.ko       ..\pod\perlko.pod
-+	copy ..\README.machten  ..\pod\perlmachten.pod
-+	copy ..\README.macos    ..\pod\perlmacos.pod
-+	copy ..\README.macosx   ..\pod\perlmacosx.pod
-+	copy ..\README.mint     ..\pod\perlmint.pod
-+	copy ..\README.mpeix    ..\pod\perlmpeix.pod
-+	copy ..\README.netware  ..\pod\perlnetware.pod
- 	copy ..\README.os2      ..\pod\perlos2.pod
-+	copy ..\README.os390    ..\pod\perlos390.pod
-+	copy ..\README.os400    ..\pod\perlos400.pod
-+	copy ..\README.plan9    ..\pod\perlplan9.pod
-+	copy ..\README.qnx      ..\pod\perlqnx.pod
-+	copy ..\README.solaris  ..\pod\perlsolaris.pod
-+	copy ..\README.tru64    ..\pod\perltru64.pod
-+	copy ..\README.tw       ..\pod\perltw.pod
-+	copy ..\README.uts      ..\pod\perluts.pod
-+	copy ..\README.vmesa    ..\pod\perlvmesa.pod
- 	copy ..\README.vms      ..\pod\perlvms.pod
- 	copy ..\README.vos      ..\pod\perlvos.pod
- 	copy ..\README.win32    ..\pod\perlwin32.pod
-+	copy ..\pod\perl__PERL_VERSION__delta.pod ..\pod\perldelta.pod
- 	cd ..\lib && $(PERLEXE) -Dtls lib_pm.PL
- 	cd ..\pod && $(PLMAKE) -f ..\win32\pod.mak converters
- 	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
-@@ -786,3 +833,6 @@
+ 	copy ..\README.apollo   ..\pod\perlapollo.pod
+@@ -814,3 +833,6 @@
  
  installhtml : doc
  	$(RCOPY) $(HTMLDIR)\*.* $(INST_HTML)\$(NULL)

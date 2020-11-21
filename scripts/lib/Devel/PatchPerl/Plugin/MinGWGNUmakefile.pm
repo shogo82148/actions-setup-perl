@@ -10376,7 +10376,8 @@ CCTYPE		:= GCC
 #CFG		:= Debug
 #USE_PERLCRT	= define
 #USE_SETARGV	:= define
-CRYPT_SRC	= fcrypt.c
+#USE_5005THREADS:= define
+#CRYPT_SRC	= .\fcrypt.c
 #CRYPT_LIB	= fcrypt.lib
 #PERL_MALLOC	:= define
 #DEBUG_MSTATS	:= define
@@ -10394,8 +10395,6 @@ BUILDOPT	+= -DPERL_TEXTMODE_SCRIPTS
 EXTRALIBDIRS	:=
 
 
-##################### CHANGE THESE ONLY IF YOU MUST #####################
-
 D_CRYPT		?= undef
 PERL_MALLOC	?= undef
 DEBUG_MSTATS	?= undef
@@ -10409,6 +10408,7 @@ USE_LARGE_FILES	?= undef
 USE_64_BIT_INT	?= undef
 USE_LONG_DOUBLE	?= undef
 USE_NO_REGISTRY	?= undef
+USE_5005THREADS ?= undef
 
 ifneq ("$(CRYPT_SRC)$(CRYPT_LIB)", "")
 D_CRYPT		= define
@@ -10456,7 +10456,9 @@ PROCESSOR_ARCHITECTURE := x64
 USE_64_BIT_INT = define
 ARCHITECTURE = x64
 
-ifeq ($(USE_MULTI),define)
+ifeq ($(USE_5005THREADS),define)
+ARCHNAME	= MSWin32-$(ARCHITECTURE)-thread
+else ifeq ($(USE_MULTI),define)
 ARCHNAME	= MSWin32-$(ARCHITECTURE)-multi
 else
 ifeq ($(USE_PERLIO),define)
@@ -10591,26 +10593,16 @@ a ?= .lib
 %.res: %.rc
 	$(RSC) --use-temp-file --include-dir=. --include-dir=.. -O COFF -D INCLUDE_MANIFEST -i $< -o $@
 
-#
-# various targets
-
-#do not put $(MINIPERL) as a dep/prereq in a rule, instead put $(HAVEMINIPERL)
-#$(MINIPERL) is not a buildable target, use "gmake mp" if you want to just build
-#miniperl alone
 MINIPERL	= ..\miniperl.exe
 HAVEMINIPERL	= .have_miniperl
 MINIDIR		= mini
 PERLEXE		= ..\perl.exe
 WPERLEXE	= ..\wperl.exe
-PERLEXESTATIC	= ..\perl-static.exe
 STATICDIR	= .\static.tmp
 GLOBEXE		= ..\perlglob.exe
 CONFIGPM	= ..\lib\Config.pm
 MINIMOD	= ..\lib\ExtUtils\Miniperl.pm
 X2P		= ..\x2p\a2p.exe
-PERLSTATIC	=
-PERLEXE_RES	=
-PERLDLL_RES	=
 
 PERLDEP = $(PERLIMPLIB)
 
@@ -10647,7 +10639,6 @@ CFGSH_TMPL	= config.gc
 CFGH_TMPL	= config_H.gc
 PERLIMPLIB	= $(COREDIR)\libperl__PERL_MINOR_VERSION__$(a)
 PERLIMPLIBBASE	= libperl__PERL_MINOR_VERSION__$(a)
-PERLSTATICLIB	= ..\libperl__PERL_MINOR_VERSION__s$(a)
 INT64		= long long
 PERLEXPLIB	= $(COREDIR)\perl__PERL_MINOR_VERSION__.exp
 PERLDLL		= ..\perl__PERL_MINOR_VERSION__.dll
@@ -10703,8 +10694,7 @@ EXTRACORE_SRC	+= ..\perlio.c
 WIN32_SRC	=		\
 		.\win32.c	\
 		.\win32sck.c	\
-		.\win32thread.c	\
-		.\win32io.c
+		.\win32thread.c 
 
 ifneq ($(CRYPT_SRC), "")
 WIN32_SRC	+= $(CRYPT_SRC)
@@ -10786,12 +10776,13 @@ ifeq ($(ALL_STATIC),define)
 STATIC_EXT	= * !Win32 !SDBM_File !Encode
 else
 #STATIC_EXT	= Cwd Compress/Raw/Zlib
-STATIC_EXT	=
+STATIC_EXT	= Win32CORE
 endif
 
 DYNALOADER	= $(EXTDIR)\DynaLoader\DynaLoader
 
 CFG_VARS	=					\
+		"INST_DRV=$(INST_DRV)"			\
 		"INST_TOP=$(INST_TOP)"			\
 		"INST_VER=$(INST_VER)"			\
 		"INST_ARCH=$(INST_ARCH)"		\
@@ -10799,8 +10790,8 @@ CFG_VARS	=					\
 		"cc=$(CC)"				\
 		"ld=$(LINK32)"				\
 		"ccflags=$(subst ",\",$(EXTRACFLAGS) $(OPTIMIZE) $(DEFINES) $(BUILDOPT))" \
-		"usecplusplus=$(USE_CPLUSPLUS)"		\
-		"cf_email=$(EMAIL)"			\
+		"cf_email=$(EMAIL)"	 		\
+		"d_crypt=$(D_CRYPT)"			\
 		"d_mymalloc=$(PERL_MALLOC)"		\
 		"libs=$(LIBFILES)"			\
 		"incpath=$(subst ",\",$(CCINCDIR))"			\
@@ -10808,23 +10799,16 @@ CFG_VARS	=					\
 		"libpth=$(subst ",\",$(CCLIBDIR);$(EXTRALIBDIRS))"	\
 		"libc=$(LIBC)"				\
 		"make=$(PLMAKE)"				\
-		"_o=$(o)"				\
-		"obj_ext=$(o)"				\
-		"_a=$(a)"				\
-		"lib_ext=$(a)"				\
-		"static_ext=$(STATIC_EXT)"		\
 		"usethreads=$(USE_ITHREADS)"		\
+		"use5005threads=$(USE_5005THREADS)"	\
 		"useithreads=$(USE_ITHREADS)"		\
+		"usethreads=$(USE_5005THREADS)"		\
 		"usemultiplicity=$(USE_MULTI)"		\
 		"useperlio=$(USE_PERLIO)"		\
 		"use64bitint=$(USE_64_BIT_INT)"		\
-		"uselongdouble=$(USE_LONG_DOUBLE)"	\
 		"uselargefiles=$(USE_LARGE_FILES)"	\
-		"usesitecustomize=$(USE_SITECUST)"	\
 		"LINK_FLAGS=$(subst ",\",$(LINK_FLAGS))"\
-		"optimize=$(subst ",\",$(OPTIMIZE))"	\
-		"ARCHPREFIX=$(ARCHPREFIX)"		\
-		"WIN64=$(WIN64)"
+		"optimize=$(subst ",\",$(OPTIMIZE))"
 
 ICWD = -I..\cpan\Cwd -I..\cpan\Cwd\lib
 
@@ -10841,19 +10825,22 @@ $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
 
 #----------------------------------------------------------------
 
-$(GLOBEXE) : perlglob$(o)
-	$(LINK32) $(OPTIMIZE) $(BLINK_FLAGS) -mconsole -o $@ perlglob$(o) $(LIBFILES)
+$(GLOBEXE) : perlglob.c
+	$(LINK32) $(OPTIMIZE) $(BLINK_FLAGS) -mconsole -o $@ perlglob.c $(LIBFILES)
 
-perlglob$(o)  : perlglob.c
+..\config.sh : $(CFGSH_TMPL) $(HAVEMINIPERL) config_sh.PL
+	$(MINIPERL) -I..\lib config_sh.PL $(CFG_VARS) $(CFGSH_TMPL) > ..\config.sh
 
-config.w32 : $(CFGSH_TMPL)
-	copy $(CFGSH_TMPL) config.w32
-
-..\config.sh : $(HAVEMINIPERL) config.w32 config_sh.PL
-	$(MINIPERL) -I..\lib config_sh.PL $(CFG_VARS) config.w32 > ..\config.sh
+$(CONFIGPM) : $(HAVEMINIPERL) ..\config.sh config_h.PL ..\minimod.pl
+	cd .. && miniperl.exe -Ilib configpm
+	$(XCOPY) *.h $(COREDIR)\\*.*
+	$(XCOPY) ..\\ext\\re\\re.pm $(LIBDIR)\\*.*
+	$(RCOPY) include $(COREDIR)\\*.*
+	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
+	-$(MINIPERL) -I..\lib $(ICWD) config_h.PL "ARCHPREFIX=$(ARCHPREFIX)"
 
 .\config.h : $(CONFIGPM)
-$(MINIDIR)\.exists :
+$(MINIDIR)\.exists : $(CFGH_TMPL)
 	if not exist "$(MINIDIR)" mkdir "$(MINIDIR)"
 	copy $(CFGH_TMPL) config.h
 	@(echo.&& \
@@ -11014,9 +11001,16 @@ $(MINICORE_OBJ) : $(CORE_NOCFG_H)
 $(MINIWIN32_OBJ) : $(CORE_NOCFG_H)
 	$(CC) -c $(CFLAGS) $(MINIBUILDOPT) -DPERL_IS_MINIPERL $(OBJOUT_FLAG)$@ $(PDBOUT) $(*F).c
 
-ifeq ($(USE_IMP_SYS),define)
+# -DPERL_IMPLICIT_SYS needs C++ for perllib.c
+# rules wrapped in .IFs break Win9X build (we end up with unbalanced []s unless
+# unless the .IF is true), so instead we use a .ELSE with the default.
+# This is the only file that depends on perlhost.h, vmem.h, and vdir.h
+
 perllib$(o)	: perllib.c .\perlhost.h .\vdir.h .\vmem.h
-	$(CC) -c -I. $(CFLAGS_O) $(CXX_FLAG) $(OBJOUT_FLAG)$@ perllib.c
+ifeq ($(USE_IMP_SYS),define)
+	$(CC) -c -I. $(CFLAGS_O) $(CXX_FLAG) $(OBJOUT_FLAG)$@ $(PDBOUT) perllib.c
+else
+	$(CC) -c -I. $(CFLAGS_O) $(OBJOUT_FLAG)$@ $(PDBOUT) perllib.c
 endif
 
 $(MINI_OBJ)	: $(MINIDIR)\.exists $(CORE_NOCFG_H)
@@ -11040,7 +11034,7 @@ $(PERLDLL): perldll.def $(PERLEXPLIB) $(PERLDLL_OBJ)
 	   $(PERLDLL_OBJ) $(LIBFILES) $(PERLEXPLIB)
 
 $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
-	cd .. && miniperl.exe minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
+	cd .. && miniperl minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
 
 ..\x2p\a2p$(o) : ..\x2p\a2p.c
 	$(CC) -I..\x2p $(CFLAGS) $(OBJOUT_FLAG)$@ -c ..\x2p\a2p.c
@@ -11071,18 +11065,13 @@ perlmain$(o) : runperl.c $(CONFIGPM)
 perlmainst$(o) : runperl.c $(CONFIGPM)
 	$(CC) $(CFLAGS_O) $(OBJOUT_FLAG)$@ $(PDBOUT) -c runperl.c
 
-$(PERLEXE): $(PERLDLL) $(CONFIGPM) $(PERLEXE_OBJ) $(PERLEXE_RES)
+$(PERLEXE): $(PERLDLL) $(CONFIGPM) $(PERLEXE_OBJ) $(PERLIMPLIB)
 	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS)  \
-	    $(LIBFILES) $(PERLEXE_OBJ) $(SETARGV_OBJ) $(PERLIMPLIB) $(PERLEXE_RES)
+	    $(PERLEXE_OBJ) $(PERLIMPLIB) $(LIBFILES)
 	copy $(PERLEXE) $(WPERLEXE)
 	$(MINIPERL) -I..\lib bin\exetype.pl $(WPERLEXE) WINDOWS
 	copy splittree.pl ..
 	$(MINIPERL) -I..\lib ..\splittree.pl "../LIB" $(AUTODIR)
-
-$(PERLEXE_ICO): $(HAVEMINIPERL) makeico.pl
-	$(MINIPERL) makeico.pl > $@
-
-$(PERLEXE_RES): perlexe.rc $(PERLEXE_ICO)
 
 $(DYNALOADER).c: $(HAVEMINIPERL) $(EXTDIR)\DynaLoader\dl_win32.xs $(CONFIGPM)
 	if not exist $(AUTODIR) mkdir $(AUTODIR)
@@ -11104,7 +11093,6 @@ $(HAVEMINIPERL): $(MINI_OBJ)
 #most of deps of this target are in DYNALOADER and therefore omitted here
 Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
 	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR)
-	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext
 
 #-------------------------------------------------------------------------------
 
@@ -11142,9 +11130,9 @@ utils: $(PERLEXE) $(X2P)
 	copy ..\README.tru64    ..\pod\perltru64.pod
 	copy ..\README.uts      ..\pod\perluts.pod
 	copy ..\README.vmesa    ..\pod\perlvmesa.pod
+	copy ..\vms\perlvms.pod ..\pod\perlvms.pod
 	copy ..\README.vos      ..\pod\perlvos.pod
 	copy ..\README.win32    ..\pod\perlwin32.pod
-	copy ..\pod\perl__PERL_VERSION__delta.pod ..\pod\perldelta.pod
 	cd ..\lib && $(PERLEXE) -Dtls lib_pm.PL
 	cd ..\pod && $(PLMAKE) -f ..\win32\pod.mak converters
 	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)

@@ -11224,18 +11224,7 @@ PATCH
  		..\pp_sys.c	\
  		..\regcomp.c	\
  		..\regexec.c	\
-@@ -344,10 +343,6 @@
- 		.\win32sck.c	\
- 		.\win32thread.c 
- 
--ifeq ($(USE_PERLIO),define)
--WIN32_SRC	+= .\win32io.c
--endif
--
- ifneq ($(CRYPT_SRC), "")
- WIN32_SRC	+= $(CRYPT_SRC)
- endif
-@@ -759,25 +754,15 @@
+@@ -759,25 +758,15 @@
  	copy ..\README.amiga    ..\pod\perlamiga.pod
  	copy ..\README.apollo   ..\pod\perlapollo.pod
  	copy ..\README.beos     ..\pod\perlbeos.pod
@@ -11275,18 +11264,7 @@ PATCH
  		..\pp_sys.c	\
  		..\regcomp.c	\
  		..\regexec.c	\
-@@ -343,6 +344,10 @@
- 		.\win32sck.c	\
- 		.\win32thread.c 
- 
-+ifeq ($(USE_PERLIO),define)
-+WIN32_SRC	+= .\win32io.c
-+endif
-+
- ifneq ($(CRYPT_SRC), "")
- WIN32_SRC	+= $(CRYPT_SRC)
- endif
-@@ -754,15 +759,25 @@
+@@ -758,15 +759,25 @@
  	copy ..\README.amiga    ..\pod\perlamiga.pod
  	copy ..\README.apollo   ..\pod\perlapollo.pod
  	copy ..\README.beos     ..\pod\perlbeos.pod

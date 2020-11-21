@@ -9642,6 +9642,14 @@ MAKEFILE
  		..\perl.c	\
  		..\perlapi.c	\
  		..\perly.c	\
+@@ -748,7 +749,6 @@
+ #most of deps of this target are in DYNALOADER and therefore omitted here
+ Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
+ 	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR)
+-	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext
+ 
+ #-------------------------------------------------------------------------------
+ 
 PATCH
     }
     if (_ge($version, "5.8.3")) {
@@ -9666,15 +9674,7 @@ PATCH
  		bin\exetype.pl		\
  		bin\runperl.pl		\
  		bin\pl2bat.pl		\
-@@ -749,7 +751,6 @@
- #most of deps of this target are in DYNALOADER and therefore omitted here
- Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
- 	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR)
--	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext
- 
- #-------------------------------------------------------------------------------
- 
-@@ -760,6 +761,7 @@
+@@ -759,6 +761,7 @@
  
  utils: $(PERLEXE) $(X2P)
  	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
@@ -9682,7 +9682,7 @@ PATCH
  	copy ..\README.aix      ..\pod\perlaix.pod
  	copy ..\README.amiga    ..\pod\perlamiga.pod
  	copy ..\README.apollo   ..\pod\perlapollo.pod
-@@ -796,6 +798,7 @@
+@@ -795,6 +798,7 @@
  	copy ..\README.vms      ..\pod\perlvms.pod
  	copy ..\README.vos      ..\pod\perlvos.pod
  	copy ..\README.win32    ..\pod\perlwin32.pod

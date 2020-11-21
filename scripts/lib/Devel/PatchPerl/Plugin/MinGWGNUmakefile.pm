@@ -9854,19 +9854,44 @@ PATCH
  		"INST_TOP=$(INST_TOP)"			\
  		"INST_VER=$(INST_VER)"			\
  		"INST_ARCH=$(INST_ARCH)"		\
-@@ -469,10 +474,10 @@
- 		"obj_ext=$(o)"				\
- 		"_a=$(a)"				\
- 		"lib_ext=$(a)"				\
-+		"static_ext=$(STATIC_EXT)"		\
+@@ -456,8 +461,8 @@
+ 		"cc=$(CC)"				\
+ 		"ld=$(LINK32)"				\
+ 		"ccflags=$(subst ",\",$(EXTRACFLAGS) $(OPTIMIZE) $(DEFINES) $(BUILDOPT))" \
+-		"usecplusplus=$(USE_CPLUSPLUS)"		\
+-		"cf_email=$(EMAIL)"			\
++		"cf_email=$(EMAIL)"	 		\
++		"d_crypt=$(D_CRYPT)"			\
+ 		"d_mymalloc=$(PERL_MALLOC)"		\
+ 		"libs=$(LIBFILES)"			\
+ 		"incpath=$(subst ",\",$(CCINCDIR))"			\
+@@ -465,24 +470,15 @@
+ 		"libpth=$(subst ",\",$(CCLIBDIR);$(EXTRALIBDIRS))"	\
+ 		"libc=$(LIBC)"				\
+ 		"make=$(PLMAKE)"				\
+-		"_o=$(o)"				\
+-		"obj_ext=$(o)"				\
+-		"_a=$(a)"				\
+-		"lib_ext=$(a)"				\
  		"usethreads=$(USE_ITHREADS)"		\
  		"use5005threads=$(USE_5005THREADS)"	\
  		"useithreads=$(USE_ITHREADS)"		\
--		"usethreads=$(USE_5005THREADS)"		\
+ 		"usethreads=$(USE_5005THREADS)"		\
  		"usemultiplicity=$(USE_MULTI)"		\
  		"useperlio=$(USE_PERLIO)"		\
- 		"use64bitint=$(USE_64_BIT_INT)"		\
-@@ -492,26 +497,29 @@
+-		"use64bitint=$(USE_64_BIT_INT)"		\
+-		"uselongdouble=$(USE_LONG_DOUBLE)"	\
+ 		"uselargefiles=$(USE_LARGE_FILES)"	\
+-		"usesitecustomize=$(USE_SITECUST)"	\
+ 		"LINK_FLAGS=$(subst ",\",$(LINK_FLAGS))"\
+-		"optimize=$(subst ",\",$(OPTIMIZE))"	\
+-		"ARCHPREFIX=$(ARCHPREFIX)"		\
+-		"WIN64=$(WIN64)"
++		"optimize=$(subst ",\",$(OPTIMIZE))"
+ 
+ ICWD = -I..\cpan\Cwd -I..\cpan\Cwd\lib
+ 
+@@ -492,26 +488,29 @@
  
  .PHONY: all
  
@@ -9906,7 +9931,7 @@ PATCH
  	if not exist "$(MINIDIR)" mkdir "$(MINIDIR)"
  	copy $(CFGH_TMPL) config.h
  	@(echo.&& \
-@@ -672,9 +680,16 @@
+@@ -672,9 +671,16 @@
  $(MINIWIN32_OBJ) : $(CORE_NOCFG_H)
  	$(CC) -c $(CFLAGS) $(MINIBUILDOPT) -DPERL_IS_MINIPERL $(OBJOUT_FLAG)$@ $(PDBOUT) $(*F).c
  
@@ -9925,7 +9950,7 @@ PATCH
  endif
  
  $(MINI_OBJ)	: $(MINIDIR)\.exists $(CORE_NOCFG_H)
-@@ -693,22 +708,12 @@
+@@ -693,22 +699,12 @@
  $(PERLIMPLIB) : perldll.def
  	$(IMPLIB) -k -d perldll.def -l $(PERLIMPLIB) -e $(PERLEXPLIB)
  
@@ -9951,7 +9976,7 @@ PATCH
  
  ..\x2p\a2p$(o) : ..\x2p\a2p.c
  	$(CC) -I..\x2p $(CFLAGS) $(OBJOUT_FLAG)$@ -c ..\x2p\a2p.c
-@@ -739,9 +744,9 @@
+@@ -739,9 +735,9 @@
  perlmainst$(o) : runperl.c $(CONFIGPM)
  	$(CC) $(CFLAGS_O) $(OBJOUT_FLAG)$@ $(PDBOUT) -c runperl.c
  
@@ -9963,7 +9988,7 @@ PATCH
  	copy $(PERLEXE) $(WPERLEXE)
  	$(MINIPERL) -I..\lib bin\exetype.pl $(WPERLEXE) WINDOWS
  	copy splittree.pl ..
-@@ -771,15 +776,8 @@
+@@ -771,15 +767,8 @@
  
  #most of deps of this target are in DYNALOADER and therefore omitted here
  Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
@@ -9981,7 +10006,7 @@ PATCH
  
  #-------------------------------------------------------------------------------
  
-@@ -790,7 +788,6 @@
+@@ -790,7 +779,6 @@
  
  utils: $(PERLEXE) $(X2P)
  	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
@@ -9989,7 +10014,7 @@ PATCH
  	copy ..\README.aix      ..\pod\perlaix.pod
  	copy ..\README.amiga    ..\pod\perlamiga.pod
  	copy ..\README.apollo   ..\pod\perlapollo.pod
-@@ -842,3 +839,6 @@
+@@ -842,3 +830,6 @@
  
  installhtml : doc
  	$(RCOPY) $(HTMLDIR)\*.* $(INST_HTML)\$(NULL)
@@ -10120,15 +10145,45 @@ PATCH
  		"INST_TOP=$(INST_TOP)"			\
  		"INST_VER=$(INST_VER)"			\
  		"INST_ARCH=$(INST_ARCH)"		\
-@@ -476,7 +489,6 @@
- 		"lib_ext=$(a)"				\
- 		"static_ext=$(STATIC_EXT)"		\
+@@ -461,8 +474,8 @@
+ 		"cc=$(CC)"				\
+ 		"ld=$(LINK32)"				\
+ 		"ccflags=$(subst ",\",$(EXTRACFLAGS) $(OPTIMIZE) $(DEFINES) $(BUILDOPT))" \
+-		"cf_email=$(EMAIL)"	 		\
+-		"d_crypt=$(D_CRYPT)"			\
++		"usecplusplus=$(USE_CPLUSPLUS)"		\
++		"cf_email=$(EMAIL)"			\
+ 		"d_mymalloc=$(PERL_MALLOC)"		\
+ 		"libs=$(LIBFILES)"			\
+ 		"incpath=$(subst ",\",$(CCINCDIR))"			\
+@@ -470,15 +483,23 @@
+ 		"libpth=$(subst ",\",$(CCLIBDIR);$(EXTRALIBDIRS))"	\
+ 		"libc=$(LIBC)"				\
+ 		"make=$(PLMAKE)"				\
++		"_o=$(o)"				\
++		"obj_ext=$(o)"				\
++		"_a=$(a)"				\
++		"lib_ext=$(a)"				\
++		"static_ext=$(STATIC_EXT)"		\
  		"usethreads=$(USE_ITHREADS)"		\
 -		"use5005threads=$(USE_5005THREADS)"	\
  		"useithreads=$(USE_ITHREADS)"		\
+-		"usethreads=$(USE_5005THREADS)"		\
  		"usemultiplicity=$(USE_MULTI)"		\
  		"useperlio=$(USE_PERLIO)"		\
-@@ -504,22 +516,19 @@
++		"use64bitint=$(USE_64_BIT_INT)"		\
++		"uselongdouble=$(USE_LONG_DOUBLE)"	\
+ 		"uselargefiles=$(USE_LARGE_FILES)"	\
++		"usesitecustomize=$(USE_SITECUST)"	\
+ 		"LINK_FLAGS=$(subst ",\",$(LINK_FLAGS))"\
+-		"optimize=$(subst ",\",$(OPTIMIZE))"
++		"optimize=$(subst ",\",$(OPTIMIZE))"	\
++		"ARCHPREFIX=$(ARCHPREFIX)"		\
++		"WIN64=$(WIN64)"
+ 
+ ICWD = -I..\cpan\Cwd -I..\cpan\Cwd\lib
+ 
+@@ -495,22 +516,19 @@
  
  #----------------------------------------------------------------
  
@@ -10160,7 +10215,7 @@ PATCH
  	if not exist "$(MINIDIR)" mkdir "$(MINIDIR)"
  	copy $(CFGH_TMPL) config.h
  	@(echo.&& \
-@@ -680,16 +689,9 @@
+@@ -671,16 +689,9 @@
  $(MINIWIN32_OBJ) : $(CORE_NOCFG_H)
  	$(CC) -c $(CFLAGS) $(MINIBUILDOPT) -DPERL_IS_MINIPERL $(OBJOUT_FLAG)$@ $(PDBOUT) $(*F).c
  
@@ -10179,7 +10234,7 @@ PATCH
  endif
  
  $(MINI_OBJ)	: $(MINIDIR)\.exists $(CORE_NOCFG_H)
-@@ -700,20 +702,30 @@
+@@ -691,20 +702,30 @@
  $(X2P_OBJ)	: $(CORE_H)
  
  perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\global.sym ..\pp.sym ..\makedef.pl
@@ -10215,7 +10270,7 @@ PATCH
  
  ..\x2p\a2p$(o) : ..\x2p\a2p.c
  	$(CC) -I..\x2p $(CFLAGS) $(OBJOUT_FLAG)$@ -c ..\x2p\a2p.c
-@@ -744,9 +756,9 @@
+@@ -735,9 +756,9 @@
  perlmainst$(o) : runperl.c $(CONFIGPM)
  	$(CC) $(CFLAGS_O) $(OBJOUT_FLAG)$@ $(PDBOUT) -c runperl.c
  
@@ -10227,7 +10282,7 @@ PATCH
  	copy $(PERLEXE) $(WPERLEXE)
  	$(MINIPERL) -I..\lib bin\exetype.pl $(WPERLEXE) WINDOWS
  	copy splittree.pl ..
-@@ -776,8 +788,15 @@
+@@ -767,8 +788,15 @@
  
  #most of deps of this target are in DYNALOADER and therefore omitted here
  Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
@@ -10245,7 +10300,7 @@ PATCH
  
  #-------------------------------------------------------------------------------
  
-@@ -794,31 +813,24 @@
+@@ -785,31 +813,24 @@
  	copy ..\README.beos     ..\pod\perlbeos.pod
  	copy ..\README.bs2000   ..\pod\perlbs2000.pod
  	copy ..\README.ce       ..\pod\perlce.pod
@@ -10277,7 +10332,7 @@ PATCH
  	copy ..\README.uts      ..\pod\perluts.pod
  	copy ..\README.vmesa    ..\pod\perlvmesa.pod
  	copy ..\README.vms      ..\pod\perlvms.pod
-@@ -834,11 +846,17 @@
+@@ -825,11 +846,17 @@
  installbare : utils
  	$(PERLEXE) ..\installperl
  	if exist $(WPERLEXE) $(XCOPY) $(WPERLEXE) $(INST_BIN)\$(NULL)

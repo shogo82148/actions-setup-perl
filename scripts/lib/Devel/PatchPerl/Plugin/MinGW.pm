@@ -530,6 +530,198 @@ PATCH
         return;
     }
 
+    if (_ge($version, "5.9.2")) {
+        _patch(<<'PATCH');
+--- lib/ExtUtils/MM_Unix.pm
++++ lib/ExtUtils/MM_Unix.pm
+@@ -382,10 +382,11 @@ sub const_config {
+ # --- Constants Sections ---
+ 
+     my($self) = shift;
+-    my(@m,$m);
++    my @m = $self->specify_shell(); # Usually returns empty string
+     push(@m,"\n# These definitions are from config.sh (via $INC{'Config.pm'})\n");
+     push(@m,"\n# They may have been overridden via Makefile.PL or on the command line\n");
+     my(%once_only);
++    my($m);
+     foreach $m (@{$self->{CONFIG}}){
+ 	# SITE*EXP macros are defined in &constants; avoid duplicates here
+ 	next if $once_only{$m};
+@@ -3438,6 +3439,16 @@ $target :: $plfile
+     join "", @m;
+ }
+ 
++=item specify_shell
++
++Specify SHELL if needed - not done on Unix.
++
++=cut
++
++sub specify_shell {
++  return '';
++}
++
+ =item quote_paren
+ 
+ Backslashes parentheses C<()> in command line arguments.
+--- lib/ExtUtils/MM_Win32.pm
++++ lib/ExtUtils/MM_Win32.pm
+@@ -24,7 +24,7 @@ use File::Basename;
+ use File::Spec;
+ use ExtUtils::MakeMaker qw( neatvalue );
+ 
+-use vars qw(@ISA $VERSION $BORLAND $GCC $DMAKE $NMAKE);
++use vars qw(@ISA $VERSION $BORLAND $GCC $DMAKE $NMAKE $GMAKE);
+ 
+ require ExtUtils::MM_Any;
+ require ExtUtils::MM_Unix;
+@@ -36,6 +36,7 @@ $ENV{EMXSHELL} = 'sh'; # to run `commands`
+ $BORLAND = 1 if $Config{'cc'} =~ /^bcc/i;
+ $GCC     = 1 if $Config{'cc'} =~ /^gcc/i;
+ $DMAKE = 1 if $Config{'make'} =~ /^dmake/i;
++$GMAKE = 1 if $Config{'make'} =~ /^gmake/i;
+ $NMAKE = 1 if $Config{'make'} =~ /^nmake/i;
+ 
+ 
+@@ -146,7 +147,8 @@ sub init_DIRFILESEP {
+ 
+     # The ^ makes sure its not interpreted as an escape in nmake
+     $self->{DIRFILESEP} = $NMAKE ? '^\\' :
+-                          $DMAKE ? '\\\\'
++                          $DMAKE ? '\\\\' :
++                          $GMAKE ? '/'
+                                  : '\\';
+ }
+ 
+@@ -234,6 +236,17 @@ sub platform_constants {
+     return $make_frag;
+ }
+ 
++=item specify_shell
++
++Set SHELL to $ENV{COMSPEC} only if make is type 'gmake'.
++
++=cut
++
++sub specify_shell {
++    my $self = shift;
++    return '' unless $GMAKE;
++    "\nSHELL = $ENV{COMSPEC}\n";
++}
+ 
+ =item special_targets (o)
+ 
+PATCH
+        return;
+    }
+
+    if (_ge($version, "5.9.1")) {
+        _patch(<<'PATCH');
+--- lib/ExtUtils/MM_Unix.pm
++++ lib/ExtUtils/MM_Unix.pm
+@@ -382,10 +382,11 @@ sub const_config {
+ # --- Constants Sections ---
+ 
+     my($self) = shift;
+-    my(@m,$m);
++    my @m = $self->specify_shell(); # Usually returns empty string
+     push(@m,"\n# These definitions are from config.sh (via $INC{'Config.pm'})\n");
+     push(@m,"\n# They may have been overridden via Makefile.PL or on the command line\n");
+     my(%once_only);
++    my($m);
+     foreach $m (@{$self->{CONFIG}}){
+ 	# SITE*EXP macros are defined in &constants; avoid duplicates here
+ 	next if $once_only{$m};
+@@ -434,9 +435,11 @@ sub constants {
+     my($self) = @_;
+     my @m = ();
+ 
++    $self->{DFSEP} = '$(DIRFILESEP)';  # alias for internal use
++
+     for my $macro (qw(
+ 
+-              AR_STATIC_ARGS DIRFILESEP
++              AR_STATIC_ARGS DIRFILESEP DFSEP
+               NAME NAME_SYM 
+               VERSION    VERSION_MACRO    VERSION_SYM DEFINE_VERSION
+               XS_VERSION XS_VERSION_MACRO             XS_DEFINE_VERSION
+@@ -605,7 +608,7 @@ sub dir_target {
+ 
+         push @targs, $targ;
+         $make .= <<MAKE_FRAG;
+-$targ ::
++$dir\$(DFSEP).exists ::
+ 	\$(NOECHO) \$(MKPATH) $targdir
+ 	\$(NOECHO) \$(TOUCH) $targ
+ 	\$(NOECHO) \$(CHMOD) \$(PERM_RWX) $targdir
+@@ -3481,6 +3484,16 @@ $target :: $plfile
+     join "", @m;
+ }
+ 
++=item specify_shell
++
++Specify SHELL if needed - not done on Unix.
++
++=cut
++
++sub specify_shell {
++  return '';
++}
++
+ =item quote_paren
+ 
+ Backslashes parentheses C<()> in command line arguments.
+--- lib/ExtUtils/MM_Win32.pm
++++ lib/ExtUtils/MM_Win32.pm
+@@ -24,7 +24,7 @@ use File::Basename;
+ use File::Spec;
+ use ExtUtils::MakeMaker qw( neatvalue );
+ 
+-use vars qw(@ISA $VERSION $BORLAND $GCC $DMAKE $NMAKE);
++use vars qw(@ISA $VERSION $BORLAND $GCC $DMAKE $NMAKE $GMAKE);
+ 
+ require ExtUtils::MM_Any;
+ require ExtUtils::MM_Unix;
+@@ -36,6 +36,7 @@ $ENV{EMXSHELL} = 'sh'; # to run `commands`
+ $BORLAND = 1 if $Config{'cc'} =~ /^bcc/i;
+ $GCC     = 1 if $Config{'cc'} =~ /^gcc/i;
+ $DMAKE = 1 if $Config{'make'} =~ /^dmake/i;
++$GMAKE = 1 if $Config{'make'} =~ /^gmake/i;
+ $NMAKE = 1 if $Config{'make'} =~ /^nmake/i;
+ 
+ 
+@@ -146,7 +147,8 @@ sub init_DIRFILESEP {
+ 
+     # The ^ makes sure its not interpreted as an escape in nmake
+     $self->{DIRFILESEP} = $NMAKE ? '^\\' :
+-                          $DMAKE ? '\\\\'
++                          $DMAKE ? '\\\\' :
++                          $GMAKE ? '/'
+                                  : '\\';
+ }
+ 
+@@ -234,6 +236,17 @@ sub platform_constants {
+     return $make_frag;
+ }
+ 
++=item specify_shell
++
++Set SHELL to $ENV{COMSPEC} only if make is type 'gmake'.
++
++=cut
++
++sub specify_shell {
++    my $self = shift;
++    return '' unless $GMAKE;
++    "\nSHELL = $ENV{COMSPEC}\n";
++}
+ 
+ =item special_targets (o)
+ 
+PATCH
+        return;
+    }
+
     if (_ge($version, "5.9.0")) {
         _patch(<<'PATCH');
 --- lib/ExtUtils/MM_Unix.pm

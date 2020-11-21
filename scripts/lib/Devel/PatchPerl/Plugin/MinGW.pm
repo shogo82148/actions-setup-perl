@@ -532,10 +532,8 @@ PATCH
 
     if (_ge($version, "5.9.0")) {
         _patch(<<'PATCH');
-diff --git a/lib/ExtUtils/MM_Unix.pm b/lib/ExtUtils/MM_Unix.pm
-index 43c5098516..af9141fd88 100644
---- a/lib/ExtUtils/MM_Unix.pm
-+++ b/lib/ExtUtils/MM_Unix.pm
+--- lib/ExtUtils/MM_Unix.pm
++++ lib/ExtUtils/MM_Unix.pm
 @@ -381,10 +381,11 @@ sub const_config {
  # --- Constants Sections ---
  
@@ -549,7 +547,38 @@ index 43c5098516..af9141fd88 100644
      foreach $m (@{$self->{CONFIG}}){
  	# SITE*EXP macros are defined in &constants; avoid duplicates here
  	next if $once_only{$m};
-@@ -3470,6 +3471,16 @@ $target :: $plfile
+@@ -433,9 +434,11 @@ sub constants {
+     my($self) = @_;
+     my @m = ();
+ 
++    $self->{DFSEP} = '$(DIRFILESEP)';  # alias for internal use
++
+     for my $macro (qw(
+ 
+-              AR_STATIC_ARGS DIRFILESEP
++              AR_STATIC_ARGS DIRFILESEP DFSEP
+               NAME NAME_SYM 
+               VERSION    VERSION_MACRO    VERSION_SYM DEFINE_VERSION
+               XS_VERSION XS_VERSION_MACRO             XS_DEFINE_VERSION
+@@ -591,7 +594,7 @@ sub dir_target {
+ 	}
+ 	next if $self->{DIR_TARGET}{$self}{$targdir}++;
+ 	push @m, qq{
+-$targ :: $src
++$dir\$(DFSEP).exists :: $src
+ 	\$(NOECHO) \$(MKPATH) $targdir
+ 	\$(NOECHO) \$(EQUALIZE_TIMESTAMP) $src $targ
+ };
+@@ -2633,7 +2636,7 @@ realclean ::
+ 	last unless defined $from;
+ 	my $todir = dirname($to);
+ 	push @m, "
+-$to: $from \$(FIRST_MAKEFILE) " . $self->catdir($todir,'.exists') . "
++$to: $from \$(FIRST_MAKEFILE) $todir\$(DFSEP).exists
+ 	\$(NOECHO) \$(RM_F) $to
+ 	\$(CP) $from $to
+ 	\$(FIXIN) $to
+@@ -3470,6 +3473,16 @@ $target :: $plfile
      join "", @m;
  }
  

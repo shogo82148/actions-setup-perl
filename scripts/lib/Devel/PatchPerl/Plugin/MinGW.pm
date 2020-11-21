@@ -1514,7 +1514,11 @@ PATCH
  
  static long
  find_pid(int pid)
-@@ -1652,11 +1654,13 @@ win32_uname(struct utsname *name)
+@@ -1649,14 +1651,17 @@ win32_uname(struct utsname *name)
+     /* machine (architecture) */
+     {
+ 	SYSTEM_INFO info;
++	DWORD procarch;
  	char *arch;
  	GetSystemInfo(&info);
  
@@ -1550,7 +1554,11 @@ PATCH
     _patch(<<'PATCH');
 --- win32/win32.c
 +++ win32/win32.c
-@@ -1633,11 +1633,13 @@ win32_uname(struct utsname *name)
+@@ -1630,14 +1630,17 @@ win32_uname(struct utsname *name)
+     /* machine (architecture) */
+     {
+ 	SYSTEM_INFO info;
++	DWORD procarch;
  	char *arch;
  	GetSystemInfo(&info);
  

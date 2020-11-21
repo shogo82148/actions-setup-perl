@@ -9122,6 +9122,7 @@ MICROCORE_SRC	=		\
 		..\mg.c		\
 		..\numeric.c	\
 		..\op.c		\
+		..\pad.c	\
 		..\perl.c	\
 		..\perlapi.c	\
 		..\perly.c	\
@@ -9586,6 +9587,59 @@ installbare : utils
 installhtml : doc
 	$(RCOPY) $(HTMLDIR)\*.* $(INST_HTML)\$(NULL)
 MAKEFILE
+    if (_ge($version, "5.8.4")) {
+        _patch_gnumakefile($version, <<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
+@@ -257,9 +257,18 @@
+ 		..\utils\perlbug	\
+ 		..\utils\pl2pm 		\
+ 		..\utils\c2ph		\
++		..\utils\pstruct	\
+ 		..\utils\h2xs		\
+ 		..\utils\perldoc	\
+ 		..\utils\perlcc		\
++		..\utils\perlivp	\
++		..\utils\libnetcfg	\
++		..\utils\enc2xs		\
++		..\utils\piconv		\
++		..\utils\cpan		\
++		..\utils\xsubpp		\
++		..\utils\prove		\
++		..\utils\instmodsh	\
+ 		..\pod\checkpods	\
+ 		..\pod\pod2html		\
+ 		..\pod\pod2latex	\
+@@ -269,7 +278,13 @@
+ 		..\pod\podchecker	\
+ 		..\pod\podselect	\
+ 		..\x2p\find2perl	\
+-		..\x2p\s2p
++		..\x2p\psed		\
++		..\x2p\s2p		\
++		bin\exetype.pl		\
++		bin\runperl.pl		\
++		bin\pl2bat.pl		\
++		bin\perlglob.pl		\
++		bin\search.pl
+ 
+ CFGSH_TMPL	= config.gc
+ CFGH_TMPL	= config_H.gc
+@@ -386,7 +401,11 @@
+ 		..\EXTERN.h	\
+ 		..\perlvars.h	\
+ 		..\intrpvar.h	\
+-		..\thrdvar.h	
++		..\thrdvar.h	\
++		.\include\dirent.h	\
++		.\include\netdb.h	\
++		.\include\sys\socket.h	\
++		.\win32.h
+ 
+ CORE_H		= $(CORE_NOCFG_H) .\config.h
+ 
+PATCH
+    }
     if (_ge($version, "5.8.5")) {
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
@@ -9612,62 +9666,7 @@ MAKEFILE
  PERLDEP = $(PERLIMPLIB)
  
  
-@@ -257,9 +272,18 @@
- 		..\utils\perlbug	\
- 		..\utils\pl2pm 		\
- 		..\utils\c2ph		\
-+		..\utils\pstruct	\
- 		..\utils\h2xs		\
- 		..\utils\perldoc	\
- 		..\utils\perlcc		\
-+		..\utils\perlivp	\
-+		..\utils\libnetcfg	\
-+		..\utils\enc2xs		\
-+		..\utils\piconv		\
-+		..\utils\cpan		\
-+		..\utils\xsubpp		\
-+		..\utils\prove		\
-+		..\utils\instmodsh	\
- 		..\pod\checkpods	\
- 		..\pod\pod2html		\
- 		..\pod\pod2latex	\
-@@ -269,7 +293,13 @@
- 		..\pod\podchecker	\
- 		..\pod\podselect	\
- 		..\x2p\find2perl	\
--		..\x2p\s2p
-+		..\x2p\psed		\
-+		..\x2p\s2p		\
-+		bin\exetype.pl		\
-+		bin\runperl.pl		\
-+		bin\pl2bat.pl		\
-+		bin\perlglob.pl		\
-+		bin\search.pl
- 
- CFGSH_TMPL	= config.gc
- CFGH_TMPL	= config_H.gc
-@@ -302,6 +332,7 @@
- 		..\mg.c		\
- 		..\numeric.c	\
- 		..\op.c		\
-+		..\pad.c	\
- 		..\perl.c	\
- 		..\perlapi.c	\
- 		..\perly.c	\
-@@ -385,7 +416,11 @@
- 		..\EXTERN.h	\
- 		..\perlvars.h	\
- 		..\intrpvar.h	\
--		..\thrdvar.h	
-+		..\thrdvar.h	\
-+		.\include\dirent.h	\
-+		.\include\netdb.h	\
-+		.\include\sys\socket.h	\
-+		.\win32.h
- 
- CORE_H		= $(CORE_NOCFG_H) .\config.h
- 
-@@ -455,7 +490,7 @@
+@@ -475,7 +490,7 @@
  
  .PHONY: all
  
@@ -9676,7 +9675,7 @@ MAKEFILE
  	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
  
  $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
-@@ -702,14 +737,19 @@
+@@ -722,14 +737,19 @@
  perlmainst$(o) : runperl.c $(CONFIGPM)
  	$(CC) $(CFLAGS_O) $(OBJOUT_FLAG)$@ $(PDBOUT) -c runperl.c
  
@@ -9698,7 +9697,7 @@ MAKEFILE
  $(DYNALOADER).c: $(HAVEMINIPERL) $(EXTDIR)\DynaLoader\dl_win32.xs $(CONFIGPM)
  	if not exist $(AUTODIR) mkdir $(AUTODIR)
  	cd $(EXTDIR)\DynaLoader \
-@@ -741,16 +781,43 @@
+@@ -761,16 +781,43 @@
  
  utils: $(PERLEXE) $(X2P)
  	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
@@ -9743,7 +9742,7 @@ MAKEFILE
  	cd ..\lib && $(PERLEXE) -Dtls lib_pm.PL
  	cd ..\pod && $(PLMAKE) -f ..\win32\pod.mak converters
  	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
-@@ -765,3 +832,6 @@
+@@ -785,3 +832,6 @@
  
  installhtml : doc
  	$(RCOPY) $(HTMLDIR)\*.* $(INST_HTML)\$(NULL)

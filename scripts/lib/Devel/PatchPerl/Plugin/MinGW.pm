@@ -1883,7 +1883,7 @@ PATCH
         return;
     }
 
-    if (_ge($version, "5.8.6")) {
+    if (_ge($version, "5.8.0")) {
         _patch(<<'PATCH');
 --- win32/config_H.gc
 +++ win32/config_H.gc
@@ -1929,12 +1929,6 @@ PATCH
  
  /* HAS_MODFL:
   *	This symbol, if defined, indicates that the modfl routine is
-PATCH
-        return;
-    }
-
-    if (_ge($version, "5.8.5")) {
-        _patch(<<'PATCH');
 PATCH
         return;
     }

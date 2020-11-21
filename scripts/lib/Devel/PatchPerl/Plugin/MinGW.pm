@@ -1903,6 +1903,7 @@ PATCH
  #   define QUAD_IS_LONG_LONG	3
  #   define QUAD_IS_INT64_T	4
 -#endif
++#   define QUAD_IS___INT64	5
  
  /* HAS_ACCESSX:
   *	This symbol, if defined, indicates that the accessx routine is

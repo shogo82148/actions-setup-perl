@@ -9834,15 +9834,7 @@ PATCH
  
  PERLDEP = $(PERLIMPLIB)
  
-@@ -398,6 +381,7 @@
- 		..\perly.h	\
- 		..\pp.h		\
- 		..\proto.h	\
-+		..\regcomp.h	\
- 		..\regexp.h	\
- 		..\scope.h	\
- 		..\sv.h		\
-@@ -418,6 +402,11 @@
+@@ -418,6 +401,11 @@
  
  CORE_H		= $(CORE_NOCFG_H) .\config.h
  
@@ -9854,7 +9846,7 @@ PATCH
  MICROCORE_OBJ	= $(MICROCORE_SRC:.c=$(o))
  CORE_OBJ	= $(MICROCORE_OBJ) $(EXTRACORE_SRC:.c=$(o))
  WIN32_OBJ	= $(WIN32_SRC:.c=$(o))
-@@ -449,6 +438,7 @@
+@@ -449,6 +437,7 @@
  DYNALOADER	= $(EXTDIR)\DynaLoader\DynaLoader
  
  CFG_VARS	=					\
@@ -9862,7 +9854,7 @@ PATCH
  		"INST_TOP=$(INST_TOP)"			\
  		"INST_VER=$(INST_VER)"			\
  		"INST_ARCH=$(INST_ARCH)"		\
-@@ -475,14 +465,9 @@
+@@ -475,14 +464,9 @@
  		"usethreads=$(USE_5005THREADS)"		\
  		"usemultiplicity=$(USE_MULTI)"		\
  		"useperlio=$(USE_PERLIO)"		\
@@ -9878,7 +9870,7 @@ PATCH
  
  ICWD = -I..\cpan\Cwd -I..\cpan\Cwd\lib
  
-@@ -790,38 +775,30 @@
+@@ -790,38 +774,30 @@
  
  utils: $(PERLEXE) $(X2P)
  	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
@@ -9917,7 +9909,7 @@ PATCH
  	copy ..\README.uts      ..\pod\perluts.pod
  	copy ..\README.vmesa    ..\pod\perlvmesa.pod
  	copy ..\README.vms      ..\pod\perlvms.pod
-@@ -837,8 +814,14 @@
+@@ -837,8 +813,14 @@
  installbare : utils
  	$(PERLEXE) ..\installperl
  	if exist $(WPERLEXE) $(XCOPY) $(WPERLEXE) $(INST_BIN)\$(NULL)
@@ -10037,7 +10029,15 @@ PATCH
  PERLDEP = $(PERLIMPLIB)
  
  
-@@ -438,7 +467,6 @@
+@@ -381,6 +410,7 @@
+ 		..\perly.h	\
+ 		..\pp.h		\
+ 		..\proto.h	\
++		..\regcomp.h	\
+ 		..\regexp.h	\
+ 		..\scope.h	\
+ 		..\sv.h		\
+@@ -437,7 +467,6 @@
  DYNALOADER	= $(EXTDIR)\DynaLoader\DynaLoader
  
  CFG_VARS	=					\
@@ -10045,7 +10045,7 @@ PATCH
  		"INST_TOP=$(INST_TOP)"			\
  		"INST_VER=$(INST_VER)"			\
  		"INST_ARCH=$(INST_ARCH)"		\
-@@ -459,15 +487,19 @@
+@@ -458,15 +487,19 @@
  		"obj_ext=$(o)"				\
  		"_a=$(a)"				\
  		"lib_ext=$(a)"				\
@@ -10068,7 +10068,7 @@ PATCH
  
  ICWD = -I..\cpan\Cwd -I..\cpan\Cwd\lib
  
-@@ -477,7 +509,7 @@
+@@ -476,7 +509,7 @@
  
  .PHONY: all
  
@@ -10077,7 +10077,7 @@ PATCH
  	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
  
  $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
-@@ -670,8 +702,8 @@
+@@ -669,8 +702,8 @@
  $(X2P_OBJ)	: $(CORE_H)
  
  perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\global.sym ..\pp.sym ..\makedef.pl
@@ -10088,7 +10088,7 @@ PATCH
  
  $(PERLEXPLIB) : $(PERLIMPLIB)
  
-@@ -825,3 +857,6 @@
+@@ -824,3 +857,6 @@
  
  inst_lib : $(CONFIGPM)
  	$(RCOPY) ..\lib $(INST_LIB)\$(NULL)

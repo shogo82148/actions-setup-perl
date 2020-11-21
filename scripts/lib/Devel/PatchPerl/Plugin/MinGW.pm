@@ -425,7 +425,7 @@ PATCH
         return;
     }
 
-    if (_ge($version, "5.9.0")) {
+    if (_ge($version, "5.9.2")) {
         _patch(<<'PATCH');
 --- lib/ExtUtils/MM_Unix.pm
 +++ lib/ExtUtils/MM_Unix.pm
@@ -525,6 +525,95 @@ PATCH
 +}
  
  =item special_targets
+ 
+PATCH
+        return;
+    }
+
+    if (_ge($version, "5.9.0")) {
+        _patch(<<'PATCH');
+diff --git a/lib/ExtUtils/MM_Unix.pm b/lib/ExtUtils/MM_Unix.pm
+index 43c5098516..af9141fd88 100644
+--- a/lib/ExtUtils/MM_Unix.pm
++++ b/lib/ExtUtils/MM_Unix.pm
+@@ -381,10 +381,11 @@ sub const_config {
+ # --- Constants Sections ---
+ 
+     my($self) = shift;
+-    my(@m,$m);
++    my @m = $self->specify_shell(); # Usually returns empty string
+     push(@m,"\n# These definitions are from config.sh (via $INC{'Config.pm'})\n");
+     push(@m,"\n# They may have been overridden via Makefile.PL or on the command line\n");
+     my(%once_only);
++    my($m);
+     foreach $m (@{$self->{CONFIG}}){
+ 	# SITE*EXP macros are defined in &constants; avoid duplicates here
+ 	next if $once_only{$m};
+@@ -3470,6 +3471,16 @@ $target :: $plfile
+     join "", @m;
+ }
+ 
++=item specify_shell
++
++Specify SHELL if needed - not done on Unix.
++
++=cut
++
++sub specify_shell {
++  return '';
++}
++
+ =item quote_paren
+ 
+ Backslashes parentheses C<()> in command line arguments.
+diff --git a/lib/ExtUtils/MM_Win32.pm b/lib/ExtUtils/MM_Win32.pm
+index 8fe0b96d95..188bec9ea4 100644
+--- a/lib/ExtUtils/MM_Win32.pm
++++ b/lib/ExtUtils/MM_Win32.pm
+@@ -24,7 +24,7 @@ use File::Basename;
+ use File::Spec;
+ use ExtUtils::MakeMaker qw( neatvalue );
+ 
+-use vars qw(@ISA $VERSION $BORLAND $GCC $DMAKE $NMAKE);
++use vars qw(@ISA $VERSION $BORLAND $GCC $DMAKE $NMAKE $GMAKE);
+ 
+ require ExtUtils::MM_Any;
+ require ExtUtils::MM_Unix;
+@@ -36,6 +36,7 @@ $ENV{EMXSHELL} = 'sh'; # to run `commands`
+ $BORLAND = 1 if $Config{'cc'} =~ /^bcc/i;
+ $GCC     = 1 if $Config{'cc'} =~ /^gcc/i;
+ $DMAKE = 1 if $Config{'make'} =~ /^dmake/i;
++$GMAKE = 1 if $Config{'make'} =~ /^gmake/i;
+ $NMAKE = 1 if $Config{'make'} =~ /^nmake/i;
+ 
+ 
+@@ -146,7 +147,8 @@ sub init_DIRFILESEP {
+ 
+     # The ^ makes sure its not interpreted as an escape in nmake
+     $self->{DIRFILESEP} = $NMAKE ? '^\\' :
+-                          $DMAKE ? '\\\\'
++                          $DMAKE ? '\\\\' :
++                          $GMAKE ? '/'
+                                  : '\\';
+ }
+ 
+@@ -234,6 +236,17 @@ sub platform_constants {
+     return $make_frag;
+ }
+ 
++=item specify_shell
++
++Set SHELL to $ENV{COMSPEC} only if make is type 'gmake'.
++
++=cut
++
++sub specify_shell {
++    my $self = shift;
++    return '' unless $GMAKE;
++    "\nSHELL = $ENV{COMSPEC}\n";
++}
+ 
+ =item special_targets (o)
  
 PATCH
         return;

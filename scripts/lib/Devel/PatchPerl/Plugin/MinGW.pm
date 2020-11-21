@@ -1458,8 +1458,8 @@ PATCH
         return;
     }
 
-    if(_ge($version, "5.8.0")) {
-    _patch(<<'PATCH');
+    if(_ge($version, "5.7.3")) {
+        _patch(<<'PATCH');
 --- win32/win32.c
 +++ win32/win32.c
 @@ -1094,6 +1094,7 @@ chown(const char *path, uid_t owner, gid_t group)
@@ -1482,6 +1482,59 @@ PATCH
 +++ win32/win32.h
 @@ -292,7 +292,9 @@ extern  void	*sbrk(ptrdiff_t need);
  #endif
+ extern	char *	getlogin(void);
+ extern	int	chown(const char *p, uid_t o, gid_t g);
++#if !defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 4
+ extern  int	mkstemp(const char *path);
++#endif
+ 
+ #undef	 Stat
+ #define  Stat		win32_stat
+PATCH
+        return;
+    }
+
+    if(_ge($version, "5.7.1")) {
+        _patch(<<'PATCH');
+--- win32/win32.c
++++ win32/win32.c
+@@ -979,6 +979,7 @@ chown(const char *path, uid_t owner, gid_t group)
+  * XXX this needs strengthening  (for PerlIO)
+  *   -- BKS, 11-11-200
+ */
++#if !defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 4
+ int mkstemp(const char *path)
+ {
+     dTHX;
+@@ -999,6 +1000,7 @@ retry:
+ 	goto retry;
+     return fd;
+ }
++#endif
+ 
+ static long
+ find_pid(int pid)
+@@ -1652,11 +1654,13 @@ win32_uname(struct utsname *name)
+ 	char *arch;
+ 	GetSystemInfo(&info);
+ 
+-#if (defined(__BORLANDC__)&&(__BORLANDC__<=0x520)) || defined(__MINGW32__)
+-	switch (info.u.s.wProcessorArchitecture) {
++#if (defined(__BORLANDC__)&&(__BORLANDC__<=0x520)) \
++ || (defined(__MINGW32__) && !defined(_ANONYMOUS_UNION))
++	procarch = info.u.s.wProcessorArchitecture;
+ #else
+-	switch (info.wProcessorArchitecture) {
++	procarch = info.wProcessorArchitecture;
+ #endif
++	switch (procarch) {
+ 	case PROCESSOR_ARCHITECTURE_INTEL:
+ 	    arch = "x86"; break;
+ 	case PROCESSOR_ARCHITECTURE_MIPS:
+--- win32/win32.h
++++ win32/win32.h
+@@ -298,7 +298,9 @@ extern  int	kill(int pid, int sig);
+ extern  void	*sbrk(int need);
  extern	char *	getlogin(void);
  extern	int	chown(const char *p, uid_t o, gid_t g);
 +#if !defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 4

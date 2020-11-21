@@ -9280,6 +9280,7 @@ CFG_VARS	=					\
 		"usethreads=$(USE_5005THREADS)"		\
 		"usemultiplicity=$(USE_MULTI)"		\
 		"useperlio=$(USE_PERLIO)"		\
+		"use64bitint=$(USE_64_BIT_INT)"		\
 		"uselargefiles=$(USE_LARGE_FILES)"	\
 		"LINK_FLAGS=$(subst ",\",$(LINK_FLAGS))"\
 		"optimize=$(subst ",\",$(OPTIMIZE))"
@@ -9665,7 +9666,7 @@ PATCH
  		bin\exetype.pl		\
  		bin\runperl.pl		\
  		bin\pl2bat.pl		\
-@@ -759,39 +761,13 @@
+@@ -760,39 +762,13 @@
  
  utils: $(PERLEXE) $(X2P)
  	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
@@ -9734,7 +9735,7 @@ PATCH
  PERLDEP = $(PERLIMPLIB)
  
  
-@@ -475,7 +490,7 @@
+@@ -476,7 +491,7 @@
  
  .PHONY: all
  
@@ -9743,7 +9744,7 @@ PATCH
  	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
  
  $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
-@@ -722,14 +737,19 @@
+@@ -723,14 +738,19 @@
  perlmainst$(o) : runperl.c $(CONFIGPM)
  	$(CC) $(CFLAGS_O) $(OBJOUT_FLAG)$@ $(PDBOUT) -c runperl.c
  
@@ -9765,7 +9766,7 @@ PATCH
  $(DYNALOADER).c: $(HAVEMINIPERL) $(EXTDIR)\DynaLoader\dl_win32.xs $(CONFIGPM)
  	if not exist $(AUTODIR) mkdir $(AUTODIR)
  	cd $(EXTDIR)\DynaLoader \
-@@ -761,16 +781,43 @@
+@@ -762,16 +782,43 @@
  
  utils: $(PERLEXE) $(X2P)
  	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
@@ -9810,7 +9811,7 @@ PATCH
  	cd ..\lib && $(PERLEXE) -Dtls lib_pm.PL
  	cd ..\pod && $(PLMAKE) -f ..\win32\pod.mak converters
  	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
-@@ -785,3 +832,6 @@
+@@ -786,3 +833,6 @@
  
  installhtml : doc
  	$(RCOPY) $(HTMLDIR)\*.* $(INST_HTML)\$(NULL)
@@ -9948,7 +9949,7 @@ PATCH
  		"d_mymalloc=$(PERL_MALLOC)"		\
  		"libs=$(LIBFILES)"			\
  		"incpath=$(subst ",\",$(CCINCDIR))"			\
-@@ -472,15 +483,23 @@
+@@ -472,16 +483,23 @@
  		"libpth=$(subst ",\",$(CCLIBDIR);$(EXTRALIBDIRS))"	\
  		"libc=$(LIBC)"				\
  		"make=$(PLMAKE)"				\
@@ -9963,7 +9964,7 @@ PATCH
 -		"usethreads=$(USE_5005THREADS)"		\
  		"usemultiplicity=$(USE_MULTI)"		\
  		"useperlio=$(USE_PERLIO)"		\
-+		"use64bitint=$(USE_64_BIT_INT)"		\
+ 		"use64bitint=$(USE_64_BIT_INT)"		\
 +		"uselongdouble=$(USE_LONG_DOUBLE)"	\
  		"uselargefiles=$(USE_LARGE_FILES)"	\
 +		"usesitecustomize=$(USE_SITECUST)"	\
@@ -9975,7 +9976,7 @@ PATCH
  
  ICWD = -I..\cpan\Cwd -I..\cpan\Cwd\lib
  
-@@ -497,22 +516,19 @@
+@@ -498,22 +516,19 @@
  
  #----------------------------------------------------------------
  
@@ -10007,7 +10008,7 @@ PATCH
  	if not exist "$(MINIDIR)" mkdir "$(MINIDIR)"
  	copy $(CFGH_TMPL) config.h
  	@(echo.&& \
-@@ -673,16 +689,9 @@
+@@ -674,16 +689,9 @@
  $(MINIWIN32_OBJ) : $(CORE_NOCFG_H)
  	$(CC) -c $(CFLAGS) $(MINIBUILDOPT) -DPERL_IS_MINIPERL $(OBJOUT_FLAG)$@ $(PDBOUT) $(*F).c
  
@@ -10026,7 +10027,7 @@ PATCH
  endif
  
  $(MINI_OBJ)	: $(MINIDIR)\.exists $(CORE_NOCFG_H)
-@@ -693,20 +702,30 @@
+@@ -694,20 +702,30 @@
  $(X2P_OBJ)	: $(CORE_H)
  
  perldll.def : $(HAVEMINIPERL) $(CONFIGPM) ..\global.sym ..\pp.sym ..\makedef.pl
@@ -10062,7 +10063,7 @@ PATCH
  
  ..\x2p\a2p$(o) : ..\x2p\a2p.c
  	$(CC) -I..\x2p $(CFLAGS) $(OBJOUT_FLAG)$@ -c ..\x2p\a2p.c
-@@ -737,9 +756,9 @@
+@@ -738,9 +756,9 @@
  perlmainst$(o) : runperl.c $(CONFIGPM)
  	$(CC) $(CFLAGS_O) $(OBJOUT_FLAG)$@ $(PDBOUT) -c runperl.c
  
@@ -10074,7 +10075,7 @@ PATCH
  	copy $(PERLEXE) $(WPERLEXE)
  	$(MINIPERL) -I..\lib bin\exetype.pl $(WPERLEXE) WINDOWS
  	copy splittree.pl ..
-@@ -769,8 +788,15 @@
+@@ -770,8 +788,15 @@
  
  #most of deps of this target are in DYNALOADER and therefore omitted here
  Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
@@ -10092,7 +10093,7 @@ PATCH
  
  #-------------------------------------------------------------------------------
  
-@@ -787,31 +813,24 @@
+@@ -788,31 +813,24 @@
  	copy ..\README.beos     ..\pod\perlbeos.pod
  	copy ..\README.bs2000   ..\pod\perlbs2000.pod
  	copy ..\README.ce       ..\pod\perlce.pod
@@ -10124,7 +10125,7 @@ PATCH
  	copy ..\README.uts      ..\pod\perluts.pod
  	copy ..\README.vmesa    ..\pod\perlvmesa.pod
  	copy ..\README.vms      ..\pod\perlvms.pod
-@@ -827,11 +846,17 @@
+@@ -828,11 +846,17 @@
  installbare : utils
  	$(PERLEXE) ..\installperl
  	if exist $(WPERLEXE) $(XCOPY) $(WPERLEXE) $(INST_BIN)\$(NULL)

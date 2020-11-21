@@ -11308,7 +11308,7 @@ PATCH
  ifneq ($(CRYPT_SRC), "")
  WIN32_SRC	+= $(CRYPT_SRC)
  endif
-@@ -751,15 +759,26 @@
+@@ -751,15 +759,25 @@
  	copy ..\README.amiga    ..\pod\perlamiga.pod
  	copy ..\README.apollo   ..\pod\perlapollo.pod
  	copy ..\README.beos     ..\pod\perlbeos.pod
@@ -11320,7 +11320,6 @@ PATCH
 +	copy ..\README.epoc     ..\pod\perlepoc.pod
  	copy ..\README.hpux     ..\pod\perlhpux.pod
 +	copy ..\README.hurd     ..\pod\perlhurd.pod
-+	copy ..\README.irix     ..\pod\perlirix.pod
  	copy ..\README.machten  ..\pod\perlmachten.pod
  	copy ..\README.macos    ..\pod\perlmacos.pod
 +	copy ..\README.mint     ..\pod\perlmint.pod

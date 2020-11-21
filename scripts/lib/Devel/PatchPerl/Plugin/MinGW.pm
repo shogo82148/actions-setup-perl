@@ -3038,23 +3038,21 @@ sub _patch_buildext_pl {
         _patch(<<'PATCH');
 --- win32/buildext.pl
 +++ win32/buildext.pl
-@@ -28,6 +28,16 @@ if ($perl =~ m#^\.\.#)
-  {
-   $perl = "$here\\$perl";
-  }
-+(my $topdir = $perl) =~ s/\\[^\\]+$//;
-+# miniperl needs to find perlglob and pl2bat
-+$ENV{PATH} = "$topdir;$topdir\\win32\\bin;$ENV{PATH}";
-+#print "PATH=$ENV{PATH}\n";
-+my $pl2bat = "$topdir\\win32\\bin\\pl2bat";
-+unless (-f "$pl2bat.bat") {
-+    my @args = ($perl, ("$pl2bat.pl") x 2);
-+    print "@args\n";
-+    system(@args) unless defined $::Cross::platform;
-+}
- my $make = shift;
- $make .= " ".shift while $ARGV[0]=~/^-/;
- my $dep  = shift;
+@@ -60,12 +60,12 @@ foreach my $dir (sort @ext)
+     if ($targ)
+      {
+       print "Making $targ in $dir\n$make $targ\n";
+-      system("$make $targ");
++      system("$make --debug $targ");
+      }
+     else
+      {
+       print "Making $dir\n$make\n";
+-      system($make);
++      system("$make --debug");
+      }
+     chdir($here) || die "Cannot cd to $here:$!";
+    }
 PATCH
         return;
     }

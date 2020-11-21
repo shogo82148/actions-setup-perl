@@ -11126,6 +11126,93 @@ installbare : utils
 installhtml : doc
 	$(RCOPY) $(HTMLDIR)\*.* $(INST_HTML)\$(NULL)
 MAKEFILE
+    if (_ge($version, "5.7.3")) {
+        _patch_gnumakefile($version, <<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
+@@ -260,6 +260,8 @@
+ 		..\utils\h2xs		\
+ 		..\utils\perldoc	\
+ 		..\utils\perlcc		\
++		..\utils\perlivp	\
++		..\utils\libnetcfg	\
+ 		..\pod\checkpods	\
+ 		..\pod\pod2html		\
+ 		..\pod\pod2latex	\
+@@ -270,6 +272,7 @@
+ 		..\pod\podselect	\
+ 		..\x2p\find2perl	\
+ 		..\x2p\s2p		\
++		..\lib\ExtUtils\xsubpp	\
+ 		bin\exetype.pl		\
+ 		bin\runperl.pl		\
+ 		bin\pl2bat.pl		\
+@@ -303,7 +306,9 @@
+ 		..\globals.c	\
+ 		..\gv.c		\
+ 		..\hv.c		\
++		..\locale.c	\
+ 		..\mg.c		\
++		..\numeric.c	\
+ 		..\op.c		\
+ 		..\perl.c	\
+ 		..\perlapi.c	\
+@@ -311,6 +316,8 @@
+ 		..\pp.c		\
+ 		..\pp_ctl.c	\
+ 		..\pp_hot.c	\
++		..\pp_pack.c	\
++		..\pp_sort.c	\
+ 		..\pp_sys.c	\
+ 		..\regcomp.c	\
+ 		..\regexec.c	\
+@@ -337,6 +344,10 @@
+ 		.\win32sck.c	\
+ 		.\win32thread.c 
+ 
++ifeq ($(USE_PERLIO), "define")
++WIN32_SRC	+= .\win32io.c
++endif
++
+ ifneq ($(CRYPT_SRC), "")
+ WIN32_SRC	+= $(CRYPT_SRC)
+ endif
+@@ -744,13 +755,33 @@
+ 
+ utils: $(PERLEXE) $(X2P)
+ 	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
++	copy ..\README.aix      ..\pod\perlaix.pod
+ 	copy ..\README.amiga    ..\pod\perlamiga.pod
++	copy ..\README.apollo   ..\pod\perlapollo.pod
++	copy ..\README.beos     ..\pod\perlbeos.pod
++	copy ..\README.bs2000   ..\pod\perlbs2000.pod
++	copy ..\README.ce       ..\pod\perlce.pod
+ 	copy ..\README.cygwin   ..\pod\perlcygwin.pod
++	copy ..\README.dgux     ..\pod\perldgux.pod
+ 	copy ..\README.dos      ..\pod\perldos.pod
++	copy ..\README.epoc     ..\pod\perlepoc.pod
+ 	copy ..\README.hpux     ..\pod\perlhpux.pod
++	copy ..\README.hurd     ..\pod\perlhurd.pod
++	copy ..\README.irix     ..\pod\perlirix.pod
+ 	copy ..\README.machten  ..\pod\perlmachten.pod
++	copy ..\README.macos    ..\pod\perlmacos.pod
++	copy ..\README.mint     ..\pod\perlmint.pod
++	copy ..\README.mpeix    ..\pod\perlmpeix.pod
+ 	copy ..\README.os2      ..\pod\perlos2.pod
++	copy ..\README.os390    ..\pod\perlos390.pod
++	copy ..\README.plan9    ..\pod\perlplan9.pod
++	copy ..\README.qnx      ..\pod\perlqnx.pod
++	copy ..\README.solaris  ..\pod\perlsolaris.pod
++	copy ..\README.tru64    ..\pod\perltru64.pod
++	copy ..\README.uts      ..\pod\perluts.pod
++	copy ..\README.vmesa    ..\pod\perlvmesa.pod
+ 	copy ..\vms\perlvms.pod ..\pod\perlvms.pod
++	copy ..\README.vos      ..\pod\perlvos.pod
+ 	copy ..\README.win32    ..\pod\perlwin32.pod
+ 	cd ..\lib && $(PERLEXE) -Dtls lib_pm.PL
+ 	cd ..\pod && $(PLMAKE) -f ..\win32\pod.mak converters
+PATCH
+    }
 }
 
 sub _patch_gnumakefile_506 {

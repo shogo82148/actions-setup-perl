@@ -24,6 +24,7 @@ my @patch = (
             [ \&_patch_config_gc ],
             [ \&_patch_config_sh_pl ],
             [ \&_patch_installperl ],
+            [ \&_patch_buildext_pl ],
         ],
     },
     {
@@ -3029,6 +3030,34 @@ PATCH
  # Make links to ordinary names if installbin directory isn't current directory.
  
 PATCH
+}
+
+sub _patch_buildext_pl {
+    my $version = shift;
+    if ($version eq '5.7.3') {
+        _patch(<<'PATCH');
+--- win32/buildext.pl
++++ win32/buildext.pl
+@@ -28,6 +28,16 @@ if ($perl =~ m#^\.\.#)
+  {
+   $perl = "$here\\$perl";
+  }
++(my $topdir = $perl) =~ s/\\[^\\]+$//;
++# miniperl needs to find perlglob and pl2bat
++$ENV{PATH} = "$topdir;$topdir\\win32\\bin;$ENV{PATH}";
++#print "PATH=$ENV{PATH}\n";
++my $pl2bat = "$topdir\\win32\\bin\\pl2bat";
++unless (-f "$pl2bat.bat") {
++    my @args = ($perl, ("$pl2bat.pl") x 2);
++    print "@args\n";
++    system(@args) unless defined $::Cross::platform;
++}
+ my $make = shift;
+ $make .= " ".shift while $ARGV[0]=~/^-/;
+ my $dep  = shift;
+PATCH
+        return;
+    }
 }
 
 1;

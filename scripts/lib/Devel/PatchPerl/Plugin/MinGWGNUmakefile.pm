@@ -9587,7 +9587,7 @@ installbare : utils
 installhtml : doc
 	$(RCOPY) $(HTMLDIR)\*.* $(INST_HTML)\$(NULL)
 MAKEFILE
-    if (_ge($version, "5.8.4")) {
+    if (_ge($version, "5.8.3")) {
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile

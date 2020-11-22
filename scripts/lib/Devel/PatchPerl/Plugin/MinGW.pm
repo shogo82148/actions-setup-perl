@@ -1672,7 +1672,7 @@ PATCH
     }
 
     if (_ge($version, "5.7.1")) {
-        _patch(<<'PATCH')
+        _patch(<<'PATCH');
 --- lib/ExtUtils/MM_Unix.pm
 +++ lib/ExtUtils/MM_Unix.pm
 @@ -192,6 +192,7 @@ sub ExtUtils::MM_Unix::has_link_code ;
@@ -1880,7 +1880,7 @@ PATCH
     }
 
     if (_ge($version, "5.7.0")) {
-        _patch(<<'PATCH')
+        _patch(<<'PATCH');
 --- lib/ExtUtils/MM_Unix.pm
 +++ lib/ExtUtils/MM_Unix.pm
 @@ -190,6 +190,7 @@ sub ExtUtils::MM_Unix::has_link_code ;

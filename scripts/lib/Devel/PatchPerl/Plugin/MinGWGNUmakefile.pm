@@ -4008,6 +4008,20 @@ PATCH
  	copy ..\README.os2      ..\pod\perlos2.pod
 PATCH
     }
+    if (_ge($version, "5.17.6")) {
+        _patch_gnumakefile($version, <<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
+@@ -877,7 +877,6 @@
+ 	copy ..\README.cygwin   ..\pod\perlcygwin.pod
+ 	copy ..\README.dgux     ..\pod\perldgux.pod
+ 	copy ..\README.dos      ..\pod\perldos.pod
+-	copy ..\README.epoc     ..\pod\perlepoc.pod
+ 	copy ..\README.freebsd  ..\pod\perlfreebsd.pod
+ 	copy ..\README.haiku    ..\pod\perlhaiku.pod
+ 	copy ..\README.hpux     ..\pod\perlhpux.pod
+PATCH
+    }
 }
 
 sub _patch_gnumakefile_514 {

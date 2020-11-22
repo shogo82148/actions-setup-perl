@@ -74,7 +74,7 @@ sub cpan_install {
         execute_or_die($perl, 'Makefile.PL');
         execute_or_die('gmake', 'install');
     } catch {
-        warn "installing $url fails: @_";
+        warning "installing $url fails: @_";
     };
 }
 

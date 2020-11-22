@@ -68,7 +68,7 @@ sub cpan_install {
 
         info "installing $url";
         chdir $tmpdir or die "failed to cd $tmpdir: $!";
-        execute_or_die('curl', '-sSL', $url, '-o', $filename);
+        execute_or_die('curl', '--retry', '3', '-sSL', $url, '-o', $filename);
         execute_or_die("7z x $filename -so | 7z x -si -ttar");
         chdir File::Spec->catfile($tmpdir, $dirname) or die "failed to cd $dirname: $!";
         execute_or_die($perl, 'Makefile.PL');
@@ -87,17 +87,8 @@ sub run {
     my $filename = $1;
 
     group "downloading perl $version from $url" => sub {
-        my $ua = LWP::UserAgent->new;
-        my $response = $ua->get($url);
-        if (!$response->is_success) {
-            die "download failed: " . $response->status_line;
-        }
-
         my $path = File::Spec->catfile($tmpdir, $filename);
-        open my $fh, ">", $path or die "fail to open $path: $!";
-        binmode $fh;
-        print $fh $response->content;
-        close $fh;
+        execute_or_die('curl', '--retry', '3', '-sSL', $url, '-o', $path;
     };
 
     group "extracting..." => sub {

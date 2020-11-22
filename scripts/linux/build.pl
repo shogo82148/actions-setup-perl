@@ -49,7 +49,7 @@ sub cpan_install {
 
     info "installing $url";
     chdir $tmpdir or die "failed to cd $tmpdir: $!";
-    execute_or_die('curl', '-sSL', $url, '-o', $filename);
+    execute_or_die('curl', '--retry', '3', '-sSL', $url, '-o', $filename);
     execute_or_die('tar', 'xvf', $filename);
     chdir File::Spec->catfile($tmpdir, $dirname) or die "failed to cd $dirname: $!";
     execute_or_die($perl, 'Makefile.PL');

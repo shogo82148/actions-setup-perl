@@ -1876,6 +1876,7 @@ PATCH
      for (qw/ CHMOD CP LD MV NOOP RM_F RM_RF TEST_F TOUCH UMASK_NULL DEV_NULL/ ) {
  	push @m, "$_ = $self->{$_}\n";
 PATCH
+        return;
     }
 
     if (_ge($version, "5.7.0")) {
@@ -2084,6 +2085,7 @@ PATCH
      for (qw/ CHMOD CP LD MV NOOP RM_F RM_RF TEST_F TOUCH UMASK_NULL DEV_NULL/ ) {
  	push @m, "$_ = $self->{$_}\n";
 PATCH
+        return;
     }
 }
 

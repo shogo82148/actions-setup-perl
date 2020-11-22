@@ -1887,7 +1887,7 @@ PATCH
         return;
     }
 
-    if (_ge($version, "5.7.0")) {
+    if (_ge($version, "5.6.0")) {
         _patch(<<'PATCH');
 --- lib/ExtUtils/MM_Unix.pm
 +++ lib/ExtUtils/MM_Unix.pm

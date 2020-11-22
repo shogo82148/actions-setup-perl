@@ -2098,10 +2098,8 @@ PATCH
 
     if (_ge($version, "5.6.2")) {
         _patch(<<'PATCH');
-diff --git a/lib/ExtUtils/MM_Win32.pm b/lib/ExtUtils/MM_Win32.pm
-index 8fe0b96d95..8c35ec94ff 100644
---- a/lib/ExtUtils/MM_Win32.pm
-+++ b/lib/ExtUtils/MM_Win32.pm
+--- lib/ExtUtils/MM_Win32.pm
++++ lib/ExtUtils/MM_Win32.pm
 @@ -24,7 +24,7 @@ use File::Basename;
  use File::Spec;
  use ExtUtils::MakeMaker qw( neatvalue );

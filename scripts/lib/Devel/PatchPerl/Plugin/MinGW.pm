@@ -126,6 +126,14 @@ my @patch = (
             [ \&_patch_make_maker ],
         ],
     },
+    {
+        perl => [
+            qr/^5\.7\.1$/,
+        ],
+        subs => [
+            [ \&_patch_buildext ],
+        ],
+    },
 );
 
 sub patchperl {
@@ -3874,6 +3882,24 @@ PATCH
  # Install main perl executables
  # Make links to ordinary names if installbin directory isn't current directory.
  
+PATCH
+}
+
+sub _patch_buildext {
+    _patch(<<'PATCH');
+diff --git a/win32/buildext.pl b/win32/buildext.pl
+index 5800750e52..3ac45f50f6 100644
+--- a/win32/buildext.pl
++++ b/win32/buildext.pl
+@@ -27,7 +27,7 @@ foreach my $dir (sort @ext)
+     if (!(-f 'Makefile') || $mmod > $dmod)
+      {
+       print "\nRunning Makefile.PL in $dir\n";
+-      my $code = system($perl,"-I$here\\..\lib",'Makefile.PL','INSTALLDIRS=perl');
++      my $code = system($perl,"-I$here\\..\\lib",'Makefile.PL','INSTALLDIRS=perl');
+       warn "$code from $dir's Makefile.PL" if $code;
+       $mmod = -M 'Makefile';
+       if ($mmod > $dmod)
 PATCH
 }
 

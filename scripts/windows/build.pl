@@ -88,7 +88,7 @@ sub run {
 
     group "downloading perl $version from $url" => sub {
         my $path = File::Spec->catfile($tmpdir, $filename);
-        execute_or_die('curl', '--retry', '3', '-sSL', $url, '-o', $path;
+        execute_or_die('curl', '--retry', '3', '-sSL', $url, '-o', $path);
     };
 
     group "extracting..." => sub {

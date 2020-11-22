@@ -2223,7 +2223,7 @@ PATCH
  
      push @m, "
 -\$(INST_ARCHAUTODIR)/extralibs.all: \$(INST_ARCHAUTODIR)/.exists ".join(" \\\n\t", @$extra)."
-+\$(INST_ARCHAUTODIR)/extralibs.all: \$(INST_ARCHAUTODIR)$(DFSEP).exists ".join(" \\\n\t", @$extra)."
++\$(INST_ARCHAUTODIR)/extralibs.all: \$(INST_ARCHAUTODIR)\$(DFSEP).exists ".join(" \\\n\t", @$extra)."
  	$self->{NOECHO}$self->{RM_F} \$\@
  	$self->{NOECHO}\$(TOUCH) \$\@
  ";

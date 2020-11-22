@@ -1146,15 +1146,6 @@ PATCH
  =item init_main
  
  Initializes AR, AR_STATIC_ARGS, BASEEXT, CONFIG, DISTNAME, DLBASE,
-@@ -2615,7 +2629,7 @@ LLIBPERL    = $llibperl
- ";
- 
-     push @m, "
--\$(INST_ARCHAUTODIR)/extralibs.all: \$(INST_ARCHAUTODIR)/.exists ".join(" \\\n\t", @$extra)."
-+\$(INST_ARCHAUTODIR)/extralibs.all: \$(INST_ARCHAUTODIR)\$(DIRFILESEP).exists ".join(" \\\n\t", @$extra)."
- 	$self->{NOECHO}$self->{RM_F} \$\@
- 	$self->{NOECHO}\$(TOUCH) \$\@
- ";
 @@ -3434,7 +3448,7 @@ sub static_lib {
  
      my(@m);
@@ -1333,15 +1324,6 @@ PATCH
  }
  
  =item init_others
-@@ -2543,7 +2561,7 @@ MAP_LIBPERL = $libperl
- ";
- 
-     push @m, "
--\$(INST_ARCHAUTODIR)/extralibs.all: \$(INST_ARCHAUTODIR)/.exists ".join(" \\\n\t", @$extra)."
-+\$(INST_ARCHAUTODIR)$(DFSEP)extralibs.all: \$(INST_ARCHAUTODIR)$(DFSEP).exists ".join(" \\\n\t", @$extra)."
- 	$self->{NOECHO}$self->{RM_F} \$\@
- 	$self->{NOECHO}\$(TOUCH) \$\@
- ";
 @@ -3319,7 +3337,7 @@ sub static_lib {
  
      my(@m);
@@ -1543,15 +1525,6 @@ PATCH
  =item init_others
  
  Initializes EXTRALIBS, BSLOADLIBS, LDLOADLIBS, LIBS, LD_RUN_PATH,
-@@ -2540,7 +2557,7 @@ MAP_LIBPERL = $libperl
- ";
- 
-     push @m, "
--\$(INST_ARCHAUTODIR)/extralibs.all: \$(INST_ARCHAUTODIR)/.exists ".join(" \\\n\t", @$extra)."
-+\$(INST_ARCHAUTODIR)/extralibs.all: \$(INST_ARCHAUTODIR)$(DFSEP).exists ".join(" \\\n\t", @$extra)."
- 	$self->{NOECHO}$self->{RM_F} \$\@
- 	$self->{NOECHO}\$(TOUCH) \$\@
- ";
 @@ -3278,7 +3295,7 @@ sub static_lib {
  
      my(@m);
@@ -1751,15 +1724,6 @@ PATCH
  }
  
  =item init_others
-@@ -2505,7 +2523,7 @@ MAP_LIBPERL = $libperl
- ";
- 
-     push @m, "
--\$(INST_ARCHAUTODIR)/extralibs.all: \$(INST_ARCHAUTODIR)/.exists ".join(" \\\n\t", @$extra)."
-+\$(INST_ARCHAUTODIR)/extralibs.all: \$(INST_ARCHAUTODIR)$(DFSEP).exists ".join(" \\\n\t", @$extra)."
- 	$self->{NOECHO}$self->{RM_F} \$\@
- 	$self->{NOECHO}\$(TOUCH) \$\@
- ";
 @@ -3244,7 +3262,7 @@ sub static_lib {
  
      my(@m);
@@ -1959,15 +1923,6 @@ PATCH
  }
  
  =item init_others
-@@ -2486,7 +2504,7 @@ MAP_LIBPERL = $libperl
- ";
- 
-     push @m, "
--\$(INST_ARCHAUTODIR)/extralibs.all: \$(INST_ARCHAUTODIR)/.exists ".join(" \\\n\t", @$extra)."
-+\$(INST_ARCHAUTODIR)/extralibs.all: \$(INST_ARCHAUTODIR)\$(DFSEP).exists ".join(" \\\n\t", @$extra)."
- 	$self->{NOECHO}$self->{RM_F} \$\@
- 	$self->{NOECHO}\$(TOUCH) \$\@
- ";
 @@ -3210,7 +3228,7 @@ sub static_lib {
  
      my(@m);
@@ -2218,15 +2173,6 @@ PATCH
  }
  
  =item init_others
-@@ -2483,7 +2501,7 @@ MAP_LIBPERL = $libperl
- ";
- 
-     push @m, "
--\$(INST_ARCHAUTODIR)/extralibs.all: \$(INST_ARCHAUTODIR)/.exists ".join(" \\\n\t", @$extra)."
-+\$(INST_ARCHAUTODIR)/extralibs.all: \$(INST_ARCHAUTODIR)$(DFSEP).exists ".join(" \\\n\t", @$extra)."
- 	$self->{NOECHO}$self->{RM_F} \$\@
- 	$self->{NOECHO}\$(TOUCH) \$\@
- ";
 @@ -3210,7 +3228,7 @@ sub static_lib {
  
      my(@m);

@@ -94,6 +94,14 @@ my @patch = (
             [ \&_patch_threads ],
         ],
     },
+    {
+        perl => [
+            qr/^5\.7\.1$/,
+        ],
+        subs => [
+            [ \&_patch_buildext ],
+        ],
+    },
 
     # patches for MakeMaker
     {
@@ -124,14 +132,6 @@ my @patch = (
         ],
         subs => [
             [ \&_patch_make_maker ],
-        ],
-    },
-    {
-        perl => [
-            qr/^5\.7\.1$/,
-        ],
-        subs => [
-            [ \&_patch_buildext ],
         ],
     },
 );
@@ -1887,7 +1887,7 @@ PATCH
         return;
     }
 
-    if (_ge($version, "5.6.0")) {
+    if (_ge($version, "5.7.0")) {
         _patch(<<'PATCH');
 --- lib/ExtUtils/MM_Unix.pm
 +++ lib/ExtUtils/MM_Unix.pm
@@ -1965,6 +1965,215 @@ PATCH
      push @m, "
 -\$(INST_ARCHAUTODIR)/extralibs.all: \$(INST_ARCHAUTODIR)/.exists ".join(" \\\n\t", @$extra)."
 +\$(INST_ARCHAUTODIR)/extralibs.all: \$(INST_ARCHAUTODIR)\$(DFSEP).exists ".join(" \\\n\t", @$extra)."
+ 	$self->{NOECHO}$self->{RM_F} \$\@
+ 	$self->{NOECHO}\$(TOUCH) \$\@
+ ";
+@@ -3210,7 +3228,7 @@ sub static_lib {
+ 
+     my(@m);
+     push(@m, <<'END');
+-$(INST_STATIC): $(OBJECT) $(MYEXTLIB) $(INST_ARCHAUTODIR)/.exists
++$(INST_STATIC): $(OBJECT) $(MYEXTLIB) $(INST_ARCHAUTODIR)$(DFSEP).exists
+ 	$(RM_RF) $@
+ END
+     # If this extension has it's own library (eg SDBM_File)
+@@ -3649,13 +3667,13 @@ pure_all :: config pm_to_blib subdirs linkext
+ subdirs :: $(MYEXTLIB)
+ 	'.$self->{NOECHO}.'$(NOOP)
+ 
+-config :: '.$self->{MAKEFILE}.' $(INST_LIBDIR)/.exists
++config :: '.$self->{MAKEFILE}.' $(INST_LIBDIR)$(DFSEP).exists
+ 	'.$self->{NOECHO}.'$(NOOP)
+ 
+-config :: $(INST_ARCHAUTODIR)/.exists
++config :: $(INST_ARCHAUTODIR)$(DFSEP).exists
+ 	'.$self->{NOECHO}.'$(NOOP)
+ 
+-config :: $(INST_AUTODIR)/.exists
++config :: $(INST_AUTODIR)$(DFSEP).exists
+ 	'.$self->{NOECHO}.'$(NOOP)
+ ';
+ 
+@@ -3663,7 +3681,7 @@ config :: $(INST_AUTODIR)/.exists
+ 
+     if (%{$self->{HTMLLIBPODS}}) {
+ 	push @m, qq[
+-config :: \$(INST_HTMLLIBDIR)/.exists
++config :: \$(INST_HTMLLIBDIR)$(DFSEP).exists
+ 	$self->{NOECHO}\$(NOOP)
+ 
+ ];
+@@ -3672,7 +3690,7 @@ config :: \$(INST_HTMLLIBDIR)/.exists
+ 
+     if (%{$self->{HTMLSCRIPTPODS}}) {
+ 	push @m, qq[
+-config :: \$(INST_HTMLSCRIPTDIR)/.exists
++config :: \$(INST_HTMLSCRIPTDIR)$(DFSEP).exists
+ 	$self->{NOECHO}\$(NOOP)
+ 
+ ];
+@@ -3681,7 +3699,7 @@ config :: \$(INST_HTMLSCRIPTDIR)/.exists
+ 
+     if (%{$self->{MAN1PODS}}) {
+ 	push @m, qq[
+-config :: \$(INST_MAN1DIR)/.exists
++config :: \$(INST_MAN1DIR)$(DFSEP).exists
+ 	$self->{NOECHO}\$(NOOP)
+ 
+ ];
+@@ -3689,7 +3707,7 @@ config :: \$(INST_MAN1DIR)/.exists
+     }
+     if (%{$self->{MAN3PODS}}) {
+ 	push @m, qq[
+-config :: \$(INST_MAN3DIR)/.exists
++config :: \$(INST_MAN3DIR)$(DFSEP).exists
+ 	$self->{NOECHO}\$(NOOP)
+ 
+ ];
+--- lib/ExtUtils/MM_Win32.pm
++++ lib/ExtUtils/MM_Win32.pm
+@@ -34,6 +34,7 @@ $GCC     = 1 if $Config{'cc'} =~ /^gcc/i;
+ $DMAKE = 1 if $Config{'make'} =~ /^dmake/i;
+ $NMAKE = 1 if $Config{'make'} =~ /^nmake/i;
+ $PERLMAKE = 1 if $Config{'make'} =~ /^pmake/i;
++$GMAKE = 1 if $Config{'make'} =~ /^gmake/i;
+ $OBJ   = 1 if $Config{'ccflags'} =~ /PERL_OBJECT/i;
+ 
+ # a few workarounds for command.com (very basic)
+@@ -201,6 +202,22 @@ sub catfile {
+     return $dir.$file;
+ }
+ 
++=item init_DIRFILESEP
++
++Using \ for Windows.
++
++=cut
++
++sub init_DIRFILESEP {
++    my($self) = shift;
++
++    # The ^ makes sure its not interpreted as an escape in nmake
++    $self->{DIRFILESEP} = $NMAKE ? '^\\' :
++                          $DMAKE ? '\\\\' :
++                          $GMAKE ? '/'
++                                 : '\\';
++}
++
+ sub init_others
+ {
+  my ($self) = @_;
+@@ -243,8 +260,11 @@ sub constants {
+     my($self) = @_;
+     my(@m,$tmp);
+ 
++    $self->{DFSEP} = '$(DIRFILESEP)';  # alias for internal use
++
+     for $tmp (qw/
+ 
++	      DIRFILESEP DFSEP
+ 	      AR_STATIC_ARGS NAME DISTNAME NAME_SYM VERSION
+ 	      VERSION_SYM XS_VERSION INST_BIN INST_EXE INST_LIB
+ 	      INST_ARCHLIB INST_SCRIPT PREFIX  INSTALLDIRS
+@@ -646,9 +666,13 @@ sub tools_other {
+     my($self) = shift;
+     my @m;
+     my $bin_sh = $Config{sh} || 'cmd /c';
+-    push @m, qq{
+-SHELL = $bin_sh
+-} unless $DMAKE;  # dmake determines its own shell 
++    if ($GMAKE) {
++        push @m, "\nSHELL = $ENV{COMSPEC}\n";
++    } elsif (!$DMAKE) { # dmake determines its own shell
++        push @m, qq{
++ SHELL = $bin_sh
++}
++    }
+ 
+     for (qw/ CHMOD CP LD MV NOOP RM_F RM_RF TEST_F TOUCH UMASK_NULL DEV_NULL/ ) {
+ 	push @m, "$_ = $self->{$_}\n";
+PATCH
+        return;
+    }
+
+    if (_ge($version, "5.6.0")) {
+        _patch(<<'PATCH');
+--- lib/ExtUtils/MM_Unix.pm
++++ lib/ExtUtils/MM_Unix.pm
+@@ -190,6 +190,7 @@ sub ExtUtils::MM_Unix::has_link_code ;
+ sub ExtUtils::MM_Unix::htmlifypods ;
+ sub ExtUtils::MM_Unix::init_dirscan ;
+ sub ExtUtils::MM_Unix::init_main ;
++sub ExtUtils::MM_Unix::init_DIRFILESEP ;
+ sub ExtUtils::MM_Unix::init_others ;
+ sub ExtUtils::MM_Unix::install ;
+ sub ExtUtils::MM_Unix::installbin ;
+@@ -547,8 +548,11 @@ sub constants {
+     my($self) = @_;
+     my(@m,$tmp);
+ 
++    $self->{DFSEP} = '$(DIRFILESEP)';  # alias for internal use
++
+     for $tmp (qw/
+ 
++	      DIRFILESEP DFSEP
+ 	      AR_STATIC_ARGS NAME DISTNAME NAME_SYM VERSION
+ 	      VERSION_SYM XS_VERSION INST_BIN INST_EXE INST_LIB
+ 	      INST_ARCHLIB INST_SCRIPT PREFIX  INSTALLDIRS
+@@ -1022,7 +1026,7 @@ BOOTSTRAP = '."$self->{BASEEXT}.bs".'
+ # As Mkbootstrap might not write a file (if none is required)
+ # we use touch to prevent make continually trying to remake it.
+ # The DynaLoader only reads a non-empty file.
+-$(BOOTSTRAP): '."$self->{MAKEFILE} $self->{BOOTDEP}".' $(INST_ARCHAUTODIR)/.exists
++$(BOOTSTRAP): '."$self->{MAKEFILE} $self->{BOOTDEP}".' $(INST_ARCHAUTODIR)$(DFSEP).exists
+ 	'.$self->{NOECHO}.'echo "Running Mkbootstrap for $(NAME) ($(BSLOADLIBS))"
+ 	'.$self->{NOECHO}.'$(PERL) "-I$(PERL_ARCHLIB)" "-I$(PERL_LIB)" \
+ 		-MExtUtils::Mkbootstrap \
+@@ -1030,7 +1034,7 @@ $(BOOTSTRAP): '."$self->{MAKEFILE} $self->{BOOTDEP}".' $(INST_ARCHAUTODIR)/.exis
+ 	'.$self->{NOECHO}.'$(TOUCH) $(BOOTSTRAP)
+ 	$(CHMOD) $(PERM_RW) $@
+ 
+-$(INST_BOOT): $(BOOTSTRAP) $(INST_ARCHAUTODIR)/.exists
++$(INST_BOOT): $(BOOTSTRAP) $(INST_ARCHAUTODIR)$(DFSEP).exists
+ 	'."$self->{NOECHO}$self->{RM_RF}".' $(INST_BOOT)
+ 	-'.$self->{CP}.' $(BOOTSTRAP) $(INST_BOOT)
+ 	$(CHMOD) $(PERM_RW) $@
+@@ -1062,7 +1066,7 @@ ARMAYBE = '.$armaybe.'
+ OTHERLDFLAGS = '.$otherldflags.'
+ INST_DYNAMIC_DEP = '.$inst_dynamic_dep.'
+ 
+-$(INST_DYNAMIC): $(OBJECT) $(MYEXTLIB) $(BOOTSTRAP) $(INST_ARCHAUTODIR)/.exists $(EXPORT_LIST) $(PERL_ARCHIVE) $(INST_DYNAMIC_DEP)
++$(INST_DYNAMIC): $(OBJECT) $(MYEXTLIB) $(BOOTSTRAP) $(INST_ARCHAUTODIR)$(DFSEP).exists $(EXPORT_LIST) $(PERL_ARCHIVE) $(INST_DYNAMIC_DEP)
+ ');
+     if ($armaybe ne ':'){
+ 	$ldfrom = 'tmp$(LIB_EXT)';
+@@ -2014,6 +2018,20 @@ usually solves this kind of problem.
+     # Define 'FULLPERL' to be a non-miniperl (used in test: target)
+     ($self->{FULLPERL} = $self->{PERL}) =~ s/miniperl/perl/i
+ 	unless ($self->{FULLPERL});
++
++    $self->init_DIRFILESEP();
++}
++
++=item init_DIRFILESEP
++
++Using / for Unix.  Called by init_main.
++
++=cut
++
++sub init_DIRFILESEP {
++    my($self) = shift;
++
++    $self->{DIRFILESEP} = '/';
+ }
+ 
+ =item init_others
+@@ -2483,7 +2501,7 @@ MAP_LIBPERL = $libperl
+ ";
+ 
+     push @m, "
+-\$(INST_ARCHAUTODIR)/extralibs.all: \$(INST_ARCHAUTODIR)/.exists ".join(" \\\n\t", @$extra)."
++\$(INST_ARCHAUTODIR)/extralibs.all: \$(INST_ARCHAUTODIR)$(DFSEP).exists ".join(" \\\n\t", @$extra)."
  	$self->{NOECHO}$self->{RM_F} \$\@
  	$self->{NOECHO}\$(TOUCH) \$\@
  ";
@@ -2394,7 +2603,8 @@ PATCH
         return;
     }
 
-    _patch(<<'PATCH');
+    if(_ge($version, "5.7.0")) {
+        _patch(<<'PATCH');
 --- win32/win32.c
 +++ win32/win32.c
 @@ -1630,14 +1630,17 @@ win32_uname(struct utsname *name)
@@ -2419,6 +2629,38 @@ PATCH
  	    arch = "x86"; break;
  	case PROCESSOR_ARCHITECTURE_MIPS:
 PATCH
+        return;
+    }
+
+    if(_ge($version, "5.6.0")) {
+        _patch(<<'PATCH');
+    _patch(<<'PATCH');
+--- win32/win32.c
++++ win32/win32.c
+@@ -1607,14 +1607,17 @@ win32_uname(struct utsname *name)
+     /* machine (architecture) */
+     {
+ 	SYSTEM_INFO info;
++	DWORD procarch;
+ 	char *arch;
+ 	GetSystemInfo(&info);
+ 
+-#if defined(__BORLANDC__) || defined(__MINGW32__)
+-	switch (info.u.s.wProcessorArchitecture) {
++#if (defined(__BORLANDC__)&&(__BORLANDC__<=0x520)) \
++ || (defined(__MINGW32__) && !defined(_ANONYMOUS_UNION))
++	procarch = info.u.s.wProcessorArchitecture;
+ #else
+-	switch (info.wProcessorArchitecture) {
++	procarch = info.wProcessorArchitecture;
+ #endif
++	switch (procarch) {
+ 	case PROCESSOR_ARCHITECTURE_INTEL:
+ 	    arch = "x86"; break;
+ 	case PROCESSOR_ARCHITECTURE_MIPS:
+PATCH
+        return;
+    }
 }
 
 sub _patch_make_maker_dirfilesep {

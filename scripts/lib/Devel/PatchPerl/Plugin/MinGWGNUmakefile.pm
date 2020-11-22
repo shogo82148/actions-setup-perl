@@ -3966,6 +3966,90 @@ $(UNIDATAFILES) : ..\pod\perluniprops.pod
 ..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(HAVEMINIPERL) ..\lib\unicore\mktables Extensions_nonxs
 	$(MINIPERL) -I..\lib $(ICWD) ..\lib\unicore\mktables -C ..\lib\unicore -P ..\pod -maketest -makelist -p
 MAKEFILE
+    if (_ge($version, "5.17.3")) {
+        _patch_gnumakefile($version, <<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
+@@ -901,7 +901,6 @@
+ 	copy ..\README.symbian  ..\pod\perlsymbian.pod
+ 	copy ..\README.tru64    ..\pod\perltru64.pod
+ 	copy ..\README.tw       ..\pod\perltw.pod
+-	copy ..\README.uts      ..\pod\perluts.pod
+ 	copy ..\README.vmesa    ..\pod\perlvmesa.pod
+ 	copy ..\README.vos      ..\pod\perlvos.pod
+ 	copy ..\README.win32    ..\pod\perlwin32.pod
+PATCH
+    }
+    if (_ge($version, "5.17.4")) {
+        _patch_gnumakefile($version, <<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
+@@ -901,7 +901,6 @@
+ 	copy ..\README.symbian  ..\pod\perlsymbian.pod
+ 	copy ..\README.tru64    ..\pod\perltru64.pod
+ 	copy ..\README.tw       ..\pod\perltw.pod
+-	copy ..\README.vmesa    ..\pod\perlvmesa.pod
+ 	copy ..\README.vos      ..\pod\perlvos.pod
+ 	copy ..\README.win32    ..\pod\perlwin32.pod
+ 	copy ..\pod\perldelta.pod ..\pod\perl__PERL_VERSION__delta.pod
+PATCH
+    }
+    if (_ge($version, "5.17.5")) {
+        _patch_gnumakefile($version, <<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
+@@ -888,7 +888,6 @@
+ 	copy ..\README.linux    ..\pod\perllinux.pod
+ 	copy ..\README.macos    ..\pod\perlmacos.pod
+ 	copy ..\README.macosx   ..\pod\perlmacosx.pod
+-	copy ..\README.mpeix    ..\pod\perlmpeix.pod
+ 	copy ..\README.netware  ..\pod\perlnetware.pod
+ 	copy ..\README.openbsd  ..\pod\perlopenbsd.pod
+ 	copy ..\README.os2      ..\pod\perlos2.pod
+PATCH
+    }
+    if (_ge($version, "5.17.6")) {
+        _patch_gnumakefile($version, <<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
+@@ -877,7 +877,6 @@
+ 	copy ..\README.cygwin   ..\pod\perlcygwin.pod
+ 	copy ..\README.dgux     ..\pod\perldgux.pod
+ 	copy ..\README.dos      ..\pod\perldos.pod
+-	copy ..\README.epoc     ..\pod\perlepoc.pod
+ 	copy ..\README.freebsd  ..\pod\perlfreebsd.pod
+ 	copy ..\README.haiku    ..\pod\perlhaiku.pod
+ 	copy ..\README.hpux     ..\pod\perlhpux.pod
+PATCH
+    }
+    if (_ge($version, "5.17.7")) {
+        _patch_gnumakefile($version, <<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
+@@ -870,7 +870,6 @@
+ 	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
+ 	copy ..\README.aix      ..\pod\perlaix.pod
+ 	copy ..\README.amiga    ..\pod\perlamiga.pod
+-	copy ..\README.beos     ..\pod\perlbeos.pod
+ 	copy ..\README.bs2000   ..\pod\perlbs2000.pod
+ 	copy ..\README.ce       ..\pod\perlce.pod
+ 	copy ..\README.cn       ..\pod\perlcn.pod
+PATCH
+    }
+    if (_ge($version, "5.17.10")) {
+        _patch_gnumakefile($version, <<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
+@@ -393,6 +393,7 @@
+ 		..\gv.h		\
+ 		..\handy.h	\
+ 		..\hv.h		\
++		..\hv_func.h	\
+ 		..\iperlsys.h	\
+ 		..\mg.h		\
+ 		..\nostdio.h	\
+PATCH
+    }
 }
 
 sub _patch_gnumakefile_514 {
@@ -12564,3 +12648,5 @@ MAKEFILE
 PATCH
     }
 }
+
+1;

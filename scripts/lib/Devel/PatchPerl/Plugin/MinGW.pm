@@ -36,6 +36,14 @@ my @patch = (
     },
     {
         perl => [
+            qr/^5\.17\.1[01]/,
+        ],
+        subs => [
+            [ \&_patch_hv_func ],
+        ],
+    },
+    {
+        perl => [
             qr/^5\.21\.[0-9]+$/,
             qr/^5\.20\.[012]$/,
             qr/^5\.20\.[012][-_]/,
@@ -2405,6 +2413,24 @@ sub _patch_sdbm {
 PATCH
 }
 
+sub _patch_hv_func {
+    _patch(<<'PATCH');
+--- hv_func.h
++++ hv_func.h
+@@ -392,8 +392,8 @@ S_perl_hash_murmur3(const unsigned char * const seed, const unsigned char *ptr,
+     /* This CPU does not handle unaligned word access */
+ 
+     /* Consume enough so that the next data byte is word aligned */
+-    int i = -(long)ptr & 3;
+-    if(i && (STRLEN)i <= len) {
++    STRLEN i = -PTR2IV(ptr) & 3;
++    if(i && i <= len) {
+       MURMUR_DOBYTES(i, h1, carry, bytes_in_carry, ptr, len);
+     }
+ 
+PATCH
+}
+
 sub _patch_win32_mkstemp {
     my $version = shift;
     if (_ge($version, "5.18.0")) {
@@ -2440,6 +2466,43 @@ sub _patch_win32_mkstemp {
  
  static long
  find_pid(pTHX_ int pid)
+PATCH
+    return
+    }
+
+    if (_ge($version, "5.17.5")) {
+	    _patch(<<'PATCH');
+--- win32/win32.c
++++ win32/win32.c
+@@ -1131,6 +1131,7 @@ chown(const char *path, uid_t owner, gid_t group)
+  * XXX this needs strengthening  (for PerlIO)
+  *   -- BKS, 11-11-200
+ */
++#if !defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 4
+ int mkstemp(const char *path)
+ {
+     dTHX;
+@@ -1151,6 +1152,7 @@ retry:
+ 	goto retry;
+     return fd;
+ }
++#endif
+ 
+ static long
+ find_pid(int pid)
+--- win32/win32.h
++++ win32/win32.h
+@@ -285,8 +285,10 @@ extern  void	*sbrk(ptrdiff_t need);
+ #endif
+ extern	char *	getlogin(void);
+ extern	int	chown(const char *p, uid_t o, gid_t g);
++#if !defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 4
+ extern  int	mkstemp(const char *path);
+ #endif
++#endif
+ 
+ #undef	 Stat
+ #define  Stat		win32_stat
 PATCH
     return
     }

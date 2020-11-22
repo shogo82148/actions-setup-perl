@@ -2096,6 +2096,58 @@ PATCH
         return;
     }
 
+    if (_ge($version, "5.6.2")) {
+        _patch(<<'PATCH');
+diff --git a/lib/ExtUtils/MM_Win32.pm b/lib/ExtUtils/MM_Win32.pm
+index 8fe0b96d95..8c35ec94ff 100644
+--- a/lib/ExtUtils/MM_Win32.pm
++++ b/lib/ExtUtils/MM_Win32.pm
+@@ -24,7 +24,7 @@ use File::Basename;
+ use File::Spec;
+ use ExtUtils::MakeMaker qw( neatvalue );
+ 
+-use vars qw(@ISA $VERSION $BORLAND $GCC $DMAKE $NMAKE);
++use vars qw(@ISA $VERSION $BORLAND $GCC $DMAKE $NMAKE $GMAKE);
+ 
+ require ExtUtils::MM_Any;
+ require ExtUtils::MM_Unix;
+@@ -37,6 +37,7 @@ $BORLAND = 1 if $Config{'cc'} =~ /^bcc/i;
+ $GCC     = 1 if $Config{'cc'} =~ /^gcc/i;
+ $DMAKE = 1 if $Config{'make'} =~ /^dmake/i;
+ $NMAKE = 1 if $Config{'make'} =~ /^nmake/i;
++$GMAKE = 1 if $Config{'make'} =~ /^gmake/i;
+ 
+ 
+ =head2 Overridden methods
+@@ -146,7 +147,8 @@ sub init_DIRFILESEP {
+ 
+     # The ^ makes sure its not interpreted as an escape in nmake
+     $self->{DIRFILESEP} = $NMAKE ? '^\\' :
+-                          $DMAKE ? '\\\\'
++                          $DMAKE ? '\\\\' :
++                          $GMAKE ? '/'
+                                  : '\\';
+ }
+ 
+@@ -186,8 +188,12 @@ sub init_others {
+ 
+     $self->SUPER::init_others;
+ 
+-    # Setting SHELL from $Config{sh} can break dmake.  Its ok without it.
+-    delete $self->{SHELL};
++    if ($GMAKE) {
++        $self->{SHELL} = $ENV{COMSPEC};
++    } else {
++        # Setting SHELL from $Config{sh} can break dmake.  Its ok without it.
++        delete $self->{SHELL};
++    }
+ 
+     $self->{LDLOADLIBS} ||= $Config{libs};
+     # -Lfoo must come first for Borland, so we put it in LDDLFLAGS
+PATCH
+        return;
+    }
+
     if (_ge($version, "5.6.0")) {
         _patch(<<'PATCH');
 --- lib/ExtUtils/MM_Unix.pm

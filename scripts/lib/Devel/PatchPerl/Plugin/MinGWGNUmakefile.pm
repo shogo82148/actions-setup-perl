@@ -4022,6 +4022,20 @@ PATCH
  	copy ..\README.hpux     ..\pod\perlhpux.pod
 PATCH
     }
+    if (_ge($version, "5.17.7")) {
+        _patch_gnumakefile($version, <<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
+@@ -870,7 +870,6 @@
+ 	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
+ 	copy ..\README.aix      ..\pod\perlaix.pod
+ 	copy ..\README.amiga    ..\pod\perlamiga.pod
+-	copy ..\README.beos     ..\pod\perlbeos.pod
+ 	copy ..\README.bs2000   ..\pod\perlbs2000.pod
+ 	copy ..\README.ce       ..\pod\perlce.pod
+ 	copy ..\README.cn       ..\pod\perlcn.pod
+PATCH
+    }
 }
 
 sub _patch_gnumakefile_514 {

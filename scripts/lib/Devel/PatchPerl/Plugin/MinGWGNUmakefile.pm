@@ -11130,26 +11130,7 @@ MAKEFILE
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
-@@ -303,7 +303,9 @@
- 		..\globals.c	\
- 		..\gv.c		\
- 		..\hv.c		\
-+		..\locale.c	\
- 		..\mg.c		\
-+		..\numeric.c	\
- 		..\op.c		\
- 		..\perl.c	\
- 		..\perlapi.c	\
-@@ -311,6 +313,8 @@
- 		..\pp.c		\
- 		..\pp_ctl.c	\
- 		..\pp_hot.c	\
-+		..\pp_pack.c	\
-+		..\pp_sort.c	\
- 		..\pp_sys.c	\
- 		..\regcomp.c	\
- 		..\regexec.c	\
-@@ -337,6 +341,10 @@
+@@ -337,6 +337,10 @@
  		.\win32sck.c	\
  		.\win32thread.c 
  
@@ -11160,7 +11141,7 @@ MAKEFILE
  ifneq ($(CRYPT_SRC), "")
  WIN32_SRC	+= $(CRYPT_SRC)
  endif
-@@ -744,13 +752,32 @@
+@@ -744,13 +748,32 @@
  
  utils: $(PERLEXE) $(X2P)
  	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
@@ -11199,15 +11180,25 @@ PATCH
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
-@@ -314,7 +314,6 @@
+@@ -303,7 +303,9 @@
+ 		..\globals.c	\
+ 		..\gv.c		\
+ 		..\hv.c		\
++		..\locale.c	\
+ 		..\mg.c		\
++		..\numeric.c	\
+ 		..\op.c		\
+ 		..\perl.c	\
+ 		..\perlapi.c	\
+@@ -311,6 +313,7 @@
+ 		..\pp.c		\
  		..\pp_ctl.c	\
  		..\pp_hot.c	\
- 		..\pp_pack.c	\
--		..\pp_sort.c	\
++		..\pp_pack.c	\
  		..\pp_sys.c	\
  		..\regcomp.c	\
  		..\regexec.c	\
-@@ -756,25 +755,15 @@
+@@ -752,25 +755,15 @@
  	copy ..\README.amiga    ..\pod\perlamiga.pod
  	copy ..\README.apollo   ..\pod\perlapollo.pod
  	copy ..\README.beos     ..\pod\perlbeos.pod

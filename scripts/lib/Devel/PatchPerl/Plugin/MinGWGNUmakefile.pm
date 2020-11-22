@@ -10367,7 +10367,6 @@ INST_TOP := $(INST_DRV)\perl
 USE_MULTI	:= define
 USE_ITHREADS	:= define
 USE_IMP_SYS	:= define
-USE_PERLIO	:= define
 USE_LARGE_FILES	:= define
 #USE_64_BIT_INT	:= define
 #USE_LONG_DOUBLE :=define
@@ -10403,7 +10402,6 @@ USE_SITECUST	?= undef
 USE_MULTI	?= undef
 USE_ITHREADS	?= undef
 USE_IMP_SYS	?= undef
-USE_PERLIO	?= undef
 USE_LARGE_FILES	?= undef
 USE_64_BIT_INT	?= undef
 USE_LONG_DOUBLE	?= undef
@@ -10461,15 +10459,6 @@ ARCHNAME	= MSWin32-$(ARCHITECTURE)-thread
 else ifeq ($(USE_MULTI),define)
 ARCHNAME	= MSWin32-$(ARCHITECTURE)-multi
 else
-ifeq ($(USE_PERLIO),define)
-ARCHNAME	= MSWin32-$(ARCHITECTURE)-perlio
-else
-ARCHNAME	= MSWin32-$(ARCHITECTURE)
-endif
-endif
-
-ifeq ($(USE_PERLIO),define)
-BUILDOPT	+= -DUSE_PERLIO
 endif
 
 ifeq ($(USE_ITHREADS),define)
@@ -10882,7 +10871,6 @@ CFG_VARS	=					\
 		"useithreads=$(USE_ITHREADS)"		\
 		"usethreads=$(USE_5005THREADS)"		\
 		"usemultiplicity=$(USE_MULTI)"		\
-		"useperlio=$(USE_PERLIO)"		\
 		"use64bitint=$(USE_64_BIT_INT)"		\
 		"uselargefiles=$(USE_LARGE_FILES)"	\
 		"LINK_FLAGS=$(subst ",\",$(LINK_FLAGS))"\
@@ -11258,7 +11246,39 @@ MAKEFILE
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
-@@ -413,92 +413,14 @@
+@@ -8,6 +8,7 @@
+ USE_MULTI	:= define
+ USE_ITHREADS	:= define
+ USE_IMP_SYS	:= define
++USE_PERLIO	:= define
+ USE_LARGE_FILES	:= define
+ #USE_64_BIT_INT	:= define
+ #USE_LONG_DOUBLE :=define
+@@ -43,6 +44,7 @@
+ USE_MULTI	?= undef
+ USE_ITHREADS	?= undef
+ USE_IMP_SYS	?= undef
++USE_PERLIO	?= undef
+ USE_LARGE_FILES	?= undef
+ USE_64_BIT_INT	?= undef
+ USE_LONG_DOUBLE	?= undef
+@@ -100,6 +102,15 @@
+ else ifeq ($(USE_MULTI),define)
+ ARCHNAME	= MSWin32-$(ARCHITECTURE)-multi
+ else
++ifeq ($(USE_PERLIO),define)
++ARCHNAME	= MSWin32-$(ARCHITECTURE)-perlio
++else
++ARCHNAME	= MSWin32-$(ARCHITECTURE)
++endif
++endif
++
++ifeq ($(USE_PERLIO),define)
++BUILDOPT	+= -DUSE_PERLIO
+ endif
+ 
+ ifeq ($(USE_ITHREADS),define)
+@@ -402,92 +413,14 @@
  SETARGV_OBJ	= setargv$(o)
  endif
  
@@ -11357,7 +11377,15 @@ MAKEFILE
  
  CFG_VARS	=					\
  		"INST_DRV=$(INST_DRV)"			\
-@@ -537,7 +459,7 @@
+@@ -512,6 +445,7 @@
+ 		"useithreads=$(USE_ITHREADS)"		\
+ 		"usethreads=$(USE_5005THREADS)"		\
+ 		"usemultiplicity=$(USE_MULTI)"		\
++		"useperlio=$(USE_PERLIO)"		\
+ 		"use64bitint=$(USE_64_BIT_INT)"		\
+ 		"uselargefiles=$(USE_LARGE_FILES)"	\
+ 		"LINK_FLAGS=$(subst ",\",$(LINK_FLAGS))"\
+@@ -525,7 +459,7 @@
  
  .PHONY: all
  
@@ -11366,7 +11394,7 @@ MAKEFILE
  	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
  
  $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
-@@ -809,59 +731,9 @@
+@@ -797,59 +731,9 @@
  	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
  	rem . > $@
  
@@ -11429,7 +11457,7 @@ MAKEFILE
  
  #-------------------------------------------------------------------------------
  
-@@ -872,13 +744,32 @@
+@@ -860,13 +744,32 @@
  
  utils: $(PERLEXE) $(X2P)
  	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)

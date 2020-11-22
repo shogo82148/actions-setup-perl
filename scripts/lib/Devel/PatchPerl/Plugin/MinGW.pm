@@ -1004,8 +1004,7 @@ PATCH
         return;
     }
 
-    if (_ge($version, "5.8.0")) {
-        _patch(<<'PATCH');
+    _patch(<<'PATCH');
 --- lib/ExtUtils/MM_Any.pm
 +++ lib/ExtUtils/MM_Any.pm
 @@ -169,6 +169,43 @@ sub test_via_script {
@@ -1251,8 +1250,6 @@ PATCH
      if (! $self->{PERL_SRC} ) {
          require VMS::Filespec if $Is_VMS;
 PATCH
-        return;
-    }
 }
 
 sub _patch_sdbm {

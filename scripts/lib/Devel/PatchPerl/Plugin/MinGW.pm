@@ -36,6 +36,14 @@ my @patch = (
     },
     {
         perl => [
+            qr/^5\.17\.1[01]/,
+        ],
+        subs => [
+            [ \&_patch_hv_func ],
+        ],
+    },
+    {
+        perl => [
             qr/^5\.21\.[0-9]+$/,
             qr/^5\.20\.[012]$/,
             qr/^5\.20\.[012][-_]/,
@@ -2402,6 +2410,24 @@ sub _patch_sdbm {
  #ifdef DOINIT
                          = {0, 0}
  #endif
+PATCH
+}
+
+sub _patch_hv_func {
+    _patch(<<'PATCH');
+--- hv_func.h
++++ hv_func.h
+@@ -392,8 +392,8 @@ S_perl_hash_murmur3(const unsigned char * const seed, const unsigned char *ptr,
+     /* This CPU does not handle unaligned word access */
+ 
+     /* Consume enough so that the next data byte is word aligned */
+-    int i = -(long)ptr & 3;
+-    if(i && (STRLEN)i <= len) {
++    STRLEN i = -PTR2IV(ptr) & 3;
++    if(i && i <= len) {
+       MURMUR_DOBYTES(i, h1, carry, bytes_in_carry, ptr, len);
+     }
+ 
 PATCH
 }
 

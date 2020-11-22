@@ -11258,18 +11258,7 @@ MAKEFILE
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
-@@ -337,6 +337,10 @@
- 		.\win32sck.c	\
- 		.\win32thread.c 
- 
-+ifeq ($(USE_PERLIO),define)
-+WIN32_SRC	+= .\win32io.c
-+endif
-+
- ifneq ($(CRYPT_SRC), "")
- WIN32_SRC	+= $(CRYPT_SRC)
- endif
-@@ -413,92 +417,14 @@
+@@ -413,92 +413,14 @@
  SETARGV_OBJ	= setargv$(o)
  endif
  
@@ -11368,7 +11357,7 @@ MAKEFILE
  
  CFG_VARS	=					\
  		"INST_DRV=$(INST_DRV)"			\
-@@ -537,7 +463,7 @@
+@@ -537,7 +459,7 @@
  
  .PHONY: all
  
@@ -11377,7 +11366,7 @@ MAKEFILE
  	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
  
  $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
-@@ -809,59 +735,9 @@
+@@ -809,59 +731,9 @@
  	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
  	rem . > $@
  
@@ -11440,7 +11429,7 @@ MAKEFILE
  
  #-------------------------------------------------------------------------------
  
-@@ -872,13 +748,32 @@
+@@ -872,13 +744,32 @@
  
  utils: $(PERLEXE) $(X2P)
  	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
@@ -11497,7 +11486,18 @@ PATCH
  		..\pp_sys.c	\
  		..\regcomp.c	\
  		..\regexec.c	\
-@@ -752,25 +755,15 @@
+@@ -337,6 +340,10 @@
+ 		.\win32sck.c	\
+ 		.\win32thread.c 
+ 
++ifeq ($(USE_PERLIO),define)
++WIN32_SRC	+= .\win32io.c
++endif
++
+ ifneq ($(CRYPT_SRC), "")
+ WIN32_SRC	+= $(CRYPT_SRC)
+ endif
+@@ -748,25 +755,15 @@
  	copy ..\README.amiga    ..\pod\perlamiga.pod
  	copy ..\README.apollo   ..\pod\perlapollo.pod
  	copy ..\README.beos     ..\pod\perlbeos.pod

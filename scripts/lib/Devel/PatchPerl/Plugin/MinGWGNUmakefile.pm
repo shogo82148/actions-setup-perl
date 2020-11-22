@@ -11117,7 +11117,7 @@ $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
 ..\x2p\walk$(o) : ..\x2p\walk.c
 	$(CC) -I..\x2p $(CFLAGS) $(OBJOUT_FLAG)$@ -c ..\x2p\walk.c
 
-$(X2P) : $(HAVEMINIPERL) $(X2P_OBJ) Extensions
+$(X2P) : $(HAVEMINIPERL) $(X2P_OBJ)
 	$(MINIPERL) -I..\lib ..\x2p\find2perl.PL
 	$(MINIPERL) -I..\lib ..\x2p\s2p.PL
 	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) $(LIBFILES) $(X2P_OBJ)
@@ -11394,6 +11394,15 @@ MAKEFILE
  	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
  
  $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
+@@ -758,7 +692,7 @@
+ ..\x2p\walk$(o) : ..\x2p\walk.c
+ 	$(CC) -I..\x2p $(CFLAGS) $(OBJOUT_FLAG)$@ -c ..\x2p\walk.c
+ 
+-$(X2P) : $(HAVEMINIPERL) $(X2P_OBJ)
++$(X2P) : $(HAVEMINIPERL) $(X2P_OBJ) Extensions
+ 	$(MINIPERL) -I..\lib ..\x2p\find2perl.PL
+ 	$(MINIPERL) -I..\lib ..\x2p\s2p.PL
+ 	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) $(LIBFILES) $(X2P_OBJ)
 @@ -797,59 +731,9 @@
  	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
  	rem . > $@

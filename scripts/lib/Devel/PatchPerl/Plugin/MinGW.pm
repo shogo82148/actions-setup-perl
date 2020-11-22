@@ -3887,10 +3887,8 @@ PATCH
 
 sub _patch_buildext {
     _patch(<<'PATCH');
-diff --git a/win32/buildext.pl b/win32/buildext.pl
-index 5800750e52..3ac45f50f6 100644
---- a/win32/buildext.pl
-+++ b/win32/buildext.pl
+--- win32/buildext.pl
++++ win32/buildext.pl
 @@ -27,7 +27,7 @@ foreach my $dir (sort @ext)
      if (!(-f 'Makefile') || $mmod > $dmod)
       {

@@ -11216,7 +11216,24 @@ PATCH
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
-@@ -317,7 +317,6 @@
+@@ -260,8 +260,6 @@
+ 		..\utils\h2xs		\
+ 		..\utils\perldoc	\
+ 		..\utils\perlcc		\
+-		..\utils\perlivp	\
+-		..\utils\libnetcfg	\
+ 		..\pod\checkpods	\
+ 		..\pod\pod2html		\
+ 		..\pod\pod2latex	\
+@@ -272,7 +270,6 @@
+ 		..\pod\podselect	\
+ 		..\x2p\find2perl	\
+ 		..\x2p\s2p		\
+-		..\lib\ExtUtils\xsubpp	\
+ 		bin\exetype.pl		\
+ 		bin\runperl.pl		\
+ 		bin\pl2bat.pl		\
+@@ -317,7 +314,6 @@
  		..\pp_ctl.c	\
  		..\pp_hot.c	\
  		..\pp_pack.c	\
@@ -11224,7 +11241,7 @@ PATCH
  		..\pp_sys.c	\
  		..\regcomp.c	\
  		..\regexec.c	\
-@@ -759,25 +758,15 @@
+@@ -759,25 +755,15 @@
  	copy ..\README.amiga    ..\pod\perlamiga.pod
  	copy ..\README.apollo   ..\pod\perlapollo.pod
  	copy ..\README.beos     ..\pod\perlbeos.pod
@@ -11256,7 +11273,24 @@ PATCH
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
-@@ -317,6 +317,7 @@
+@@ -260,6 +260,8 @@
+ 		..\utils\h2xs		\
+ 		..\utils\perldoc	\
+ 		..\utils\perlcc		\
++		..\utils\perlivp	\
++		..\utils\libnetcfg	\
+ 		..\pod\checkpods	\
+ 		..\pod\pod2html		\
+ 		..\pod\pod2latex	\
+@@ -270,6 +272,7 @@
+ 		..\pod\podselect	\
+ 		..\x2p\find2perl	\
+ 		..\x2p\s2p		\
++		..\lib\ExtUtils\xsubpp	\
+ 		bin\exetype.pl		\
+ 		bin\runperl.pl		\
+ 		bin\pl2bat.pl		\
+@@ -314,6 +317,7 @@
  		..\pp_ctl.c	\
  		..\pp_hot.c	\
  		..\pp_pack.c	\
@@ -11264,7 +11298,7 @@ PATCH
  		..\pp_sys.c	\
  		..\regcomp.c	\
  		..\regexec.c	\
-@@ -758,15 +759,25 @@
+@@ -755,15 +759,25 @@
  	copy ..\README.amiga    ..\pod\perlamiga.pod
  	copy ..\README.apollo   ..\pod\perlapollo.pod
  	copy ..\README.beos     ..\pod\perlbeos.pod

@@ -11227,7 +11227,6 @@ utils: $(PERLEXE) $(X2P)
 	copy ..\README.os2      ..\pod\perlos2.pod
 	copy ..\vms\perlvms.pod ..\pod\perlvms.pod
 	copy ..\README.win32    ..\pod\perlwin32.pod
-	cd ..\lib && $(PERLEXE) -Dtls lib_pm.PL
 	cd ..\pod && $(PLMAKE) -f ..\win32\pod.mak converters
 	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
 
@@ -11466,7 +11465,7 @@ MAKEFILE
  
  #-------------------------------------------------------------------------------
  
-@@ -860,13 +744,24 @@
+@@ -860,14 +744,26 @@
  
  utils: $(PERLEXE) $(X2P)
  	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
@@ -11489,8 +11488,10 @@ MAKEFILE
  	copy ..\vms\perlvms.pod ..\pod\perlvms.pod
 +	copy ..\README.vos      ..\pod\perlvos.pod
  	copy ..\README.win32    ..\pod\perlwin32.pod
- 	cd ..\lib && $(PERLEXE) -Dtls lib_pm.PL
++	cd ..\lib && $(PERLEXE) -Dtls lib_pm.PL
  	cd ..\pod && $(PLMAKE) -f ..\win32\pod.mak converters
+ 	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
+ 
 PATCH
     }
     if (_ge($version, "5.7.2")) {

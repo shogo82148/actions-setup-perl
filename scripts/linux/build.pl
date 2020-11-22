@@ -29,11 +29,11 @@ sub execute_or_die {
 }
 
 sub cpan_install {
-    my ($url, $min_version, $max_version) = @_;
+    my ($url, $name, $min_version, $max_version) = @_;
 
     # this perl is too old to install the module.
     if ($min_version && version->parse("v$version") < version->parse("v$min_version")) {
-        info "skip installing $url";
+        info "skip installing $name";
         return;
     }
 
@@ -47,13 +47,14 @@ sub cpan_install {
     my @ext = split /[.]tar[.]/, $filename;
     my $dirname = $ext[0];
 
-    info "installing $url";
+    info "installing $name from $url";
     chdir $tmpdir or die "failed to cd $tmpdir: $!";
     execute_or_die('curl', '--retry', '3', '-sSL', $url, '-o', $filename);
     execute_or_die('tar', 'xvf', $filename);
     chdir File::Spec->catfile($tmpdir, $dirname) or die "failed to cd $dirname: $!";
     execute_or_die($perl, 'Makefile.PL');
     execute_or_die('make', 'install');
+    execute_or_die($perl, "-M$name", "-e1");
 }
 
 sub run {

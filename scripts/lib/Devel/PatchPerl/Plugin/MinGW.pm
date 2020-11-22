@@ -2444,6 +2444,43 @@ PATCH
     return
     }
 
+    if (_ge($version, "5.17.5")) {
+	    _patch(<<'PATCH');
+--- win32/win32.c
++++ win32/win32.c
+@@ -1131,6 +1131,7 @@ chown(const char *path, uid_t owner, gid_t group)
+  * XXX this needs strengthening  (for PerlIO)
+  *   -- BKS, 11-11-200
+ */
++#if !defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 4
+ int mkstemp(const char *path)
+ {
+     dTHX;
+@@ -1151,6 +1152,7 @@ retry:
+ 	goto retry;
+     return fd;
+ }
++#endif
+ 
+ static long
+ find_pid(int pid)
+--- win32/win32.h
++++ win32/win32.h
+@@ -285,8 +285,10 @@ extern  void	*sbrk(ptrdiff_t need);
+ #endif
+ extern	char *	getlogin(void);
+ extern	int	chown(const char *p, uid_t o, gid_t g);
++#if !defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 4
+ extern  int	mkstemp(const char *path);
+ #endif
++#endif
+ 
+ #undef	 Stat
+ #define  Stat		win32_stat
+PATCH
+    return
+    }
+
     if (_ge($version, "5.12.0")) {
 	    _patch(<<'PATCH');
 diff --git a/win32/win32.c b/win32/win32.c

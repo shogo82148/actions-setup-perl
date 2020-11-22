@@ -2632,6 +2632,11 @@ PATCH
         return;
     }
 
+    if(_ge($version, "5.6.2")) {
+        # no need to patch
+        return;
+    }
+
     if(_ge($version, "5.6.1")) {
         _patch(<<'PATCH');
 --- win32/win32.c

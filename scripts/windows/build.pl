@@ -15,7 +15,7 @@ use File::pushd qw[pushd];
 use File::Spec;
 use File::Path qw/make_path remove_tree/;
 use Carp qw/croak/;
-use Actions::Core qw/warn info group set_failed/;
+use Actions::Core qw/warning info group set_failed/;
 use File::Basename qw(dirname);
 
 my $version = $ENV{PERL_VERSION};

@@ -11228,7 +11228,8 @@ utils: $(PERLEXE) $(X2P)
 	copy ..\vms\perlvms.pod ..\pod\perlvms.pod
 	copy ..\README.win32    ..\pod\perlwin32.pod
 	cd ..\pod && $(PLMAKE) -f ..\win32\pod.mak converters
-	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
+# 	FIXME: it faisl with "gmake: *** [GNUmakefile:872: utils] Error -1073741515"
+#	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
 
 install : all installbare installhtml
 
@@ -11465,7 +11466,7 @@ MAKEFILE
  
  #-------------------------------------------------------------------------------
  
-@@ -860,14 +744,26 @@
+@@ -860,17 +744,28 @@
  
  utils: $(PERLEXE) $(X2P)
  	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
@@ -11490,7 +11491,11 @@ MAKEFILE
  	copy ..\README.win32    ..\pod\perlwin32.pod
 +	cd ..\lib && $(PERLEXE) -Dtls lib_pm.PL
  	cd ..\pod && $(PLMAKE) -f ..\win32\pod.mak converters
- 	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
+-# 	FIXME: it faisl with "gmake: *** [GNUmakefile:872: utils] Error -1073741515"
+-#	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
++	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
+ 
+ install : all installbare installhtml
  
 PATCH
     }
@@ -11538,16 +11543,6 @@ PATCH
  	copy ..\README.hpux     ..\pod\perlhpux.pod
  	copy ..\README.machten  ..\pod\perlmachten.pod
  	copy ..\README.macos    ..\pod\perlmacos.pod
-@@ -765,7 +770,8 @@
- 	copy ..\README.win32    ..\pod\perlwin32.pod
- 	cd ..\lib && $(PERLEXE) -Dtls lib_pm.PL
- 	cd ..\pod && $(PLMAKE) -f ..\win32\pod.mak converters
--	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
-+# 	FIXME: it faisl with "gmake: *** [GNUmakefile:872: utils] Error -1073741515"
-+#	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
- 
- install : all installbare installhtml
- 
 PATCH
     }
     if (_ge($version, "5.7.3")) {
@@ -11579,7 +11574,7 @@ PATCH
  		..\pp_sys.c	\
  		..\regcomp.c	\
  		..\regexec.c	\
-@@ -755,23 +759,32 @@
+@@ -755,15 +759,25 @@
  	copy ..\README.amiga    ..\pod\perlamiga.pod
  	copy ..\README.apollo   ..\pod\perlapollo.pod
  	copy ..\README.beos     ..\pod\perlbeos.pod
@@ -11605,15 +11600,6 @@ PATCH
  	copy ..\README.vmesa    ..\pod\perlvmesa.pod
  	copy ..\vms\perlvms.pod ..\pod\perlvms.pod
  	copy ..\README.vos      ..\pod\perlvos.pod
- 	copy ..\README.win32    ..\pod\perlwin32.pod
- 	cd ..\lib && $(PERLEXE) -Dtls lib_pm.PL
- 	cd ..\pod && $(PLMAKE) -f ..\win32\pod.mak converters
--# 	FIXME: it faisl with "gmake: *** [GNUmakefile:872: utils] Error -1073741515"
--#	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
-+	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
- 
- install : all installbare installhtml
- 
 PATCH
     }
 }

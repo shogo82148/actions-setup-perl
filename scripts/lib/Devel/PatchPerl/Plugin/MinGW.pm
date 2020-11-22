@@ -1256,8 +1256,10 @@ PATCH
 
     if (_ge($version, "5.7.3")) {
         _patch(<<'PATCH');
---- lib/ExtUtils/MM_Unix.pm
-+++ lib/ExtUtils/MM_Unix.pm
+diff --git a/lib/ExtUtils/MM_Unix.pm b/lib/ExtUtils/MM_Unix.pm
+index 249954d140..a94223c472 100644
+--- a/lib/ExtUtils/MM_Unix.pm
++++ b/lib/ExtUtils/MM_Unix.pm
 @@ -182,6 +182,7 @@ sub has_link_code;
  sub htmlifypods;
  sub init_dirscan;
@@ -1397,13 +1399,15 @@ PATCH
  	$self->{NOECHO}\$(NOOP)
  
  ];
---- lib/ExtUtils/MM_Win32.pm
-+++ lib/ExtUtils/MM_Win32.pm
+diff --git a/lib/ExtUtils/MM_Win32.pm b/lib/ExtUtils/MM_Win32.pm
+index 76e1bd1538..f0e0c166d1 100644
+--- a/lib/ExtUtils/MM_Win32.pm
++++ b/lib/ExtUtils/MM_Win32.pm
 @@ -37,6 +37,7 @@ $GCC     = 1 if $Config{'cc'} =~ /^gcc/i;
  $DMAKE = 1 if $Config{'make'} =~ /^dmake/i;
  $NMAKE = 1 if $Config{'make'} =~ /^nmake/i;
  $PERLMAKE = 1 if $Config{'make'} =~ /^pmake/i;
-+$GMAKE = 1 if $Config{'gmake'} =~ /^gmake/i;
++$GMAKE = 1 if $Config{'make'} =~ /^gmake/i;
  
  # a few workarounds for command.com (very basic)
  {
@@ -1442,15 +1446,20 @@ PATCH
  	      AR_STATIC_ARGS NAME DISTNAME NAME_SYM VERSION
  	      VERSION_SYM XS_VERSION INST_BIN INST_EXE INST_LIB
  	      INST_ARCHLIB INST_SCRIPT PREFIX  INSTALLDIRS
-@@ -655,9 +675,8 @@ sub tools_other {
+@@ -655,9 +675,14 @@ sub tools_other {
      my($self) = shift;
      my @m;
      my $bin_sh = $Config{sh} || 'cmd /c';
 -    push @m, qq{
--SHELL = $bin_sh
--} unless $DMAKE;  # dmake determines its own shell 
 +
-+    push @m, "\nSHELL = $ENV{COMSPEC}\n";
++    if ($GMAKE) {
++        push @m, "\nSHELL = $ENV{COMSPEC}\n";
++    } elsif (!$DMAKE) { # dmake determines its own shell
++        push @m, qq{
+ SHELL = $bin_sh
+-} unless $DMAKE;  # dmake determines its own shell 
++}
++    }
  
      for (qw/ CHMOD CP LD MV NOOP RM_F RM_RF TEST_F TOUCH UMASK_NULL DEV_NULL/ ) {
  	push @m, "$_ = $self->{$_}\n";

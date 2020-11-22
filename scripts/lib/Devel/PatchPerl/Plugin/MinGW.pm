@@ -1442,20 +1442,15 @@ PATCH
  	      AR_STATIC_ARGS NAME DISTNAME NAME_SYM VERSION
  	      VERSION_SYM XS_VERSION INST_BIN INST_EXE INST_LIB
  	      INST_ARCHLIB INST_SCRIPT PREFIX  INSTALLDIRS
-@@ -655,9 +675,14 @@ sub tools_other {
+@@ -655,9 +675,8 @@ sub tools_other {
      my($self) = shift;
      my @m;
      my $bin_sh = $Config{sh} || 'cmd /c';
 -    push @m, qq{
-+
-+    if ($GMAKE) {
-+        push @m, "\nSHELL = $ENV{COMSPEC}\n";
-+    } elsif (!$DMAKE) { # dmake determines its own shell
-+        push @m, qq{
- SHELL = $bin_sh
+-SHELL = $bin_sh
 -} unless $DMAKE;  # dmake determines its own shell 
-+}
-+    }
++
++    push @m, "\nSHELL = $ENV{COMSPEC}\n";
  
      for (qw/ CHMOD CP LD MV NOOP RM_F RM_RF TEST_F TOUCH UMASK_NULL DEV_NULL/ ) {
  	push @m, "$_ = $self->{$_}\n";

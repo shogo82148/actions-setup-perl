@@ -10772,14 +10772,92 @@ ifneq ($(USE_SETARGV),)
 SETARGV_OBJ	= setargv$(o)
 endif
 
-ifeq ($(ALL_STATIC),define)
-STATIC_EXT	= * !Win32 !SDBM_File !Encode
-else
-#STATIC_EXT	= Cwd Compress/Raw/Zlib
-STATIC_EXT	= Win32CORE
-endif
+DYNAMIC_EXT	= Socket IO Fcntl Opcode SDBM_File POSIX attrs Thread B re \
+		Data/Dumper Devel/Peek ByteLoader Devel/DProf File/Glob \
+		Sys/Hostname Storable
+STATIC_EXT	= DynaLoader
+NONXS_EXT	= Errno
 
 DYNALOADER	= $(EXTDIR)\DynaLoader\DynaLoader
+SOCKET		= $(EXTDIR)\Socket\Socket
+FCNTL		= $(EXTDIR)\Fcntl\Fcntl
+OPCODE		= $(EXTDIR)\Opcode\Opcode
+SDBM_FILE	= $(EXTDIR)\SDBM_File\SDBM_File
+IO		= $(EXTDIR)\IO\IO
+POSIX		= $(EXTDIR)\POSIX\POSIX
+ATTRS		= $(EXTDIR)\attrs\attrs
+THREAD		= $(EXTDIR)\Thread\Thread
+B		= $(EXTDIR)\B\B
+RE		= $(EXTDIR)\re\re
+DUMPER		= $(EXTDIR)\Data\Dumper\Dumper
+ERRNO		= $(EXTDIR)\Errno\Errno
+PEEK		= $(EXTDIR)\Devel\Peek\Peek
+BYTELOADER	= $(EXTDIR)\ByteLoader\ByteLoader
+DPROF		= $(EXTDIR)\Devel\DProf\DProf
+GLOB		= $(EXTDIR)\File\Glob\Glob
+HOSTNAME	= $(EXTDIR)\Sys\Hostname\Hostname
+STORABLE	= $(EXTDIR)\Storable\Storable
+
+SOCKET_DLL	= $(AUTODIR)\Socket\Socket.dll
+FCNTL_DLL	= $(AUTODIR)\Fcntl\Fcntl.dll
+OPCODE_DLL	= $(AUTODIR)\Opcode\Opcode.dll
+SDBM_FILE_DLL	= $(AUTODIR)\SDBM_File\SDBM_File.dll
+IO_DLL		= $(AUTODIR)\IO\IO.dll
+POSIX_DLL	= $(AUTODIR)\POSIX\POSIX.dll
+ATTRS_DLL	= $(AUTODIR)\attrs\attrs.dll
+THREAD_DLL	= $(AUTODIR)\Thread\Thread.dll
+B_DLL		= $(AUTODIR)\B\B.dll
+DUMPER_DLL	= $(AUTODIR)\Data\Dumper\Dumper.dll
+PEEK_DLL	= $(AUTODIR)\Devel\Peek\Peek.dll
+RE_DLL		= $(AUTODIR)\re\re.dll
+BYTELOADER_DLL	= $(AUTODIR)\ByteLoader\ByteLoader.dll
+DPROF_DLL	= $(AUTODIR)\Devel\DProf\DProf.dll
+GLOB_DLL	= $(AUTODIR)\File\Glob\Glob.dll
+HOSTNAME_DLL	= $(AUTODIR)\Sys\Hostname\Hostname.dll
+STORABLE_DLL	= $(AUTODIR)\Storable\Storable.dll
+
+ERRNO_PM	= $(LIBDIR)\Errno.pm
+
+EXTENSION_C	= 		\
+		$(SOCKET).c	\
+		$(FCNTL).c	\
+		$(OPCODE).c	\
+		$(SDBM_FILE).c	\
+		$(IO).c		\
+		$(POSIX).c	\
+		$(ATTRS).c	\
+		$(THREAD).c	\
+		$(RE).c		\
+		$(DUMPER).c	\
+		$(PEEK).c	\
+		$(B).c		\
+		$(BYTELOADER).c	\
+		$(DPROF).c	\
+		$(GLOB).c	\
+		$(HOSTNAME).c	\
+		$(STORABLE).c
+
+EXTENSION_DLL	= 		\
+		$(SOCKET_DLL)	\
+		$(FCNTL_DLL)	\
+		$(OPCODE_DLL)	\
+		$(SDBM_FILE_DLL)\
+		$(IO_DLL)	\
+		$(POSIX_DLL)	\
+		$(ATTRS_DLL)	\
+		$(DUMPER_DLL)	\
+		$(PEEK_DLL)	\
+		$(B_DLL)	\
+		$(RE_DLL)	\
+		$(THREAD_DLL)	\
+		$(BYTELOADER_DLL)	\
+		$(DPROF_DLL)	\
+		$(GLOB_DLL)	\
+		$(HOSTNAME_DLL)	\
+		$(STORABLE_DLL)
+
+EXTENSION_PM	=		\
+		$(ERRNO_PM)
 
 CFG_VARS	=					\
 		"INST_DRV=$(INST_DRV)"			\
@@ -10818,7 +10896,7 @@ ICWD = -I..\cpan\Cwd -I..\cpan\Cwd\lib
 
 .PHONY: all
 
-all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) $(PERLEXE) $(X2P) Extensions
+all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) $(PERLEXE) $(X2P) $(EXTENSION_DLL) $(EXTENSION_PM)
 	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
 
 $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
@@ -11090,9 +11168,59 @@ $(HAVEMINIPERL): $(MINI_OBJ)
 	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
 	rem . > $@
 
-#most of deps of this target are in DYNALOADER and therefore omitted here
-Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
-	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR)
+$(DUMPER_DLL): $(HAVEMINIPERL) $(DUMPER).xs
+	cd $(EXTDIR)\Data\Dumper && ..\..\..\miniperl -I..\..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+
+$(DPROF_DLL): $(HAVEMINIPERL) $(DPROF).xs
+	cd $(EXTDIR)\Devel\DProf && ..\..\..\miniperl -I..\..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+
+$(GLOB_DLL): $(HAVEMINIPERL) $(GLOB).xs
+	cd $(EXTDIR)\File\Glob && ..\..\..\miniperl -I..\..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+
+$(PEEK_DLL): $(HAVEMINIPERL) $(PEEK).xs
+	cd $(EXTDIR)\Devel\Peek && ..\..\..\miniperl -I..\..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+
+$(RE_DLL): $(HAVEMINIPERL) $(RE).xs
+	cd $(EXTDIR)\re && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+
+$(B_DLL): $(HAVEMINIPERL) $(B).xs
+	cd $(EXTDIR)\B && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+
+$(THREAD_DLL): $(HAVEMINIPERL) $(THREAD).xs
+	cd $(EXTDIR)\Thread && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+
+$(ATTRS_DLL): $(HAVEMINIPERL) $(ATTRS).xs
+	cd $(EXTDIR)\attrs && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+
+$(POSIX_DLL): $(HAVEMINIPERL) $(POSIX).xs
+	cd $(EXTDIR)\POSIX && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+
+$(IO_DLL): $(HAVEMINIPERL) $(IO).xs
+	cd $(EXTDIR)\IO && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+
+$(SDBM_FILE_DLL) : $(HAVEMINIPERL) $(SDBM_FILE).xs
+	cd $(EXTDIR)\SDBM_File && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+
+$(FCNTL_DLL): $(HAVEMINIPERL) $(FCNTL).xs
+	cd $(EXTDIR)\Fcntl && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+
+$(OPCODE_DLL): $(HAVEMINIPERL) $(OPCODE).xs
+	cd $(EXTDIR)\Opcode && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+
+$(SOCKET_DLL): $(HAVEMINIPERL) $(SOCKET).xs
+	cd $(EXTDIR)\Socket && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+
+$(HOSTNAME_DLL): $(HAVEMINIPERL) $(HOSTNAME).xs
+	cd $(EXTDIR)\Sys\Hostname && ..\..\..\miniperl -I..\..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+
+$(BYTELOADER_DLL): $(HAVEMINIPERL) $(BYTELOADER).xs
+	cd $(EXTDIR)\ByteLoader && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+
+$(STORABLE_DLL): $(HAVEMINIPERL) $(STORABLE).xs
+	cd $(EXTDIR)\Storable && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+
+$(ERRNO_PM): $(HAVEMINIPERL) $(ERRNO)_pm.PL
+	cd $(EXTDIR)\Errno && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
 
 #-------------------------------------------------------------------------------
 
@@ -11141,7 +11269,178 @@ MAKEFILE
  ifneq ($(CRYPT_SRC), "")
  WIN32_SRC	+= $(CRYPT_SRC)
  endif
-@@ -744,13 +748,32 @@
+@@ -413,92 +417,14 @@
+ SETARGV_OBJ	= setargv$(o)
+ endif
+ 
+-DYNAMIC_EXT	= Socket IO Fcntl Opcode SDBM_File POSIX attrs Thread B re \
+-		Data/Dumper Devel/Peek ByteLoader Devel/DProf File/Glob \
+-		Sys/Hostname Storable
+-STATIC_EXT	= DynaLoader
+-NONXS_EXT	= Errno
++ifeq ($(ALL_STATIC),define)
++STATIC_EXT	= * !Win32 !SDBM_File !Encode
++else
++#STATIC_EXT	= Cwd Compress/Raw/Zlib
++STATIC_EXT	= Win32CORE
++endif
+ 
+ DYNALOADER	= $(EXTDIR)\DynaLoader\DynaLoader
+-SOCKET		= $(EXTDIR)\Socket\Socket
+-FCNTL		= $(EXTDIR)\Fcntl\Fcntl
+-OPCODE		= $(EXTDIR)\Opcode\Opcode
+-SDBM_FILE	= $(EXTDIR)\SDBM_File\SDBM_File
+-IO		= $(EXTDIR)\IO\IO
+-POSIX		= $(EXTDIR)\POSIX\POSIX
+-ATTRS		= $(EXTDIR)\attrs\attrs
+-THREAD		= $(EXTDIR)\Thread\Thread
+-B		= $(EXTDIR)\B\B
+-RE		= $(EXTDIR)\re\re
+-DUMPER		= $(EXTDIR)\Data\Dumper\Dumper
+-ERRNO		= $(EXTDIR)\Errno\Errno
+-PEEK		= $(EXTDIR)\Devel\Peek\Peek
+-BYTELOADER	= $(EXTDIR)\ByteLoader\ByteLoader
+-DPROF		= $(EXTDIR)\Devel\DProf\DProf
+-GLOB		= $(EXTDIR)\File\Glob\Glob
+-HOSTNAME	= $(EXTDIR)\Sys\Hostname\Hostname
+-STORABLE	= $(EXTDIR)\Storable\Storable
+-
+-SOCKET_DLL	= $(AUTODIR)\Socket\Socket.dll
+-FCNTL_DLL	= $(AUTODIR)\Fcntl\Fcntl.dll
+-OPCODE_DLL	= $(AUTODIR)\Opcode\Opcode.dll
+-SDBM_FILE_DLL	= $(AUTODIR)\SDBM_File\SDBM_File.dll
+-IO_DLL		= $(AUTODIR)\IO\IO.dll
+-POSIX_DLL	= $(AUTODIR)\POSIX\POSIX.dll
+-ATTRS_DLL	= $(AUTODIR)\attrs\attrs.dll
+-THREAD_DLL	= $(AUTODIR)\Thread\Thread.dll
+-B_DLL		= $(AUTODIR)\B\B.dll
+-DUMPER_DLL	= $(AUTODIR)\Data\Dumper\Dumper.dll
+-PEEK_DLL	= $(AUTODIR)\Devel\Peek\Peek.dll
+-RE_DLL		= $(AUTODIR)\re\re.dll
+-BYTELOADER_DLL	= $(AUTODIR)\ByteLoader\ByteLoader.dll
+-DPROF_DLL	= $(AUTODIR)\Devel\DProf\DProf.dll
+-GLOB_DLL	= $(AUTODIR)\File\Glob\Glob.dll
+-HOSTNAME_DLL	= $(AUTODIR)\Sys\Hostname\Hostname.dll
+-STORABLE_DLL	= $(AUTODIR)\Storable\Storable.dll
+-
+-ERRNO_PM	= $(LIBDIR)\Errno.pm
+-
+-EXTENSION_C	= 		\
+-		$(SOCKET).c	\
+-		$(FCNTL).c	\
+-		$(OPCODE).c	\
+-		$(SDBM_FILE).c	\
+-		$(IO).c		\
+-		$(POSIX).c	\
+-		$(ATTRS).c	\
+-		$(THREAD).c	\
+-		$(RE).c		\
+-		$(DUMPER).c	\
+-		$(PEEK).c	\
+-		$(B).c		\
+-		$(BYTELOADER).c	\
+-		$(DPROF).c	\
+-		$(GLOB).c	\
+-		$(HOSTNAME).c	\
+-		$(STORABLE).c
+-
+-EXTENSION_DLL	= 		\
+-		$(SOCKET_DLL)	\
+-		$(FCNTL_DLL)	\
+-		$(OPCODE_DLL)	\
+-		$(SDBM_FILE_DLL)\
+-		$(IO_DLL)	\
+-		$(POSIX_DLL)	\
+-		$(ATTRS_DLL)	\
+-		$(DUMPER_DLL)	\
+-		$(PEEK_DLL)	\
+-		$(B_DLL)	\
+-		$(RE_DLL)	\
+-		$(THREAD_DLL)	\
+-		$(BYTELOADER_DLL)	\
+-		$(DPROF_DLL)	\
+-		$(GLOB_DLL)	\
+-		$(HOSTNAME_DLL)	\
+-		$(STORABLE_DLL)
+-
+-EXTENSION_PM	=		\
+-		$(ERRNO_PM)
+ 
+ CFG_VARS	=					\
+ 		"INST_DRV=$(INST_DRV)"			\
+@@ -537,7 +463,7 @@
+ 
+ .PHONY: all
+ 
+-all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) $(PERLEXE) $(X2P) $(EXTENSION_DLL) $(EXTENSION_PM)
++all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) $(PERLEXE) $(X2P) Extensions
+ 	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
+ 
+ $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
+@@ -809,59 +735,9 @@
+ 	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
+ 	rem . > $@
+ 
+-$(DUMPER_DLL): $(HAVEMINIPERL) $(DUMPER).xs
+-	cd $(EXTDIR)\Data\Dumper && ..\..\..\miniperl -I..\..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+-
+-$(DPROF_DLL): $(HAVEMINIPERL) $(DPROF).xs
+-	cd $(EXTDIR)\Devel\DProf && ..\..\..\miniperl -I..\..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+-
+-$(GLOB_DLL): $(HAVEMINIPERL) $(GLOB).xs
+-	cd $(EXTDIR)\File\Glob && ..\..\..\miniperl -I..\..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+-
+-$(PEEK_DLL): $(HAVEMINIPERL) $(PEEK).xs
+-	cd $(EXTDIR)\Devel\Peek && ..\..\..\miniperl -I..\..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+-
+-$(RE_DLL): $(HAVEMINIPERL) $(RE).xs
+-	cd $(EXTDIR)\re && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+-
+-$(B_DLL): $(HAVEMINIPERL) $(B).xs
+-	cd $(EXTDIR)\B && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+-
+-$(THREAD_DLL): $(HAVEMINIPERL) $(THREAD).xs
+-	cd $(EXTDIR)\Thread && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+-
+-$(ATTRS_DLL): $(HAVEMINIPERL) $(ATTRS).xs
+-	cd $(EXTDIR)\attrs && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+-
+-$(POSIX_DLL): $(HAVEMINIPERL) $(POSIX).xs
+-	cd $(EXTDIR)\POSIX && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+-
+-$(IO_DLL): $(HAVEMINIPERL) $(IO).xs
+-	cd $(EXTDIR)\IO && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+-
+-$(SDBM_FILE_DLL) : $(HAVEMINIPERL) $(SDBM_FILE).xs
+-	cd $(EXTDIR)\SDBM_File && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+-
+-$(FCNTL_DLL): $(HAVEMINIPERL) $(FCNTL).xs
+-	cd $(EXTDIR)\Fcntl && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+-
+-$(OPCODE_DLL): $(HAVEMINIPERL) $(OPCODE).xs
+-	cd $(EXTDIR)\Opcode && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+-
+-$(SOCKET_DLL): $(HAVEMINIPERL) $(SOCKET).xs
+-	cd $(EXTDIR)\Socket && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+-
+-$(HOSTNAME_DLL): $(HAVEMINIPERL) $(HOSTNAME).xs
+-	cd $(EXTDIR)\Sys\Hostname && ..\..\..\miniperl -I..\..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+-
+-$(BYTELOADER_DLL): $(HAVEMINIPERL) $(BYTELOADER).xs
+-	cd $(EXTDIR)\ByteLoader && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+-
+-$(STORABLE_DLL): $(HAVEMINIPERL) $(STORABLE).xs
+-	cd $(EXTDIR)\Storable && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
+-
+-$(ERRNO_PM): $(HAVEMINIPERL) $(ERRNO)_pm.PL
+-	cd $(EXTDIR)\Errno && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
++#most of deps of this target are in DYNALOADER and therefore omitted here
++Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
++	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR)
+ 
+ #-------------------------------------------------------------------------------
+ 
+@@ -872,13 +748,32 @@
  
  utils: $(PERLEXE) $(X2P)
  	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)

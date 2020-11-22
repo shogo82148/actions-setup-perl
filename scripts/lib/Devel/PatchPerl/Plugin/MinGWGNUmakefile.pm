@@ -11465,7 +11465,7 @@ MAKEFILE
  
  #-------------------------------------------------------------------------------
  
-@@ -860,14 +744,26 @@
+@@ -860,16 +744,29 @@
  
  utils: $(PERLEXE) $(X2P)
  	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
@@ -11490,7 +11490,11 @@ MAKEFILE
  	copy ..\README.win32    ..\pod\perlwin32.pod
 +	cd ..\lib && $(PERLEXE) -Dtls lib_pm.PL
  	cd ..\pod && $(PLMAKE) -f ..\win32\pod.mak converters
- 	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
+-	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
++	# FIXME: it faisl with "gmake: *** [GNUmakefile:872: utils] Error -1073741515"
++	# $(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
+ 
+ install : all installbare installhtml
  
 PATCH
     }
@@ -11538,6 +11542,16 @@ PATCH
  	copy ..\README.hpux     ..\pod\perlhpux.pod
  	copy ..\README.machten  ..\pod\perlmachten.pod
  	copy ..\README.macos    ..\pod\perlmacos.pod
+@@ -765,8 +770,7 @@
+ 	copy ..\README.win32    ..\pod\perlwin32.pod
+ 	cd ..\lib && $(PERLEXE) -Dtls lib_pm.PL
+ 	cd ..\pod && $(PLMAKE) -f ..\win32\pod.mak converters
+-	# FIXME: it faisl with "gmake: *** [GNUmakefile:872: utils] Error -1073741515"
+-	# $(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
++	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
+ 
+ install : all installbare installhtml
+ 
 PATCH
     }
     if (_ge($version, "5.7.3")) {

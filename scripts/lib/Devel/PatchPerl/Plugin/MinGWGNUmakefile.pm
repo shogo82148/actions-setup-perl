@@ -3932,7 +3932,6 @@ utils: $(PERLEXE) $(X2P)
 	copy ..\README.symbian  ..\pod\perlsymbian.pod
 	copy ..\README.tru64    ..\pod\perltru64.pod
 	copy ..\README.tw       ..\pod\perltw.pod
-	copy ..\README.uts      ..\pod\perluts.pod
 	copy ..\README.vmesa    ..\pod\perlvmesa.pod
 	copy ..\README.vos      ..\pod\perlvos.pod
 	copy ..\README.win32    ..\pod\perlwin32.pod
@@ -3966,6 +3965,20 @@ $(UNIDATAFILES) : ..\pod\perluniprops.pod
 ..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(HAVEMINIPERL) ..\lib\unicore\mktables Extensions_nonxs
 	$(MINIPERL) -I..\lib $(ICWD) ..\lib\unicore\mktables -C ..\lib\unicore -P ..\pod -maketest -makelist -p
 MAKEFILE
+    if (_ge($version, "5.17.3")) {
+        _patch_gnumakefile($version, <<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
+@@ -901,6 +901,7 @@
+ 	copy ..\README.symbian  ..\pod\perlsymbian.pod
+ 	copy ..\README.tru64    ..\pod\perltru64.pod
+ 	copy ..\README.tw       ..\pod\perltw.pod
++	copy ..\README.uts      ..\pod\perluts.pod
+ 	copy ..\README.vmesa    ..\pod\perlvmesa.pod
+ 	copy ..\README.vos      ..\pod\perlvos.pod
+ 	copy ..\README.win32    ..\pod\perlwin32.pod
+PATCH
+    }
 }
 
 sub _patch_gnumakefile_514 {

@@ -1256,10 +1256,8 @@ PATCH
 
     if (_ge($version, "5.7.3")) {
         _patch(<<'PATCH');
-diff --git a/lib/ExtUtils/MM_Unix.pm b/lib/ExtUtils/MM_Unix.pm
-index 249954d140..a94223c472 100644
---- a/lib/ExtUtils/MM_Unix.pm
-+++ b/lib/ExtUtils/MM_Unix.pm
+--- lib/ExtUtils/MM_Unix.pm
++++ lib/ExtUtils/MM_Unix.pm
 @@ -182,6 +182,7 @@ sub has_link_code;
  sub htmlifypods;
  sub init_dirscan;
@@ -1399,10 +1397,8 @@ index 249954d140..a94223c472 100644
  	$self->{NOECHO}\$(NOOP)
  
  ];
-diff --git a/lib/ExtUtils/MM_Win32.pm b/lib/ExtUtils/MM_Win32.pm
-index 76e1bd1538..f0e0c166d1 100644
---- a/lib/ExtUtils/MM_Win32.pm
-+++ b/lib/ExtUtils/MM_Win32.pm
+--- lib/ExtUtils/MM_Win32.pm
++++ lib/ExtUtils/MM_Win32.pm
 @@ -37,6 +37,7 @@ $GCC     = 1 if $Config{'cc'} =~ /^gcc/i;
  $DMAKE = 1 if $Config{'make'} =~ /^dmake/i;
  $NMAKE = 1 if $Config{'make'} =~ /^nmake/i;

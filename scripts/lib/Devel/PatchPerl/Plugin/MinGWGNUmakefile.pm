@@ -3980,6 +3980,28 @@ MAKEFILE
  	copy ..\README.win32    ..\pod\perlwin32.pod
 PATCH
     }
+    if (_ge($version, "5.17.5")) {
+        _patch_gnumakefile($version, <<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
+@@ -888,7 +888,6 @@
+ 	copy ..\README.linux    ..\pod\perllinux.pod
+ 	copy ..\README.macos    ..\pod\perlmacos.pod
+ 	copy ..\README.macosx   ..\pod\perlmacosx.pod
+-	copy ..\README.mpeix    ..\pod\perlmpeix.pod
+ 	copy ..\README.netware  ..\pod\perlnetware.pod
+ 	copy ..\README.openbsd  ..\pod\perlopenbsd.pod
+ 	copy ..\README.os2      ..\pod\perlos2.pod
+@@ -901,7 +900,6 @@
+ 	copy ..\README.symbian  ..\pod\perlsymbian.pod
+ 	copy ..\README.tru64    ..\pod\perltru64.pod
+ 	copy ..\README.tw       ..\pod\perltw.pod
+-	copy ..\README.vmesa    ..\pod\perlvmesa.pod
+ 	copy ..\README.vos      ..\pod\perlvos.pod
+ 	copy ..\README.win32    ..\pod\perlwin32.pod
+ 	copy ..\pod\perldelta.pod ..\pod\perl__PERL_VERSION__delta.pod
+PATCH
+    }
 }
 
 sub _patch_gnumakefile_514 {

@@ -3104,6 +3104,54 @@ PATCH
 PATCH
         return;
     }
+
+    if (_ge($version, "5.6.0")) {
+        _patch(<<'PATCH');
+--- win32/config_H.gc
++++ win32/config_H.gc
+@@ -1022,16 +1022,14 @@
+  *	Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
+  *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.
+  */
+-/*#define HAS_QUAD	/**/
+-#ifdef HAS_QUAD
++#define HAS_QUAD	/**/
+ #   define Quad_t long long	/**/
+ #   define Uquad_t unsigned long long	/**/
+-#   define QUADKIND 5	/**/
++#   define QUADKIND 3	/**/
+ #   define QUAD_IS_INT	1
+ #   define QUAD_IS_LONG	2
+ #   define QUAD_IS_LONG_LONG	3
+ #   define QUAD_IS_INT64_T	4
+-#endif
+ 
+ /* HAS_ACCESSX:
+  *	This symbol, if defined, indicates that the accessx routine is
+@@ -1686,14 +1684,18 @@
+  *	available to exclusively create and open a uniquely named
+  *	temporary file.
+  */
+-/*#define HAS_MKSTEMP		/**/
++#if __MINGW64_VERSION_MAJOR >= 4
++#define HAS_MKSTEMP
++#endif
+ 
+ /* HAS_MKSTEMPS:
+  *	This symbol, if defined, indicates that the mkstemps routine is
+  *	available to excluslvely create and open a uniquely named
+  *	(with a suffix) temporary file.
+  */
+-/*#define HAS_MKSTEMPS		/**/
++#if __MINGW64_VERSION_MAJOR >= 4
++#define HAS_MKSTEMPS
++#endif
+ 
+ /* HAS_MMAP:
+  *	This symbol, if defined, indicates that the mmap system call is
+PATCH
+        return;
+    }
 }
 
 sub _patch_config_gc {
@@ -3112,56 +3160,19 @@ sub _patch_config_gc {
         return;
     }
 
-    if (_ge($version, "5.8.0")) {
-        _patch(<<'PATCH');
---- win32/config.gc
-+++ win32/config.gc
-@@ -345,7 +345,7 @@ d_pwgecos='undef'
- d_pwpasswd='undef'
- d_pwquota='undef'
- d_qgcvt='undef'
--d_quad='undef'
-+d_quad='define'
- d_random_r='undef'
- d_readdir64_r='undef'
- d_readdir='define'
-PATCH
-        return;
+    open my $orig, '<', File::Spec->catfile('win32', 'config.gc') or die "failed to open win32/config.gc: $!";
+    open my $new, '>', File::Spec->catfile('win32', 'config.gc.new') or die "failed to open win32/config.gc.new: $!";
+
+    while(my $line = <$orig>) {
+        $line =~ s/^d_quad=.*/d_quad='define'/;
+        print $new $line;
     }
 
-    if (_ge($version, "5.7.1")) {
-        _patch(<<'PATCH');
---- win32/config.gc
-+++ win32/config.gc
-@@ -280,7 +280,7 @@ d_pwgecos='undef'
- d_pwpasswd='undef'
- d_pwquota='undef'
- d_qgcvt='undef'
--d_quad='undef'
-+d_quad='define'
- d_readdir='define'
- d_readlink='undef'
- d_readv='undef'
-PATCH
-        return;
-    }
+    close $orig;
+    close $new;
 
-    if (_ge($version, "5.7.0")) {
-        _patch(<<'PATCH');
---- win32/config.gc
-+++ win32/config.gc
-@@ -258,7 +258,7 @@ d_pwgecos='undef'
- d_pwpasswd='undef'
- d_pwquota='undef'
- d_qgcvt='undef'
--d_quad='undef'
-+d_quad='define'
- d_readdir='define'
- d_readlink='undef'
- d_rename='define'
-PATCH
-        return;
-    }
+    rename File::Spec->catfile('win32', 'config.gc'), File::Spec->catfile('win32', 'config.gc.orig');
+    rename File::Spec->catfile('win32', 'config.gc.new'), File::Spec->catfile('win32', 'config.gc');
 }
 
 sub _patch_config_sh_pl {

@@ -132,13 +132,7 @@ sub run {
         cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-4.02.tar.gz', '5.5.3');
 
         # Cpanel::JSON::XS
-        # install fails with perl v5.13.0 - v.5.13.8
-        # XS.xs:540:61: error: 'UTF8_DISALLOW_SUPER' undeclared (first use in this function); did you mean 'UNICODE_ALLOW_SUPER'?
-        # perl v5.11.0
-        # XS.o:XS.c:(.text+0x394c): undefined reference to `Perl_ck_warner_d'
-        cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.25.tar.gz', '5.6.2', '5.11.0');
-        cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.25.tar.gz', '5.11.1', '5.13.0');
-        cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.25.tar.gz', '5.13.9');
+        cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.25.tar.gz', '5.6.2');
 
         # some requirements of JSON::XS
         cpan_install('https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/Canary-Stability-2013.tar.gz', '5.8.3');
@@ -158,9 +152,7 @@ sub run {
         cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-PP-4.05.tar.gz', '5.6.0');
 
         # JSON::MaybeXS
-        # EXCEPTION_ACCESS_VIOLATION with perl v5.10.1 - v5.11.5, v5.12.x and v5.13.0
-        cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004003.tar.gz', '5.6.0', '5.10.1');
-        cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004003.tar.gz', '5.13.1');
+        cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004003.tar.gz', '5.6.0');
 
         # YAML
         cpan_install('https://cpan.metacpan.org/authors/id/T/TI/TINITA/YAML-1.30.tar.gz', '5.8.1');
@@ -180,11 +172,9 @@ sub run {
         cpan_install('https://cpan.metacpan.org/authors/id/A/AB/ABH/Mozilla-CA-20200520.tar.gz', '5.6.0');
 
         # IO::Socket::SSL
-        # EXCEPTION_ACCESS_VIOLATION with perl v5.10.1 - v5.11.5, v5.12.x and v5.13.0
         local $ENV{NO_NETWORK_TESTING} = 1;
         local $ENV{PERL_MM_USE_DEFAULT} = 1;
-        cpan_install('https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-2.068.tar.gz', '5.8.0', '5.10.1');
-        cpan_install('https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-2.068.tar.gz', '5.13.1');
+        cpan_install('https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-2.068.tar.gz', '5.8.0');
     };
 
     group "archiving" => sub {

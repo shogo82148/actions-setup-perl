@@ -4036,6 +4036,20 @@ PATCH
  	copy ..\README.cn       ..\pod\perlcn.pod
 PATCH
     }
+    if (_ge($version, "5.17.10")) {
+        _patch_gnumakefile($version, <<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
+@@ -393,6 +393,7 @@
+ 		..\gv.h		\
+ 		..\handy.h	\
+ 		..\hv.h		\
++		..\hv_func.h	\
+ 		..\iperlsys.h	\
+ 		..\mg.h		\
+ 		..\nostdio.h	\
+PATCH
+    }
 }
 
 sub _patch_gnumakefile_514 {
@@ -12634,3 +12648,4 @@ MAKEFILE
 PATCH
     }
 }
+s

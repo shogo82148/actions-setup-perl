@@ -12493,4 +12493,83 @@ installbare : utils
 installhtml : doc
 	$(RCOPY) $(HTMLDIR)\*.* $(INST_HTML)\$(NULL)
 MAKEFILE
+    if (_ge($version, "5.6.2")) {
+        _patch_gnumakefile($version, <<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
+@@ -794,55 +794,55 @@
+ 	rem . > $@
+ 
+ $(DUMPER_DLL): $(HAVEMINIPERL) $(DUMPER).xs
+-	cd $(EXTDIR)\Data\Dumper && ..\..\..\miniperl -I..\..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
++	cd $(EXTDIR)\Data\Dumper && ..\..\..\miniperl -I..\..\..\lib Makefile.PL INSTALLDIRS=perl PERL_CORE=1 && $(PLMAKE)
+ 
+ $(DPROF_DLL): $(HAVEMINIPERL) $(DPROF).xs
+-	cd $(EXTDIR)\Devel\DProf && ..\..\..\miniperl -I..\..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
++	cd $(EXTDIR)\Devel\DProf && ..\..\..\miniperl -I..\..\..\lib Makefile.PL INSTALLDIRS=perl PERL_CORE=1 && $(PLMAKE)
+ 
+ $(GLOB_DLL): $(HAVEMINIPERL) $(GLOB).xs
+-	cd $(EXTDIR)\File\Glob && ..\..\..\miniperl -I..\..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
++	cd $(EXTDIR)\File\Glob && ..\..\..\miniperl -I..\..\..\lib Makefile.PL INSTALLDIRS=perl PERL_CORE=1 && $(PLMAKE)
+ 
+ $(PEEK_DLL): $(HAVEMINIPERL) $(PEEK).xs
+-	cd $(EXTDIR)\Devel\Peek && ..\..\..\miniperl -I..\..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
++	cd $(EXTDIR)\Devel\Peek && ..\..\..\miniperl -I..\..\..\lib Makefile.PL INSTALLDIRS=perl PERL_CORE=1 && $(PLMAKE)
+ 
+ $(RE_DLL): $(HAVEMINIPERL) $(RE).xs
+-	cd $(EXTDIR)\re && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
++	cd $(EXTDIR)\re && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl PERL_CORE=1 && $(PLMAKE)
+ 
+ $(B_DLL): $(HAVEMINIPERL) $(B).xs
+-	cd $(EXTDIR)\B && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
++	cd $(EXTDIR)\B && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl PERL_CORE=1 && $(PLMAKE)
+ 
+ $(THREAD_DLL): $(HAVEMINIPERL) $(THREAD).xs
+-	cd $(EXTDIR)\Thread && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
++	cd $(EXTDIR)\Thread && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl PERL_CORE=1 && $(PLMAKE)
+ 
+ $(ATTRS_DLL): $(HAVEMINIPERL) $(ATTRS).xs
+-	cd $(EXTDIR)\attrs && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
++	cd $(EXTDIR)\attrs && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl PERL_CORE=1 && $(PLMAKE)
+ 
+ $(POSIX_DLL): $(HAVEMINIPERL) $(POSIX).xs
+-	cd $(EXTDIR)\POSIX && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
++	cd $(EXTDIR)\POSIX && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl PERL_CORE=1 && $(PLMAKE)
+ 
+ $(IO_DLL): $(HAVEMINIPERL) $(IO).xs
+-	cd $(EXTDIR)\IO && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
++	cd $(EXTDIR)\IO && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl PERL_CORE=1 && $(PLMAKE)
+ 
+ $(SDBM_FILE_DLL) : $(HAVEMINIPERL) $(SDBM_FILE).xs
+-	cd $(EXTDIR)\SDBM_File && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
++	cd $(EXTDIR)\SDBM_File && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl PERL_CORE=1 && $(PLMAKE)
+ 
+ $(FCNTL_DLL): $(HAVEMINIPERL) $(FCNTL).xs
+-	cd $(EXTDIR)\Fcntl && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
++	cd $(EXTDIR)\Fcntl && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl PERL_CORE=1 && $(PLMAKE)
+ 
+ $(OPCODE_DLL): $(HAVEMINIPERL) $(OPCODE).xs
+-	cd $(EXTDIR)\Opcode && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
++	cd $(EXTDIR)\Opcode && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl PERL_CORE=1 && $(PLMAKE)
+ 
+ $(SOCKET_DLL): $(HAVEMINIPERL) $(SOCKET).xs
+-	cd $(EXTDIR)\Socket && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
++	cd $(EXTDIR)\Socket && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl PERL_CORE=1 && $(PLMAKE)
+ 
+ $(HOSTNAME_DLL): $(HAVEMINIPERL) $(HOSTNAME).xs
+-	cd $(EXTDIR)\Sys\Hostname && ..\..\..\miniperl -I..\..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
++	cd $(EXTDIR)\Sys\Hostname && ..\..\..\miniperl -I..\..\..\lib Makefile.PL INSTALLDIRS=perl PERL_CORE=1 && $(PLMAKE)
+ 
+ $(BYTELOADER_DLL): $(HAVEMINIPERL) $(BYTELOADER).xs
+-	cd $(EXTDIR)\ByteLoader && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
++	cd $(EXTDIR)\ByteLoader && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl PERL_CORE=1 && $(PLMAKE)
+ 
+ $(ERRNO_PM): $(HAVEMINIPERL) $(ERRNO)_pm.PL
+-	cd $(EXTDIR)\Errno && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl && $(PLMAKE)
++	cd $(EXTDIR)\Errno && ..\..\miniperl -I..\..\lib Makefile.PL INSTALLDIRS=perl PERL_CORE=1 && $(PLMAKE)
+ 
+ #-------------------------------------------------------------------------------
+ 
+PATCH
+    }
 }

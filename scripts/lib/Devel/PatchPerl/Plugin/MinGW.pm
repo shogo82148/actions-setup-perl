@@ -24,7 +24,6 @@ my @patch = (
             [ \&_patch_config_gc ],
             [ \&_patch_config_sh_pl ],
             [ \&_patch_installperl ],
-            [ \&_patch_buildext_pl ],
         ],
     },
     {
@@ -1668,6 +1667,12 @@ PATCH
  
      for (qw/ CHMOD CP LD MV NOOP RM_F RM_RF TEST_F TOUCH UMASK_NULL DEV_NULL/ ) {
  	push @m, "$_ = $self->{$_}\n";
+PATCH
+        return;
+    }
+
+    if (_ge($version, "5.7.1")) {
+        _patch(<<'PATCH')
 PATCH
     }
 }
@@ -3447,32 +3452,6 @@ PATCH
  # Make links to ordinary names if installbin directory isn't current directory.
  
 PATCH
-}
-
-sub _patch_buildext_pl {
-    my $version = shift;
-    if ($version eq '5.7.3') {
-        _patch(<<'PATCH');
---- win32/buildext.pl
-+++ win32/buildext.pl
-@@ -60,12 +60,12 @@ foreach my $dir (sort @ext)
-     if ($targ)
-      {
-       print "Making $targ in $dir\n$make $targ\n";
--      system("$make $targ");
-+      system("$make --debug $targ");
-      }
-     else
-      {
-       print "Making $dir\n$make\n";
--      system($make);
-+      system("$make --debug");
-      }
-     chdir($here) || die "Cannot cd to $here:$!";
-    }
-PATCH
-        return;
-    }
 }
 
 1;

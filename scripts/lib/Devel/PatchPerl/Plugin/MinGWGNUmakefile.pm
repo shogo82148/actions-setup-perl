@@ -11130,24 +11130,7 @@ MAKEFILE
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
-@@ -260,6 +260,8 @@
- 		..\utils\h2xs		\
- 		..\utils\perldoc	\
- 		..\utils\perlcc		\
-+		..\utils\perlivp	\
-+		..\utils\libnetcfg	\
- 		..\pod\checkpods	\
- 		..\pod\pod2html		\
- 		..\pod\pod2latex	\
-@@ -270,6 +272,7 @@
- 		..\pod\podselect	\
- 		..\x2p\find2perl	\
- 		..\x2p\s2p		\
-+		..\lib\ExtUtils\xsubpp	\
- 		bin\exetype.pl		\
- 		bin\runperl.pl		\
- 		bin\pl2bat.pl		\
-@@ -303,7 +306,9 @@
+@@ -303,7 +303,9 @@
  		..\globals.c	\
  		..\gv.c		\
  		..\hv.c		\
@@ -11157,7 +11140,7 @@ MAKEFILE
  		..\op.c		\
  		..\perl.c	\
  		..\perlapi.c	\
-@@ -311,6 +316,8 @@
+@@ -311,6 +313,8 @@
  		..\pp.c		\
  		..\pp_ctl.c	\
  		..\pp_hot.c	\
@@ -11166,7 +11149,7 @@ MAKEFILE
  		..\pp_sys.c	\
  		..\regcomp.c	\
  		..\regexec.c	\
-@@ -337,6 +344,10 @@
+@@ -337,6 +341,10 @@
  		.\win32sck.c	\
  		.\win32thread.c 
  
@@ -11177,7 +11160,7 @@ MAKEFILE
  ifneq ($(CRYPT_SRC), "")
  WIN32_SRC	+= $(CRYPT_SRC)
  endif
-@@ -744,13 +755,32 @@
+@@ -744,13 +752,32 @@
  
  utils: $(PERLEXE) $(X2P)
  	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
@@ -11216,24 +11199,7 @@ PATCH
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
-@@ -260,8 +260,6 @@
- 		..\utils\h2xs		\
- 		..\utils\perldoc	\
- 		..\utils\perlcc		\
--		..\utils\perlivp	\
--		..\utils\libnetcfg	\
- 		..\pod\checkpods	\
- 		..\pod\pod2html		\
- 		..\pod\pod2latex	\
-@@ -272,7 +270,6 @@
- 		..\pod\podselect	\
- 		..\x2p\find2perl	\
- 		..\x2p\s2p		\
--		..\lib\ExtUtils\xsubpp	\
- 		bin\exetype.pl		\
- 		bin\runperl.pl		\
- 		bin\pl2bat.pl		\
-@@ -317,7 +314,6 @@
+@@ -314,7 +314,6 @@
  		..\pp_ctl.c	\
  		..\pp_hot.c	\
  		..\pp_pack.c	\
@@ -11241,7 +11207,7 @@ PATCH
  		..\pp_sys.c	\
  		..\regcomp.c	\
  		..\regexec.c	\
-@@ -759,25 +755,15 @@
+@@ -756,25 +755,15 @@
  	copy ..\README.amiga    ..\pod\perlamiga.pod
  	copy ..\README.apollo   ..\pod\perlapollo.pod
  	copy ..\README.beos     ..\pod\perlbeos.pod

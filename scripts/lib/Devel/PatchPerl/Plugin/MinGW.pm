@@ -1673,6 +1673,208 @@ PATCH
 
     if (_ge($version, "5.7.1")) {
         _patch(<<'PATCH')
+--- lib/ExtUtils/MM_Unix.pm
++++ lib/ExtUtils/MM_Unix.pm
+@@ -192,6 +192,7 @@ sub ExtUtils::MM_Unix::has_link_code ;
+ sub ExtUtils::MM_Unix::htmlifypods ;
+ sub ExtUtils::MM_Unix::init_dirscan ;
+ sub ExtUtils::MM_Unix::init_main ;
++sub ExtUtils::MM_Unix::init_DIRFILESEP ;
+ sub ExtUtils::MM_Unix::init_others ;
+ sub ExtUtils::MM_Unix::install ;
+ sub ExtUtils::MM_Unix::installbin ;
+@@ -552,8 +553,11 @@ sub constants {
+     my($self) = @_;
+     my(@m,$tmp);
+ 
++    $self->{DFSEP} = '$(DIRFILESEP)';  # alias for internal use
++
+     for $tmp (qw/
+ 
++	      DIRFILESEP DFSEP
+ 	      AR_STATIC_ARGS NAME DISTNAME NAME_SYM VERSION
+ 	      VERSION_SYM XS_VERSION INST_BIN INST_EXE INST_LIB
+ 	      INST_ARCHLIB INST_SCRIPT PREFIX  INSTALLDIRS
+@@ -1036,7 +1040,7 @@ BOOTSTRAP = '."$self->{BASEEXT}.bs".'
+ # As Mkbootstrap might not write a file (if none is required)
+ # we use touch to prevent make continually trying to remake it.
+ # The DynaLoader only reads a non-empty file.
+-$(BOOTSTRAP): '."$self->{MAKEFILE} $self->{BOOTDEP}".' $(INST_ARCHAUTODIR)/.exists
++$(BOOTSTRAP): '."$self->{MAKEFILE} $self->{BOOTDEP}".' $(INST_ARCHAUTODIR)$(DFSEP).exists
+ 	'.$self->{NOECHO}.'echo "Running Mkbootstrap for $(NAME) ($(BSLOADLIBS))"
+ 	'.$self->{NOECHO}.'$(PERL) "-I$(PERL_ARCHLIB)" "-I$(PERL_LIB)" \
+ 		-MExtUtils::Mkbootstrap \
+@@ -1044,7 +1048,7 @@ $(BOOTSTRAP): '."$self->{MAKEFILE} $self->{BOOTDEP}".' $(INST_ARCHAUTODIR)/.exis
+ 	'.$self->{NOECHO}.'$(TOUCH) $(BOOTSTRAP)
+ 	$(CHMOD) $(PERM_RW) $@
+ 
+-$(INST_BOOT): $(BOOTSTRAP) $(INST_ARCHAUTODIR)/.exists
++$(INST_BOOT): $(BOOTSTRAP) $(INST_ARCHAUTODIR)$(DFSEP).exists
+ 	'."$self->{NOECHO}$self->{RM_RF}".' $(INST_BOOT)
+ 	-'.$self->{CP}.' $(BOOTSTRAP) $(INST_BOOT)
+ 	$(CHMOD) $(PERM_RW) $@
+@@ -1076,7 +1080,7 @@ ARMAYBE = '.$armaybe.'
+ OTHERLDFLAGS = '.$otherldflags.'
+ INST_DYNAMIC_DEP = '.$inst_dynamic_dep.'
+ 
+-$(INST_DYNAMIC): $(OBJECT) $(MYEXTLIB) $(BOOTSTRAP) $(INST_ARCHAUTODIR)/.exists $(EXPORT_LIST) $(PERL_ARCHIVE) $(PERL_ARCHIVE_AFTER) $(INST_DYNAMIC_DEP)
++$(INST_DYNAMIC): $(OBJECT) $(MYEXTLIB) $(BOOTSTRAP) $(INST_ARCHAUTODIR)$(DFSEP).exists $(EXPORT_LIST) $(PERL_ARCHIVE) $(PERL_ARCHIVE_AFTER) $(INST_DYNAMIC_DEP)
+ ');
+     if ($armaybe ne ':'){
+ 	$ldfrom = 'tmp$(LIB_EXT)';
+@@ -2035,6 +2039,20 @@ usually solves this kind of problem.
+     # Define 'FULLPERL' to be a non-miniperl (used in test: target)
+     ($self->{FULLPERL} = $self->{PERL}) =~ s/miniperl/perl/i
+ 	unless ($self->{FULLPERL});
++
++    $self->init_DIRFILESEP();
++}
++
++=item init_DIRFILESEP
++
++Using / for Unix.  Called by init_main.
++
++=cut
++
++sub init_DIRFILESEP {
++    my($self) = shift;
++
++    $self->{DIRFILESEP} = '/';
+ }
+ 
+ =item init_others
+@@ -2505,7 +2523,7 @@ MAP_LIBPERL = $libperl
+ ";
+ 
+     push @m, "
+-\$(INST_ARCHAUTODIR)/extralibs.all: \$(INST_ARCHAUTODIR)/.exists ".join(" \\\n\t", @$extra)."
++\$(INST_ARCHAUTODIR)/extralibs.all: \$(INST_ARCHAUTODIR)$(DFSEP).exists ".join(" \\\n\t", @$extra)."
+ 	$self->{NOECHO}$self->{RM_F} \$\@
+ 	$self->{NOECHO}\$(TOUCH) \$\@
+ ";
+@@ -3244,7 +3262,7 @@ sub static_lib {
+ 
+     my(@m);
+     push(@m, <<'END');
+-$(INST_STATIC): $(OBJECT) $(MYEXTLIB) $(INST_ARCHAUTODIR)/.exists
++$(INST_STATIC): $(OBJECT) $(MYEXTLIB) $(INST_ARCHAUTODIR)$(DFSEP).exists
+ 	$(RM_RF) $@
+ END
+     # If this extension has it's own library (eg SDBM_File)
+@@ -3692,13 +3710,13 @@ pure_all :: config pm_to_blib subdirs linkext
+ subdirs :: $(MYEXTLIB)
+ 	'.$self->{NOECHO}.'$(NOOP)
+ 
+-config :: '.$self->{MAKEFILE}.' $(INST_LIBDIR)/.exists
++config :: '.$self->{MAKEFILE}.' $(INST_LIBDIR)$(DFSEP).exists
+ 	'.$self->{NOECHO}.'$(NOOP)
+ 
+-config :: $(INST_ARCHAUTODIR)/.exists
++config :: $(INST_ARCHAUTODIR)$(DFSEP).exists
+ 	'.$self->{NOECHO}.'$(NOOP)
+ 
+-config :: $(INST_AUTODIR)/.exists
++config :: $(INST_AUTODIR)$(DFSEP).exists
+ 	'.$self->{NOECHO}.'$(NOOP)
+ ';
+ 
+@@ -3706,7 +3724,7 @@ config :: $(INST_AUTODIR)/.exists
+ 
+     if (%{$self->{HTMLLIBPODS}}) {
+ 	push @m, qq[
+-config :: \$(INST_HTMLLIBDIR)/.exists
++config :: \$(INST_HTMLLIBDIR)$(DFSEP).exists
+ 	$self->{NOECHO}\$(NOOP)
+ 
+ ];
+@@ -3715,7 +3733,7 @@ config :: \$(INST_HTMLLIBDIR)/.exists
+ 
+     if (%{$self->{HTMLSCRIPTPODS}}) {
+ 	push @m, qq[
+-config :: \$(INST_HTMLSCRIPTDIR)/.exists
++config :: \$(INST_HTMLSCRIPTDIR)$(DFSEP).exists
+ 	$self->{NOECHO}\$(NOOP)
+ 
+ ];
+@@ -3724,7 +3742,7 @@ config :: \$(INST_HTMLSCRIPTDIR)/.exists
+ 
+     if (%{$self->{MAN1PODS}}) {
+ 	push @m, qq[
+-config :: \$(INST_MAN1DIR)/.exists
++config :: \$(INST_MAN1DIR)$(DFSEP).exists
+ 	$self->{NOECHO}\$(NOOP)
+ 
+ ];
+@@ -3732,7 +3750,7 @@ config :: \$(INST_MAN1DIR)/.exists
+     }
+     if (%{$self->{MAN3PODS}}) {
+ 	push @m, qq[
+-config :: \$(INST_MAN3DIR)/.exists
++config :: \$(INST_MAN3DIR)$(DFSEP).exists
+ 	$self->{NOECHO}\$(NOOP)
+ 
+ ];
+--- lib/ExtUtils/MM_Win32.pm
++++ lib/ExtUtils/MM_Win32.pm
+@@ -36,6 +36,7 @@ $GCC     = 1 if $Config{'cc'} =~ /^gcc/i;
+ $DMAKE = 1 if $Config{'make'} =~ /^dmake/i;
+ $NMAKE = 1 if $Config{'make'} =~ /^nmake/i;
+ $PERLMAKE = 1 if $Config{'make'} =~ /^pmake/i;
++$GMAKE = 1 if $Config{'make'} =~ /^gmake/i;
+ $OBJ   = 1 if $Config{'ccflags'} =~ /PERL_OBJECT/i;
+ 
+ # a few workarounds for command.com (very basic)
+@@ -203,6 +204,22 @@ sub catfile {
+     return $dir.$file;
+ }
+ 
++=item init_DIRFILESEP
++
++Using \ for Windows.
++
++=cut
++
++sub init_DIRFILESEP {
++    my($self) = shift;
++
++    # The ^ makes sure its not interpreted as an escape in nmake
++    $self->{DIRFILESEP} = $NMAKE ? '^\\' :
++                          $DMAKE ? '\\\\' :
++                          $GMAKE ? '/'
++                                 : '\\';
++}
++
+ sub init_others
+ {
+  my ($self) = @_;
+@@ -245,8 +262,11 @@ sub constants {
+     my($self) = @_;
+     my(@m,$tmp);
+ 
++    $self->{DFSEP} = '$(DIRFILESEP)';  # alias for internal use
++
+     for $tmp (qw/
+ 
++	      DIRFILESEP DFSEP
+ 	      AR_STATIC_ARGS NAME DISTNAME NAME_SYM VERSION
+ 	      VERSION_SYM XS_VERSION INST_BIN INST_EXE INST_LIB
+ 	      INST_ARCHLIB INST_SCRIPT PREFIX  INSTALLDIRS
+@@ -648,9 +668,13 @@ sub tools_other {
+     my($self) = shift;
+     my @m;
+     my $bin_sh = $Config{sh} || 'cmd /c';
+-    push @m, qq{
++    if ($GMAKE) {
++        push @m, "\nSHELL = $ENV{COMSPEC}\n";
++    } elsif (!$DMAKE) { # dmake determines its own shell
++        push @m, qq{
+ SHELL = $bin_sh
+-} unless $DMAKE;  # dmake determines its own shell 
++}
++    }
+ 
+     for (qw/ CHMOD CP LD MV NOOP RM_F RM_RF TEST_F TOUCH UMASK_NULL DEV_NULL/ ) {
+ 	push @m, "$_ = $self->{$_}\n";
 PATCH
     }
 }

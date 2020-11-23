@@ -83,6 +83,14 @@ my @patch = (
     },
     {
         perl => [
+            qr/^5\.12\.5$/,
+        ],
+        subs => [
+            [ \&_patch_mg ],
+        ],
+    },
+    {
+        perl => [
             qr/^5\.11\.[01]/,
             qr/^5\.10\./,
             qr/^5\.9\.[345]$/,
@@ -3119,7 +3127,7 @@ PATCH
 }
 
 sub _patch_socket_h {
-    _patch(<<'PATCH')
+    _patch(<<'PATCH');
 --- win32/include/sys/socket.h
 +++ win32/include/sys/socket.h
 @@ -29,6 +29,7 @@ extern "C" {
@@ -3130,6 +3138,34 @@ sub _patch_socket_h {
  #define  ENOTSOCK	WSAENOTSOCK
  
  #ifdef USE_SOCKETS_AS_HANDLES
+PATCH
+}
+
+sub _patch_mg {
+    # comes from https://github.com/Perl/perl5/commit/68f8932eb570af656553ed44c11a23f0a216a3ec
+    _patch(<<'PATCH');
+--- mg.c
++++ mg.c
+@@ -532,6 +532,7 @@ Perl_mg_free(pTHX_ SV *sv)
+ 	SvMAGIC_set(sv, moremagic);
+     }
+     SvMAGIC_set(sv, NULL);
++    SvMAGICAL_off(sv);
+     return 0;
+ }
+ 
+diff --git a/sv.c b/sv.c
+index 44307d45752..716c2ee26f6 100644
+--- sv.c
++++ sv.c
+@@ -3553,7 +3553,6 @@ Perl_sv_setsv_flags(pTHX_ SV *dstr, register SV* sstr, const I32 flags)
+     {
+ 	/* need to nuke the magic */
+ 	mg_free(dstr);
+-	SvRMAGICAL_off(dstr);
+     }
+ 
+     /* There's a lot of redundancy below but we're going for speed here */
 PATCH
 }
 

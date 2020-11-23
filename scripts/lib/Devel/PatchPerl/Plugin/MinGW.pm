@@ -3689,10 +3689,6 @@ PATCH
 
 sub _patch_config_gc {
     my $version = shift;
-    if (_ge($version, "5.10.0")) {
-        return;
-    }
-
     open my $orig, '<', File::Spec->catfile('win32', 'config.gc') or die "failed to open win32/config.gc: $!";
     open my $new, '>', File::Spec->catfile('win32', 'config.gc.new') or die "failed to open win32/config.gc.new: $!";
 

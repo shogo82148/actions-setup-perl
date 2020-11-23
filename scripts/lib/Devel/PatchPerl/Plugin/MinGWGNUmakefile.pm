@@ -7045,8 +7045,8 @@ Extensions_static : buildext.pl $(HAVEMINIPERL) $(CONFIGPM)
 
 doc: $(PERLEXE)
 	$(PERLEXE) -I..\lib ..\installhtml --podroot=.. --htmldir=$(HTMLDIR) \
-	    --podpath=pod:lib:utils --htmlroot="file://$(subst :,|,$(INST_HTML))"\
-	    --recurse
+	    --podpath=pod:lib:ext:utils --htmlroot="file://$(subst :,|,$(INST_HTML))" \
+	    --libpod=perlfunc:perlguts:perlvar:perlrun:perlop --recurse
 
 # Note that this next section is parsed (and regenerated) by pod/buildtoc
 # so please check that script before making structural changes here
@@ -7732,8 +7732,8 @@ PATCH
 -doc: $(PERLEXE)
 +doc: $(PERLEXE) ..\pod\perltoc.pod
  	$(PERLEXE) -I..\lib ..\installhtml --podroot=.. --htmldir=$(HTMLDIR) \
- 	    --podpath=pod:lib:utils --htmlroot="file://$(subst :,|,$(INST_HTML))"\
- 	    --recurse
+ 	    --podpath=pod:lib:ext:utils --htmlroot="file://$(subst :,|,$(INST_HTML))" \
+ 	    --libpod=perlfunc:perlguts:perlvar:perlrun:perlop --recurse
  
 -# Note that this next section is parsed (and regenerated) by pod/buildtoc
 -# so please check that script before making structural changes here

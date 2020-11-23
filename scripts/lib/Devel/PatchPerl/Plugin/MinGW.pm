@@ -3357,7 +3357,32 @@ PATCH
         _patch(<<'PATCH');
 --- win32/config_H.gc
 +++ win32/config_H.gc
-@@ -3692,14 +3692,18 @@
+@@ -912,23 +912,15 @@
+  *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, QUAD_IS_INT64_T,
+  *	or QUAD_IS___INT64.
+  */
+-#define HAS_QUAD	/**/
+-#ifdef HAS_QUAD
+-#   ifndef _MSC_VER
++#define HAS_QUAD
+ #	define Quad_t long long	/**/
+ #	define Uquad_t unsigned long long	/**/
+ #	define QUADKIND 3	/**/
+-#   else
+-#	define Quad_t __int64	/**/
+-#	define Uquad_t unsigned __int64	/**/
+-#	define QUADKIND 5	/**/
+-#   endif
+ #   define QUAD_IS_INT	1
+ #   define QUAD_IS_LONG	2
+ #   define QUAD_IS_LONG_LONG	3
+ #   define QUAD_IS_INT64_T	4
+ #   define QUAD_IS___INT64	5
+-#endif
+ 
+ /* OSNAME:
+  *	This symbol contains the name of the operating system, as determined
+@@ -3692,14 +3684,18 @@
   *	This symbol, if defined, indicates that the mkdtemp routine is
   *	available to exclusively create a uniquely named temporary directory.
   */

@@ -3889,7 +3889,7 @@ $(DYNALOADER) : ..\make_ext.pl ..\lib\buildcustomize.pl $(PERLDEP) $(CONFIGPM) E
 doc: $(PERLEXE) ..\pod\perltoc.pod
 	$(PERLEXE) -I..\lib ..\installhtml --podroot=.. --htmldir=$(HTMLDIR) \
 	    --podpath=pod:lib:ext:utils --htmlroot="file://$(subst :,|,$(INST_HTML))" \
-	    --libpods=perlfunc:perlguts:perlvar:perlrun:perlop --recurse
+	    --recurse
 
 # Note that this next section is parsed (and regenerated) by pod/buildtoc
 # so please check that script before making structural changes here
@@ -3962,21 +3962,25 @@ $(UNIDATAFILES) : ..\pod\perluniprops.pod
 ..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(HAVEMINIPERL) ..\lib\unicore\mktables Extensions_nonxs
 	$(MINIPERL) -I..\lib $(ICWD) ..\lib\unicore\mktables -C ..\lib\unicore -P ..\pod -maketest -makelist -p
 MAKEFILE
-    if (! -e 'README.uts') { # _ge($version, "5.17.3")
+    if (_ge($version, "5.17.1")) {
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
-@@ -857,8 +857,8 @@
+@@ -857,7 +857,7 @@
  
  doc: $(PERLEXE) ..\pod\perltoc.pod
  	$(PERLEXE) -I..\lib ..\installhtml --podroot=.. --htmldir=$(HTMLDIR) \
 -	    --podpath=pod:lib:ext:utils --htmlroot="file://$(subst :,|,$(INST_HTML))" \
--	    --libpods=perlfunc:perlguts:perlvar:perlrun:perlop --recurse
 +	    --podpath=pod:lib:utils --htmlroot="file://$(subst :,|,$(INST_HTML))"\
-+	    --recurse
+ 	    --recurse
  
  # Note that this next section is parsed (and regenerated) by pod/buildtoc
- # so please check that script before making structural changes here
+PATCH
+    }
+    if (! -e 'README.uts') { # _ge($version, "5.17.3")
+        _patch_gnumakefile($version, <<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
 @@ -897,7 +897,6 @@
  	copy ..\README.symbian  ..\pod\perlsymbian.pod
  	copy ..\README.tru64    ..\pod\perltru64.pod

@@ -1,6 +1,13 @@
 name: Main workflow
 on:
-  pull_request: {}
+  pull_request:
+    paths:
+      - "src/**"
+      - "package.json"
+      - "package-lock.json"
+      - "action.yml"
+      - ".prettierrc.json"
+      - "tsconfig.json"
   push:
     branches:
       - "main"

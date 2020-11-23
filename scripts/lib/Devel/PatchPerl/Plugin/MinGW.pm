@@ -3840,6 +3840,45 @@ PATCH
     }
 
     if (_ge($version, "5.10.0")) {
+        _patch(<<'PATCH');
+--- win32/config_sh.PL
++++ win32/config_sh.PL
+@@ -117,6 +117,34 @@ unless (defined $ENV{SYSTEMROOT}) { # SystemRoot has been introduced by WinNT
+     $opt{d_link} = 'undef';
+ }
+ 
++# 64-bit patch is hard coded from here
++my $int64  = 'long long';
++$opt{d_atoll} = 'define';
++$opt{d_strtoll} = 'define';
++$opt{d_strtoull} = 'define';
++$opt{ptrsize} = 8;
++$opt{sizesize} = 8;
++$opt{ssizetype} = $int64;
++$opt{st_ino_size} = 8;
++$opt{d_nv_preserves_uv} = 'undef';
++$opt{nv_preserves_uv_bits} = 53;
++$opt{ivdformat} = qq{"I64d"};
++$opt{ivsize} = 8;
++$opt{ivtype} = $int64;
++$opt{sPRIXU64} = qq{"I64X"};
++$opt{sPRId64} = qq{"I64d"};
++$opt{sPRIi64} = qq{"I64i"};
++$opt{sPRIo64} = qq{"I64o"};
++$opt{sPRIu64} = qq{"I64u"};
++$opt{sPRIx64} = qq{"I64x"};
++$opt{uvXUformat} = qq{"I64X"};
++$opt{uvoformat} = qq{"I64o"};
++$opt{uvsize} = 8;
++$opt{uvtype} = qq{unsigned $int64};
++$opt{uvuformat} = qq{"I64u"};
++$opt{uvxformat} = qq{"I64x"};
++# end of 64-bit patch
++
+ if ($opt{uselargefiles} ne 'define') {
+     $opt{lseeksize} = 4;
+     $opt{lseektype} = 'off_t';
+PATCH
         return;
     }
 

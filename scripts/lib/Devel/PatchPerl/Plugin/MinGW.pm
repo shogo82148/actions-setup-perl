@@ -3612,7 +3612,7 @@ sub _patch_config_sh_pl {
         return;
     }
 
-    if (_ge($version, "5.16.0")) {
+    if (_ge($version, "5.15.3")) {
     _patch(<<'PATCH');
 --- win32/config_sh.PL
 +++ win32/config_sh.PL

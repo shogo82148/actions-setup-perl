@@ -3608,6 +3608,10 @@ sub _patch_config_gc {
 
 sub _patch_config_sh_pl {
     my $version = shift;
+    if (_ge($version, "5.17.3")) {
+        return;
+    }
+
     if (_ge($version, "5.16.0")) {
     _patch(<<'PATCH');
 --- win32/config_sh.PL

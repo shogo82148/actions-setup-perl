@@ -4991,6 +4991,20 @@ $(UNIDATAFILES) : ..\pod\perluniprops.pod
 ..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(HAVEMINIPERL) ..\lib\unicore\mktables Extensions_nonxs
 	$(MINIPERL) -I..\lib $(ICWD) ..\lib\unicore\mktables -C ..\lib\unicore -P ..\pod -maketest -makelist -p
 MAKEFILE
+    if (! -e 'utils\dprofpp') { # _ge($version, "5.15.0")
+        _patch_gnumakefile($version, <<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
+@@ -271,7 +271,6 @@
+ UTILS		=			\
+ 		..\utils\h2ph		\
+ 		..\utils\splain		\
+-		..\utils\dprofpp	\
+ 		..\utils\perlbug	\
+ 		..\utils\pl2pm 		\
+ 		..\utils\c2ph		\
+PATCH
+    }
 }
 
 sub _patch_gnumakefile_512 {

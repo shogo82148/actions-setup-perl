@@ -46,20 +46,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: msys2/setup-msys2@v2
-        with:
-          install: make mingw-w64-x86_64-gcc nasm
-      - name: install OpenSSL
-        run: |
-          set -eux
-          OPENSSL_VERSION=1_1_1h
-          curl --retry 3 -sSL "https://github.com/openssl/openssl/archive/OpenSSL_$OPENSSL_VERSION.tar.gz" -o openssl.tar.gz
-          tar xzf openssl.tar.gz
-          cd "openssl-OpenSSL_$OPENSSL_VERSION"
-          perl Configure --prefix="$(cygpath "$RUNNER_TOOL_CACHE\perl\${{ matrix.perl }}\x64")" mingw64
-          make "-j$(nproc)"
-          make install_sw
-        shell: "msys2 {0}"
+      # - uses: msys2/setup-msys2@v2
+      #   with:
+      #     install: make mingw-w64-x86_64-gcc nasm
+      # - name: install OpenSSL
+      #   run: |
+      #     set -eux
+      #     OPENSSL_VERSION=1_1_1h
+      #     curl --retry 3 -sSL "https://github.com/openssl/openssl/archive/OpenSSL_$OPENSSL_VERSION.tar.gz" -o openssl.tar.gz
+      #     tar xzf openssl.tar.gz
+      #     cd "openssl-OpenSSL_$OPENSSL_VERSION"
+      #     perl Configure --prefix="$(cygpath "$RUNNER_TOOL_CACHE\perl\${{ matrix.perl }}\x64")" mingw64
+      #     make "-j$(nproc)"
+      #     make install_sw
+      #   shell: "msys2 {0}"
 
       - name: setup host perl
         shell: bash

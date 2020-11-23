@@ -33,13 +33,13 @@ sub perl_release {
     if ($version =~ /^[0-9a-f]{7,}$/i) {
         # it looks like SHA1 Hash of git commit.
         # download from GitHub.
-        return "https://github.com/Perl/perl5/archive/$version.tar.gz";
+        return "https://github.com/Perl/perl5/archive/$version.tar.gz", "perl5-$version";
     }
 
     my $releases = CPAN::Perl::Releases::MetaCPAN->new->get;
     for my $release (@$releases) {
         if ($release->{name} eq "perl-$version") {
-            return $release->{download_url};
+            return $release->{download_url}, "perl-$version";
         }
     }
     die "not found the tarball for perl-$version\n";
@@ -56,16 +56,16 @@ sub execute_or_die {
 sub cpan_install {
     my ($url, $name, $min_version, $max_version) = @_;
 
-    # this perl is too old to install the module.
-    if ($min_version && version->parse("v$version") < version->parse("v$min_version")) {
-        info "skip installing $name";
-        return;
-    }
+    # # this perl is too old to install the module.
+    # if ($min_version && version->parse("v$version") < version->parse("v$min_version")) {
+    #     info "skip installing $name";
+    #     return;
+    # }
 
-    # no need to install
-    if ($max_version && version->parse("v$version") >= version->parse("v$max_version")) {
-        return;
-    }
+    # # no need to install
+    # if ($max_version && version->parse("v$version") >= version->parse("v$max_version")) {
+    #     return;
+    # }
 
     try {
         my @path = split m(/), $url;
@@ -105,8 +105,11 @@ sub jobs {
 sub run {
     local $ENV{PERL5LIB} = ""; # ignore libraries of the host perl
 
-    my $url = perl_release($version);
+    my ($url, $perldir) = perl_release($version);
     my $filename = "perl.tar.gz";
+
+    # extracted directory
+    $perldir = File::Spec->catdir($tmpdir, $perldir);
 
     group "downloading perl $version from $url" => sub {
         my $path = File::Spec->catfile($tmpdir, $filename);
@@ -120,12 +123,12 @@ sub run {
 
     group "patching..." => sub {
         local $ENV{PERL5_PATCHPERL_PLUGIN} = "GitHubActions";
-        my $dir = pushd(File::Spec->catdir($tmpdir, "perl-$version"));
+        my $dir = pushd($perldir);
         Devel::PatchPerl->patch_source($version);
     };
 
     group "build and install Perl" => sub {
-        my $dir = pushd(File::Spec->catdir($tmpdir, "perl-$version", "win32"));
+        my $dir = pushd(File::Spec->catdir($perldir, "win32"));
         execute_or_die("gmake", "-f", "GNUmakefile", "install", "INST_TOP=$install_dir", "CCHOME=C:\\MinGW", "-j", jobs($version));
     };
 

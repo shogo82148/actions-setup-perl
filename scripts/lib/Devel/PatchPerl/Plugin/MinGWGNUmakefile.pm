@@ -3966,7 +3966,7 @@ $(UNIDATAFILES) : ..\pod\perluniprops.pod
 ..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(HAVEMINIPERL) ..\lib\unicore\mktables Extensions_nonxs
 	$(MINIPERL) -I..\lib $(ICWD) ..\lib\unicore\mktables -C ..\lib\unicore -P ..\pod -maketest -makelist -p
 MAKEFILE
-    if (_ge($version, "5.17.3")) {
+    if (_ge($version, "5.17.3") || ! -e 'README.uts') {
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
@@ -3980,7 +3980,7 @@ MAKEFILE
  	copy ..\README.win32    ..\pod\perlwin32.pod
 PATCH
     }
-    if (_ge($version, "5.17.4")) {
+    if (_ge($version, "5.17.4") || ! -e 'README.vmesa') {
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
@@ -3994,7 +3994,7 @@ PATCH
  	copy ..\pod\perldelta.pod ..\pod\perl__PERL_VERSION__delta.pod
 PATCH
     }
-    if (_ge($version, "5.17.5")) {
+    if (_ge($version, "5.17.5") || ! -e 'README.mpeix') {
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
@@ -4008,7 +4008,7 @@ PATCH
  	copy ..\README.os2      ..\pod\perlos2.pod
 PATCH
     }
-    if (_ge($version, "5.17.6")) {
+    if (_ge($version, "5.17.6") || ! -e 'README.epoc') {
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
@@ -4022,7 +4022,7 @@ PATCH
  	copy ..\README.hpux     ..\pod\perlhpux.pod
 PATCH
     }
-    if (_ge($version, "5.17.7")) {
+    if (_ge($version, "5.17.7") || ! -e 'README.beos') {
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
@@ -4036,7 +4036,7 @@ PATCH
  	copy ..\README.cn       ..\pod\perlcn.pod
 PATCH
     }
-    if (_ge($version, "5.17.10")) {
+    if (_ge($version, "5.17.10") || -e 'hv_func.h') {
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile

@@ -106,9 +106,7 @@ sub run {
     local $ENV{PERL5LIB} = ""; # ignore libraries of the host perl
 
     my $url = perl_release($version);
-
-    $url =~ m/\/(perl-.*)$/;
-    my $filename = $1;
+    my $filename = "perl.tar.gz";
 
     group "downloading perl $version from $url" => sub {
         my $path = File::Spec->catfile($tmpdir, $filename);

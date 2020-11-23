@@ -3891,10 +3891,6 @@ doc: $(PERLEXE) ..\pod\perltoc.pod
 	    --podpath=pod:lib:ext:utils --htmlroot="file://$(subst :,|,$(INST_HTML))" \
 	    --libpod=perlfunc:perlguts:perlvar:perlrun:perlop --recurse
 
-# perl 5.18.x do not need this, it is for perl 5.19.2
-..\utils\Makefile: $(HAVEMINIPERL) $(CONFIGPM) ..\utils\Makefile.PL
-	$(MINIPERL) -I..\lib ..\utils\Makefile.PL ..
-
 # Note that this next section is parsed (and regenerated) by pod/buildtoc
 # so please check that script before making structural changes here
 utils: $(PERLEXE) $(X2P)
@@ -3979,9 +3975,9 @@ MAKEFILE
 +	    --podpath=pod:lib:utils --htmlroot="file://$(subst :,|,$(INST_HTML))"\
 +	    --recurse
  
- # perl 5.18.x do not need this, it is for perl 5.19.2
- ..\utils\Makefile: $(HAVEMINIPERL) $(CONFIGPM) ..\utils\Makefile.PL
-@@ -901,7 +901,6 @@
+ # Note that this next section is parsed (and regenerated) by pod/buildtoc
+ # so please check that script before making structural changes here
+@@ -897,7 +897,6 @@
  	copy ..\README.symbian  ..\pod\perlsymbian.pod
  	copy ..\README.tru64    ..\pod\perltru64.pod
  	copy ..\README.tw       ..\pod\perltw.pod
@@ -3995,7 +3991,7 @@ PATCH
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
-@@ -901,7 +901,6 @@
+@@ -897,7 +897,6 @@
  	copy ..\README.symbian  ..\pod\perlsymbian.pod
  	copy ..\README.tru64    ..\pod\perltru64.pod
  	copy ..\README.tw       ..\pod\perltw.pod
@@ -4009,7 +4005,7 @@ PATCH
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
-@@ -888,7 +888,6 @@
+@@ -884,7 +884,6 @@
  	copy ..\README.linux    ..\pod\perllinux.pod
  	copy ..\README.macos    ..\pod\perlmacos.pod
  	copy ..\README.macosx   ..\pod\perlmacosx.pod
@@ -4023,7 +4019,7 @@ PATCH
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
-@@ -877,7 +877,6 @@
+@@ -873,7 +873,6 @@
  	copy ..\README.cygwin   ..\pod\perlcygwin.pod
  	copy ..\README.dgux     ..\pod\perldgux.pod
  	copy ..\README.dos      ..\pod\perldos.pod
@@ -4037,7 +4033,7 @@ PATCH
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
-@@ -870,7 +870,6 @@
+@@ -866,7 +866,6 @@
  	cd ..\utils && $(PLMAKE) PERL=$(MINIPERL)
  	copy ..\README.aix      ..\pod\perlaix.pod
  	copy ..\README.amiga    ..\pod\perlamiga.pod
@@ -4926,10 +4922,6 @@ doc: $(PERLEXE) ..\pod\perltoc.pod
 	$(PERLEXE) -I..\lib ..\installhtml --podroot=.. --htmldir=$(HTMLDIR) \
 	    --podpath=pod:lib:utils --htmlroot="file://$(subst :,|,$(INST_HTML))"\
 	    --recurse
-
-# perl 5.18.x do not need this, it is for perl 5.19.2
-..\utils\Makefile: $(HAVEMINIPERL) $(CONFIGPM) ..\utils\Makefile.PL
-	$(MINIPERL) -I..\lib ..\utils\Makefile.PL ..
 
 # Note that this next section is parsed (and regenerated) by pod/buildtoc
 # so please check that script before making structural changes here

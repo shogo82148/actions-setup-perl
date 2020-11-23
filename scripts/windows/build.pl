@@ -56,16 +56,22 @@ sub execute_or_die {
 sub cpan_install {
     my ($url, $name, $min_version, $max_version) = @_;
 
-    # # this perl is too old to install the module.
-    # if ($min_version && version->parse("v$version") < version->parse("v$min_version")) {
-    #     info "skip installing $name";
-    #     return;
-    # }
-
-    # # no need to install
-    # if ($max_version && version->parse("v$version") >= version->parse("v$max_version")) {
-    #     return;
-    # }
+    my $skip = try {
+        # this perl is too old to install the module.
+        if ($min_version && version->parse("v$version") < version->parse("v$min_version")) {
+            return 1;
+        }
+        # no need to install
+        if ($max_version && version->parse("v$version") >= version->parse("v$max_version")) {
+            return 1;
+        }
+        return 0;
+    } catch {
+        # perhaps, we clouldn't parse the version.
+        # try installing.
+        return 0;
+    };
+    return if $skip;
 
     try {
         my @path = split m(/), $url;

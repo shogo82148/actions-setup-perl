@@ -3407,15 +3407,30 @@ PATCH
  
  /* HAS_MKSTEMPS:
   *	This symbol, if defined, indicates that the mkstemps routine is
-@@ -3849,7 +3853,7 @@
+@@ -3849,21 +3853,14 @@
   *	Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
   *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.
   */
 -/*#define HAS_QUAD	/**/
+-#ifdef HAS_QUAD
+-#   ifndef _MSC_VER
 +#define HAS_QUAD
- #ifdef HAS_QUAD
- #   ifndef _MSC_VER
  #	define Quad_t long long	/**/
+ #	define Uquad_t unsigned long long	/**/
+-#   else
+-#	define Quad_t __int64	/**/
+-#	define Uquad_t unsigned __int64	/**/
+-#   endif
+-#   define QUADKIND 5	/**/
++#   define QUADKIND 3	/**/
+ #   define QUAD_IS_INT	1
+ #   define QUAD_IS_LONG	2
+ #   define QUAD_IS_LONG_LONG	3
+ #   define QUAD_IS_INT64_T	4
+-#endif
+ 
+ /* IVTYPE:
+  *	This symbol defines the C type used for Perl's IV.
 PATCH
         return;
     }

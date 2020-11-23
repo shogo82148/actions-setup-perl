@@ -83,6 +83,14 @@ my @patch = (
     },
     {
         perl => [
+            qr/^5\.12\.5$/,
+        ],
+        subs => [
+            [ \&_patch_pp_hot ],
+        ],
+    },
+    {
+        perl => [
             qr/^5\.11\.[01]/,
             qr/^5\.10\./,
             qr/^5\.9\.[345]$/,
@@ -3119,7 +3127,7 @@ PATCH
 }
 
 sub _patch_socket_h {
-    _patch(<<'PATCH')
+    _patch(<<'PATCH');
 --- win32/include/sys/socket.h
 +++ win32/include/sys/socket.h
 @@ -29,6 +29,7 @@ extern "C" {
@@ -3130,6 +3138,60 @@ sub _patch_socket_h {
  #define  ENOTSOCK	WSAENOTSOCK
  
  #ifdef USE_SOCKETS_AS_HANDLES
+PATCH
+}
+
+sub _patch_pp_hot {
+    # reverts https://github.com/Perl/perl5/commit/8ef242405b8c660c02e953dbc987fbc06897af10
+    # for fixing https://github.com/shogo82148/actions-setup-perl/issues/469
+    _patch(<<'PATCH');
+--- pp_hot.c
++++ pp_hot.c
+@@ -1020,8 +1020,14 @@ PP(pp_aassign)
+ 		*(relem++) = sv;
+ 		didstore = av_store(ary,i++,sv);
+ 		if (magic) {
+-		    if (SvSMAGICAL(sv))
++		    if (SvSMAGICAL(sv)) {
++			/* More magic can happen in the mg_set callback, so we
++			 * backup the delaymagic for now. */
++			U16 dmbak = PL_delaymagic;
++			PL_delaymagic = 0;
+ 			mg_set(sv);
++			PL_delaymagic = dmbak;
++		    }
+ 		    if (!didstore)
+ 			sv_2mortal(sv);
+ 		}
+@@ -1051,8 +1057,12 @@ PP(pp_aassign)
+ 			duplicates += 2;
+ 		    didstore = hv_store_ent(hash,sv,tmpstr,0);
+ 		    if (magic) {
+-			if (SvSMAGICAL(tmpstr))
++			if (SvSMAGICAL(tmpstr)) {
++			    U16 dmbak = PL_delaymagic;
++			    PL_delaymagic = 0;
+ 			    mg_set(tmpstr);
++			    PL_delaymagic = dmbak;
++			}
+ 			if (!didstore)
+ 			    sv_2mortal(tmpstr);
+ 		    }
+@@ -1076,7 +1086,13 @@ PP(pp_aassign)
+ 	    }
+ 	    else
+ 		sv_setsv(sv, &PL_sv_undef);
+-	    SvSETMAGIC(sv);
++
++	    if (SvSMAGICAL(sv)) {
++		U16 dmbak = PL_delaymagic;
++		PL_delaymagic = 0;
++		mg_set(sv);
++		PL_delaymagic = dmbak;
++	    }
+ 	    break;
+ 	}
+     }
 PATCH
 }
 
@@ -3672,7 +3734,7 @@ PATCH
         return;
     }
 
-    if (_ge($version, "5.14.0")) {
+    if (_ge($version, "5.13.0")) {
     _patch(<<'PATCH');
 --- win32/config_sh.PL
 +++ win32/config_sh.PL
@@ -3730,6 +3792,49 @@ PATCH
  }
  
  # change the s{GM|LOCAL}TIME_{min|max} for VS2005 (aka VC 8) and
+PATCH
+        return;
+    }
+
+    if (_ge($version, "5.12.0")) {
+        _patch(<<'PATCH');
+--- win32/config_sh.PL
++++ win32/config_sh.PL
+@@ -118,6 +118,34 @@ unless (defined $ENV{SYSTEMROOT}) { # SystemRoot has been introduced by WinNT
+     $opt{d_link} = 'undef';
+ }
+ 
++# 64-bit patch is hard coded from here
++my $int64  = 'long long';
++$opt{d_atoll} = 'define';
++$opt{d_strtoll} = 'define';
++$opt{d_strtoull} = 'define';
++$opt{ptrsize} = 8;
++$opt{sizesize} = 8;
++$opt{ssizetype} = $int64;
++$opt{st_ino_size} = 8;
++$opt{d_nv_preserves_uv} = 'undef';
++$opt{nv_preserves_uv_bits} = 53;
++$opt{ivdformat} = qq{"I64d"};
++$opt{ivsize} = 8;
++$opt{ivtype} = $int64;
++$opt{sPRIXU64} = qq{"I64X"};
++$opt{sPRId64} = qq{"I64d"};
++$opt{sPRIi64} = qq{"I64i"};
++$opt{sPRIo64} = qq{"I64o"};
++$opt{sPRIu64} = qq{"I64u"};
++$opt{sPRIx64} = qq{"I64x"};
++$opt{uvXUformat} = qq{"I64X"};
++$opt{uvoformat} = qq{"I64o"};
++$opt{uvsize} = 8;
++$opt{uvtype} = qq{unsigned $int64};
++$opt{uvuformat} = qq{"I64u"};
++$opt{uvxformat} = qq{"I64x"};
++# end of 64-bit patch
++
+ # change the lseeksize and lseektype from their canned default values (which
+ # are set-up for a non-uselargefiles build) if we are building with
+ # uselargefiles. don't do this for bcc32: the code contains special handling
 PATCH
         return;
     }

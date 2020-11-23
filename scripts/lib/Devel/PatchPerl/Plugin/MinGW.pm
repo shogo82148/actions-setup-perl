@@ -3460,9 +3460,6 @@ PATCH
         return;
     }
 
-    _patch(<<'PATCH');
-PATCH
-
     if (_ge($version, "5.9.4")) {
         _patch(<<'PATCH');
 --- win32/config_H.gc

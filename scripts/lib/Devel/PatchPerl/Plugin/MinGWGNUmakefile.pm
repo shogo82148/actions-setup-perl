@@ -3888,8 +3888,8 @@ $(DYNALOADER) : ..\make_ext.pl ..\lib\buildcustomize.pl $(PERLDEP) $(CONFIGPM) E
 
 doc: $(PERLEXE) ..\pod\perltoc.pod
 	$(PERLEXE) -I..\lib ..\installhtml --podroot=.. --htmldir=$(HTMLDIR) \
-	    --podpath=pod:lib:utils --htmlroot="file://$(subst :,|,$(INST_HTML))"\
-	    --recurse
+	    --podpath=pod:lib:ext:utils --htmlroot="file://$(subst :,|,$(INST_HTML))" \
+	    --libpod=perlfunc:perlguts:perlvar:perlrun:perlop --recurse
 
 # perl 5.18.x do not need this, it is for perl 5.19.2
 ..\utils\Makefile: $(HAVEMINIPERL) $(CONFIGPM) ..\utils\Makefile.PL
@@ -3970,6 +3970,17 @@ MAKEFILE
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
 +++ win32/GNUmakefile
+@@ -857,8 +857,8 @@
+ 
+ doc: $(PERLEXE) ..\pod\perltoc.pod
+ 	$(PERLEXE) -I..\lib ..\installhtml --podroot=.. --htmldir=$(HTMLDIR) \
+-	    --podpath=pod:lib:ext:utils --htmlroot="file://$(subst :,|,$(INST_HTML))" \
+-	    --libpod=perlfunc:perlguts:perlvar:perlrun:perlop --recurse
++	    --podpath=pod:lib:utils --htmlroot="file://$(subst :,|,$(INST_HTML))"\
++	    --recurse
+ 
+ # perl 5.18.x do not need this, it is for perl 5.19.2
+ ..\utils\Makefile: $(HAVEMINIPERL) $(CONFIGPM) ..\utils\Makefile.PL
 @@ -901,7 +901,6 @@
  	copy ..\README.symbian  ..\pod\perlsymbian.pod
  	copy ..\README.tru64    ..\pod\perltru64.pod

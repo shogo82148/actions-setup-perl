@@ -3612,7 +3612,7 @@ sub _patch_config_sh_pl {
         return;
     }
 
-    if (_ge($version, "5.16.0")) {
+    if (_ge($version, "5.15.3")) {
     _patch(<<'PATCH');
 --- win32/config_sh.PL
 +++ win32/config_sh.PL
@@ -3653,6 +3653,68 @@ sub _patch_config_sh_pl {
 +
 +# set large files options
  if ($opt{uselargefiles} eq 'define') {
+     $opt{lseeksize} = 8;
+-    if ($opt{cc} eq 'cl') {
+-	$opt{lseektype} = '__int64';
+-    }
+-    elsif ($opt{cc} =~ /\bgcc\b/) {
+-	$opt{lseektype} = 'long long';
+-    }
++    $opt{lseektype} = $int64;
++}
++else {
++    $opt{lseeksize} = 4;
++    $opt{lseektype} = 'long';
+ }
+ 
+ # change the s{GM|LOCAL}TIME_{min|max} for VS2005 (aka VC 8) and
+PATCH
+        return;
+    }
+
+    if (_ge($version, "5.14.0")) {
+    _patch(<<'PATCH');
+--- win32/config_sh.PL
++++ win32/config_sh.PL
+@@ -118,18 +118,42 @@ unless (defined $ENV{SYSTEMROOT}) { # SystemRoot has been introduced by WinNT
+     $opt{d_link} = 'undef';
+ }
+ 
+-# change the lseeksize and lseektype from their canned default values (which
+-# are set-up for a non-uselargefiles build) if we are building with
+-# uselargefiles. don't do this for bcc32: the code contains special handling
+-# for bcc32 and the lseeksize and lseektype should not be changed.
+-if ($opt{uselargefiles} eq 'define' and $opt{cc} ne 'bcc32') {
++# 64-bit patch is hard coded from here
++my $int64  = 'long long';
++$opt{d_atoll} = 'define';
++$opt{d_strtoll} = 'define';
++$opt{d_strtoull} = 'define';
++$opt{ptrsize} = 8;
++$opt{sizesize} = 8;
++$opt{ssizetype} = $int64;
++$opt{st_ino_size} = 8;
++$opt{d_nv_preserves_uv} = 'undef';
++$opt{nv_preserves_uv_bits} = 53;
++$opt{ivdformat} = qq{"I64d"};
++$opt{ivsize} = 8;
++$opt{ivtype} = $int64;
++$opt{sPRIXU64} = qq{"I64X"};
++$opt{sPRId64} = qq{"I64d"};
++$opt{sPRIi64} = qq{"I64i"};
++$opt{sPRIo64} = qq{"I64o"};
++$opt{sPRIu64} = qq{"I64u"};
++$opt{sPRIx64} = qq{"I64x"};
++$opt{uvXUformat} = qq{"I64X"};
++$opt{uvoformat} = qq{"I64o"};
++$opt{uvsize} = 8;
++$opt{uvtype} = qq{unsigned $int64};
++$opt{uvuformat} = qq{"I64u"};
++$opt{uvxformat} = qq{"I64x"};
++# end of 64-bit patch
++
++# set large files options
++if ($opt{uselargefiles} eq 'define') {
      $opt{lseeksize} = 8;
 -    if ($opt{cc} eq 'cl') {
 -	$opt{lseektype} = '__int64';

@@ -3717,6 +3717,7 @@ sub _patch_config_gc {
         $line =~ s/^uvxformat=.*/uvxformat='"I64x"'/;
         $line =~ s/^d_quad=.*/d_quad='define'/;
         $line =~ s/^quadkind=.*/quadkind='3'/;
+        $line =~ s/^use64bitint=.*/use64bitint='define'/;
         print $new $line;
     }
 

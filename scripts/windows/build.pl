@@ -130,7 +130,7 @@ sub run {
     group "patching..." => sub {
         local $ENV{PERL5_PATCHPERL_PLUGIN} = "GitHubActions";
         my $dir = pushd($perldir);
-        Devel::PatchPerl->patch_source();
+        Devel::PatchPerl->patch_source("5.12.0");
     };
 
     group "build and install Perl" => sub {

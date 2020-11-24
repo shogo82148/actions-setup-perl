@@ -3689,7 +3689,32 @@ sub _patch_config_gc {
     open my $orig, '<', File::Spec->catfile('win32', 'config.gc') or die "failed to open win32/config.gc: $!";
     open my $new, '>', File::Spec->catfile('win32', 'config.gc.new') or die "failed to open win32/config.gc.new: $!";
 
+    # overwrite 64-bit configure
     while(my $line = <$orig>) {
+        $line =~ s/^d_atoll=.*/d_atoll='define'/;
+        $line =~ s/^d_strtoll=.*/d_strtoll='define'/;
+        $line =~ s/^d_strtoull=.*/d_strtoull='define'/;
+        $line =~ s/^ptrsize=.*/ptrsize='8'/;
+        $line =~ s/^sizesize=.*/sizesize='8'/;
+        $line =~ s/^ssizetype=.*/ssizetype='int'/;
+        $line =~ s/^st_ino_size=.*/st_ino_size='8'/;
+        $line =~ s/^d_nv_preserves_uv=.*/d_nv_preserves_uv='undef'/;
+        $line =~ s/^nv_preserves_uv_bits=.*/nv_preserves_uv_bits='53'/;
+        $line =~ s/^ivdformat=.*/ivdformat='"I64d"'/;
+        $line =~ s/^ivsize=.*/ivsize='8'/;
+        $line =~ s/^ivtype=.*/ivtype='long long'/;
+        $line =~ s/^sPRIXU64=.*/sPRIXU64='"I64X"'/;
+        $line =~ s/^sPRId64=.*/sPRId64='"I64d"'/;
+        $line =~ s/^sPRIi64=.*/sPRIi64='"I64i"'/;
+        $line =~ s/^sPRIo64=.*/sPRIo64='"I64o"'/;
+        $line =~ s/^sPRIu64=.*/sPRIu64='"I64u"'/;
+        $line =~ s/^sPRIx64=.*/sPRIx64='"I64x"'/;
+        $line =~ s/^uvXUformat=.*/uvXUformat='"I64X"'/;
+        $line =~ s/^uvoformat=.*/uvoformat='"I64o"'/;
+        $line =~ s/^uvsize=.*/uvsize='8'/;
+        $line =~ s/^uvtype=.*/uvtype='unsigned long long'/;
+        $line =~ s/^uvuformat=.*/uvuformat='"I64u"'/;
+        $line =~ s/^uvxformat=.*/uvxformat='"I64x"'/;
         $line =~ s/^d_quad=.*/d_quad='define'/;
         print $new $line;
     }

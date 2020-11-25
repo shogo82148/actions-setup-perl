@@ -19,6 +19,9 @@ on:
         required: false
         default: ""
 
+env:
+  OPENSSL_VERSION: "1_1_1h"
+
 jobs:
   list:
     runs-on: ubuntu-latest
@@ -46,15 +49,30 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: msys2/setup-msys2@v2
+      - name: Set up MSYS2
+        uses: msys2/setup-msys2@v2
         with:
           install: make mingw-w64-x86_64-gcc nasm
+
+      - id: cache-path
+        name: Get Cache Path
+        run: |
+          echo "::set-output name=openssh-path::$(cygpath --windows --absolute "./openssl-OpenSSL_$OPENSSL_VERSION")"
+        shell: "msys2 {0}"
+      - name: restore cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{ steps.cache-path.outputs.openssh-path }}
+          key: openssh-${{ runner.os }}-$OPENSSL_VERSION
+
       - name: install OpenSSL
         run: |
           set -eux
-          OPENSSL_VERSION=1_1_1h
-          curl --retry 3 -sSL "https://github.com/openssl/openssl/archive/OpenSSL_$OPENSSL_VERSION.tar.gz" -o openssl.tar.gz
-          tar xzf openssl.tar.gz
+          if [[ ! -d "openssl-OpenSSL_$OPENSSL_VERSION" ]]; then
+            curl --retry 3 -sSL "https://github.com/openssl/openssl/archive/OpenSSL_$OPENSSL_VERSION.tar.gz" -o openssl.tar.gz
+            tar xzf openssl.tar.gz
+          fi
           cd "openssl-OpenSSL_$OPENSSL_VERSION"
           perl Configure --prefix="$(cygpath "$RUNNER_TOOL_CACHE\perl\${{ matrix.perl }}\x64")" mingw64
           make "-j$(nproc)"

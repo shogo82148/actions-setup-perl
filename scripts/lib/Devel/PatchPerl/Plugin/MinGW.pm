@@ -110,12 +110,21 @@ my @patch = (
             [ \&_patch_threads ],
         ],
     },
+
+    {
+        perl => [
+            qr/^5\.9\.2$/,
+        ],
+        subs => [
+            [ \&_patch_buildext_5092 ],
+        ],
+    },
     {
         perl => [
             qr/^5\.7\.1$/,
         ],
         subs => [
-            [ \&_patch_buildext ],
+            [ \&_patch_buildext_5071 ],
         ],
     },
 
@@ -4636,7 +4645,25 @@ PATCH
 PATCH
 }
 
-sub _patch_buildext {
+sub _patch_buildext_5092 {
+    _patch(<<'PATCH');
+diff --git a/win32/buildext.pl b/win32/buildext.pl
+index 90518d1e4f..2f18b9070d 100644
+--- a/win32/buildext.pl
++++ b/win32/buildext.pl
+@@ -61,7 +61,7 @@ if ($opts{'list-static-libs'} || $opts{'create-perllibst-h'}) {
+       open my $fh, "<..\\lib\\auto\\$_\\extralibs.ld" or die "can't open <..\\lib\\auto\\$_\\extralibs.ld: $!";
+       $extralibs{$_}++ for grep {/\S/} split /\s+/, join '', <$fh>;
+     }
+-    print map {/([^\/]+)$/;"..\\lib\\auto\\$_/$1$Config{_a} "} @statics;
++    print map {s|/|\\|g;m|([^\\]+)$|;"..\\lib\\auto\\$_\\$1$Config{_a} "} @statics;
+     print map {"$_ "} sort keys %extralibs;
+   }
+   exit;
+PATCH
+}
+
+sub _patch_buildext_5071 {
     _patch(<<'PATCH');
 --- win32/buildext.pl
 +++ win32/buildext.pl

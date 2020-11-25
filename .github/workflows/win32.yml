@@ -64,7 +64,7 @@ jobs:
         with:
           path: |
             ${{ steps.cache-path.outputs.openssh-path }}
-          key: openssh-${{ runner.os }}-$OPENSSL_VERSION
+          key: openssh-${{ runner.os }}-${{ env.OPENSSL_VERSION }}
 
       - name: install OpenSSL
         run: |

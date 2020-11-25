@@ -3133,68 +3133,6 @@ PATCH
  	print "\t$err => $err{$err},\n";
 PATCH
     }
-
-    if (_ge($version, "5.10.0")) {
-        return;
-    }
-
-    if (_ge($version, "5.9.0")) {
-        # maint, Win32, GCC 3.2
-        # from https://github.com/Perl/perl5/commit/99228ec22de3d3407bfd2ef2153516707cceb96c
-        _patch(<<'PATCH');
---- ext/Errno/Errno_pm.PL
-+++ ext/Errno/Errno_pm.PL
-@@ -229,8 +229,16 @@ sub write_errno_pm {
- 	    my($name,$expr);
- 	    next unless ($name, $expr) = /"(.*?)"\s*\[\s*\[\s*(.*?)\s*\]\s*\]/;
- 	    next if $name eq $expr;
--	    $expr =~ s/(\d+)[LU]+\b/$1/g; # 2147483647L et alia
-+	    $expr =~ s/\(?\(\w+\)([^\)]*)\)?/$1/; # ((type)0xcafebabe) at alia
-+	    $expr =~ s/((?:0x)?[0-9a-fA-F]+)[LU]+\b/$1/g; # 2147483647L et alia
-+	    next if $expr =~ m/^[a-zA-Z]+$/; # skip some Win32 functions
-+	    if($expr =~ m/^0[xX]/) {
-+		$err{$name} = hex $expr;
-+	    }
-+	    else {
- 	    $err{$name} = eval $expr;
-+	}
-+	    delete $err{$name} unless defined $err{$name};
- 	}
- 	close(CPPO);
-     }
-PATCH
-    }
-
-    if (_ge($version, "5.8.5")) {
-        return;
-    }
-
-    if (_ge($version, "5.6.0")) {
-        # maint, Win32, GCC 3.2
-        # from https://github.com/Perl/perl5/commit/99228ec22de3d3407bfd2ef2153516707cceb96c
-        _patch(<<'PATCH');
---- ext/Errno/Errno_pm.PL
-+++ ext/Errno/Errno_pm.PL
-@@ -229,8 +229,16 @@ sub write_errno_pm {
- 	    my($name,$expr);
- 	    next unless ($name, $expr) = /"(.*?)"\s*\[\s*\[\s*(.*?)\s*\]\s*\]/;
- 	    next if $name eq $expr;
--	    $expr =~ s/(\d+)[LU]+\b/$1/g; # 2147483647L et alia
-+	    $expr =~ s/\(?\(\w+\)([^\)]*)\)?/$1/; # ((type)0xcafebabe) at alia
-+	    $expr =~ s/((?:0x)?[0-9a-fA-F]+)[LU]+\b/$1/g; # 2147483647L et alia
-+	    next if $expr =~ m/^[a-zA-Z]+$/; # skip some Win32 functions
-+	    if($expr =~ m/^0[xX]/) {
-+		$err{$name} = hex $expr;
-+	    }
-+	    else {
- 	    $err{$name} = eval $expr;
-+	}
-+	    delete $err{$name} unless defined $err{$name};
- 	}
- 	close(CPPO);
-     }
-PATCH
-    }
 }
 
 sub _patch_socket_h {

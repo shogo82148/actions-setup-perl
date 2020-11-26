@@ -3865,7 +3865,7 @@ PATCH
         return;
     }
 
-    if (_ge($version, "5.12.0")) {
+    if (_ge($version, "5.11.0")) {
         _patch(<<'PATCH');
 --- win32/config_sh.PL
 +++ win32/config_sh.PL

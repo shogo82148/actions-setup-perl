@@ -3865,7 +3865,7 @@ PATCH
         return;
     }
 
-    if (_ge($version, "5.11.0")) {
+    if (_ge($version, "5.10.1")) {
         _patch(<<'PATCH');
 --- win32/config_sh.PL
 +++ win32/config_sh.PL
@@ -3910,10 +3910,8 @@ PATCH
 
     if (_ge($version, "5.10.0")) {
         _patch(<<'PATCH');
-diff --git a/win32/config_sh.PL b/win32/config_sh.PL
-index 67f9c20353..eb2a743518 100644
---- a/win32/config_sh.PL
-+++ b/win32/config_sh.PL
+--- win32/config_sh.PL
++++ win32/config_sh.PL
 @@ -117,10 +117,42 @@ unless (defined $ENV{SYSTEMROOT}) { # SystemRoot has been introduced by WinNT
      $opt{d_link} = 'undef';
  }

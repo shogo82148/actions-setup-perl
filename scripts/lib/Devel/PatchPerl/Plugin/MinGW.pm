@@ -3910,12 +3910,15 @@ PATCH
 
     if (_ge($version, "5.10.0")) {
         _patch(<<'PATCH');
---- win32/config_sh.PL
-+++ win32/config_sh.PL
-@@ -117,6 +117,34 @@ unless (defined $ENV{SYSTEMROOT}) { # SystemRoot has been introduced by WinNT
+diff --git a/win32/config_sh.PL b/win32/config_sh.PL
+index 67f9c20353..eb2a743518 100644
+--- a/win32/config_sh.PL
++++ b/win32/config_sh.PL
+@@ -117,10 +117,42 @@ unless (defined $ENV{SYSTEMROOT}) { # SystemRoot has been introduced by WinNT
      $opt{d_link} = 'undef';
  }
  
+-if ($opt{uselargefiles} ne 'define') {
 +# 64-bit patch is hard coded from here
 +my $int64  = 'long long';
 +$opt{d_atoll} = 'define';
@@ -3942,11 +3945,20 @@ PATCH
 +$opt{uvtype} = qq{unsigned $int64};
 +$opt{uvuformat} = qq{"I64u"};
 +$opt{uvxformat} = qq{"I64x"};
-+# end of 64-bit patch
 +
- if ($opt{uselargefiles} ne 'define') {
++if ($opt{uselargefiles} eq 'define') {
++     $opt{lseeksize} = 8;
++     $opt{lseektype} = $int64;
++}
++else {
      $opt{lseeksize} = 4;
-     $opt{lseektype} = 'off_t';
+-    $opt{lseektype} = 'off_t';
++    $opt{lseektype} = 'long';
+ }
++# end of 64-bit patch
+ 
+ if ($opt{useithreads} eq 'define' && $opt{ccflags} =~ /-DPERL_IMPLICIT_SYS\b/) {
+     $opt{d_pseudofork} = 'define';
 PATCH
         return;
     }

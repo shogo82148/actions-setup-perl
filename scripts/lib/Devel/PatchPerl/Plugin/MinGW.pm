@@ -3727,6 +3727,8 @@ sub _patch_config_gc {
         $line =~ s/^d_quad=.*/d_quad='define'/;
         $line =~ s/^quadkind=.*/quadkind='3'/;
         $line =~ s/^use64bitint=.*/use64bitint='define'/;
+        $line =~ s/^lseeksize=.*/lseeksize='8'/;
+        $line =~ s/^lseektype=.*/lseektype='long long'/;
         print $new $line;
     }
 

@@ -4670,7 +4670,7 @@ sub _patch_system {
     _patch(<<'PATCH');
 --- embed.fnc
 +++ embed.fnc
-@@ -209,7 +209,7 @@ p	|bool	|do_exec	|NN const char* cmd
+@@ -200,7 +200,7 @@ p	|bool	|do_exec	|NN const char* cmd
  #endif
  
  #if defined(WIN32) || defined(__SYMBIAN32__)
@@ -4679,23 +4679,16 @@ sub _patch_system {
  Ap	|int	|do_spawn	|NN char* cmd
  Ap	|int	|do_spawn_nowait|NN char* cmd
  #endif
-diff --git a/proto.h b/proto.h
-index 4e4abf1434..8dbbc585dd 100644
 --- proto.h
 +++ proto.h
-@@ -575,11 +575,10 @@ PERL_CALLCONV bool	Perl_do_exec(pTHX_ const char* cmd)
+@@ -430,7 +430,6 @@ PERL_CALLCONV bool	Perl_do_exec(pTHX_ const char* cmd)
  
  #if defined(WIN32) || defined(__SYMBIAN32__)
  PERL_CALLCONV int	Perl_do_aspawn(pTHX_ SV* really, SV** mark, SV** sp)
 -			__attribute__nonnull__(pTHX_1)
  			__attribute__nonnull__(pTHX_2)
  			__attribute__nonnull__(pTHX_3);
- #define PERL_ARGS_ASSERT_DO_ASPAWN	\
--	assert(really); assert(mark); assert(sp)
-+	assert(mark); assert(sp)
  
- PERL_CALLCONV int	Perl_do_spawn(pTHX_ char* cmd)
- 			__attribute__nonnull__(pTHX_1);
 PATCH
 }
 

@@ -112,6 +112,14 @@ my @patch = (
     },
 
     {
+        per => [
+            qr/^5\.10\.0$/,
+        ],
+        subs => [
+            [ \&_patch_system ],
+        ],
+    }
+    {
         perl => [
             qr/^5\.9\.2$/,
         ],
@@ -4654,6 +4662,40 @@ PATCH
  # Install main perl executables
  # Make links to ordinary names if installbin directory isn't current directory.
  
+PATCH
+}
+
+sub _patch_system {
+    # from https://github.com/Perl/perl5/commit/5f9e9d12f9b91d15f5287353e242748cb029b693
+    _patch(<<'PATCH');
+--- embed.fnc
++++ embed.fnc
+@@ -209,7 +209,7 @@ p	|bool	|do_exec	|NN const char* cmd
+ #endif
+ 
+ #if defined(WIN32) || defined(__SYMBIAN32__)
+-Ap	|int	|do_aspawn	|NN SV* really|NN SV** mark|NN SV** sp
++Ap	|int	|do_aspawn	|NULLOK SV* really|NN SV** mark|NN SV** sp
+ Ap	|int	|do_spawn	|NN char* cmd
+ Ap	|int	|do_spawn_nowait|NN char* cmd
+ #endif
+diff --git a/proto.h b/proto.h
+index 4e4abf1434..8dbbc585dd 100644
+--- proto.h
++++ proto.h
+@@ -575,11 +575,10 @@ PERL_CALLCONV bool	Perl_do_exec(pTHX_ const char* cmd)
+ 
+ #if defined(WIN32) || defined(__SYMBIAN32__)
+ PERL_CALLCONV int	Perl_do_aspawn(pTHX_ SV* really, SV** mark, SV** sp)
+-			__attribute__nonnull__(pTHX_1)
+ 			__attribute__nonnull__(pTHX_2)
+ 			__attribute__nonnull__(pTHX_3);
+ #define PERL_ARGS_ASSERT_DO_ASPAWN	\
+-	assert(really); assert(mark); assert(sp)
++	assert(mark); assert(sp)
+ 
+ PERL_CALLCONV int	Perl_do_spawn(pTHX_ char* cmd)
+ 			__attribute__nonnull__(pTHX_1);
 PATCH
 }
 

@@ -118,7 +118,7 @@ my @patch = (
         subs => [
             [ \&_patch_system ],
         ],
-    }
+    },
     {
         perl => [
             qr/^5\.9\.2$/,

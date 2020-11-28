@@ -7045,8 +7045,8 @@ Extensions_static : buildext.pl $(HAVEMINIPERL) $(CONFIGPM)
 
 doc: $(PERLEXE)
 	$(PERLEXE) -I..\lib ..\installhtml --podroot=.. --htmldir=$(HTMLDIR) \
-	    --podpath=pod:lib:utils --htmlroot="file://$(subst :,|,$(INST_HTML))"\
-	    --recurse
+	    --podpath=pod:lib:ext:utils --htmlroot="file://$(subst :,|,$(INST_HTML))" \
+	    --libpod=perlfunc:perlguts:perlvar:perlrun:perlop --recurse
 
 # Note that this next section is parsed (and regenerated) by pod/buildtoc
 # so please check that script before making structural changes here
@@ -7732,8 +7732,8 @@ PATCH
 -doc: $(PERLEXE)
 +doc: $(PERLEXE) ..\pod\perltoc.pod
  	$(PERLEXE) -I..\lib ..\installhtml --podroot=.. --htmldir=$(HTMLDIR) \
- 	    --podpath=pod:lib:utils --htmlroot="file://$(subst :,|,$(INST_HTML))"\
- 	    --recurse
+ 	    --podpath=pod:lib:ext:utils --htmlroot="file://$(subst :,|,$(INST_HTML))" \
+ 	    --libpod=perlfunc:perlguts:perlvar:perlrun:perlop --recurse
  
 -# Note that this next section is parsed (and regenerated) by pod/buildtoc
 -# so please check that script before making structural changes here
@@ -8653,6 +8653,20 @@ MAKEFILE
  	$(PERLEXE) -I..\lib $(PL2BAT) $(UTILS)
 PATCH
     }
+    if (_ge($version, "5.9.2")) {
+        _patch_gnumakefile($version, <<'PATCH');
+--- win32/GNUmakefile
++++ win32/GNUmakefile
+@@ -745,6 +745,7 @@
+ #most of deps of this target are in DYNALOADER and therefore omitted here
+ Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
+ 	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR)
++	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext
+ 
+ #-------------------------------------------------------------------------------
+ 
+PATCH
+    }
     if (_ge($version, "5.9.3")) {
         _patch_gnumakefile($version, <<'PATCH');
 --- win32/GNUmakefile
@@ -8703,6 +8717,34 @@ PATCH
 +	$(MINIPERL) -I..\lib buildext.pl --create-perllibst-h
  	$(MINIPERL) -w ..\makedef.pl PLATFORM=win32 $(OPTIMIZE) $(DEFINES) $(BUILDOPT) \
  	    CCTYPE=$(CCTYPE) > perldll.def
+ 
+@@ -681,9 +690,9 @@
+ $(PERLIMPLIB) : perldll.def
+ 	$(IMPLIB) -k -d perldll.def -l $(PERLIMPLIB) -e $(PERLEXPLIB)
+ 
+-$(PERLDLL): perldll.def $(PERLEXPLIB) $(PERLDLL_OBJ)
++$(PERLDLL): perldll.def $(PERLEXPLIB) $(PERLDLL_OBJ) Extensions_static
+ 	$(LINK32) -mdll -o $@ $(BLINK_FLAGS) \
+-	   $(PERLDLL_OBJ) $(LIBFILES) $(PERLEXPLIB)
++	   $(PERLDLL_OBJ) $(shell type Extensions_static) $(LIBFILES) $(PERLEXPLIB)
+ 
+ $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
+ 	cd .. && miniperl minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
+@@ -744,8 +753,13 @@
+ 
+ #most of deps of this target are in DYNALOADER and therefore omitted here
+ Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
+-	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR)
+-	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext
++	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --dynamic
++	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext --dynamic
++
++Extensions_static : buildext.pl $(HAVEMINIPERL) $(CONFIGPM)
++	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --static
++	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext --static
++	$(MINIPERL) -I..\lib buildext.pl --list-static-libs > Extensions_static
+ 
+ #-------------------------------------------------------------------------------
  
 PATCH
     }
@@ -8824,16 +8866,10 @@ PATCH
  $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
  
  #----------------------------------------------------------------
-@@ -691,9 +714,24 @@
- $(PERLIMPLIB) : perldll.def
- 	$(IMPLIB) -k -d perldll.def -l $(PERLIMPLIB) -e $(PERLEXPLIB)
- 
--$(PERLDLL): perldll.def $(PERLEXPLIB) $(PERLDLL_OBJ)
-+$(PERLDLL): perldll.def $(PERLEXPLIB) $(PERLDLL_OBJ) Extensions_static
+@@ -695,6 +718,21 @@
  	$(LINK32) -mdll -o $@ $(BLINK_FLAGS) \
--	   $(PERLDLL_OBJ) $(LIBFILES) $(PERLEXPLIB)
-+	   $(PERLDLL_OBJ) $(shell type Extensions_static) $(LIBFILES) $(PERLEXPLIB)
-+
+ 	   $(PERLDLL_OBJ) $(shell type Extensions_static) $(LIBFILES) $(PERLEXPLIB)
+ 
 +$(PERLSTATICLIB): $(PERLDLL_OBJ) Extensions_static
 +	$(LIB32) $(LIB_FLAGS) $@ $(PERLDLL_OBJ)
 +	if exist $(STATICDIR) rmdir /s /q $(STATICDIR)
@@ -8848,9 +8884,10 @@ PATCH
 +	$(MINIPERL) -I..\lib ..\uupacktool.pl -u $(PERLEXE_ICO).packd $(PERLEXE_ICO)
 +
 +$(PERLEXE_RES): perlexe.rc $(PERLEXE_ICO)
- 
++
  $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
  	cd .. && miniperl minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
+ 
 @@ -718,6 +756,15 @@
  	$(MINIPERL) -I..\lib ..\x2p\s2p.PL
  	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) $(LIBFILES) $(X2P_OBJ)
@@ -8878,7 +8915,7 @@ PATCH
  $(DYNALOADER).c: $(HAVEMINIPERL) $(EXTDIR)\DynaLoader\dl_win32.xs $(CONFIGPM)
  	if not exist $(AUTODIR) mkdir $(AUTODIR)
  	cd $(EXTDIR)\DynaLoader \
-@@ -748,13 +799,25 @@
+@@ -748,18 +799,24 @@
  $(EXTDIR)\DynaLoader\dl_win32.xs: dl_win32.xs
  	copy dl_win32.xs $(EXTDIR)\DynaLoader\dl_win32.xs
  
@@ -8892,20 +8929,20 @@ PATCH
  
  #most of deps of this target are in DYNALOADER and therefore omitted here
  Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
--	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR)
 +	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
-+	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --dynamic
+ 	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --dynamic
+-	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext --dynamic
 +	-if exist ext $(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext --dynamic
-+
-+Extensions_static : buildext.pl $(HAVEMINIPERL) $(CONFIGPM)
+ 
+ Extensions_static : buildext.pl $(HAVEMINIPERL) $(CONFIGPM)
 +	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
-+	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --static
+ 	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --static
+-	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext --static
 +	-if exist ext $(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext --static
-+	$(MINIPERL) -I..\lib buildext.pl --list-static-libs > Extensions_static
+ 	$(MINIPERL) -I..\lib buildext.pl --list-static-libs > Extensions_static
  
  #-------------------------------------------------------------------------------
- 
-@@ -811,7 +874,10 @@
+@@ -817,7 +874,10 @@
  installbare : utils
  	$(PERLEXE) ..\installperl
  	if exist $(WPERLEXE) $(XCOPY) $(WPERLEXE) $(INST_BIN)\$(NULL)

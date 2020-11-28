@@ -110,12 +110,29 @@ my @patch = (
             [ \&_patch_threads ],
         ],
     },
+
+    {
+        perl => [
+            qr/^5\.10\.0$/,
+        ],
+        subs => [
+            [ \&_patch_system ],
+        ],
+    },
+    {
+        perl => [
+            qr/^5\.9\.2$/,
+        ],
+        subs => [
+            [ \&_patch_buildext_5092 ],
+        ],
+    },
     {
         perl => [
             qr/^5\.7\.1$/,
         ],
         subs => [
-            [ \&_patch_buildext ],
+            [ \&_patch_buildext_5071 ],
         ],
     },
 
@@ -3357,7 +3374,32 @@ PATCH
         _patch(<<'PATCH');
 --- win32/config_H.gc
 +++ win32/config_H.gc
-@@ -3692,14 +3692,18 @@
+@@ -912,23 +912,15 @@
+  *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, QUAD_IS_INT64_T,
+  *	or QUAD_IS___INT64.
+  */
+-#define HAS_QUAD	/**/
+-#ifdef HAS_QUAD
+-#   ifndef _MSC_VER
++#define HAS_QUAD
+ #	define Quad_t long long	/**/
+ #	define Uquad_t unsigned long long	/**/
+ #	define QUADKIND 3	/**/
+-#   else
+-#	define Quad_t __int64	/**/
+-#	define Uquad_t unsigned __int64	/**/
+-#	define QUADKIND 5	/**/
+-#   endif
+ #   define QUAD_IS_INT	1
+ #   define QUAD_IS_LONG	2
+ #   define QUAD_IS_LONG_LONG	3
+ #   define QUAD_IS_INT64_T	4
+ #   define QUAD_IS___INT64	5
+-#endif
+ 
+ /* OSNAME:
+  *	This symbol contains the name of the operating system, as determined
+@@ -3692,14 +3684,18 @@
   *	This symbol, if defined, indicates that the mkdtemp routine is
   *	available to exclusively create a uniquely named temporary directory.
   */
@@ -3407,21 +3449,33 @@ PATCH
  
  /* HAS_MKSTEMPS:
   *	This symbol, if defined, indicates that the mkstemps routine is
-@@ -3849,7 +3853,7 @@
+@@ -3849,21 +3853,14 @@
   *	Quad_t, and its unsigned counterpar, Uquad_t. QUADKIND will be one
   *	of QUAD_IS_INT, QUAD_IS_LONG, QUAD_IS_LONG_LONG, or QUAD_IS_INT64_T.
   */
 -/*#define HAS_QUAD	/**/
+-#ifdef HAS_QUAD
+-#   ifndef _MSC_VER
 +#define HAS_QUAD
- #ifdef HAS_QUAD
- #   ifndef _MSC_VER
  #	define Quad_t long long	/**/
+ #	define Uquad_t unsigned long long	/**/
+-#   else
+-#	define Quad_t __int64	/**/
+-#	define Uquad_t unsigned __int64	/**/
+-#   endif
+-#   define QUADKIND 5	/**/
++#   define QUADKIND 3	/**/
+ #   define QUAD_IS_INT	1
+ #   define QUAD_IS_LONG	2
+ #   define QUAD_IS_LONG_LONG	3
+ #   define QUAD_IS_INT64_T	4
+-#endif
+ 
+ /* IVTYPE:
+  *	This symbol defines the C type used for Perl's IV.
 PATCH
         return;
     }
-
-    _patch(<<'PATCH');
-PATCH
 
     if (_ge($version, "5.9.4")) {
         _patch(<<'PATCH');
@@ -3649,15 +3703,40 @@ PATCH
 
 sub _patch_config_gc {
     my $version = shift;
-    if (_ge($version, "5.10.0")) {
-        return;
-    }
-
     open my $orig, '<', File::Spec->catfile('win32', 'config.gc') or die "failed to open win32/config.gc: $!";
     open my $new, '>', File::Spec->catfile('win32', 'config.gc.new') or die "failed to open win32/config.gc.new: $!";
 
+    # overwrite 64-bit configure
     while(my $line = <$orig>) {
+        $line =~ s/^d_atoll=.*/d_atoll='define'/;
+        $line =~ s/^d_strtoll=.*/d_strtoll='define'/;
+        $line =~ s/^d_strtoull=.*/d_strtoull='define'/;
+        $line =~ s/^ptrsize=.*/ptrsize='8'/;
+        $line =~ s/^sizesize=.*/sizesize='8'/;
+        $line =~ s/^ssizetype=.*/ssizetype='int'/;
+        $line =~ s/^st_ino_size=.*/st_ino_size='8'/;
+        $line =~ s/^d_nv_preserves_uv=.*/d_nv_preserves_uv='undef'/;
+        $line =~ s/^nv_preserves_uv_bits=.*/nv_preserves_uv_bits='53'/;
+        $line =~ s/^ivdformat=.*/ivdformat='"I64d"'/;
+        $line =~ s/^ivsize=.*/ivsize='8'/;
+        $line =~ s/^ivtype=.*/ivtype='long long'/;
+        $line =~ s/^sPRIXU64=.*/sPRIXU64='"I64X"'/;
+        $line =~ s/^sPRId64=.*/sPRId64='"I64d"'/;
+        $line =~ s/^sPRIi64=.*/sPRIi64='"I64i"'/;
+        $line =~ s/^sPRIo64=.*/sPRIo64='"I64o"'/;
+        $line =~ s/^sPRIu64=.*/sPRIu64='"I64u"'/;
+        $line =~ s/^sPRIx64=.*/sPRIx64='"I64x"'/;
+        $line =~ s/^uvXUformat=.*/uvXUformat='"I64X"'/;
+        $line =~ s/^uvoformat=.*/uvoformat='"I64o"'/;
+        $line =~ s/^uvsize=.*/uvsize='8'/;
+        $line =~ s/^uvtype=.*/uvtype='unsigned long long'/;
+        $line =~ s/^uvuformat=.*/uvuformat='"I64u"'/;
+        $line =~ s/^uvxformat=.*/uvxformat='"I64x"'/;
         $line =~ s/^d_quad=.*/d_quad='define'/;
+        $line =~ s/^quadkind=.*/quadkind='3'/;
+        $line =~ s/^use64bitint=.*/use64bitint='define'/;
+        $line =~ s/^lseeksize=.*/lseeksize='8'/;
+        $line =~ s/^lseektype=.*/lseektype='long long'/;
         print $new $line;
     }
 
@@ -3796,7 +3875,7 @@ PATCH
         return;
     }
 
-    if (_ge($version, "5.12.0")) {
+    if (_ge($version, "5.10.1")) {
         _patch(<<'PATCH');
 --- win32/config_sh.PL
 +++ win32/config_sh.PL
@@ -3840,6 +3919,55 @@ PATCH
     }
 
     if (_ge($version, "5.10.0")) {
+        _patch(<<'PATCH');
+--- win32/config_sh.PL
++++ win32/config_sh.PL
+@@ -117,10 +117,42 @@ unless (defined $ENV{SYSTEMROOT}) { # SystemRoot has been introduced by WinNT
+     $opt{d_link} = 'undef';
+ }
+ 
+-if ($opt{uselargefiles} ne 'define') {
++# 64-bit patch is hard coded from here
++my $int64  = 'long long';
++$opt{d_atoll} = 'define';
++$opt{d_strtoll} = 'define';
++$opt{d_strtoull} = 'define';
++$opt{ptrsize} = 8;
++$opt{sizesize} = 8;
++$opt{ssizetype} = $int64;
++$opt{st_ino_size} = 8;
++$opt{d_nv_preserves_uv} = 'undef';
++$opt{nv_preserves_uv_bits} = 53;
++$opt{ivdformat} = qq{"I64d"};
++$opt{ivsize} = 8;
++$opt{ivtype} = $int64;
++$opt{sPRIXU64} = qq{"I64X"};
++$opt{sPRId64} = qq{"I64d"};
++$opt{sPRIi64} = qq{"I64i"};
++$opt{sPRIo64} = qq{"I64o"};
++$opt{sPRIu64} = qq{"I64u"};
++$opt{sPRIx64} = qq{"I64x"};
++$opt{uvXUformat} = qq{"I64X"};
++$opt{uvoformat} = qq{"I64o"};
++$opt{uvsize} = 8;
++$opt{uvtype} = qq{unsigned $int64};
++$opt{uvuformat} = qq{"I64u"};
++$opt{uvxformat} = qq{"I64x"};
++
++if ($opt{uselargefiles} eq 'define') {
++     $opt{lseeksize} = 8;
++     $opt{lseektype} = $int64;
++}
++else {
+     $opt{lseeksize} = 4;
+-    $opt{lseektype} = 'off_t';
++    $opt{lseektype} = 'long';
+ }
++# end of 64-bit patch
+ 
+ if ($opt{useithreads} eq 'define' && $opt{ccflags} =~ /-DPERL_IMPLICIT_SYS\b/) {
+     $opt{d_pseudofork} = 'define';
+PATCH
         return;
     }
 
@@ -4537,7 +4665,52 @@ PATCH
 PATCH
 }
 
-sub _patch_buildext {
+sub _patch_system {
+    # from https://github.com/Perl/perl5/commit/5f9e9d12f9b91d15f5287353e242748cb029b693
+    _patch(<<'PATCH');
+--- embed.fnc
++++ embed.fnc
+@@ -200,7 +200,7 @@ p	|bool	|do_exec	|NN const char* cmd
+ #endif
+ 
+ #if defined(WIN32) || defined(__SYMBIAN32__)
+-Ap	|int	|do_aspawn	|NN SV* really|NN SV** mark|NN SV** sp
++Ap	|int	|do_aspawn	|NULLOK SV* really|NN SV** mark|NN SV** sp
+ Ap	|int	|do_spawn	|NN char* cmd
+ Ap	|int	|do_spawn_nowait|NN char* cmd
+ #endif
+--- proto.h
++++ proto.h
+@@ -430,7 +430,6 @@ PERL_CALLCONV bool	Perl_do_exec(pTHX_ const char* cmd)
+ 
+ #if defined(WIN32) || defined(__SYMBIAN32__)
+ PERL_CALLCONV int	Perl_do_aspawn(pTHX_ SV* really, SV** mark, SV** sp)
+-			__attribute__nonnull__(pTHX_1)
+ 			__attribute__nonnull__(pTHX_2)
+ 			__attribute__nonnull__(pTHX_3);
+ 
+PATCH
+}
+
+sub _patch_buildext_5092 {
+    _patch(<<'PATCH');
+diff --git a/win32/buildext.pl b/win32/buildext.pl
+index 90518d1e4f..2f18b9070d 100644
+--- a/win32/buildext.pl
++++ b/win32/buildext.pl
+@@ -61,7 +61,7 @@ if ($opts{'list-static-libs'} || $opts{'create-perllibst-h'}) {
+       open my $fh, "<..\\lib\\auto\\$_\\extralibs.ld" or die "can't open <..\\lib\\auto\\$_\\extralibs.ld: $!";
+       $extralibs{$_}++ for grep {/\S/} split /\s+/, join '', <$fh>;
+     }
+-    print map {/([^\/]+)$/;"..\\lib\\auto\\$_/$1$Config{_a} "} @statics;
++    print map {s|/|\\|g;m|([^\\]+)$|;"..\\lib\\auto\\$_\\$1$Config{_a} "} @statics;
+     print map {"$_ "} sort keys %extralibs;
+   }
+   exit;
+PATCH
+}
+
+sub _patch_buildext_5071 {
     _patch(<<'PATCH');
 --- win32/buildext.pl
 +++ win32/buildext.pl

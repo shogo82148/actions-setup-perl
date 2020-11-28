@@ -102,11 +102,11 @@ jobs:
         working-directory: ./scripts/windows
 
       # for debugging
-      - uses: actions/upload-artifact@v1
-        with:
-          name: perl-${{ matrix.perl }}
-          path: ${{ runner.temp }}/perl-${{ matrix.perl }}
-        if: failure()
+      # - uses: actions/upload-artifact@v1
+      #   with:
+      #     name: perl-${{ matrix.perl }}
+      #     path: ${{ runner.temp }}/perl-${{ matrix.perl }}
+      #   if: failure()
       - uses: actions/upload-artifact@v1
         with:
           name: perl-${{ matrix.perl }}-wer

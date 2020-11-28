@@ -114,6 +114,7 @@ my @patch = (
     {
         perl => [
             qr/^5\.10\.0$/,
+            qr/^5\.[0-9]\./,
         ],
         subs => [
             [ \&_patch_system ],

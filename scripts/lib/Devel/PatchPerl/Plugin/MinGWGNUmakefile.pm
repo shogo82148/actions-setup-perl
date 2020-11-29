@@ -8697,12 +8697,9 @@ PATCH
  $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
  	cd .. && miniperl minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
  
-@@ -743,8 +761,9 @@
- 	rem . > $@
- 
+@@ -745,6 +763,7 @@
  #most of deps of this target are in DYNALOADER and therefore omitted here
--Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
-+Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM) $(UNIDATAFILES)
+ Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
  	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR)
 +	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext
  
@@ -8791,7 +8788,7 @@ PATCH
 @@ -762,8 +770,13 @@
  
  #most of deps of this target are in DYNALOADER and therefore omitted here
- Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM) $(UNIDATAFILES)
+ Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
 -	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR)
 -	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext
 +	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --dynamic
@@ -9051,7 +9048,7 @@ PATCH
 @@ -764,12 +819,14 @@
  
  #most of deps of this target are in DYNALOADER and therefore omitted here
- Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM) $(UNIDATAFILES)
+ Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
 +	$(XCOPY) ..\\*.h $(COREDIR)\\*.*
  	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR) --dynamic
 -	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) ext --dynamic

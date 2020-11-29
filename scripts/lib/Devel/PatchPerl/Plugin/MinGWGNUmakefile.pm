@@ -8895,12 +8895,14 @@ PATCH
  PERLDLL_OBJ	= $(CORE_OBJ)
  PERLEXE_OBJ	= perlmain$(o)
  PERLEXEST_OBJ	= perlmainst$(o)
-@@ -489,13 +515,19 @@
+@@ -488,14 +514,20 @@
+ 
  .PHONY: all
  
- all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) $(UNIDATAFILES) $(PERLEXE) \
+-all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) $(UNIDATAFILES) $(PERLEXE) \
 -		$(X2P) MakePPPort Extensions
-+		$(X2P) MakePPPort Extensions $(PERLSTATIC)
++all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) \
++		$(UNIDATAFILES) MakePPPort $(PERLEXE) $(X2P) Extensions $(PERLSTATIC)
  	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
  
 +..\regcomp$(o) : ..\regnodes.h ..\regcharclass.h

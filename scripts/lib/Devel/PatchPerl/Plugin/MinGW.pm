@@ -4718,14 +4718,14 @@ PATCH
     _patch(<<'PATCH');
 --- embed.fnc
 +++ embed.fnc
-@@ -171,7 +171,7 @@ Ap	|bool	|do_close	|GV* gv|bool not_implicit
- p	|bool	|do_eof		|GV* gv
- p	|bool	|do_exec	|char* cmd
+@@ -208,7 +208,7 @@ p	|bool	|do_exec	|NN char* cmd
+ #endif
+ 
  #if defined(WIN32)
--Ap	|int	|do_aspawn	|SV* really|SV** mark|SV** sp
+-Ap	|int	|do_aspawn	|NN SV* really|NN SV** mark|NN SV** sp
 +Ap	|int	|do_aspawn	|NULLOK SV* really|NN SV** mark|NN SV** sp
- Ap	|int	|do_spawn	|char* cmd
- Ap	|int	|do_spawn_nowait|char* cmd
+ Ap	|int	|do_spawn	|NN char* cmd
+ Ap	|int	|do_spawn_nowait|NN char* cmd
  #endif
 PATCH
 }

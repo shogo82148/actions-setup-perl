@@ -189,7 +189,10 @@ sub run {
         # IO::Socket::SSL
         local $ENV{NO_NETWORK_TESTING} = 1;
         local $ENV{PERL_MM_USE_DEFAULT} = 1;
-        cpan_install('https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-2.068.tar.gz', 'IO::Socket::SSL', '5.8.1');
+        # NOTE:
+        # IO::Socket::SSL supports v5.8.1, but it doesn't work on Windows
+        # https://github.com/shogo82148/actions-setup-perl/pull/480#issuecomment-735391122
+        cpan_install('https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-2.068.tar.gz', 'IO::Socket::SSL', '5.8.7');
     };
 
     group "archiving" => sub {

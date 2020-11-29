@@ -853,10 +853,8 @@ PATCH
 
     if (_ge($version, "5.8.8")) {
         _patch(<<'PATCH');
-diff --git a/lib/ExtUtils/MM_Any.pm b/lib/ExtUtils/MM_Any.pm
-index 8369e63a24..04b6d2934b 100644
---- a/lib/ExtUtils/MM_Any.pm
-+++ b/lib/ExtUtils/MM_Any.pm
+--- lib/ExtUtils/MM_Any.pm
++++ lib/ExtUtils/MM_Any.pm
 @@ -632,6 +632,29 @@ MAKE_FRAG
  
  }
@@ -907,10 +905,8 @@ index 8369e63a24..04b6d2934b 100644
  
  =cut
  
-diff --git a/lib/ExtUtils/MM_Unix.pm b/lib/ExtUtils/MM_Unix.pm
-index 9d792a866e..a044bbced8 100644
---- a/lib/ExtUtils/MM_Unix.pm
-+++ b/lib/ExtUtils/MM_Unix.pm
+--- lib/ExtUtils/MM_Unix.pm
++++ lib/ExtUtils/MM_Unix.pm
 @@ -295,8 +295,8 @@ sub const_cccmd {
  
  =item const_config (o)

@@ -24,6 +24,7 @@ my @patch = (
             [ \&_patch_config_gc ],
             [ \&_patch_config_sh_pl ],
             [ \&_patch_installperl ],
+            [ \&_patch_errno ],
         ],
     },
     {
@@ -60,16 +61,6 @@ my @patch = (
         ],
         subs => [
             [ \&_patch_convert_errno_to_wsa_error ],
-        ],
-    },
-    {
-        perl => [
-            qr/^5\.1[0-9]\./,
-            qr/^5\.9\./,
-            qr/^5\.8\.[789]$/,
-        ],
-        subs => [
-            [ \&_patch_errno ],
         ],
     },
     {
@@ -3082,6 +3073,67 @@ PATCH
 sub _patch_errno {
     my $version = shift;
 
+    if (_ge($version, "5.20.0")) {
+        return;
+    }
+
+    if (_ge($version, "5.13.5")) {
+        # Silence noise from Errno_pm.PL on Windows
+        # from https://github.com/Perl/perl5/commit/7bf140906596458f94aa2d5969d3067c0d6441a4
+        # and https://github.com/Perl/perl5/commit/f974e9b91d22c1ef2d849ded64674df4f1b18bad
+        _patch(<<'PATCH');
+--- ext/Errno/Errno_pm.PL
++++ ext/Errno/Errno_pm.PL
+@@ -245,7 +245,7 @@ sub write_errno_pm {
+ 	    my($name,$expr);
+ 	    next unless ($name, $expr) = /"(.*?)"\s*\[\s*\[\s*(.*?)\s*\]\s*\]/;
+ 	    next if $name eq $expr;
+-	    $expr =~ s/\(?\([a-z_]\w*\)([^\)]*)\)?/$1/i; # ((type)0xcafebabe) at alia
+-	    $expr =~ s/((?:0x)?[0-9a-fA-F]+)[LU]+\b/$1/g; # 2147483647L et alia
++	    $expr =~ s/\(?\(\s*[a-z_]\w*\s*\)([^\)]*)\)?/$1/i; # ((type)0xcafebabe) at alia
++	    $expr =~ s/((?:0x)?[0-9a-fA-F]+)[luLU]+\b/$1/g; # 2147483647L et alia
+ 	    next if $expr =~ m/^[a-zA-Z]+$/; # skip some Win32 functions
+ 	    if($expr =~ m/^0[xX]/) {
+PATCH
+        return;
+    }
+
+    if (_ge($version, "5.13.1")) {
+        # Silence noise from Errno_pm.PL on Windows
+        # from https://github.com/Perl/perl5/commit/7bf140906596458f94aa2d5969d3067c0d6441a4
+        # and https://github.com/Perl/perl5/commit/f974e9b91d22c1ef2d849ded64674df4f1b18bad
+
+        # Sanity check on Errno values.
+        # https://github.com/Perl/perl5/commit/be54382c6ee2d28448a2bfa85dedcbb6144583ae
+
+        _patch(<<'PATCH');
+--- ext/Errno/Errno_pm.PL
++++ ext/Errno/Errno_pm.PL
+@@ -281,8 +281,8 @@ sub write_errno_pm {
+ 	    my($name,$expr);
+ 	    next unless ($name, $expr) = /"(.*?)"\s*\[\s*\[\s*(.*?)\s*\]\s*\]/;
+ 	    next if $name eq $expr;
+-	    $expr =~ s/\(?\([a-z_]\w*\)([^\)]*)\)?/$1/i; # ((type)0xcafebabe) at alia
+-	    $expr =~ s/((?:0x)?[0-9a-fA-F]+)[LU]+\b/$1/g; # 2147483647L et alia
++	    $expr =~ s/\(?\(\s*[a-z_]\w*\s*\)([^\)]*)\)?/$1/i; # ((type)0xcafebabe) at alia
++	    $expr =~ s/((?:0x)?[0-9a-fA-F]+)[luLU]+\b/$1/g; # 2147483647L et alia
+ 	    next if $expr =~ m/^[a-zA-Z]+$/; # skip some Win32 functions
+ 	    if($expr =~ m/^0[xX]/) {
+ 		$err{$name} = hex $expr;
+@@ -358,7 +358,8 @@ BEGIN {
+     %err = (
+ EDQ
+    
+-    my @err = sort { $err{$a} <=> $err{$b} } keys %err;
++    my @err = sort { $err{$a} <=> $err{$b} }
++	grep { $err{$_} =~ /-?\d+$/ } keys %err;
+ 
+     foreach $err (@err) {
+ 	print "\t$err => $err{$err},\n";
+PATCH
+        return;
+    }
+
     if (_ge($version, "5.9.2")) {
         # Silence noise from Errno_pm.PL on Windows
         # from https://github.com/Perl/perl5/commit/7bf140906596458f94aa2d5969d3067c0d6441a4
@@ -3100,11 +3152,27 @@ sub _patch_errno {
  	    next if $expr =~ m/^[a-zA-Z]+$/; # skip some Win32 functions
  	    if($expr =~ m/^0[xX]/) {
 PATCH
-    } elsif (_ge($version, "5.9.0")) {
+        return;
+    }
+
+    if (_ge($version, "5.9.0")) {
         _patch(<<'PATCH');
 --- ext/Errno/Errno_pm.PL
 +++ ext/Errno/Errno_pm.PL
-@@ -229,8 +229,8 @@ sub write_errno_pm {
+@@ -20,6 +20,12 @@ unlink "errno.c" if -f "errno.c";
+ sub process_file {
+     my($file) = @_;
+ 
++    # for win32 perl under cygwin, we need to get a windows pathname
++    if ($^O eq 'MSWin32' && $Config{cc} =~ /\B-mno-cygwin\b/ &&
++        defined($file) && !-f $file) {
++        chomp($file = `cygpath -w "$file"`);
++    }
++
+     return unless defined $file and -f $file;
+ #   warn "Processing $file\n";
+ 
+@@ -229,8 +235,8 @@ sub write_errno_pm {
  	    my($name,$expr);
  	    next unless ($name, $expr) = /"(.*?)"\s*\[\s*\[\s*(.*?)\s*\]\s*\]/;
  	    next if $name eq $expr;
@@ -3116,7 +3184,10 @@ PATCH
  	    if($expr =~ m/^0[xX]/) {
  		$err{$name} = hex $expr;
 PATCH
-    } else {
+        return;
+    }
+
+    if (_ge($version, "5.8.7")) {
         _patch(<<'PATCH');
 --- ext/Errno/Errno_pm.PL
 +++ ext/Errno/Errno_pm.PL
@@ -3134,29 +3205,35 @@ PATCH
 PATCH
     }
 
-    if (_ge($version, "5.13.5")) {
-        return;
-    }
-
-    if (_ge($version, "5.13.1")) {
-        # Sanity check on Errno values.
-        # https://github.com/Perl/perl5/commit/be54382c6ee2d28448a2bfa85dedcbb6144583ae
-        _patch(<<'PATCH');
+    _patch(<<'PATCH');
 --- ext/Errno/Errno_pm.PL
 +++ ext/Errno/Errno_pm.PL
-@@ -357,8 +357,9 @@ my %err;
- BEGIN {
-     %err = (
- EDQ
--   
--    my @err = sort { $err{$a} <=> $err{$b} } keys %err;
-+
-+    my @err = sort { $err{$a} <=> $err{$b} }
-+	grep { $err{$_} =~ /-?\d+$/ } keys %err;
+@@ -20,6 +20,12 @@ unlink "errno.c" if -f "errno.c";
+ sub process_file {
+     my($file) = @_;
  
-     foreach $err (@err) {
- 	print "\t$err => $err{$err},\n";
++    # for win32 perl under cygwin, we need to get a windows pathname
++    if ($^O eq 'MSWin32' && $Config{cc} =~ /\B-mno-cygwin\b/ &&
++        defined($file) && !-f $file) {
++        chomp($file = `cygpath -w "$file"`);
++    }
++
+     return unless defined $file and -f $file;
+ #   warn "Processing $file\n";
+ 
+@@ -231,8 +237,8 @@ sub write_errno_pm {
+ 	    my($name,$expr);
+ 	    next unless ($name, $expr) = /"(.*?)"\s*\[\s*\[\s*(.*?)\s*\]\s*\]/;
+ 	    next if $name eq $expr;
+-	    $expr =~ s/\(?\(\w+\)([^\)]*)\)?/$1/; # ((type)0xcafebabe) at alia
+-	    $expr =~ s/((?:0x)?[0-9a-fA-F]+)[LU]+\b/$1/g; # 2147483647L et alia
++	    $expr =~ s/\(?\(\s*[a-z_]\w*\s*\)([^\)]*)\)?/$1/i; # ((type)0xcafebabe) at alia
++	    $expr =~ s/((?:0x)?[0-9a-fA-F]+)[luLU]+\b/$1/g; # 2147483647L et alia
+ 	    next if $expr =~ m/^[a-zA-Z]+$/; # skip some Win32 functions
+ 	    if($expr =~ m/^0[xX]/) {
+ 		$err{$name} = hex $expr;
 PATCH
+        return;
     }
 }
 

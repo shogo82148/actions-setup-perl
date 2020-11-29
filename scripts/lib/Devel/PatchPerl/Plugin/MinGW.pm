@@ -3304,20 +3304,7 @@ PATCH
         _patch(<<'PATCH');
 --- ext/Errno/Errno_pm.PL
 +++ ext/Errno/Errno_pm.PL
-@@ -20,6 +20,12 @@ unlink "errno.c" if -f "errno.c";
- sub process_file {
-     my($file) = @_;
- 
-+    # for win32 perl under cygwin, we need to get a windows pathname
-+    if ($^O eq 'MSWin32' && $Config{cc} =~ /\B-mno-cygwin\b/ &&
-+        defined($file) && !-f $file) {
-+        chomp($file = `cygpath -w "$file"`);
-+    }
-+
-     return unless defined $file and -f $file;
- #   warn "Processing $file\n";
- 
-@@ -229,8 +235,8 @@ sub write_errno_pm {
+@@ -229,8 +229,8 @@ sub write_errno_pm {
  	    my($name,$expr);
  	    next unless ($name, $expr) = /"(.*?)"\s*\[\s*\[\s*(.*?)\s*\]\s*\]/;
  	    next if $name eq $expr;
@@ -3350,23 +3337,11 @@ PATCH
 PATCH
     }
 
-    _patch(<<'PATCH');
+    if (_ge($version, "5.8.1")) {
+        _patch(<<'PATCH');
 --- ext/Errno/Errno_pm.PL
 +++ ext/Errno/Errno_pm.PL
-@@ -20,6 +20,12 @@ unlink "errno.c" if -f "errno.c";
- sub process_file {
-     my($file) = @_;
- 
-+    # for win32 perl under cygwin, we need to get a windows pathname
-+    if ($^O eq 'MSWin32' && $Config{cc} =~ /\B-mno-cygwin\b/ &&
-+        defined($file) && !-f $file) {
-+        chomp($file = `cygpath -w "$file"`);
-+    }
-+
-     return unless defined $file and -f $file;
- #   warn "Processing $file\n";
- 
-@@ -231,8 +237,8 @@ sub write_errno_pm {
+@@ -229,8 +229,8 @@ sub write_errno_pm {
  	    my($name,$expr);
  	    next unless ($name, $expr) = /"(.*?)"\s*\[\s*\[\s*(.*?)\s*\]\s*\]/;
  	    next if $name eq $expr;
@@ -3378,6 +3353,25 @@ PATCH
  	    if($expr =~ m/^0[xX]/) {
  		$err{$name} = hex $expr;
 PATCH
+        return;
+    }
+
+    if (_ge($version, "5.6.0")) {
+        _patch(<<'PATCH');
+--- ext/Errno/Errno_pm.PL
++++ ext/Errno/Errno_pm.PL
+@@ -229,7 +229,7 @@ sub write_errno_pm {
+ 	    my($name,$expr);
+ 	    next unless ($name, $expr) = /"(.*?)"\s*\[\s*\[\s*(.*?)\s*\]\s*\]/;
+ 	    next if $name eq $expr;
+-	    $expr =~ s/(\d+)[LU]+\b/$1/g; # 2147483647L et alia
++	    $expr =~ s/((?:0x)?[0-9a-fA-F]+)[luLU]+\b/$1/g; # 2147483647L et alia
+ 	    $err{$name} = eval $expr;
+ 	}
+ 	close(CPPO);
+PATCH
+        return;
+    }
 }
 
 sub _patch_socket_h {

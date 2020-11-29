@@ -4667,6 +4667,10 @@ PATCH
 }
 
 sub _patch_system {
+    my $version = shift;
+
+    if (_ge($version, "5.9.3")) {
+        _patch(<<'PATCH');
     # from https://github.com/Perl/perl5/commit/5f9e9d12f9b91d15f5287353e242748cb029b693
     _patch(<<'PATCH');
 --- embed.fnc
@@ -4690,6 +4694,21 @@ sub _patch_system {
  			__attribute__nonnull__(pTHX_2)
  			__attribute__nonnull__(pTHX_3);
  
+PATCH
+        return;
+    }
+    _patch(<<'PATCH');
+--- embed.fnc
++++ embed.fnc
+@@ -171,7 +171,7 @@ Ap	|bool	|do_close	|GV* gv|bool not_implicit
+ p	|bool	|do_eof		|GV* gv
+ p	|bool	|do_exec	|char* cmd
+ #if defined(WIN32)
+-Ap	|int	|do_aspawn	|SV* really|SV** mark|SV** sp
++Ap	|int	|do_aspawn	|NULLOK SV* really|NN SV** mark|NN SV** sp
+ Ap	|int	|do_spawn	|char* cmd
+ Ap	|int	|do_spawn_nowait|char* cmd
+ #endif
 PATCH
 }
 

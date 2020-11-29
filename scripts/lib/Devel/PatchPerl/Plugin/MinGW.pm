@@ -943,10 +943,8 @@ PATCH
  =item quote_paren
  
  Backslashes parentheses C<()> in command line arguments.
-diff --git a/lib/ExtUtils/MM_Win32.pm b/lib/ExtUtils/MM_Win32.pm
-index 4998c74f59..a3fbebf6d2 100644
---- a/lib/ExtUtils/MM_Win32.pm
-+++ b/lib/ExtUtils/MM_Win32.pm
+--- lib/ExtUtils/MM_Win32.pm
++++ lib/ExtUtils/MM_Win32.pm
 @@ -131,9 +131,10 @@ sub init_DIRFILESEP {
      my($self) = shift;
  
@@ -984,10 +982,8 @@ index 4998c74f59..a3fbebf6d2 100644
  
  1;
  __END__
-diff --git a/lib/ExtUtils/MakeMaker.pm b/lib/ExtUtils/MakeMaker.pm
-index 0e651511ae..ed9ca6cfae 100644
---- a/lib/ExtUtils/MakeMaker.pm
-+++ b/lib/ExtUtils/MakeMaker.pm
+--- lib/ExtUtils/MakeMaker.pm
++++ lib/ExtUtils/MakeMaker.pm
 @@ -491,6 +491,7 @@ sub new {
  
      ($self->{NAME_SYM} = $self->{NAME}) =~ s/\W+/_/g;

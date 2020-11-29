@@ -1,4 +1,4 @@
-requires 'perl', '5.008005';
+requires 'perl', '5.006';
 
 requires 'Carton';
 requires 'Menlo::Legacy';
@@ -6,3 +6,4 @@ requires 'Menlo';
 requires 'Menlo::Index::Mirror';
 requires 'ExtUtils::Manifest', '1.70';
 requires 'ExtUtils::MakeMaker', '7.52';
+requires 'Getopt::Long', '2.52';

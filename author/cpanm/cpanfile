@@ -1,4 +1,5 @@
-requires 'perl', '5.008001';
+requires 'perl', '5.006';
 requires 'App::cpanminus';
 requires 'ExtUtils::Manifest', '1.70';
 requires 'ExtUtils::MakeMaker', '7.52';
+requires 'Getopt::Long', '2.52';

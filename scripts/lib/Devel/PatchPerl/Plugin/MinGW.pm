@@ -3479,7 +3479,8 @@ PATCH
 
 sub _patch_perlhost_507 {
     my $version = shift;
-    _patch(<<'PATCH');
+    if (_ge($version, "5.7.1")) {
+        _patch(<<'PATCH');
 --- win32/perlhost.h
 +++ win32/perlhost.h
 @@ -770,7 +770,7 @@ PerlStdIOTell(struct IPerlStdIO* piPerl, FILE* pf)
@@ -3490,6 +3491,22 @@ sub _patch_perlhost_507 {
 +PerlStdIOSeek(struct IPerlStdIO* piPerl, FILE* pf, Off_t offset, int origin)
  {
      return win32_fseek(pf, offset, origin);
+ }
+PATCH
+        return;
+    }
+
+    _patch(<<'PATCH');
+--- win32/perlhost.h
++++ win32/perlhost.h
+@@ -738,7 +738,7 @@ PerlStdIOTell(struct IPerlStdIO* piPerl, PerlIO* pf)
+ }
+ 
+ int
+-PerlStdIOSeek(struct IPerlStdIO* piPerl, PerlIO* pf, off_t offset, int origin)
++PerlStdIOSeek(struct IPerlStdIO* piPerl, PerlIO* pf, Off_t offset, int origin)
+ {
+     return win32_fseek((FILE*)pf, offset, origin);
  }
 PATCH
 }

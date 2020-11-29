@@ -3372,7 +3372,7 @@ PATCH
         return;
     }
 
-    if (_ge($version, "5.6.0")) {
+    if (_ge($version, "5.7.3")) {
         _patch(<<'PATCH');
 --- ext/Errno/Errno_pm.PL
 +++ ext/Errno/Errno_pm.PL

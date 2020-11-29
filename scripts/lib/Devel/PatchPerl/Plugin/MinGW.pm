@@ -24,6 +24,7 @@ my @patch = (
             [ \&_patch_config_gc ],
             [ \&_patch_config_sh_pl ],
             [ \&_patch_installperl ],
+            [ \&_patch_errno ],
         ],
     },
     {
@@ -60,16 +61,6 @@ my @patch = (
         ],
         subs => [
             [ \&_patch_convert_errno_to_wsa_error ],
-        ],
-    },
-    {
-        perl => [
-            qr/^5\.1[0-9]\./,
-            qr/^5\.9\./,
-            qr/^5\.8\.[789]$/,
-        ],
-        subs => [
-            [ \&_patch_errno ],
         ],
     },
     {
@@ -114,6 +105,7 @@ my @patch = (
     {
         perl => [
             qr/^5\.10\.0$/,
+            qr/^5\.[0-9]\./,
         ],
         subs => [
             [ \&_patch_system ],
@@ -855,6 +847,151 @@ PATCH
  
  =item special_targets
  
+PATCH
+        return;
+    }
+
+    if (_ge($version, "5.8.8")) {
+        _patch(<<'PATCH');
+--- lib/ExtUtils/MM_Any.pm
++++ lib/ExtUtils/MM_Any.pm
+@@ -632,6 +632,29 @@ MAKE_FRAG
+ 
+ }
+ 
++=head3 make
++
++    my $make = $MM->make;
++
++Returns the make variant we're generating the Makefile for.  This attempts
++to do some normalization on the information from %Config or the user.
++
++=cut
++
++sub make {
++    my $self = shift;
++
++    my $make = lc $self->{MAKE};
++
++    # Truncate anything like foomake6 to just foomake.
++    $make =~ s/^(\w+make).*/$1/;
++
++    # Turn gnumake into gmake.
++    $make =~ s/^gnu/g/;
++
++    return $make;
++}
++
+ 
+ =head3 manifypods_target
+ 
+@@ -1677,6 +1700,19 @@ Michael G Schwern <schwern@pobox.com> and the denizens of
+ makemaker@perl.org with code from ExtUtils::MM_Unix and
+ ExtUtils::MM_Win32.
+ 
++=head3 init_MAKE
++
++    $mm->init_MAKE
++
++Initialize MAKE from either a MAKE environment variable or $Config{make}.
++
++=cut
++
++sub init_MAKE {
++    my $self = shift;
++ 
++    $self->{MAKE} ||= $ENV{MAKE} || $Config{make};
++}
+ 
+ =cut
+ 
+--- lib/ExtUtils/MM_Unix.pm
++++ lib/ExtUtils/MM_Unix.pm
+@@ -295,8 +295,8 @@ sub const_cccmd {
+ 
+ =item const_config (o)
+ 
+-Defines a couple of constants in the Makefile that are imported from
+-%Config.
++Sets SHELL if needed, then defines a couple of constants in the Makefile
++that are imported from %Config.
+ 
+ =cut
+ 
+@@ -307,6 +307,7 @@ sub const_config {
+     my(@m,$m);
+     push(@m,"\n# These definitions are from config.sh (via $INC{'Config.pm'})\n");
+     push(@m,"\n# They may have been overridden via Makefile.PL or on the command line\n");
++    push(@m, $self->specify_shell()); # Usually returns empty string
+     my(%once_only);
+     foreach $m (@{$self->{CONFIG}}){
+ 	# SITE*EXP macros are defined in &constants; avoid duplicates here
+@@ -3077,6 +3078,16 @@ MAKE_FRAG
+     return $m;
+ }
+ 
++=item specify_shell
++
++Specify SHELL if needed - not done on Unix.
++
++=cut
++
++sub specify_shell {
++  return '';
++}
++
+ =item quote_paren
+ 
+ Backslashes parentheses C<()> in command line arguments.
+--- lib/ExtUtils/MM_Win32.pm
++++ lib/ExtUtils/MM_Win32.pm
+@@ -131,9 +131,10 @@ sub init_DIRFILESEP {
+     my($self) = shift;
+ 
+     # The ^ makes sure its not interpreted as an escape in nmake
+-    $self->{DIRFILESEP} = $NMAKE ? '^\\' :
+-                          $DMAKE ? '\\\\'
+-                                 : '\\';
++    $self->{DIRFILESEP} = $self->is_make_type('nmake') ? '^\\' :
++                          $self->is_make_type('dmake') ? '\\\\' :
++                          $self->is_make_type('gmake') ? '/'
++                                                       : '\\';
+ }
+ 
+ =item B<init_others>
+@@ -526,6 +527,22 @@ sub os_flavor {
+     return('Win32');
+ }
+ 
++=item specify_shell
++
++Set SHELL to $ENV{COMSPEC} only if make is type 'gmake'.
++
++=cut
++
++sub specify_shell {
++    my $self = shift;
++    return '' unless $self->is_make_type('gmake');
++    "\nSHELL = $ENV{COMSPEC}\n";
++}
++
++sub is_make_type {
++    my($self, $type) = @_;
++    return !! ($self->make =~ /\b$type(?:\.exe)?$/);
++}
+ 
+ 1;
+ __END__
+--- lib/ExtUtils/MakeMaker.pm
++++ lib/ExtUtils/MakeMaker.pm
+@@ -491,6 +491,7 @@ sub new {
+ 
+     ($self->{NAME_SYM} = $self->{NAME}) =~ s/\W+/_/g;
+ 
++    $self->init_MAKE;
+     $self->init_main;
+     $self->init_VERSION;
+     $self->init_dist;
 PATCH
         return;
     }
@@ -3081,6 +3218,67 @@ PATCH
 sub _patch_errno {
     my $version = shift;
 
+    if (_ge($version, "5.20.0")) {
+        return;
+    }
+
+    if (_ge($version, "5.13.5")) {
+        # Silence noise from Errno_pm.PL on Windows
+        # from https://github.com/Perl/perl5/commit/7bf140906596458f94aa2d5969d3067c0d6441a4
+        # and https://github.com/Perl/perl5/commit/f974e9b91d22c1ef2d849ded64674df4f1b18bad
+        _patch(<<'PATCH');
+--- ext/Errno/Errno_pm.PL
++++ ext/Errno/Errno_pm.PL
+@@ -245,7 +245,7 @@ sub write_errno_pm {
+ 	    my($name,$expr);
+ 	    next unless ($name, $expr) = /"(.*?)"\s*\[\s*\[\s*(.*?)\s*\]\s*\]/;
+ 	    next if $name eq $expr;
+-	    $expr =~ s/\(?\([a-z_]\w*\)([^\)]*)\)?/$1/i; # ((type)0xcafebabe) at alia
+-	    $expr =~ s/((?:0x)?[0-9a-fA-F]+)[LU]+\b/$1/g; # 2147483647L et alia
++	    $expr =~ s/\(?\(\s*[a-z_]\w*\s*\)([^\)]*)\)?/$1/i; # ((type)0xcafebabe) at alia
++	    $expr =~ s/((?:0x)?[0-9a-fA-F]+)[luLU]+\b/$1/g; # 2147483647L et alia
+ 	    next if $expr =~ m/^[a-zA-Z]+$/; # skip some Win32 functions
+ 	    if($expr =~ m/^0[xX]/) {
+PATCH
+        return;
+    }
+
+    if (_ge($version, "5.13.1")) {
+        # Silence noise from Errno_pm.PL on Windows
+        # from https://github.com/Perl/perl5/commit/7bf140906596458f94aa2d5969d3067c0d6441a4
+        # and https://github.com/Perl/perl5/commit/f974e9b91d22c1ef2d849ded64674df4f1b18bad
+
+        # Sanity check on Errno values.
+        # https://github.com/Perl/perl5/commit/be54382c6ee2d28448a2bfa85dedcbb6144583ae
+
+        _patch(<<'PATCH');
+--- ext/Errno/Errno_pm.PL
++++ ext/Errno/Errno_pm.PL
+@@ -281,8 +281,8 @@ sub write_errno_pm {
+ 	    my($name,$expr);
+ 	    next unless ($name, $expr) = /"(.*?)"\s*\[\s*\[\s*(.*?)\s*\]\s*\]/;
+ 	    next if $name eq $expr;
+-	    $expr =~ s/\(?\([a-z_]\w*\)([^\)]*)\)?/$1/i; # ((type)0xcafebabe) at alia
+-	    $expr =~ s/((?:0x)?[0-9a-fA-F]+)[LU]+\b/$1/g; # 2147483647L et alia
++	    $expr =~ s/\(?\(\s*[a-z_]\w*\s*\)([^\)]*)\)?/$1/i; # ((type)0xcafebabe) at alia
++	    $expr =~ s/((?:0x)?[0-9a-fA-F]+)[luLU]+\b/$1/g; # 2147483647L et alia
+ 	    next if $expr =~ m/^[a-zA-Z]+$/; # skip some Win32 functions
+ 	    if($expr =~ m/^0[xX]/) {
+ 		$err{$name} = hex $expr;
+@@ -358,7 +358,8 @@ BEGIN {
+     %err = (
+ EDQ
+    
+-    my @err = sort { $err{$a} <=> $err{$b} } keys %err;
++    my @err = sort { $err{$a} <=> $err{$b} }
++	grep { $err{$_} =~ /-?\d+$/ } keys %err;
+ 
+     foreach $err (@err) {
+ 	print "\t$err => $err{$err},\n";
+PATCH
+        return;
+    }
+
     if (_ge($version, "5.9.2")) {
         # Silence noise from Errno_pm.PL on Windows
         # from https://github.com/Perl/perl5/commit/7bf140906596458f94aa2d5969d3067c0d6441a4
@@ -3099,11 +3297,27 @@ sub _patch_errno {
  	    next if $expr =~ m/^[a-zA-Z]+$/; # skip some Win32 functions
  	    if($expr =~ m/^0[xX]/) {
 PATCH
-    } else {
+        return;
+    }
+
+    if (_ge($version, "5.9.0")) {
         _patch(<<'PATCH');
 --- ext/Errno/Errno_pm.PL
 +++ ext/Errno/Errno_pm.PL
-@@ -229,8 +229,8 @@ sub write_errno_pm {
+@@ -20,6 +20,12 @@ unlink "errno.c" if -f "errno.c";
+ sub process_file {
+     my($file) = @_;
+ 
++    # for win32 perl under cygwin, we need to get a windows pathname
++    if ($^O eq 'MSWin32' && $Config{cc} =~ /\B-mno-cygwin\b/ &&
++        defined($file) && !-f $file) {
++        chomp($file = `cygpath -w "$file"`);
++    }
++
+     return unless defined $file and -f $file;
+ #   warn "Processing $file\n";
+ 
+@@ -229,8 +235,8 @@ sub write_errno_pm {
  	    my($name,$expr);
  	    next unless ($name, $expr) = /"(.*?)"\s*\[\s*\[\s*(.*?)\s*\]\s*\]/;
  	    next if $name eq $expr;
@@ -3115,32 +3329,55 @@ PATCH
  	    if($expr =~ m/^0[xX]/) {
  		$err{$name} = hex $expr;
 PATCH
-    }
-
-    if (_ge($version, "5.13.5")) {
         return;
     }
 
-    if (_ge($version, "5.13.1")) {
-        # Sanity check on Errno values.
-        # https://github.com/Perl/perl5/commit/be54382c6ee2d28448a2bfa85dedcbb6144583ae
+    if (_ge($version, "5.8.7")) {
         _patch(<<'PATCH');
 --- ext/Errno/Errno_pm.PL
 +++ ext/Errno/Errno_pm.PL
-@@ -357,8 +357,9 @@ my %err;
- BEGIN {
-     %err = (
- EDQ
--   
--    my @err = sort { $err{$a} <=> $err{$b} } keys %err;
-+
-+    my @err = sort { $err{$a} <=> $err{$b} }
-+	grep { $err{$_} =~ /-?\d+$/ } keys %err;
- 
-     foreach $err (@err) {
- 	print "\t$err => $err{$err},\n";
+@@ -277,8 +277,8 @@ sub write_errno_pm {
+ 	    my($name,$expr);
+ 	    next unless ($name, $expr) = /"(.*?)"\s*\[\s*\[\s*(.*?)\s*\]\s*\]/;
+ 	    next if $name eq $expr;
+-	    $expr =~ s/\(?\([a-z_]\w*\)([^\)]*)\)?/$1/i; # ((type)0xcafebabe) at alia
+-	    $expr =~ s/((?:0x)?[0-9a-fA-F]+)[LU]+\b/$1/g; # 2147483647L et alia
++	    $expr =~ s/\(?\(\s*[a-z_]\w*\s*\)([^\)]*)\)?/$1/i; # ((type)0xcafebabe) at alia
++	    $expr =~ s/((?:0x)?[0-9a-fA-F]+)[luLU]+\b/$1/g; # 2147483647L et alia
+ 	    next if $expr =~ m/^[a-zA-Z]+$/; # skip some Win32 functions
+ 	    if($expr =~ m/^0[xX]/) {
+ 		$err{$name} = hex $expr;
 PATCH
     }
+
+    _patch(<<'PATCH');
+--- ext/Errno/Errno_pm.PL
++++ ext/Errno/Errno_pm.PL
+@@ -20,6 +20,12 @@ unlink "errno.c" if -f "errno.c";
+ sub process_file {
+     my($file) = @_;
+ 
++    # for win32 perl under cygwin, we need to get a windows pathname
++    if ($^O eq 'MSWin32' && $Config{cc} =~ /\B-mno-cygwin\b/ &&
++        defined($file) && !-f $file) {
++        chomp($file = `cygpath -w "$file"`);
++    }
++
+     return unless defined $file and -f $file;
+ #   warn "Processing $file\n";
+ 
+@@ -231,8 +237,8 @@ sub write_errno_pm {
+ 	    my($name,$expr);
+ 	    next unless ($name, $expr) = /"(.*?)"\s*\[\s*\[\s*(.*?)\s*\]\s*\]/;
+ 	    next if $name eq $expr;
+-	    $expr =~ s/\(?\(\w+\)([^\)]*)\)?/$1/; # ((type)0xcafebabe) at alia
+-	    $expr =~ s/((?:0x)?[0-9a-fA-F]+)[LU]+\b/$1/g; # 2147483647L et alia
++	    $expr =~ s/\(?\(\s*[a-z_]\w*\s*\)([^\)]*)\)?/$1/i; # ((type)0xcafebabe) at alia
++	    $expr =~ s/((?:0x)?[0-9a-fA-F]+)[luLU]+\b/$1/g; # 2147483647L et alia
+ 	    next if $expr =~ m/^[a-zA-Z]+$/; # skip some Win32 functions
+ 	    if($expr =~ m/^0[xX]/) {
+ 		$err{$name} = hex $expr;
+PATCH
 }
 
 sub _patch_socket_h {
@@ -4666,6 +4903,10 @@ PATCH
 }
 
 sub _patch_system {
+    my $version = shift;
+
+    if (_ge($version, "5.9.3")) {
+        _patch(<<'PATCH');
     # from https://github.com/Perl/perl5/commit/5f9e9d12f9b91d15f5287353e242748cb029b693
     _patch(<<'PATCH');
 --- embed.fnc
@@ -4690,14 +4931,63 @@ sub _patch_system {
  			__attribute__nonnull__(pTHX_3);
  
 PATCH
+        return;
+    }
+
+    if (_ge($version, "5.9.0")) {
+        _patch(<<'PATCH');
+--- embed.fnc
++++ embed.fnc
+@@ -171,7 +171,7 @@ Ap	|bool	|do_close	|GV* gv|bool not_implicit
+ p	|bool	|do_eof		|GV* gv
+ p	|bool	|do_exec	|char* cmd
+ #if defined(WIN32)
+-Ap	|int	|do_aspawn	|SV* really|SV** mark|SV** sp
++Ap	|int	|do_aspawn	|NULLOK SV* really|NN SV** mark|NN SV** sp
+ Ap	|int	|do_spawn	|char* cmd
+ Ap	|int	|do_spawn_nowait|char* cmd
+ #endif
+PATCH
+        return;
+    }
+
+    if (_ge($version, "5.8.8")) {
+        _patch(<<'PATCH');
+--- embed.fnc
++++ embed.fnc
+@@ -208,7 +208,7 @@ p	|bool	|do_exec	|NN char* cmd
+ #endif
+ 
+ #if defined(WIN32)
+-Ap	|int	|do_aspawn	|NN SV* really|NN SV** mark|NN SV** sp
++Ap	|int	|do_aspawn	|NULLOK SV* really|NN SV** mark|NN SV** sp
+ Ap	|int	|do_spawn	|NN char* cmd
+ Ap	|int	|do_spawn_nowait|NN char* cmd
+ #endif
+PATCH
+        return;
+    }
+
+    _patch(<<'PATCH');
+--- embed.fnc
++++ embed.fnc
+@@ -181,7 +181,7 @@ Ap	|bool	|do_close	|GV* gv|bool not_implicit
+ p	|bool	|do_eof		|GV* gv
+ p	|bool	|do_exec	|char* cmd
+ #if defined(WIN32)
+-Ap	|int	|do_aspawn	|SV* really|SV** mark|SV** sp
++Ap	|int	|do_aspawn	|NULLOK SV* really|NN SV** mark|NN SV** sp
+ Ap	|int	|do_spawn	|char* cmd
+ Ap	|int	|do_spawn_nowait|char* cmd
+ #endif
+PATCH
+
 }
 
 sub _patch_buildext_5092 {
     _patch(<<'PATCH');
-diff --git a/win32/buildext.pl b/win32/buildext.pl
-index 90518d1e4f..2f18b9070d 100644
---- a/win32/buildext.pl
-+++ b/win32/buildext.pl
+--- win32/buildext.pl
++++ win32/buildext.pl
 @@ -61,7 +61,7 @@ if ($opts{'list-static-libs'} || $opts{'create-perllibst-h'}) {
        open my $fh, "<..\\lib\\auto\\$_\\extralibs.ld" or die "can't open <..\\lib\\auto\\$_\\extralibs.ld: $!";
        $extralibs{$_}++ for grep {/\S/} split /\s+/, join '', <$fh>;

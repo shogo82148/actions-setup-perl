@@ -92,7 +92,15 @@ my @patch = (
     },
     {
         perl => [
-            qr/^5\.[67]\./,
+            qr/^5\.7\./,
+        ],
+        subs => [
+            [ \&_patch_perlhost_507 ],
+        ],
+    },
+    {
+        perl => [
+            qr/^5\.6\./,
         ],
         subs => [
             [ \&_patch_perlhost_506 ],
@@ -3466,6 +3474,23 @@ sub _patch_perlhost {
  
      /* push a zero on the stack (we are the child) */
      {
+PATCH
+}
+
+sub _patch_perlhost_507 {
+    my $version = shift;
+    _patch(<<'PATCH');
+--- win32/perlhost.h
++++ win32/perlhost.h
+@@ -770,7 +770,7 @@ PerlStdIOTell(struct IPerlStdIO* piPerl, FILE* pf)
+ }
+ 
+ int
+-PerlStdIOSeek(struct IPerlStdIO* piPerl, FILE* pf, off_t offset, int origin)
++PerlStdIOSeek(struct IPerlStdIO* piPerl, FILE* pf, Off_t offset, int origin)
+ {
+     return win32_fseek(pf, offset, origin);
+ }
 PATCH
 }
 

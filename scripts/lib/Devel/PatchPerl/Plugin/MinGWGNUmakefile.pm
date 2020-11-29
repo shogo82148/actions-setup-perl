@@ -8757,6 +8757,34 @@ PATCH
  		..\utils\corelist	\
  		..\utils\cpan		\
  		..\utils\xsubpp		\
+@@ -487,7 +488,8 @@
+ 
+ .PHONY: all
+ 
+-all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) $(PERLEXE) $(X2P) Extensions
++all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) $(UNIDATAFILES) $(PERLEXE) \
++		$(X2P) MakePPPort Extensions
+ 	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
+ 
+ $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
+@@ -747,6 +749,10 @@
+ $(EXTDIR)\DynaLoader\dl_win32.xs: dl_win32.xs
+ 	copy dl_win32.xs $(EXTDIR)\DynaLoader\dl_win32.xs
+ 
++
++MakePPPort: $(HAVEMINIPERL) $(CONFIGPM)
++	$(MINIPERL) -I..\lib ..\mkppport
++
+ $(HAVEMINIPERL): $(MINI_OBJ)
+ 	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
+ 	rem . > $@
+@@ -821,3 +827,6 @@
+ 
+ installhtml : doc
+ 	$(RCOPY) $(HTMLDIR)\*.* $(INST_HTML)\$(NULL)
++
++$(UNIDATAFILES) : $(HAVEMINIPERL) $(CONFIGPM) ..\lib\unicore\mktables
++	cd ..\lib\unicore && ..\$(MINIPERL) -I.. mktables -check $@ $(FIRSTUNIFILE)
 PATCH
     }
     if (_ge($version, "5.9.5")) {
@@ -8867,12 +8895,11 @@ PATCH
  PERLDLL_OBJ	= $(CORE_OBJ)
  PERLEXE_OBJ	= perlmain$(o)
  PERLEXEST_OBJ	= perlmainst$(o)
-@@ -488,13 +514,20 @@
- 
+@@ -489,13 +515,19 @@
  .PHONY: all
  
--all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) $(PERLEXE) $(X2P) Extensions
-+all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) $(UNIDATAFILES) $(PERLEXE) \
+ all : .\config.h $(GLOBEXE) $(MINIMOD) $(CONFIGPM) $(UNIDATAFILES) $(PERLEXE) \
+-		$(X2P) MakePPPort Extensions
 +		$(X2P) MakePPPort Extensions $(PERLSTATIC)
  	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
  
@@ -8889,7 +8916,7 @@ PATCH
  $(GLOBEXE) : perlglob.c
  	$(LINK32) $(OPTIMIZE) $(BLINK_FLAGS) -mconsole -o $@ perlglob.c $(LIBFILES)
  
-@@ -695,6 +728,21 @@
+@@ -696,6 +728,21 @@
  	$(LINK32) -mdll -o $@ $(BLINK_FLAGS) \
  	   $(PERLDLL_OBJ) $(shell type Extensions_static) $(LIBFILES) $(PERLEXPLIB)
  
@@ -8911,7 +8938,7 @@ PATCH
  $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
  	cd .. && miniperl minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
  
-@@ -718,6 +766,15 @@
+@@ -719,6 +766,15 @@
  	$(MINIPERL) -I..\lib ..\x2p\s2p.PL
  	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) $(LIBFILES) $(X2P_OBJ)
  
@@ -8927,7 +8954,7 @@ PATCH
  perlmain.c : runperl.c
  	copy runperl.c perlmain.c
  
-@@ -735,6 +792,10 @@
+@@ -736,6 +792,10 @@
  	copy splittree.pl ..
  	$(MINIPERL) -I..\lib ..\splittree.pl "../LIB" $(AUTODIR)
  
@@ -8938,17 +8965,7 @@ PATCH
  $(DYNALOADER).c: $(HAVEMINIPERL) $(EXTDIR)\DynaLoader\dl_win32.xs $(CONFIGPM)
  	if not exist $(AUTODIR) mkdir $(AUTODIR)
  	cd $(EXTDIR)\DynaLoader \
-@@ -748,18 +809,24 @@
- $(EXTDIR)\DynaLoader\dl_win32.xs: dl_win32.xs
- 	copy dl_win32.xs $(EXTDIR)\DynaLoader\dl_win32.xs
- 
-+
-+MakePPPort: $(HAVEMINIPERL) $(CONFIGPM)
-+	$(MINIPERL) -I..\lib ..\mkppport
-+
- $(HAVEMINIPERL): $(MINI_OBJ)
- 	$(LINK32) -mconsole -o $(MINIPERL) $(BLINK_FLAGS) $(MINI_OBJ) $(LIBFILES)
- 	rem . > $@
+@@ -759,12 +819,14 @@
  
  #most of deps of this target are in DYNALOADER and therefore omitted here
  Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
@@ -8965,7 +8982,7 @@ PATCH
  	$(MINIPERL) -I..\lib buildext.pl --list-static-libs > Extensions_static
  
  #-------------------------------------------------------------------------------
-@@ -817,8 +884,14 @@
+@@ -822,7 +884,10 @@
  installbare : utils
  	$(PERLEXE) ..\installperl
  	if exist $(WPERLEXE) $(XCOPY) $(WPERLEXE) $(INST_BIN)\$(NULL)
@@ -8976,10 +8993,6 @@ PATCH
  	$(XCOPY) "bin\*.bat" $(INST_SCRIPT)\$(NULL)
  
  installhtml : doc
- 	$(RCOPY) $(HTMLDIR)\*.* $(INST_HTML)\$(NULL)
-+
-+$(UNIDATAFILES) : $(HAVEMINIPERL) $(CONFIGPM) ..\lib\unicore\mktables
-+	cd ..\lib\unicore && ..\$(MINIPERL) -I.. mktables -check $@ $(FIRSTUNIFILE)
 PATCH
     }
 }

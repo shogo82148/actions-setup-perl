@@ -3386,8 +3386,6 @@ PATCH
  	    if($expr =~ m/^0[xX]/) {
  		$err{$name} = hex $expr;
 PATCH
-        return;
-    }
 }
 
 sub _patch_socket_h {

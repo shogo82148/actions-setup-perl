@@ -8685,7 +8685,19 @@ PATCH
  	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
  
  $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
-@@ -745,6 +758,7 @@
+@@ -685,6 +698,11 @@
+ 	$(LINK32) -mdll -o $@ $(BLINK_FLAGS) \
+ 	   $(PERLDLL_OBJ) $(LIBFILES) $(PERLEXPLIB)
+ 
++$(PERLEXE_ICO): $(HAVEMINIPERL) ..\uupacktool.pl $(PERLEXE_ICO).packd
++	$(MINIPERL) -I..\lib ..\uupacktool.pl -u $(PERLEXE_ICO).packd $(PERLEXE_ICO)
++
++$(PERLEXE_RES): perlexe.rc $(PERLEXE_ICO)
++
+ $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
+ 	cd .. && miniperl minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
+ 
+@@ -745,6 +763,7 @@
  #most of deps of this target are in DYNALOADER and therefore omitted here
  Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
  	$(MINIPERL) -I..\lib $(ICWD) buildext.pl "$(PLMAKE)" $(PERLDEP) $(EXTDIR)
@@ -8693,7 +8705,7 @@ PATCH
  
  #-------------------------------------------------------------------------------
  
-@@ -806,3 +820,6 @@
+@@ -806,3 +825,6 @@
  
  installhtml : doc
  	$(RCOPY) $(HTMLDIR)\*.* $(INST_HTML)\$(NULL)
@@ -8771,9 +8783,9 @@ PATCH
 -	   $(PERLDLL_OBJ) $(LIBFILES) $(PERLEXPLIB)
 +	   $(PERLDLL_OBJ) $(shell type Extensions_static) $(LIBFILES) $(PERLEXPLIB)
  
- $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
- 	cd .. && miniperl minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
-@@ -757,8 +765,13 @@
+ $(PERLEXE_ICO): $(HAVEMINIPERL) ..\uupacktool.pl $(PERLEXE_ICO).packd
+ 	$(MINIPERL) -I..\lib ..\uupacktool.pl -u $(PERLEXE_ICO).packd $(PERLEXE_ICO)
+@@ -762,8 +770,13 @@
  
  #most of deps of this target are in DYNALOADER and therefore omitted here
  Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
@@ -8836,7 +8848,7 @@ PATCH
  	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
  
  $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
-@@ -759,6 +749,10 @@
+@@ -764,6 +754,10 @@
  $(EXTDIR)\DynaLoader\dl_win32.xs: dl_win32.xs
  	copy dl_win32.xs $(EXTDIR)\DynaLoader\dl_win32.xs
  
@@ -8978,7 +8990,7 @@ PATCH
  $(GLOBEXE) : perlglob.c
  	$(LINK32) $(OPTIMIZE) $(BLINK_FLAGS) -mconsole -o $@ perlglob.c $(LIBFILES)
  
-@@ -696,6 +728,21 @@
+@@ -696,6 +728,16 @@
  	$(LINK32) -mdll -o $@ $(BLINK_FLAGS) \
  	   $(PERLDLL_OBJ) $(shell type Extensions_static) $(LIBFILES) $(PERLEXPLIB)
  
@@ -8992,15 +9004,10 @@ PATCH
 +		cd .. && rmdir /s /q $(STATICDIR)
 +	$(XCOPY) $(PERLSTATICLIB) $(COREDIR)
 +
-+$(PERLEXE_ICO): $(HAVEMINIPERL) ..\uupacktool.pl $(PERLEXE_ICO).packd
-+	$(MINIPERL) -I..\lib ..\uupacktool.pl -u $(PERLEXE_ICO).packd $(PERLEXE_ICO)
-+
-+$(PERLEXE_RES): perlexe.rc $(PERLEXE_ICO)
-+
- $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
- 	cd .. && miniperl minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
+ $(PERLEXE_ICO): $(HAVEMINIPERL) ..\uupacktool.pl $(PERLEXE_ICO).packd
+ 	$(MINIPERL) -I..\lib ..\uupacktool.pl -u $(PERLEXE_ICO).packd $(PERLEXE_ICO)
  
-@@ -719,6 +766,15 @@
+@@ -724,6 +766,15 @@
  	$(MINIPERL) -I..\lib ..\x2p\s2p.PL
  	$(LINK32) -mconsole -o $@ $(BLINK_FLAGS) $(LIBFILES) $(X2P_OBJ)
  
@@ -9016,7 +9023,7 @@ PATCH
  perlmain.c : runperl.c
  	copy runperl.c perlmain.c
  
-@@ -736,6 +792,10 @@
+@@ -741,6 +792,10 @@
  	copy splittree.pl ..
  	$(MINIPERL) -I..\lib ..\splittree.pl "../LIB" $(AUTODIR)
  
@@ -9027,7 +9034,7 @@ PATCH
  $(DYNALOADER).c: $(HAVEMINIPERL) $(EXTDIR)\DynaLoader\dl_win32.xs $(CONFIGPM)
  	if not exist $(AUTODIR) mkdir $(AUTODIR)
  	cd $(EXTDIR)\DynaLoader \
-@@ -759,12 +819,14 @@
+@@ -764,12 +819,14 @@
  
  #most of deps of this target are in DYNALOADER and therefore omitted here
  Extensions : buildext.pl $(HAVEMINIPERL) $(PERLDEP) $(CONFIGPM)
@@ -9044,7 +9051,7 @@ PATCH
  	$(MINIPERL) -I..\lib buildext.pl --list-static-libs > Extensions_static
  
  #-------------------------------------------------------------------------------
-@@ -822,11 +884,14 @@
+@@ -827,11 +884,14 @@
  installbare : utils
  	$(PERLEXE) ..\installperl
  	if exist $(WPERLEXE) $(XCOPY) $(WPERLEXE) $(INST_BIN)\$(NULL)

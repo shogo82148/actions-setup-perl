@@ -8689,8 +8689,8 @@ PATCH
  	$(LINK32) -mdll -o $@ $(BLINK_FLAGS) \
  	   $(PERLDLL_OBJ) $(LIBFILES) $(PERLEXPLIB)
  
-+$(PERLEXE_ICO): $(HAVEMINIPERL) ..\uupacktool.pl $(PERLEXE_ICO).packd
-+	$(MINIPERL) -I..\lib ..\uupacktool.pl -u $(PERLEXE_ICO).packd $(PERLEXE_ICO)
++$(PERLEXE_ICO): $(HAVEMINIPERL) makeico.pl
++	$(MINIPERL) makeico.pl > $@
 +
 +$(PERLEXE_RES): perlexe.rc $(PERLEXE_ICO)
 +
@@ -8783,8 +8783,8 @@ PATCH
 -	   $(PERLDLL_OBJ) $(LIBFILES) $(PERLEXPLIB)
 +	   $(PERLDLL_OBJ) $(shell type Extensions_static) $(LIBFILES) $(PERLEXPLIB)
  
- $(PERLEXE_ICO): $(HAVEMINIPERL) ..\uupacktool.pl $(PERLEXE_ICO).packd
- 	$(MINIPERL) -I..\lib ..\uupacktool.pl -u $(PERLEXE_ICO).packd $(PERLEXE_ICO)
+ $(PERLEXE_ICO): $(HAVEMINIPERL) makeico.pl
+ 	$(MINIPERL) makeico.pl > $@
 @@ -762,8 +770,13 @@
  
  #most of deps of this target are in DYNALOADER and therefore omitted here
@@ -8848,6 +8848,17 @@ PATCH
  	@echo Everything is up to date. '$(MAKE_BARE) test' to run test suite.
  
  $(DYNALOADER)$(o) : $(DYNALOADER).c $(CORE_H) $(EXTDIR)\DynaLoader\dlutils.c
+@@ -706,8 +696,8 @@
+ 	$(LINK32) -mdll -o $@ $(BLINK_FLAGS) \
+ 	   $(PERLDLL_OBJ) $(shell type Extensions_static) $(LIBFILES) $(PERLEXPLIB)
+ 
+-$(PERLEXE_ICO): $(HAVEMINIPERL) makeico.pl
+-	$(MINIPERL) makeico.pl > $@
++$(PERLEXE_ICO): $(HAVEMINIPERL) ..\uupacktool.pl $(PERLEXE_ICO).packd
++	$(MINIPERL) -I..\lib ..\uupacktool.pl -u $(PERLEXE_ICO).packd $(PERLEXE_ICO)
+ 
+ $(PERLEXE_RES): perlexe.rc $(PERLEXE_ICO)
+ 
 @@ -764,6 +754,10 @@
  $(EXTDIR)\DynaLoader\dl_win32.xs: dl_win32.xs
  	copy dl_win32.xs $(EXTDIR)\DynaLoader\dl_win32.xs

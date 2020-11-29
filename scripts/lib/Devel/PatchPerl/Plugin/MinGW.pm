@@ -4714,10 +4714,8 @@ PATCH
 
 sub _patch_buildext_5092 {
     _patch(<<'PATCH');
-diff --git a/win32/buildext.pl b/win32/buildext.pl
-index 90518d1e4f..2f18b9070d 100644
---- a/win32/buildext.pl
-+++ b/win32/buildext.pl
+--- win32/buildext.pl
++++ win32/buildext.pl
 @@ -61,7 +61,7 @@ if ($opts{'list-static-libs'} || $opts{'create-perllibst-h'}) {
        open my $fh, "<..\\lib\\auto\\$_\\extralibs.ld" or die "can't open <..\\lib\\auto\\$_\\extralibs.ld: $!";
        $extralibs{$_}++ for grep {/\S/} split /\s+/, join '', <$fh>;

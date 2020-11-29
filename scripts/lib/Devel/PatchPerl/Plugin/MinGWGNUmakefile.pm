@@ -7595,10 +7595,10 @@ PATCH
 -endif
 -ifeq ($(USE_CPLUSPLUS),define)
 -	@(echo #define USE_CPLUSPLUS&& \
- 	echo #endif)>> config.h
+-	echo #endif)>> config.h
 -else
 -	@(echo #undef USE_CPLUSPLUS&& \
--	echo #endif)>> config.h
+ 	echo #endif)>> config.h
 -endif
  #separate line since this is sentinal that this target is done
  	rem. > $(MINIDIR)\.exists
@@ -7768,15 +7768,12 @@ PATCH
  	$(PERLEXE) ..\installperl
  	if exist $(WPERLEXE) $(XCOPY) $(WPERLEXE) $(INST_BIN)\$(NULL)
  	if exist $(PERLEXESTATIC) $(XCOPY) $(PERLEXESTATIC) $(INST_BIN)\$(NULL)
-@@ -945,5 +806,10 @@
+@@ -945,5 +806,7 @@
  installhtml : doc
  	$(RCOPY) $(HTMLDIR)\*.* $(INST_HTML)\$(NULL)
  
 -$(UNIDATAFILES) : $(HAVEMINIPERL) $(CONFIGPM) ..\lib\unicore\mktables
 -	cd ..\lib\unicore && ..\$(MINIPERL) -I.. mktables -check $@ $(FIRSTUNIFILE)
-+inst_lib : $(CONFIGPM)
-+	$(RCOPY) ..\lib $(INST_LIB)\$(NULL)
-+
 +$(UNIDATAFILES) : ..\pod\perluniprops.pod
 +
 +..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(HAVEMINIPERL) ..\lib\unicore\mktables Extensions_nonxs
@@ -7818,7 +7815,7 @@ PATCH
  
  $(MINIMOD) : $(HAVEMINIPERL) ..\minimod.pl
  	cd .. && miniperl minimod.pl > lib\ExtUtils\Miniperl.pm && cd win32
-@@ -812,4 +813,4 @@
+@@ -809,4 +810,4 @@
  $(UNIDATAFILES) : ..\pod\perluniprops.pod
  
  ..\pod\perluniprops.pod: ..\lib\unicore\mktables $(CONFIGPM) $(HAVEMINIPERL) ..\lib\unicore\mktables Extensions_nonxs

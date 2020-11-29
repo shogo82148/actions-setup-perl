@@ -4792,7 +4792,7 @@ PATCH
     }
 
     if (_ge($version, "5.9.0")) {
-    _patch(<<'PATCH');
+        _patch(<<'PATCH');
 --- embed.fnc
 +++ embed.fnc
 @@ -171,7 +171,7 @@ Ap	|bool	|do_close	|GV* gv|bool not_implicit
@@ -4808,7 +4808,8 @@ PATCH
         return;
     }
 
-    _patch(<<'PATCH');
+    if (_ge($version, "5.8.8")) {
+        _patch(<<'PATCH');
 --- embed.fnc
 +++ embed.fnc
 @@ -208,7 +208,7 @@ p	|bool	|do_exec	|NN char* cmd
@@ -4821,6 +4822,23 @@ PATCH
  Ap	|int	|do_spawn_nowait|NN char* cmd
  #endif
 PATCH
+        return;
+    }
+
+    _patch(<<'PATCH');
+--- embed.fnc
++++ embed.fnc
+@@ -181,7 +181,7 @@ Ap	|bool	|do_close	|GV* gv|bool not_implicit
+ p	|bool	|do_eof		|GV* gv
+ p	|bool	|do_exec	|char* cmd
+ #if defined(WIN32)
+-Ap	|int	|do_aspawn	|SV* really|SV** mark|SV** sp
++Ap	|int	|do_aspawn	|NULLOK SV* really|NN SV** mark|NN SV** sp
+ Ap	|int	|do_spawn	|char* cmd
+ Ap	|int	|do_spawn_nowait|char* cmd
+ #endif
+PATCH
+
 }
 
 sub _patch_buildext_5092 {

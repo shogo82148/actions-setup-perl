@@ -851,6 +851,159 @@ PATCH
         return;
     }
 
+    if (_ge($version, "5.8.8")) {
+        _patch(<<'PATCH');
+diff --git a/lib/ExtUtils/MM_Any.pm b/lib/ExtUtils/MM_Any.pm
+index 8369e63a24..04b6d2934b 100644
+--- a/lib/ExtUtils/MM_Any.pm
++++ b/lib/ExtUtils/MM_Any.pm
+@@ -632,6 +632,29 @@ MAKE_FRAG
+ 
+ }
+ 
++=head3 make
++
++    my $make = $MM->make;
++
++Returns the make variant we're generating the Makefile for.  This attempts
++to do some normalization on the information from %Config or the user.
++
++=cut
++
++sub make {
++    my $self = shift;
++
++    my $make = lc $self->{MAKE};
++
++    # Truncate anything like foomake6 to just foomake.
++    $make =~ s/^(\w+make).*/$1/;
++
++    # Turn gnumake into gmake.
++    $make =~ s/^gnu/g/;
++
++    return $make;
++}
++
+ 
+ =head3 manifypods_target
+ 
+@@ -1677,6 +1700,19 @@ Michael G Schwern <schwern@pobox.com> and the denizens of
+ makemaker@perl.org with code from ExtUtils::MM_Unix and
+ ExtUtils::MM_Win32.
+ 
++=head3 init_MAKE
++
++    $mm->init_MAKE
++
++Initialize MAKE from either a MAKE environment variable or $Config{make}.
++
++=cut
++
++sub init_MAKE {
++    my $self = shift;
++ 
++    $self->{MAKE} ||= $ENV{MAKE} || $Config{make};
++}
+ 
+ =cut
+ 
+diff --git a/lib/ExtUtils/MM_Unix.pm b/lib/ExtUtils/MM_Unix.pm
+index 9d792a866e..a044bbced8 100644
+--- a/lib/ExtUtils/MM_Unix.pm
++++ b/lib/ExtUtils/MM_Unix.pm
+@@ -295,8 +295,8 @@ sub const_cccmd {
+ 
+ =item const_config (o)
+ 
+-Defines a couple of constants in the Makefile that are imported from
+-%Config.
++Sets SHELL if needed, then defines a couple of constants in the Makefile
++that are imported from %Config.
+ 
+ =cut
+ 
+@@ -307,6 +307,7 @@ sub const_config {
+     my(@m,$m);
+     push(@m,"\n# These definitions are from config.sh (via $INC{'Config.pm'})\n");
+     push(@m,"\n# They may have been overridden via Makefile.PL or on the command line\n");
++    push(@m, $self->specify_shell()); # Usually returns empty string
+     my(%once_only);
+     foreach $m (@{$self->{CONFIG}}){
+ 	# SITE*EXP macros are defined in &constants; avoid duplicates here
+@@ -3077,6 +3078,16 @@ MAKE_FRAG
+     return $m;
+ }
+ 
++=item specify_shell
++
++Specify SHELL if needed - not done on Unix.
++
++=cut
++
++sub specify_shell {
++  return '';
++}
++
+ =item quote_paren
+ 
+ Backslashes parentheses C<()> in command line arguments.
+diff --git a/lib/ExtUtils/MM_Win32.pm b/lib/ExtUtils/MM_Win32.pm
+index 4998c74f59..a3fbebf6d2 100644
+--- a/lib/ExtUtils/MM_Win32.pm
++++ b/lib/ExtUtils/MM_Win32.pm
+@@ -131,9 +131,10 @@ sub init_DIRFILESEP {
+     my($self) = shift;
+ 
+     # The ^ makes sure its not interpreted as an escape in nmake
+-    $self->{DIRFILESEP} = $NMAKE ? '^\\' :
+-                          $DMAKE ? '\\\\'
+-                                 : '\\';
++    $self->{DIRFILESEP} = $self->is_make_type('nmake') ? '^\\' :
++                          $self->is_make_type('dmake') ? '\\\\' :
++                          $self->is_make_type('gmake') ? '/'
++                                                       : '\\';
+ }
+ 
+ =item B<init_others>
+@@ -526,6 +527,22 @@ sub os_flavor {
+     return('Win32');
+ }
+ 
++=item specify_shell
++
++Set SHELL to $ENV{COMSPEC} only if make is type 'gmake'.
++
++=cut
++
++sub specify_shell {
++    my $self = shift;
++    return '' unless $self->is_make_type('gmake');
++    "\nSHELL = $ENV{COMSPEC}\n";
++}
++
++sub is_make_type {
++    my($self, $type) = @_;
++    return !! ($self->make =~ /\b$type(?:\.exe)?$/);
++}
+ 
+ 1;
+ __END__
+diff --git a/lib/ExtUtils/MakeMaker.pm b/lib/ExtUtils/MakeMaker.pm
+index 0e651511ae..ed9ca6cfae 100644
+--- a/lib/ExtUtils/MakeMaker.pm
++++ b/lib/ExtUtils/MakeMaker.pm
+@@ -491,6 +491,7 @@ sub new {
+ 
+     ($self->{NAME_SYM} = $self->{NAME}) =~ s/\W+/_/g;
+ 
++    $self->init_MAKE;
+     $self->init_main;
+     $self->init_VERSION;
+     $self->init_dist;
+PATCH
+        return;
+    }
+
     if (_ge($version, "5.8.1")) {
         _patch(<<'PATCH');
 --- lib/ExtUtils/MM_Any.pm

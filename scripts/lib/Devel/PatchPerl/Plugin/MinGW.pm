@@ -4962,7 +4962,8 @@ PATCH
         return;
     }
 
-    _patch(<<'PATCH');
+    if (_ge($version, "5.8.0")) {
+        _patch(<<'PATCH');
 --- embed.fnc
 +++ embed.fnc
 @@ -181,7 +181,7 @@ Ap	|bool	|do_close	|GV* gv|bool not_implicit
@@ -4975,7 +4976,8 @@ PATCH
  Ap	|int	|do_spawn_nowait|char* cmd
  #endif
 PATCH
-
+        return;
+    }
 }
 
 sub _patch_buildext_5092 {

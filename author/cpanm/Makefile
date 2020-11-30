@@ -9,25 +9,38 @@ all: cpanm
 
 .PHONY: image
 image: .image.exists ## build docker image of packing environment
-.image.exists: Dockerfile cpanfile cpanfile.snapshot build.pl
+.DELETE_ON_ERROR: .image.exists
+.image.exists: Dockerfile
+	touch .image.exists
 	-docker rmi $(IMAGE_NAME)
 	docker build -t $(IMAGE_NAME) .
-	touch .image.exists
 
-.container.exists: .image.exists
-	-docker rm $(IMAGE_NAME)-tmp
-	docker run --name $(IMAGE_NAME)-tmp $(IMAGE_NAME) perl build.pl
-	touch .container.exists
+cpanm: .deps.exists build.pl
+	docker cp cpanm.PL $(IMAGE_NAME)-deps:/tmp/cpanm/cpanm.PL
+	cat build.pl | docker run --rm -i --volumes-from $(IMAGE_NAME)-deps $(IMAGE_NAME) perl -
+	docker cp $(IMAGE_NAME)-deps:/tmp/cpanm/cpanm cpanm
 
-cpanm: .container.exists ## generate fat-packed cpanm
-	docker cp $(IMAGE_NAME)-tmp:/tmp/cpanm/cpanm cpanm
+.PHONY: deps
+deps: .deps.exists ## install dependencies
+.DELETE_ON_ERROR: .deps.exists
+.deps.exists: .image.exists cpanfile.snapshot patches/*.patch
+	touch .deps.exists
+	-docker rm $(IMAGE_NAME)-deps
+	docker create -v /tmp/cpanm --name $(IMAGE_NAME)-deps $(IMAGE_NAME) /bin/true
+	docker cp cpanfile $(IMAGE_NAME)-deps:/tmp/cpanm/cpanfile
+	docker cp cpanfile.snapshot $(IMAGE_NAME)-deps:/tmp/cpanm/cpanfile.snapshot
+	docker cp lib $(IMAGE_NAME)-deps:/tmp/cpanm/lib
+	docker run --rm --volumes-from $(IMAGE_NAME)-deps $(IMAGE_NAME) carton install --deployment
+	cat patches/*.patch | docker run --rm -i --volumes-from $(IMAGE_NAME)-deps -w /tmp/cpanm/local/lib/perl5 $(IMAGE_NAME) patch -s -f -p0
 
 .PHONY: update
 update: .image.exists ## download dependencies and update cpanfile.snapshot
 	-docker rm $(IMAGE_NAME)-update
-	docker run --name $(IMAGE_NAME)-update $(IMAGE_NAME) \
-		sh -c "rm -f cpanfile.snapshot && rm -rf local && carton install"
+	docker create -v /tmp/cpanm --name $(IMAGE_NAME)-update $(IMAGE_NAME) /bin/true
+	docker cp cpanfile $(IMAGE_NAME)-update:/tmp/cpanm/cpanfile
+	docker run --rm --volumes-from $(IMAGE_NAME)-update $(IMAGE_NAME) carton install
 	docker cp $(IMAGE_NAME)-update:/tmp/cpanm/cpanfile.snapshot cpanfile.snapshot
+	-docker rm $(IMAGE_NAME)-update
 
 .PHONY: install
 install: all ## installs into the bin directory of this repository
@@ -35,8 +48,7 @@ install: all ## installs into the bin directory of this repository
 
 .PHONY: clean
 clean:
-	rm -f cpm cpm.bat
-	rm -f .image.exists .container.exists
-	-docker rm $(IMAGE_NAME)-tmp
+	-rm -f .*.exists
+	-docker rm $(IMAGE_NAME)-deps
 	-docker rm $(IMAGE_NAME)-update
 	-docker rmi $(IMAGE_NAME)

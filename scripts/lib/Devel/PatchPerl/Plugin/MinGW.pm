@@ -3351,6 +3351,7 @@ PATCH
  	    if($expr =~ m/^0[xX]/) {
  		$err{$name} = hex $expr;
 PATCH
+        return;
     }
 
     if (_ge($version, "5.8.1")) {

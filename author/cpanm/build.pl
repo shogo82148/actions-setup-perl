@@ -13,7 +13,7 @@ sub fatpack {
 
 fatpack(
     "-o", "cpanm",
-    "-d", "local",
+    "-d", "local,lib",
     "-e", join(
         ',',
         # configure modules
@@ -25,7 +25,7 @@ fatpack(
         'Cwd',
     ),
     "--shebang", '#!/usr/bin/env perl',
-    "local/bin/cpanm"
+    "cpanm.PL"
 );
 
 1;

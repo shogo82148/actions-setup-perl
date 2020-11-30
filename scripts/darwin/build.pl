@@ -3,6 +3,7 @@
 use utf8;
 use warnings;
 use strict;
+use 5.026001;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 use Try::Tiny;
@@ -14,10 +15,11 @@ use Carp qw/croak/;
 use Actions::Core qw/info group set_failed/;
 
 my $version = $ENV{PERL_VERSION};
+my $thread = $ENV{PERL_MULTI_THREAD};
 my $tmpdir = File::Spec->rel2abs($ENV{RUNNER_TEMP} || "tmp");
 make_path($tmpdir);
 my $install_dir = File::Spec->rel2abs(
-    File::Spec->catdir($ENV{RUNNER_TOOL_CACHE} || $tmpdir, "perl", $version, "x64"));
+    File::Spec->catdir($ENV{RUNNER_TOOL_CACHE} || $tmpdir, "perl", $version . ($thread ? "-thr" : ""), "x64"));
 my $perl = File::Spec->catfile($install_dir, 'bin', 'perl');
 
 sub execute_or_die {
@@ -69,7 +71,7 @@ sub run {
         }
 
         my @options = ("-de", "-Dman1dir=none", "-Dman3dir=none");
-        if ($ENV{PERL_MULTI_THREAD}) {
+        if ($thread) {
             # enable multi threading
             push @options, "-Duseithreads";
         }

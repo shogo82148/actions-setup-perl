@@ -3,7 +3,7 @@
 use utf8;
 use warnings;
 use strict;
-use 5.026002;
+use 5.026001;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 use File::Copy;
@@ -20,12 +20,13 @@ use Actions::Core::Command qw(issue_command);
 use File::Basename qw(dirname);
 
 my $version = $ENV{PERL_VERSION};
+my $thread = $ENV{PERL_MULTI_THREAD};
 my $tmpdir = File::Spec->rel2abs(
     File::Spec->catdir($ENV{RUNNER_TEMP} || "tmp", "build-perl-$$"));
 make_path($tmpdir);
 remove_tree($tmpdir, {keep_root => 1});
 my $install_dir = File::Spec->rel2abs(
-    File::Spec->catdir($ENV{RUNNER_TOOL_CACHE} || $tmpdir, "perl", $version, "x64"));
+    File::Spec->catdir($ENV{RUNNER_TOOL_CACHE} || $tmpdir, "perl", $version . ($thread ? "-thr" : ""), "x64"));
 my $perl = File::Spec->catfile($install_dir, 'bin', 'perl');
 
 sub perl_release {
@@ -142,7 +143,7 @@ sub run {
             "INST_TOP=$install_dir",
             "CCHOME=C:\\MinGW",
         );
-        if ($ENV{PERL_MULTI_THREAD}) {
+        if ($thread) {
             push @args, "USE_ITHREADS=define";
         } else {
             push @args, "USE_ITHREADS=undef";

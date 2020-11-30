@@ -12,16 +12,15 @@ async function run() {
 
     let thread: boolean;
     if (platform === 'win32') {
-      if (!parseBoolean(multiThread || 'true')) {
-        core.warning('disabling multi-thread is ignored on Windows');
+      thread = parseBoolean(multiThread || 'true');
+      if (dist === 'strawberry' && !thread) {
+        core.warning('non-thread Strawberry Perl is not provided.');
       }
-      thread = true;
     } else {
       if (dist === 'strawberry') {
         core.warning(
-          'The strawberry distribution is not available on this platform'
+          'The strawberry distribution is not available on this platform. fallback to the default distribution.'
         );
-        core.warning('fallback to the default distribution');
         dist = 'default';
       }
       thread = parseBoolean(multiThread || 'false');
@@ -47,10 +46,7 @@ async function run() {
     core.addPath(path.join(__dirname, '..', 'bin'));
 
     // for pre-installed modules
-    core.exportVariable(
-      'PERL5LIB',
-      path.join(__dirname, '..', 'scripts', 'lib')
-    );
+    core.exportVariable('PERL5LIB', path.join(__dirname, '..', 'scripts', 'lib'));
   } catch (error) {
     core.setFailed(error.message);
   }

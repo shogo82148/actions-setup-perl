@@ -5130,14 +5130,6 @@ sub _patch_makedef {
      # XXX AIX seems to want the perlvars.h symbols, for some reason
      if ($PLATFORM eq 'aix' or $PLATFORM eq 'os2') {	# OS/2 needs PL_thr_key
  	my $glob = readvar($perlvars_h);
-@@ -1285,6 +1288,7 @@ if ($PLATFORM =~ /^win(?:32|ce)$/) {
- 			    win32_open
- 			    win32_close
- 			    win32_eof
-+			    win32_isatty
- 			    win32_read
- 			    win32_write
- 			    win32_spawnvp
 --- perl.c
 +++ perl.c
 @@ -108,8 +108,6 @@ S_init_tls_and_interp(PerlInterpreter *my_perl)

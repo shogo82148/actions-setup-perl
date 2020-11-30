@@ -5088,12 +5088,38 @@ sub _patch_makedef {
         return;
     }
 
-    # from https://github.com/Perl/perl5/commit/9307c420fad2f6f5bd314f9ed66dd53288703e09
     # Export PL_curinterp symbol for MULTIPLICITY without USE_ITHREADS
+    # from https://github.com/Perl/perl5/commit/9307c420fad2f6f5bd314f9ed66dd53288703e09
+    # Correct some #ifdef USE_ITHREADS / USE_MULTI
+    # from https://github.com/Perl/perl5/commit/8703a9a4fd75723318bc4ba1afc42a215806f2d1
     _patch(<<'PATCH');
 --- makedef.pl
 +++ makedef.pl
-@@ -1223,6 +1223,10 @@ if ($define{'MULTIPLICITY'}) {
+@@ -632,7 +632,6 @@ unless ($define{'DEBUGGING'}) {
+ 		    Perl_pad_sv
+ 		    Perl_hv_assert
+ 		    PL_block_type
+-		    PL_scopestack_name
+ 		    PL_watchaddr
+ 		    PL_watchok
+ 		    PL_watch_pvx
+@@ -759,6 +758,7 @@ unless ($define{'USE_ITHREADS'}) {
+ 		    PL_sharedsv_space_mutex
+ 		    PL_dollarzero_mutex
+ 		    PL_hints_mutex
++		    PL_my_ctx_mutex
+ 		    PL_perlio_mutex
+ 		    PL_regdupe
+ 		    Perl_parser_dup
+@@ -794,7 +794,6 @@ unless ($define{'USE_ITHREADS'}) {
+ 
+ unless ($define{'PERL_IMPLICIT_CONTEXT'}) {
+     skip_symbols [qw(
+-		    PL_my_ctx_mutex
+ 		    PL_my_cxt_index
+ 		    PL_my_cxt_list
+ 		    PL_my_cxt_size
+@@ -1224,6 +1223,10 @@ if ($define{'MULTIPLICITY'}) {
  	my $glob = readvar($f, sub { "Perl_" . $_[1] . $_[2] . "_ptr" });
  	emit_symbols $glob;
      }
@@ -5104,6 +5130,55 @@ sub _patch_makedef {
      # XXX AIX seems to want the perlvars.h symbols, for some reason
      if ($PLATFORM eq 'aix' or $PLATFORM eq 'os2') {	# OS/2 needs PL_thr_key
  	my $glob = readvar($perlvars_h);
+@@ -1285,6 +1288,7 @@ if ($PLATFORM =~ /^win(?:32|ce)$/) {
+ 			    win32_open
+ 			    win32_close
+ 			    win32_eof
++			    win32_isatty
+ 			    win32_read
+ 			    win32_write
+ 			    win32_spawnvp
+--- perl.c
++++ perl.c
+@@ -108,8 +108,6 @@ S_init_tls_and_interp(PerlInterpreter *my_perl)
+ 	OP_REFCNT_INIT;
+ 	HINTS_REFCNT_INIT;
+ 	MUTEX_INIT(&PL_dollarzero_mutex);
+-#  endif
+-#ifdef PERL_IMPLICIT_CONTEXT
+ 	MUTEX_INIT(&PL_my_ctx_mutex);
+ #  endif
+     }
+--- util.c
++++ util.c
+@@ -5837,9 +5837,13 @@ Perl_my_cxt_init(pTHX_ int *index, size_t size)
+     PERL_ARGS_ASSERT_MY_CXT_INIT;
+     if (*index == -1) {
+ 	/* this module hasn't been allocated an index yet */
++#if defined(USE_ITHREADS)
+ 	MUTEX_LOCK(&PL_my_ctx_mutex);
++#endif
+ 	*index = PL_my_cxt_index++;
++#if defined(USE_ITHREADS)
+ 	MUTEX_UNLOCK(&PL_my_ctx_mutex);
++#endif
+     }
+     
+     /* make sure the array is big enough */
+@@ -5894,9 +5898,13 @@ Perl_my_cxt_init(pTHX_ const char *my_cxt_key, size_t size)
+     index = Perl_my_cxt_index(aTHX_ my_cxt_key);
+     if (index == -1) {
+ 	/* this module hasn't been allocated an index yet */
++#if defined(USE_ITHREADS)
+ 	MUTEX_LOCK(&PL_my_ctx_mutex);
++#endif
+ 	index = PL_my_cxt_index++;
++#if defined(USE_ITHREADS)
+ 	MUTEX_UNLOCK(&PL_my_ctx_mutex);
++#endif
+     }
+ 
+     /* make sure the array is big enough */
 PATCH
 }
 

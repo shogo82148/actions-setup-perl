@@ -4,7 +4,7 @@
             "owner": "perl-builder",
             "pattern": [
                 {
-                    "regexp": "^([0-9]+ out of [0-9]+ hunk FAILED -- saving rejects to file .*\\.rej)$",
+                    "regexp": "^([0-9]+ out of [0-9]+ hunks? FAILED -- saving rejects to file .*\\.rej)$",
                     "message": 1
                 }
             ]

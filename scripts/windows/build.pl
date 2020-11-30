@@ -136,7 +136,18 @@ sub run {
 
     group "build and install Perl" => sub {
         my $dir = pushd(File::Spec->catdir($perldir, "win32"));
-        execute_or_die("gmake", "-f", "GNUmakefile", "install", "INST_TOP=$install_dir", "CCHOME=C:\\MinGW", "-j", jobs($version));
+        my @args = (
+            "-f", "GNUmakefile",
+            "-j", jobs($version),
+            "INST_TOP=$install_dir",
+            "CCHOME=C:\\MinGW",
+        );
+        if ($ENV{PERL_MULTI_THREAD}) {
+            push @args, "USE_ITHREADS=define";
+        } else {
+            push @args, "USE_ITHREADS=undef";
+        }
+        execute_or_die("gmake", @args, "install");
     };
 
     group "perl -V" => sub {

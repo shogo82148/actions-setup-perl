@@ -16,6 +16,7 @@ use File::Spec;
 use File::Path qw/make_path remove_tree/;
 use Carp qw/croak/;
 use Actions::Core qw/warning info group set_failed/;
+use Actions::Core::Command qw(issue_command);
 use File::Basename qw(dirname);
 
 my $version = $ENV{PERL_VERSION};
@@ -202,9 +203,12 @@ sub run {
 }
 
 try {
+    issue_command('add-matcher', {}, File::Spec->catfile($FindBin::Bin, "..", "matcher.json"));
     run();
 } catch {
     set_failed("$_");
+} finally {
+    issue_command('remove-matcher', {owner => 'perl-builder'});
 };
 
 1;

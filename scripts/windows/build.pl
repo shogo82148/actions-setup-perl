@@ -26,7 +26,7 @@ my $tmpdir = File::Spec->rel2abs(
 make_path($tmpdir);
 remove_tree($tmpdir, {keep_root => 1});
 my $install_dir = File::Spec->rel2abs(
-    File::Spec->catdir($ENV{RUNNER_TOOL_CACHE} || $tmpdir, "perl", $version . ($thread ? "-thr", ""), "x64"));
+    File::Spec->catdir($ENV{RUNNER_TOOL_CACHE} || $tmpdir, "perl", $version . ($thread ? "-thr" : ""), "x64"));
 my $perl = File::Spec->catfile($install_dir, 'bin', 'perl');
 
 sub perl_release {

@@ -5252,6 +5252,68 @@ PATCH
         return;
     }
 
+    if (_ge($version, "5.9.3")) {
+        _patch(<<'PATCH');
+--- makedef.pl
++++ makedef.pl
+@@ -714,6 +714,7 @@ unless ($define{'USE_ITHREADS'}) {
+ 		    PL_sharedsv_space
+ 		    PL_sharedsv_space_mutex
+ 		    PL_dollarzero_mutex
++		    PL_my_ctx_mutex
+ 		    Perl_dirp_dup
+ 		    Perl_cx_dup
+ 		    Perl_si_dup
+@@ -751,7 +752,6 @@ unless ($define{'USE_ITHREADS'}) {
+ 
+ unless ($define{'PERL_IMPLICIT_CONTEXT'}) {
+     skip_symbols [qw(
+-		    PL_my_ctx_mutex
+ 		    PL_my_cxt_index
+ 		    PL_my_cxt_list
+ 		    PL_my_cxt_size
+@@ -1080,6 +1080,10 @@ if ($define{'MULTIPLICITY'}) {
+ 	my $glob = readvar($f, sub { "Perl_" . $_[1] . $_[2] . "_ptr" });
+ 	emit_symbols $glob;
+     }
++    unless ($define{'USE_ITHREADS'}) {
++	# XXX needed for XS extensions that define PERL_CORE
++	emit_symbol("PL_curinterp");
++    }
+     # XXX AIX seems to want the perlvars.h symbols, for some reason
+     if ($PLATFORM eq 'aix' or $PLATFORM eq 'os2') {	# OS/2 needs PL_thr_key
+ 	my $glob = readvar($perlvars_h);
+--- perl.c
++++ perl.c
+@@ -158,8 +158,6 @@ S_init_tls_and_interp(PerlInterpreter *my_perl)
+ 	PERL_SET_THX(my_perl);
+ 	OP_REFCNT_INIT;
+ 	MUTEX_INIT(&PL_dollarzero_mutex);
+-#  endif
+-#ifdef PERL_IMPLICIT_CONTEXT
+ 	MUTEX_INIT(&PL_my_ctx_mutex);
+ #  endif
+     }
+--- util.c
++++ util.c
+@@ -5217,9 +5217,13 @@ Perl_my_cxt_init(pTHX_ int *index, size_t size)
+     void *p;
+     if (*index == -1) {
+ 	/* this module hasn't been allocated an index yet */
++#if defined(USE_ITHREADS)
+ 	MUTEX_LOCK(&PL_my_ctx_mutex);
++#endif
+ 	*index = PL_my_cxt_index++;
++#if defined(USE_ITHREADS)
+ 	MUTEX_UNLOCK(&PL_my_ctx_mutex);
++#endif
+     }
+     
+     /* make sure the array is big enough */
+PATCH
+        return;
+    }
+
     _patch(<<'PATCH');
 --- makedef.pl
 +++ makedef.pl

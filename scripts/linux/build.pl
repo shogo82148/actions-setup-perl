@@ -3,6 +3,7 @@
 use utf8;
 use warnings;
 use strict;
+use 5.026001;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 use Try::Tiny;

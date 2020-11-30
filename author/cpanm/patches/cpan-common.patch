@@ -1,0 +1,40 @@
+--- CPAN/Common/Index.pm
++++ CPAN/Common/Index.pm
+@@ -1,4 +1,4 @@
+-use 5.008001;
++use 5.006;
+ use strict;
+ use warnings;
+ 
+--- CPAN/Common/Index/LocalPackage.pm
++++ CPAN/Common/Index/LocalPackage.pm
+@@ -1,4 +1,4 @@
+-use 5.008001;
++use 5.006;
+ use strict;
+ use warnings;
+ 
+--- CPAN/Common/Index/MetaDB.pm
++++ CPAN/Common/Index/MetaDB.pm
+@@ -1,4 +1,4 @@
+-use 5.008001;
++use 5.006;
+ use strict;
+ use warnings;
+ 
+--- CPAN/Common/Index/Mirror.pm
++++ CPAN/Common/Index/Mirror.pm
+@@ -1,4 +1,4 @@
+-use 5.008001;
++use 5.006;
+ use strict;
+ use warnings;
+ 
+--- CPAN/Common/Index/Mux/Ordered.pm
++++ CPAN/Common/Index/Mux/Ordered.pm
+@@ -1,4 +1,4 @@
+-use 5.008001;
++use 5.006;
+ use strict;
+ use warnings;
+ 

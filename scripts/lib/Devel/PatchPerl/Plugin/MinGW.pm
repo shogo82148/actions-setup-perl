@@ -25,6 +25,7 @@ my @patch = (
             [ \&_patch_config_sh_pl ],
             [ \&_patch_installperl ],
             [ \&_patch_errno ],
+            [ \&_patch_makedef ],
         ],
     },
     {
@@ -5077,6 +5078,32 @@ sub _patch_buildext_5071 {
        warn "$code from $dir's Makefile.PL" if $code;
        $mmod = -M 'Makefile';
        if ($mmod > $dmod)
+PATCH
+}
+
+sub _patch_makedef {
+    my $version = shift;
+
+    if (_ge($version, "5.11.3")) {
+        return;
+    }
+
+    # from https://github.com/Perl/perl5/commit/9307c420fad2f6f5bd314f9ed66dd53288703e09
+    # Export PL_curinterp symbol for MULTIPLICITY without USE_ITHREADS
+    _patch(<<'PATCH');
+--- makedef.pl
++++ makedef.pl
+@@ -1223,6 +1223,10 @@ if ($define{'MULTIPLICITY'}) {
+ 	my $glob = readvar($f, sub { "Perl_" . $_[1] . $_[2] . "_ptr" });
+ 	emit_symbols $glob;
+     }
++    unless ($define{'USE_ITHREADS'}) {
++	# XXX needed for XS extensions that define PERL_CORE
++	emit_symbol("PL_curinterp");
++    }
+     # XXX AIX seems to want the perlvars.h symbols, for some reason
+     if ($PLATFORM eq 'aix' or $PLATFORM eq 'os2') {	# OS/2 needs PL_thr_key
+ 	my $glob = readvar($perlvars_h);
 PATCH
 }
 

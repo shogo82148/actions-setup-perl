@@ -5176,7 +5176,7 @@ PATCH
         return;
     }
 
-    if (_ge($version, "5.6.0")) {
+    if (_ge($version, "5.10.0")) {
         _patch(<<'PATCH');
 --- makedef.pl
 +++ makedef.pl
@@ -5251,6 +5251,22 @@ PATCH
 PATCH
         return;
     }
+
+    _patch(<<'PATCH');
+--- makedef.pl
++++ makedef.pl
+@@ -1089,6 +1089,10 @@ if ($define{'MULTIPLICITY'}) {
+ 	my $glob = readvar($f, sub { "Perl_" . $_[1] . $_[2] . "_ptr" });
+ 	emit_symbols $glob;
+     }
++    unless ($define{'USE_ITHREADS'}) {
++	# XXX needed for XS extensions that define PERL_CORE
++	emit_symbol("PL_curinterp");
++    }
+     # XXX AIX seems to want the perlvars.h symbols, for some reason
+     if ($PLATFORM eq 'aix' or $PLATFORM eq 'os2') {	# OS/2 needs PL_thr_key
+ 	my $glob = readvar($perlvars_h);
+PATCH
 }
 
 1;

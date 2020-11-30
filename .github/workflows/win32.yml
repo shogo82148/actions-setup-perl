@@ -26,12 +26,12 @@ jobs:
       - uses: actions/checkout@v2
       - name: sanity check
         run: |
-          perl -c scripts\lib\Devel\PatchPerl\Plugin\GitHubActions.pm
-          perl -c scripts\lib\Devel\PatchPerl\Plugin\MinGW.pm
-          perl -c scripts\lib\Devel\PatchPerl\Plugin\MinGWGNUmakefile.pm
-          perl -c scripts\windows\build.pl
+          perl -c scripts/lib/Devel/PatchPerl/Plugin/GitHubActions.pm
+          perl -c scripts/lib/Devel/PatchPerl/Plugin/MinGW.pm
+          perl -c scripts/lib/Devel/PatchPerl/Plugin/MinGWGNUmakefile.pm
+          perl -c scripts/widows/build.pl
         env:
-          PERL5LIB: ${{ github.workspace }}\scripts\lib
+          PERL5LIB: ${{ github.workspace }}/scripts/lib
       - id: set-matrix
         name: list available perl versions
         run: |

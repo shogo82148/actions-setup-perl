@@ -24,6 +24,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: scripts/darwin/local
+          key: ${{ runner.os }}-sanity-check-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
+      - name: sanity check
+        run: |
+          ../../bin/carton install --deployment
+          ../../bin/carton exec perl -c build.pl
+        working-directory: ./scripts/darwin
+        env:
+          PERL5LIB: ${{ github.workspace }}/scripts/lib
       - id: set-matrix
         name: list available perl versions
         run: |

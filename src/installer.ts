@@ -10,16 +10,13 @@ const osArch = os.arch();
 
 async function getAvailableVersions(): Promise<string[]> {
   return new Promise<string[]>((resolve, reject) => {
-    fs.readFile(
-      path.join(__dirname, '..', 'versions', `${osPlat}.json`),
-      (err, data) => {
-        if (err) {
-          reject(err);
-        }
-        const info = JSON.parse(data.toString()) as string[];
-        resolve(info);
+    fs.readFile(path.join(__dirname, '..', 'versions', `${osPlat}.json`), (err, data) => {
+      if (err) {
+        reject(err);
       }
-    );
+      const info = JSON.parse(data.toString()) as string[];
+      resolve(info);
+    });
   });
 }
 
@@ -84,15 +81,13 @@ async function acquirePerl(version: string, thread: boolean): Promise<string> {
     : downloadUrl.endsWith('.tar.bz2')
     ? await tc.extractTar(downloadPath, '', 'xj')
     : await tc.extractTar(downloadPath);
-  return await tc.cacheDir(extPath, 'perl', version);
+  return await tc.cacheDir(extPath, 'perl', version + (thread ? '-thr' : ''));
 }
 
 function getFileName(version: string, thread: boolean): string {
-  if (osPlat === 'win32') {
-    return `perl-${version}-${osPlat}-${osArch}.zip`;
-  }
   const suffix = thread ? '-multi-thread' : '';
-  return `perl-${version}-${osPlat}-${osArch}${suffix}.tar.xz`;
+  const ext = osPlat === 'win32' ? 'zip' : 'tar.xz';
+  return `perl-${version}-${osPlat}-${osArch}${suffix}.${ext}`;
 }
 
 interface PackageVersion {

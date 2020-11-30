@@ -168,9 +168,9 @@ jobs:
       matrix:
         os:
           - windows-2019
-        dist:
-          - default
-          - strawberry
+        multi-thread:
+          - false
+          - true
     steps:
       - name: disable autocrlf
         run: git config --global core.autocrlf false
@@ -192,7 +192,82 @@ jobs:
         uses: ./
         with:
           perl-version: "5.30.0"
-          distribution: ${{ matrix.dist }}
+          multi-thread: ${{ matrix.multi-thread }}
+
+      - run: gcc --version
+
+      - name: run perl -V on bash
+        run: perl -V
+        shell: bash
+      - name: run perl -V on pwsh
+        run: perl -V
+        shell: pwsh
+      - name: run perl -V on python
+        run: |
+          import subprocess
+          subprocess.call(['perl', '-V'])
+        shell: python
+      - name: run perl -V on cmd
+        run: perl -V
+        shell: cmd
+      - name: run perl -V on powershell
+        run: perl -V
+        shell: powershell
+      - name: run perl -V on perl {0}
+        run: |
+          use Config qw(myconfig);
+          print myconfig();
+        shell: "perl {0}"
+
+      - name: "Actions::Core"
+        run: prove -lv t
+        working-directory: ./scripts
+      - name: list perl versions
+        id: versions
+        run: |
+          use Actions::Core;
+          set_output(versions => [perl_versions()]);
+        shell: "perl {0}"
+      - name: result of list perl versions
+        run: echo "$VERSIONS" | jq .
+        env:
+          VERSIONS: ${{ steps.versions.outputs.versions }}
+
+      - name: run preinstalled script files
+        run: |
+          carton --help
+          cpanm --help
+          cpm --help
+
+  test-strawberry:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - windows-2019
+    steps:
+      - name: disable autocrlf
+        run: git config --global core.autocrlf false
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - run: npm ci
+      - run: npm run build
+      - run: npm run package
+      - run: npm test
+
+      - name: use the action
+        uses: ./
+        with:
+          perl-version: "5.30.0"
+          distribution: strawberry
 
       - run: gcc --version
 

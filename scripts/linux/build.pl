@@ -88,7 +88,7 @@ sub run {
         my @options = ("-de", "-Dman1dir=none", "-Dman3dir=none");
         if ($thread) {
             # enable multi threading
-            push @options, "-Duseshrplib", "-Duseithreads";
+            push @options, "-Duseithreads";
         }
 
         Perl::Build->install_from_cpan(

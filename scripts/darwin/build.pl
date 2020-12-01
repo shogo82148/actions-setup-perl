@@ -12,7 +12,7 @@ use File::Spec;
 use File::Path qw/make_path/;
 use version 0.77 ();
 use Carp qw/croak/;
-use Actions::Core qw/info group set_failed/;
+use Actions::Core qw/warning info group set_failed/;
 
 my $version = $ENV{PERL_VERSION};
 my $thread = $ENV{PERL_MULTI_THREAD};
@@ -33,30 +33,41 @@ sub execute_or_die {
 sub cpan_install {
     my ($url, $name, $min_version, $max_version) = @_;
 
-    # this perl is too old to install the module.
-    if ($min_version && version->parse("v$version") < version->parse("v$min_version")) {
-        info "skip installing $name";
-        return;
-    }
+    my $skip = try {
+        # this perl is too old to install the module.
+        if ($min_version && version->parse("v$version") < version->parse("v$min_version")) {
+            return 1;
+        }
+        # no need to install
+        if ($max_version && version->parse("v$version") >= version->parse("v$max_version")) {
+            return 1;
+        }
+        return 0;
+    } catch {
+        # perhaps, we clouldn't parse the version.
+        # try installing.
+        return 0;
+    };
+    return if $skip;
 
-    # no need to install
-    if ($max_version && version->parse("v$version") >= version->parse("v$max_version")) {
-        return;
-    }
+    try {
+        local $ENV{PATH} = "$install_dir/bin:$ENV{PATH}";
+        my @path = split m(/), $url;
+        my $filename = $path[-1];
+        my @ext = split /[.]tar[.]/, $filename;
+        my $dirname = $ext[0];
 
-    my @path = split m(/), $url;
-    my $filename = $path[-1];
-    my @ext = split /[.]tar[.]/, $filename;
-    my $dirname = $ext[0];
-
-    info "installing $name from $url";
-    chdir $tmpdir or die "failed to cd $tmpdir: $!";
-    execute_or_die('curl', '--retry', '3', '-sSL', $url, '-o', $filename);
-    execute_or_die('tar', 'xvf', $filename);
-    chdir File::Spec->catfile($tmpdir, $dirname) or die "failed to cd $dirname: $!";
-    execute_or_die($perl, 'Makefile.PL');
-    execute_or_die('make', 'install');
-    execute_or_die($perl, "-M$name", "-e1");
+        info "installing $name from $url";
+        chdir $tmpdir or die "failed to cd $tmpdir: $!";
+        execute_or_die('curl', '--retry', '3', '-sSL', $url, '-o', $filename);
+        execute_or_die('tar', 'xvf', $filename);
+        chdir File::Spec->catfile($tmpdir, $dirname) or die "failed to cd $dirname: $!";
+        execute_or_die($perl, 'Makefile.PL');
+        execute_or_die('make', 'install');
+        execute_or_die($perl, "-M$name", "-e1");
+    } catch {
+        warning "installing $name from $url fails: @_";
+    };
 }
 
 sub run {

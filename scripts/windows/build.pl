@@ -17,7 +17,6 @@ use File::Path qw/make_path remove_tree/;
 use Carp qw/croak/;
 use Actions::Core qw/warning info group set_failed/;
 use Actions::Core::Command qw(issue_command);
-use File::Basename qw(dirname);
 
 my $version = $ENV{PERL_VERSION};
 my $thread = $ENV{PERL_MULTI_THREAD};
@@ -76,6 +75,7 @@ sub cpan_install {
     return if $skip;
 
     try {
+        local $ENV{PATH} = "$install_dir\\bin;$ENV{PATH}";
         my @path = split m(/), $url;
         my $filename = $path[-1];
         my @ext = split /[.]tar[.]/, $filename;

@@ -117,7 +117,10 @@ sub run {
         # some requirements of JSON::PP
         cpan_install('https://cpan.metacpan.org/authors/id/C/CO/CORION/parent-0.238.tar.gz', 'parent', '5.6.0', '5.10.1');
         cpan_install('https://cpan.metacpan.org/authors/id/J/JK/JKEENAN/File-Path-2.18.tar.gz', 'File::Path', '5.6.0', '5.6.1');
-        cpan_install('https://cpan.metacpan.org/authors/id/P/PE/PEVANS/Scalar-List-Utils-1.55.tar.gz', 'Scalar::List::Utils', '5.6.0', '5.8.1');
+        # https://metacpan.org/release/PEVANS/Scalar-List-Utils-1.55 provides Scalar::Util, but its build fails in perl v5.8.0.
+        # It was fixed by https://github.com/Dual-Life/Scalar-List-Utils/pull/106, but it is not released yet.
+        # So we download from GitHub instead of CPAN 
+        cpan_install('https://github.com/Dual-Life/Scalar-List-Utils/archive/e0c6651d618a15dba14d48bfc56e5d0c029458c7.tar.gz', 'Scalar::Util', '5.6.0', '5.8.1');
         cpan_install('https://cpan.metacpan.org/authors/id/T/TO/TODDR/Exporter-5.74.tar.gz', 'Exporter', '5.6.0', '5.6.1');
         cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/File-Temp-0.2311.tar.gz', 'File::Temp', '5.6.0', '5.6.1');
         cpan_install('https://cpan.metacpan.org/authors/id/M/MA/MAKAMAKA/JSON-PP-Compat5006-1.09.tar.gz', 'JSON::PP::Compat5006', '5.6.0', '5.8.0');

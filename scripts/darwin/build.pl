@@ -53,10 +53,10 @@ sub cpan_install {
     try {
         local $ENV{PATH} = "$install_dir/bin:$ENV{PATH}";
         my ($filename, $dirname);
-        if ($url =~ m(/([^/])+/archive/(([0-9a-fA-F]+)[.]tar[.][0-9a-z]+))) {
+        if ($url =~ m(/([^/]+)/archive/(([0-9a-fA-F]+)[.]tar[.][0-9a-z]+))) {
             $dirname = "$1-$3";
             $filename = $2;
-        } elsif ($url =~ m(/(([^/])+[.]tar[.][0-9a-z]+))) {
+        } elsif ($url =~ m(/(([^/]+)[.]tar[.][0-9a-z]+))) {
             $dirname = $2;
             $filename = $1
         }

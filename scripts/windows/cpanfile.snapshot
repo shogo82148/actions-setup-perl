@@ -16,12 +16,12 @@ DISTRIBUTIONS
       Canary::Stability 2013
     requirements:
       ExtUtils::MakeMaker 0
-  Devel-PatchPerl-2.02
-    pathname: B/BI/BINGOS/Devel-PatchPerl-2.02.tar.gz
+  Devel-PatchPerl-2.04
+    pathname: B/BI/BINGOS/Devel-PatchPerl-2.04.tar.gz
     provides:
-      Devel::PatchPerl 2.02
-      Devel::PatchPerl::Hints 2.02
-      Devel::PatchPerl::Plugin 2.02
+      Devel::PatchPerl 2.04
+      Devel::PatchPerl::Hints 2.04
+      Devel::PatchPerl::Plugin 2.04
     requirements:
       ExtUtils::MakeMaker 0
       File::pushd 1.00
@@ -176,12 +176,12 @@ DISTRIBUTIONS
       HTML::Tagset 3.20
     requirements:
       ExtUtils::MakeMaker 0
-  HTTP-Cookies-6.08
-    pathname: O/OA/OALDERS/HTTP-Cookies-6.08.tar.gz
+  HTTP-Cookies-6.09
+    pathname: O/OA/OALDERS/HTTP-Cookies-6.09.tar.gz
     provides:
-      HTTP::Cookies 6.08
-      HTTP::Cookies::Microsoft 6.08
-      HTTP::Cookies::Netscape 6.08
+      HTTP::Cookies 6.09
+      HTTP::Cookies::Microsoft 6.09
+      HTTP::Cookies::Netscape 6.09
     requirements:
       Carp 0
       ExtUtils::MakeMaker 0

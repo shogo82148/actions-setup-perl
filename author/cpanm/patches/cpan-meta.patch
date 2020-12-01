@@ -1,0 +1,8 @@
+--- Parse/CPAN/Meta.pm
++++ Parse/CPAN/Meta.pm
+@@ -1,4 +1,4 @@
+-use 5.008001;
++use 5.006;
+ use strict;
+ use warnings;
+ package Parse::CPAN::Meta;

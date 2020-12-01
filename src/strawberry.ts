@@ -43,16 +43,13 @@ interface PerlVersion {
 // 64 bit Portable binaries are not available with Perl 5.12.x and older.
 async function getAvailableVersions(): Promise<PerlVersion[]> {
   return new Promise<PerlVersion[]>((resolve, reject) => {
-    fs.readFile(
-      path.join(__dirname, '..', 'versions', `strawberry.json`),
-      (err, data) => {
-        if (err) {
-          reject(err);
-        }
-        const info = JSON.parse(data.toString()) as PerlVersion[];
-        resolve(info);
+    fs.readFile(path.join(__dirname, '..', 'versions', `strawberry.json`), (err, data) => {
+      if (err) {
+        reject(err);
       }
-    );
+      const info = JSON.parse(data.toString()) as PerlVersion[];
+      resolve(info);
+    });
   });
 }
 

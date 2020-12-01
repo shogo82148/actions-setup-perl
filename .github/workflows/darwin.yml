@@ -24,6 +24,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: scripts/darwin/local
+          key: ${{ runner.os }}-sanity-check-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
+      - name: sanity check
+        run: |
+          ../../bin/carton install --deployment
+          ../../bin/carton exec perl -c build.pl
+        working-directory: ./scripts/darwin
+        env:
+          PERL5LIB: ${{ github.workspace }}/scripts/lib
       - id: set-matrix
         name: list available perl versions
         run: |
@@ -74,7 +85,7 @@ jobs:
         run: |
           # there is no aws cli in macOS, so use https://github.com/shogo82148/s3cli-mini
           ACTIONS_VERSION=v$(cat "$GITHUB_WORKSPACE/package.json" | jq -r .version)
-          curl -sSL https://github.com/shogo82148/s3cli-mini/releases/download/v0.0.6/s3cli-mini_darwin_amd64.tar.gz -o s3cli-mini.tar.gz
+          curl --retry 3 -sSL https://github.com/shogo82148/s3cli-mini/releases/download/v0.0.6/s3cli-mini_darwin_amd64.tar.gz -o s3cli-mini.tar.gz
           tar xzvf s3cli-mini.tar.gz
 
           # upload
@@ -122,7 +133,7 @@ jobs:
         run: |
           # there is no aws cli in macOS, so use https://github.com/shogo82148/s3cli-mini
           ACTIONS_VERSION=v$(cat "$GITHUB_WORKSPACE/package.json" | jq -r .version)
-          curl -sSL https://github.com/shogo82148/s3cli-mini/releases/download/v0.0.6/s3cli-mini_darwin_amd64.tar.gz -o s3cli-mini.tar.gz
+          curl --retry 3 -sSL https://github.com/shogo82148/s3cli-mini/releases/download/v0.0.6/s3cli-mini_darwin_amd64.tar.gz -o s3cli-mini.tar.gz
           tar xzvf s3cli-mini.tar.gz
 
           # upload

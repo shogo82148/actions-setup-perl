@@ -1,0 +1,11 @@
+--- Menlo/CLI/Compat.pm
++++ Menlo/CLI/Compat.pm
+@@ -2362,7 +2362,7 @@ sub save_meta {
+ 
+     require JSON::PP;
+     open my $fh, ">", "blib/meta/install.json" or die $!;
+-    print $fh JSON::PP::encode_json($local);
++    print {$fh} JSON::PP::encode_json($local);
+ 
+     File::Copy::copy("MYMETA.json", "blib/meta/MYMETA.json");
+ 

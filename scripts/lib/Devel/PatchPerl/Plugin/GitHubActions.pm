@@ -99,6 +99,7 @@ sub _ge {
 }
 
 sub _patch_unixish {
+    my $version = shift;
     if (_ge($version, "5.8.0")) {
         _patch(<<'PATCH');
 --- unixish.h
@@ -134,6 +135,7 @@ PATCH
 }
 
 sub _patch_configure {
+    my $version = shift;
     if (_ge($version, "5.8.0")) {
         _patch(<<'PATCH');
     _patch(<<'PATCH');

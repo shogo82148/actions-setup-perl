@@ -31,7 +31,7 @@ my @patch = (
     },
     {
         perl => [
-            qr/^5\.8\.1$/,
+            qr/^5\.8\.[01]$/,
             qr/^5\.6\./,
         ],
         subs => [
@@ -99,7 +99,8 @@ sub _ge {
 }
 
 sub _patch_unixish {
-    _patch(<<'PATCH');
+    if (_ge($version, "5.8.0")) {
+        _patch(<<'PATCH');
 --- unixish.h
 +++ unixish.h
 @@ -103,9 +103,7 @@
@@ -113,9 +114,28 @@ sub _patch_unixish {
  #ifndef SIGABRT
  #    define SIGABRT SIGILL
 PATCH
+        return;
+    }
+
+    _patch(<<'PATCH');
+--- unixish.h
++++ unixish.h
+@@ -89,9 +89,7 @@
+  */
+ /* #define ALTERNATE_SHEBANG "#!" / **/
+ 
+-#if !defined(NSIG) || defined(M_UNIX) || defined(M_XENIX) || defined(__NetBSD__)
+ # include <signal.h>
+-#endif
+ 
+ #ifndef SIGABRT
+ #    define SIGABRT SIGILL
+PATCH
 }
 
 sub _patch_configure {
+    if (_ge($version, "5.8.0")) {
+        _patch(<<'PATCH');
     _patch(<<'PATCH');
 --- Configure
 +++ Configure
@@ -128,6 +148,21 @@ sub _patch_configure {
  }
  EOM
  if $cc -o try $ccflags $ldflags try.c; then
+PATCH
+        return;
+    }
+    _patch(<<'PATCH');
+--- Configure
++++ Configure
+@@ -3134,7 +3134,7 @@ int main() {
+ 	printf("%s\n", "1");
+ #endif
+ #endif
+-	exit(0);
++	return(0);
+ }
+ EOM
+ if $cc -o gccvers $ccflags $ldflags gccvers.c; then
 PATCH
 }
 

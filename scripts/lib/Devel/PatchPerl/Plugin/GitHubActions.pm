@@ -10,6 +10,7 @@ use File::Slurp qw/read_file/;
 use File::Spec;
 use JSON qw/encode_json decode_json/;
 use Devel::PatchPerl;
+use Try::Tiny;
 
 use Devel::PatchPerl::Plugin::MinGWGNUmakefile;
 use Devel::PatchPerl::Plugin::MinGW;
@@ -19,6 +20,24 @@ use Devel::PatchPerl::Plugin::MinGW;
 *_patch = *Devel::PatchPerl::_patch;
 
 my @patch = (
+    {
+        perl => [
+            qr/^5\.8\.[012]$/,
+            qr/^5\.6\./,
+        ],
+        subs => [
+            [ \&_patch_unixish ],
+        ],
+    },
+    {
+        perl => [
+            qr/^5\.8\.1$/,
+            qr/^5\.6\./,
+        ],
+        subs => [
+            [ \&_patch_configure ],
+        ],
+    },
 );
 
 sub patchperl {
@@ -34,11 +53,15 @@ sub patchperl {
 
     # copy from https://github.com/bingos/devel-patchperl/blob/acdcf1d67ae426367f42ca763b9ba6b92dd90925/lib/Devel/PatchPerl.pm#L301-L307
     for my $p ( grep { _is( $_->{perl}, $vers ) } @patch ) {
-       for my $s (@{$p->{subs}}) {
-         my($sub, @args) = @$s;
-         push @args, $vers unless scalar @args;
-         $sub->(@args);
-       }
+        for my $s (@{$p->{subs}}) {
+            my($sub, @args) = @$s;
+            push @args, $vers unless scalar @args;
+            try {
+                $sub->(@args);
+            } catch {
+                warn "caught error: $_";
+            };
+        }
     }
 
     _patch_patchlevel();
@@ -73,6 +96,39 @@ sub _patch_patchlevel {
 sub _ge {
     my ($v1, $v2) = @_;
     return version->parse("v$v1") >= version->parse("v$v2");
+}
+
+sub _patch_unixish {
+    _patch(<<'PATCH');
+--- unixish.h
++++ unixish.h
+@@ -103,9 +103,7 @@
+  */
+ /* #define ALTERNATE_SHEBANG "#!" / **/
+ 
+-#if !defined(NSIG) || defined(M_UNIX) || defined(M_XENIX) || defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__)
+ # include <signal.h>
+-#endif
+ 
+ #ifndef SIGABRT
+ #    define SIGABRT SIGILL
+PATCH
+}
+
+sub _patch_configure {
+    _patch(<<'PATCH');
+--- Configure
++++ Configure
+@@ -3791,7 +3856,7 @@ int main() {
+        printf("%s\n", "1");
+ #endif
+ #endif
+-       exit(0);
++       return(0);
+ }
+ EOM
+ if $cc -o try $ccflags $ldflags try.c; then
+PATCH
 }
 
 1;

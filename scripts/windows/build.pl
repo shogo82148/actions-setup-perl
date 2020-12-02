@@ -21,7 +21,7 @@ use Actions::Core::Command qw(issue_command);
 my $version = $ENV{PERL_VERSION};
 my $thread = $ENV{PERL_MULTI_THREAD};
 my $tmpdir = File::Spec->rel2abs(
-    File::Spec->catdir($ENV{RUNNER_TEMP} || "tmp", "build-perl-$$"));
+    File::Spec->catdir($ENV{RUNNER_TEMP} || "tmp"));
 make_path($tmpdir);
 remove_tree($tmpdir, {keep_root => 1});
 my $install_dir = File::Spec->rel2abs(

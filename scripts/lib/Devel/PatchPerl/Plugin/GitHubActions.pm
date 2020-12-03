@@ -174,6 +174,19 @@ PATCH
  EOF
  set X $cc -o try $optimize $ccflags $ldflags try.c $libs
  shift
+@@ -7151,7 +7151,11 @@ eval $setvar
+ : Cruising for prototypes
+ echo " "
+ echo "Checking out function prototypes..." >&4
+-$cat >prototype.c <<'EOCP'
++$cat >prototype.c <<EOCP
++#$i_stdlib I_STDLIB
++#ifdef I_STDLIB
++#include <stdlib.h>
++#endif
+ int main(int argc, char *argv[]) {
+ 	exit(0);}
+ EOCP
 PATCH
 }
 

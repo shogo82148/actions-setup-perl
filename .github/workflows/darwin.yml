@@ -41,7 +41,7 @@ jobs:
           if [ -n "$PERL_VERSIONS" ]; then
             echo "::set-output name=matrix::$(printenv PERL_VERSIONS | jq -c '{perl: .}')"
           else
-            echo "::set-output name=matrix::$(cat versions/linux.json | jq -c '{perl: .}')"
+            echo "::set-output name=matrix::$(cat versions/darwin.json | jq -c '{perl: .}')"
           fi
         env:
           PERL_VERSIONS: ${{ github.event.inputs.perl-versions }}

@@ -136,7 +136,7 @@ PATCH
 
 sub _patch_configure {
     my $version = shift;
-    if (_ge($version, "5.8.0")) {
+    if (_ge($version, "5.8.1")) {
         _patch(<<'PATCH');
     _patch(<<'PATCH');
 --- Configure
@@ -156,7 +156,7 @@ PATCH
     _patch(<<'PATCH');
 --- Configure
 +++ Configure
-@@ -3134,7 +3134,7 @@ int main() {
+@@ -3791,7 +3791,7 @@ int main() {
  	printf("%s\n", "1");
  #endif
  #endif
@@ -164,7 +164,16 @@ PATCH
 +	return(0);
  }
  EOM
- if $cc -o gccvers $ccflags $ldflags gccvers.c; then
+ if $cc -o try $ccflags $ldflags try.c; then
+@@ -4797,7 +4797,7 @@ echo " "
+ echo "Checking your choice of C compiler and flags for coherency..." >&4
+ $cat > try.c <<'EOF'
+ #include <stdio.h>
+-int main() { printf("Ok\n"); exit(0); }
++int main() { printf("Ok\n"); return(0); }
+ EOF
+ set X $cc -o try $optimize $ccflags $ldflags try.c $libs
+ shift
 PATCH
 }
 

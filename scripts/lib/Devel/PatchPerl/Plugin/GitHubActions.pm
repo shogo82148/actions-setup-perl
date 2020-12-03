@@ -621,7 +621,7 @@ PATCH
 +#ifdef I_STDLIB
 +#include <stdlib.h>
 +#endif
- #include <db.h>
+ #include <db3/db.h>
  int main(int argc, char *argv[])
  {
 @@ -16933,6 +17045,10 @@ sunos) $echo '#define PERL_FFLUSH_ALL_FOPEN_MAX 32' > try.c ;;

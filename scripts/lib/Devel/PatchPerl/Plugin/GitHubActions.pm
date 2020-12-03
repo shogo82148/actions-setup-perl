@@ -191,7 +191,63 @@ PATCH
  	eval $xscan;\
  	$contains '^fprintf$' libc.list >/dev/null 2>&1; then
  		eval $xrun
-@@ -5845,8 +5845,12 @@ echo " "
+@@ -5776,9 +5776,9 @@ $rm -f libnames libpath
+ : is a C symbol defined?
+ csym='tlook=$1;
+ case "$3" in
+--v) tf=libc.tmp; tc=""; tdc="";;
+--a) tf=libc.tmp; tc="[0]"; tdc="[]";;
+-*) tlook="^$1\$"; tf=libc.list; tc="()"; tdc="()";;
++-v) tf=libc.tmp; tdc="";;
++-a) tf=libc.tmp; tdc="[]";;
++*) tlook="^$1\$"; tf=libc.list; tdc="()";;
+ esac;
+ tx=yes;
+ case "$reuseval-$4" in
+@@ -5787,25 +5787,28 @@ true-*) tx=no; eval "tval=\$$4"; case "$tval" in "") tx=yes;; esac;;
+ esac;
+ case "$tx" in
+ yes)
+-	case "$runnm" in
+-	true)
+-		if $contains $tlook $tf >/dev/null 2>&1;
+-		then tval=true;
+-		else tval=false;
+-		fi;;
+-	*)
+-		echo "int main() { extern short $1$tdc; printf(\"%hd\", $1$tc); }" > t.c;
+-		if $cc -o t $optimize $ccflags $ldflags t.c $libs >/dev/null 2>&1;
+-		then tval=true;
+-		else tval=false;
++	tval=false;
++	if $test "$runnm" = true; then
++		if $contains $tlook $tf >/dev/null 2>&1; then
++			tval=true;
++		elif $test "$mistrustnm" = compile -o "$mistrustnm" = run; then
++			echo "void *(*(p()))$tdc { extern void *$1$tdc; return &$1; } int main() { if(p()) return(0); else return(1); }"> try.c;
++			$cc -o try $optimize $ccflags $ldflags try.c >/dev/null 2>&1 $libs && tval=true;
++			$test "$mistrustnm" = run -a -x try && { $run ./try$_exe >/dev/null 2>&1 || tval=false; };
++			$rm -f try$_exe try.c core core.* try.core;
+ 		fi;
+-		$rm -f t t.c;;
+-	esac;;
++	else
++		echo "void *(*(p()))$tdc { extern void *$1$tdc; return &$1; } int main() { if(p()) return(0); else return(1); }"> try.c;
++		$cc -o try $optimize $ccflags $ldflags try.c $libs >/dev/null 2>&1 && tval=true;
++		$rm -f try$_exe try.c;
++	fi;
++	;;
+ *)
+ 	case "$tval" in
+ 	$define) tval=true;;
+ 	*) tval=false;;
+-	esac;;
++	esac;
++	;;
+ esac;
+ eval "$2=$tval"'
+ 
+@@ -5845,8 +5848,12 @@ echo " "
  case "$doublesize" in
  '')
  	echo "Checking to see how big your double precision numbers are..." >&4
@@ -205,7 +261,7 @@ PATCH
  int main()
  {
      printf("%d\n", (int)sizeof(double));
-@@ -6665,7 +6669,11 @@ echo " "
+@@ -6665,7 +6672,11 @@ echo " "
  echo "Checking to see how well your C compiler groks the void type..." >&4
  case "$voidflags" in
  '')
@@ -218,7 +274,7 @@ PATCH
  #if TRY & 1
  void sub() {
  #else
-@@ -6762,8 +6770,12 @@ case "$ptrsize" in
+@@ -6762,8 +6773,12 @@ case "$ptrsize" in
  	else
  		echo '#define VOID_PTR void *' > try.c
  	fi
@@ -232,7 +288,7 @@ PATCH
  int main()
  {
      printf("%d\n", (int)sizeof(VOID_PTR));
-@@ -7151,7 +7163,11 @@ eval $setvar
+@@ -7151,7 +7166,11 @@ eval $setvar
  : Cruising for prototypes
  echo " "
  echo "Checking out function prototypes..." >&4
@@ -245,7 +301,7 @@ PATCH
  int main(int argc, char *argv[]) {
  	exit(0);}
  EOCP
-@@ -7511,10 +7527,13 @@ while other systems (such as those using ELF) use $cc.
+@@ -7511,10 +7530,13 @@ while other systems (such as those using ELF) use $cc.
  
  EOM
  	case "$ld" in
@@ -260,7 +316,7 @@ PATCH
  int main() {
  	char b[4];
  	int i = open("a.out",O_RDONLY);
-@@ -8639,6 +8658,10 @@ echo "Checking the size of $zzz..." >&4
+@@ -8639,6 +8661,10 @@ echo "Checking the size of $zzz..." >&4
  cat > try.c <<EOCP
  #include <sys/types.h>
  #include <stdio.h>
@@ -271,7 +327,7 @@ PATCH
  int main() {
      printf("%d\n", (int)sizeof($fpostype));
      exit(0);
-@@ -8743,9 +8766,13 @@ EOCP
+@@ -8743,9 +8769,13 @@ EOCP
  		$cat > try.c <<EOCP
  #include <sys/types.h>
  #include <stdio.h>
@@ -286,7 +342,7 @@ PATCH
  }
  EOCP
  		set try
-@@ -9055,7 +9082,7 @@ eval $inlibc
+@@ -9055,7 +9085,7 @@ eval $inlibc
  case "$d_access" in
  "$define")
  	echo " "
@@ -295,7 +351,7 @@ PATCH
  #include <sys/types.h>
  #ifdef I_FCNTL
  #include <fcntl.h>
-@@ -9066,6 +9093,10 @@ case "$d_access" in
+@@ -9066,6 +9096,10 @@ case "$d_access" in
  #ifdef I_UNISTD
  #include <unistd.h>
  #endif
@@ -306,7 +362,7 @@ PATCH
  int main() {
  	exit(R_OK);
  }
-@@ -9203,7 +9234,7 @@ echo " "
+@@ -9203,7 +9237,7 @@ echo " "
  if test "X$timeincl" = X; then
  	echo "Testing to see if we should include <time.h>, <sys/time.h> or both." >&4
  	$echo $n "I'm now running the test program...$c"
@@ -315,7 +371,7 @@ PATCH
  #include <sys/types.h>
  #ifdef I_TIME
  #include <time.h>
-@@ -9217,6 +9248,10 @@ if test "X$timeincl" = X; then
+@@ -9217,6 +9251,10 @@ if test "X$timeincl" = X; then
  #ifdef I_SYSSELECT
  #include <sys/select.h>
  #endif
@@ -326,7 +382,7 @@ PATCH
  int main()
  {
  	struct tm foo;
-@@ -9382,7 +9417,7 @@ echo " "
+@@ -9382,7 +9420,7 @@ echo " "
  echo "Checking whether your compiler can handle __attribute__ ..." >&4
  $cat >attrib.c <<'EOCP'
  #include <stdio.h>
@@ -335,7 +391,7 @@ PATCH
  EOCP
  if $cc $ccflags -c attrib.c >attrib.out 2>&1 ; then
  	if $contains 'warning' attrib.out >/dev/null 2>&1; then
-@@ -9426,6 +9461,10 @@ case "$d_getpgrp" in
+@@ -9426,6 +9464,10 @@ case "$d_getpgrp" in
  #ifdef I_UNISTD
  #  include <unistd.h>
  #endif
@@ -346,7 +402,7 @@ PATCH
  int main()
  {
  	if (getuid() == 0) {
-@@ -9488,6 +9527,10 @@ case "$d_setpgrp" in
+@@ -9488,6 +9530,10 @@ case "$d_setpgrp" in
  #ifdef I_UNISTD
  #  include <unistd.h>
  #endif
@@ -357,7 +413,7 @@ PATCH
  int main()
  {
  	if (getuid() == 0) {
-@@ -9593,6 +9636,10 @@ else
+@@ -9593,6 +9639,10 @@ else
  fi
  $cat >try.c <<EOCP
  #include <stdio.h>
@@ -368,7 +424,7 @@ PATCH
  #include <sys/types.h>
  #include <signal.h>
  $signal_t blech(s) int s; { exit(3); }
-@@ -9647,6 +9694,10 @@ echo " "
+@@ -9647,6 +9697,10 @@ echo " "
  echo 'Checking whether your C compiler can cast negative float to unsigned.' >&4
  $cat >try.c <<EOCP
  #include <stdio.h>
@@ -379,7 +435,7 @@ PATCH
  #include <sys/types.h>
  #include <signal.h>
  $signal_t blech(s) int s; { exit(7); }
-@@ -9743,8 +9794,12 @@ echo " "
+@@ -9743,8 +9797,12 @@ echo " "
  if set vprintf val -f d_vprintf; eval $csym; $val; then
  	echo 'vprintf() found.' >&4
  	val="$define"
@@ -393,7 +449,7 @@ PATCH
  
  int main() { xxx("foo"); }
  
-@@ -10283,6 +10338,10 @@ eval $inhdr
+@@ -10283,6 +10341,10 @@ eval $inhdr
  echo " "
  $cat >dirfd.c <<EOM
  #include <stdio.h>
@@ -404,7 +460,7 @@ PATCH
  #$i_dirent I_DIRENT		/**/
  #$i_sysdir I_SYS_DIR		/**/
  #$i_sysndir I_SYS_NDIR		/**/
-@@ -10375,6 +10434,10 @@ EOM
+@@ -10375,6 +10437,10 @@ EOM
  $cat >fred.c<<EOM
  
  #include <stdio.h>
@@ -415,7 +471,7 @@ PATCH
  #$i_dlfcn I_DLFCN
  #ifdef I_DLFCN
  #include <dlfcn.h>      /* the dynamic linker include file for SunOS/Solaris */
-@@ -10912,7 +10975,7 @@ esac
+@@ -10912,7 +10978,7 @@ esac
  
  : Locate the flags for 'open()'
  echo " "
@@ -424,7 +480,7 @@ PATCH
  #include <sys/types.h>
  #ifdef I_FCNTL
  #include <fcntl.h>
-@@ -10920,6 +10983,10 @@ $cat >try.c <<'EOCP'
+@@ -10920,6 +10986,10 @@ $cat >try.c <<'EOCP'
  #ifdef I_SYS_FILE
  #include <sys/file.h>
  #endif
@@ -435,7 +491,7 @@ PATCH
  int main() {
  	if(O_RDONLY);
  #ifdef O_TRUNC
-@@ -11052,7 +11119,10 @@ case "$o_nonblock" in
+@@ -11052,7 +11122,10 @@ case "$o_nonblock" in
  	$cat head.c > try.c
  	$cat >>try.c <<EOCP
  #include <stdio.h>
@@ -446,7 +502,7 @@ PATCH
  #$i_fcntl I_FCNTL
  #ifdef I_FCNTL
  #include <fcntl.h>
-@@ -11098,7 +11168,10 @@ case "$eagain" in
+@@ -11098,7 +11171,10 @@ case "$eagain" in
  #include <sys/types.h>
  #include <signal.h>
  #include <stdio.h> 
@@ -458,7 +514,7 @@ PATCH
  #$i_fcntl I_FCNTL
  #ifdef I_FCNTL
  #include <fcntl.h>
-@@ -11258,7 +11331,10 @@ eval $inlibc
+@@ -11258,7 +11334,10 @@ eval $inlibc
  echo " "
  : See if fcntl-based locking works.
  $cat >try.c <<EOCP
@@ -469,7 +525,7 @@ PATCH
  #include <unistd.h>
  #include <fcntl.h>
  #include <signal.h>
-@@ -11325,6 +11401,10 @@ $cat <<EOM
+@@ -11325,6 +11404,10 @@ $cat <<EOM
  Checking to see how well your C compiler handles fd_set and friends ...
  EOM
  $cat >try.c <<EOCP
@@ -480,7 +536,7 @@ PATCH
  #$i_systime I_SYS_TIME
  #$i_sysselct I_SYS_SELECT
  #$d_socket HAS_SOCKET
-@@ -13005,9 +13085,13 @@ eval $inlibc
+@@ -13005,9 +13088,13 @@ eval $inlibc
  
  : Look for isascii
  echo " "
@@ -495,7 +551,7 @@ PATCH
  int main() {
  	int c = 'A';
  	if (isascii(c))
-@@ -13352,8 +13436,12 @@ echo " "
+@@ -13352,8 +13439,12 @@ echo " "
  case "$charsize" in
  '')
  	echo "Checking to see how big your characters are (hey, you never know)..." >&4
@@ -509,7 +565,7 @@ PATCH
  int main()
  {
      printf("%d\n", (int)sizeof(char));
-@@ -13593,6 +13681,10 @@ if test X"$d_volatile" = X"$define"; then
+@@ -13593,6 +13684,10 @@ if test X"$d_volatile" = X"$define"; then
  fi
  $cat <<EOP >try.c
  #include <stdio.h>
@@ -520,7 +576,7 @@ PATCH
  #include <sys/types.h>
  #include <signal.h>
  #ifdef SIGFPE
-@@ -14363,7 +14455,7 @@ $define)
+@@ -14363,7 +14458,7 @@ $define)
  #endif
  END
  
@@ -529,7 +585,7 @@ PATCH
  #include <sys/types.h>
  #include <sys/ipc.h>
  #include <sys/sem.h>
-@@ -14410,14 +14502,14 @@ int main() {
+@@ -14410,14 +14505,14 @@ int main() {
  }
  END
      val="$undef"
@@ -552,7 +608,7 @@ PATCH
      set d_semctl_semun
      eval $setvar
      case "$d_semctl_semun" in
-@@ -14431,7 +14523,7 @@ END
+@@ -14431,7 +14526,7 @@ END
      esac
  
      : see whether semctl IPC_STAT can use struct semid_ds pointer
@@ -561,7 +617,7 @@ PATCH
  #include <sys/types.h>
  #include <sys/ipc.h>
  #include <sys/sem.h>
-@@ -15065,10 +15157,14 @@ echo " "
+@@ -15065,10 +15160,14 @@ echo " "
  : see if we have sigaction
  if set sigaction val -f d_sigaction; eval $csym; $val; then
  	echo 'sigaction() found.' >&4
@@ -577,7 +633,7 @@ PATCH
  int main()
  {
      struct sigaction act, oact;
-@@ -15100,8 +15196,12 @@ eval $inlibc
+@@ -15100,8 +15199,12 @@ eval $inlibc
  echo " "
  case "$d_sigsetjmp" in
  '')
@@ -591,7 +647,7 @@ PATCH
  sigjmp_buf env;
  int set = 1;
  int main()
-@@ -16182,6 +16282,10 @@ I'm now running the test program...
+@@ -16182,6 +16285,10 @@ I'm now running the test program...
  EOM
  		$cat >try.c <<EOCP
  #include <stdio.h>
@@ -602,7 +658,7 @@ PATCH
  #include <sys/types.h>
  typedef $uvtype UV;
  int main()
-@@ -16244,6 +16348,10 @@ EOM
+@@ -16244,6 +16351,10 @@ EOM
  case "$d_u32align" in
  '')   $cat >try.c <<EOCP
  #include <stdio.h>
@@ -613,7 +669,7 @@ PATCH
  #define U32 $u32type
  #define BYTEORDER 0x$byteorder
  #define U8 $u8type
-@@ -16595,6 +16703,10 @@ $define)
+@@ -16595,6 +16706,10 @@ $define)
  #endif
  #include <sys/types.h>
  #include <stdio.h>
@@ -624,7 +680,7 @@ PATCH
  #include <db3/db.h>
  int main(int argc, char *argv[])
  {
-@@ -16933,6 +17045,10 @@ sunos) $echo '#define PERL_FFLUSH_ALL_FOPEN_MAX 32' > try.c ;;
+@@ -16933,6 +17048,10 @@ sunos) $echo '#define PERL_FFLUSH_ALL_FOPEN_MAX 32' > try.c ;;
  esac
  $cat >>try.c <<EOCP
  #include <stdio.h>
@@ -635,7 +691,7 @@ PATCH
  #$i_unistd I_UNISTD
  #ifdef I_UNISTD
  # include <unistd.h>
-@@ -17249,6 +17365,10 @@ echo "Checking the size of $zzz..." >&4
+@@ -17249,6 +17368,10 @@ echo "Checking the size of $zzz..." >&4
  cat > try.c <<EOCP
  #include <sys/types.h>
  #include <stdio.h>
@@ -646,7 +702,7 @@ PATCH
  int main() {
      printf("%d\n", (int)sizeof($gidtype));
      exit(0);
-@@ -17959,7 +18079,11 @@ echo " "
+@@ -17959,7 +18082,11 @@ echo " "
  echo "Checking how to generate random libraries on your machine..." >&4
  echo 'int bar1() { return bar2(); }' > bar1.c
  echo 'int bar2() { return 2; }' > bar2.c
@@ -659,7 +715,7 @@ PATCH
  int main() { printf("%d\n", bar1()); exit(0); }
  EOP
  $cc $ccflags -c bar1.c >/dev/null 2>&1
-@@ -18081,6 +18205,10 @@ EOM
+@@ -18081,6 +18208,10 @@ EOM
  #   include <sys/socket.h> /* Might include <sys/bsdtypes.h> */
  #endif
  #include <stdio.h>
@@ -670,7 +726,7 @@ PATCH
  $selecttype b;
  #define S sizeof(*(b))
  #define MINBITS	64
-@@ -18186,9 +18314,13 @@ xxx="$xxx SYS TERM THAW TRAP TSTP TTIN TTOU URG USR1 USR2"
+@@ -18186,9 +18317,13 @@ xxx="$xxx SYS TERM THAW TRAP TSTP TTIN TTOU URG USR1 USR2"
  xxx="$xxx USR3 USR4 VTALRM WAITING WINCH WIND WINDOW XCPU XFSZ"
  
  : generate a few handy files for later
@@ -685,7 +741,7 @@ PATCH
  #include <stdio.h>
  int main() {
  
-@@ -18263,7 +18395,7 @@ END {
+@@ -18263,7 +18398,7 @@ END {
  $cat >signal.awk <<'EOP'
  BEGIN { ndups = 0 }
  $1 ~ /^NSIG$/ { nsig = $2 }
@@ -694,7 +750,7 @@ PATCH
      if ($2 > maxsig) { maxsig = $2 }
      if (sig_name[$2]) {
  	dup_name[ndups] = $1
-@@ -18416,6 +18548,10 @@ echo "Checking the size of $zzz..." >&4
+@@ -18416,6 +18551,10 @@ echo "Checking the size of $zzz..." >&4
  cat > try.c <<EOCP
  #include <sys/types.h>
  #include <stdio.h>
@@ -705,7 +761,7 @@ PATCH
  int main() {
      printf("%d\n", (int)sizeof($sizetype));
      exit(0);
-@@ -18519,6 +18655,10 @@ eval $typedef
+@@ -18519,6 +18658,10 @@ eval $typedef
  dflt="$ssizetype"
  $cat > try.c <<EOM
  #include <stdio.h>
@@ -716,7 +772,7 @@ PATCH
  #include <sys/types.h>
  #define Size_t $sizetype
  #define SSize_t $dflt
-@@ -18601,6 +18741,10 @@ echo "Checking the size of $zzz..." >&4
+@@ -18601,6 +18744,10 @@ echo "Checking the size of $zzz..." >&4
  cat > try.c <<EOCP
  #include <sys/types.h>
  #include <stdio.h>

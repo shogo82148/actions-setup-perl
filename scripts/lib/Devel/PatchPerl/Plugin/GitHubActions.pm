@@ -214,6 +214,21 @@ PATCH
  int main(int argc, char *argv[]) {
  	exit(0);}
  EOCP
+@@ -7519,11 +7523,11 @@ int main() {
+ 	char b[4];
+ 	int i = open("a.out",O_RDONLY);
+ 	if(i == -1) 
+-		exit(1); /* fail */
++		return(1); /* fail */
+ 	if(read(i,b,4)==4 && b[0]==127 && b[1]=='E' && b[2]=='L' && b[3]=='F')
+-		exit(0); /* succeed (yes, it's ELF) */
++		return(0); /* succeed (yes, it's ELF) */
+ 	else
+-		exit(1); /* fail */
++		return(1); /* fail */
+ }
+ EOM
+ 		if $cc $ccflags $ldflags try.c >/dev/null 2>&1 && $run ./a.out; then
 @@ -8641,7 +8645,7 @@ cat > try.c <<EOCP
  #include <stdio.h>
  int main() {
@@ -223,6 +238,72 @@ PATCH
  }
  EOCP
  set try
+@@ -8745,7 +8749,7 @@ EOCP
+ #include <stdio.h>
+ int main() {
+     printf("%d\n", (int)sizeof($fpostype));
+-    exit(0);
++    return(0);
+ }
+ EOCP
+ 		set try
+@@ -8948,7 +8952,7 @@ int main()
+ 	 * t/base/num.t for benefit of platforms not using Configure or
+ 	 * overriding d_Gconvert */
+ 
+-	exit(0);
++	return(0);
+ }
+ EOP
+ : first add preferred functions to our list
+@@ -9227,12 +9231,12 @@ int main()
+ 	struct timezone tzp;
+ #endif
+ 	if (foo.tm_sec == foo.tm_sec)
+-		exit(0);
++		return(0);
+ #ifdef S_TIMEVAL
+ 	if (bar.tv_sec == bar.tv_sec)
+-		exit(0);
++		return(0);
+ #endif
+-	exit(1);
++	return(1);
+ }
+ EOCP
+ 	flags=''
+@@ -9434,12 +9438,12 @@ int main()
+ 	}
+ #ifdef TRY_BSD_PGRP
+ 	if (getpgrp(1) == 0)
+-		exit(0);
++		return(0);
+ #else
+ 	if (getpgrp() > 0)
+-		exit(0);
++		return(0);
+ #endif
+-	exit(1);
++	return(1);
+ }
+ EOP
+ 	if $cc -o try -DTRY_BSD_PGRP $ccflags $ldflags try.c $libs >/dev/null 2>&1 && $run ./try; then
+@@ -9496,12 +9500,12 @@ int main()
+ 	}
+ #ifdef TRY_BSD_PGRP
+ 	if (-1 == setpgrp(1, 1))
+-		exit(0);
++		return(0);
+ #else
+ 	if (setpgrp() != -1)
+-		exit(0);
++		return(0);
+ #endif
+-	exit(1);
++	return(1);
+ }
+ EOP
+ 	if $cc -o try -DTRY_BSD_PGRP $ccflags $ldflags try.c $libs >/dev/null 2>&1 && $run ./try; then
 @@ -9593,6 +9597,10 @@ else
  fi
  $cat >try.c <<EOCP
@@ -245,6 +326,137 @@ PATCH
  #include <sys/types.h>
  #include <signal.h>
  $signal_t blech(s) int s; { exit(7); }
+@@ -10311,9 +10323,9 @@ $cat >dirfd.c <<EOM
+ int main() {
+ 	DIR *dirp = opendir(".");
+ 	if (dirfd(dirp) >= 0)
+-		exit(0);
++		return(0);
+ 	else
+-		exit(1);
++		return(1);
+ }
+ EOM
+ set dirfd
+@@ -10399,7 +10411,7 @@ int main()
+     if (handle == NULL) {
+ 	printf ("1\n") ;
+ 	fflush (stdout) ;
+-	exit(0);
++	return(0);
+     }
+     symbol = dlsym(handle, "fred") ;
+     if (symbol == NULL) {
+@@ -10408,14 +10420,14 @@ int main()
+ 	if (symbol == NULL) {
+ 	    printf ("2\n") ;
+ 	    fflush (stdout) ;
+-	    exit(0);
++	    return(0);
+ 	}
+ 	printf ("3\n") ;
+     }
+     else
+ 	printf ("4\n") ;
+     fflush (stdout) ;
+-    exit(0);
++    return(0);
+ }
+ EOM
+ 	: Call the object file tmp-dyna.o in case dlext=o.
+@@ -10923,9 +10935,9 @@ $cat >try.c <<'EOCP'
+ int main() {
+ 	if(O_RDONLY);
+ #ifdef O_TRUNC
+-	exit(0);
++	return(0);
+ #else
+-	exit(1);
++	return($1);
+ #endif
+ }
+ EOCP
+@@ -11060,17 +11072,17 @@ case "$o_nonblock" in
+ int main() {
+ #ifdef O_NONBLOCK
+ 	printf("O_NONBLOCK\n");
+-	exit(0);
++	return($1);
+ #endif
+ #ifdef O_NDELAY
+ 	printf("O_NDELAY\n");
+-	exit(0);
++	return($1);
+ #endif
+ #ifdef FNDELAY
+ 	printf("FNDELAY\n");
+-	exit(0);
++	return($1);
+ #endif
+-	exit(0);
++	return($1);
+ }
+ EOCP
+ 	set try
+@@ -11135,14 +11147,14 @@ int main()
+ 		close(pu[0]);	/* Parent writes (blocking) to pu[1] */
+ #ifdef F_SETFL
+ 		if (-1 == fcntl(pd[0], F_SETFL, MY_O_NONBLOCK))
+-			exit(1);
++			return($1);
+ #else
+-		exit(4);
++		return($1);
+ #endif
+ 		signal(SIGALRM, blech);
+ 		alarm(5);
+ 		if ((ret = read(pd[0], buf, 1)) > 0)	/* Nothing to read! */
+-			exit(2);
++			return($1);
+ 		sprintf(string, "%d\n", ret);
+ 		write(2, string, strlen(string));
+ 		alarm(0);
+@@ -11164,14 +11176,14 @@ int main()
+ 		alarm(0);
+ 		sprintf(string, "%d\n", ret);
+ 		write(4, string, strlen(string));
+-		exit(0);
++		return($1);
+ 	}
+ 
+ 	close(pd[0]);			/* We write to pd[1] */
+ 	close(pu[1]);			/* We read from pu[0] */
+ 	read(pu[0], buf, 1);	/* Wait for parent to signal us we may continue */
+ 	close(pd[1]);			/* Pipe pd is now fully closed! */
+-	exit(0);				/* Bye bye, thank you for playing! */
++	return($1);				/* Bye bye, thank you for playing! */
+ }
+ EOCP
+ 	set try
+@@ -11346,9 +11358,9 @@ int main() {
+ #endif
+ 
+ #if defined(FD_SET) && defined(FD_CLR) && defined(FD_ISSET) && defined(FD_ZERO)
+-	exit(0);
++	return($1);
+ #else
+-	exit(1);
++	return($1);
+ #endif
+ }
+ EOCP
+@@ -13011,9 +13023,9 @@ $cat >isascii.c <<'EOCP'
+ int main() {
+ 	int c = 'A';
+ 	if (isascii(c))
+-		exit(0);
++		return($1);
+ 	else
+-		exit(1);
++		return($1);
+ }
+ EOCP
+ set isascii
 @@ -13357,7 +13369,7 @@ case "$charsize" in
  int main()
  {
@@ -254,6 +466,109 @@ PATCH
  }
  EOCP
  	set try
+@@ -13625,7 +13637,7 @@ int main() {
+       }	
+     }
+     printf("%d\n", ((i == n) ? -n : i));
+-    exit(0);
++    return($1);
+ }
+ EOP
+ set try
+@@ -14102,11 +14114,11 @@ for (align = 7; align >= 0; align--) {
+ 			bcopy(b, b+off, len);
+ 			bcopy(b+off, b, len);
+ 			if (bcmp(b, abc, len))
+-				exit(1);
++				return($1);
+ 		}
+ 	}
+ }
+-exit(0);
++return($1);
+ }
+ EOCP
+ 		set try
+@@ -14178,11 +14190,11 @@ for (align = 7; align >= 0; align--) {
+ 			memcpy(b+off, b, len);
+ 			memcpy(b, b+off, len);
+ 			if (memcmp(b, abc, len))
+-				exit(1);
++				return($1);
+ 		}
+ 	}
+ }
+-exit(0);
++return($1);
+ }
+ EOCP
+ 		set try
+@@ -14237,8 +14249,8 @@ int main()
+ char a = -1;
+ char b = 0;
+ if ((a < b) && memcmp(&a, &b, 1) < 0)
+-	exit(1);
+-exit(0);
++	return($1);
++return($1);
+ }
+ EOCP
+ 	set try
+@@ -15110,7 +15122,7 @@ int main()
+ 		exit(set);
+ 	set = 0;
+ 	siglongjmp(env, 1);
+-	exit(1);
++	return($1);
+ }
+ EOP
+ 	set try
+@@ -15374,8 +15386,8 @@ int main() {
+ 		18 <= FILE_cnt(fp) &&
+ 		strncmp(FILE_ptr(fp), "include <stdio.h>\n", 18) == 0
+ 	)
+-		exit(0);
+-	exit(1);
++		return($1);
++	return($1);
+ }
+ EOP
+ val="$undef"
+@@ -15452,12 +15464,12 @@ int main() {
+ 	size_t cnt;
+ 	if (!fp) {
+ 	    puts("Fail even to read");
+-	    exit(1);
++	    return($1);
+ 	}
+ 	c = getc(fp); /* Read away the first # */
+ 	if (c == EOF) {
+ 	    puts("Fail even to read");
+-	    exit(1);
++	    return($1);
+ 	}
+ 	if (!(
+ 		18 <= FILE_cnt(fp) &&
+@@ -15532,8 +15544,8 @@ int main() {
+ 		19 <= FILE_bufsiz(fp) &&
+ 		strncmp(FILE_base(fp), "#include <stdio.h>\n", 19) == 0
+ 	)
+-		exit(0);
+-	exit(1);
++		return($1);
++	return($1);
+ }
+ EOP
+ 	set try
+@@ -16199,7 +16211,7 @@ int main()
+ 	for (i = 0; i < $uvsize; i++)
+ 		printf("%c", u.c[i]+'0');
+ 	printf("\n");
+-	exit(0);
++	return($1);
+ }
+ EOCP
+ 		xxx_prompt=y
 @@ -16244,6 +16256,10 @@ EOM
  case "$d_u32align" in
  '')   $cat >try.c <<EOCP
@@ -265,7 +580,18 @@ PATCH
  #define U32 $u32type
  #define BYTEORDER 0x$byteorder
  #define U8 $u8type
-@@ -17251,7 +17267,7 @@ cat > try.c <<EOCP
+@@ -16595,6 +16611,10 @@ $define)
+ #endif
+ #include <sys/types.h>
+ #include <stdio.h>
++#$i_stdlib I_STDLIB
++#ifdef I_STDLIB
++#include <stdlib.h>
++#endif
+ #include <db.h>
+ int main(int argc, char *argv[])
+ {
+@@ -17251,7 +17271,7 @@ cat > try.c <<EOCP
  #include <stdio.h>
  int main() {
      printf("%d\n", (int)sizeof($gidtype));
@@ -274,7 +600,16 @@ PATCH
  }
  EOCP
  set try
-@@ -18418,7 +18434,7 @@ cat > try.c <<EOCP
+@@ -18257,7 +18277,7 @@ echo $xxx | $tr ' ' $trnl | $sort | $uniq | $awk '
+ }
+ END {
+ 	printf "#endif /* JUST_NSIG */\n";
+-	printf "exit(0);\n}\n";
++	printf "return(0);\n}\n";
+ }
+ ' >>signal.c
+ $cat >signal.awk <<'EOP'
+@@ -18418,7 +18438,7 @@ cat > try.c <<EOCP
  #include <stdio.h>
  int main() {
      printf("%d\n", (int)sizeof($sizetype));
@@ -283,7 +618,7 @@ PATCH
  }
  EOCP
  set try
-@@ -18530,7 +18546,7 @@ int main()
+@@ -18530,7 +18550,7 @@ int main()
  		printf("int\n");
  	else 
  		printf("long\n");
@@ -292,7 +627,7 @@ PATCH
  }
  EOM
  echo " "
-@@ -18603,7 +18619,7 @@ cat > try.c <<EOCP
+@@ -18603,7 +18623,7 @@ cat > try.c <<EOCP
  #include <stdio.h>
  int main() {
      printf("%d\n", (int)sizeof($uidtype));

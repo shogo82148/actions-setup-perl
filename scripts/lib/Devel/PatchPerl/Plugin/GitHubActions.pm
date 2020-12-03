@@ -174,6 +174,33 @@ PATCH
  EOF
  set X $cc -o try $optimize $ccflags $ldflags try.c $libs
  shift
+@@ -4893,7 +4893,7 @@ int main()
+ 	printf("intsize=%d;\n", (int)sizeof(int));
+ 	printf("longsize=%d;\n", (int)sizeof(long));
+ 	printf("shortsize=%d;\n", (int)sizeof(short));
+-	exit(0);
++	return(0);
+ }
+ EOCP
+ 	set try
+@@ -5850,7 +5850,7 @@ case "$doublesize" in
+ int main()
+ {
+     printf("%d\n", (int)sizeof(double));
+-    exit(0);
++    return(0);
+ }
+ EOCP
+ 	set try
+@@ -6767,7 +6767,7 @@ case "$ptrsize" in
+ int main()
+ {
+     printf("%d\n", (int)sizeof(VOID_PTR));
+-    exit(0);
++    return(0);
+ }
+ EOCP
+ 	set try
 @@ -7151,7 +7151,11 @@ eval $setvar
  : Cruising for prototypes
  echo " "
@@ -187,6 +214,93 @@ PATCH
  int main(int argc, char *argv[]) {
  	exit(0);}
  EOCP
+@@ -8641,7 +8645,7 @@ cat > try.c <<EOCP
+ #include <stdio.h>
+ int main() {
+     printf("%d\n", (int)sizeof($fpostype));
+-    exit(0);
++    return(0);
+ }
+ EOCP
+ set try
+@@ -9593,6 +9597,10 @@ else
+ fi
+ $cat >try.c <<EOCP
+ #include <stdio.h>
++#$i_stdlib I_STDLIB
++#ifdef I_STDLIB
++#include <stdlib.h>
++#endif
+ #include <sys/types.h>
+ #include <signal.h>
+ $signal_t blech(s) int s; { exit(3); }
+@@ -9647,6 +9655,10 @@ echo " "
+ echo 'Checking whether your C compiler can cast negative float to unsigned.' >&4
+ $cat >try.c <<EOCP
+ #include <stdio.h>
++#$i_stdlib I_STDLIB
++#ifdef I_STDLIB
++#include <stdlib.h>
++#endif
+ #include <sys/types.h>
+ #include <signal.h>
+ $signal_t blech(s) int s; { exit(7); }
+@@ -13357,7 +13369,7 @@ case "$charsize" in
+ int main()
+ {
+     printf("%d\n", (int)sizeof(char));
+-    exit(0);
++    return(0);
+ }
+ EOCP
+ 	set try
+@@ -16244,6 +16256,10 @@ EOM
+ case "$d_u32align" in
+ '')   $cat >try.c <<EOCP
+ #include <stdio.h>
++#$i_stdlib I_STDLIB
++#ifdef I_STDLIB
++#include <stdlib.h>
++#endif
+ #define U32 $u32type
+ #define BYTEORDER 0x$byteorder
+ #define U8 $u8type
+@@ -17251,7 +17267,7 @@ cat > try.c <<EOCP
+ #include <stdio.h>
+ int main() {
+     printf("%d\n", (int)sizeof($gidtype));
+-    exit(0);
++    return(0);
+ }
+ EOCP
+ set try
+@@ -18418,7 +18434,7 @@ cat > try.c <<EOCP
+ #include <stdio.h>
+ int main() {
+     printf("%d\n", (int)sizeof($sizetype));
+-    exit(0);
++    return(0);
+ }
+ EOCP
+ set try
+@@ -18530,7 +18546,7 @@ int main()
+ 		printf("int\n");
+ 	else 
+ 		printf("long\n");
+-	exit(0);
++	return(0);
+ }
+ EOM
+ echo " "
+@@ -18603,7 +18619,7 @@ cat > try.c <<EOCP
+ #include <stdio.h>
+ int main() {
+     printf("%d\n", (int)sizeof($uidtype));
+-    exit(0);
++    return(0);
+ }
+ EOCP
+ set try
 PATCH
 }
 

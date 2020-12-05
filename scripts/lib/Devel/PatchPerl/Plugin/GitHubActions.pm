@@ -138,8 +138,10 @@ sub _patch_configure {
     my $version = shift;
     if (_ge($version, "5.8.0")) {
         _patch(<<'PATCH');
---- Configure
-+++ Configure
+diff --git a/Configure b/Configure
+index c1e20289a1..fe4165839e 100755
+--- a/Configure
++++ b/Configure
 @@ -2152,9 +2152,10 @@ for dir in \$*; do
  	elif test -f \$dir/\$thing.exe; then
  		if test -n "$DJGPP"; then
@@ -192,7 +194,58 @@ sub _patch_configure {
      done
      $rm -f try try.*
  esac
-@@ -4813,7 +4817,7 @@ echo " "
+@@ -4466,6 +4470,50 @@ case "$firstmakefile" in
+ '') firstmakefile='makefile';;
+ esac
+ 
++case "$ccflags" in
++*-DUSE_LONG_DOUBLE*|*-DUSE_MORE_BITS*) uselongdouble="$define" ;;
++esac
++
++case "$uselongdouble" in
++$define|true|[yY]*)	dflt='y';;
++*) dflt='n';;
++esac
++cat <<EOM
++
++Perl can be built to take advantage of long doubles which
++(if available) may give more accuracy and range for floating point numbers.
++
++If this doesn't make any sense to you, just accept the default '$dflt'.
++EOM
++rp='Try to use long doubles if available?'
++. ./myread
++case "$ans" in
++y|Y) 	val="$define"	;;
++*)      val="$undef"	;;
++esac
++set uselongdouble
++eval $setvar
++
++case "$uselongdouble" in
++true|[yY]*) uselongdouble="$define" ;;
++esac
++
++case "$uselongdouble" in
++$define)
++: Look for a hint-file generated 'call-back-unit'.  If the
++: user has specified that long doubles should be used,
++: we may need to set or change some other defaults.
++	if $test -f uselongdouble.cbu; then
++		echo "Your platform has some specific hints for long doubles, using them..."
++		. ./uselongdouble.cbu
++	else
++		$cat <<EOM
++(Your platform doesn't have any specific hints for long doubles.)
++EOM
++	fi
++	;;
++esac
++
+ : Looking for optional libraries
+ echo " "
+ echo "Checking for optional libraries..." >&4
+@@ -4813,7 +4861,7 @@ echo " "
  echo "Checking your choice of C compiler and flags for coherency..." >&4
  $cat > try.c <<'EOF'
  #include <stdio.h>
@@ -201,7 +254,7 @@ sub _patch_configure {
  EOF
  set X $cc -o try $optimize $ccflags $ldflags try.c $libs
  shift
-@@ -4897,100 +4901,6 @@ mc_file=$1;
+@@ -4897,100 +4945,6 @@ mc_file=$1;
  shift;
  $cc -o ${mc_file} $optimize $ccflags $ldflags $* ${mc_file}.c $libs;'
  
@@ -302,7 +355,7 @@ sub _patch_configure {
  : determine filename position in cpp output
  echo " "
  echo "Computing filename position in cpp output for #include directives..." >&4
-@@ -5100,6 +5010,108 @@ do set $yyy; var=$2; eval "was=\$$2";
+@@ -5100,6 +5054,108 @@ do set $yyy; var=$2; eval "was=\$$2";
  	set $yyy; shift; shift; yyy=$@;
  done'
  
@@ -411,7 +464,7 @@ sub _patch_configure {
  : see if inttypes.h is available
  : we want a real compile instead of Inhdr because some systems
  : have an inttypes.h which includes non-existent headers
-@@ -5378,1075 +5390,370 @@ case "$use64bitall" in
+@@ -5378,1040 +5434,335 @@ case "$use64bitall" in
  	;;
  esac
  
@@ -469,19 +522,6 @@ sub _patch_configure {
 +    exit(0);
  }
  EOCP
--set try
--if eval $compile_ok && $run ./try > glibc.ver; then
--	val="$define"
--	gnulibc_version=`$cat glibc.ver`
--	echo "You are using the GNU C Library version $gnulibc_version"
--else
--	val="$undef"
--	gnulibc_version=''
--	echo "You are not using the GNU C Library"
--fi
--$rm -f try try.* glibc.ver
--set d_gnulibc
--eval $setvar
 +	set try
 +	if eval $compile_ok; then
 +		doublesize=`$run ./try`
@@ -496,6 +536,29 @@ sub _patch_configure {
 +	;;
 +esac
 +$rm -f try.c try
++
++: check for long doubles
++echo " "
++echo "Checking to see if you have long double..." >&4
++echo 'int main() { long double x = 7.0; }' > try.c
+ set try
+-if eval $compile_ok && $run ./try > glibc.ver; then
++if eval $compile; then
+ 	val="$define"
+-	gnulibc_version=`$cat glibc.ver`
+-	echo "You are using the GNU C Library version $gnulibc_version"
++	echo "You have long double."
+ else
+ 	val="$undef"
+-	gnulibc_version=''
+-	echo "You are not using the GNU C Library"
++	echo "You do not have long double."
+ fi
+-$rm -f try try.* glibc.ver
+-set d_gnulibc
++$rm try.*
++set d_longdbl
+ eval $setvar
  
 -: see if nm is to be used to determine whether a symbol is defined or not
 -case "$usenm" in
@@ -503,22 +566,6 @@ sub _patch_configure {
 -	dflt=''
 -	case "$d_gnulibc" in
 -	"$define")
-+: check for long doubles
-+echo " "
-+echo "Checking to see if you have long double..." >&4
-+echo 'int main() { long double x = 7.0; }' > try.c
-+set try
-+if eval $compile; then
-+	val="$define"
-+	echo "You have long double."
-+else
-+	val="$undef"
-+	echo "You do not have long double."
-+fi
-+$rm try.*
-+set d_longdbl
-+eval $setvar
-+
 +: check for length of long double
 +case "${d_longdbl}${longdblsize}" in
 +$define)
@@ -725,30 +772,13 @@ sub _patch_configure {
 -case "$ans" in
 -[Nn]*) usenm=false;;
 -*) usenm=true;;
-+fn=d~
-+rp='Installation prefix to use?'
-+. ./getfile
-+oldprefix=''
-+case "$prefix" in
-+'') ;;
-+*)
-+	case "$ans" in
-+	"$prefix") ;;
-+	*) oldprefix="$prefix";;
-+	esac
-+	;;
- esac
-+prefix="$ans"
-+prefixexp="$ansexp"
- 
+-esac
+-
 -runnm=$usenm
 -case "$reuseval" in
 -true) runnm=false;;
-+case "$afsroot" in
-+'')	afsroot=/afs ;;
-+*)	afsroot=$afsroot ;;
- esac
- 
+-esac
+-
 -: nm options which may be necessary
 -case "$nm_opt" in
 -'') if $test -f /mach_boot; then
@@ -773,15 +803,26 @@ sub _patch_configure {
 -			nm_so_opt='--dynamic'
 -		fi
 -		;;
--	esac
--	;;
--esac
--
++fn=d~
++rp='Installation prefix to use?'
++. ./getfile
++oldprefix=''
++case "$prefix" in
++'') ;;
++*)
++	case "$ans" in
++	"$prefix") ;;
++	*) oldprefix="$prefix";;
+ 	esac
+ 	;;
+ esac
++prefix="$ans"
++prefixexp="$ansexp"
+ 
 -case "$runnm" in
 -true)
 -: get list of predefined functions in a handy place
-+: is AFS running?
- echo " "
+-echo " "
 -case "$libc" in
 -'') libc=unknown
 -	case "$libs" in
@@ -821,7 +862,10 @@ sub _patch_configure {
 -	esac
 -	done
 -	;;
--esac
++case "$afsroot" in
++'')	afsroot=/afs ;;
++*)	afsroot=$afsroot ;;
+ esac
 -xxx=normal
 -case "$libc" in
 -unknown)
@@ -845,6 +889,9 @@ sub _patch_configure {
 -	;;
 -*)
 -	set blurfl
++
++: is AFS running?
++echo " "
 +case "$afs" in
 +$define|true)	afs=true ;;
 +$undef|false)	afs=false ;;
@@ -946,37 +993,8 @@ sub _patch_configure {
 +rp='What installation prefix should I use for installing files?'
  . ./getfile
 -libc="$ans"
-+installprefix="$ans"
-+installprefixexp="$ansexp"
- 
-+: set the prefixit variable, to compute a suitable default value
-+prefixit='case "$3" in
-+""|none)
-+	case "$oldprefix" in
-+	"") eval "$1=\"\$$2\"";;
-+	*)
-+		case "$3" in
-+		"") eval "$1=";;
-+		none)
-+			eval "tp=\"\$$2\"";
-+			case "$tp" in
-+			""|" ") eval "$1=\"\$$2\"";;
-+			*) eval "$1=";;
-+			esac;;
-+		esac;;
-+	esac;;
-+*)
-+	eval "tp=\"$oldprefix-\$$2-\""; eval "tp=\"$tp\"";
-+	case "$tp" in
-+	--|/*--|\~*--) eval "$1=\"$prefix/$3\"";;
-+	/*-$oldprefix/*|\~*-$oldprefix/*)
-+		eval "$1=\`echo \$$2 | sed \"s,^$oldprefix,$prefix,\"\`";;
-+	*) eval "$1=\"\$$2\"";;
-+	esac;;
-+esac'
-+
-+: get the patchlevel
- echo " "
+-
+-echo " "
 -echo $libc $libnames | $tr ' ' $trnl | $sort | $uniq > libnames
 -set X `cat libnames`
 -shift
@@ -987,36 +1005,8 @@ sub _patch_configure {
 -$sed 's/^/	/' libnames >&4
 -echo " "
 -$echo $n "This may take a while...$c" >&4
-+echo "Getting the current patchlevel..." >&4
-+if $test -r $rsrc/patchlevel.h;then
-+	revision=`awk '/define[ 	]+PERL_REVISION/ {print $3}' $rsrc/patchlevel.h`
-+	patchlevel=`awk '/define[ 	]+PERL_VERSION/ {print $3}' $rsrc/patchlevel.h`
-+	subversion=`awk '/define[ 	]+PERL_SUBVERSION/ {print $3}' $rsrc/patchlevel.h`
-+	api_revision=`awk '/define[ 	]+PERL_API_REVISION/ {print $3}' $rsrc/patchlevel.h`
-+	api_version=`awk '/define[ 	]+PERL_API_VERSION/ {print $3}' $rsrc/patchlevel.h`
-+	api_subversion=`awk '/define[ 	]+PERL_API_SUBVERSION/ {print $3}' $rsrc/patchlevel.h`
-+       perl_patchlevel=`grep ',"DEVEL[0-9][0-9]*"' $rsrc/patchlevel.h|sed 's/[^0-9]//g'`
-+else
-+	revision=0
-+	patchlevel=0
-+	subversion=0
-+	api_revision=0
-+	api_version=0
-+	api_subversion=0
-+	perl_patchlevel=0
-+	$echo "(You do not have patchlevel.h.  Eek.)"
-+fi
-+if $test -r $rsrc/.patch ; then  
-+	if $test "`cat $rsrc/.patch`" -gt "$perl_patchlevel" ; then
-+		perl_patchlevel=`cat $rsrc/.patch`
-+	fi
-+fi
-+: Define a handy string here to avoid duplication in myconfig.SH and configpm.
-+version_patchlevel_string="version $patchlevel subversion $subversion"
-+case "$perl_patchlevel" in
-+0|'') ;;
-+*) version_patchlevel_string="$version_patchlevel_string patch $perl_patchlevel" ;;
-+esac
++installprefix="$ans"
++installprefixexp="$ansexp"
  
 -for file in $*; do
 -	case $file in
@@ -1771,46 +1761,35 @@ sub _patch_configure {
 -	*) eval "$1=\"\$$2\"";;
 -	esac;;
 -esac'
--
--: get the patchlevel
--echo " "
--echo "Getting the current patchlevel..." >&4
--if $test -r $rsrc/patchlevel.h;then
--	revision=`awk '/define[ 	]+PERL_REVISION/ {print $3}' $rsrc/patchlevel.h`
--	patchlevel=`awk '/define[ 	]+PERL_VERSION/ {print $3}' $rsrc/patchlevel.h`
--	subversion=`awk '/define[ 	]+PERL_SUBVERSION/ {print $3}' $rsrc/patchlevel.h`
--	api_revision=`awk '/define[ 	]+PERL_API_REVISION/ {print $3}' $rsrc/patchlevel.h`
--	api_version=`awk '/define[ 	]+PERL_API_VERSION/ {print $3}' $rsrc/patchlevel.h`
--	api_subversion=`awk '/define[ 	]+PERL_API_SUBVERSION/ {print $3}' $rsrc/patchlevel.h`
--       perl_patchlevel=`grep ',"DEVEL[0-9][0-9]*"' $rsrc/patchlevel.h|sed 's/[^0-9]//g'`
--else
--	revision=0
--	patchlevel=0
--	subversion=0
--	api_revision=0
--	api_version=0
--	api_subversion=0
--	perl_patchlevel=0
--	$echo "(You do not have patchlevel.h.  Eek.)"
--fi
--if $test -r $rsrc/.patch ; then  
--	if $test "`cat $rsrc/.patch`" -gt "$perl_patchlevel" ; then
--		perl_patchlevel=`cat $rsrc/.patch`
--	fi
--fi
--: Define a handy string here to avoid duplication in myconfig.SH and configpm.
--version_patchlevel_string="version $patchlevel subversion $subversion"
--case "$perl_patchlevel" in
--0|'') ;;
--*) version_patchlevel_string="$version_patchlevel_string patch $perl_patchlevel" ;;
--esac
--
--$echo "(You have $package $version_patchlevel_string.)"
-+$echo "(You have $package $version_patchlevel_string.)"
++: set the prefixit variable, to compute a suitable default value
++prefixit='case "$3" in
++""|none)
++	case "$oldprefix" in
++	"") eval "$1=\"\$$2\"";;
++	*)
++		case "$3" in
++		"") eval "$1=";;
++		none)
++			eval "tp=\"\$$2\"";
++			case "$tp" in
++			""|" ") eval "$1=\"\$$2\"";;
++			*) eval "$1=";;
++			esac;;
++		esac;;
++	esac;;
++*)
++	eval "tp=\"$oldprefix-\$$2-\""; eval "tp=\"$tp\"";
++	case "$tp" in
++	--|/*--|\~*--) eval "$1=\"$prefix/$3\"";;
++	/*-$oldprefix/*|\~*-$oldprefix/*)
++		eval "$1=\`echo \$$2 | sed \"s,^$oldprefix,$prefix,\"\`";;
++	*) eval "$1=\"\$$2\"";;
++	esac;;
++esac'
  
- case "$osname" in
- dos|vms)
-@@ -6669,19 +5976,36 @@ set d_dosuid
+ : get the patchlevel
+ echo " "
+@@ -6669,19 +6020,36 @@ set d_dosuid
  eval $setvar
  
  : see if this is a malloc.h system
@@ -1854,11 +1833,20 @@ sub _patch_configure {
  #if TRY & 1
  void sub() {
  #else
-@@ -6766,664 +6090,1159 @@ EOM
- 	voidflags="$ans"
- 	;;
- esac
--$rm -f try.* .out
+@@ -6760,670 +6128,1165 @@ case "$voidflags" in
+     4: operations between pointers to and addresses of void functions.
+     8: generic void pointers.
+ EOM
+-	dflt="$voidflags";
+-	rp="Your void support flags add up to what?"
+-	. ./myread
+-	voidflags="$ans"
++	dflt="$voidflags";
++	rp="Your void support flags add up to what?"
++	. ./myread
++	voidflags="$ans"
++	;;
++esac
 +$rm -f try.* .out
 +
 +: check for length of pointer
@@ -2037,26 +2025,11 @@ sub _patch_configure {
 +	"$prefix") ;;
 +	*) oldsiteprefix="$prefix";;
 +	esac
-+	;;
-+esac
+ 	;;
+ esac
+-$rm -f try.* .out
 +siteprefix="$ans"
 +siteprefixexp="$ansexp"
-+
-+: determine where site specific libraries go.
-+: Usual default is /usr/local/lib/perl5/site_perl/$version
-+: The default "style" setting is made in installstyle.U
-+: XXX No longer works with Prefixit stuff.
-+prog=`echo $package | $sed 's/-*[0-9.]*$//'`
-+case "$sitelib" in
-+'') case "$installstyle" in
-+	*lib/perl5*) dflt=$siteprefix/lib/$package/site_$prog/$version ;;
-+	*)	 dflt=$siteprefix/lib/site_$prog/$version ;;
-+	esac
-+	;;
-+*)	dflt="$sitelib"
-+	;;
-+esac
-+$cat <<EOM
  
 -: check for length of pointer
 -echo " "
@@ -2087,12 +2060,39 @@ sub _patch_configure {
 -		. ./myread
 -		ptrsize="$ans"
 -	fi
++: determine where site specific libraries go.
++: Usual default is /usr/local/lib/perl5/site_perl/$version
++: The default "style" setting is made in installstyle.U
++: XXX No longer works with Prefixit stuff.
++prog=`echo $package | $sed 's/-*[0-9.]*$//'`
++case "$sitelib" in
++'') case "$installstyle" in
++	*lib/perl5*) dflt=$siteprefix/lib/$package/site_$prog/$version ;;
++	*)	 dflt=$siteprefix/lib/site_$prog/$version ;;
++	esac
++	;;
++*)	dflt="$sitelib"
+ 	;;
+ esac
+-$rm -f try.c try
+-case "$use64bitall" in
+-"$define"|true|[yY]*)
+-	case "$ptrsize" in
+-	4)	cat <<EOM >&4
++$cat <<EOM
+ 
+-*** You have chosen a maximally 64-bit build, but your pointers
+-*** are only 4 bytes wide, disabling maximal 64-bitness.
 +The installation process will create a directory for
 +site-specific extensions and modules.  Most users find it convenient
 +to place all site-specific files in this directory rather than in the
 +main distribution directory.
-+
-+EOM
+ 
+ EOM
+-		use64bitall="$undef"
+-		case "$use64bitint" in
+-		"$define"|true|[yY]*) ;;
+-		*)	cat <<EOM >&4
 +fn=d~+
 +rp='Pathname for the site-specific library files?'
 +. ./getfile
@@ -2115,27 +2115,19 @@ sub _patch_configure {
 +	dflt="$dflt/$archname"
 +	;;
 +*)	dflt="$sitearch"
- 	;;
- esac
--$rm -f try.c try
--case "$use64bitall" in
--"$define"|true|[yY]*)
--	case "$ptrsize" in
--	4)	cat <<EOM >&4
++	;;
++esac
 +set sitearch sitearch none
 +eval $prefixit
 +$cat <<EOM
  
--*** You have chosen a maximally 64-bit build, but your pointers
--*** are only 4 bytes wide, disabling maximal 64-bitness.
+-*** Downgrading from maximal 64-bitness to using 64-bit integers.
 +The installation process will also create a directory for
 +architecture-dependent site-specific extensions and modules.
  
  EOM
--		use64bitall="$undef"
--		case "$use64bitint" in
--		"$define"|true|[yY]*) ;;
--		*)	cat <<EOM >&4
+-			use64bitint="$define"
+-			;;
 +fn=d~+
 +rp='Pathname for the site-specific architecture-dependent library files?'
 +. ./getfile
@@ -2159,15 +2151,12 @@ sub _patch_configure {
 +Of course you may also use these directories in whatever way you see
 +fit.  For example, you might use them to access modules shared over a
 +company-wide network.
- 
--*** Downgrading from maximal 64-bitness to using 64-bit integers.
++
 +The default answer should be fine for most people.
 +This causes further questions about vendor add-ons to be skipped
 +and no vendor-specific directories will be configured for perl.
- 
- EOM
--			use64bitint="$define"
--			;;
++
++EOM
 +rp='Do you want to configure vendor-specific add-on directories?'
 +case "$usevendorprefix" in
 +define|true|[yY]*) dflt=y ;;
@@ -2194,9 +2183,9 @@ sub _patch_configure {
 +	*)	case "$ans" in
 +		"$prefix") ;;
 +		*) oldvendorprefix="$prefix";;
- 		esac
- 		;;
- 	esac
++		esac
++		;;
++	esac
 +	usevendorprefix="$define"
 +	vendorprefix="$ans"
 +	vendorprefixexp="$ansexp"
@@ -2204,18 +2193,9 @@ sub _patch_configure {
 +*)	usevendorprefix="$undef"
 +	vendorprefix=''
 +	vendorprefixexp=''
- 	;;
- esac
- 
--
--: determine which malloc to compile in
--echo " "
--case "$usemymalloc" in
--[yY]*|true|$define)	dflt='y' ;;
--[nN]*|false|$undef)	dflt='n' ;;
--*)	case "$ptrsize" in
--	4) dflt='y' ;;
--	*) dflt='n' ;;
++	;;
++esac
++
 +case "$vendorprefix" in
 +'')	d_vendorlib="$undef"
 +	vendorlib=''
@@ -2230,35 +2210,18 @@ sub _patch_configure {
 +		case "$installstyle" in
 +		*lib/perl5*) dflt=$vendorprefix/lib/$package/vendor_$prog/$version ;;
 +		*)	     dflt=$vendorprefix/lib/vendor_$prog/$version ;;
-+		esac
-+		;;
+ 		esac
+ 		;;
 +	*)	dflt="$vendorlib"
 +		;;
- 	esac
++	esac
 +	fn=d~+
 +	rp='Pathname for the vendor-supplied library files?'
 +	. ./getfile
 +	vendorlib="$ans"
 +	vendorlibexp="$ansexp"
- 	;;
- esac
--rp="Do you wish to attempt to use the malloc that comes with $package?"
--. ./myread
--usemymalloc="$ans"
--case "$ans" in
--y*|true)
--	usemymalloc='y'
--	mallocsrc='malloc.c'
--	mallocobj="malloc$_o"
--	d_mymalloc="$define"
--	case "$libs" in
--	*-lmalloc*)
--		: Remove malloc from list of libraries to use
--		echo "Removing unneeded -lmalloc from library list" >&4
--		set `echo X $libs | $sed -e 's/-lmalloc / /' -e 's/-lmalloc$//'`
--		shift
--		libs="$*"
--		echo "libs = $libs" >&4
++	;;
++esac
 +vendorlib_stem=`echo "$vendorlibexp" | sed "s,/$version$,,"`
 +: Change installation prefix, if necessary.
 +if $test X"$prefix" != X"$installprefix"; then
@@ -2280,7 +2243,7 @@ sub _patch_configure {
 +	case "$vendorarch" in
 +	'')	dflt=`echo $vendorlib | $sed 's,/share$,,'`
 +		dflt="$dflt/$archname"
- 		;;
++		;;
 +	*)	dflt="$vendorarch" ;;
  	esac
 +	fn=d~+
@@ -2289,12 +2252,6 @@ sub _patch_configure {
 +	vendorarch="$ans"
 +	vendorarchexp="$ansexp"
  	;;
--*)
--	usemymalloc='n'
--	mallocsrc=''
--	mallocobj=''
--	d_mymalloc="$undef"
--	;;
  esac
 +: Change installation prefix, if necessary.
 +if $test X"$prefix" != X"$installprefix"; then
@@ -2322,15 +2279,50 @@ sub _patch_configure {
 +$cat <<EOM
 +Enter a colon-separated set of extra paths to include in perl's @INC
 +search path, or enter 'none' for no extra paths.
-+
+ 
 +EOM
-+
+ 
+-: determine which malloc to compile in
+-echo " "
+-case "$usemymalloc" in
+-[yY]*|true|$define)	dflt='y' ;;
+-[nN]*|false|$undef)	dflt='n' ;;
+-*)	case "$ptrsize" in
+-	4) dflt='y' ;;
+-	*) dflt='n' ;;
+-	esac
+-	;;
+-esac
+-rp="Do you wish to attempt to use the malloc that comes with $package?"
 +rp='Colon-separated list of additional directories for perl to search?'
-+. ./myread
-+case "$ans" in
+ . ./myread
+-usemymalloc="$ans"
+ case "$ans" in
+-y*|true)
+-	usemymalloc='y'
+-	mallocsrc='malloc.c'
+-	mallocobj="malloc$_o"
+-	d_mymalloc="$define"
+-	case "$libs" in
+-	*-lmalloc*)
+-		: Remove malloc from list of libraries to use
+-		echo "Removing unneeded -lmalloc from library list" >&4
+-		set `echo X $libs | $sed -e 's/-lmalloc / /' -e 's/-lmalloc$//'`
+-		shift
+-		libs="$*"
+-		echo "libs = $libs" >&4
+-		;;
+-	esac
+-	;;
+-*)
+-	usemymalloc='n'
+-	mallocsrc=''
+-	mallocobj=''
+-	d_mymalloc="$undef"
+-	;;
 +' '|''|none)	otherlibdirs=' ' ;;     
 +*)	otherlibdirs="$ans" ;;
-+esac
+ esac
 +case "$otherlibdirs" in
 +' ') val=$undef ;;
 +*)	val=$define ;;
@@ -2514,17 +2506,7 @@ sub _patch_configure {
 +set extras
 +eval $setvar
 +echo " "
- 
--: determine where site specific libraries go.
--: Usual default is /usr/local/lib/perl5/site_perl/$version
--: The default "style" setting is made in installstyle.U
--: XXX No longer works with Prefixit stuff.
--prog=`echo $package | $sed 's/-*[0-9.]*$//'`
--case "$sitelib" in
--'') case "$installstyle" in
--	*lib/perl5*) dflt=$siteprefix/lib/$package/site_$prog/$version ;;
--	*)	 dflt=$siteprefix/lib/site_$prog/$version ;;
--	esac
++
 +: Find perl5.005 or later.
 +echo "Looking for a previously installed perl5.005 or later... "
 +case "$perl5" in
@@ -2538,21 +2520,15 @@ sub _patch_configure {
 +			break;
 +		fi
 +	done
- 	;;
--*)	dflt="$sitelib"
++	;;
 +*)	perl5="$perl5"
- 	;;
- esac
--$cat <<EOM
++	;;
++esac
 +case "$perl5" in
 +'')	echo "None found.  That's ok.";;
 +*)	echo "Using $perl5." ;;
 +esac
- 
--The installation process will create a directory for
--site-specific extensions and modules.  Most users find it convenient
--to place all site-specific files in this directory rather than in the
--main distribution directory.
++
 +: Determine list of previous versions to include in @INC
 +$cat > getverlist <<EOPL
 +#!$perl5 -w
@@ -2573,20 +2549,7 @@ sub _patch_configure {
 +else {
 +    ;@candidates = ();
 +}
- 
--EOM
--fn=d~+
--rp='Pathname for the site-specific library files?'
--. ./getfile
--sitelib="$ans"
--sitelibexp="$ansexp"
--sitelib_stem=`echo "$sitelibexp" | sed "s,/$version$,,"`
--: Change installation prefix, if necessary.
--if $test X"$prefix" != X"$installprefix"; then
--	installsitelib=`echo $sitelibexp | $sed "s#^$prefix#$installprefix#"`
--else
--	installsitelib="$sitelibexp"
--fi
++
 +# XXX ToDo:  These comparisons must be reworked when two-digit
 +# subversions come along, so that 5.7.10 compares as greater than
 +# 5.7.3!  By that time, hope that 5.6.x is sufficiently
@@ -2608,15 +2571,18 @@ sub _patch_configure {
 +    }
 +}
  
--: determine where site specific architecture-dependent libraries go.
--: sitelib  default is /usr/local/lib/perl5/site_perl/$version
--: sitearch default is /usr/local/lib/perl5/site_perl/$version/$archname
--: sitelib may have an optional trailing /share.
--case "$sitearch" in
--'')	dflt=`echo $sitelib | $sed 's,/share$,,'`
--	dflt="$dflt/$archname"
+-: determine where site specific libraries go.
+-: Usual default is /usr/local/lib/perl5/site_perl/$version
+-: The default "style" setting is made in installstyle.U
+-: XXX No longer works with Prefixit stuff.
+-prog=`echo $package | $sed 's/-*[0-9.]*$//'`
+-case "$sitelib" in
+-'') case "$installstyle" in
+-	*lib/perl5*) dflt=$siteprefix/lib/$package/site_$prog/$version ;;
+-	*)	 dflt=$siteprefix/lib/site_$prog/$version ;;
+-	esac
 -	;;
--*)	dflt="$sitearch"
+-*)	dflt="$sitelib"
 +if (@inc_version_list) {
 +    print join(' ', @inc_version_list);
 +}
@@ -2642,12 +2608,12 @@ sub _patch_configure {
 +case "$dflt" in
 +5.005) dflt=none ;;
  esac
--set sitearch sitearch none
--eval $prefixit
  $cat <<EOM
  
--The installation process will also create a directory for
--architecture-dependent site-specific extensions and modules.
+-The installation process will create a directory for
+-site-specific extensions and modules.  Most users find it convenient
+-to place all site-specific files in this directory rather than in the
+-main distribution directory.
 +In order to ease the process of upgrading, this version of perl 
 +can be configured to use modules built and installed with earlier 
 +versions of perl that were installed under $prefix.  Specify here
@@ -2660,6 +2626,57 @@ sub _patch_configure {
 +just accept the default.
  EOM
 -fn=d~+
+-rp='Pathname for the site-specific library files?'
+-. ./getfile
+-sitelib="$ans"
+-sitelibexp="$ansexp"
+-sitelib_stem=`echo "$sitelibexp" | sed "s,/$version$,,"`
+-: Change installation prefix, if necessary.
+-if $test X"$prefix" != X"$installprefix"; then
+-	installsitelib=`echo $sitelibexp | $sed "s#^$prefix#$installprefix#"`
+-else
+-	installsitelib="$sitelibexp"
+-fi
+ 
+-: determine where site specific architecture-dependent libraries go.
+-: sitelib  default is /usr/local/lib/perl5/site_perl/$version
+-: sitearch default is /usr/local/lib/perl5/site_perl/$version/$archname
+-: sitelib may have an optional trailing /share.
+-case "$sitearch" in
+-'')	dflt=`echo $sitelib | $sed 's,/share$,,'`
+-	dflt="$dflt/$archname"
+-	;;
+-*)	dflt="$sitearch"
++rp='List of earlier versions to include in @INC?'
++. ./myread
++case "$ans" in
++[Nn]one|''|' ') inc_version_list=' ' ;;
++*) inc_version_list="$ans" ;;
++esac
++case "$inc_version_list" in
++''|' ') 
++	inc_version_list_init='0';;
++*)	inc_version_list_init=`echo $inc_version_list |
++		$sed -e 's/^/"/' -e 's/ /","/g' -e 's/$/",0/'`
+ 	;;
+ esac
+-set sitearch sitearch none
+-eval $prefixit
+-$cat <<EOM
++$rm -f getverlist
+ 
+-The installation process will also create a directory for
+-architecture-dependent site-specific extensions and modules.
++: determine whether to install perl also as /usr/bin/perl
+ 
++echo " "
++if $test -d /usr/bin -a "X$installbin" != X/usr/bin; then
++	$cat <<EOM
++Many scripts expect perl to be installed as /usr/bin/perl.
++I can install the perl you are about to compile also as /usr/bin/perl
++(in addition to $installbin/perl).
+ EOM
+-fn=d~+
 -rp='Pathname for the site-specific architecture-dependent library files?'
 -. ./getfile
 -sitearch="$ans"
@@ -2667,12 +2684,25 @@ sub _patch_configure {
 -: Change installation prefix, if necessary.
 -if $test X"$prefix" != X"$installprefix"; then
 -	installsitearch=`echo $sitearchexp | sed "s#^$prefix#$installprefix#"`
--else
++	case "$installusrbinperl" in
++	"$undef"|[nN]*)	dflt='n';;
++	*)		dflt='y';;
++	esac
++	rp="Do you want to install perl as /usr/bin/perl?"
++	. ./myread
++	case "$ans" in
++	[yY]*)	val="$define";;
++	*)	val="$undef" ;;
++	esac
+ else
 -	installsitearch="$sitearchexp"
--fi
--
--$cat <<EOM
++	val="$undef"
+ fi
++set installusrbinperl
++eval $setvar
  
+-$cat <<EOM
+-
 -The installation process will also create a directory for
 -vendor-supplied add-ons.  Vendors who supply perl with their system
 -may find it convenient to place all vendor-supplied files in this
@@ -2686,138 +2716,6 @@ sub _patch_configure {
 -The default answer should be fine for most people.
 -This causes further questions about vendor add-ons to be skipped
 -and no vendor-specific directories will be configured for perl.
--
--EOM
--rp='Do you want to configure vendor-specific add-on directories?'
--case "$usevendorprefix" in
--define|true|[yY]*) dflt=y ;;
--*)	: User may have set vendorprefix directly on Configure command line.
--	case "$vendorprefix" in
--	''|' ') dflt=n ;;
--	*)	dflt=y ;;
--	esac
--	;;
--esac
-+rp='List of earlier versions to include in @INC?'
- . ./myread
- case "$ans" in
--[yY]*)	fn=d~+
--	rp='Installation prefix to use for vendor-supplied add-ons?'
--	case "$vendorprefix" in
--	'') dflt='' ;;
--	*)  dflt=$vendorprefix ;;
--	esac
--	. ./getfile
--	: XXX Prefixit unit does not yet support siteprefix and vendorprefix
--	oldvendorprefix=''
--	case "$vendorprefix" in
--	'') ;;
--	*)	case "$ans" in
--		"$prefix") ;;
--		*) oldvendorprefix="$prefix";;
--		esac
--		;;
--	esac
--	usevendorprefix="$define"
--	vendorprefix="$ans"
--	vendorprefixexp="$ansexp"
--	;;
--*)	usevendorprefix="$undef"
--	vendorprefix=''
--	vendorprefixexp=''
-+[Nn]one|''|' ') inc_version_list=' ' ;;
-+*) inc_version_list="$ans" ;;
-+esac
-+case "$inc_version_list" in
-+''|' ') 
-+	inc_version_list_init='0';;
-+*)	inc_version_list_init=`echo $inc_version_list |
-+		$sed -e 's/^/"/' -e 's/ /","/g' -e 's/$/",0/'`
- 	;;
- esac
-+$rm -f getverlist
- 
--case "$vendorprefix" in
--'')	d_vendorlib="$undef"
--	vendorlib=''
--	vendorlibexp=''
--	;;
--*)	d_vendorlib="$define"
--	: determine where vendor-supplied modules go.
--	: Usual default is /usr/local/lib/perl5/vendor_perl/$version
--	case "$vendorlib" in
--	'')
--		prog=`echo $package | $sed 's/-*[0-9.]*$//'`
--		case "$installstyle" in
--		*lib/perl5*) dflt=$vendorprefix/lib/$package/vendor_$prog/$version ;;
--		*)	     dflt=$vendorprefix/lib/vendor_$prog/$version ;;
--		esac
--		;;
--	*)	dflt="$vendorlib"
--		;;
-+: determine whether to install perl also as /usr/bin/perl
-+
-+echo " "
-+if $test -d /usr/bin -a "X$installbin" != X/usr/bin; then
-+	$cat <<EOM
-+Many scripts expect perl to be installed as /usr/bin/perl.
-+I can install the perl you are about to compile also as /usr/bin/perl
-+(in addition to $installbin/perl).
-+EOM
-+	case "$installusrbinperl" in
-+	"$undef"|[nN]*)	dflt='n';;
-+	*)		dflt='y';;
-+	esac
-+	rp="Do you want to install perl as /usr/bin/perl?"
-+	. ./myread
-+	case "$ans" in
-+	[yY]*)	val="$define";;
-+	*)	val="$undef" ;;
- 	esac
--	fn=d~+
--	rp='Pathname for the vendor-supplied library files?'
--	. ./getfile
--	vendorlib="$ans"
--	vendorlibexp="$ansexp"
--	;;
--esac
--vendorlib_stem=`echo "$vendorlibexp" | sed "s,/$version$,,"`
--: Change installation prefix, if necessary.
--if $test X"$prefix" != X"$installprefix"; then
--	installvendorlib=`echo $vendorlibexp | $sed "s#^$prefix#$installprefix#"`
- else
--	installvendorlib="$vendorlibexp"
-+	val="$undef"
- fi
-+set installusrbinperl
-+eval $setvar
- 
--case "$vendorprefix" in
--'')	d_vendorarch="$undef"
--	vendorarch=''
--	vendorarchexp=''
--	;;
--*)	d_vendorarch="$define"
--	: determine where vendor-supplied architecture-dependent libraries go.
--	: vendorlib  default is /usr/local/lib/perl5/vendor_perl/$version
--	: vendorarch default is /usr/local/lib/perl5/vendor_perl/$version/$archname
--	: vendorlib may have an optional trailing /share.
--	case "$vendorarch" in
--	'')	dflt=`echo $vendorlib | $sed 's,/share$,,'`
--		dflt="$dflt/$archname"
--		;;
--	*)	dflt="$vendorarch" ;;
--	esac
--	fn=d~+
--	rp='Pathname for vendor-supplied architecture-dependent files?'
--	. ./getfile
--	vendorarch="$ans"
--	vendorarchexp="$ansexp"
--	;;
--esac
--: Change installation prefix, if necessary.
--if $test X"$prefix" != X"$installprefix"; then
--	installvendorarch=`echo $vendorarchexp | sed "s#^$prefix#$installprefix#"`
 +echo " "
 +echo "Checking for GNU C Library..." >&4
 +cat >try.c <<'EOCP'
@@ -2851,19 +2749,151 @@ sub _patch_configure {
 +	val="$define"
 +	gnulibc_version=`$cat glibc.ver`
 +	echo "You are using the GNU C Library version $gnulibc_version"
- else
--	installvendorarch="$vendorarchexp"
++else
 +	val="$undef"
 +	gnulibc_version=''
 +	echo "You are not using the GNU C Library"
- fi
++fi
 +$rm -f try try.* glibc.ver
 +set d_gnulibc
 +eval $setvar
  
--: Final catch-all directories to search
--$cat <<EOM
+-EOM
+-rp='Do you want to configure vendor-specific add-on directories?'
+-case "$usevendorprefix" in
+-define|true|[yY]*) dflt=y ;;
+-*)	: User may have set vendorprefix directly on Configure command line.
+-	case "$vendorprefix" in
+-	''|' ') dflt=n ;;
+-	*)	dflt=y ;;
+-	esac
+-	;;
+-esac
+-. ./myread
+-case "$ans" in
+-[yY]*)	fn=d~+
+-	rp='Installation prefix to use for vendor-supplied add-ons?'
+-	case "$vendorprefix" in
+-	'') dflt='' ;;
+-	*)  dflt=$vendorprefix ;;
+-	esac
+-	. ./getfile
+-	: XXX Prefixit unit does not yet support siteprefix and vendorprefix
+-	oldvendorprefix=''
+-	case "$vendorprefix" in
+-	'') ;;
+-	*)	case "$ans" in
+-		"$prefix") ;;
+-		*) oldvendorprefix="$prefix";;
+-		esac
++: see if nm is to be used to determine whether a symbol is defined or not
++case "$usenm" in
++'')
++	dflt=''
++	case "$d_gnulibc" in
++	"$define")
++		echo " "
++		echo "nm probably won't work on the GNU C Library." >&4
++		dflt=n
+ 		;;
+ 	esac
+-	usevendorprefix="$define"
+-	vendorprefix="$ans"
+-	vendorprefixexp="$ansexp"
+-	;;
+-*)	usevendorprefix="$undef"
+-	vendorprefix=''
+-	vendorprefixexp=''
+-	;;
+-esac
 -
+-case "$vendorprefix" in
+-'')	d_vendorlib="$undef"
+-	vendorlib=''
+-	vendorlibexp=''
+-	;;
+-*)	d_vendorlib="$define"
+-	: determine where vendor-supplied modules go.
+-	: Usual default is /usr/local/lib/perl5/vendor_perl/$version
+-	case "$vendorlib" in
+-	'')
+-		prog=`echo $package | $sed 's/-*[0-9.]*$//'`
+-		case "$installstyle" in
+-		*lib/perl5*) dflt=$vendorprefix/lib/$package/vendor_$prog/$version ;;
+-		*)	     dflt=$vendorprefix/lib/vendor_$prog/$version ;;
+-		esac
++	case "$dflt" in
++	'') 
++		if $test "$osname" = aix -a "X$PASE" != "Xdefine" -a ! -f /lib/syscalls.exp; then
++			echo " "
++			echo "Whoops!  This is an AIX system without /lib/syscalls.exp!" >&4
++			echo "'nm' won't be sufficient on this sytem." >&4
++			dflt=n
++		fi
+ 		;;
+-	*)	dflt="$vendorlib"
++	esac
++	case "$dflt" in
++	'') dflt=`$egrep 'inlibc|csym' $rsrc/Configure | wc -l 2>/dev/null`
++		if $test $dflt -gt 20; then
++			dflt=y
++		else
++			dflt=n
++		fi
+ 		;;
+ 	esac
+-	fn=d~+
+-	rp='Pathname for the vendor-supplied library files?'
+-	. ./getfile
+-	vendorlib="$ans"
+-	vendorlibexp="$ansexp"
+-	;;
+-esac
+-vendorlib_stem=`echo "$vendorlibexp" | sed "s,/$version$,,"`
+-: Change installation prefix, if necessary.
+-if $test X"$prefix" != X"$installprefix"; then
+-	installvendorlib=`echo $vendorlibexp | $sed "s#^$prefix#$installprefix#"`
+-else
+-	installvendorlib="$vendorlibexp"
+-fi
+-
+-case "$vendorprefix" in
+-'')	d_vendorarch="$undef"
+-	vendorarch=''
+-	vendorarchexp=''
+ 	;;
+-*)	d_vendorarch="$define"
+-	: determine where vendor-supplied architecture-dependent libraries go.
+-	: vendorlib  default is /usr/local/lib/perl5/vendor_perl/$version
+-	: vendorarch default is /usr/local/lib/perl5/vendor_perl/$version/$archname
+-	: vendorlib may have an optional trailing /share.
+-	case "$vendorarch" in
+-	'')	dflt=`echo $vendorlib | $sed 's,/share$,,'`
+-		dflt="$dflt/$archname"
+-		;;
+-	*)	dflt="$vendorarch" ;;
++*)
++	case "$usenm" in
++	true|$define) dflt=y;;
++	*) dflt=n;;
+ 	esac
+-	fn=d~+
+-	rp='Pathname for vendor-supplied architecture-dependent files?'
+-	. ./getfile
+-	vendorarch="$ans"
+-	vendorarchexp="$ansexp"
+ 	;;
+ esac
+-: Change installation prefix, if necessary.
+-if $test X"$prefix" != X"$installprefix"; then
+-	installvendorarch=`echo $vendorarchexp | sed "s#^$prefix#$installprefix#"`
+-else
+-	installvendorarch="$vendorarchexp"
+-fi
+-
+-: Final catch-all directories to search
+ $cat <<EOM
+ 
 -Lastly, you can have perl look in other directories for extensions and
 -modules in addition to those already specified.
 -These directories will be searched after 
@@ -2876,49 +2906,10 @@ sub _patch_configure {
 -case "$otherlibdirs" in
 -''|' ') dflt='none' ;;
 -*)	dflt="$otherlibdirs" ;;
-+: see if nm is to be used to determine whether a symbol is defined or not
-+case "$usenm" in
-+'')
-+	dflt=''
-+	case "$d_gnulibc" in
-+	"$define")
-+		echo " "
-+		echo "nm probably won't work on the GNU C Library." >&4
-+		dflt=n
-+		;;
-+	esac
-+	case "$dflt" in
-+	'') 
-+		if $test "$osname" = aix -a "X$PASE" != "Xdefine" -a ! -f /lib/syscalls.exp; then
-+			echo " "
-+			echo "Whoops!  This is an AIX system without /lib/syscalls.exp!" >&4
-+			echo "'nm' won't be sufficient on this sytem." >&4
-+			dflt=n
-+		fi
-+		;;
-+	esac
-+	case "$dflt" in
-+	'') dflt=`$egrep 'inlibc|csym' $rsrc/Configure | wc -l 2>/dev/null`
-+		if $test $dflt -gt 20; then
-+			dflt=y
-+		else
-+			dflt=n
-+		fi
-+		;;
-+	esac
-+	;;
-+*)
-+	case "$usenm" in
-+	true|$define) dflt=y;;
-+	*) dflt=n;;
-+	esac
-+	;;
- esac
- $cat <<EOM
+-esac
+-$cat <<EOM
 -Enter a colon-separated set of extra paths to include in perl's @INC
 -search path, or enter 'none' for no extra paths.
- 
--EOM
 +I can use $nm to extract the symbols from your C libraries. This
 +is a time consuming task which may generate huge output on the disk (up
 +to 3 megabytes) but that should make the symbols extraction faster. The
@@ -2927,9 +2918,10 @@ sub _patch_configure {
 +you have a fast C compiler and/or if your 'nm' output cannot be parsed,
 +this may be the best solution.
  
--rp='Colon-separated list of additional directories for perl to search?'
+-EOM
 +You probably shouldn't let me use 'nm' if you are using the GNU C Library.
-+
+ 
+-rp='Colon-separated list of additional directories for perl to search?'
 +EOM
 +rp="Shall I use $nm to extract C symbols from the libraries?"
  . ./myread
@@ -2969,13 +2961,13 @@ sub _patch_configure {
 -*)	ansi2knr='ansi2knr'
 -	echo " "
 -	cat <<EOM >&4
--
+ 
 -$me:  FATAL ERROR:
 -This version of $package can only be compiled by a compiler that 
 -understands function prototypes.  Unfortunately, your C compiler 
 -	$cc $ccflags
 -doesn't seem to understand them.  Sorry about that.
- 
+-
 -If GNU cc is available for your system, perhaps you could try that instead.  
 +runnm=$usenm
 +case "$reuseval" in
@@ -3140,7 +3132,10 @@ sub _patch_configure {
 +		libc='blurfl'
 +	fi
  fi
--
++if $test $xxx = apollo -o -r "$libc" || (test -h "$libc") >/dev/null 2>&1; then
++	dflt="$libc"
++	cat <<EOM
+ 
 -echo " "
 -case "$extras" in
 -'') dflt='n';;
@@ -3154,21 +3149,28 @@ sub _patch_configure {
 -or a local copy, for example a CD-ROM or a local CPAN mirror.  (You will
 -be asked later to configure the CPAN.pm module which will in turn do
 -the installation of the rest of the extra modules or bundles.)
--
++If the guess above is wrong (which it might be if you're using a strange
++compiler, or your machine supports multiple models), you can override it here.
+ 
 -Notice also that if the modules require any external software such as
 -libraries and headers (the libz library and the zlib.h header for the
 -Compress::Zlib module, for example) you MUST have any such software
 -already installed, this configuration process will NOT install such
 -things for you.
--
++EOM
++else
++	dflt=''
++	echo $libpth | $tr ' ' $trnl | $sort | $uniq > libpath
++	cat >&4 <<EOM
++I can't seem to find your C library.  I've looked in the following places:
+ 
 -If this doesn't make any sense to you, just accept the default '$dflt'.
--EOM
+ EOM
 -rp='Install any extra modules (y or n)?'
 -. ./myread
 -case "$ans" in
 -y|Y)
-+if $test $xxx = apollo -o -r "$libc" || (test -h "$libc") >/dev/null 2>&1; then
-+	dflt="$libc"
++	$sed 's/^/	/' libpath
  	cat <<EOM
  
 -Please list any extra modules or bundles to be installed from CPAN,
@@ -3194,8 +3196,7 @@ sub _patch_configure {
 -set extras
 -eval $setvar
 -echo " "
-+If the guess above is wrong (which it might be if you're using a strange
-+compiler, or your machine supports multiple models), you can override it here.
++None of these seems to contain your C library. I need to get its name...
  
 -: Find perl5.005 or later.
 -echo "Looking for a previously installed perl5.005 or later... "
@@ -3219,11 +3220,11 @@ sub _patch_configure {
 -*)	echo "Using $perl5." ;;
 -esac
 +EOM
-+else
-+	dflt=''
-+	echo $libpth | $tr ' ' $trnl | $sort | $uniq > libpath
-+	cat >&4 <<EOM
-+I can't seem to find your C library.  I've looked in the following places:
++fi
++fn=f
++rp='Where is your C library?'
++. ./getfile
++libc="$ans"
  
 -: Determine list of previous versions to include in @INC
 -$cat > getverlist <<EOPL
@@ -3245,9 +3246,17 @@ sub _patch_configure {
 -else {
 -    ;@candidates = ();
 -}
-+EOM
-+	$sed 's/^/	/' libpath
-+	cat <<EOM
++echo " "
++echo $libc $libnames | $tr ' ' $trnl | $sort | $uniq > libnames
++set X `cat libnames`
++shift
++xxx=files
++case $# in 1) xxx=file; esac
++echo "Extracting names from the following $xxx for later perusal:" >&4
++echo " "
++$sed 's/^/	/' libnames >&4
++echo " "
++$echo $n "This may take a while...$c" >&4
  
 -# XXX ToDo:  These comparisons must be reworked when two-digit
 -# subversions come along, so that 5.7.10 compares as greater than
@@ -3269,7 +3278,12 @@ sub _patch_configure {
 -	# 5.7.0 if we're installing 5.6.1.
 -    }
 -}
-+None of these seems to contain your C library. I need to get its name...
++for file in $*; do
++	case $file in
++	*$so*) $nm $nm_so_opt $nm_opt $file 2>/dev/null;;
++	*) $nm $nm_opt $file 2>/dev/null;;
++	esac
++done >libc.tmp
  
 -if (@inc_version_list) {
 -    print join(' ', @inc_version_list);
@@ -3283,61 +3297,6 @@ sub _patch_configure {
 -case "$inc_version_list" in
 -'')	if test -x "$perl5$exe_ext"; then
 -		dflt=`$perl5 getverlist`
--	else
--		dflt='none'
--	fi
--	;;
--$undef) dflt='none' ;;
--*)  eval dflt=\"$inc_version_list\" ;;
--esac
--case "$dflt" in
--''|' ') dflt=none ;;
--esac
--case "$dflt" in
--5.005) dflt=none ;;
--esac
--$cat <<EOM
-+EOM
-+fi
-+fn=f
-+rp='Where is your C library?'
-+. ./getfile
-+libc="$ans"
- 
--In order to ease the process of upgrading, this version of perl 
--can be configured to use modules built and installed with earlier 
--versions of perl that were installed under $prefix.  Specify here
--the list of earlier versions that this version of perl should check.
--If Configure detected no earlier versions of perl installed under
--$prefix, then the list will be empty.  Answer 'none' to tell perl
--to not search earlier versions.
-+echo " "
-+echo $libc $libnames | $tr ' ' $trnl | $sort | $uniq > libnames
-+set X `cat libnames`
-+shift
-+xxx=files
-+case $# in 1) xxx=file; esac
-+echo "Extracting names from the following $xxx for later perusal:" >&4
-+echo " "
-+$sed 's/^/	/' libnames >&4
-+echo " "
-+$echo $n "This may take a while...$c" >&4
- 
--The default should almost always be sensible, so if you're not sure,
--just accept the default.
--EOM
-+for file in $*; do
-+	case $file in
-+	*$so*) $nm $nm_so_opt $nm_opt $file 2>/dev/null;;
-+	*) $nm $nm_opt $file 2>/dev/null;;
-+	esac
-+done >libc.tmp
- 
--rp='List of earlier versions to include in @INC?'
--. ./myread
--case "$ans" in
--[Nn]one|''|' ') inc_version_list=' ' ;;
--*) inc_version_list="$ans" ;;
 +$echo $n ".$c"
 +$grep fprintf libc.tmp > libc.ptf
 +xscan='eval "<libc.ptf $com >libc.list"; $echo $n ".$c" >&4'
@@ -3408,7 +3367,8 @@ sub _patch_configure {
 +	then
 +		nm_opt='-p'
 +		eval $xrun
-+	else
+ 	else
+-		dflt='none'
 +		echo " "
 +		echo "$nm didn't seem to work right. Trying $ar instead..." >&4
 +		com=''
@@ -3449,7 +3409,36 @@ sub _patch_configure {
 +				exit 1
 +			fi
 +		fi
-+	fi
+ 	fi
+-	;;
+-$undef) dflt='none' ;;
+-*)  eval dflt=\"$inc_version_list\" ;;
+-esac
+-case "$dflt" in
+-''|' ') dflt=none ;;
+-esac
+-case "$dflt" in
+-5.005) dflt=none ;;
+-esac
+-$cat <<EOM
+-
+-In order to ease the process of upgrading, this version of perl 
+-can be configured to use modules built and installed with earlier 
+-versions of perl that were installed under $prefix.  Specify here
+-the list of earlier versions that this version of perl should check.
+-If Configure detected no earlier versions of perl installed under
+-$prefix, then the list will be empty.  Answer 'none' to tell perl
+-to not search earlier versions.
+-
+-The default should almost always be sensible, so if you're not sure,
+-just accept the default.
+-EOM
+-
+-rp='List of earlier versions to include in @INC?'
+-. ./myread
+-case "$ans" in
+-[Nn]one|''|' ') inc_version_list=' ' ;;
+-*) inc_version_list="$ans" ;;
 +fi
 +nm_extract="$com"
 +case "$PASE" in
@@ -3574,7 +3563,7 @@ sub _patch_configure {
  : see if dlopen exists
  xxx_runnm="$runnm"
  runnm=false
-@@ -7527,10 +7346,13 @@ while other systems (such as those using ELF) use $cc.
+@@ -7527,10 +7390,13 @@ while other systems (such as those using ELF) use $cc.
  
  EOM
  	case "$ld" in
@@ -3589,7 +3578,7 @@ sub _patch_configure {
  int main() {
  	char b[4];
  	int i = open("a.out",O_RDONLY);
-@@ -8655,6 +8477,10 @@ echo "Checking the size of $zzz..." >&4
+@@ -8655,6 +8521,10 @@ echo "Checking the size of $zzz..." >&4
  cat > try.c <<EOCP
  #include <sys/types.h>
  #include <stdio.h>
@@ -3600,7 +3589,7 @@ sub _patch_configure {
  int main() {
      printf("%d\n", (int)sizeof($fpostype));
      exit(0);
-@@ -8759,9 +8585,13 @@ EOCP
+@@ -8759,9 +8629,13 @@ EOCP
  		$cat > try.c <<EOCP
  #include <sys/types.h>
  #include <stdio.h>
@@ -3615,36 +3604,11 @@ sub _patch_configure {
  }
  EOCP
  		set try
-@@ -8789,34 +8619,149 @@ EOCP
- 	;;
- esac
- 
--case "$vendorprefix" in
--'')	d_vendorbin="$undef"
--	vendorbin=''
--	vendorbinexp=''
-+case "$vendorprefix" in
-+'')	d_vendorbin="$undef"
-+	vendorbin=''
-+	vendorbinexp=''
-+	;;
-+*)	d_vendorbin="$define"
-+	: determine where vendor-supplied executables go.
-+	case "$vendorbin" in
-+	'') dflt=$vendorprefix/bin ;;
-+	*)	dflt="$vendorbin" ;;
-+	esac
-+	fn=d~+
-+	rp='Pathname for the vendor-supplied executables directory?'
-+	. ./getfile
-+	vendorbin="$ans"
-+	vendorbinexp="$ansexp"
-+	;;
-+esac
-+: Change installation prefix, if necessary.
-+if $test X"$prefix" != X"$installprefix"; then
-+	installvendorbin=`echo $vendorbinexp | $sed "s#^$prefix#$installprefix#"`
-+else
+@@ -8811,12 +8685,127 @@ esac
+ if $test X"$prefix" != X"$installprefix"; then
+ 	installvendorbin=`echo $vendorbinexp | $sed "s#^$prefix#$installprefix#"`
+ else
+-	installvendorbin="$vendorbinexp"
 +	installvendorbin="$vendorbinexp"
 +fi
 +
@@ -3750,8 +3714,11 @@ sub _patch_configure {
 +	echo "Cannot figure out how to print long doubles." >&4
 +else
 +	sSCNfldbl=$sPRIfldbl	# expect consistency
-+fi
-+
+ fi
+ 
+-: see if qgcvt exists
+-set qgcvt d_qgcvt
+-eval $inlibc
 +$rm -f try try.*
 +
 +fi # d_longdbl
@@ -3760,37 +3727,16 @@ sub _patch_configure {
 +'')	d_PRIfldbl="$undef"; d_PRIgldbl="$undef"; d_PRIeldbl="$undef"; 
 +	d_PRIFUldbl="$undef"; d_PRIGUldbl="$undef"; d_PRIEUldbl="$undef"; 
 +	d_SCNfldbl="$undef";
- 	;;
--*)	d_vendorbin="$define"
--	: determine where vendor-supplied executables go.
--	case "$vendorbin" in
--	'') dflt=$vendorprefix/bin ;;
--	*)	dflt="$vendorbin" ;;
--	esac
--	fn=d~+
--	rp='Pathname for the vendor-supplied executables directory?'
--	. ./getfile
--	vendorbin="$ans"
--	vendorbinexp="$ansexp"
++	;;
 +*)	d_PRIfldbl="$define"; d_PRIgldbl="$define"; d_PRIeldbl="$define"; 
 +	d_PRIFUldbl="$define"; d_PRIGUldbl="$define"; d_PRIEUldbl="$define"; 
 +	d_SCNfldbl="$define";
- 	;;
- esac
--: Change installation prefix, if necessary.
--if $test X"$prefix" != X"$installprefix"; then
--	installvendorbin=`echo $vendorbinexp | $sed "s#^$prefix#$installprefix#"`
--else
--	installvendorbin="$vendorbinexp"
--fi
--
--: see if qgcvt exists
--set qgcvt d_qgcvt
--eval $inlibc
++	;;
++esac
  
  : Check how to convert floats to strings.
  
-@@ -9071,7 +9016,7 @@ eval $inlibc
+@@ -9071,7 +9060,7 @@ eval $inlibc
  case "$d_access" in
  "$define")
  	echo " "
@@ -3799,7 +3745,7 @@ sub _patch_configure {
  #include <sys/types.h>
  #ifdef I_FCNTL
  #include <fcntl.h>
-@@ -9082,6 +9027,10 @@ case "$d_access" in
+@@ -9082,6 +9071,10 @@ case "$d_access" in
  #ifdef I_UNISTD
  #include <unistd.h>
  #endif
@@ -3810,7 +3756,7 @@ sub _patch_configure {
  int main() {
  	exit(R_OK);
  }
-@@ -9219,7 +9168,7 @@ echo " "
+@@ -9219,7 +9212,7 @@ echo " "
  if test "X$timeincl" = X; then
  	echo "Testing to see if we should include <time.h>, <sys/time.h> or both." >&4
  	$echo $n "I'm now running the test program...$c"
@@ -3819,7 +3765,7 @@ sub _patch_configure {
  #include <sys/types.h>
  #ifdef I_TIME
  #include <time.h>
-@@ -9233,6 +9182,10 @@ if test "X$timeincl" = X; then
+@@ -9233,6 +9226,10 @@ if test "X$timeincl" = X; then
  #ifdef I_SYSSELECT
  #include <sys/select.h>
  #endif
@@ -3830,7 +3776,7 @@ sub _patch_configure {
  int main()
  {
  	struct tm foo;
-@@ -9398,7 +9351,7 @@ echo " "
+@@ -9398,7 +9395,7 @@ echo " "
  echo "Checking whether your compiler can handle __attribute__ ..." >&4
  $cat >attrib.c <<'EOCP'
  #include <stdio.h>
@@ -3839,7 +3785,7 @@ sub _patch_configure {
  EOCP
  if $cc $ccflags -c attrib.c >attrib.out 2>&1 ; then
  	if $contains 'warning' attrib.out >/dev/null 2>&1; then
-@@ -9442,6 +9395,10 @@ case "$d_getpgrp" in
+@@ -9442,6 +9439,10 @@ case "$d_getpgrp" in
  #ifdef I_UNISTD
  #  include <unistd.h>
  #endif
@@ -3850,7 +3796,7 @@ sub _patch_configure {
  int main()
  {
  	if (getuid() == 0) {
-@@ -9504,6 +9461,10 @@ case "$d_setpgrp" in
+@@ -9504,6 +9505,10 @@ case "$d_setpgrp" in
  #ifdef I_UNISTD
  #  include <unistd.h>
  #endif
@@ -3861,7 +3807,7 @@ sub _patch_configure {
  int main()
  {
  	if (getuid() == 0) {
-@@ -9609,6 +9570,10 @@ else
+@@ -9609,6 +9614,10 @@ else
  fi
  $cat >try.c <<EOCP
  #include <stdio.h>
@@ -3872,7 +3818,7 @@ sub _patch_configure {
  #include <sys/types.h>
  #include <signal.h>
  $signal_t blech(s) int s; { exit(3); }
-@@ -9663,6 +9628,10 @@ echo " "
+@@ -9663,6 +9672,10 @@ echo " "
  echo 'Checking whether your C compiler can cast negative float to unsigned.' >&4
  $cat >try.c <<EOCP
  #include <stdio.h>
@@ -3883,7 +3829,7 @@ sub _patch_configure {
  #include <sys/types.h>
  #include <signal.h>
  $signal_t blech(s) int s; { exit(7); }
-@@ -9759,8 +9728,12 @@ echo " "
+@@ -9759,8 +9772,12 @@ echo " "
  if set vprintf val -f d_vprintf; eval $csym; $val; then
  	echo 'vprintf() found.' >&4
  	val="$define"
@@ -3897,7 +3843,7 @@ sub _patch_configure {
  
  int main() { xxx("foo"); }
  
-@@ -10299,6 +10272,10 @@ eval $inhdr
+@@ -10299,6 +10316,10 @@ eval $inhdr
  echo " "
  $cat >dirfd.c <<EOM
  #include <stdio.h>
@@ -3908,7 +3854,7 @@ sub _patch_configure {
  #$i_dirent I_DIRENT		/**/
  #$i_sysdir I_SYS_DIR		/**/
  #$i_sysndir I_SYS_NDIR		/**/
-@@ -10391,6 +10368,10 @@ EOM
+@@ -10391,6 +10412,10 @@ EOM
  $cat >fred.c<<EOM
  
  #include <stdio.h>
@@ -3919,89 +3865,11 @@ sub _patch_configure {
  #$i_dlfcn I_DLFCN
  #ifdef I_DLFCN
  #include <dlfcn.h>      /* the dynamic linker include file for SunOS/Solaris */
-@@ -10646,614 +10627,909 @@ esac
- set endnetent d_endnent
- eval $inlibc
- 
--: see if endnetent_r exists
--set endnetent_r d_endnetent_r
-+: see if endnetent_r exists
-+set endnetent_r d_endnetent_r
-+eval $inlibc
-+case "$d_endnetent_r" in
-+"$define")
-+	hdrs="$i_systypes sys/types.h define stdio.h $i_netdb netdb.h"
-+	case "$d_endnetent_r_proto:$usethreads" in
-+	":define")	d_endnetent_r_proto=define
-+		set d_endnetent_r_proto endnetent_r $hdrs
-+		eval $hasproto ;;
-+	*)	;;
-+	esac
-+	case "$d_endnetent_r_proto" in
-+	define)
-+	case "$endnetent_r_proto" in
-+	''|0) try='int endnetent_r(struct netent_data*);'
-+	./protochk "extern $try" $hdrs && endnetent_r_proto=I_D ;;
-+	esac
-+	case "$endnetent_r_proto" in
-+	''|0) try='void endnetent_r(struct netent_data*);'
-+	./protochk "extern $try" $hdrs && endnetent_r_proto=V_D ;;
-+	esac
-+	case "$endnetent_r_proto" in
-+	''|0)	d_endnetent_r=undef
-+ 	        endnetent_r_proto=0
-+		echo "Disabling endnetent_r, cannot determine prototype." >&4 ;;
-+	* )	case "$endnetent_r_proto" in
-+		REENTRANT_PROTO*) ;;
-+		*) endnetent_r_proto="REENTRANT_PROTO_$endnetent_r_proto" ;;
-+		esac
-+		echo "Prototype: $try" ;;
-+	esac
-+	;;
-+	*)	case "$usethreads" in
-+		define) echo "endnetent_r has no prototype, not using it." >&4 ;;
-+		esac
-+		d_endnetent_r=undef
-+		endnetent_r_proto=0
-+		;;
-+	esac
-+	;;
-+*)	endnetent_r_proto=0
-+	;;
-+esac
-+
-+: see if endprotoent exists
-+set endprotoent d_endpent
-+eval $inlibc
-+
-+: see if endprotoent_r exists
-+set endprotoent_r d_endprotoent_r
-+eval $inlibc
-+case "$d_endprotoent_r" in
-+"$define")
-+	hdrs="$i_systypes sys/types.h define stdio.h $i_netdb netdb.h"
-+	case "$d_endprotoent_r_proto:$usethreads" in
-+	":define")	d_endprotoent_r_proto=define
-+		set d_endprotoent_r_proto endprotoent_r $hdrs
-+		eval $hasproto ;;
-+	*)	;;
-+	esac
-+	case "$d_endprotoent_r_proto" in
-+	define)
-+	case "$endprotoent_r_proto" in
-+	''|0) try='int endprotoent_r(struct protoent_data*);'
-+	./protochk "extern $try" $hdrs && endprotoent_r_proto=I_D ;;
-+	esac
-+	case "$endprotoent_r_proto" in
-+	''|0) try='void endprotoent_r(struct protoent_data*);'
-+	./protochk "extern $try" $hdrs && endprotoent_r_proto=V_D ;;
-+	esac
-+	case "$endprotoent_r_proto" in
-+	''|0)	d_endprotoent_r=undef
-+ 	        endprotoent_r_proto=0
-+		echo "Disabling endprotoent_r, cannot determine prototype." >&4 ;;
-+	* )	case "$endprotoent_r_proto" in
-+		REENTRANT_PROTO*) ;;
+@@ -10723,537 +10748,832 @@ case "$d_endprotoent_r" in
+ 		echo "Disabling endprotoent_r, cannot determine prototype." >&4 ;;
+ 	* )	case "$endprotoent_r_proto" in
+ 		REENTRANT_PROTO*) ;;
+-		*) endprotoent_r_proto="REENTRANT_PROTO_$endprotoent_r_proto" ;;
 +		*) endprotoent_r_proto="REENTRANT_PROTO_$endprotoent_r_proto" ;;
 +		esac
 +		echo "Prototype: $try" ;;
@@ -4113,124 +3981,81 @@ sub _patch_configure {
 +
 +: see if endpwent_r exists
 +set endpwent_r d_endpwent_r
- eval $inlibc
--case "$d_endnetent_r" in
++eval $inlibc
 +case "$d_endpwent_r" in
- "$define")
--	hdrs="$i_systypes sys/types.h define stdio.h $i_netdb netdb.h"
--	case "$d_endnetent_r_proto:$usethreads" in
--	":define")	d_endnetent_r_proto=define
--		set d_endnetent_r_proto endnetent_r $hdrs
++"$define")
 +	hdrs="$i_systypes sys/types.h define stdio.h $i_pwd pwd.h"
 +	case "$d_endpwent_r_proto:$usethreads" in
 +	":define")	d_endpwent_r_proto=define
 +		set d_endpwent_r_proto endpwent_r $hdrs
- 		eval $hasproto ;;
- 	*)	;;
- 	esac
--	case "$d_endnetent_r_proto" in
++		eval $hasproto ;;
++	*)	;;
++	esac
 +	case "$d_endpwent_r_proto" in
- 	define)
--	case "$endnetent_r_proto" in
--	''|0) try='int endnetent_r(struct netent_data*);'
--	./protochk "extern $try" $hdrs && endnetent_r_proto=I_D ;;
++	define)
 +	case "$endpwent_r_proto" in
 +	''|0) try='int endpwent_r(FILE**);'
 +	./protochk "extern $try" $hdrs && endpwent_r_proto=I_H ;;
- 	esac
--	case "$endnetent_r_proto" in
--	''|0) try='void endnetent_r(struct netent_data*);'
--	./protochk "extern $try" $hdrs && endnetent_r_proto=V_D ;;
++	esac
 +	case "$endpwent_r_proto" in
 +	''|0) try='void endpwent_r(FILE**);'
 +	./protochk "extern $try" $hdrs && endpwent_r_proto=V_H ;;
- 	esac
--	case "$endnetent_r_proto" in
--	''|0)	d_endnetent_r=undef
-- 	        endnetent_r_proto=0
--		echo "Disabling endnetent_r, cannot determine prototype." >&4 ;;
--	* )	case "$endnetent_r_proto" in
++	esac
 +	case "$endpwent_r_proto" in
 +	''|0)	d_endpwent_r=undef
 + 	        endpwent_r_proto=0
 +		echo "Disabling endpwent_r, cannot determine prototype." >&4 ;;
 +	* )	case "$endpwent_r_proto" in
- 		REENTRANT_PROTO*) ;;
--		*) endnetent_r_proto="REENTRANT_PROTO_$endnetent_r_proto" ;;
++		REENTRANT_PROTO*) ;;
 +		*) endpwent_r_proto="REENTRANT_PROTO_$endpwent_r_proto" ;;
- 		esac
- 		echo "Prototype: $try" ;;
- 	esac
- 	;;
- 	*)	case "$usethreads" in
--		define) echo "endnetent_r has no prototype, not using it." >&4 ;;
++		esac
++		echo "Prototype: $try" ;;
++	esac
++	;;
++	*)	case "$usethreads" in
 +		define) echo "endpwent_r has no prototype, not using it." >&4 ;;
- 		esac
--		d_endnetent_r=undef
--		endnetent_r_proto=0
++		esac
 +		d_endpwent_r=undef
 +		endpwent_r_proto=0
- 		;;
- 	esac
- 	;;
--*)	endnetent_r_proto=0
++		;;
++	esac
++	;;
 +*)	endpwent_r_proto=0
- 	;;
- esac
- 
--: see if endprotoent exists
--set endprotoent d_endpent
++	;;
++esac
++
 +: see if endservent exists
 +set endservent d_endsent
- eval $inlibc
- 
--: see if endprotoent_r exists
--set endprotoent_r d_endprotoent_r
++eval $inlibc
++
 +: see if endservent_r exists
 +set endservent_r d_endservent_r
- eval $inlibc
--case "$d_endprotoent_r" in
++eval $inlibc
 +case "$d_endservent_r" in
- "$define")
- 	hdrs="$i_systypes sys/types.h define stdio.h $i_netdb netdb.h"
--	case "$d_endprotoent_r_proto:$usethreads" in
--	":define")	d_endprotoent_r_proto=define
--		set d_endprotoent_r_proto endprotoent_r $hdrs
++"$define")
++	hdrs="$i_systypes sys/types.h define stdio.h $i_netdb netdb.h"
 +	case "$d_endservent_r_proto:$usethreads" in
 +	":define")	d_endservent_r_proto=define
 +		set d_endservent_r_proto endservent_r $hdrs
- 		eval $hasproto ;;
- 	*)	;;
- 	esac
--	case "$d_endprotoent_r_proto" in
++		eval $hasproto ;;
++	*)	;;
++	esac
 +	case "$d_endservent_r_proto" in
- 	define)
--	case "$endprotoent_r_proto" in
--	''|0) try='int endprotoent_r(struct protoent_data*);'
--	./protochk "extern $try" $hdrs && endprotoent_r_proto=I_D ;;
++	define)
 +	case "$endservent_r_proto" in
 +	''|0) try='int endservent_r(struct servent_data*);'
 +	./protochk "extern $try" $hdrs && endservent_r_proto=I_D ;;
- 	esac
--	case "$endprotoent_r_proto" in
--	''|0) try='void endprotoent_r(struct protoent_data*);'
--	./protochk "extern $try" $hdrs && endprotoent_r_proto=V_D ;;
++	esac
 +	case "$endservent_r_proto" in
 +	''|0) try='void endservent_r(struct servent_data*);'
 +	./protochk "extern $try" $hdrs && endservent_r_proto=V_D ;;
- 	esac
--	case "$endprotoent_r_proto" in
--	''|0)	d_endprotoent_r=undef
-- 	        endprotoent_r_proto=0
--		echo "Disabling endprotoent_r, cannot determine prototype." >&4 ;;
--	* )	case "$endprotoent_r_proto" in
++	esac
 +	case "$endservent_r_proto" in
 +	''|0)	d_endservent_r=undef
 + 	        endservent_r_proto=0
 +		echo "Disabling endservent_r, cannot determine prototype." >&4 ;;
 +	* )	case "$endservent_r_proto" in
- 		REENTRANT_PROTO*) ;;
--		*) endprotoent_r_proto="REENTRANT_PROTO_$endprotoent_r_proto" ;;
++		REENTRANT_PROTO*) ;;
 +		*) endservent_r_proto="REENTRANT_PROTO_$endservent_r_proto" ;;
  		esac
  		echo "Prototype: $try" ;;
@@ -4327,6 +4152,7 @@ sub _patch_configure {
 +$rm -f try try.*
  
 -	if $contains 'pw_change' $$.h >/dev/null 2>&1; then
+-		val="$define"
 +: see which of string.h or strings.h is needed
 +echo " "
 +strings=`./findhdr string.h`
@@ -4338,9 +4164,12 @@ sub _patch_configure {
 +	strings=`./findhdr strings.h`
 +	if $test "$strings" && $test -r "$strings"; then
 +		echo "Using <strings.h> instead of <string.h>." >&4
-+	else
+ 	else
+-		val="$undef"
 +		echo "No string header found -- You'll surely have problems." >&4
-+	fi
+ 	fi
+-	set d_pwchange
+-	eval $setvar
 +fi
 +set i_string
 +eval $setvar
@@ -4348,12 +4177,20 @@ sub _patch_configure {
 +"$undef") strings=`./findhdr strings.h`;;
 +*)	  strings=`./findhdr string.h`;;
 +esac
-+
+ 
+-	if $contains 'pw_class' $$.h >/dev/null 2>&1; then
+-		val="$define"
+-	else
+-		val="$undef"
+-	fi
+-	set d_pwclass
+-	eval $setvar
 +: see if this is a sys/file.h system
 +val=''
 +set sys/file.h val
 +eval $inhdr
-+
+ 
+-	if $contains 'pw_expire' $$.h >/dev/null 2>&1; then
 +: do we need to include sys/file.h ?
 +case "$val" in
 +"$define")
@@ -4365,7 +4202,7 @@ sub _patch_configure {
  		val="$undef"
 +		echo "We won't be including <sys/file.h>." >&4
  	fi
--	set d_pwchange
+-	set d_pwexpire
 -	eval $setvar
 +	;;
 +*)
@@ -4375,7 +4212,7 @@ sub _patch_configure {
 +set i_sysfile
 +eval $setvar
  
--	if $contains 'pw_class' $$.h >/dev/null 2>&1; then
+-	if $contains 'pw_comment' $$.h >/dev/null 2>&1; then
 +: see if fcntl.h is there
 +val=''
 +set fcntl.h val
@@ -4396,7 +4233,7 @@ sub _patch_configure {
 +			echo "We won't be including <fcntl.h>." >&4
 +		fi
  	fi
--	set d_pwclass
+-	set d_pwcomment
 -	eval $setvar
 +	;;
 +*)
@@ -4407,7 +4244,7 @@ sub _patch_configure {
 +set i_fcntl
 +eval $setvar
  
--	if $contains 'pw_expire' $$.h >/dev/null 2>&1; then
+-	if $contains 'pw_gecos' $$.h >/dev/null 2>&1; then
 -		val="$define"
 +: check for non-blocking I/O stuff
 +case "$h_sysfile" in
@@ -4461,20 +4298,13 @@ sub _patch_configure {
 -		val="$undef"
 +		echo "(I can't compile the test program; pray O_NONBLOCK is right!)"
  	fi
--	set d_pwexpire
+-	set d_pwgecos
 -	eval $setvar
 +	;;
 +*) echo "Using $hint value $o_nonblock.";;
 +esac
 +$rm -f try try.* .out core
- 
--	if $contains 'pw_comment' $$.h >/dev/null 2>&1; then
--		val="$define"
--	else
--		val="$undef"
--	fi
--	set d_pwcomment
--	eval $setvar
++
 +echo " "
 +echo "Let's see what value errno gets from read() on a $o_nonblock file..." >&4
 +case "$eagain" in
@@ -4516,14 +4346,7 @@ sub _patch_configure {
 +	int pu[2];
 +	char buf[1];
 +	char string[100];
- 
--	if $contains 'pw_gecos' $$.h >/dev/null 2>&1; then
--		val="$define"
--	else
--		val="$undef"
--	fi
--	set d_pwgecos
--	eval $setvar
++
 +	pipe(pd);	/* Down: child -> parent */
 +	pipe(pu);	/* Up: parent -> child */
 +	if (0 != fork()) {
@@ -4787,14 +4610,7 @@ sub _patch_configure {
 -*)	endservent_r_proto=0
 -	;;
 -esac
-+	case "$stdio_base" in
-+	'') stdio_base='((fp)->_base)';;
-+	esac
-+	case "$stdio_bufsiz" in
-+	'') stdio_bufsiz='((fp)->_cnt + (fp)->_ptr - (fp)->_base)';;
-+	esac
-+fi
- 
+-
 -: Locate the flags for 'open()'
 -echo " "
 -$cat >try.c <<'EOCP'
@@ -4804,6 +4620,14 @@ sub _patch_configure {
 -#endif
 -#ifdef I_SYS_FILE
 -#include <sys/file.h>
++	case "$stdio_base" in
++	'') stdio_base='((fp)->_base)';;
++	esac
++	case "$stdio_bufsiz" in
++	'') stdio_bufsiz='((fp)->_cnt + (fp)->_ptr - (fp)->_base)';;
++	esac
++fi
++
 +: test whether _ptr and _cnt really work
 +echo "Checking how std your stdio is..." >&4
 +$cat >try.c <<EOP
@@ -4975,18 +4799,17 @@ sub _patch_configure {
 -       *) echo "#include <sys/fcntl.h>" > head.c;;
 -       esac
 -       ;;
--esac
++: Can _cnt be used as an lvalue?
++case "$d_stdstdio$cnt_lval" in
++$define$define) val=$define ;;
++*) val=$undef ;;
+ esac
 -echo " "
 -echo "Figuring out the flag used by open() for non-blocking I/O..." >&4
 -case "$o_nonblock" in
 -'')
 -	$cat head.c > try.c
 -	$cat >>try.c <<EOCP
-+: Can _cnt be used as an lvalue?
-+case "$d_stdstdio$cnt_lval" in
-+$define$define) val=$define ;;
-+*) val=$undef ;;
-+esac
 +set d_stdio_cnt_lval
 +eval $setvar
 +
@@ -5076,14 +4899,15 @@ sub _patch_configure {
 +
  }
 -EOCP
-+EOP
- 	set try
+-	set try
 -	if eval $compile_ok; then
 -		o_nonblock=`$run ./try`
 -		case "$o_nonblock" in
 -		'') echo "I can't figure it out, assuming O_NONBLOCK will do.";;
 -		*) echo "Seems like we can use $o_nonblock.";;
 -		esac
++EOP
++	set try
 +	if eval $compile && $to try.c; then
 + 		case `$run ./try` in
 +		Pass_changed)
@@ -5209,9 +5033,11 @@ sub _patch_configure {
 -	read(pu[0], buf, 1);	/* Wait for parent to signal us we may continue */
 -	close(pd[1]);			/* Pipe pd is now fully closed! */
 -	exit(0);				/* Bye bye, thank you for playing! */
--}
++	exit(1);
+ }
 -EOCP
--	set try
++EOP
+ 	set try
 -	if eval $compile_ok; then
 -		echo "$startsh" >mtry
 -		echo "$run ./try >try.out 2>try.ret 4>try.err || exit 4" >>mtry
@@ -5253,10 +5079,6 @@ sub _patch_configure {
 -		if test "$status" = "$rd_nodata"; then
 -			echo "WARNING: you can't distinguish between EOF and no data!"
 -			val="$undef"
-+	exit(1);
-+}
-+EOP
-+	set try
 +	if eval $compile && $to try.c; then
 +		if $run ./try; then
 +			echo "And its _base field acts std."
@@ -5306,7 +5128,7 @@ sub _patch_configure {
  
  : see if fchdir exists
  set fchdir d_fchdir
-@@ -11274,7 +11550,10 @@ eval $inlibc
+@@ -11274,7 +11594,10 @@ eval $inlibc
  echo " "
  : See if fcntl-based locking works.
  $cat >try.c <<EOCP
@@ -5317,7 +5139,7 @@ sub _patch_configure {
  #include <unistd.h>
  #include <fcntl.h>
  #include <signal.h>
-@@ -11341,6 +11620,10 @@ $cat <<EOM
+@@ -11341,6 +11664,10 @@ $cat <<EOM
  Checking to see how well your C compiler handles fd_set and friends ...
  EOM
  $cat >try.c <<EOCP
@@ -5328,7 +5150,7 @@ sub _patch_configure {
  #$i_systime I_SYS_TIME
  #$i_sysselct I_SYS_SELECT
  #$d_socket HAS_SOCKET
-@@ -13021,9 +13304,13 @@ eval $inlibc
+@@ -13021,9 +13348,13 @@ eval $inlibc
  
  : Look for isascii
  echo " "
@@ -5343,7 +5165,139 @@ sub _patch_configure {
  int main() {
  	int c = 'A';
  	if (isascii(c))
-@@ -13368,8 +13655,12 @@ echo " "
+@@ -13268,13 +13599,129 @@ END
+ 	if $cc $ccflags -c mmap.c >/dev/null 2>&1; then
+ 		mmaptype='void *'
+ 	else
+-		mmaptype='caddr_t'
++		mmaptype='caddr_t'
++	fi
++	echo "and it returns ($mmaptype)." >&4
++	;;
++esac
++
++
++
++
++: see if sqrtl exists
++set sqrtl d_sqrtl
++eval $inlibc
++
++: see if scalbnl exists
++set scalbnl d_scalbnl
++eval $inlibc
++
++: see if modfl exists
++set modfl d_modfl
++eval $inlibc
++
++: see if prototype for modfl is available
++echo " "
++set d_modflproto modfl math.h
++eval $hasproto
++
++d_modfl_pow32_bug="$undef"
++
++case "$d_longdbl$d_modfl" in
++$define$define)
++	$cat <<EOM
++Checking to see whether your modfl() is okay for large values...
++EOM
++$cat >try.c <<EOCP
++#include <math.h> 
++#include <stdio.h>
++EOCP
++if $test "X$d_modflproto" != "X$define"; then
++	$cat >>try.c <<EOCP
++/* Sigh. many current glibcs provide the function, but do not prototype it.  */ 
++long double modfl (long double, long double *);
++EOCP
++fi
++$cat >>try.c <<EOCP
++int main() {
++    long double nv = 4294967303.15;
++    long double v, w;
++    v = modfl(nv, &w);         
++#ifdef __GLIBC__
++    printf("glibc");
++#endif
++    printf(" %"$sPRIfldbl" %"$sPRIfldbl" %"$sPRIfldbl"\n", nv, v, w);
++    return 0;
++}
++EOCP
++	case "$osname:$gccversion" in
++	aix:)	saveccflags="$ccflags"
++		ccflags="$ccflags -qlongdouble" ;; # to avoid core dump
++	esac
++	set try
++	if eval $compile; then
++		foo=`$run ./try`
++		case "$foo" in
++		*" 4294967303.150000 1.150000 4294967302.000000")
++			echo >&4 "Your modfl() is broken for large values."
++			d_modfl_pow32_bug="$define"
++			case "$foo" in
++			glibc)	echo >&4 "You should upgrade your glibc to at least 2.2.2 to get a fixed modfl()."
++			;;
++			esac
++			;;
++		*" 4294967303.150000 0.150000 4294967303.000000")
++			echo >&4 "Your modfl() seems okay for large values."
++			;;
++		*)	echo >&4 "I don't understand your modfl() at all."
++			d_modfl="$undef"
++			;;
++		esac
++		$rm -f try.* try core core.try.*
++	else
++		echo "I cannot figure out whether your modfl() is okay, assuming it isn't."
++		d_modfl="$undef"
+ 	fi
+-	echo "and it returns ($mmaptype)." >&4
++	case "$osname:$gccversion" in
++	aix:)	ccflags="$saveccflags" ;; # restore
++	esac
+ 	;;
+ esac
+ 
++if $test "$uselongdouble" = "$define"; then
++    message=""
++    if $test "$d_sqrtl" != "$define"; then
++	message="$message sqrtl"
++    fi
++    if $test "$d_modfl" != "$define"; then
++	if $test "$d_aintl:$d_copysignl" = "$define:$define"; then
++	    echo "You have both aintl and copysignl, so I can emulate modfl."
++	else
++	    message="$message modfl"
++	fi
++    fi
++    if $test "$d_frexpl" != "$define"; then
++	if $test "$d_ilogbl:$d_scalbnl" = "$define:$define"; then
++	    echo "You have both ilogbl and scalbnl, so I can emulate frexpl."
++	else
++	    message="$message frexpl"
++	fi
++    fi
++
++    if $test "$message" != ""; then
++	$cat <<EOM >&4
++
++*** You requested the use of long doubles but you do not seem to have
++*** the following mathematical functions needed for long double support:
++***    $message
++*** Please rerun Configure without -Duselongdouble and/or -Dusemorebits.
++*** Cannot continue, aborting.
++
++EOM
+ 
++	exit 1
++    fi
++fi
+ 
+ : see if mprotect exists
+ set mprotect d_mprotect
+@@ -13368,8 +13815,12 @@ echo " "
  case "$charsize" in
  '')
  	echo "Checking to see how big your characters are (hey, you never know)..." >&4
@@ -5357,7 +5311,7 @@ sub _patch_configure {
  int main()
  {
      printf("%d\n", (int)sizeof(char));
-@@ -13609,6 +13900,10 @@ if test X"$d_volatile" = X"$define"; then
+@@ -13609,6 +14060,10 @@ if test X"$d_volatile" = X"$define"; then
  fi
  $cat <<EOP >try.c
  #include <stdio.h>
@@ -5368,7 +5322,7 @@ sub _patch_configure {
  #include <sys/types.h>
  #include <signal.h>
  #ifdef SIGFPE
-@@ -14379,7 +14674,7 @@ $define)
+@@ -14379,7 +14834,7 @@ $define)
  #endif
  END
  
@@ -5377,7 +5331,7 @@ sub _patch_configure {
  #include <sys/types.h>
  #include <sys/ipc.h>
  #include <sys/sem.h>
-@@ -15081,10 +15376,14 @@ echo " "
+@@ -15081,10 +15536,14 @@ echo " "
  : see if we have sigaction
  if set sigaction val -f d_sigaction; eval $csym; $val; then
  	echo 'sigaction() found.' >&4
@@ -5393,7 +5347,7 @@ sub _patch_configure {
  int main()
  {
      struct sigaction act, oact;
-@@ -15116,8 +15415,12 @@ eval $inlibc
+@@ -15116,8 +15575,12 @@ eval $inlibc
  echo " "
  case "$d_sigsetjmp" in
  '')
@@ -5407,7 +5361,7 @@ sub _patch_configure {
  sigjmp_buf env;
  int set = 1;
  int main()
-@@ -15231,343 +15534,87 @@ case "$d_srandom_r" in
+@@ -15231,343 +15694,87 @@ case "$d_srandom_r" in
  	esac
  	case "$srandom_r_proto" in
  	''|0)	d_srandom_r=undef
@@ -5817,7 +5771,7 @@ sub _patch_configure {
  
  $cat >&4 <<EOM
  Checking how to access stdio streams by file descriptor number...
-@@ -16198,6 +16245,10 @@ I'm now running the test program...
+@@ -16198,6 +16405,10 @@ I'm now running the test program...
  EOM
  		$cat >try.c <<EOCP
  #include <stdio.h>
@@ -5828,7 +5782,7 @@ sub _patch_configure {
  #include <sys/types.h>
  typedef $uvtype UV;
  int main()
-@@ -16260,6 +16311,10 @@ EOM
+@@ -16260,6 +16471,10 @@ EOM
  case "$d_u32align" in
  '')   $cat >try.c <<EOCP
  #include <stdio.h>
@@ -5839,7 +5793,7 @@ sub _patch_configure {
  #define U32 $u32type
  #define BYTEORDER 0x$byteorder
  #define U8 $u8type
-@@ -16611,7 +16666,11 @@ $define)
+@@ -16611,7 +16826,11 @@ $define)
  #endif
  #include <sys/types.h>
  #include <stdio.h>
@@ -5852,7 +5806,7 @@ sub _patch_configure {
  int main(int argc, char *argv[])
  {
  #ifdef DB_VERSION_MAJOR	/* DB version >= 2 */
-@@ -16659,7 +16718,7 @@ int main(int argc, char *argv[])
+@@ -16659,7 +16878,7 @@ int main(int argc, char *argv[])
      printf("You have Berkeley DB Version 1.\n");
      exit(0);	/* DB version < 2: the coast is clear. */
  #else
@@ -5861,7 +5815,7 @@ sub _patch_configure {
  #endif
  #endif
  }
-@@ -16672,7 +16731,7 @@ EOCP
+@@ -16672,7 +16891,7 @@ EOCP
  		db_version_minor=$2
  		db_version_patch=$3
  	else
@@ -5870,7 +5824,7 @@ sub _patch_configure {
  		i_db=$undef
  		case " $libs " in
  		*"-ldb "*)
-@@ -16700,7 +16759,7 @@ define)
+@@ -16700,7 +16919,7 @@ define)
  #define const
  #endif
  #include <sys/types.h>
@@ -5879,7 +5833,7 @@ sub _patch_configure {
  
  #ifndef DB_VERSION_MAJOR
  u_int32_t hash_cb (ptr, size)
-@@ -16745,7 +16804,7 @@ define)
+@@ -16745,7 +16964,7 @@ define)
  #define const
  #endif
  #include <sys/types.h>
@@ -5888,7 +5842,7 @@ sub _patch_configure {
  
  #ifndef DB_VERSION_MAJOR
  size_t prefix_cb (key1, key2)
-@@ -16949,6 +17008,10 @@ sunos) $echo '#define PERL_FFLUSH_ALL_FOPEN_MAX 32' > try.c ;;
+@@ -16949,6 +17168,10 @@ sunos) $echo '#define PERL_FFLUSH_ALL_FOPEN_MAX 32' > try.c ;;
  esac
  $cat >>try.c <<EOCP
  #include <stdio.h>
@@ -5899,7 +5853,7 @@ sub _patch_configure {
  #$i_unistd I_UNISTD
  #ifdef I_UNISTD
  # include <unistd.h>
-@@ -17265,6 +17328,10 @@ echo "Checking the size of $zzz..." >&4
+@@ -17265,6 +17488,10 @@ echo "Checking the size of $zzz..." >&4
  cat > try.c <<EOCP
  #include <sys/types.h>
  #include <stdio.h>
@@ -5910,7 +5864,7 @@ sub _patch_configure {
  int main() {
      printf("%d\n", (int)sizeof($gidtype));
      exit(0);
-@@ -17975,7 +18042,11 @@ echo " "
+@@ -17975,7 +18202,11 @@ echo " "
  echo "Checking how to generate random libraries on your machine..." >&4
  echo 'int bar1() { return bar2(); }' > bar1.c
  echo 'int bar2() { return 2; }' > bar2.c
@@ -5923,7 +5877,7 @@ sub _patch_configure {
  int main() { printf("%d\n", bar1()); exit(0); }
  EOP
  $cc $ccflags -c bar1.c >/dev/null 2>&1
-@@ -18065,7 +18136,8 @@ esac
+@@ -18065,7 +18296,8 @@ esac
  
  : check for the select 'width'
  case "$selectminbits" in
@@ -5933,7 +5887,7 @@ sub _patch_configure {
  	$define)
  		$cat <<EOM
  
-@@ -18097,25 +18169,31 @@ EOM
+@@ -18097,25 +18329,31 @@ EOM
  #   include <sys/socket.h> /* Might include <sys/bsdtypes.h> */
  #endif
  #include <stdio.h>
@@ -5968,7 +5922,7 @@ sub _patch_configure {
      b = ($selecttype)s;
      for (i = 0; i < NBITS; i++)
  	FD_SET(i, b);
-@@ -18123,6 +18201,7 @@ int main() {
+@@ -18123,6 +18361,7 @@ int main() {
      t.tv_usec = 0;
      select(fd + 1, b, 0, 0, &t);
      for (i = NBITS - 1; i > fd && FD_ISSET(i, b); i--);
@@ -5976,7 +5930,7 @@ sub _patch_configure {
      printf("%d\n", i + 1);
      return 0;
  }
-@@ -18133,10 +18212,10 @@ EOCP
+@@ -18133,10 +18372,10 @@ EOCP
  			case "$selectminbits" in
  			'')	cat >&4 <<EOM
  Cannot figure out on how many bits at a time your select() operates.
@@ -5990,7 +5944,7 @@ sub _patch_configure {
  				;;
  			1)	bits="1 bit" ;;
  			*)	bits="$selectminbits bits" ;;
-@@ -18145,7 +18224,8 @@ EOM
+@@ -18145,7 +18384,8 @@ EOM
  		else
  			rp='What is the minimum number of bits your select() operates on?'
  			case "$byteorder" in
@@ -6000,7 +5954,7 @@ sub _patch_configure {
  			*)		dflt=1	;;
  			esac
  			. ./myread
-@@ -18155,7 +18235,7 @@ EOM
+@@ -18155,7 +18395,7 @@ EOM
  		$rm -f try.* try
  		;;
  	*)	: no select, so pick a harmless default
@@ -6009,7 +5963,7 @@ sub _patch_configure {
  		;;
  	esac
  	;;
-@@ -18202,9 +18282,13 @@ xxx="$xxx SYS TERM THAW TRAP TSTP TTIN TTOU URG USR1 USR2"
+@@ -18202,9 +18442,13 @@ xxx="$xxx SYS TERM THAW TRAP TSTP TTIN TTOU URG USR1 USR2"
  xxx="$xxx USR3 USR4 VTALRM WAITING WINCH WIND WINDOW XCPU XFSZ"
  
  : generate a few handy files for later
@@ -6024,7 +5978,7 @@ sub _patch_configure {
  #include <stdio.h>
  int main() {
  
-@@ -18279,7 +18363,7 @@ END {
+@@ -18279,7 +18523,7 @@ END {
  $cat >signal.awk <<'EOP'
  BEGIN { ndups = 0 }
  $1 ~ /^NSIG$/ { nsig = $2 }
@@ -6033,7 +5987,7 @@ sub _patch_configure {
      if ($2 > maxsig) { maxsig = $2 }
      if (sig_name[$2]) {
  	dup_name[ndups] = $1
-@@ -18432,6 +18516,10 @@ echo "Checking the size of $zzz..." >&4
+@@ -18432,6 +18676,10 @@ echo "Checking the size of $zzz..." >&4
  cat > try.c <<EOCP
  #include <sys/types.h>
  #include <stdio.h>
@@ -6044,7 +5998,7 @@ sub _patch_configure {
  int main() {
      printf("%d\n", (int)sizeof($sizetype));
      exit(0);
-@@ -18535,6 +18623,10 @@ eval $typedef
+@@ -18535,6 +18783,10 @@ eval $typedef
  dflt="$ssizetype"
  $cat > try.c <<EOM
  #include <stdio.h>
@@ -6055,7 +6009,7 @@ sub _patch_configure {
  #include <sys/types.h>
  #define Size_t $sizetype
  #define SSize_t $dflt
-@@ -18617,6 +18709,10 @@ echo "Checking the size of $zzz..." >&4
+@@ -18617,6 +18869,10 @@ echo "Checking the size of $zzz..." >&4
  cat > try.c <<EOCP
  #include <sys/types.h>
  #include <stdio.h>
@@ -6066,7 +6020,7 @@ sub _patch_configure {
  int main() {
      printf("%d\n", (int)sizeof($uidtype));
      exit(0);
-@@ -19440,7 +19536,19 @@ Note that DynaLoader is always built and need not be mentioned here.
+@@ -19440,7 +19696,19 @@ Note that DynaLoader is always built and need not be mentioned here.
  
  EOM
  	case "$dynamic_ext" in

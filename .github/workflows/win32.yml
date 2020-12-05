@@ -32,6 +32,9 @@ jobs:
         run: |
           ../../bin/carton install --deployment
           ../../bin/carton exec perl -c build.pl
+          ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/GitHubActions.pm
+          ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/MinGW.pm
+          ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/MinGWGNUmakefile.pm
         working-directory: ./scripts/windows
       - id: set-matrix
         name: list available perl versions

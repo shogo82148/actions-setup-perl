@@ -165,6 +165,7 @@ sub run {
 }
 
 try {
+    issue_command('add-matcher', {}, File::Spec->catfile($FindBin::Bin, "..", "matcher.json"));
     run();
 } catch {
     set_failed("$_");

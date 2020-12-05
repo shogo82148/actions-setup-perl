@@ -6006,10 +6006,8 @@ PATCH
     }
 
     _patch(<<'PATCH');
-diff --git a/Configure b/Configure
-index dec52a8171..501574ad7b 100755
---- a/Configure
-+++ b/Configure
+--- Configure
++++ Configure
 @@ -165,6 +165,11 @@ ccversion=''
  ccsymbols=''
  cppccsymbols=''

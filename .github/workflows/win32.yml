@@ -134,7 +134,6 @@ jobs:
 
       - name: upload
         shell: pwsh
-        if: startsWith(github.ref, 'refs/heads/releases/')
         run: |
           Set-Location ${env:RUNNER_TEMP}
           Invoke-WebRequest -Uri https://github.com/shogo82148/s3cli-mini/releases/download/v0.0.6/s3cli-mini_windows_amd64.zip -OutFile s3cli-mini.zip
@@ -230,7 +229,6 @@ jobs:
 
       - name: upload
         shell: pwsh
-        if: startsWith(github.ref, 'refs/heads/releases/')
         run: |
           Set-Location ${env:RUNNER_TEMP}
           Invoke-WebRequest -Uri https://github.com/shogo82148/s3cli-mini/releases/download/v0.0.6/s3cli-mini_windows_amd64.zip -OutFile s3cli-mini.zip

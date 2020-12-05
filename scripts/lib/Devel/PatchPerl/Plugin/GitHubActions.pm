@@ -136,7 +136,8 @@ PATCH
 
 sub _patch_configure {
     my $version = shift;
-    _patch(<<'PATCH');
+    if (_ge($version, "5.8.0")) {
+        _patch(<<'PATCH');
 --- Configure
 +++ Configure
 @@ -2152,9 +2152,10 @@ for dir in \$*; do
@@ -6087,6 +6088,8 @@ sub _patch_configure {
  		# Perhaps we are reusing an old out-of-date config.sh.
  		case "$hint" in
 PATCH
+        return;
+    }
 }
 
 1;

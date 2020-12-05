@@ -6042,6 +6042,49 @@ sub _patch_configure {
 PATCH
         return;
     }
+
+    _patch(<<'PATCH');
+--- Configure
++++ Configure
+@@ -3124,7 +3124,7 @@ fi
+ 
+ echo " "
+ echo "Checking for GNU cc in disguise and/or its version number..." >&4
+-$cat >gccvers.c <<EOM
++$cat >try.c <<EOM
+ #include <stdio.h>
+ int main() {
+ #ifdef __GNUC__
+@@ -3134,15 +3134,15 @@ int main() {
+ 	printf("%s\n", "1");
+ #endif
+ #endif
+-	exit(0);
++	return(0);
+ }
+ EOM
+-if $cc -o gccvers $ccflags $ldflags gccvers.c; then
+-	gccversion=`./gccvers`
++if $cc -o try $ccflags $ldflags try.c; then
++	gccversion=`$run ./try`
+ 	case "$gccversion" in
+ 	'') echo "You are not using GNU cc." ;;
+ 	*)  echo "You are using GNU cc $gccversion."
+-	    ccname=gcc	
++	    ccname=gcc
+ 	    ;;
+ 	esac
+ else
+@@ -3156,7 +3156,7 @@ else
+ 		;;
+ 	esac
+ fi
+-$rm -f gccvers*
++$rm -f try try.*
+ case "$gccversion" in
+ 1.*) cpp=`./loc gcc-cpp $cpp $pth` ;;
+ esac
+PATCH
 }
 
 1;

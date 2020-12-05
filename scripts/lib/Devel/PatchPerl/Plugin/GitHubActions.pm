@@ -137,10 +137,8 @@ PATCH
 sub _patch_configure {
     my $version = shift;
     _patch(<<'PATCH');
-diff --git a/Configure b/Configure
-index c1e20289a1..9e952b4707 100755
---- a/Configure
-+++ b/Configure
+--- Configure
++++ Configure
 @@ -2152,9 +2152,10 @@ for dir in \$*; do
  	elif test -f \$dir/\$thing.exe; then
  		if test -n "$DJGPP"; then

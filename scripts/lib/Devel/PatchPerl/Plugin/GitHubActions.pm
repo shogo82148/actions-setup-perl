@@ -6084,6 +6084,15 @@ PATCH
  case "$gccversion" in
  1.*) cpp=`./loc gcc-cpp $cpp $pth` ;;
  esac
+@@ -4171,7 +4171,7 @@ echo " "
+ echo "Checking your choice of C compiler and flags for coherency..." >&4
+ $cat > try.c <<'EOF'
+ #include <stdio.h>
+-int main() { printf("Ok\n"); exit(0); }
++int main() { printf("Ok\n"); return(0); }
+ EOF
+ set X $cc -o try $optimize $ccflags $ldflags try.c $libs
+ shift
 PATCH
 }
 

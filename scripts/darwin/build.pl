@@ -13,6 +13,7 @@ use File::Path qw/make_path/;
 use version 0.77 ();
 use Carp qw/croak/;
 use Actions::Core qw/warning info group set_failed/;
+use Actions::Core::Command qw(issue_command);
 
 my $version = $ENV{PERL_VERSION};
 my $thread = $ENV{PERL_MULTI_THREAD};

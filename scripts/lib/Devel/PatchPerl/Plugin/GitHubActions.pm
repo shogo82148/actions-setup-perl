@@ -6673,7 +6673,104 @@ PATCH
  			cat <<EOM
  You appear to have ELF support.  I'll use $cc to build dynamic libraries.
  EOM
-@@ -8001,7 +8406,7 @@ eval $inlibc
+@@ -7168,7 +7573,7 @@ case "$man3dir" in
+ esac
+ 
+ : see if we have to deal with yellow pages, now NIS.
+-if $test -d /usr/etc/yp || $test -d /etc/yp; then
++if $test -d /usr/etc/yp || $test -d /etc/yp || $test -d /usr/lib/yp; then
+ 	if $test -f /usr/etc/nibindd; then
+ 		echo " "
+ 		echo "I'm fairly confident you're on a NeXT."
+@@ -7696,7 +8101,7 @@ int main() {
+ EOCP
+ 	set try
+ 	if eval $compile; then
+-		yyy=`./try$exe_ext`
++		yyy=`$run ./try`
+ 		case "$yyy" in
+ 		123.456)
+ 			sPRIfldbl='"f"'; sPRIgldbl='"g"'; sPRIeldbl='"e"';
+@@ -7713,17 +8118,17 @@ if $test X"$sPRIfldbl" = X; then
+ #include <stdio.h>
+ int main() {
+   long double d = 123.456;
+-  printf("%.3llf\n", d);
++  printf("%.3Lf\n", d);
+ }
+ EOCP
+ 	set try
+ 	if eval $compile; then
+-		yyy=`./try$exe_ext`
++		yyy=`$run ./try`
+ 		case "$yyy" in
+ 		123.456)
+-			sPRIfldbl='"llf"'; sPRIgldbl='"llg"'; sPRIeldbl='"lle"';
+-                	sPRIFUldbl='"llF"'; sPRIGUldbl='"llG"'; sPRIEUldbl='"llE"';
+-			echo "We will use %llf."
++			sPRIfldbl='"Lf"'; sPRIgldbl='"Lg"'; sPRIeldbl='"Le"';
++                	sPRIFUldbl='"LF"'; sPRIGUldbl='"LG"'; sPRIEUldbl='"LE"';
++			echo "We will use %Lf."
+ 			;;
+ 		esac
+ 	fi
+@@ -7735,17 +8140,17 @@ if $test X"$sPRIfldbl" = X; then
+ #include <stdio.h>
+ int main() {
+   long double d = 123.456;
+-  printf("%.3Lf\n", d);
++  printf("%.3llf\n", d);
+ }
+ EOCP
+ 	set try
+ 	if eval $compile; then
+-		yyy=`./try$exe_ext`
++		yyy=`$run ./try`
+ 		case "$yyy" in
+ 		123.456)
+-			sPRIfldbl='"Lf"'; sPRIgldbl='"Lg"'; sPRIeldbl='"Le"';
+-                	sPRIFUldbl='"LF"'; sPRIGUldbl='"LG"'; sPRIEUldbl='"LE"';
+-			echo "We will use %Lf."
++			sPRIfldbl='"llf"'; sPRIgldbl='"llg"'; sPRIeldbl='"lle"';
++                	sPRIFUldbl='"llF"'; sPRIGUldbl='"llG"'; sPRIEUldbl='"llE"';
++			echo "We will use %llf."
+ 			;;
+ 		esac
+ 	fi
+@@ -7762,7 +8167,7 @@ int main() {
+ EOCP
+ 	set try
+ 	if eval $compile; then
+-		yyy=`./try$exe_ext`
++		yyy=`$run ./try`
+ 		case "$yyy" in
+ 		123.456)
+ 			sPRIfldbl='"lf"'; sPRIgldbl='"lg"'; sPRIeldbl='"le"';
+@@ -7822,9 +8227,13 @@ char *myname = "qgcvt";
+ #define DOUBLETYPE long double
+ #endif
+ #ifdef TRY_sprintf
+-#if defined(USE_LONG_DOUBLE) && defined(HAS_LONG_DOUBLE) && defined(HAS_PRIgldbl)
++#if defined(USE_LONG_DOUBLE) && defined(HAS_LONG_DOUBLE)
++#ifdef HAS_PRIgldbl
+ #define Gconvert(x,n,t,b) sprintf((b),"%.*"$sPRIgldbl,(n),(x))
+ #else
++#define Gconvert(x,n,t,b) sprintf((b),"%.*g",(n),(double)(x))
++#endif
++#else
+ #define Gconvert(x,n,t,b) sprintf((b),"%.*g",(n),(x))
+ #endif
+ char *myname = "sprintf";
+@@ -7960,7 +8369,7 @@ for xxx_convert in $xxx_list; do
+ 	set try -DTRY_$xxx_convert
+ 	if eval $compile; then
+ 		echo "$xxx_convert() found." >&4
+-		if ./try; then
++		if $run ./try; then
+ 			echo "I'll use $xxx_convert to convert floats into a string." >&4
+ 			break;
+ 		else
+@@ -8001,7 +8410,7 @@ eval $inlibc
  case "$d_access" in
  "$define")
  	echo " "
@@ -6682,7 +6779,7 @@ PATCH
  #include <sys/types.h>
  #ifdef I_FCNTL
  #include <fcntl.h>
-@@ -8012,6 +8417,10 @@ case "$d_access" in
+@@ -8012,6 +8421,10 @@ case "$d_access" in
  #ifdef I_UNISTD
  #include <unistd.h>
  #endif
@@ -6693,7 +6790,7 @@ PATCH
  int main() {
  	exit(R_OK);
  }
-@@ -8056,7 +8465,7 @@ echo " "
+@@ -8056,7 +8469,7 @@ echo " "
  echo "Checking whether your compiler can handle __attribute__ ..." >&4
  $cat >attrib.c <<'EOCP'
  #include <stdio.h>
@@ -6702,7 +6799,87 @@ PATCH
  EOCP
  if $cc $ccflags -c attrib.c >attrib.out 2>&1 ; then
  	if $contains 'warning' attrib.out >/dev/null 2>&1; then
-@@ -8267,6 +8676,10 @@ else
+@@ -8094,12 +8507,16 @@ case "$d_getpgrp" in
+ "$define")
+ 	echo " "
+ 	echo "Checking to see which flavor of getpgrp is in use..."
+-	$cat >set.c <<EOP
++	$cat >try.c <<EOP
+ #$i_unistd I_UNISTD
+ #include <sys/types.h>
+ #ifdef I_UNISTD
+ #  include <unistd.h>
+ #endif
++#$i_stdlib I_STDLIB
++#ifdef I_STDLIB
++#include <stdlib.h>
++#endif
+ int main()
+ {
+ 	if (getuid() == 0) {
+@@ -8116,10 +8533,10 @@ int main()
+ 	exit(1);
+ }
+ EOP
+-	if $cc -o set -DTRY_BSD_PGRP $ccflags $ldflags set.c $libs >/dev/null 2>&1 && ./set; then
++	if $cc -o try -DTRY_BSD_PGRP $ccflags $ldflags try.c $libs >/dev/null 2>&1 && $run ./try; then
+ 		echo "You have to use getpgrp(pid) instead of getpgrp()." >&4
+ 		val="$define"
+-	elif $cc -o set $ccflags $ldflags set.c $libs >/dev/null 2>&1 && ./set; then
++	elif $cc -o try $ccflags $ldflags try.c $libs >/dev/null 2>&1 && $run ./try; then
+ 		echo "You have to use getpgrp() instead of getpgrp(pid)." >&4
+ 		val="$undef"
+ 	else
+@@ -8146,7 +8563,7 @@ EOP
+ esac
+ set d_bsdgetpgrp
+ eval $setvar
+-$rm -f set set.c
++$rm -f try try.*
+ 
+ : see if setpgrp exists
+ set setpgrp d_setpgrp
+@@ -8156,12 +8573,16 @@ case "$d_setpgrp" in
+ "$define")
+ 	echo " "
+ 	echo "Checking to see which flavor of setpgrp is in use..."
+-	$cat >set.c <<EOP
++	$cat >try.c <<EOP
+ #$i_unistd I_UNISTD
+ #include <sys/types.h>
+ #ifdef I_UNISTD
+ #  include <unistd.h>
+ #endif
++#$i_stdlib I_STDLIB
++#ifdef I_STDLIB
++#include <stdlib.h>
++#endif
+ int main()
+ {
+ 	if (getuid() == 0) {
+@@ -8178,10 +8599,10 @@ int main()
+ 	exit(1);
+ }
+ EOP
+-	if $cc -o set -DTRY_BSD_PGRP $ccflags $ldflags set.c $libs >/dev/null 2>&1 && ./set; then
++	if $cc -o try -DTRY_BSD_PGRP $ccflags $ldflags try.c $libs >/dev/null 2>&1 && $run ./try; then
+ 		echo 'You have to use setpgrp(pid,pgrp) instead of setpgrp().' >&4
+ 		val="$define"
+-	elif $cc -o set $ccflags $ldflags set.c $libs >/dev/null 2>&1 && ./set; then
++	elif $cc -o try $ccflags $ldflags try.c $libs >/dev/null 2>&1 && $run ./try; then
+ 		echo 'You have to use setpgrp() instead of setpgrp(pid,pgrp).' >&4
+ 		val="$undef"
+ 	else
+@@ -8208,7 +8629,7 @@ EOP
+ esac
+ set d_bsdsetpgrp
+ eval $setvar
+-$rm -f set set.c
++$rm -f try try.*
+ : see if bzero exists
+ set bzero d_bzero
+ eval $inlibc
+@@ -8267,6 +8688,10 @@ else
  fi
  $cat >try.c <<EOCP
  #include <stdio.h>
@@ -6713,7 +6890,7 @@ PATCH
  #include <sys/types.h>
  #include <signal.h>
  $signal_t blech(s) int s; { exit(3); }
-@@ -8298,7 +8711,7 @@ int main()
+@@ -8298,7 +8723,7 @@ int main()
  EOCP
  set try
  if eval $compile_ok; then
@@ -6722,7 +6899,7 @@ PATCH
  	yyy=$?
  else
  	echo "(I can't seem to compile the test program--assuming it can't)"
-@@ -8321,6 +8734,10 @@ echo " "
+@@ -8321,6 +8746,10 @@ echo " "
  echo 'Checking whether your C compiler can cast negative float to unsigned.' >&4
  $cat >try.c <<EOCP
  #include <stdio.h>
@@ -6733,7 +6910,7 @@ PATCH
  #include <sys/types.h>
  #include <signal.h>
  $signal_t blech(s) int s; { exit(7); }
-@@ -8394,7 +8811,7 @@ int main()
+@@ -8394,7 +8823,7 @@ int main()
  EOCP
  set try
  if eval $compile_ok; then
@@ -6742,7 +6919,7 @@ PATCH
  	castflags=$?
  else
  	echo "(I can't seem to compile the test program--assuming it can't)"
-@@ -8417,8 +8834,12 @@ echo " "
+@@ -8417,8 +8846,12 @@ echo " "
  if set vprintf val -f d_vprintf; eval $csym; $val; then
  	echo 'vprintf() found.' >&4
  	val="$define"
@@ -6756,7 +6933,7 @@ PATCH
  
  int main() { xxx("foo"); }
  
-@@ -8432,8 +8853,8 @@ va_dcl
+@@ -8432,8 +8865,8 @@ va_dcl
  	exit((unsigned long)vsprintf(buf,"%s",args) > 10L);
  }
  EOF
@@ -6767,7 +6944,7 @@ PATCH
  		echo "Your vsprintf() returns (int)." >&4
  		val2="$undef"
  	else
-@@ -8445,6 +8866,7 @@ else
+@@ -8445,6 +8878,7 @@ else
  		val="$undef"
  		val2="$undef"
  fi
@@ -6775,7 +6952,7 @@ PATCH
  set d_vprintf
  eval $setvar
  val=$val2
-@@ -8486,7 +8908,11 @@ eval $setvar
+@@ -8486,7 +8920,11 @@ eval $setvar
  
  : see if crypt exists
  echo " "
@@ -6788,7 +6965,7 @@ PATCH
  	echo 'crypt() found.' >&4
  	val="$define"
  	cryptlib=''
-@@ -8516,6 +8942,8 @@ else
+@@ -8516,6 +8954,8 @@ else
  fi
  set d_crypt
  eval $setvar
@@ -6797,7 +6974,44 @@ PATCH
  
  : get csh whereabouts
  case "$csh" in
-@@ -8815,7 +9243,7 @@ eval $inlibc
+@@ -8687,9 +9127,13 @@ EOM
+ $cat >fred.c<<EOM
+ 
+ #include <stdio.h>
++#$i_stdlib I_STDLIB
++#ifdef I_STDLIB
++#include <stdlib.h>
++#endif
+ #$i_dlfcn I_DLFCN
+ #ifdef I_DLFCN
+-#include <dlfcn.h>      /* the dynamic linker include file for Sunos/Solaris */
++#include <dlfcn.h>      /* the dynamic linker include file for SunOS/Solaris */
+ #else
+ #include <sys/types.h>
+ #include <nlist.h>
+@@ -8733,9 +9177,9 @@ EOM
+ 	: Call the object file tmp-dyna.o in case dlext=o.
+ 	if $cc $ccflags $cccdlflags -c dyna.c > /dev/null 2>&1 && 
+ 		mv dyna${_o} tmp-dyna${_o} > /dev/null 2>&1 && 
+-		$ld -o dyna.$dlext $lddlflags tmp-dyna${_o} > /dev/null 2>&1 && 
+-		$cc -o fred $ccflags $ldflags $cccdlflags $ccdlflags fred.c $libs > /dev/null 2>&1; then
+-		xxx=`./fred`
++		$ld -o dyna.$dlext $ldflags $lddlflags tmp-dyna${_o} > /dev/null 2>&1 && 
++		$cc -o fred $ccflags $ldflags $cccdlflags $ccdlflags fred.c $libs > /dev/null 2>&1 && $to dyna.$dlext; then
++		xxx=`$run ./fred`
+ 		case $xxx in
+ 		1)	echo "Test program failed using dlopen." >&4
+ 			echo "Perhaps you should not use dynamic loading." >&4;;
+@@ -8752,7 +9196,7 @@ EOM
+ 	;;
+ esac
+ 		
+-$rm -f fred fred.? dyna.$dlext dyna.? tmp-dyna.?
++$rm -f fred fred.* dyna.$dlext dyna.* tmp-dyna.*
+ 
+ set d_dlsymun
+ eval $setvar
+@@ -8815,7 +9259,7 @@ eval $inlibc
  
  : Locate the flags for 'open()'
  echo " "
@@ -6806,7 +7020,7 @@ PATCH
  #include <sys/types.h>
  #ifdef I_FCNTL
  #include <fcntl.h>
-@@ -8823,6 +9251,10 @@ $cat >open3.c <<'EOCP'
+@@ -8823,6 +9267,10 @@ $cat >open3.c <<'EOCP'
  #ifdef I_SYS_FILE
  #include <sys/file.h>
  #endif
@@ -6817,7 +7031,7 @@ PATCH
  int main() {
  	if(O_RDONLY);
  #ifdef O_TRUNC
-@@ -8834,10 +9266,10 @@ int main() {
+@@ -8834,10 +9282,10 @@ int main() {
  EOCP
  : check sys/file.h first to get FREAD on Sun
  if $test `./findhdr sys/file.h` && \
@@ -6830,7 +7044,7 @@ PATCH
  		echo "and you have the 3 argument form of open()." >&4
  		val="$define"
  	else
-@@ -8845,10 +9277,10 @@ if $test `./findhdr sys/file.h` && \
+@@ -8845,10 +9293,10 @@ if $test `./findhdr sys/file.h` && \
  		val="$undef"
  	fi
  elif $test `./findhdr fcntl.h` && \
@@ -6843,7 +7057,7 @@ PATCH
  		echo "and you have the 3 argument form of open()." >&4
  		val="$define"
  	else
-@@ -8861,7 +9293,7 @@ else
+@@ -8861,7 +9309,7 @@ else
  fi
  set d_open3
  eval $setvar
@@ -6852,7 +7066,7 @@ PATCH
  
  : see which of string.h or strings.h is needed
  echo " "
-@@ -8885,6 +9317,35 @@ case "$i_string" in
+@@ -8885,6 +9333,35 @@ case "$i_string" in
  *)	  strings=`./findhdr string.h`;;
  esac
  
@@ -6888,7 +7102,7 @@ PATCH
  : check for non-blocking I/O stuff
  case "$h_sysfile" in
  true) echo "#include <sys/file.h>" > head.c;;
-@@ -8900,8 +9361,16 @@ echo "Figuring out the flag used by open() for non-blocking I/O..." >&4
+@@ -8900,8 +9377,16 @@ echo "Figuring out the flag used by open() for non-blocking I/O..." >&4
  case "$o_nonblock" in
  '')
  	$cat head.c > try.c
@@ -6906,7 +7120,7 @@ PATCH
  int main() {
  #ifdef O_NONBLOCK
  	printf("O_NONBLOCK\n");
-@@ -8920,7 +9389,7 @@ int main() {
+@@ -8920,7 +9405,7 @@ int main() {
  EOCP
  	set try
  	if eval $compile_ok; then
@@ -6915,7 +7129,7 @@ PATCH
  		case "$o_nonblock" in
  		'') echo "I can't figure it out, assuming O_NONBLOCK will do.";;
  		*) echo "Seems like we can use $o_nonblock.";;
-@@ -8943,6 +9412,14 @@ case "$eagain" in
+@@ -8943,6 +9428,14 @@ case "$eagain" in
  #include <sys/types.h>
  #include <signal.h>
  #include <stdio.h> 
@@ -6930,7 +7144,7 @@ PATCH
  #define MY_O_NONBLOCK $o_nonblock
  #ifndef errno  /* XXX need better Configure test */
  extern int errno;
-@@ -9003,7 +9480,7 @@ int main()
+@@ -9003,7 +9496,7 @@ int main()
  		ret = read(pd[0], buf, 1);	/* Should read EOF */
  		alarm(0);
  		sprintf(string, "%d\n", ret);
@@ -6939,7 +7153,7 @@ PATCH
  		exit(0);
  	}
  
-@@ -9017,7 +9494,7 @@ EOCP
+@@ -9017,7 +9510,7 @@ EOCP
  	set try
  	if eval $compile_ok; then
  		echo "$startsh" >mtry
@@ -6948,7 +7162,33 @@ PATCH
  		chmod +x mtry
  		./mtry >/dev/null 2>&1
  		case $? in
-@@ -9118,7 +9595,7 @@ case "$d_fcntl" in
+@@ -9093,10 +9586,15 @@ eval $inlibc
+ 
+ echo " "
+ : See if fcntl-based locking works.
+-$cat >try.c <<'EOCP'
++$cat >try.c <<EOCP
++#$i_stdlib I_STDLIB
++#ifdef I_STDLIB
+ #include <stdlib.h>
++#endif
+ #include <unistd.h>
+ #include <fcntl.h>
++#include <signal.h>
++$signal_t blech(x) int x; { exit(3); }
+ int main() {
+ #if defined(F_SETLK) && defined(F_SETLKW)
+      struct flock flock;
+@@ -9105,6 +9603,8 @@ int main() {
+      flock.l_type = F_RDLCK;
+      flock.l_whence = SEEK_SET;
+      flock.l_start = flock.l_len = 0;
++     signal(SIGALRM, blech);
++     alarm(10);
+      retval = fcntl(fd, F_SETLK, &flock);
+      close(fd);
+      (retval < 0 ? exit(2) : exit(0));
+@@ -9118,12 +9618,24 @@ case "$d_fcntl" in
  "$define")
  	set try
  	if eval $compile_ok; then
@@ -6957,7 +7197,42 @@ PATCH
  			echo "Yes, it seems to work."
  			val="$define"
  		else
-@@ -9249,7 +9726,7 @@ echo " "
+ 			echo "Nope, it didn't work."
+ 			val="$undef"
++			case "$?" in
++			3) $cat >&4 <<EOM
++***
++*** I had to forcibly timeout from fcntl(..., F_SETLK, ...).
++*** This is (almost) impossible.
++*** If your NFS lock daemons are not feeling well, something like
++*** this may happen, please investigate.  Cannot continue, aborting.
++***
++EOM
++				exit 1
++				;;
++			esac
+ 		fi
+ 	else
+ 		echo "I'm unable to compile the test program, so I'll assume not."
+@@ -9196,7 +9708,7 @@ else
+ 							sockethdr="-I/usr/netinclude"
+ 							;;
+ 						esac
+-						echo "Found Berkeley sockets interface in lib$net." >& 4 
++						echo "Found Berkeley sockets interface in lib$net." >&4 
+ 						if $contains setsockopt libc.list >/dev/null 2>&1; then
+ 							d_oldsock="$undef"
+ 						else
+@@ -9222,7 +9734,7 @@ eval $inlibc
+ 
+ 
+ echo " "
+-echo "Checking the availability of certain socket constants..." >& 4
++echo "Checking the availability of certain socket constants..." >&4
+ for ENUM in MSG_CTRUNC MSG_DONTROUTE MSG_OOB MSG_PEEK MSG_PROXY SCM_RIGHTS; do
+ 	enum=`$echo $ENUM|./tr '[A-Z]' '[a-z]'`
+ 	$cat >try.c <<EOF
+@@ -9249,7 +9761,7 @@ echo " "
  if test "X$timeincl" = X; then
  	echo "Testing to see if we should include <time.h>, <sys/time.h> or both." >&4
  	$echo $n "I'm now running the test program...$c"
@@ -6966,7 +7241,7 @@ PATCH
  #include <sys/types.h>
  #ifdef I_TIME
  #include <time.h>
-@@ -9263,6 +9740,10 @@ if test "X$timeincl" = X; then
+@@ -9263,6 +9775,10 @@ if test "X$timeincl" = X; then
  #ifdef I_SYSSELECT
  #include <sys/select.h>
  #endif
@@ -6977,7 +7252,7 @@ PATCH
  int main()
  {
  	struct tm foo;
-@@ -9333,7 +9814,11 @@ $cat <<EOM
+@@ -9333,7 +9849,11 @@ $cat <<EOM
  
  Checking to see how well your C compiler handles fd_set and friends ...
  EOM
@@ -6990,7 +7265,7 @@ PATCH
  #$i_systime I_SYS_TIME
  #$i_sysselct I_SYS_SELECT
  #$d_socket HAS_SOCKET
-@@ -9361,12 +9846,12 @@ int main() {
+@@ -9361,12 +9881,12 @@ int main() {
  #endif
  }
  EOCP
@@ -7005,7 +7280,7 @@ PATCH
  		echo "and you have the normal fd_set macros (just as I'd expect)." >&4
  		d_fd_macros="$define"
  	else
-@@ -9379,12 +9864,12 @@ else
+@@ -9379,12 +9899,12 @@ else
  	$cat <<'EOM'
  Hmm, your compiler has some difficulty with fd_set.  Checking further...
  EOM
@@ -7020,7 +7295,7 @@ PATCH
  			echo "and you have the normal fd_set macros." >&4
  			d_fd_macros="$define"
  		else
-@@ -9400,7 +9885,7 @@ EOM
+@@ -9400,7 +9920,7 @@ EOM
  		d_fd_macros="$undef"
  	fi
  fi
@@ -7029,7 +7304,7 @@ PATCH
  
  : see if fgetpos exists
  set fgetpos d_fgetpos
-@@ -10315,8 +10800,12 @@ echo " "
+@@ -10315,8 +10835,12 @@ echo " "
  case "$charsize" in
  '')
  	echo "Checking to see how big your characters are (hey, you never know)..." >&4
@@ -7043,7 +7318,7 @@ PATCH
  int main()
  {
      printf("%d\n", (int)sizeof(char));
-@@ -11603,10 +12092,14 @@ echo " "
+@@ -11603,10 +12127,14 @@ echo " "
  : see if we have sigaction
  if set sigaction val -f d_sigaction; eval $csym; $val; then
  	echo 'sigaction() found.' >&4
@@ -7059,7 +7334,7 @@ PATCH
  int main()
  {
      struct sigaction act, oact;
-@@ -11634,8 +12127,12 @@ $rm -f try try$_o try.c
+@@ -11634,8 +12162,12 @@ $rm -f try try$_o try.c
  echo " "
  case "$d_sigsetjmp" in
  '')
@@ -7073,7 +7348,7 @@ PATCH
  sigjmp_buf env;
  int set = 1;
  int main()
-@@ -11649,7 +12146,7 @@ int main()
+@@ -11649,7 +12181,7 @@ int main()
  EOP
  	set try
  	if eval $compile; then
@@ -7082,7 +7357,7 @@ PATCH
  			echo "POSIX sigsetjmp found." >&4
  			val="$define"
  		else
-@@ -11981,7 +12478,7 @@ EOCP
+@@ -11981,7 +12513,7 @@ EOCP
  	do
  	        set try -DSTDIO_STREAM_ARRAY=$s
  		if eval $compile; then
@@ -7091,7 +7366,37 @@ PATCH
  			yes)	stdio_stream_array=$s; break ;;
  			esac
  		fi
-@@ -12458,7 +12955,7 @@ int main()
+@@ -12335,7 +12867,7 @@ case "$d_closedir" in
+ "$define")
+ 	echo " "
+ 	echo "Checking whether closedir() returns a status..." >&4
+-	cat > closedir.c <<EOM
++	cat > try.c <<EOM
+ #$i_dirent I_DIRENT		/**/
+ #$i_sysdir I_SYS_DIR		/**/
+ #$i_sysndir I_SYS_NDIR		/**/
+@@ -12364,9 +12896,9 @@ case "$d_closedir" in
+ #endif 
+ int main() { return closedir(opendir(".")); }
+ EOM
+-	set closedir
++	set try
+ 	if eval $compile_ok; then
+-		if ./closedir > /dev/null 2>&1 ; then
++		if $run ./try > /dev/null 2>&1 ; then
+ 			echo "Yes, it does."
+ 			val="$undef"
+ 		else
+@@ -12384,7 +12916,7 @@ EOM
+ esac
+ set d_void_closedir
+ eval $setvar
+-$rm -f closedir*
++$rm -f try try.*
+ : see if there is a wait4
+ set wait4 d_wait4
+ eval $inlibc
+@@ -12458,7 +12990,7 @@ int main()
  EOCP
  		set try
  		if eval $compile_ok; then
@@ -7100,7 +7405,7 @@ PATCH
  		else
  			dflt='8'
  			echo "(I can't seem to compile the test program...)"
-@@ -12478,16 +12975,16 @@ esac
+@@ -12478,16 +13010,16 @@ esac
  : set the base revision
  baserev=5.0
  
@@ -7120,7 +7425,7 @@ PATCH
  	;;
  *)
  	case "$byteorder" in
-@@ -12501,21 +12998,27 @@ an Alpha will report 12345678. If the test program works the default is
+@@ -12501,21 +13033,27 @@ an Alpha will report 12345678. If the test program works the default is
  probably right.
  I'm now running the test program...
  EOM
@@ -7155,7 +7460,7 @@ PATCH
  		printf("%c", u.c[i]+'0');
  	printf("\n");
  	exit(0);
-@@ -12524,7 +13027,7 @@ EOCP
+@@ -12524,7 +13062,7 @@ EOCP
  		xxx_prompt=y
  		set try
  		if eval $compile && ./try > /dev/null; then
@@ -7164,7 +7469,7 @@ PATCH
  			case "$dflt" in
  			[1-4][1-4][1-4][1-4]|12345678|87654321)
  				echo "(The test program ran ok.)"
-@@ -12542,7 +13045,7 @@ EOM
+@@ -12542,7 +13080,7 @@ EOM
  		fi
  		case "$xxx_prompt" in
  		y)
@@ -7173,7 +7478,7 @@ PATCH
  			. ./myread
  			byteorder="$ans"
  			;;
-@@ -12600,14 +13103,24 @@ $define)
+@@ -12600,14 +13138,24 @@ $define)
  #endif
  #include <sys/types.h>
  #include <stdio.h>
@@ -7201,7 +7506,7 @@ PATCH
  
      printf("db.h is from Berkeley DB Version %d.%d.%d\n",
  		DB_VERSION_MAJOR, DB_VERSION_MINOR, DB_VERSION_PATCH);
-@@ -12616,11 +13129,11 @@ int main()
+@@ -12616,11 +13164,11 @@ int main()
  
      /* check that db.h & libdb are compatible */
      if (DB_VERSION_MAJOR != Major || DB_VERSION_MINOR != Minor || DB_VERSION_PATCH != Patch) {
@@ -7215,7 +7520,7 @@ PATCH
  
      Version = DB_VERSION_MAJOR * 1000000 + DB_VERSION_MINOR * 1000
  		+ DB_VERSION_PATCH ;
-@@ -12628,26 +13141,34 @@ int main()
+@@ -12628,26 +13176,34 @@ int main()
      /* needs to be >= 2.3.4 */
      if (Version < 2003004) {
      /* if (DB_VERSION_MAJOR == 2 && DB_VERSION_MINOR == 0 && DB_VERSION_PATCH < 5) { */
@@ -7255,7 +7560,7 @@ PATCH
  		i_db=$undef
  		case " $libs " in
  		*"-ldb "*)
-@@ -12675,7 +13196,7 @@ define)
+@@ -12675,7 +13231,7 @@ define)
  #define const
  #endif
  #include <sys/types.h>
@@ -7264,7 +7569,7 @@ PATCH
  
  #ifndef DB_VERSION_MAJOR
  u_int32_t hash_cb (ptr, size)
-@@ -12720,7 +13241,7 @@ define)
+@@ -12720,7 +13276,7 @@ define)
  #define const
  #endif
  #include <sys/types.h>
@@ -7273,7 +7578,7 @@ PATCH
  
  #ifndef DB_VERSION_MAJOR
  size_t prefix_cb (key1, key2)
-@@ -12760,7 +13281,11 @@ echo " "
+@@ -12760,7 +13316,11 @@ echo " "
  echo "Checking to see how well your C compiler groks the void type..." >&4
  case "$voidflags" in
  '')
@@ -7286,7 +7591,40 @@ PATCH
  #if TRY & 1
  void sub() {
  #else
-@@ -13016,6 +13541,10 @@ sunos) $echo '#define PERL_FFLUSH_ALL_FOPEN_MAX 32' > try.c ;;
+@@ -12980,7 +13540,7 @@ done
+ 
+ echo " "
+ echo "Determining whether or not we are on an EBCDIC system..." >&4
+-$cat >tebcdic.c <<'EOM'
++$cat >try.c <<'EOM'
+ int main()
+ {
+   if ('M'==0xd4) return 0;
+@@ -12989,19 +13549,19 @@ int main()
+ EOM
+ 
+ val=$undef
+-set tebcdic
++set try
+ if eval $compile_ok; then
+-	if ./tebcdic; then
++	if $run ./try; then
+ 		echo "You seem to speak EBCDIC." >&4
+ 		val="$define"
+ 	else
+-		echo "Nope, no EBCDIC, probably ASCII or some ISO Latin. Or UTF8." >&4
++		echo "Nope, no EBCDIC, probably ASCII or some ISO Latin. Or UTF-8." >&4
+ 	fi
+ else
+ 	echo "I'm unable to compile the test program." >&4
+ 	echo "I'll assume ASCII or some ISO Latin. Or UTF8." >&4
+ fi
+-$rm -f tebcdic.c tebcdic
++$rm -f try try.*
+ set ebcdic
+ eval $setvar
+ 
+@@ -13016,6 +13576,10 @@ sunos) $echo '#define PERL_FFLUSH_ALL_FOPEN_MAX 32' > try.c ;;
  esac
  $cat >>try.c <<EOCP
  #include <stdio.h>
@@ -7297,7 +7635,7 @@ PATCH
  #$i_unistd I_UNISTD
  #ifdef I_UNISTD
  # include <unistd.h>
-@@ -13026,7 +13555,9 @@ $cat >>try.c <<EOCP
+@@ -13026,7 +13590,9 @@ $cat >>try.c <<EOCP
  # define STDIO_STREAM_ARRAY $stdio_stream_array
  #endif
  int main() {
@@ -7308,7 +7646,7 @@ PATCH
  #ifdef TRY_FPUTC
    fputc('x', p);
  #else
-@@ -13075,24 +13606,26 @@ int main() {
+@@ -13075,24 +13641,26 @@ int main() {
  }
  EOCP
  : first we have to find out how _not_ to flush
@@ -7342,7 +7680,7 @@ PATCH
  			output=-DTRY_FPRINTF
  		    fi
  	    fi
-@@ -13103,9 +13636,9 @@ fi
+@@ -13103,9 +13671,9 @@ fi
  case "$fflushNULL" in
  '') 	set try -DTRY_FFLUSH_NULL $output
  	if eval $compile; then
@@ -7354,7 +7692,7 @@ PATCH
  		if $test -s try.out -a "X$code" = X42; then
  			fflushNULL="`$cat try.out`"
  		else
-@@ -13151,7 +13684,7 @@ EOCP
+@@ -13151,7 +13719,7 @@ EOCP
                  set tryp
                  if eval $compile; then
                      $rm -f tryp.out
@@ -7363,7 +7701,30 @@ PATCH
                      if cmp tryp.c tryp.out >/dev/null 2>&1; then
                         $cat >&4 <<EOM
  fflush(NULL) seems to behave okay with input streams.
-@@ -13327,6 +13860,10 @@ echo "Checking the size of $zzz..." >&4
+@@ -13215,7 +13783,7 @@ EOCP
+ 	set tryp
+ 	if eval $compile; then
+ 	    $rm -f tryp.out
+-	    $cat tryp.c | ./tryp$exe_ext 2>/dev/null > tryp.out
++	    $cat tryp.c | $run ./tryp 2>/dev/null > tryp.out
+ 	    if cmp tryp.c tryp.out >/dev/null 2>&1; then
+ 	       $cat >&4 <<EOM
+ Good, at least fflush(stdin) seems to behave okay when stdin is a pipe.
+@@ -13227,9 +13795,10 @@ EOM
+ 				$cat >&4 <<EOM
+ (Now testing the other method--but note that this also may fail.)
+ EOM
+-				$rm -f try.out
+-				./try$exe_ext 2>/dev/null
+-				if $test -s try.out -a "X$?" = X42; then
++				$run ./try 2>/dev/null
++				code=$?
++				$from try.out
++				if $test -s try.out -a "X$code" = X42; then
+ 					fflushall="`$cat try.out`"
+ 				fi
+ 			fi
+@@ -13327,6 +13896,10 @@ echo "Checking the size of $zzz..." >&4
  cat > try.c <<EOCP
  #include <sys/types.h>
  #include <stdio.h>
@@ -7374,7 +7735,7 @@ PATCH
  int main() {
      printf("%d\n", (int)sizeof($gidtype));
      exit(0);
-@@ -13334,7 +13871,7 @@ int main() {
+@@ -13334,7 +13907,7 @@ int main() {
  EOCP
  set try
  if eval $compile_ok; then
@@ -7383,7 +7744,123 @@ PATCH
  	case "$yyy" in
  	'')	gidsize=4
  		echo "(I can't execute the test program--guessing $gidsize.)" >&4
-@@ -13919,8 +14456,12 @@ case "$ptrsize" in
+@@ -13368,7 +13941,7 @@ int main() {
+ EOCP
+ set try
+ if eval $compile; then
+-	yyy=`./try`
++	yyy=`$run ./try`
+ 	case "$yyy" in
+ 	'')	gidsign=1
+ 		echo "(I can't execute the test program--guessing unsigned.)" >&4
+@@ -13403,7 +13976,7 @@ int main() {
+ EOCP
+ 	set try
+ 	if eval $compile; then
+-		yyy=`./try$exe_ext`
++		yyy=`$run ./try`
+ 		case "$yyy" in
+ 		12345678901)
+ 			sPRId64='"d"'; sPRIi64='"i"'; sPRIu64='"u"';
+@@ -13425,7 +13998,7 @@ int main() {
+ EOCP
+ 	set try
+ 	if eval $compile; then
+-		yyy=`./try$exe_ext`
++		yyy=`$run ./try`
+ 		case "$yyy" in
+ 		12345678901)
+ 			sPRId64='"ld"'; sPRIi64='"li"'; sPRIu64='"lu"';
+@@ -13448,7 +14021,7 @@ int main() {
+ EOCP
+ 	set try
+ 	if eval $compile; then
+-		yyy=`./try$exe_ext`
++		yyy=`$run ./try`
+ 		case "$yyy" in
+ 		12345678901)
+ 			sPRId64=PRId64; sPRIi64=PRIi64; sPRIu64=PRIu64;
+@@ -13459,45 +14032,45 @@ EOCP
+ 	fi
+ fi
+ 
+-if $test X"$sPRId64" = X -a X"$quadtype" = X"long long"; then
+-	$cat >try.c <<'EOCP'
++if $test X"$sPRId64" = X -a X"$quadtype" != X; then
++	$cat >try.c <<EOCP
+ #include <sys/types.h>
+ #include <stdio.h>
+ int main() {
+-  long long q = 12345678901LL; /* AIX cc requires the LL suffix. */
+-  printf("%lld\n", q);
++  $quadtype q = 12345678901;
++  printf("%Ld\n", q);
+ }
+ EOCP
+ 	set try
+ 	if eval $compile; then
+-		yyy=`./try$exe_ext`
++		yyy=`$run ./try`
+ 		case "$yyy" in
+ 		12345678901)
+-			sPRId64='"lld"'; sPRIi64='"lli"'; sPRIu64='"llu"';
+-                	sPRIo64='"llo"'; sPRIx64='"llx"'; sPRIXU64='"llX"';
+-			echo "We will use the %lld style."
++			sPRId64='"Ld"'; sPRIi64='"Li"'; sPRIu64='"Lu"';
++                	sPRIo64='"Lo"'; sPRIx64='"Lx"'; sPRIXU64='"LX"';
++			echo "We will use %Ld."
+ 			;;
+ 		esac
+ 	fi
+ fi
+ 
+-if $test X"$sPRId64" = X -a X"$quadtype" != X; then
+-	$cat >try.c <<EOCP
++if $test X"$sPRId64" = X -a X"$quadtype" = X"long long"; then
++	$cat >try.c <<'EOCP'
+ #include <sys/types.h>
+ #include <stdio.h>
+ int main() {
+-  $quadtype q = 12345678901;
+-  printf("%Ld\n", q);
++  long long q = 12345678901LL; /* AIX cc requires the LL suffix. */
++  printf("%lld\n", q);
+ }
+ EOCP
+ 	set try
+ 	if eval $compile; then
+-		yyy=`./try$exe_ext`
++		yyy=`$run ./try`
+ 		case "$yyy" in
+ 		12345678901)
+-			sPRId64='"Ld"'; sPRIi64='"Li"'; sPRIu64='"Lu"';
+-                	sPRIo64='"Lo"'; sPRIx64='"Lx"'; sPRIXU64='"LX"';
+-			echo "We will use %Ld."
++			sPRId64='"lld"'; sPRIi64='"lli"'; sPRIu64='"llu"';
++                	sPRIo64='"llo"'; sPRIx64='"llx"'; sPRIXU64='"llX"';
++			echo "We will use the %lld style."
+ 			;;
+ 		esac
+ 	fi
+@@ -13514,7 +14087,7 @@ int main() {
+ EOCP
+ 	set try
+ 	if eval $compile; then
+-		yyy=`./try$exe_ext`
++		yyy=`$run ./try`
+ 		case "$yyy" in
+ 		12345678901)
+ 			sPRId64='"qd"'; sPRIi64='"qi"'; sPRIu64='"qu"';
+@@ -13596,7 +14169,7 @@ else
+ fi
+ 
+ case "$ivdformat" in
+-'') echo "$0: Fatal: failed to find format strings, cannot continue." >& 4
++'') echo "$0: Fatal: failed to find format strings, cannot continue." >&4
+     exit 1
+     ;;
+ esac
+@@ -13919,8 +14492,12 @@ case "$ptrsize" in
  	else
  		echo '#define VOID_PTR void *' > try.c
  	fi
@@ -7397,7 +7874,49 @@ PATCH
  int main()
  {
      printf("%d\n", (int)sizeof(VOID_PTR));
-@@ -13947,7 +14488,11 @@ echo " "
+@@ -13929,7 +14506,7 @@ int main()
+ EOCP
+ 	set try
+ 	if eval $compile_ok; then
+-		ptrsize=`./try`
++		ptrsize=`$run ./try`
+ 		echo "Your pointers are $ptrsize bytes long."
+ 	else
+ 		dflt='4'
+@@ -13942,12 +14519,44 @@ EOCP
+ esac
+ $rm -f try.c try
+ 
++case "$use64bitall" in
++"$define"|true|[yY]*)
++	case "$ptrsize" in
++	4)	cat <<EOM >&4
++
++*** You have chosen a maximally 64-bit build,
++*** but your pointers are only 4 bytes wide.
++*** Please rerun Configure without -Duse64bitall.
++EOM
++		case "$d_quad" in
++		define)
++			cat <<EOM >&4
++*** Since you have quads, you could possibly try with -Duse64bitint.
++EOM
++			;;
++		esac
++		cat <<EOM >&4
++*** Cannot continue, aborting.
++
++EOM
++
++		exit 1
++		;;
++	esac
++	;;
++esac
++
++
+ : see if ar generates random libraries by itself
+ echo " "
  echo "Checking how to generate random libraries on your machine..." >&4
  echo 'int bar1() { return bar2(); }' > bar1.c
  echo 'int bar2() { return 2; }' > bar2.c
@@ -7410,7 +7929,7 @@ PATCH
  int main() { printf("%d\n", bar1()); exit(0); }
  EOP
  $cc $ccflags -c bar1.c >/dev/null 2>&1
-@@ -13955,13 +14500,13 @@ $cc $ccflags -c bar2.c >/dev/null 2>&1
+@@ -13955,13 +14564,13 @@ $cc $ccflags -c bar2.c >/dev/null 2>&1
  $cc $ccflags -c foo.c >/dev/null 2>&1
  $ar rc bar$_a bar2$_o bar1$_o >/dev/null 2>&1
  if $cc -o foobar $ccflags $ldflags foo$_o bar$_a $libs > /dev/null 2>&1 &&
@@ -7426,7 +7945,7 @@ PATCH
  		echo "a table of contents needs to be added with '$ar ts'."
  		orderlib=false
  		ranlib="$ar ts"
-@@ -14037,7 +14582,8 @@ esac
+@@ -14037,7 +14646,8 @@ esac
  
  : check for the select 'width'
  case "$selectminbits" in
@@ -7436,7 +7955,7 @@ PATCH
  	$define)
  		$cat <<EOM
  
-@@ -14069,25 +14615,31 @@ EOM
+@@ -14069,25 +14679,31 @@ EOM
  #   include <sys/socket.h> /* Might include <sys/bsdtypes.h> */
  #endif
  #include <stdio.h>
@@ -7471,7 +7990,7 @@ PATCH
      b = ($selecttype)s;
      for (i = 0; i < NBITS; i++)
  	FD_SET(i, b);
-@@ -14095,20 +14647,21 @@ int main() {
+@@ -14095,20 +14711,21 @@ int main() {
      t.tv_usec = 0;
      select(fd + 1, b, 0, 0, &t);
      for (i = NBITS - 1; i > fd && FD_ISSET(i, b); i--);
@@ -7497,7 +8016,7 @@ PATCH
  				;;
  			1)	bits="1 bit" ;;
  			*)	bits="$selectminbits bits" ;;
-@@ -14117,7 +14670,8 @@ EOM
+@@ -14117,7 +14734,8 @@ EOM
  		else
  			rp='What is the minimum number of bits your select() operates on?'
  			case "$byteorder" in
@@ -7507,7 +8026,7 @@ PATCH
  			*)		dflt=1	;;
  			esac
  			. ./myread
-@@ -14127,7 +14681,7 @@ EOM
+@@ -14127,7 +14745,7 @@ EOM
  		$rm -f try.* try
  		;;
  	*)	: no select, so pick a harmless default
@@ -7516,7 +8035,16 @@ PATCH
  		;;
  	esac
  	;;
-@@ -14174,9 +14728,13 @@ xxx="$xxx SYS TERM THAW TRAP TSTP TTIN TTOU URG USR1 USR2"
+@@ -14146,7 +14764,7 @@ else
+ 	xxx=`echo '#include <signal.h>' |
+ 	$cppstdin $cppminus $cppflags 2>/dev/null |
+ 	$grep '^[ 	]*#.*include' | 
+-	$awk "{print \\$$fieldn}" | $sed 's!"!!g' | $sort | $uniq`
++	$awk "{print \\$$fieldn}" | $sed 's!"!!g' | $sed 's!\\\\\\\\!/!g' | $sort | $uniq`
+ fi
+ : Check this list of files to be sure we have parsed the cpp output ok.
+ : This will also avoid potentially non-existent files, such 
+@@ -14174,9 +14792,13 @@ xxx="$xxx SYS TERM THAW TRAP TSTP TTIN TTOU URG USR1 USR2"
  xxx="$xxx USR3 USR4 VTALRM WAITING WINCH WIND WINDOW XCPU XFSZ"
  
  : generate a few handy files for later
@@ -7531,7 +8059,49 @@ PATCH
  #include <stdio.h>
  int main() {
  
-@@ -14403,6 +14961,10 @@ echo "Checking the size of $zzz..." >&4
+@@ -14251,7 +14873,7 @@ END {
+ $cat >signal.awk <<'EOP'
+ BEGIN { ndups = 0 }
+ $1 ~ /^NSIG$/ { nsig = $2 }
+-($1 !~ /^NSIG$/) && (NF == 2) {
++($1 !~ /^NSIG$/) && (NF == 2) && ($2 ~ /^[0-9][0-9]*$/) {
+     if ($2 > maxsig) { maxsig = $2 }
+     if (sig_name[$2]) {
+ 	dup_name[ndups] = $1
+@@ -14293,13 +14915,13 @@ $cat >>signal_cmd <<'EOS'
+ 
+ set signal
+ if eval $compile_ok; then
+-	./signal$_exe | ($sort -n -k 2 2>/dev/null || $sort -n +1) | $uniq | $awk -f signal.awk >signal.lst
++	$run ./signal$_exe | ($sort -n -k 2 2>/dev/null || $sort -n +1) | $uniq | $awk -f signal.awk >signal.lst
+ else
+ 	echo "(I can't seem be able to compile the whole test program)" >&4
+ 	echo "(I'll try it in little pieces.)" >&4
+ 	set signal -DJUST_NSIG
+ 	if eval $compile_ok; then
+-		./signal$_exe > signal.nsg
++		$run ./signal$_exe > signal.nsg
+ 		$cat signal.nsg
+ 	else
+ 		echo "I can't seem to figure out how many signals you have." >&4
+@@ -14320,14 +14942,14 @@ EOCP
+ 		set signal
+ 		if eval $compile; then
+ 			echo "SIG${xx} found."
+-			./signal$_exe  >> signal.ls1
++			$run ./signal$_exe  >> signal.ls1
+ 		else
+ 			echo "SIG${xx} NOT found."
+ 		fi
+ 	done
+ 	if $test -s signal.ls1; then
+ 		$cat signal.nsg signal.ls1 |
+-			($sort -n -k 2 2>/dev/null || $sort -n +1) | $uniq | $awk -f signal.awk >signal.lst
++			$sort -n | $uniq | $awk -f signal.awk >signal.lst
+ 	fi
+ 
+ fi
+@@ -14403,6 +15025,10 @@ echo "Checking the size of $zzz..." >&4
  cat > try.c <<EOCP
  #include <sys/types.h>
  #include <stdio.h>
@@ -7542,7 +8112,7 @@ PATCH
  int main() {
      printf("%d\n", (int)sizeof($sizetype));
      exit(0);
-@@ -14410,7 +14972,7 @@ int main() {
+@@ -14410,7 +15036,7 @@ int main() {
  EOCP
  set try
  if eval $compile_ok; then
@@ -7551,7 +8121,7 @@ PATCH
  	case "$yyy" in
  	'')	sizesize=4
  		echo "(I can't execute the test program--guessing $sizesize.)" >&4
-@@ -14504,8 +15066,12 @@ esac
+@@ -14504,8 +15130,12 @@ esac
  set ssize_t ssizetype int stdio.h sys/types.h
  eval $typedef
  dflt="$ssizetype"
@@ -7565,7 +8135,7 @@ PATCH
  #include <sys/types.h>
  #define Size_t $sizetype
  #define SSize_t $dflt
-@@ -14521,9 +15087,9 @@ int main()
+@@ -14521,9 +15151,9 @@ int main()
  }
  EOM
  echo " "
@@ -7578,7 +8148,7 @@ PATCH
  	echo "I'll be using $ssizetype for functions returning a byte count." >&4
  else
  	$cat >&4 <<EOM
-@@ -14539,7 +15105,7 @@ EOM
+@@ -14539,7 +15169,7 @@ EOM
  	. ./myread
  	ssizetype="$ans"
  fi
@@ -7587,7 +8157,7 @@ PATCH
  
  : see what type of char stdio uses.
  echo " "
-@@ -14604,6 +15170,10 @@ echo "Checking the size of $zzz..." >&4
+@@ -14604,6 +15234,10 @@ echo "Checking the size of $zzz..." >&4
  cat > try.c <<EOCP
  #include <sys/types.h>
  #include <stdio.h>
@@ -7598,7 +8168,7 @@ PATCH
  int main() {
      printf("%d\n", (int)sizeof($uidtype));
      exit(0);
-@@ -14611,7 +15181,7 @@ int main() {
+@@ -14611,7 +15245,7 @@ int main() {
  EOCP
  set try
  if eval $compile_ok; then
@@ -7607,7 +8177,30 @@ PATCH
  	case "$yyy" in
  	'')	uidsize=4
  		echo "(I can't execute the test program--guessing $uidsize.)" >&4
-@@ -14786,35 +15356,6 @@ esac
+@@ -14644,7 +15278,7 @@ int main() {
+ EOCP
+ set try
+ if eval $compile; then
+-	yyy=`./try`
++	yyy=`$run ./try`
+ 	case "$yyy" in
+ 	'')	uidsign=1
+ 		echo "(I can't execute the test program--guessing unsigned.)" >&4
+@@ -14710,11 +15344,11 @@ case "$yacc" in
+ esac
+ echo " "
+ comp='yacc'
+-if $test -f "$byacc"; then
++if $test -f "$byacc$_exe"; then
+ 	dflt="$byacc"
+ 	comp="byacc or $comp"
+ fi
+-if $test -f "$bison"; then
++if $test -f "$bison$_exe"; then
+ 	comp="$comp or bison -y"
+ fi
+ rp="Which compiler compiler ($comp) shall I use?"
+@@ -14786,35 +15420,6 @@ esac
  set i_sysfile
  eval $setvar
  
@@ -7643,7 +8236,28 @@ PATCH
  : see if this is a ieeefp.h system
  set ieeefp.h i_ieeefp
  eval $inhdr
-@@ -15005,10 +15546,10 @@ $awk \\
+@@ -14848,6 +15453,20 @@ eval $inhdr
+ : see if ndbm.h is available
+ set ndbm.h t_ndbm
+ eval $inhdr
++
++case "$t_ndbm" in
++$undef)
++    # Some Linux distributions such as RedHat 7.1 put the
++    # ndbm.h header in /usr/include/gdbm/ndbm.h.
++    if $test -f /usr/include/gdbm/ndbm.h; then
++	echo '<gdbm/ndbm.h> found.'
++        ccflags="$ccflags -I/usr/include/gdbm"
++        cppflags="$cppflags -I/usr/include/gdbm"
++        t_ndbm=$define
++    fi
++    ;;
++esac
++
+ case "$t_ndbm" in
+ $define)
+ 	: see if dbm_open exists
+@@ -15005,12 +15624,12 @@ $awk \\
  EOSH
  cat <<'EOSH' >> Cppsym.try
  'length($1) > 0 {
@@ -7656,8 +8270,62 @@ PATCH
 +    printf "#ifdef __%s\n#if __%s+0\nprintf(\"__%s=%%ld\\n\", (long)__%s);\n#else\nprintf(\"__%s\\n\");\n#endif\n#endif\n", $1, $1, $1, $1, $1
 +    printf "#ifdef __%s__\n#if __%s__+0\nprintf(\"__%s__=%%ld\\n\", (long)__%s__);\n#else\nprintf(\"__%s__\\n\");\n#endif\n#endif\n", $1, $1, $1, $1, $1
  }'	 >> try.c
- echo '}' >> try.c
+-echo '}' >> try.c
++echo 'return 0;}' >> try.c
  EOSH
+ cat <<EOSH >> Cppsym.try
+ ccflags="$ccflags"
+@@ -15018,7 +15637,7 @@ case "$osname-$gccversion" in
+ irix-) ccflags="\$ccflags -woff 1178" ;;
+ os2-*) ccflags="\$ccflags -Zlinker /PM:VIO" ;;
+ esac
+-$cc -o try $optimize \$ccflags $ldflags try.c $libs && ./try$exe_ext
++$cc -o try $optimize \$ccflags $ldflags try.c $libs && $run ./try
+ EOSH
+ chmod +x Cppsym.try
+ $eunicefix Cppsym.try
+@@ -15037,7 +15656,7 @@ for i in \`$cc -v -c tmp.c 2>&1 $postprocess_cc_v\`
+ do
+ 	case "\$i" in
+ 	-D*) echo "\$i" | $sed 's/^-D//';;
+-	-A*) $test "$gccversion" && echo "\$i" | $sed 's/^-A\(.*\)(\(.*\))/\1=\2/';;
++	-A*) $test "$gccversion" && echo "\$i" | $sed 's/^-A//' | $sed 's/\(.*\)(\(.*\))/\1=\2/';;
+ 	esac
+ done
+ $rm -f try.c
+@@ -15397,7 +16016,7 @@ find_extensions='
+            else
+                if $test -d $xxx -a $# -lt 10; then
+                    set $1$xxx/ $*;
+-                   cd $xxx;
++                   cd "$xxx";
+                    eval $find_extensions;
+                    cd ..;
+                    shift;
+@@ -15407,17 +16026,21 @@ find_extensions='
+        esac;
+     done'
+ tdir=`pwd`
+-cd $rsrc/ext
++cd "$rsrc/ext"
+ set X
+ shift
+ eval $find_extensions
++# Special case:  Add in threads/shared since it is not picked up by the
++# recursive find above (and adding in general recursive finding breaks
++# SDBM_File/sdbm).  A.D.  10/25/2001.
++known_extensions="$known_extensions threads/shared"
+ set X $nonxs_extensions
+ shift
+ nonxs_extensions="$*"
+ set X $known_extensions
+ shift
+ known_extensions="$*"
+-cd $tdir
++cd "$tdir"
+ 
+ : Now see which are supported on this system.
+ avail_ext=''
 PATCH
 }
 

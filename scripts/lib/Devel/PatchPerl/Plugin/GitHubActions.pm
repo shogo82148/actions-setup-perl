@@ -38,6 +38,14 @@ my @patch = (
             [ \&_patch_configure ],
         ],
     },
+    {
+        perl => [
+            qr/^5\.6\./,
+        ],
+        subs => [
+            [ \&_patch_perl_h ],
+        ],
+    },
 );
 
 sub patchperl {
@@ -131,6 +139,26 @@ PATCH
  
  #ifndef SIGABRT
  #    define SIGABRT SIGILL
+PATCH
+}
+
+sub _patch_perl_h {
+    _patch(<<'PATCH');
+--- perl.h
++++ perl.h
+@@ -2064,6 +2064,12 @@ struct ptr_tbl {
+ #  define htovs(x)	vtohs(x)
+ # endif
+ 	/* otherwise default to functions in util.c */
++#ifndef htovs
++short htovs(short n);
++short vtohs(short n);
++long htovl(long n);
++long vtohl(long n);
++#endif
+ #endif
+ 
+ #ifdef CASTNEGFLOAT
 PATCH
 }
 

@@ -31,7 +31,7 @@ my @patch = (
     },
     {
         perl => [
-            qr/^5\.8\.[01]$/,
+            qr/^5\.8\.0$/,
             qr/^5\.6\./,
         ],
         subs => [
@@ -136,22 +136,6 @@ PATCH
 
 sub _patch_configure {
     my $version = shift;
-    if (_ge($version, "5.8.1")) {
-        _patch(<<'PATCH');
---- Configure
-+++ Configure
-@@ -3791,7 +3856,7 @@ int main() {
-        printf("%s\n", "1");
- #endif
- #endif
--       exit(0);
-+       return(0);
- }
- EOM
- if $cc -o try $ccflags $ldflags try.c; then
-PATCH
-        return;
-    }
     _patch(<<'PATCH');
 --- Configure
 +++ Configure

@@ -81,7 +81,6 @@ jobs:
         working-directory: ./scripts/darwin
 
       - name: upload
-        if: startsWith(github.ref, 'refs/heads/releases/')
         run: |
           # there is no aws cli in macOS, so use https://github.com/shogo82148/s3cli-mini
           ACTIONS_VERSION=v$(cat "$GITHUB_WORKSPACE/package.json" | jq -r .version)
@@ -129,7 +128,6 @@ jobs:
         working-directory: ./scripts/darwin
 
       - name: upload
-        if: startsWith(github.ref, 'refs/heads/releases/')
         run: |
           # there is no aws cli in macOS, so use https://github.com/shogo82148/s3cli-mini
           ACTIONS_VERSION=v$(cat "$GITHUB_WORKSPACE/package.json" | jq -r .version)

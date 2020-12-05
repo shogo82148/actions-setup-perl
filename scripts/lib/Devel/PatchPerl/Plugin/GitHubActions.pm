@@ -157,7 +157,22 @@ sub _patch_configure {
  EOF
  set X $cc -o try $optimize $ccflags $ldflags try.c $libs
  shift
-@@ -5417,7 +5417,7 @@ case "$usenm" in
+@@ -5084,6 +5084,14 @@ do set $yyy; var=$2; eval "was=\$$2";
+ 	set $yyy; shift; shift; yyy=$@;
+ done'
+ 
++: see if this is a malloc.h system
++set malloc.h i_malloc
++eval $inhdr
++
++: see if stdlib is available
++set stdlib.h i_stdlib
++eval $inhdr
++
+ : see if inttypes.h is available
+ : we want a real compile instead of Inhdr because some systems
+ : have an inttypes.h which includes non-existent headers
+@@ -5417,7 +5425,7 @@ case "$usenm" in
  	esac
  	case "$dflt" in
  	'') 
@@ -166,7 +181,7 @@ sub _patch_configure {
  			echo " "
  			echo "Whoops!  This is an AIX system without /lib/syscalls.exp!" >&4
  			echo "'nm' won't be sufficient on this sytem." >&4
-@@ -5655,7 +5655,7 @@ $grep fprintf libc.tmp > libc.ptf
+@@ -5655,7 +5663,7 @@ $grep fprintf libc.tmp > libc.ptf
  xscan='eval "<libc.ptf $com >libc.list"; $echo $n ".$c" >&4'
  xrun='eval "<libc.tmp $com >libc.list"; echo "done." >&4'
  xxx='[ADTSIW]'
@@ -175,7 +190,7 @@ sub _patch_configure {
  	eval $xscan;\
  	$contains '^fprintf$' libc.list >/dev/null 2>&1; then
  		eval $xrun
-@@ -5776,9 +5776,9 @@ $rm -f libnames libpath
+@@ -5776,9 +5784,9 @@ $rm -f libnames libpath
  : is a C symbol defined?
  csym='tlook=$1;
  case "$3" in
@@ -188,7 +203,7 @@ sub _patch_configure {
  esac;
  tx=yes;
  case "$reuseval-$4" in
-@@ -5787,25 +5787,28 @@ true-*) tx=no; eval "tval=\$$4"; case "$tval" in "") tx=yes;; esac;;
+@@ -5787,25 +5795,28 @@ true-*) tx=no; eval "tval=\$$4"; case "$tval" in "") tx=yes;; esac;;
  esac;
  case "$tx" in
  yes)
@@ -231,7 +246,7 @@ sub _patch_configure {
  esac;
  eval "$2=$tval"'
  
-@@ -5845,8 +5848,12 @@ echo " "
+@@ -5845,8 +5856,12 @@ echo " "
  case "$doublesize" in
  '')
  	echo "Checking to see how big your double precision numbers are..." >&4
@@ -245,7 +260,20 @@ sub _patch_configure {
  int main()
  {
      printf("%d\n", (int)sizeof(double));
-@@ -6665,7 +6672,11 @@ echo " "
+@@ -6652,20 +6667,16 @@ esac
+ set d_dosuid
+ eval $setvar
+ 
+-: see if this is a malloc.h system
+-set malloc.h i_malloc
+-eval $inhdr
+-
+-: see if stdlib is available
+-set stdlib.h i_stdlib
+-eval $inhdr
+-
+ : check for void type
+ echo " "
  echo "Checking to see how well your C compiler groks the void type..." >&4
  case "$voidflags" in
  '')

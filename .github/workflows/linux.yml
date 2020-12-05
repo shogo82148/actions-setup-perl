@@ -79,7 +79,6 @@ jobs:
         working-directory: ./scripts/linux
 
       - name: upload
-        if: startsWith(github.ref, 'refs/heads/releases/')
         run: |
           ACTIONS_VERSION=v$(cat "$GITHUB_WORKSPACE/package.json" | jq -r .version)
           aws --region us-east-1 s3 cp --acl public-read "$RUNNER_TEMP/perl.tar.xz" "s3://shogo82148-actions-setup-perl/$ACTIONS_VERSION/perl-$PERL_VERSION-linux-x64.tar.xz"
@@ -120,7 +119,6 @@ jobs:
         working-directory: ./scripts/linux
 
       - name: upload
-        if: startsWith(github.ref, 'refs/heads/releases/')
         run: |
           ACTIONS_VERSION=v$(cat "$GITHUB_WORKSPACE/package.json" | jq -r .version)
           aws --region us-east-1 s3 cp --acl public-read "$RUNNER_TEMP/perl.tar.xz" "s3://shogo82148-actions-setup-perl/$ACTIONS_VERSION/perl-$PERL_VERSION-linux-x64-multi-thread.tar.xz"

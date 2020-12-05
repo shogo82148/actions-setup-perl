@@ -6191,39 +6191,6 @@ PATCH
  
  : produce awk script to parse command line options
  cat >options.awk <<'EOF'
-@@ -1281,23 +1328,23 @@ while test $# -gt 0; do
- 	    zzz=''
- 	    uuu=undef
- 	    case "$yyy" in
--            *=*) zzz=`echo $yyy|sed 's!=.*!!'`
-+            *=*) zzz=`echo "$yyy"|sed 's!=.*!!'`
-                  case "$zzz" in
-                  *:*) zzz='' ;;
-                  *)   xxx=append
--                      zzz=" "`echo $yyy|sed 's!^[^=]*=!!'` 
--                      yyy=`echo $yyy|sed 's!=.*!!'` ;;
-+                      zzz=" "`echo "$yyy"|sed 's!^[^=]*=!!'` 
-+                      yyy=`echo "$yyy"|sed 's!=.*!!'` ;;
-                  esac
- 	;;
- esac
-             case "$xxx" in
-             '')  case "$yyy" in
--                 *:*) xxx=`echo $yyy|sed 's!:.*!!'`
--                      yyy=`echo $yyy|sed 's!^[^:]*:!!'`
--                      zzz=`echo $yyy|sed 's!^[^=]*=!!'`
--                      yyy=`echo $yyy|sed 's!=.*!!'` ;;
--                 *)   xxx=`echo $yyy|sed 's!:.*!!'`
--                      yyy=`echo $yyy|sed 's!^[^:]*:!!'` ;;
-+                 *:*) xxx=`echo "$yyy"|sed 's!:.*!!'`
-+                      yyy=`echo "$yyy"|sed 's!^[^:]*:!!'`
-+                      zzz=`echo "$yyy"|sed 's!^[^=]*=!!'`
-+                      yyy=`echo "$yyy"|sed 's!=.*!!'` ;;
-+                 *)   xxx=`echo "$yyy"|sed 's!:.*!!'`
-+                      yyy=`echo "$yyy"|sed 's!^[^:]*:!!'` ;;
-                  esac
-                  ;;       
-             esac
 @@ -1518,7 +1565,7 @@ for file in $*; do
  		*/*)
  			dir=`expr X$file : 'X\(.*\)/'`

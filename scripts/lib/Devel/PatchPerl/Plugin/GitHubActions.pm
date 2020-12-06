@@ -54,8 +54,6 @@ sub patchperl {
     my $source = $args{source};
     my $dir = pushd( $source );
 
-    system("cp", "Configure", "$ENV{GITHUB_WORKSPACE}");
-
     if ($^O eq 'MSWin32') {
         Devel::PatchPerl::Plugin::MinGWGNUmakefile->patchperl(%args);
         Devel::PatchPerl::Plugin::MinGW->patchperl(%args);
@@ -75,8 +73,6 @@ sub patchperl {
     }
 
     _patch_patchlevel();
-
-    system("find . -name '*.rej' -exec cat '{}' ';'");
 }
 
 # adapted from patchlevel.h for use with perls that predate it

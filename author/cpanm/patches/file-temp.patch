@@ -1,0 +1,22 @@
+--- File/Temp.pm
++++ File/Temp.pm
+@@ -150,7 +150,6 @@
+ use Fcntl 1.03;
+ use IO::Seekable;               # For SEEK_*
+ use Errno;
+-use Scalar::Util 'refaddr';
+ require VMS::Stdio if $^O eq 'VMS';
+ 
+ # pre-emptively load Carp::Heavy. If we don't when we run out of file
+@@ -1181,7 +1180,10 @@
+ # refaddr() demands one parameter only, whereas overload.pm calls with three
+ # even for unary operations like '0+'.
+ sub NUMIFY {
+-  return refaddr($_[0]);
++  # Scalar::Util::refaddr can't be used on perl v5.8.0 or older.
++  # We does'nt use this function, so just return 0 here.
++  # return refaddr($_[0]);
++  return 0;
+ }
+ 
+ #pod =item B<dirname>

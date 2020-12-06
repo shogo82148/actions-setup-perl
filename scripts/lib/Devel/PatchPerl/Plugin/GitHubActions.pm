@@ -13067,8 +13067,10 @@ PATCH
     }
 
     _patch(<<'PATCH');
---- Configure
-+++ Configure
+diff --git a/Configure b/Configure
+index 2617ba02bf..7456aba27f 100755
+--- a/Configure
++++ b/Configure
 @@ -944,6 +944,21 @@ if test -f /etc/unixtovms.exe; then
  	eunicefix=/etc/unixtovms.exe
  fi
@@ -13735,7 +13737,7 @@ PATCH
  	'') echo "You are not using GNU cc." ;;
  	*)  echo "You are using GNU cc $gccversion."
 +	    ccname=gcc	
- 		;;
+ 	    ;;
  	esac
  else
 @@ -3096,88 +3494,272 @@ else
@@ -14261,9 +14263,9 @@ PATCH
  			case "$dflt" in
 -			*$thisincl*);;
 -			*) dflt="$dflt -I$thisincl";;
-+                        *" -I$thisincl "*);;
-+                        *) dflt="$dflt -I$thisincl ";;
- esac
++			*" -I$thisincl "*);;
++			*) dflt="$dflt -I$thisincl ";;
+ 			esac
  		fi
  	fi
 @@ -3967,7 +4402,10 @@ none) ccflags='';;
@@ -14310,35 +14312,19 @@ PATCH
  		case "$xxx" in
  		"Ok") dflt=n ;;
  		*)	echo 'The program compiled OK, but produced no output.' >> try.msg
-@@ -4178,50 +4616,167 @@ typedef_ask='type=$1; var=$2; def=$3; shift; shift; shift; inclist=$@;
- case "$inclist" in
- "") inclist="sys/types.h";;
- esac;
--eval "varval=\$$var";
--case "$varval" in
--"")
--	$rm -f temp.c;
--	for inc in $inclist; do
--		echo "#include <$inc>" >>temp.c;
--	done;
--	echo "#ifdef $type" >> temp.c;
--	echo "printf(\"We have $type\");" >> temp.c;
--	echo "#endif" >> temp.c;
--	$cppstdin $cppflags $cppminus < temp.c >temp.E 2>/dev/null;
--	echo " " ;
--	echo "$rp" | $sed -e "s/What is/Looking for/" -e "s/?/./";
--	if $contains $type temp.E >/dev/null 2>&1; then
--		echo "$type found." >&4;
--		eval "$var=\$type";
--	else
--		echo "$type NOT found." >&4;
--		dflt="$def";
--		. ./myread ;
--		eval "$var=\$ans";
--	fi;
--	$rm -f temp.?;;
--*) eval "$var=\$varval";;
--esac'
+@@ -4173,55 +4611,172 @@ case "$varval" in
+ *) eval "$var=\$varval";;
+ esac'
+ 
+-: define an is-a-typedef? function that prompts if the type is not available.
+-typedef_ask='type=$1; var=$2; def=$3; shift; shift; shift; inclist=$@;
+-case "$inclist" in
+-"") inclist="sys/types.h";;
++: define an is-a-typedef? function that prompts if the type is not available.
++typedef_ask='type=$1; var=$2; def=$3; shift; shift; shift; inclist=$@;
++case "$inclist" in
++"") inclist="sys/types.h";;
++esac;
 +eval "varval=\$$var";
 +case "$varval" in
 +"")
@@ -14460,7 +14446,32 @@ PATCH
 +cont=true; xxf="echo \"<\$1> found.\" >&4";
 +case $# in 2) xxnf="echo \"<\$1> NOT found.\" >&4";;
 +*) xxnf="echo \"<\$1> NOT found, ...\" >&4";;
-+esac;
+ esac;
+-eval "varval=\$$var";
+-case "$varval" in
+-"")
+-	$rm -f temp.c;
+-	for inc in $inclist; do
+-		echo "#include <$inc>" >>temp.c;
+-	done;
+-	echo "#ifdef $type" >> temp.c;
+-	echo "printf(\"We have $type\");" >> temp.c;
+-	echo "#endif" >> temp.c;
+-	$cppstdin $cppflags $cppminus < temp.c >temp.E 2>/dev/null;
+-	echo " " ;
+-	echo "$rp" | $sed -e "s/What is/Looking for/" -e "s/?/./";
+-	if $contains $type temp.E >/dev/null 2>&1; then
+-		echo "$type found." >&4;
+-		eval "$var=\$type";
+-	else
+-		echo "$type NOT found." >&4;
+-		dflt="$def";
+-		. ./myread ;
+-		eval "$var=\$ans";
+-	fi;
+-	$rm -f temp.?;;
+-*) eval "$var=\$varval";;
+-esac'
 +case $# in 4) instead=instead;; *) instead="at last";; esac;
 +while $test "$cont"; do
 +	xxx=`./findhdr $1`

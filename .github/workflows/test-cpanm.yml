@@ -38,8 +38,6 @@ jobs:
         with:
           perl-version: "${{ matrix.perl }}"
 
-      - name: run cpanm
-        run:
-          cpanm --help
-          cpanm --version
-          cpanm ExtUtils::MakeMaker
+      - run: cpanm --help
+      - run: cpanm --version
+      - run: cpanm ExtUtils::MakeMaker

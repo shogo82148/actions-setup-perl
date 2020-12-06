@@ -14309,19 +14309,35 @@ PATCH
  		case "$xxx" in
  		"Ok") dflt=n ;;
  		*)	echo 'The program compiled OK, but produced no output.' >> try.msg
-@@ -4173,55 +4611,172 @@ case "$varval" in
- *) eval "$var=\$varval";;
- esac'
- 
--: define an is-a-typedef? function that prompts if the type is not available.
--typedef_ask='type=$1; var=$2; def=$3; shift; shift; shift; inclist=$@;
--case "$inclist" in
--"") inclist="sys/types.h";;
-+: define an is-a-typedef? function that prompts if the type is not available.
-+typedef_ask='type=$1; var=$2; def=$3; shift; shift; shift; inclist=$@;
-+case "$inclist" in
-+"") inclist="sys/types.h";;
-+esac;
+@@ -4178,50 +4616,167 @@ typedef_ask='type=$1; var=$2; def=$3; shift; shift; shift; inclist=$@;
+ case "$inclist" in
+ "") inclist="sys/types.h";;
+ esac;
+-eval "varval=\$$var";
+-case "$varval" in
+-"")
+-	$rm -f temp.c;
+-	for inc in $inclist; do
+-		echo "#include <$inc>" >>temp.c;
+-	done;
+-	echo "#ifdef $type" >> temp.c;
+-	echo "printf(\"We have $type\");" >> temp.c;
+-	echo "#endif" >> temp.c;
+-	$cppstdin $cppflags $cppminus < temp.c >temp.E 2>/dev/null;
+-	echo " " ;
+-	echo "$rp" | $sed -e "s/What is/Looking for/" -e "s/?/./";
+-	if $contains $type temp.E >/dev/null 2>&1; then
+-		echo "$type found." >&4;
+-		eval "$var=\$type";
+-	else
+-		echo "$type NOT found." >&4;
+-		dflt="$def";
+-		. ./myread ;
+-		eval "$var=\$ans";
+-	fi;
+-	$rm -f temp.?;;
+-*) eval "$var=\$varval";;
+-esac'
 +eval "varval=\$$var";
 +case "$varval" in
 +"")
@@ -14443,32 +14459,7 @@ PATCH
 +cont=true; xxf="echo \"<\$1> found.\" >&4";
 +case $# in 2) xxnf="echo \"<\$1> NOT found.\" >&4";;
 +*) xxnf="echo \"<\$1> NOT found, ...\" >&4";;
- esac;
--eval "varval=\$$var";
--case "$varval" in
--"")
--	$rm -f temp.c;
--	for inc in $inclist; do
--		echo "#include <$inc>" >>temp.c;
--	done;
--	echo "#ifdef $type" >> temp.c;
--	echo "printf(\"We have $type\");" >> temp.c;
--	echo "#endif" >> temp.c;
--	$cppstdin $cppflags $cppminus < temp.c >temp.E 2>/dev/null;
--	echo " " ;
--	echo "$rp" | $sed -e "s/What is/Looking for/" -e "s/?/./";
--	if $contains $type temp.E >/dev/null 2>&1; then
--		echo "$type found." >&4;
--		eval "$var=\$type";
--	else
--		echo "$type NOT found." >&4;
--		dflt="$def";
--		. ./myread ;
--		eval "$var=\$ans";
--	fi;
--	$rm -f temp.?;;
--*) eval "$var=\$varval";;
--esac'
++esac;
 +case $# in 4) instead=instead;; *) instead="at last";; esac;
 +while $test "$cont"; do
 +	xxx=`./findhdr $1`

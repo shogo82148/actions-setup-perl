@@ -35,6 +35,7 @@ requires 'Win32::ShellQuote';
 requires 'local::lib';
 requires 'parent';
 requires 'version';
+requires 'warnings';
 
 # soft dependencies for optional features
 suggests 'LWP::UserAgent', '5.802';

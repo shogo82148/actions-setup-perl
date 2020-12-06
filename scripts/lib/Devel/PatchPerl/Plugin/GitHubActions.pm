@@ -147,10 +147,43 @@ PATCH
 }
 
 sub _patch_perl_h {
+    my $version = shift;
+
+    if (_ge($version, '5.6.1')) {
     _patch(<<'PATCH');
 --- perl.h
 +++ perl.h
 @@ -2064,6 +2064,12 @@ struct ptr_tbl {
+ #  define htovs(x)	vtohs(x)
+ # endif
+ 	/* otherwise default to functions in util.c */
++#ifndef htovs
++short htovs(short n);
++short vtohs(short n);
++long htovl(long n);
++long vtohl(long n);
++#endif
+ #endif
+ 
+ #ifdef CASTNEGFLOAT
+PATCH
+        return;
+    }
+
+    _patch(<<'PATCH');
+--- perl.h
++++ perl.h
+@@ -492,6 +492,9 @@ register struct op *Perl_op asm(stringify(OP_IN_REGISTER));
+ #   include <stdlib.h>
+ #endif
+ 
++/* clang patched is hard coded by actions-setup-perl */
++#include <unistd.h>
++
+ #ifdef PERL_MICRO /* Last chance to export Perl_my_swap */
+ #  define MYSWAP
+ #endif
+@@ -1936,6 +1939,12 @@ struct ptr_tbl {
  #  define htovs(x)	vtohs(x)
  # endif
  	/* otherwise default to functions in util.c */

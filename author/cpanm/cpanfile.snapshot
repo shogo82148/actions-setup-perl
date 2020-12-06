@@ -778,6 +778,12 @@ DISTRIBUTIONS
       Win32::ShellQuote 0.003001
     requirements:
       perl 5.006
+  if-0.0608
+    pathname: X/XS/XSAWYERX/if-0.0608.tar.gz
+    provides:
+      if 0.0608
+    requirements:
+      ExtUtils::MakeMaker 0
   local-lib-2.000024
     pathname: H/HA/HAARG/local-lib-2.000024.tar.gz
     provides:

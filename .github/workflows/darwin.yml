@@ -86,8 +86,8 @@ jobs:
       - uses: actions/upload-artifact@v1
         if: always()
         with:
-          name: Configure.orig-${{ matrix.perl }}
-          path: Configure.orig
+          name: Configure-${{ matrix.perl }}
+          path: Configure
 
       - name: upload
         run: |

@@ -1,0 +1,10 @@
+--- version.pm
++++ version.pm
+@@ -1,7 +1,6 @@
+ #!perl -w
+ package version;
+ 
+-use 5.006002;
+ use strict;
+ use warnings::register;
+ if ($] >= 5.015) {

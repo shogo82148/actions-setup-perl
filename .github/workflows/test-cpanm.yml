@@ -1,6 +1,5 @@
 name: update cpanm
 on:
-on:
   pull_request:
     paths:
       - "bin/cpanm"

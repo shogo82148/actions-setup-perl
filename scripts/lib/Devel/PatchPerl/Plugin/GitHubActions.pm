@@ -31,6 +31,14 @@ my @patch = (
     },
     {
         perl => [
+            qr/^5\.8\.0]$/,
+        ],
+        subs => [
+            [ \&_patch_warnings ],
+        ],
+    },
+    {
+        perl => [
             qr/^5\.8\.0$/,
             qr/^5\.6\./,
         ],
@@ -139,6 +147,35 @@ PATCH
  
  #ifndef SIGABRT
  #    define SIGABRT SIGILL
+PATCH
+}
+
+sub _patch_warnings {
+    _patch(<<'PATCH');
+--- lib/warnings.pm
++++ lib/warnings.pm
+@@ -291,7 +291,7 @@ $All = "" ; vec($All, $Offsets{'all'}, 2) = 3 ;
+ sub Croaker
+ {
+     delete $Carp::CarpInternal{'warnings'};
+-    croak @_ ;
++    croak(@_);
+ }
+ 
+ sub bits
+diff --git a/warnings.pl b/warnings.pl
+index 586e5a7730..20ed7ffb07 100644
+--- warnings.pl
++++ warnings.pl
+@@ -604,7 +604,7 @@ $All = "" ; vec($All, $Offsets{'all'}, 2) = 3 ;
+ sub Croaker
+ {
+     delete $Carp::CarpInternal{'warnings'};
+-    croak @_ ;
++    croak(@_);
+ }
+ 
+ sub bits
 PATCH
 }
 

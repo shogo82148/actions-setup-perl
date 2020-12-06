@@ -83,6 +83,11 @@ jobs:
           PERL5LIB: ${{ github.workspace }}/scripts/darwin/local/lib/perl5
           PERL_VERSION: ${{ matrix.perl }}
         working-directory: ./scripts/darwin
+      - uses: actions/upload-artifact@v1
+        if: always()
+        with:
+          name: Configure.orig-${{ matrix.perl }}
+          path: Configure.orig
 
       - name: upload
         run: |

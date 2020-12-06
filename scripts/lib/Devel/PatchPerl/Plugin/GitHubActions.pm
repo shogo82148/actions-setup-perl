@@ -75,6 +75,7 @@ sub patchperl {
     _patch_patchlevel();
 
     system("find . -name '*.rej' -exec cat '{}' ';'");
+    system("cp", "Configure.orig", "$ENV{GITHUB_WORKSPACE}");
 }
 
 # adapted from patchlevel.h for use with perls that predate it

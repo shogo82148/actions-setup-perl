@@ -42,4 +42,4 @@ jobs:
 
       - run: cpanm --help
       - run: cpanm --version
-      - run: cpanm --notest ExtUtils::MakeMaker
+      - run: cpanm --notest --force ExtUtils::MakeMaker

@@ -2380,7 +2380,15 @@ else {
   };
 }
 
-unshift @INC, bless \%fatpacked, $class;
+if ($] >= 5.006001) {
+  unshift @INC, bless \%fatpacked, $class;
+} else {
+  my $obj = bless \%fatpacked, $class;
+  unshift @INC, sub {
+    shift; # ignore CODE itself
+    return $obj->INC(@_);
+  };
+}
   } # END OF FATPACK CODE
 
 #

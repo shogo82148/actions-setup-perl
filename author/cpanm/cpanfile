@@ -1,5 +1,6 @@
 requires 'perl', '5.006';
 requires 'Menlo::Legacy';
+requires 'App::FatPacker::Simple';
 
 # runtime dependencies. Mostly core and fatpackable back to 5.8
 # https://github.com/miyagawa/cpanminus/issues/455

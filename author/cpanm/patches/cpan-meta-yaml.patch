@@ -6,7 +6,7 @@
  use strict;
  use warnings;
  package CPAN::Meta::YAML; # git description: v1.68-2-gcc5324e
-@@ -8,6 +8,17 @@
+@@ -8,6 +8,20 @@
  $CPAN::Meta::YAML::VERSION = '0.018';
  ; # original $VERSION removed by Doppelgaenger
  
@@ -17,14 +17,17 @@
 +            require Carp;
 +            Carp::croak($@);
 +        }
-+        *utf8::valid = \&JSON::PP::Compat5006::_is_valid_utf8;
++        *utf8::valid = *JSON::PP::Compat5006::_is_valid_utf8;
++    } elsif ($] == 5.008) {
++        require Encode;
++        *utf8::is_utf8 = *Encode::is_utf8;
 +    }
 +}
 +
  #####################################################################
  # The CPAN::Meta::YAML API.
  #
-@@ -232,7 +243,8 @@
+@@ -232,7 +246,8 @@
          utf8::upgrade($string);
  
          # Check for and strip any leading UTF-8 BOM

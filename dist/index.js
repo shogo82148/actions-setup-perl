@@ -2,7 +2,7 @@ require('./sourcemap-register.js');module.exports =
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 1480:
+/***/ 113:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -28,12 +28,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getPerl = void 0;
-const core = __importStar(__webpack_require__(2186));
-const tc = __importStar(__webpack_require__(7784));
+const core = __importStar(__webpack_require__(6341));
+const tc = __importStar(__webpack_require__(6792));
 const os = __importStar(__webpack_require__(2087));
 const fs = __importStar(__webpack_require__(5747));
 const path = __importStar(__webpack_require__(5622));
-const semver = __importStar(__webpack_require__(1383));
+const semver = __importStar(__webpack_require__(7782));
 const osPlat = os.platform();
 const osArch = os.arch();
 async function getAvailableVersions() {
@@ -126,7 +126,7 @@ async function getDownloadUrl(filename) {
 
 /***/ }),
 
-/***/ 5613:
+/***/ 9395:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -151,10 +151,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core = __importStar(__webpack_require__(2186));
-const installer = __importStar(__webpack_require__(1480));
+const core = __importStar(__webpack_require__(6341));
+const installer = __importStar(__webpack_require__(113));
 const path = __importStar(__webpack_require__(5622));
-const strawberry = __importStar(__webpack_require__(3776));
+const strawberry = __importStar(__webpack_require__(7478));
 async function run() {
     try {
         const platform = process.platform;
@@ -227,7 +227,7 @@ run();
 
 /***/ }),
 
-/***/ 3776:
+/***/ 7478:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -255,10 +255,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getPerl = void 0;
 // Load tempDirectory before it gets wiped by tool-cache
 let tempDirectory = process.env['RUNNER_TEMPDIRECTORY'] || '';
-const core = __importStar(__webpack_require__(2186));
-const tc = __importStar(__webpack_require__(7784));
+const core = __importStar(__webpack_require__(6341));
+const tc = __importStar(__webpack_require__(6792));
 const path = __importStar(__webpack_require__(5622));
-const semver = __importStar(__webpack_require__(1383));
+const semver = __importStar(__webpack_require__(7782));
 const fs = __importStar(__webpack_require__(5747));
 if (!tempDirectory) {
     let baseLocation;
@@ -366,7 +366,7 @@ async function acquirePerl(version) {
 
 /***/ }),
 
-/***/ 7351:
+/***/ 6416:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -380,7 +380,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const os = __importStar(__webpack_require__(2087));
-const utils_1 = __webpack_require__(5278);
+const utils_1 = __webpack_require__(3057);
 /**
  * Commands
  *
@@ -452,7 +452,7 @@ function escapeProperty(s) {
 
 /***/ }),
 
-/***/ 2186:
+/***/ 6341:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -474,9 +474,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const command_1 = __webpack_require__(7351);
-const file_command_1 = __webpack_require__(717);
-const utils_1 = __webpack_require__(5278);
+const command_1 = __webpack_require__(6416);
+const file_command_1 = __webpack_require__(2786);
+const utils_1 = __webpack_require__(3057);
 const os = __importStar(__webpack_require__(2087));
 const path = __importStar(__webpack_require__(5622));
 /**
@@ -697,7 +697,7 @@ exports.getState = getState;
 
 /***/ }),
 
-/***/ 717:
+/***/ 2786:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -715,7 +715,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const fs = __importStar(__webpack_require__(5747));
 const os = __importStar(__webpack_require__(2087));
-const utils_1 = __webpack_require__(5278);
+const utils_1 = __webpack_require__(3057);
 function issueCommand(command, message) {
     const filePath = process.env[`GITHUB_${command}`];
     if (!filePath) {
@@ -733,7 +733,7 @@ exports.issueCommand = issueCommand;
 
 /***/ }),
 
-/***/ 5278:
+/***/ 3057:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -759,7 +759,7 @@ exports.toCommandValue = toCommandValue;
 
 /***/ }),
 
-/***/ 1514:
+/***/ 2176:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -781,7 +781,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const tr = __importStar(__webpack_require__(8159));
+const tr = __importStar(__webpack_require__(4299));
 /**
  * Exec a command.
  * Output will be streamed to the live console.
@@ -810,7 +810,7 @@ exports.exec = exec;
 
 /***/ }),
 
-/***/ 8159:
+/***/ 4299:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -836,8 +836,8 @@ const os = __importStar(__webpack_require__(2087));
 const events = __importStar(__webpack_require__(8614));
 const child = __importStar(__webpack_require__(3129));
 const path = __importStar(__webpack_require__(5622));
-const io = __importStar(__webpack_require__(7436));
-const ioUtil = __importStar(__webpack_require__(1962));
+const io = __importStar(__webpack_require__(7960));
+const ioUtil = __importStar(__webpack_require__(4348));
 /* eslint-disable @typescript-eslint/unbound-method */
 const IS_WINDOWS = process.platform === 'win32';
 /*
@@ -1417,7 +1417,7 @@ class ExecState extends events.EventEmitter {
 
 /***/ }),
 
-/***/ 9925:
+/***/ 6182:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -1425,7 +1425,7 @@ class ExecState extends events.EventEmitter {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const http = __webpack_require__(8605);
 const https = __webpack_require__(7211);
-const pm = __webpack_require__(6443);
+const pm = __webpack_require__(653);
 let tunnel;
 var HttpCodes;
 (function (HttpCodes) {
@@ -1844,7 +1844,7 @@ class HttpClient {
         if (useProxy) {
             // If using proxy, need tunnel
             if (!tunnel) {
-                tunnel = __webpack_require__(4294);
+                tunnel = __webpack_require__(5666);
             }
             const agentOptions = {
                 maxSockets: maxSockets,
@@ -1960,7 +1960,7 @@ exports.HttpClient = HttpClient;
 
 /***/ }),
 
-/***/ 6443:
+/***/ 653:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -2025,7 +2025,7 @@ exports.checkBypass = checkBypass;
 
 /***/ }),
 
-/***/ 1962:
+/***/ 4348:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -2227,7 +2227,7 @@ function isUnixExecutable(stats) {
 
 /***/ }),
 
-/***/ 7436:
+/***/ 7960:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -2245,7 +2245,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const childProcess = __webpack_require__(3129);
 const path = __webpack_require__(5622);
 const util_1 = __webpack_require__(1669);
-const ioUtil = __webpack_require__(1962);
+const ioUtil = __webpack_require__(4348);
 const exec = util_1.promisify(childProcess.exec);
 /**
  * Copies a file or folder.
@@ -2524,7 +2524,7 @@ function copyFile(srcFile, destFile, force) {
 
 /***/ }),
 
-/***/ 2473:
+/***/ 7129:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2546,8 +2546,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const semver = __importStar(__webpack_require__(562));
-const core_1 = __webpack_require__(2186);
+const semver = __importStar(__webpack_require__(5199));
+const core_1 = __webpack_require__(6341);
 // needs to be require for core node modules to be mocked
 /* eslint @typescript-eslint/no-require-imports: 0 */
 const os = __webpack_require__(2087);
@@ -2637,7 +2637,7 @@ exports._readLinuxVersionFile = _readLinuxVersionFile;
 
 /***/ }),
 
-/***/ 8279:
+/***/ 7169:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -2659,7 +2659,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core = __importStar(__webpack_require__(2186));
+const core = __importStar(__webpack_require__(6341));
 /**
  * Internal class for retries
  */
@@ -2714,7 +2714,7 @@ exports.RetryHelper = RetryHelper;
 
 /***/ }),
 
-/***/ 7784:
+/***/ 6792:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -2739,20 +2739,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core = __importStar(__webpack_require__(2186));
-const io = __importStar(__webpack_require__(7436));
+const core = __importStar(__webpack_require__(6341));
+const io = __importStar(__webpack_require__(7960));
 const fs = __importStar(__webpack_require__(5747));
-const mm = __importStar(__webpack_require__(2473));
+const mm = __importStar(__webpack_require__(7129));
 const os = __importStar(__webpack_require__(2087));
 const path = __importStar(__webpack_require__(5622));
-const httpm = __importStar(__webpack_require__(9925));
-const semver = __importStar(__webpack_require__(562));
+const httpm = __importStar(__webpack_require__(6182));
+const semver = __importStar(__webpack_require__(5199));
 const stream = __importStar(__webpack_require__(2413));
 const util = __importStar(__webpack_require__(1669));
-const v4_1 = __importDefault(__webpack_require__(824));
-const exec_1 = __webpack_require__(1514);
+const v4_1 = __importDefault(__webpack_require__(8497));
+const exec_1 = __webpack_require__(2176);
 const assert_1 = __webpack_require__(2357);
-const retry_helper_1 = __webpack_require__(8279);
+const retry_helper_1 = __webpack_require__(7169);
 class HTTPError extends Error {
     constructor(httpStatusCode) {
         super(`Unexpected HTTP response: ${httpStatusCode}`);
@@ -3327,7 +3327,7 @@ function _unique(values) {
 
 /***/ }),
 
-/***/ 562:
+/***/ 5199:
 /***/ ((module, exports) => {
 
 exports = module.exports = SemVer
@@ -4930,7 +4930,349 @@ function coerce (version, options) {
 
 /***/ }),
 
-/***/ 1532:
+/***/ 159:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+// A linked list to keep track of recently-used-ness
+const Yallist = __webpack_require__(4986)
+
+const MAX = Symbol('max')
+const LENGTH = Symbol('length')
+const LENGTH_CALCULATOR = Symbol('lengthCalculator')
+const ALLOW_STALE = Symbol('allowStale')
+const MAX_AGE = Symbol('maxAge')
+const DISPOSE = Symbol('dispose')
+const NO_DISPOSE_ON_SET = Symbol('noDisposeOnSet')
+const LRU_LIST = Symbol('lruList')
+const CACHE = Symbol('cache')
+const UPDATE_AGE_ON_GET = Symbol('updateAgeOnGet')
+
+const naiveLength = () => 1
+
+// lruList is a yallist where the head is the youngest
+// item, and the tail is the oldest.  the list contains the Hit
+// objects as the entries.
+// Each Hit object has a reference to its Yallist.Node.  This
+// never changes.
+//
+// cache is a Map (or PseudoMap) that matches the keys to
+// the Yallist.Node object.
+class LRUCache {
+  constructor (options) {
+    if (typeof options === 'number')
+      options = { max: options }
+
+    if (!options)
+      options = {}
+
+    if (options.max && (typeof options.max !== 'number' || options.max < 0))
+      throw new TypeError('max must be a non-negative number')
+    // Kind of weird to have a default max of Infinity, but oh well.
+    const max = this[MAX] = options.max || Infinity
+
+    const lc = options.length || naiveLength
+    this[LENGTH_CALCULATOR] = (typeof lc !== 'function') ? naiveLength : lc
+    this[ALLOW_STALE] = options.stale || false
+    if (options.maxAge && typeof options.maxAge !== 'number')
+      throw new TypeError('maxAge must be a number')
+    this[MAX_AGE] = options.maxAge || 0
+    this[DISPOSE] = options.dispose
+    this[NO_DISPOSE_ON_SET] = options.noDisposeOnSet || false
+    this[UPDATE_AGE_ON_GET] = options.updateAgeOnGet || false
+    this.reset()
+  }
+
+  // resize the cache when the max changes.
+  set max (mL) {
+    if (typeof mL !== 'number' || mL < 0)
+      throw new TypeError('max must be a non-negative number')
+
+    this[MAX] = mL || Infinity
+    trim(this)
+  }
+  get max () {
+    return this[MAX]
+  }
+
+  set allowStale (allowStale) {
+    this[ALLOW_STALE] = !!allowStale
+  }
+  get allowStale () {
+    return this[ALLOW_STALE]
+  }
+
+  set maxAge (mA) {
+    if (typeof mA !== 'number')
+      throw new TypeError('maxAge must be a non-negative number')
+
+    this[MAX_AGE] = mA
+    trim(this)
+  }
+  get maxAge () {
+    return this[MAX_AGE]
+  }
+
+  // resize the cache when the lengthCalculator changes.
+  set lengthCalculator (lC) {
+    if (typeof lC !== 'function')
+      lC = naiveLength
+
+    if (lC !== this[LENGTH_CALCULATOR]) {
+      this[LENGTH_CALCULATOR] = lC
+      this[LENGTH] = 0
+      this[LRU_LIST].forEach(hit => {
+        hit.length = this[LENGTH_CALCULATOR](hit.value, hit.key)
+        this[LENGTH] += hit.length
+      })
+    }
+    trim(this)
+  }
+  get lengthCalculator () { return this[LENGTH_CALCULATOR] }
+
+  get length () { return this[LENGTH] }
+  get itemCount () { return this[LRU_LIST].length }
+
+  rforEach (fn, thisp) {
+    thisp = thisp || this
+    for (let walker = this[LRU_LIST].tail; walker !== null;) {
+      const prev = walker.prev
+      forEachStep(this, fn, walker, thisp)
+      walker = prev
+    }
+  }
+
+  forEach (fn, thisp) {
+    thisp = thisp || this
+    for (let walker = this[LRU_LIST].head; walker !== null;) {
+      const next = walker.next
+      forEachStep(this, fn, walker, thisp)
+      walker = next
+    }
+  }
+
+  keys () {
+    return this[LRU_LIST].toArray().map(k => k.key)
+  }
+
+  values () {
+    return this[LRU_LIST].toArray().map(k => k.value)
+  }
+
+  reset () {
+    if (this[DISPOSE] &&
+        this[LRU_LIST] &&
+        this[LRU_LIST].length) {
+      this[LRU_LIST].forEach(hit => this[DISPOSE](hit.key, hit.value))
+    }
+
+    this[CACHE] = new Map() // hash of items by key
+    this[LRU_LIST] = new Yallist() // list of items in order of use recency
+    this[LENGTH] = 0 // length of items in the list
+  }
+
+  dump () {
+    return this[LRU_LIST].map(hit =>
+      isStale(this, hit) ? false : {
+        k: hit.key,
+        v: hit.value,
+        e: hit.now + (hit.maxAge || 0)
+      }).toArray().filter(h => h)
+  }
+
+  dumpLru () {
+    return this[LRU_LIST]
+  }
+
+  set (key, value, maxAge) {
+    maxAge = maxAge || this[MAX_AGE]
+
+    if (maxAge && typeof maxAge !== 'number')
+      throw new TypeError('maxAge must be a number')
+
+    const now = maxAge ? Date.now() : 0
+    const len = this[LENGTH_CALCULATOR](value, key)
+
+    if (this[CACHE].has(key)) {
+      if (len > this[MAX]) {
+        del(this, this[CACHE].get(key))
+        return false
+      }
+
+      const node = this[CACHE].get(key)
+      const item = node.value
+
+      // dispose of the old one before overwriting
+      // split out into 2 ifs for better coverage tracking
+      if (this[DISPOSE]) {
+        if (!this[NO_DISPOSE_ON_SET])
+          this[DISPOSE](key, item.value)
+      }
+
+      item.now = now
+      item.maxAge = maxAge
+      item.value = value
+      this[LENGTH] += len - item.length
+      item.length = len
+      this.get(key)
+      trim(this)
+      return true
+    }
+
+    const hit = new Entry(key, value, len, now, maxAge)
+
+    // oversized objects fall out of cache automatically.
+    if (hit.length > this[MAX]) {
+      if (this[DISPOSE])
+        this[DISPOSE](key, value)
+
+      return false
+    }
+
+    this[LENGTH] += hit.length
+    this[LRU_LIST].unshift(hit)
+    this[CACHE].set(key, this[LRU_LIST].head)
+    trim(this)
+    return true
+  }
+
+  has (key) {
+    if (!this[CACHE].has(key)) return false
+    const hit = this[CACHE].get(key).value
+    return !isStale(this, hit)
+  }
+
+  get (key) {
+    return get(this, key, true)
+  }
+
+  peek (key) {
+    return get(this, key, false)
+  }
+
+  pop () {
+    const node = this[LRU_LIST].tail
+    if (!node)
+      return null
+
+    del(this, node)
+    return node.value
+  }
+
+  del (key) {
+    del(this, this[CACHE].get(key))
+  }
+
+  load (arr) {
+    // reset the cache
+    this.reset()
+
+    const now = Date.now()
+    // A previous serialized cache has the most recent items first
+    for (let l = arr.length - 1; l >= 0; l--) {
+      const hit = arr[l]
+      const expiresAt = hit.e || 0
+      if (expiresAt === 0)
+        // the item was created without expiration in a non aged cache
+        this.set(hit.k, hit.v)
+      else {
+        const maxAge = expiresAt - now
+        // dont add already expired items
+        if (maxAge > 0) {
+          this.set(hit.k, hit.v, maxAge)
+        }
+      }
+    }
+  }
+
+  prune () {
+    this[CACHE].forEach((value, key) => get(this, key, false))
+  }
+}
+
+const get = (self, key, doUse) => {
+  const node = self[CACHE].get(key)
+  if (node) {
+    const hit = node.value
+    if (isStale(self, hit)) {
+      del(self, node)
+      if (!self[ALLOW_STALE])
+        return undefined
+    } else {
+      if (doUse) {
+        if (self[UPDATE_AGE_ON_GET])
+          node.value.now = Date.now()
+        self[LRU_LIST].unshiftNode(node)
+      }
+    }
+    return hit.value
+  }
+}
+
+const isStale = (self, hit) => {
+  if (!hit || (!hit.maxAge && !self[MAX_AGE]))
+    return false
+
+  const diff = Date.now() - hit.now
+  return hit.maxAge ? diff > hit.maxAge
+    : self[MAX_AGE] && (diff > self[MAX_AGE])
+}
+
+const trim = self => {
+  if (self[LENGTH] > self[MAX]) {
+    for (let walker = self[LRU_LIST].tail;
+      self[LENGTH] > self[MAX] && walker !== null;) {
+      // We know that we're about to delete this one, and also
+      // what the next least recently used key will be, so just
+      // go ahead and set it now.
+      const prev = walker.prev
+      del(self, walker)
+      walker = prev
+    }
+  }
+}
+
+const del = (self, node) => {
+  if (node) {
+    const hit = node.value
+    if (self[DISPOSE])
+      self[DISPOSE](hit.key, hit.value)
+
+    self[LENGTH] -= hit.length
+    self[CACHE].delete(hit.key)
+    self[LRU_LIST].removeNode(node)
+  }
+}
+
+class Entry {
+  constructor (key, value, length, now, maxAge) {
+    this.key = key
+    this.value = value
+    this.length = length
+    this.now = now
+    this.maxAge = maxAge || 0
+  }
+}
+
+const forEachStep = (self, fn, node, thisp) => {
+  let hit = node.value
+  if (isStale(self, hit)) {
+    del(self, node)
+    if (!self[ALLOW_STALE])
+      hit = undefined
+  }
+  if (hit)
+    fn.call(thisp, hit.value, hit.key, self)
+}
+
+module.exports = LRUCache
+
+
+/***/ }),
+
+/***/ 6345:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const ANY = Symbol('SemVer ANY')
@@ -4940,12 +5282,7 @@ class Comparator {
     return ANY
   }
   constructor (comp, options) {
-    if (!options || typeof options !== 'object') {
-      options = {
-        loose: !!options,
-        includePrerelease: false
-      }
-    }
+    options = parseOptions(options)
 
     if (comp instanceof Comparator) {
       if (comp.loose === !!options.loose) {
@@ -5067,27 +5404,23 @@ class Comparator {
 
 module.exports = Comparator
 
-const {re, t} = __webpack_require__(9523)
-const cmp = __webpack_require__(5098)
-const debug = __webpack_require__(427)
-const SemVer = __webpack_require__(8088)
-const Range = __webpack_require__(9828)
+const parseOptions = __webpack_require__(314)
+const {re, t} = __webpack_require__(2607)
+const cmp = __webpack_require__(9350)
+const debug = __webpack_require__(5136)
+const SemVer = __webpack_require__(205)
+const Range = __webpack_require__(7307)
 
 
 /***/ }),
 
-/***/ 9828:
+/***/ 7307:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 // hoisted class for cyclic dependency
 class Range {
   constructor (range, options) {
-    if (!options || typeof options !== 'object') {
-      options = {
-        loose: !!options,
-        includePrerelease: false
-      }
-    }
+    options = parseOptions(options)
 
     if (range instanceof Range) {
       if (
@@ -5127,6 +5460,24 @@ class Range {
       throw new TypeError(`Invalid SemVer Range: ${range}`)
     }
 
+    // if we have any that are not the null set, throw out null sets.
+    if (this.set.length > 1) {
+      // keep the first one, in case they're all null sets
+      const first = this.set[0]
+      this.set = this.set.filter(c => !isNullSet(c[0]))
+      if (this.set.length === 0)
+        this.set = [first]
+      else if (this.set.length > 1) {
+        // if we have any that are *, then the range is just *
+        for (const c of this.set) {
+          if (c.length === 1 && isAny(c[0])) {
+            this.set = [c]
+            break
+          }
+        }
+      }
+    }
+
     this.format()
   }
 
@@ -5145,8 +5496,17 @@ class Range {
   }
 
   parseRange (range) {
-    const loose = this.options.loose
     range = range.trim()
+
+    // memoize range parsing for performance.
+    // this is a very hot path, and fully deterministic.
+    const memoOpts = Object.keys(this.options).join(',')
+    const memoKey = `parseRange:${memoOpts}:${range}`
+    const cached = cache.get(memoKey)
+    if (cached)
+      return cached
+
+    const loose = this.options.loose
     // `1.2.3 - 1.2.4` => `>=1.2.3 <=1.2.4`
     const hr = loose ? re[t.HYPHENRANGELOOSE] : re[t.HYPHENRANGE]
     range = range.replace(hr, hyphenReplace(this.options.includePrerelease))
@@ -5168,15 +5528,33 @@ class Range {
     // ready to be split into comparators.
 
     const compRe = loose ? re[t.COMPARATORLOOSE] : re[t.COMPARATOR]
-    return range
+    const rangeList = range
       .split(' ')
       .map(comp => parseComparator(comp, this.options))
       .join(' ')
       .split(/\s+/)
+      // >=0.0.0 is equivalent to *
       .map(comp => replaceGTE0(comp, this.options))
       // in loose mode, throw out any that are not valid comparators
       .filter(this.options.loose ? comp => !!comp.match(compRe) : () => true)
       .map(comp => new Comparator(comp, this.options))
+
+    // if any comparators are the null set, then replace with JUST null set
+    // if more than one comparator, remove any * comparators
+    // also, don't include the same comparator more than once
+    const l = rangeList.length
+    const rangeMap = new Map()
+    for (const comp of rangeList) {
+      if (isNullSet(comp))
+        return [comp]
+      rangeMap.set(comp.value, comp)
+    }
+    if (rangeMap.size > 1 && rangeMap.has(''))
+      rangeMap.delete('')
+
+    const result = [...rangeMap.values()]
+    cache.set(memoKey, result)
+    return result
   }
 
   intersects (range, options) {
@@ -5225,16 +5603,23 @@ class Range {
 }
 module.exports = Range
 
-const Comparator = __webpack_require__(1532)
-const debug = __webpack_require__(427)
-const SemVer = __webpack_require__(8088)
+const LRU = __webpack_require__(159)
+const cache = new LRU({ max: 1000 })
+
+const parseOptions = __webpack_require__(314)
+const Comparator = __webpack_require__(6345)
+const debug = __webpack_require__(5136)
+const SemVer = __webpack_require__(205)
 const {
   re,
   t,
   comparatorTrimReplace,
   tildeTrimReplace,
   caretTrimReplace
-} = __webpack_require__(9523)
+} = __webpack_require__(2607)
+
+const isNullSet = c => c.value === '<0.0.0-0'
+const isAny = c => c.value === ''
 
 // take a set of comparators and determine whether there
 // exists a version which can satisfy it
@@ -5546,22 +5931,19 @@ const testSet = (set, version, options) => {
 
 /***/ }),
 
-/***/ 8088:
+/***/ 205:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const debug = __webpack_require__(427)
-const { MAX_LENGTH, MAX_SAFE_INTEGER } = __webpack_require__(2293)
-const { re, t } = __webpack_require__(9523)
+const debug = __webpack_require__(5136)
+const { MAX_LENGTH, MAX_SAFE_INTEGER } = __webpack_require__(2143)
+const { re, t } = __webpack_require__(2607)
 
-const { compareIdentifiers } = __webpack_require__(2463)
+const parseOptions = __webpack_require__(314)
+const { compareIdentifiers } = __webpack_require__(8289)
 class SemVer {
   constructor (version, options) {
-    if (!options || typeof options !== 'object') {
-      options = {
-        loose: !!options,
-        includePrerelease: false
-      }
-    }
+    options = parseOptions(options)
+
     if (version instanceof SemVer) {
       if (version.loose === !!options.loose &&
           version.includePrerelease === !!options.includePrerelease) {
@@ -5843,10 +6225,10 @@ module.exports = SemVer
 
 /***/ }),
 
-/***/ 8848:
+/***/ 8376:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const parse = __webpack_require__(5925)
+const parse = __webpack_require__(894)
 const clean = (version, options) => {
   const s = parse(version.trim().replace(/^[=v]+/, ''), options)
   return s ? s.version : null
@@ -5856,15 +6238,15 @@ module.exports = clean
 
 /***/ }),
 
-/***/ 5098:
+/***/ 9350:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const eq = __webpack_require__(1898)
-const neq = __webpack_require__(6017)
-const gt = __webpack_require__(4123)
-const gte = __webpack_require__(5522)
-const lt = __webpack_require__(194)
-const lte = __webpack_require__(7520)
+const eq = __webpack_require__(7480)
+const neq = __webpack_require__(9830)
+const gt = __webpack_require__(1301)
+const gte = __webpack_require__(5038)
+const lt = __webpack_require__(6695)
+const lte = __webpack_require__(8333)
 
 const cmp = (a, op, b, loose) => {
   switch (op) {
@@ -5911,12 +6293,12 @@ module.exports = cmp
 
 /***/ }),
 
-/***/ 3466:
+/***/ 3576:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const SemVer = __webpack_require__(8088)
-const parse = __webpack_require__(5925)
-const {re, t} = __webpack_require__(9523)
+const SemVer = __webpack_require__(205)
+const parse = __webpack_require__(894)
+const {re, t} = __webpack_require__(2607)
 
 const coerce = (version, options) => {
   if (version instanceof SemVer) {
@@ -5969,10 +6351,10 @@ module.exports = coerce
 
 /***/ }),
 
-/***/ 2156:
+/***/ 9039:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const SemVer = __webpack_require__(8088)
+const SemVer = __webpack_require__(205)
 const compareBuild = (a, b, loose) => {
   const versionA = new SemVer(a, loose)
   const versionB = new SemVer(b, loose)
@@ -5983,20 +6365,20 @@ module.exports = compareBuild
 
 /***/ }),
 
-/***/ 2804:
+/***/ 6064:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const compare = __webpack_require__(4309)
+const compare = __webpack_require__(6515)
 const compareLoose = (a, b) => compare(a, b, true)
 module.exports = compareLoose
 
 
 /***/ }),
 
-/***/ 4309:
+/***/ 6515:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const SemVer = __webpack_require__(8088)
+const SemVer = __webpack_require__(205)
 const compare = (a, b, loose) =>
   new SemVer(a, loose).compare(new SemVer(b, loose))
 
@@ -6005,11 +6387,11 @@ module.exports = compare
 
 /***/ }),
 
-/***/ 4297:
+/***/ 4408:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const parse = __webpack_require__(5925)
-const eq = __webpack_require__(1898)
+const parse = __webpack_require__(894)
+const eq = __webpack_require__(7480)
 
 const diff = (version1, version2) => {
   if (eq(version1, version2)) {
@@ -6035,40 +6417,40 @@ module.exports = diff
 
 /***/ }),
 
-/***/ 1898:
+/***/ 7480:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const compare = __webpack_require__(4309)
+const compare = __webpack_require__(6515)
 const eq = (a, b, loose) => compare(a, b, loose) === 0
 module.exports = eq
 
 
 /***/ }),
 
-/***/ 4123:
+/***/ 1301:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const compare = __webpack_require__(4309)
+const compare = __webpack_require__(6515)
 const gt = (a, b, loose) => compare(a, b, loose) > 0
 module.exports = gt
 
 
 /***/ }),
 
-/***/ 5522:
+/***/ 5038:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const compare = __webpack_require__(4309)
+const compare = __webpack_require__(6515)
 const gte = (a, b, loose) => compare(a, b, loose) >= 0
 module.exports = gte
 
 
 /***/ }),
 
-/***/ 900:
+/***/ 5996:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const SemVer = __webpack_require__(8088)
+const SemVer = __webpack_require__(205)
 
 const inc = (version, release, options, identifier) => {
   if (typeof (options) === 'string') {
@@ -6087,70 +6469,66 @@ module.exports = inc
 
 /***/ }),
 
-/***/ 194:
+/***/ 6695:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const compare = __webpack_require__(4309)
+const compare = __webpack_require__(6515)
 const lt = (a, b, loose) => compare(a, b, loose) < 0
 module.exports = lt
 
 
 /***/ }),
 
-/***/ 7520:
+/***/ 8333:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const compare = __webpack_require__(4309)
+const compare = __webpack_require__(6515)
 const lte = (a, b, loose) => compare(a, b, loose) <= 0
 module.exports = lte
 
 
 /***/ }),
 
-/***/ 6688:
+/***/ 1509:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const SemVer = __webpack_require__(8088)
+const SemVer = __webpack_require__(205)
 const major = (a, loose) => new SemVer(a, loose).major
 module.exports = major
 
 
 /***/ }),
 
-/***/ 8447:
+/***/ 7632:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const SemVer = __webpack_require__(8088)
+const SemVer = __webpack_require__(205)
 const minor = (a, loose) => new SemVer(a, loose).minor
 module.exports = minor
 
 
 /***/ }),
 
-/***/ 6017:
+/***/ 9830:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const compare = __webpack_require__(4309)
+const compare = __webpack_require__(6515)
 const neq = (a, b, loose) => compare(a, b, loose) !== 0
 module.exports = neq
 
 
 /***/ }),
 
-/***/ 5925:
+/***/ 894:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const {MAX_LENGTH} = __webpack_require__(2293)
-const { re, t } = __webpack_require__(9523)
-const SemVer = __webpack_require__(8088)
+const {MAX_LENGTH} = __webpack_require__(2143)
+const { re, t } = __webpack_require__(2607)
+const SemVer = __webpack_require__(205)
 
+const parseOptions = __webpack_require__(314)
 const parse = (version, options) => {
-  if (!options || typeof options !== 'object') {
-    options = {
-      loose: !!options,
-      includePrerelease: false
-    }
-  }
+  options = parseOptions(options)
 
   if (version instanceof SemVer) {
     return version
@@ -6181,20 +6559,20 @@ module.exports = parse
 
 /***/ }),
 
-/***/ 2866:
+/***/ 5613:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const SemVer = __webpack_require__(8088)
+const SemVer = __webpack_require__(205)
 const patch = (a, loose) => new SemVer(a, loose).patch
 module.exports = patch
 
 
 /***/ }),
 
-/***/ 6014:
+/***/ 7881:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const parse = __webpack_require__(5925)
+const parse = __webpack_require__(894)
 const prerelease = (version, options) => {
   const parsed = parse(version, options)
   return (parsed && parsed.prerelease.length) ? parsed.prerelease : null
@@ -6204,30 +6582,30 @@ module.exports = prerelease
 
 /***/ }),
 
-/***/ 7499:
+/***/ 2661:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const compare = __webpack_require__(4309)
+const compare = __webpack_require__(6515)
 const rcompare = (a, b, loose) => compare(b, a, loose)
 module.exports = rcompare
 
 
 /***/ }),
 
-/***/ 8701:
+/***/ 4055:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const compareBuild = __webpack_require__(2156)
+const compareBuild = __webpack_require__(9039)
 const rsort = (list, loose) => list.sort((a, b) => compareBuild(b, a, loose))
 module.exports = rsort
 
 
 /***/ }),
 
-/***/ 6055:
+/***/ 3320:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const Range = __webpack_require__(9828)
+const Range = __webpack_require__(7307)
 const satisfies = (version, range, options) => {
   try {
     range = new Range(range, options)
@@ -6241,20 +6619,20 @@ module.exports = satisfies
 
 /***/ }),
 
-/***/ 1426:
+/***/ 9347:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const compareBuild = __webpack_require__(2156)
+const compareBuild = __webpack_require__(9039)
 const sort = (list, loose) => list.sort((a, b) => compareBuild(a, b, loose))
 module.exports = sort
 
 
 /***/ }),
 
-/***/ 9601:
+/***/ 1432:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const parse = __webpack_require__(5925)
+const parse = __webpack_require__(894)
 const valid = (version, options) => {
   const v = parse(version, options)
   return v ? v.version : null
@@ -6264,62 +6642,62 @@ module.exports = valid
 
 /***/ }),
 
-/***/ 1383:
+/***/ 7782:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 // just pre-load all the stuff that index.js lazily exports
-const internalRe = __webpack_require__(9523)
+const internalRe = __webpack_require__(2607)
 module.exports = {
   re: internalRe.re,
   src: internalRe.src,
   tokens: internalRe.t,
-  SEMVER_SPEC_VERSION: __webpack_require__(2293).SEMVER_SPEC_VERSION,
-  SemVer: __webpack_require__(8088),
-  compareIdentifiers: __webpack_require__(2463).compareIdentifiers,
-  rcompareIdentifiers: __webpack_require__(2463).rcompareIdentifiers,
-  parse: __webpack_require__(5925),
-  valid: __webpack_require__(9601),
-  clean: __webpack_require__(8848),
-  inc: __webpack_require__(900),
-  diff: __webpack_require__(4297),
-  major: __webpack_require__(6688),
-  minor: __webpack_require__(8447),
-  patch: __webpack_require__(2866),
-  prerelease: __webpack_require__(6014),
-  compare: __webpack_require__(4309),
-  rcompare: __webpack_require__(7499),
-  compareLoose: __webpack_require__(2804),
-  compareBuild: __webpack_require__(2156),
-  sort: __webpack_require__(1426),
-  rsort: __webpack_require__(8701),
-  gt: __webpack_require__(4123),
-  lt: __webpack_require__(194),
-  eq: __webpack_require__(1898),
-  neq: __webpack_require__(6017),
-  gte: __webpack_require__(5522),
-  lte: __webpack_require__(7520),
-  cmp: __webpack_require__(5098),
-  coerce: __webpack_require__(3466),
-  Comparator: __webpack_require__(1532),
-  Range: __webpack_require__(9828),
-  satisfies: __webpack_require__(6055),
-  toComparators: __webpack_require__(2706),
-  maxSatisfying: __webpack_require__(579),
-  minSatisfying: __webpack_require__(832),
-  minVersion: __webpack_require__(4179),
-  validRange: __webpack_require__(2098),
-  outside: __webpack_require__(420),
-  gtr: __webpack_require__(9380),
-  ltr: __webpack_require__(3323),
-  intersects: __webpack_require__(7008),
-  simplifyRange: __webpack_require__(5297),
-  subset: __webpack_require__(7863),
+  SEMVER_SPEC_VERSION: __webpack_require__(2143).SEMVER_SPEC_VERSION,
+  SemVer: __webpack_require__(205),
+  compareIdentifiers: __webpack_require__(8289).compareIdentifiers,
+  rcompareIdentifiers: __webpack_require__(8289).rcompareIdentifiers,
+  parse: __webpack_require__(894),
+  valid: __webpack_require__(1432),
+  clean: __webpack_require__(8376),
+  inc: __webpack_require__(5996),
+  diff: __webpack_require__(4408),
+  major: __webpack_require__(1509),
+  minor: __webpack_require__(7632),
+  patch: __webpack_require__(5613),
+  prerelease: __webpack_require__(7881),
+  compare: __webpack_require__(6515),
+  rcompare: __webpack_require__(2661),
+  compareLoose: __webpack_require__(6064),
+  compareBuild: __webpack_require__(9039),
+  sort: __webpack_require__(9347),
+  rsort: __webpack_require__(4055),
+  gt: __webpack_require__(1301),
+  lt: __webpack_require__(6695),
+  eq: __webpack_require__(7480),
+  neq: __webpack_require__(9830),
+  gte: __webpack_require__(5038),
+  lte: __webpack_require__(8333),
+  cmp: __webpack_require__(9350),
+  coerce: __webpack_require__(3576),
+  Comparator: __webpack_require__(6345),
+  Range: __webpack_require__(7307),
+  satisfies: __webpack_require__(3320),
+  toComparators: __webpack_require__(5374),
+  maxSatisfying: __webpack_require__(9700),
+  minSatisfying: __webpack_require__(6383),
+  minVersion: __webpack_require__(5102),
+  validRange: __webpack_require__(5659),
+  outside: __webpack_require__(8304),
+  gtr: __webpack_require__(3219),
+  ltr: __webpack_require__(4758),
+  intersects: __webpack_require__(3847),
+  simplifyRange: __webpack_require__(5804),
+  subset: __webpack_require__(9562),
 }
 
 
 /***/ }),
 
-/***/ 2293:
+/***/ 2143:
 /***/ ((module) => {
 
 // Note: this is the semver.org version of the spec that it implements
@@ -6343,7 +6721,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 427:
+/***/ 5136:
 /***/ ((module) => {
 
 const debug = (
@@ -6359,7 +6737,7 @@ module.exports = debug
 
 /***/ }),
 
-/***/ 2463:
+/***/ 8289:
 /***/ ((module) => {
 
 const numeric = /^[0-9]+$/
@@ -6389,11 +6767,29 @@ module.exports = {
 
 /***/ }),
 
-/***/ 9523:
+/***/ 314:
+/***/ ((module) => {
+
+// parse out just the options we care about so we always get a consistent
+// obj with keys in a consistent order.
+const opts = ['includePrerelease', 'loose', 'rtl']
+const parseOptions = options =>
+  !options ? {}
+  : typeof options !== 'object' ? { loose: true }
+  : opts.filter(k => options[k]).reduce((options, k) => {
+    options[k] = true
+    return options
+  }, {})
+module.exports = parseOptions
+
+
+/***/ }),
+
+/***/ 2607:
 /***/ ((module, exports, __webpack_require__) => {
 
-const { MAX_SAFE_COMPONENT_LENGTH } = __webpack_require__(2293)
-const debug = __webpack_require__(427)
+const { MAX_SAFE_COMPONENT_LENGTH } = __webpack_require__(2143)
+const debug = __webpack_require__(5136)
 exports = module.exports = {}
 
 // The actual regexps go on exports.re
@@ -6578,21 +6974,21 @@ createToken('GTE0PRE', '^\\s*>=\\s*0\.0\.0-0\\s*$')
 
 /***/ }),
 
-/***/ 9380:
+/***/ 3219:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 // Determine if version is greater than all the versions possible in the range.
-const outside = __webpack_require__(420)
+const outside = __webpack_require__(8304)
 const gtr = (version, range, options) => outside(version, range, '>', options)
 module.exports = gtr
 
 
 /***/ }),
 
-/***/ 7008:
+/***/ 3847:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const Range = __webpack_require__(9828)
+const Range = __webpack_require__(7307)
 const intersects = (r1, r2, options) => {
   r1 = new Range(r1, options)
   r2 = new Range(r2, options)
@@ -6603,10 +6999,10 @@ module.exports = intersects
 
 /***/ }),
 
-/***/ 3323:
+/***/ 4758:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const outside = __webpack_require__(420)
+const outside = __webpack_require__(8304)
 // Determine if version is less than all the versions possible in the range
 const ltr = (version, range, options) => outside(version, range, '<', options)
 module.exports = ltr
@@ -6614,11 +7010,11 @@ module.exports = ltr
 
 /***/ }),
 
-/***/ 579:
+/***/ 9700:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const SemVer = __webpack_require__(8088)
-const Range = __webpack_require__(9828)
+const SemVer = __webpack_require__(205)
+const Range = __webpack_require__(7307)
 
 const maxSatisfying = (versions, range, options) => {
   let max = null
@@ -6646,11 +7042,11 @@ module.exports = maxSatisfying
 
 /***/ }),
 
-/***/ 832:
+/***/ 6383:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const SemVer = __webpack_require__(8088)
-const Range = __webpack_require__(9828)
+const SemVer = __webpack_require__(205)
+const Range = __webpack_require__(7307)
 const minSatisfying = (versions, range, options) => {
   let min = null
   let minSV = null
@@ -6677,12 +7073,12 @@ module.exports = minSatisfying
 
 /***/ }),
 
-/***/ 4179:
+/***/ 5102:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const SemVer = __webpack_require__(8088)
-const Range = __webpack_require__(9828)
-const gt = __webpack_require__(4123)
+const SemVer = __webpack_require__(205)
+const Range = __webpack_require__(7307)
+const gt = __webpack_require__(1301)
 
 const minVersion = (range, loose) => {
   range = new Range(range, loose)
@@ -6701,6 +7097,7 @@ const minVersion = (range, loose) => {
   for (let i = 0; i < range.set.length; ++i) {
     const comparators = range.set[i]
 
+    let setMin = null
     comparators.forEach((comparator) => {
       // Clone to avoid manipulating the comparator's semver object.
       const compver = new SemVer(comparator.semver.version)
@@ -6715,8 +7112,8 @@ const minVersion = (range, loose) => {
           /* fallthrough */
         case '':
         case '>=':
-          if (!minver || gt(minver, compver)) {
-            minver = compver
+          if (!setMin || gt(compver, setMin)) {
+            setMin = compver
           }
           break
         case '<':
@@ -6728,6 +7125,8 @@ const minVersion = (range, loose) => {
           throw new Error(`Unexpected operation: ${comparator.operator}`)
       }
     })
+    if (setMin && (!minver || gt(minver, setMin)))
+      minver = setMin
   }
 
   if (minver && range.test(minver)) {
@@ -6741,18 +7140,18 @@ module.exports = minVersion
 
 /***/ }),
 
-/***/ 420:
+/***/ 8304:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const SemVer = __webpack_require__(8088)
-const Comparator = __webpack_require__(1532)
+const SemVer = __webpack_require__(205)
+const Comparator = __webpack_require__(6345)
 const {ANY} = Comparator
-const Range = __webpack_require__(9828)
-const satisfies = __webpack_require__(6055)
-const gt = __webpack_require__(4123)
-const lt = __webpack_require__(194)
-const lte = __webpack_require__(7520)
-const gte = __webpack_require__(5522)
+const Range = __webpack_require__(7307)
+const satisfies = __webpack_require__(3320)
+const gt = __webpack_require__(1301)
+const lt = __webpack_require__(6695)
+const lte = __webpack_require__(8333)
+const gte = __webpack_require__(5038)
 
 const outside = (version, range, hilo, options) => {
   version = new SemVer(version, options)
@@ -6778,7 +7177,7 @@ const outside = (version, range, hilo, options) => {
       throw new TypeError('Must provide a hilo val of "<" or ">"')
   }
 
-  // If it satisifes the range it is not outside
+  // If it satisfies the range it is not outside
   if (satisfies(version, range, options)) {
     return false
   }
@@ -6828,14 +7227,14 @@ module.exports = outside
 
 /***/ }),
 
-/***/ 5297:
+/***/ 5804:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 // given a set of versions and a range, create a "simplified" range
 // that includes the same versions that the original range does
 // If the original range is shorter than the simplified one, return that.
-const satisfies = __webpack_require__(6055)
-const compare = __webpack_require__(4309)
+const satisfies = __webpack_require__(3320)
+const compare = __webpack_require__(6515)
 module.exports = (versions, range, options) => {
   const set = []
   let min = null
@@ -6879,13 +7278,13 @@ module.exports = (versions, range, options) => {
 
 /***/ }),
 
-/***/ 7863:
+/***/ 9562:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const Range = __webpack_require__(9828)
-const { ANY } = __webpack_require__(1532)
-const satisfies = __webpack_require__(6055)
-const compare = __webpack_require__(4309)
+const Range = __webpack_require__(7307)
+const { ANY } = __webpack_require__(6345)
+const satisfies = __webpack_require__(3320)
+const compare = __webpack_require__(6515)
 
 // Complex range `r1 || r2 || ...` is a subset of `R1 || R2 || ...` iff:
 // - Every simple range `r1, r2, ...` is a subset of some `R1, R2, ...`
@@ -6905,15 +7304,18 @@ const compare = __webpack_require__(4309)
 //   - If EQ satisfies every C, return true
 //   - Else return false
 // - If GT
-//   - If GT is lower than any > or >= comp in C, return false
+//   - If GT.semver is lower than any > or >= comp in C, return false
 //   - If GT is >=, and GT.semver does not satisfy every C, return false
 // - If LT
-//   - If LT.semver is greater than that of any > comp in C, return false
+//   - If LT.semver is greater than any < or <= comp in C, return false
 //   - If LT is <=, and LT.semver does not satisfy every C, return false
 // - If any C is a = range, and GT or LT are set, return false
 // - Else return true
 
 const subset = (sub, dom, options) => {
+  if (sub === dom)
+    return true
+
   sub = new Range(sub, options)
   dom = new Range(dom, options)
   let sawNonNull = false
@@ -6936,6 +7338,9 @@ const subset = (sub, dom, options) => {
 }
 
 const simpleSubset = (sub, dom, options) => {
+  if (sub === dom)
+    return true
+
   if (sub.length === 1 && sub[0].semver === ANY)
     return dom.length === 1 && dom[0].semver === ANY
 
@@ -6974,6 +7379,7 @@ const simpleSubset = (sub, dom, options) => {
       if (!satisfies(eq, String(c), options))
         return false
     }
+
     return true
   }
 
@@ -6985,7 +7391,7 @@ const simpleSubset = (sub, dom, options) => {
     if (gt) {
       if (c.operator === '>' || c.operator === '>=') {
         higher = higherGT(gt, c, options)
-        if (higher === c)
+        if (higher === c && higher !== gt)
           return false
       } else if (gt.operator === '>=' && !satisfies(gt.semver, String(c), options))
         return false
@@ -6993,7 +7399,7 @@ const simpleSubset = (sub, dom, options) => {
     if (lt) {
       if (c.operator === '<' || c.operator === '<=') {
         lower = lowerLT(lt, c, options)
-        if (lower === c)
+        if (lower === c && lower !== lt)
           return false
       } else if (lt.operator === '<=' && !satisfies(lt.semver, String(c), options))
         return false
@@ -7041,10 +7447,10 @@ module.exports = subset
 
 /***/ }),
 
-/***/ 2706:
+/***/ 5374:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const Range = __webpack_require__(9828)
+const Range = __webpack_require__(7307)
 
 // Mostly just for testing and legacy API reasons
 const toComparators = (range, options) =>
@@ -7056,10 +7462,10 @@ module.exports = toComparators
 
 /***/ }),
 
-/***/ 2098:
+/***/ 5659:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const Range = __webpack_require__(9828)
+const Range = __webpack_require__(7307)
 const validRange = (range, options) => {
   try {
     // Return '*' instead of '' so that truthiness works.
@@ -7074,15 +7480,15 @@ module.exports = validRange
 
 /***/ }),
 
-/***/ 4294:
+/***/ 5666:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-module.exports = __webpack_require__(4219);
+module.exports = __webpack_require__(5532);
 
 
 /***/ }),
 
-/***/ 4219:
+/***/ 5532:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -7354,7 +7760,7 @@ exports.debug = debug; // for test
 
 /***/ }),
 
-/***/ 2707:
+/***/ 1758:
 /***/ ((module) => {
 
 /**
@@ -7387,7 +7793,7 @@ module.exports = bytesToUuid;
 
 /***/ }),
 
-/***/ 5859:
+/***/ 5591:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 // Unique ID creation requires a high quality random # generator.  In node.js
@@ -7402,11 +7808,11 @@ module.exports = function nodeRNG() {
 
 /***/ }),
 
-/***/ 824:
+/***/ 8497:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var rng = __webpack_require__(5859);
-var bytesToUuid = __webpack_require__(2707);
+var rng = __webpack_require__(5591);
+var bytesToUuid = __webpack_require__(1758);
 
 function v4(options, buf, offset) {
   var i = buf && offset || 0;
@@ -7434,6 +7840,456 @@ function v4(options, buf, offset) {
 }
 
 module.exports = v4;
+
+
+/***/ }),
+
+/***/ 6909:
+/***/ ((module) => {
+
+"use strict";
+
+module.exports = function (Yallist) {
+  Yallist.prototype[Symbol.iterator] = function* () {
+    for (let walker = this.head; walker; walker = walker.next) {
+      yield walker.value
+    }
+  }
+}
+
+
+/***/ }),
+
+/***/ 4986:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+module.exports = Yallist
+
+Yallist.Node = Node
+Yallist.create = Yallist
+
+function Yallist (list) {
+  var self = this
+  if (!(self instanceof Yallist)) {
+    self = new Yallist()
+  }
+
+  self.tail = null
+  self.head = null
+  self.length = 0
+
+  if (list && typeof list.forEach === 'function') {
+    list.forEach(function (item) {
+      self.push(item)
+    })
+  } else if (arguments.length > 0) {
+    for (var i = 0, l = arguments.length; i < l; i++) {
+      self.push(arguments[i])
+    }
+  }
+
+  return self
+}
+
+Yallist.prototype.removeNode = function (node) {
+  if (node.list !== this) {
+    throw new Error('removing node which does not belong to this list')
+  }
+
+  var next = node.next
+  var prev = node.prev
+
+  if (next) {
+    next.prev = prev
+  }
+
+  if (prev) {
+    prev.next = next
+  }
+
+  if (node === this.head) {
+    this.head = next
+  }
+  if (node === this.tail) {
+    this.tail = prev
+  }
+
+  node.list.length--
+  node.next = null
+  node.prev = null
+  node.list = null
+
+  return next
+}
+
+Yallist.prototype.unshiftNode = function (node) {
+  if (node === this.head) {
+    return
+  }
+
+  if (node.list) {
+    node.list.removeNode(node)
+  }
+
+  var head = this.head
+  node.list = this
+  node.next = head
+  if (head) {
+    head.prev = node
+  }
+
+  this.head = node
+  if (!this.tail) {
+    this.tail = node
+  }
+  this.length++
+}
+
+Yallist.prototype.pushNode = function (node) {
+  if (node === this.tail) {
+    return
+  }
+
+  if (node.list) {
+    node.list.removeNode(node)
+  }
+
+  var tail = this.tail
+  node.list = this
+  node.prev = tail
+  if (tail) {
+    tail.next = node
+  }
+
+  this.tail = node
+  if (!this.head) {
+    this.head = node
+  }
+  this.length++
+}
+
+Yallist.prototype.push = function () {
+  for (var i = 0, l = arguments.length; i < l; i++) {
+    push(this, arguments[i])
+  }
+  return this.length
+}
+
+Yallist.prototype.unshift = function () {
+  for (var i = 0, l = arguments.length; i < l; i++) {
+    unshift(this, arguments[i])
+  }
+  return this.length
+}
+
+Yallist.prototype.pop = function () {
+  if (!this.tail) {
+    return undefined
+  }
+
+  var res = this.tail.value
+  this.tail = this.tail.prev
+  if (this.tail) {
+    this.tail.next = null
+  } else {
+    this.head = null
+  }
+  this.length--
+  return res
+}
+
+Yallist.prototype.shift = function () {
+  if (!this.head) {
+    return undefined
+  }
+
+  var res = this.head.value
+  this.head = this.head.next
+  if (this.head) {
+    this.head.prev = null
+  } else {
+    this.tail = null
+  }
+  this.length--
+  return res
+}
+
+Yallist.prototype.forEach = function (fn, thisp) {
+  thisp = thisp || this
+  for (var walker = this.head, i = 0; walker !== null; i++) {
+    fn.call(thisp, walker.value, i, this)
+    walker = walker.next
+  }
+}
+
+Yallist.prototype.forEachReverse = function (fn, thisp) {
+  thisp = thisp || this
+  for (var walker = this.tail, i = this.length - 1; walker !== null; i--) {
+    fn.call(thisp, walker.value, i, this)
+    walker = walker.prev
+  }
+}
+
+Yallist.prototype.get = function (n) {
+  for (var i = 0, walker = this.head; walker !== null && i < n; i++) {
+    // abort out of the list early if we hit a cycle
+    walker = walker.next
+  }
+  if (i === n && walker !== null) {
+    return walker.value
+  }
+}
+
+Yallist.prototype.getReverse = function (n) {
+  for (var i = 0, walker = this.tail; walker !== null && i < n; i++) {
+    // abort out of the list early if we hit a cycle
+    walker = walker.prev
+  }
+  if (i === n && walker !== null) {
+    return walker.value
+  }
+}
+
+Yallist.prototype.map = function (fn, thisp) {
+  thisp = thisp || this
+  var res = new Yallist()
+  for (var walker = this.head; walker !== null;) {
+    res.push(fn.call(thisp, walker.value, this))
+    walker = walker.next
+  }
+  return res
+}
+
+Yallist.prototype.mapReverse = function (fn, thisp) {
+  thisp = thisp || this
+  var res = new Yallist()
+  for (var walker = this.tail; walker !== null;) {
+    res.push(fn.call(thisp, walker.value, this))
+    walker = walker.prev
+  }
+  return res
+}
+
+Yallist.prototype.reduce = function (fn, initial) {
+  var acc
+  var walker = this.head
+  if (arguments.length > 1) {
+    acc = initial
+  } else if (this.head) {
+    walker = this.head.next
+    acc = this.head.value
+  } else {
+    throw new TypeError('Reduce of empty list with no initial value')
+  }
+
+  for (var i = 0; walker !== null; i++) {
+    acc = fn(acc, walker.value, i)
+    walker = walker.next
+  }
+
+  return acc
+}
+
+Yallist.prototype.reduceReverse = function (fn, initial) {
+  var acc
+  var walker = this.tail
+  if (arguments.length > 1) {
+    acc = initial
+  } else if (this.tail) {
+    walker = this.tail.prev
+    acc = this.tail.value
+  } else {
+    throw new TypeError('Reduce of empty list with no initial value')
+  }
+
+  for (var i = this.length - 1; walker !== null; i--) {
+    acc = fn(acc, walker.value, i)
+    walker = walker.prev
+  }
+
+  return acc
+}
+
+Yallist.prototype.toArray = function () {
+  var arr = new Array(this.length)
+  for (var i = 0, walker = this.head; walker !== null; i++) {
+    arr[i] = walker.value
+    walker = walker.next
+  }
+  return arr
+}
+
+Yallist.prototype.toArrayReverse = function () {
+  var arr = new Array(this.length)
+  for (var i = 0, walker = this.tail; walker !== null; i++) {
+    arr[i] = walker.value
+    walker = walker.prev
+  }
+  return arr
+}
+
+Yallist.prototype.slice = function (from, to) {
+  to = to || this.length
+  if (to < 0) {
+    to += this.length
+  }
+  from = from || 0
+  if (from < 0) {
+    from += this.length
+  }
+  var ret = new Yallist()
+  if (to < from || to < 0) {
+    return ret
+  }
+  if (from < 0) {
+    from = 0
+  }
+  if (to > this.length) {
+    to = this.length
+  }
+  for (var i = 0, walker = this.head; walker !== null && i < from; i++) {
+    walker = walker.next
+  }
+  for (; walker !== null && i < to; i++, walker = walker.next) {
+    ret.push(walker.value)
+  }
+  return ret
+}
+
+Yallist.prototype.sliceReverse = function (from, to) {
+  to = to || this.length
+  if (to < 0) {
+    to += this.length
+  }
+  from = from || 0
+  if (from < 0) {
+    from += this.length
+  }
+  var ret = new Yallist()
+  if (to < from || to < 0) {
+    return ret
+  }
+  if (from < 0) {
+    from = 0
+  }
+  if (to > this.length) {
+    to = this.length
+  }
+  for (var i = this.length, walker = this.tail; walker !== null && i > to; i--) {
+    walker = walker.prev
+  }
+  for (; walker !== null && i > from; i--, walker = walker.prev) {
+    ret.push(walker.value)
+  }
+  return ret
+}
+
+Yallist.prototype.splice = function (start, deleteCount, ...nodes) {
+  if (start > this.length) {
+    start = this.length - 1
+  }
+  if (start < 0) {
+    start = this.length + start;
+  }
+
+  for (var i = 0, walker = this.head; walker !== null && i < start; i++) {
+    walker = walker.next
+  }
+
+  var ret = []
+  for (var i = 0; walker && i < deleteCount; i++) {
+    ret.push(walker.value)
+    walker = this.removeNode(walker)
+  }
+  if (walker === null) {
+    walker = this.tail
+  }
+
+  if (walker !== this.head && walker !== this.tail) {
+    walker = walker.prev
+  }
+
+  for (var i = 0; i < nodes.length; i++) {
+    walker = insert(this, walker, nodes[i])
+  }
+  return ret;
+}
+
+Yallist.prototype.reverse = function () {
+  var head = this.head
+  var tail = this.tail
+  for (var walker = head; walker !== null; walker = walker.prev) {
+    var p = walker.prev
+    walker.prev = walker.next
+    walker.next = p
+  }
+  this.head = tail
+  this.tail = head
+  return this
+}
+
+function insert (self, node, value) {
+  var inserted = node === self.head ?
+    new Node(value, null, node, self) :
+    new Node(value, node, node.next, self)
+
+  if (inserted.next === null) {
+    self.tail = inserted
+  }
+  if (inserted.prev === null) {
+    self.head = inserted
+  }
+
+  self.length++
+
+  return inserted
+}
+
+function push (self, item) {
+  self.tail = new Node(item, self.tail, null, self)
+  if (!self.head) {
+    self.head = self.tail
+  }
+  self.length++
+}
+
+function unshift (self, item) {
+  self.head = new Node(item, null, self.head, self)
+  if (!self.tail) {
+    self.tail = self.head
+  }
+  self.length++
+}
+
+function Node (value, prev, next, list) {
+  if (!(this instanceof Node)) {
+    return new Node(value, prev, next, list)
+  }
+
+  this.list = list
+  this.value = value
+
+  if (prev) {
+    prev.next = this
+    this.prev = prev
+  } else {
+    this.prev = null
+  }
+
+  if (next) {
+    next.prev = this
+    this.next = next
+  } else {
+    this.next = null
+  }
+}
+
+try {
+  // add if support for Symbol.iterator is present
+  __webpack_require__(6909)(Yallist)
+} catch (er) {}
 
 
 /***/ }),
@@ -7580,7 +8436,7 @@ module.exports = require("util");;
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(5613);
+/******/ 	return __webpack_require__(9395);
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map

@@ -31,7 +31,7 @@ my @patch = (
     },
     {
         perl => [
-            qr/^5\.8\.0]$/,
+            qr/^5\.8\.0$/,
         ],
         subs => [
             [ \&_patch_warnings ],

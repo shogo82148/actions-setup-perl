@@ -11,7 +11,7 @@ RUN curl --compressed -sSL https://raw.githubusercontent.com/tokuhirom/Perl-Buil
 RUN apk del perl
 
 ENV PATH=/opt/perl-5.8/bin:$PATH
-RUN curl --compressed -sSL https://cpanmin.us/ | perl - --notest App::FatPacker::Simple Carton ExtUtils::PL2Bat
+RUN curl --compressed -sSL https://cpanmin.us/ | perl - --notest Carton
 
 RUN mkdir -p /tmp/cpanm
 WORKDIR /tmp/cpanm

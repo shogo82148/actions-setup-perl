@@ -1,0 +1,45 @@
+name: update cpanm
+on:
+  pull_request:
+    paths:
+      - "bin/cpanm"
+  push:
+    branches:
+      - "main"
+  workflow_dispatch:
+
+jobs:
+  cpanm:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        perl:
+          - "5" # latest version of Perl 5
+          - "5.8.1" # oldest version the original cpanm supports
+          - "5.8.0"
+          - "5.6.2"
+          - "5.6.1" # oldest version the action supports
+
+          # too old to work cpanm... I gave up.
+          # - "5.6.0"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - run: npm ci
+      - run: npm run build
+      - run: npm run package
+
+      - name: use the action
+        uses: ./
+        with:
+          perl-version: "${{ matrix.perl }}"
+
+      - run: cpanm --help
+      - run: cpanm --version
+      - run: cpanm --notest ExtUtils::MakeMaker

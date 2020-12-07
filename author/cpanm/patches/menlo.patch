@@ -1,16 +1,14 @@
 --- Menlo/Index/MetaCPAN.pm
 +++ Menlo/Index/MetaCPAN.pm
-@@ -1,4 +1,4 @@
+@@ -1,4 +1,3 @@
 -use 5.008001;
-+use 5.006;
  use strict;
  use warnings;
  
 --- Menlo/Index/MetaDB.pm
 +++ Menlo/Index/MetaDB.pm
-@@ -1,4 +1,4 @@
+@@ -1,4 +1,3 @@
 -use 5.008001;
-+use 5.006;
  use strict;
  use warnings;
  

@@ -1,0 +1,9 @@
+--- Carp.pm
++++ Carp.pm
+@@ -1,6 +1,5 @@
+ package Carp;
+ 
+-{ use 5.006; }
+ use strict;
+ use warnings;
+ BEGIN {

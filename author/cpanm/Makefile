@@ -32,9 +32,10 @@ deps: .deps.exists ## install dependencies
 	docker cp lib $(IMAGE_NAME)-deps:/tmp/cpanm/lib
 	docker run --rm --volumes-from $(IMAGE_NAME)-deps $(IMAGE_NAME) carton install --deployment
 	cat patches/*.patch | docker run --rm -i --volumes-from $(IMAGE_NAME)-deps -w /tmp/cpanm/local/lib/perl5 $(IMAGE_NAME) patch -s -f -p0
+	docker cp $(IMAGE_NAME)-deps:/tmp/cpanm/local .
 
 .PHONY: update
-update: .image.exists ## download dependencies and update cpanfile.snapshot
+update: .image.exists cpanfile.snapshot ## download dependencies and update cpanfile.snapshot
 	-docker rm $(IMAGE_NAME)-update
 	docker create -v /tmp/cpanm --name $(IMAGE_NAME)-update $(IMAGE_NAME) /bin/true
 	docker cp cpanfile $(IMAGE_NAME)-update:/tmp/cpanm/cpanfile

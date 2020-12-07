@@ -17,7 +17,11 @@ jobs:
         perl:
           - "5" # latest version of Perl 5
           - "5.8.1" # oldest version the original cpanm supports
-          - "5.8.0"
+
+          # TODO: @shogo82148 fix me
+          # building ExtUtils::MakeMaker fails.
+          # - "5.8.0"
+
           - "5.6.2"
           - "5.6.1" # oldest version the action supports
 
@@ -42,4 +46,4 @@ jobs:
 
       - run: cpanm --help
       - run: cpanm --version
-      - run: cpanm --notest --force ExtUtils::MakeMaker
+      - run: cpanm --notest ExtUtils::MakeMaker

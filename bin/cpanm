@@ -87,7 +87,7 @@ $fatpacked{"CPAN/Meta/Validator.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n
 CPAN_META_VALIDATOR
 
 $fatpacked{"CPAN/Meta/YAML.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'CPAN_META_YAML';
-  use strict;use warnings;package CPAN::Meta::YAML;$CPAN::Meta::YAML::VERSION='0.018';;BEGIN {if ($] < 5.008 && $] >= 5.006){eval "require 'JSON/PP/Compat5006.pm'";if ($@){Carp::croak $@}}sub utf8::valid {my$str=$_[0];my$is_utf8;while ($str =~ /(?:
+  sub utf8;use strict;use warnings;package CPAN::Meta::YAML;$CPAN::Meta::YAML::VERSION='0.018';;BEGIN {if ($] < 5.008 && $] >= 5.006){eval "require 'JSON/PP/Compat5006.pm'";if ($@){Carp::croak $@}}sub utf8::valid {my$str=$_[0];my$is_utf8;while ($str =~ /(?:
               (
                   [\x00-\x7F]
                   |[\xC2-\xDF][\x80-\xBF]

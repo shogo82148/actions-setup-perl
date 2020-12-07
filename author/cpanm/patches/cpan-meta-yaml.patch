@@ -2,7 +2,38 @@
 +++ CPAN/Meta/YAML.pm
 @@ -1,4 +1,4 @@
 -use 5.008001; # sane UTF-8 support
-+use 5.006;
++use utf8;
  use strict;
  use warnings;
  package CPAN::Meta::YAML; # git description: v1.68-2-gcc5324e
+@@ -8,6 +8,20 @@
+ $CPAN::Meta::YAML::VERSION = '0.018';
+ ; # original $VERSION removed by Doppelgaenger
+ 
++BEGIN {
++    if ($] < 5.008 && $] >= 5.006) {
++        eval qq| require JSON::PP::Compat5006 |;
++        if ($@) {
++            require Carp;
++            Carp::croak($@);
++        }
++        *utf8::valid = *JSON::PP::Compat5006::_is_valid_utf8;
++    } elsif ($] == 5.008) {
++        require Encode;
++        *utf8::is_utf8 = *Encode::is_utf8;
++    }
++}
++
+ #####################################################################
+ # The CPAN::Meta::YAML API.
+ #
+@@ -232,7 +246,8 @@
+         utf8::upgrade($string);
+ 
+         # Check for and strip any leading UTF-8 BOM
+-        $string =~ s/^\x{FEFF}//;
++        my $bom = pack('U',0xFEFF); # perl 5.6.0 can't parse \x{FEFF}. why???
++        $string =~ s/^$bom//;
+ 
+         # Check for some special cases
+         return $self unless length $string;

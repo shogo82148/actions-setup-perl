@@ -1,5 +1,6 @@
 requires 'perl', '5.006';
 requires 'Menlo::Legacy';
+requires 'App::FatPacker::Simple';
 
 # runtime dependencies. Mostly core and fatpackable back to 5.8
 # https://github.com/miyagawa/cpanminus/issues/455
@@ -23,7 +24,8 @@ requires 'File::pushd';
 requires 'Getopt::Long', '2.52';
 requires 'HTTP::Tiny', '0.054';
 requires 'HTTP::Tinyish', '0.04';
-requires 'JSON::PP', 2;
+requires 'JSON::PP', '2';
+requires 'JSON::PP::Compat5006', '1.09';
 requires 'Module::CPANfile';
 requires 'Module::CoreList';
 requires 'Module::Metadata';
@@ -35,6 +37,7 @@ requires 'Win32::ShellQuote';
 requires 'local::lib';
 requires 'parent';
 requires 'version';
+requires 'if', '0.0608';
 
 # soft dependencies for optional features
 suggests 'LWP::UserAgent', '5.802';

@@ -32,6 +32,9 @@ jobs:
         run: |
           ../../bin/carton install --deployment
           ../../bin/carton exec perl -c build.pl
+          ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/GitHubActions.pm
+          ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/MinGW.pm
+          ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/MinGWGNUmakefile.pm
         working-directory: ./scripts/windows
       - id: set-matrix
         name: list available perl versions
@@ -49,6 +52,7 @@ jobs:
   build:
     runs-on: windows-2019
     needs: list
+    timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix: ${{fromJson(needs.list.outputs.matrix)}}
@@ -134,7 +138,6 @@ jobs:
 
       - name: upload
         shell: pwsh
-        if: startsWith(github.ref, 'refs/heads/releases/')
         run: |
           Set-Location ${env:RUNNER_TEMP}
           Invoke-WebRequest -Uri https://github.com/shogo82148/s3cli-mini/releases/download/v0.0.6/s3cli-mini_windows_amd64.zip -OutFile s3cli-mini.zip
@@ -150,6 +153,7 @@ jobs:
   build-multi-thread:
     runs-on: windows-2019
     needs: list
+    timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix: ${{fromJson(needs.list.outputs.matrix)}}
@@ -230,7 +234,6 @@ jobs:
 
       - name: upload
         shell: pwsh
-        if: startsWith(github.ref, 'refs/heads/releases/')
         run: |
           Set-Location ${env:RUNNER_TEMP}
           Invoke-WebRequest -Uri https://github.com/shogo82148/s3cli-mini/releases/download/v0.0.6/s3cli-mini_windows_amd64.zip -OutFile s3cli-mini.zip

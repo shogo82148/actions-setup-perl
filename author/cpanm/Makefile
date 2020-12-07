@@ -35,7 +35,7 @@ deps: .deps.exists ## install dependencies
 	docker cp $(IMAGE_NAME)-deps:/tmp/cpanm/local .
 
 .PHONY: update
-update: .image.exists ## download dependencies and update cpanfile.snapshot
+update: .image.exists cpanfile.snapshot ## download dependencies and update cpanfile.snapshot
 	-docker rm $(IMAGE_NAME)-update
 	docker create -v /tmp/cpanm --name $(IMAGE_NAME)-update $(IMAGE_NAME) /bin/true
 	docker cp cpanfile $(IMAGE_NAME)-update:/tmp/cpanm/cpanfile

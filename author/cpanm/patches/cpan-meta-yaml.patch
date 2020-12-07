@@ -5,3 +5,51 @@
  use strict;
  use warnings;
  package CPAN::Meta::YAML; # git description: v1.68-2-gcc5324e
+@@ -8,6 +7,47 @@
+ $CPAN::Meta::YAML::VERSION = '0.018';
+ ; # original $VERSION removed by Doppelgaenger
+ 
++BEGIN {
++    if ($] < 5.008 && $] >= 5.006) {
++        eval "require 'JSON/PP/Compat5006.pm'";
++        if ($@) { Carp::croak $@; }
++    }
++
++    # https://github.com/makamaka/JSON/blob/472dbb7db947b230d2e66cfadfb57937ecb4217c/lib/JSON/backportPP/Compat5006.pm#L113-L144
++    sub utf8::valid {
++        my $str = $_[0];
++        my $is_utf8;
++    
++        while ($str =~ /(?:
++            (
++                [\x00-\x7F]
++                |[\xC2-\xDF][\x80-\xBF]
++                |[\xE0][\xA0-\xBF][\x80-\xBF]
++                |[\xE1-\xEC][\x80-\xBF][\x80-\xBF]
++                |[\xED][\x80-\x9F][\x80-\xBF]
++                |[\xEE-\xEF][\x80-\xBF][\x80-\xBF]
++                |[\xF0][\x90-\xBF][\x80-\xBF][\x80-\xBF]
++                |[\xF1-\xF3][\x80-\xBF][\x80-\xBF][\x80-\xBF]
++                |[\xF4][\x80-\x8F][\x80-\xBF][\x80-\xBF]
++            )
++            | (.)
++        )/xg)
++        {
++            if (defined $1) {
++                $is_utf8 = 1 if (!defined $is_utf8);
++            }
++            else {
++                $is_utf8 = 0 if (!defined $is_utf8);
++                if ($is_utf8) { # eventually, not utf8
++                    return;
++                }
++            }
++        }
++    
++        return $is_utf8;
++    }
++}
++
+ #####################################################################
+ # The CPAN::Meta::YAML API.
+ #

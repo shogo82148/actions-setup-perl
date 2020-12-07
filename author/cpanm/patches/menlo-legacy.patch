@@ -1,6 +1,28 @@
 --- Menlo/CLI/Compat.pm
 +++ Menlo/CLI/Compat.pm
-@@ -2362,7 +2362,7 @@ sub save_meta {
+@@ -908,7 +908,9 @@
+         }
+     }
+ 
+-    if (WIN32) {
++    if (WIN32 || $] < 5.008) {
++        # very old perl doesn't support dup(2) mode ('>&')
++        # fallback to system()
+         $cmd = Menlo::Util::shell_quote(@$cmd) if ref $cmd eq 'ARRAY';
+         unless ($self->{verbose}) {
+             $cmd .= " >> " . Menlo::Util::shell_quote($self->{log}) . " 2>&1";
+@@ -947,7 +949,9 @@
+ sub run_timeout {
+     my($self, $cmd, $timeout) = @_;
+ 
+-    return $self->run_command($cmd) if ref($cmd) eq 'CODE' || WIN32 || $self->{verbose} || !$timeout;
++    # very old perl doesn't support dup(2) mode ('>&')
++    # fallback to system()
++    return $self->run_command($cmd) if ref($cmd) eq 'CODE' || WIN32 || $self->{verbose} || !$timeout || $] < 5.008;
+ 
+     my $pid = fork;
+     if ($pid) {
+@@ -2362,7 +2366,7 @@
  
      require JSON::PP;
      open my $fh, ">", "blib/meta/install.json" or die $!;

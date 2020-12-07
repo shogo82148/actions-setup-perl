@@ -449,6 +449,13 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Scalar::Util 1.08
       Test::More 0
+  JSON-PP-Compat5006-1.09
+    pathname: M/MA/MAKAMAKA/JSON-PP-Compat5006-1.09.tar.gz
+    provides:
+      JSON::PP::Compat5006 1.09
+    requirements:
+      ExtUtils::MakeMaker 0
+      Test::More 0
   Locale-Maketext-Simple-0.21
     pathname: J/JE/JESSE/Locale-Maketext-Simple-0.21.tar.gz
     provides:

@@ -854,10 +854,10 @@ DISTRIBUTIONS
       Scalar::Util 1.18
       XSLoader 0.22
       parent 0
-  Parse-PMFile-0.42
-    pathname: I/IS/ISHIGAKI/Parse-PMFile-0.42.tar.gz
+  Parse-PMFile-0.43
+    pathname: I/IS/ISHIGAKI/Parse-PMFile-0.43.tar.gz
     provides:
-      Parse::PMFile 0.42
+      Parse::PMFile 0.43
     requirements:
       Dumpvalue 0
       ExtUtils::MakeMaker 0

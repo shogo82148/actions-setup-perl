@@ -348,11 +348,11 @@ DISTRIBUTIONS
       Scalar::Util 0
       perl 5.006002
       strict 0
-  LWP-Protocol-https-6.09
-    pathname: O/OA/OALDERS/LWP-Protocol-https-6.09.tar.gz
+  LWP-Protocol-https-6.10
+    pathname: O/OA/OALDERS/LWP-Protocol-https-6.10.tar.gz
     provides:
-      LWP::Protocol::https 6.09
-      LWP::Protocol::https::Socket 6.09
+      LWP::Protocol::https 6.10
+      LWP::Protocol::https::Socket 6.10
     requirements:
       ExtUtils::MakeMaker 0
       IO::Socket::SSL 1.54

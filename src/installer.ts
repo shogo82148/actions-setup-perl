@@ -64,6 +64,13 @@ export async function getPerl(version: string, thread: boolean) {
       path += ':' + pre;
     }
     core.exportVariable('LD_LIBRARY_PATH', path);
+  } else if (osPlat === 'darwin') {
+    let path = lib;
+    const pre = process.env['DYLD_LIBRARY_PATH'];
+    if (pre) {
+      path += ':' + pre;
+    }
+    core.exportVariable('DYLD_LIBRARY_PATH', path);
   }
 }
 

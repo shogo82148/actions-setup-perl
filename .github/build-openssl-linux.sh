@@ -47,11 +47,9 @@ echo "::group::build OpenSSL"
 echo "::endgroup::"
 
 # configure for building Net::SSLeay
-cat <<"__END__"  >> "$GITHUB_ENV"
+cat <<__END__  >> "$GITHUB_ENV"
 OPENSSL_PREFIX=$PREFIX
 LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH
-CFLAGS=-I$PREFIX/include $CFLAGS
-LDFLAGS=-L$PREFIX/lib $LDFLAGS
 __END__
 
 export LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH

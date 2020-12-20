@@ -111,6 +111,9 @@ jobs:
       - name: gcc --version
         run: gcc --version
 
+      - name: build OpenSSL
+        run: .github/build-openssl-linux.sh
+
       - uses: actions/cache@v2
         with:
           path: scripts/linux/local

@@ -46,3 +46,6 @@ echo "::group::build OpenSSL"
     make install_sw
 )
 echo "::endgroup::"
+
+# configure for building Net::SSLeay
+echo OPENSSL_PREFIX="$PREFIX" >> "$GITHUB_ENV"

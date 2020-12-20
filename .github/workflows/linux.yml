@@ -54,16 +54,21 @@ jobs:
   build:
     runs-on: ubuntu-18.04
     needs: list
-    timeout-minutes: 15
+    timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix: ${{fromJson(needs.list.outputs.matrix)}}
+    env:
+      PERL_VERSION: ${{ matrix.perl }}
     steps:
       - uses: actions/checkout@v2
       - name: Host perl -V
         run: perl -V
       - name: gcc --version
         run: gcc --version
+
+      - name: build OpenSSL
+        run: .github/build-openssl-linux.sh
 
       - uses: actions/cache@v2
         with:
@@ -79,7 +84,6 @@ jobs:
         run: perl build.pl
         env:
           PERL5LIB: ${{ github.workspace }}/scripts/linux/local/lib/perl5
-          PERL_VERSION: ${{ matrix.perl }}
         working-directory: ./scripts/linux
 
       - name: upload
@@ -87,7 +91,6 @@ jobs:
           ACTIONS_VERSION=v$(cat "$GITHUB_WORKSPACE/package.json" | jq -r .version)
           aws --region us-east-1 s3 cp --acl public-read "$RUNNER_TEMP/perl.tar.xz" "s3://shogo82148-actions-setup-perl/$ACTIONS_VERSION/perl-$PERL_VERSION-linux-x64.tar.xz"
         env:
-          PERL_VERSION: ${{ matrix.perl }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
@@ -98,12 +101,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{fromJson(needs.list.outputs.matrix)}}
+    env:
+      PERL_VERSION: ${{ matrix.perl }}
+      PERL_MULTI_THREAD: "1"
     steps:
       - uses: actions/checkout@v2
       - name: Host perl -V
         run: perl -V
       - name: gcc --version
         run: gcc --version
+
+      - name: build OpenSSL
+        run: .github/build-openssl-linux.sh
 
       - uses: actions/cache@v2
         with:
@@ -119,8 +128,6 @@ jobs:
         run: perl build.pl
         env:
           PERL5LIB: ${{ github.workspace }}/scripts/linux/local/lib/perl5
-          PERL_VERSION: ${{ matrix.perl }}
-          PERL_MULTI_THREAD: "1"
         working-directory: ./scripts/linux
 
       - name: upload
@@ -128,6 +135,5 @@ jobs:
           ACTIONS_VERSION=v$(cat "$GITHUB_WORKSPACE/package.json" | jq -r .version)
           aws --region us-east-1 s3 cp --acl public-read "$RUNNER_TEMP/perl.tar.xz" "s3://shogo82148-actions-setup-perl/$ACTIONS_VERSION/perl-$PERL_VERSION-linux-x64-multi-thread.tar.xz"
         env:
-          PERL_VERSION: ${{ matrix.perl }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

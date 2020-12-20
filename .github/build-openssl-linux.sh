@@ -19,7 +19,6 @@ JOBS=$(nproc)
 
 mkdir -p "$RUNNER_TEMP"
 cd "$RUNNER_TEMP"
-rm -rf ./*
 
 echo "::group::download OpenSSL source"
 (

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# bundle OpenSSL for better compatibility.
+# bundle OpenSSL for better reproducibility.
 
 set -e
 

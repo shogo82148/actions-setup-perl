@@ -1,4 +1,4 @@
-name: update cpanm
+name: test cpanm
 on:
   pull_request:
     paths:

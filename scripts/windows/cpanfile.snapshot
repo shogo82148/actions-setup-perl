@@ -176,12 +176,12 @@ DISTRIBUTIONS
       HTML::Tagset 3.20
     requirements:
       ExtUtils::MakeMaker 0
-  HTTP-Cookies-6.09
-    pathname: O/OA/OALDERS/HTTP-Cookies-6.09.tar.gz
+  HTTP-Cookies-6.10
+    pathname: O/OA/OALDERS/HTTP-Cookies-6.10.tar.gz
     provides:
-      HTTP::Cookies 6.09
-      HTTP::Cookies::Microsoft 6.09
-      HTTP::Cookies::Netscape 6.09
+      HTTP::Cookies 6.10
+      HTTP::Cookies::Microsoft 6.10
+      HTTP::Cookies::Netscape 6.10
     requirements:
       Carp 0
       ExtUtils::MakeMaker 0

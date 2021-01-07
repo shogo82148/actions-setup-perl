@@ -221,19 +221,19 @@ DISTRIBUTIONS
       Time::Zone 0
       perl 5.006002
       strict 0
-  HTTP-Message-6.26
-    pathname: O/OA/OALDERS/HTTP-Message-6.26.tar.gz
+  HTTP-Message-6.27
+    pathname: O/OA/OALDERS/HTTP-Message-6.27.tar.gz
     provides:
-      HTTP::Config 6.26
-      HTTP::Headers 6.26
-      HTTP::Headers::Auth 6.26
-      HTTP::Headers::ETag 6.26
-      HTTP::Headers::Util 6.26
-      HTTP::Message 6.26
-      HTTP::Request 6.26
-      HTTP::Request::Common 6.26
-      HTTP::Response 6.26
-      HTTP::Status 6.26
+      HTTP::Config 6.27
+      HTTP::Headers 6.27
+      HTTP::Headers::Auth 6.27
+      HTTP::Headers::ETag 6.27
+      HTTP::Headers::Util 6.27
+      HTTP::Message 6.27
+      HTTP::Request 6.27
+      HTTP::Request::Common 6.27
+      HTTP::Response 6.27
+      HTTP::Status 6.27
     requirements:
       Carp 0
       Compress::Raw::Zlib 0

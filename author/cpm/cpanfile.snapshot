@@ -8,10 +8,10 @@ DISTRIBUTIONS
       Carp 0.01
       ExtUtils::MakeMaker 0
       perl 5.006
-  App-cpm-0.996
-    pathname: S/SK/SKAJI/App-cpm-0.996.tar.gz
+  App-cpm-0.997000
+    pathname: S/SK/SKAJI/App-cpm-0.997000.tar.gz
     provides:
-      App::cpm 0.996
+      App::cpm 0.997000
       App::cpm::CLI undef
       App::cpm::CircularDependency undef
       App::cpm::DistNotation undef
@@ -46,6 +46,7 @@ DISTRIBUTIONS
       CPAN::Meta::YAML 0
       Class::Tiny 0
       Command::Runner 0.100
+      ExtUtils::Install 2.20
       ExtUtils::InstallPaths 0.002
       File::Copy::Recursive 0
       File::pushd 0
@@ -56,6 +57,7 @@ DISTRIBUTIONS
       Module::CPANfile 0
       Module::Metadata 0
       Parallel::Pipes 0.004
+      Parse::PMFile 0.43
       local::lib 2.000018
       parent 0
       perl 5.008001
@@ -292,6 +294,26 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
+  ExtUtils-Install-2.20
+    pathname: B/BI/BINGOS/ExtUtils-Install-2.20.tar.gz
+    provides:
+      ExtUtils::Install 2.20
+      ExtUtils::Install::Warn 2.20
+      ExtUtils::Installed 2.20
+      ExtUtils::Packlist 2.20
+    requirements:
+      Carp 0
+      Cwd 0
+      ExtUtils::MakeMaker 0
+      File::Basename 0
+      File::Compare 0
+      File::Copy 0
+      File::Find 0
+      File::Path 0
+      File::Spec 0
+      File::Temp 0
+      Test::More 0.47
+      perl 5.006
   ExtUtils-InstallPaths-0.012
     pathname: L/LE/LEONT/ExtUtils-InstallPaths-0.012.tar.gz
     provides:

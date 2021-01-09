@@ -56,6 +56,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{fromJson(needs.list.outputs.matrix)}}
+    env:
+      PERL_VERSION: ${{ matrix.perl }}
     steps:
       - uses: actions/checkout@v2
 
@@ -101,7 +103,6 @@ jobs:
         shell: cmd
         run: perl build.pl
         env:
-          PERL_VERSION: ${{ matrix.perl }}
           PERL5LIB: ${{ github.workspace }}/scripts/windows/local/lib/perl5
           # PERL_DL_DEBUG: "10" # enables debugging
         working-directory: ./scripts/windows
@@ -149,6 +150,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{fromJson(needs.list.outputs.matrix)}}
+    env:
+      PERL_VERSION: ${{ matrix.perl }}
+      PERL_MULTI_THREAD: "1"
     steps:
       - uses: actions/checkout@v2
 
@@ -194,10 +198,8 @@ jobs:
         shell: cmd
         run: perl build.pl
         env:
-          PERL_VERSION: ${{ matrix.perl }}
           PERL5LIB: ${{ github.workspace }}/scripts/windows/local/lib/perl5
           # PERL_DL_DEBUG: "10" # enables debugging
-          PERL_MULTI_THREAD: "1"
         working-directory: ./scripts/windows
 
       - uses: actions/upload-artifact@v1

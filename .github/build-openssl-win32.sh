@@ -12,7 +12,7 @@ PERL_DIR=perl
 if [[ "x$PERL_MULTI_THREAD" != "x" ]]; then
     PERL_DIR="$PERL_DIR-thr"
 fi
-PREFIX=$(cygpath "$RUNNER_TOOL_CACHE\perl\${{ matrix.perl }}\x64")
+PREFIX=$(cygpath "$RUNNER_TOOL_CACHE\\perl\\$PERL_VERSION\\x64")
 
 # detect the number of CPU Core
 JOBS=$(nproc)

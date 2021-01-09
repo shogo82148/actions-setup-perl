@@ -25,7 +25,7 @@ echo "::group::download OpenSSL source"
 (
     set -eux
     cd "$RUNNER_TEMP"
-    curl -sSL "https://github.com/openssl/openssl/archive/OpenSSL_$OPENSSL_VERSION.tar.gz" -o openssl.tar.gz
+    curl --retry 3 -sSL "https://github.com/openssl/openssl/archive/OpenSSL_$OPENSSL_VERSION.tar.gz" -o openssl.tar.gz
 )
 echo "::endgroup::"
 

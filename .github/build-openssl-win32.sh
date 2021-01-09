@@ -2,7 +2,7 @@
 
 # bundle OpenSSL for better reproducibility.
 
-set -eux
+set -e
 
 OPENSSL_VERSION=1_1_1i
 ROOT=$(cd "$(dirname "$0")" && pwd)

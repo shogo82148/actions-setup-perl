@@ -459,13 +459,13 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Test 0
       perl 5.006
-  Net-HTTP-6.19
-    pathname: O/OA/OALDERS/Net-HTTP-6.19.tar.gz
+  Net-HTTP-6.20
+    pathname: O/OA/OALDERS/Net-HTTP-6.20.tar.gz
     provides:
-      Net::HTTP 6.19
-      Net::HTTP::Methods 6.19
-      Net::HTTP::NB 6.19
-      Net::HTTPS 6.19
+      Net::HTTP 6.20
+      Net::HTTP::Methods 6.20
+      Net::HTTP::NB 6.20
+      Net::HTTPS 6.20
     requirements:
       Carp 0
       Compress::Raw::Zlib 0
@@ -476,7 +476,6 @@ DISTRIBUTIONS
       base 0
       perl 5.006002
       strict 0
-      vars 0
       warnings 0
   TimeDate-2.33
     pathname: A/AT/ATOOMIC/TimeDate-2.33.tar.gz

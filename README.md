@@ -109,6 +109,7 @@ The following Perl scripts are pre-installed for convenience.
 - Net::SSLeay
 - IO::Socket::SSL
 - Mozilla::CA
+- Win32 (installed from CPAN in perl 5.8.3 or earlier. From perl 5.8.4, it is installed as a core module.)
 
 ## Actions::Core
 

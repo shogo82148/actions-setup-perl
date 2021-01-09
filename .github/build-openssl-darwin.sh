@@ -43,7 +43,7 @@ echo "::group::build OpenSSL"
     cd "$RUNNER_TEMP/openssl-OpenSSL_$OPENSSL_VERSION"
     ./Configure --prefix="$PREFIX" darwin64-x86_64-cc
     make "-j$JOBS"
-    make install_sw
+    make install_sw install_ssldirs
 )
 echo "::endgroup::"
 

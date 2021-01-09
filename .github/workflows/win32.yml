@@ -71,7 +71,7 @@ jobs:
           cd "openssl-OpenSSL_$OPENSSL_VERSION"
           perl Configure --prefix="$(cygpath "$RUNNER_TOOL_CACHE\perl\${{ matrix.perl }}\x64")" mingw64
           make "-j$(nproc)"
-          make install_sw
+          make install_sw install_ssldirs
         shell: "msys2 {0}"
 
       - name: setup host perl

@@ -7,6 +7,7 @@ on:
       - "scripts/linux/**"
       - "scripts/lib/Devel/**"
       - ".github/workflows/linux.yml"
+      - ".github/build-openssl-linux.sh"
   push:
     branches:
       - "releases/*"

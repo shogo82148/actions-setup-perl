@@ -7,6 +7,7 @@ on:
       - "scripts/windows/**"
       - "scripts/lib/Devel/**"
       - ".github/workflows/win32.yml"
+      - ".github/build-openssl-win32.sh"
   push:
     branches:
       - "releases/*"

@@ -8,11 +8,11 @@ OPENSSL_VERSION=1_1_1i
 ROOT=$(cd "$(dirname "$0")" && pwd)
 : "${RUNNER_TEMP:=$ROOT/working}"
 : "${RUNNER_TOOL_CACHE:=$RUNNER_TEMP/dist}"
-PERL_DIR=perl
+PERL_DIR=$PERL_VERSION
 if [[ "x$PERL_MULTI_THREAD" != "x" ]]; then
     PERL_DIR="$PERL_DIR-thr"
 fi
-PREFIX=$RUNNER_TOOL_CACHE/$PERL_DIR/$PERL_VERSION/x64
+PREFIX=$RUNNER_TOOL_CACHE/perl/$PERL_DIR/x64
 
 # detect the number of CPU Core
 JOBS=$(nproc)

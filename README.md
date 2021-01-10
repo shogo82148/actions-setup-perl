@@ -204,3 +204,6 @@ jobs:
 # License
 
 The scripts and documentation in this project are released under the [MIT License](LICENSE.md)
+
+The Raptor in `social-preview.svg` is licensed under the CC-SA License, Version 4.0 [https://creativecommons.org/licenses/by-sa/4.0/](https://creativecommons.org/licenses/by-sa/4.0/). Copyright (C) 2012, Sebastian Riedel.
+https://github.com/kraih/perl-raptor

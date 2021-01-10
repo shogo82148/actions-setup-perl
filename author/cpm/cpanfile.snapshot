@@ -8,10 +8,10 @@ DISTRIBUTIONS
       Carp 0.01
       ExtUtils::MakeMaker 0
       perl 5.006
-  App-cpm-0.996
-    pathname: S/SK/SKAJI/App-cpm-0.996.tar.gz
+  App-cpm-0.997000
+    pathname: S/SK/SKAJI/App-cpm-0.997000.tar.gz
     provides:
-      App::cpm 0.996
+      App::cpm 0.997000
       App::cpm::CLI undef
       App::cpm::CircularDependency undef
       App::cpm::DistNotation undef
@@ -46,6 +46,7 @@ DISTRIBUTIONS
       CPAN::Meta::YAML 0
       Class::Tiny 0
       Command::Runner 0.100
+      ExtUtils::Install 2.20
       ExtUtils::InstallPaths 0.002
       File::Copy::Recursive 0
       File::pushd 0
@@ -56,6 +57,7 @@ DISTRIBUTIONS
       Module::CPANfile 0
       Module::Metadata 0
       Parallel::Pipes 0.004
+      Parse::PMFile 0.43
       local::lib 2.000018
       parent 0
       perl 5.008001
@@ -292,6 +294,26 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
+  ExtUtils-Install-2.20
+    pathname: B/BI/BINGOS/ExtUtils-Install-2.20.tar.gz
+    provides:
+      ExtUtils::Install 2.20
+      ExtUtils::Install::Warn 2.20
+      ExtUtils::Installed 2.20
+      ExtUtils::Packlist 2.20
+    requirements:
+      Carp 0
+      Cwd 0
+      ExtUtils::MakeMaker 0
+      File::Basename 0
+      File::Compare 0
+      File::Copy 0
+      File::Find 0
+      File::Path 0
+      File::Spec 0
+      File::Temp 0
+      Test::More 0.47
+      perl 5.006
   ExtUtils-InstallPaths-0.012
     pathname: L/LE/LEONT/ExtUtils-InstallPaths-0.012.tar.gz
     provides:
@@ -304,45 +326,45 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  ExtUtils-MakeMaker-7.56
-    pathname: B/BI/BINGOS/ExtUtils-MakeMaker-7.56.tar.gz
+  ExtUtils-MakeMaker-7.58
+    pathname: B/BI/BINGOS/ExtUtils-MakeMaker-7.58.tar.gz
     provides:
-      ExtUtils::Command 7.56
-      ExtUtils::Command::MM 7.56
-      ExtUtils::Liblist 7.56
-      ExtUtils::Liblist::Kid 7.56
-      ExtUtils::MM 7.56
-      ExtUtils::MM_AIX 7.56
-      ExtUtils::MM_Any 7.56
-      ExtUtils::MM_BeOS 7.56
-      ExtUtils::MM_Cygwin 7.56
-      ExtUtils::MM_DOS 7.56
-      ExtUtils::MM_Darwin 7.56
-      ExtUtils::MM_MacOS 7.56
-      ExtUtils::MM_NW5 7.56
-      ExtUtils::MM_OS2 7.56
-      ExtUtils::MM_OS390 7.56
-      ExtUtils::MM_QNX 7.56
-      ExtUtils::MM_UWIN 7.56
-      ExtUtils::MM_Unix 7.56
-      ExtUtils::MM_VMS 7.56
-      ExtUtils::MM_VOS 7.56
-      ExtUtils::MM_Win32 7.56
-      ExtUtils::MM_Win95 7.56
-      ExtUtils::MY 7.56
-      ExtUtils::MakeMaker 7.56
-      ExtUtils::MakeMaker::Config 7.56
-      ExtUtils::MakeMaker::Locale 7.56
-      ExtUtils::MakeMaker::_version 7.56
-      ExtUtils::MakeMaker::charstar 7.56
-      ExtUtils::MakeMaker::version 7.56
-      ExtUtils::MakeMaker::version::regex 7.56
-      ExtUtils::MakeMaker::version::vpp 7.56
-      ExtUtils::Mkbootstrap 7.56
-      ExtUtils::Mksymlists 7.56
-      ExtUtils::testlib 7.56
-      MM 7.56
-      MY 7.56
+      ExtUtils::Command 7.58
+      ExtUtils::Command::MM 7.58
+      ExtUtils::Liblist 7.58
+      ExtUtils::Liblist::Kid 7.58
+      ExtUtils::MM 7.58
+      ExtUtils::MM_AIX 7.58
+      ExtUtils::MM_Any 7.58
+      ExtUtils::MM_BeOS 7.58
+      ExtUtils::MM_Cygwin 7.58
+      ExtUtils::MM_DOS 7.58
+      ExtUtils::MM_Darwin 7.58
+      ExtUtils::MM_MacOS 7.58
+      ExtUtils::MM_NW5 7.58
+      ExtUtils::MM_OS2 7.58
+      ExtUtils::MM_OS390 7.58
+      ExtUtils::MM_QNX 7.58
+      ExtUtils::MM_UWIN 7.58
+      ExtUtils::MM_Unix 7.58
+      ExtUtils::MM_VMS 7.58
+      ExtUtils::MM_VOS 7.58
+      ExtUtils::MM_Win32 7.58
+      ExtUtils::MM_Win95 7.58
+      ExtUtils::MY 7.58
+      ExtUtils::MakeMaker 7.58
+      ExtUtils::MakeMaker::Config 7.58
+      ExtUtils::MakeMaker::Locale 7.58
+      ExtUtils::MakeMaker::_version 7.58
+      ExtUtils::MakeMaker::charstar 7.58
+      ExtUtils::MakeMaker::version 7.58
+      ExtUtils::MakeMaker::version::regex 7.58
+      ExtUtils::MakeMaker::version::vpp 7.58
+      ExtUtils::Mkbootstrap 7.58
+      ExtUtils::Mksymlists 7.58
+      ExtUtils::testlib 7.58
+      MM 7.58
+      MY 7.58
     requirements:
       Data::Dumper 0
       Encode 0
@@ -670,11 +692,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20201120
-    pathname: B/BI/BINGOS/Module-CoreList-5.20201120.tar.gz
+  Module-CoreList-5.20201220
+    pathname: B/BI/BINGOS/Module-CoreList-5.20201220.tar.gz
     provides:
-      Module::CoreList 5.20201120
-      Module::CoreList::Utils 5.20201120
+      Module::CoreList 5.20201220
+      Module::CoreList::Utils 5.20201220
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0

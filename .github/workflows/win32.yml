@@ -7,6 +7,7 @@ on:
       - "scripts/windows/**"
       - "scripts/lib/Devel/**"
       - ".github/workflows/win32.yml"
+      - ".github/build-openssl-win32.sh"
   push:
     branches:
       - "releases/*"
@@ -56,6 +57,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{fromJson(needs.list.outputs.matrix)}}
+    env:
+      PERL_VERSION: ${{ matrix.perl }}
     steps:
       - uses: actions/checkout@v2
 
@@ -63,15 +66,7 @@ jobs:
         with:
           install: make mingw-w64-x86_64-gcc nasm
       - name: install OpenSSL
-        run: |
-          set -eux
-          OPENSSL_VERSION=1_1_1h
-          curl --retry 3 -sSL "https://github.com/openssl/openssl/archive/OpenSSL_$OPENSSL_VERSION.tar.gz" -o openssl.tar.gz
-          tar xzf openssl.tar.gz
-          cd "openssl-OpenSSL_$OPENSSL_VERSION"
-          perl Configure --prefix="$(cygpath "$RUNNER_TOOL_CACHE\perl\${{ matrix.perl }}\x64")" mingw64
-          make "-j$(nproc)"
-          make install_sw
+        run: .github/build-openssl-win32.sh
         shell: "msys2 {0}"
 
       - name: setup host perl
@@ -109,7 +104,6 @@ jobs:
         shell: cmd
         run: perl build.pl
         env:
-          PERL_VERSION: ${{ matrix.perl }}
           PERL5LIB: ${{ github.workspace }}/scripts/windows/local/lib/perl5
           # PERL_DL_DEBUG: "10" # enables debugging
         working-directory: ./scripts/windows
@@ -157,6 +151,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{fromJson(needs.list.outputs.matrix)}}
+    env:
+      PERL_VERSION: ${{ matrix.perl }}
+      PERL_MULTI_THREAD: "1"
     steps:
       - uses: actions/checkout@v2
 
@@ -164,15 +161,7 @@ jobs:
         with:
           install: make mingw-w64-x86_64-gcc nasm
       - name: install OpenSSL
-        run: |
-          set -eux
-          OPENSSL_VERSION=1_1_1h
-          curl --retry 3 -sSL "https://github.com/openssl/openssl/archive/OpenSSL_$OPENSSL_VERSION.tar.gz" -o openssl.tar.gz
-          tar xzf openssl.tar.gz
-          cd "openssl-OpenSSL_$OPENSSL_VERSION"
-          perl Configure --prefix="$(cygpath "$RUNNER_TOOL_CACHE\perl\${{ matrix.perl }}-thr\x64")" mingw64
-          make "-j$(nproc)"
-          make install_sw
+        run: .github/build-openssl-win32.sh
         shell: "msys2 {0}"
 
       - name: setup host perl
@@ -210,10 +199,8 @@ jobs:
         shell: cmd
         run: perl build.pl
         env:
-          PERL_VERSION: ${{ matrix.perl }}
           PERL5LIB: ${{ github.workspace }}/scripts/windows/local/lib/perl5
           # PERL_DL_DEBUG: "10" # enables debugging
-          PERL_MULTI_THREAD: "1"
         working-directory: ./scripts/windows
 
       - uses: actions/upload-artifact@v1

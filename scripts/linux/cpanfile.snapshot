@@ -1,9 +1,9 @@
 # carton snapshot format: version 1.0
 DISTRIBUTIONS
-  CPAN-Perl-Releases-5.20201120
-    pathname: B/BI/BINGOS/CPAN-Perl-Releases-5.20201120.tar.gz
+  CPAN-Perl-Releases-5.20210109
+    pathname: B/BI/BINGOS/CPAN-Perl-Releases-5.20210109.tar.gz
     provides:
-      CPAN::Perl::Releases 5.20201120
+      CPAN::Perl::Releases 5.20210109
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006000
@@ -23,12 +23,12 @@ DISTRIBUTIONS
       Canary::Stability 2013
     requirements:
       ExtUtils::MakeMaker 0
-  Devel-PatchPerl-2.04
-    pathname: B/BI/BINGOS/Devel-PatchPerl-2.04.tar.gz
+  Devel-PatchPerl-2.06
+    pathname: B/BI/BINGOS/Devel-PatchPerl-2.06.tar.gz
     provides:
-      Devel::PatchPerl 2.04
-      Devel::PatchPerl::Hints 2.04
-      Devel::PatchPerl::Plugin 2.04
+      Devel::PatchPerl 2.06
+      Devel::PatchPerl::Hints 2.06
+      Devel::PatchPerl::Plugin 2.06
     requirements:
       ExtUtils::MakeMaker 0
       File::pushd 1.00

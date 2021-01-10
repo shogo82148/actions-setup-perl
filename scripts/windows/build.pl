@@ -158,6 +158,9 @@ sub run {
     };
 
     group "install common CPAN modules" => sub {
+        # Win32
+        cpan_install('https://cpan.metacpan.org/authors/id/J/JD/JDB/Win32-0.54.tar.gz', 'Win32', '5.6.0', '5.8.3');
+
         # JSON
         cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-4.02.tar.gz', 'JSON', '5.5.3');
 

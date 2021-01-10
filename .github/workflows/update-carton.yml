@@ -8,10 +8,17 @@ jobs:
   carton:
     runs-on: ubuntu-latest
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          token: ${{ secrets.SHOGO_GITHUB_TOKEN }}
+          token: ${{ steps.generate_token.outputs.token }}
 
       - name: update cpanfile.snapshot
         run: make update
@@ -27,7 +34,7 @@ jobs:
 
       - name: commit
         env:
-          TOKEN: ${{ secrets.SHOGO_GITHUB_TOKEN }}
+          TOKEN: ${{ steps.generate_token.outputs.token }}
         run: |
           branch=update-carton-$(date +"%Y-%m-%d-%H-%M-%S")
           git config --global user.name "Ichinose Shogo"

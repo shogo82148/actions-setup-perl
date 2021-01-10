@@ -83,10 +83,18 @@ jobs:
       - darwin
       - windows
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+
       - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+          token: ${{ steps.generate_token.outputs.token }}
       - name: cleanup
         run: |
           rm -f scripts/linux/cpanfile.snapshot
@@ -111,7 +119,7 @@ jobs:
 
       - name: commit
         env:
-          TOKEN: ${{ secrets.SHOGO_GITHUB_TOKEN }}
+          TOKEN: ${{ steps.generate_token.outputs.token }}
         run: |
           branch=update-build-tools-$(date +"%Y-%m-%d-%H-%M-%S")
           git config --global user.name "Ichinose Shogo"

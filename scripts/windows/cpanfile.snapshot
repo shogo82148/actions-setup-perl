@@ -16,12 +16,12 @@ DISTRIBUTIONS
       Canary::Stability 2013
     requirements:
       ExtUtils::MakeMaker 0
-  Devel-PatchPerl-2.04
-    pathname: B/BI/BINGOS/Devel-PatchPerl-2.04.tar.gz
+  Devel-PatchPerl-2.06
+    pathname: B/BI/BINGOS/Devel-PatchPerl-2.06.tar.gz
     provides:
-      Devel::PatchPerl 2.04
-      Devel::PatchPerl::Hints 2.04
-      Devel::PatchPerl::Plugin 2.04
+      Devel::PatchPerl 2.06
+      Devel::PatchPerl::Hints 2.06
+      Devel::PatchPerl::Plugin 2.06
     requirements:
       ExtUtils::MakeMaker 0
       File::pushd 1.00
@@ -176,12 +176,12 @@ DISTRIBUTIONS
       HTML::Tagset 3.20
     requirements:
       ExtUtils::MakeMaker 0
-  HTTP-Cookies-6.09
-    pathname: O/OA/OALDERS/HTTP-Cookies-6.09.tar.gz
+  HTTP-Cookies-6.10
+    pathname: O/OA/OALDERS/HTTP-Cookies-6.10.tar.gz
     provides:
-      HTTP::Cookies 6.09
-      HTTP::Cookies::Microsoft 6.09
-      HTTP::Cookies::Netscape 6.09
+      HTTP::Cookies 6.10
+      HTTP::Cookies::Microsoft 6.10
+      HTTP::Cookies::Netscape 6.10
     requirements:
       Carp 0
       ExtUtils::MakeMaker 0
@@ -221,19 +221,19 @@ DISTRIBUTIONS
       Time::Zone 0
       perl 5.006002
       strict 0
-  HTTP-Message-6.26
-    pathname: O/OA/OALDERS/HTTP-Message-6.26.tar.gz
+  HTTP-Message-6.27
+    pathname: O/OA/OALDERS/HTTP-Message-6.27.tar.gz
     provides:
-      HTTP::Config 6.26
-      HTTP::Headers 6.26
-      HTTP::Headers::Auth 6.26
-      HTTP::Headers::ETag 6.26
-      HTTP::Headers::Util 6.26
-      HTTP::Message 6.26
-      HTTP::Request 6.26
-      HTTP::Request::Common 6.26
-      HTTP::Response 6.26
-      HTTP::Status 6.26
+      HTTP::Config 6.27
+      HTTP::Headers 6.27
+      HTTP::Headers::Auth 6.27
+      HTTP::Headers::ETag 6.27
+      HTTP::Headers::Util 6.27
+      HTTP::Message 6.27
+      HTTP::Request 6.27
+      HTTP::Request::Common 6.27
+      HTTP::Response 6.27
+      HTTP::Status 6.27
     requirements:
       Carp 0
       Compress::Raw::Zlib 0
@@ -348,11 +348,11 @@ DISTRIBUTIONS
       Scalar::Util 0
       perl 5.006002
       strict 0
-  LWP-Protocol-https-6.09
-    pathname: O/OA/OALDERS/LWP-Protocol-https-6.09.tar.gz
+  LWP-Protocol-https-6.10
+    pathname: O/OA/OALDERS/LWP-Protocol-https-6.10.tar.gz
     provides:
-      LWP::Protocol::https 6.09
-      LWP::Protocol::https::Socket 6.09
+      LWP::Protocol::https 6.10
+      LWP::Protocol::https::Socket 6.10
     requirements:
       ExtUtils::MakeMaker 0
       IO::Socket::SSL 1.54
@@ -459,13 +459,13 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Test 0
       perl 5.006
-  Net-HTTP-6.19
-    pathname: O/OA/OALDERS/Net-HTTP-6.19.tar.gz
+  Net-HTTP-6.20
+    pathname: O/OA/OALDERS/Net-HTTP-6.20.tar.gz
     provides:
-      Net::HTTP 6.19
-      Net::HTTP::Methods 6.19
-      Net::HTTP::NB 6.19
-      Net::HTTPS 6.19
+      Net::HTTP 6.20
+      Net::HTTP::Methods 6.20
+      Net::HTTP::NB 6.20
+      Net::HTTPS 6.20
     requirements:
       Carp 0
       Compress::Raw::Zlib 0
@@ -476,7 +476,6 @@ DISTRIBUTIONS
       base 0
       perl 5.006002
       strict 0
-      vars 0
       warnings 0
   TimeDate-2.33
     pathname: A/AT/ATOOMIC/TimeDate-2.33.tar.gz
@@ -633,32 +632,32 @@ DISTRIBUTIONS
       common::sense 3.75
     requirements:
       ExtUtils::MakeMaker 0
-  libwww-perl-6.50
-    pathname: O/OA/OALDERS/libwww-perl-6.50.tar.gz
+  libwww-perl-6.52
+    pathname: O/OA/OALDERS/libwww-perl-6.52.tar.gz
     provides:
-      LWP 6.50
-      LWP::Authen::Basic 6.50
-      LWP::Authen::Digest 6.50
-      LWP::Authen::Ntlm 6.50
-      LWP::ConnCache 6.50
-      LWP::Debug 6.50
-      LWP::Debug::TraceHTTP 6.50
-      LWP::DebugFile 6.50
-      LWP::MemberMixin 6.50
-      LWP::Protocol 6.50
-      LWP::Protocol::cpan 6.50
-      LWP::Protocol::data 6.50
-      LWP::Protocol::file 6.50
-      LWP::Protocol::ftp 6.50
-      LWP::Protocol::gopher 6.50
-      LWP::Protocol::http 6.50
-      LWP::Protocol::loopback 6.50
-      LWP::Protocol::mailto 6.50
-      LWP::Protocol::nntp 6.50
-      LWP::Protocol::nogo 6.50
-      LWP::RobotUA 6.50
-      LWP::Simple 6.50
-      LWP::UserAgent 6.50
+      LWP 6.52
+      LWP::Authen::Basic 6.52
+      LWP::Authen::Digest 6.52
+      LWP::Authen::Ntlm 6.52
+      LWP::ConnCache 6.52
+      LWP::Debug 6.52
+      LWP::Debug::TraceHTTP 6.52
+      LWP::DebugFile 6.52
+      LWP::MemberMixin 6.52
+      LWP::Protocol 6.52
+      LWP::Protocol::cpan 6.52
+      LWP::Protocol::data 6.52
+      LWP::Protocol::file 6.52
+      LWP::Protocol::ftp 6.52
+      LWP::Protocol::gopher 6.52
+      LWP::Protocol::http 6.52
+      LWP::Protocol::loopback 6.52
+      LWP::Protocol::mailto 6.52
+      LWP::Protocol::nntp 6.52
+      LWP::Protocol::nogo 6.52
+      LWP::RobotUA 6.52
+      LWP::Simple 6.52
+      LWP::UserAgent 6.52
       libwww::perl undef
     requirements:
       CPAN::Meta::Requirements 2.120620

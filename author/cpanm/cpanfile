@@ -18,6 +18,7 @@ requires 'ExtUtils::Helpers', '0.020';
 requires 'ExtUtils::InstallPaths', 0.002;
 requires 'ExtUtils::MakeMaker', '7.52';
 requires 'ExtUtils::Manifest', '1.70';
+requires 'ExtUtils::PL2Bat', '0.003';
 requires 'File::Temp';
 requires 'File::Which';
 requires 'File::pushd';

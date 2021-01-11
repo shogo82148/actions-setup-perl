@@ -1,0 +1,133 @@
+name: update cpanfile.snapshot of build tools
+on:
+  push:
+    paths:
+      - "scripts/*/cpanfile"
+      - ".github/workflows/update-build-tools.yml"
+    branches-ignore:
+      - "update-build-tools-*"
+  schedule:
+    - cron: "27 23 * * *"
+  workflow_dispatch:
+
+jobs:
+  linux:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: carton install
+        shell: bash
+        run: |
+          rm -f cpanfile.snapshot
+          ../../bin/carton install
+        working-directory: ./scripts/linux
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: cpanfile.snapshot-linux
+          path: scripts/linux/cpanfile.snapshot
+
+  darwin:
+    runs-on: macos-latest
+    steps:
+      - name: setup host perl
+        run: perl -MConfig -E 'say "$Config{bin}"' >> $GITHUB_PATH
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: carton install
+        shell: bash
+        run: |
+          rm -f cpanfile.snapshot
+          ../../bin/carton install
+        working-directory: ./scripts/darwin
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: cpanfile.snapshot-darwin
+          path: scripts/darwin/cpanfile.snapshot
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - name: setup host perl
+        shell: bash
+        run: |
+          cat << 'END_OF_PATH' >> $GITHUB_PATH
+          C:\MinGW\bin
+          C:\strawberry\perl\site\bin
+          C:\strawberry\perl\bin
+          END_OF_PATH
+
+      - name: Checkout
+        uses: actions/checkout@v2
+      - run: "rm -f scripts/windows/cpanfile.snapshot"
+        shell: bash
+
+      - name: carton install
+        shell: cmd
+        run: ..\..\bin\carton install
+        working-directory: ./scripts/windows
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: cpanfile.snapshot-windows
+          path: scripts/windows/cpanfile.snapshot
+
+  commit:
+    runs-on: ubuntu-latest
+    needs:
+      - linux
+      - darwin
+      - windows
+    steps:
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          token: ${{ steps.generate_token.outputs.token }}
+      - name: cleanup
+        run: |
+          rm -f scripts/linux/cpanfile.snapshot
+          rm -f scripts/darwin/cpanfile.snapshot
+          rm -f scripts/windows/cpanfile.snapshot
+
+      - name: download cpanfile.snapshot for linux
+        uses: actions/download-artifact@v1
+        with:
+          name: cpanfile.snapshot-linux
+          path: scripts/linux
+      - name: download cpanfile.snapshot for darwin
+        uses: actions/download-artifact@v1
+        with:
+          name: cpanfile.snapshot-darwin
+          path: scripts/darwin
+      - name: download cpanfile.snapshot for windows
+        uses: actions/download-artifact@v1
+        with:
+          name: cpanfile.snapshot-windows
+          path: scripts/windows
+
+      - name: commit
+        env:
+          TOKEN: ${{ steps.generate_token.outputs.token }}
+        run: |
+          branch=update-build-tools-$(date +"%Y-%m-%d-%H-%M-%S")
+          git config --global user.name "Ichinose Shogo"
+          git config --global user.email shogo82148@gmail.com
+          git switch -c "$branch"
+          git add .
+          git commit -m "Update cpanfile.snapshot $(date +"%Y-%m-%d %H:%M:%S")" || exit 0
+          git push -u origin "$branch"
+          curl -H "Authorization: token $TOKEN" \
+            -d "$(jq --arg branch $branch -n '{ "title": "Auto Update build tools", "base": "main", "head": $branch }')" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls"

@@ -1,0 +1,234 @@
+name: build on windows
+
+on:
+  pull_request:
+    paths:
+      - "versions/win32.json"
+      - "scripts/windows/**"
+      - "scripts/lib/Devel/**"
+      - ".github/workflows/win32.yml"
+      - ".github/build-openssl-win32.sh"
+  push:
+    branches:
+      - "releases/*"
+  schedule:
+    - cron: "29 0 * * 2"
+  workflow_dispatch:
+    inputs:
+      perl-versions:
+        description: perl versions to build (JSON Array)
+        required: false
+        default: ""
+
+jobs:
+  list:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: scripts/windows/local
+          key: ${{ runner.os }}-sanity-check-${{ hashFiles('scripts/windows/cpanfile.snapshot') }}
+      - name: sanity check
+        run: |
+          ../../bin/carton install --deployment
+          ../../bin/carton exec perl -c build.pl
+          ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/GitHubActions.pm
+          ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/MinGW.pm
+          ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/MinGWGNUmakefile.pm
+        working-directory: ./scripts/windows
+      - id: set-matrix
+        name: list available perl versions
+        run: |
+          if [ -n "$PERL_VERSIONS" ]; then
+            echo "::set-output name=matrix::$(printenv PERL_VERSIONS | jq -c '{perl: .}')"
+          else
+            echo "::set-output name=matrix::$(cat versions/win32.json | jq -c '{perl: .}')"
+          fi
+        env:
+          PERL_VERSIONS: ${{ github.event.inputs.perl-versions }}
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+
+  build:
+    runs-on: windows-2019
+    needs: list
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix: ${{fromJson(needs.list.outputs.matrix)}}
+    env:
+      PERL_VERSION: ${{ matrix.perl }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: msys2/setup-msys2@v2
+        with:
+          install: make mingw-w64-x86_64-gcc nasm
+      - name: install OpenSSL
+        run: .github/build-openssl-win32.sh
+        shell: "msys2 {0}"
+
+      - name: setup host perl
+        shell: bash
+        run: |
+          cat << 'END_OF_PATH' >> $GITHUB_PATH
+          C:\MinGW\bin
+          C:\strawberry\perl\site\bin
+          C:\strawberry\perl\bin
+          END_OF_PATH
+      - name: Host perl -V
+        run: perl -V
+      - name: gcc --version
+        run: gcc --version
+
+      # https://support.microsoft.com/en-us/help/254649/overview-of-memory-dump-file-options-for-windows
+      # https://docs.microsoft.com/en-us/windows/win32/wer/collecting-user-mode-dumps
+      - name: "enable Windows Error Reporting, WER"
+        run: |
+          mkdir "${{ runner.temp }}/perl-wer"
+          reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpType /t REG_DWORD /d 2
+          reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpFolder /t REG_EXPAND_SZ /d "${{ runner.temp }}/perl-wer"
+        shell: cmd
+
+      - uses: actions/cache@v2
+        with:
+          path: scripts/windows/local
+          key: ${{ runner.os }}-build-${{ hashFiles('scripts/windows/cpanfile.snapshot') }}
+      - name: carton install
+        shell: cmd
+        run: ../../bin/carton install
+        working-directory: ./scripts/windows
+
+      - name: build
+        shell: cmd
+        run: perl build.pl
+        env:
+          PERL5LIB: ${{ github.workspace }}/scripts/windows/local/lib/perl5
+          # PERL_DL_DEBUG: "10" # enables debugging
+        working-directory: ./scripts/windows
+
+      # for debugging
+      # - uses: actions/upload-artifact@v1
+      #   with:
+      #     name: perl-${{ matrix.perl }}
+      #     path: ${{ runner.temp }}/perl-${{ matrix.perl }}
+      #   if: failure()
+      - uses: actions/upload-artifact@v1
+        with:
+          name: perl-${{ matrix.perl }}-wer
+          path: ${{ runner.temp }}/perl-wer
+        if: failure()
+      - uses: actions/setup-python@v1
+        with:
+          python-version: "3.x"
+        if: failure()
+      - run: |
+          pip install minidump
+          minidump --all *.dmp
+        if: failure()
+        shell: bash
+        working-directory: ${{ runner.temp }}/perl-wer
+
+      - name: upload
+        shell: pwsh
+        run: |
+          Set-Location ${env:RUNNER_TEMP}
+          Invoke-WebRequest -Uri https://github.com/shogo82148/s3cli-mini/releases/download/v0.0.6/s3cli-mini_windows_amd64.zip -OutFile s3cli-mini.zip
+          7z x s3cli-mini.zip
+          $pkg = Get-Content "${env:GITHUB_WORKSPACE}/package.json" -Encoding UTF8 -Raw | ConvertFrom-Json
+          $version = $pkg.version
+          s3cli-mini_windows_amd64/s3cli-mini --region us-east-1 cp --acl public-read perl.zip "s3://shogo82148-actions-setup-perl/v$version/perl-${env:PERL_VERSION}-win32-x64.zip"
+        env:
+          PERL_VERSION: ${{ matrix.perl }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  build-multi-thread:
+    runs-on: windows-2019
+    needs: list
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix: ${{fromJson(needs.list.outputs.matrix)}}
+    env:
+      PERL_VERSION: ${{ matrix.perl }}
+      PERL_MULTI_THREAD: "1"
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: msys2/setup-msys2@v2
+        with:
+          install: make mingw-w64-x86_64-gcc nasm
+      - name: install OpenSSL
+        run: .github/build-openssl-win32.sh
+        shell: "msys2 {0}"
+
+      - name: setup host perl
+        shell: bash
+        run: |
+          cat << 'END_OF_PATH' >> $GITHUB_PATH
+          C:\MinGW\bin
+          C:\strawberry\perl\site\bin
+          C:\strawberry\perl\bin
+          END_OF_PATH
+      - name: Host perl -V
+        run: perl -V
+      - name: gcc --version
+        run: gcc --version
+
+      # https://support.microsoft.com/en-us/help/254649/overview-of-memory-dump-file-options-for-windows
+      # https://docs.microsoft.com/en-us/windows/win32/wer/collecting-user-mode-dumps
+      - name: "enable Windows Error Reporting, WER"
+        run: |
+          mkdir "${{ runner.temp }}/perl-wer"
+          reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpType /t REG_DWORD /d 2
+          reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpFolder /t REG_EXPAND_SZ /d "${{ runner.temp }}/perl-wer"
+        shell: cmd
+
+      - uses: actions/cache@v2
+        with:
+          path: scripts/windows/local
+          key: ${{ runner.os }}-build-${{ hashFiles('scripts/windows/cpanfile.snapshot') }}
+      - name: carton install
+        shell: cmd
+        run: ../../bin/carton install
+        working-directory: ./scripts/windows
+
+      - name: build
+        shell: cmd
+        run: perl build.pl
+        env:
+          PERL5LIB: ${{ github.workspace }}/scripts/windows/local/lib/perl5
+          # PERL_DL_DEBUG: "10" # enables debugging
+        working-directory: ./scripts/windows
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: perl-${{ matrix.perl }}-wer
+          path: ${{ runner.temp }}/perl-wer
+        if: failure()
+      - uses: actions/setup-python@v1
+        with:
+          python-version: "3.x"
+        if: failure()
+      - run: |
+          pip install minidump
+          minidump --all *.dmp
+        if: failure()
+        shell: bash
+        working-directory: ${{ runner.temp }}/perl-wer
+
+      - name: upload
+        shell: pwsh
+        run: |
+          Set-Location ${env:RUNNER_TEMP}
+          Invoke-WebRequest -Uri https://github.com/shogo82148/s3cli-mini/releases/download/v0.0.6/s3cli-mini_windows_amd64.zip -OutFile s3cli-mini.zip
+          7z x s3cli-mini.zip
+          $pkg = Get-Content "${env:GITHUB_WORKSPACE}/package.json" -Encoding UTF8 -Raw | ConvertFrom-Json
+          $version = $pkg.version
+          s3cli-mini_windows_amd64/s3cli-mini --region us-east-1 cp --acl public-read perl.zip "s3://shogo82148-actions-setup-perl/v$version/perl-${env:PERL_VERSION}-win32-x64-multi-thread.zip"
+        env:
+          PERL_VERSION: ${{ matrix.perl }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

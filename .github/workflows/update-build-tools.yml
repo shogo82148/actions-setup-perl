@@ -1,4 +1,4 @@
-name: update cpanfile.snapshot of build tools
+name: update build tools
 on:
   push:
     paths:

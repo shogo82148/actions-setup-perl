@@ -8,15 +8,49 @@
  require VMS::Stdio if $^O eq 'VMS';
  
  # pre-emptively load Carp::Heavy. If we don't when we run out of file
-@@ -1181,7 +1180,10 @@
- # refaddr() demands one parameter only, whereas overload.pm calls with three
- # even for unary operations like '0+'.
- sub NUMIFY {
--  return refaddr($_[0]);
-+  # Scalar::Util::refaddr can't be used on perl v5.8.0 or older.
-+  # We does'nt use this function, so just return 0 here.
-+  # return refaddr($_[0]);
-+  return 0;
+@@ -960,7 +959,11 @@
+     # make sure we save the absolute path for later cleanup
+     # OK to untaint because we only ever use this internally
+     # as a file path, never interpolating into the shell
+-    $fname = Cwd::abs_path($fname);
++
++    # use File::Spec->rel2abs instead of Cwd::abs_path.
++    # because very old Cwd::abs_path doesn't work with normal files.
++    use File::Spec;
++    $fname = File::Spec->rel2abs($fname);
+     ($fname) = $fname =~ /^(.*)$/;
+ 
+     # If we have a directory, check that it is a directory
+@@ -1184,6 +1187,32 @@ sub NUMIFY {
+   return refaddr($_[0]);
  }
  
- #pod =item B<dirname>
++# from https://github.com/makamaka/JSON-PP/blob/70dc2b90c257d8b72c115ef891d24c2a2cd02578/lib/JSON/PP.pm#L1435-L1489
++BEGIN {
++  eval 'require Scalar::Util';
++  unless($@){
++    *File::Temp::refaddr = \&Scalar::Util::refaddr;
++  } else {
++    *File::Temp::refaddr = sub {
++      return undef unless length(ref($_[0]));
++
++      my $addr;
++      if(defined(my $pkg = blessed($_[0]))) {
++        $addr .= bless $_[0], 'Scalar::Util::Fake';
++        bless $_[0], $pkg;
++      }
++      else {
++        $addr .= $_[0]
++      }
++
++      $addr =~ /0x(\w+)/;
++      local $^W;
++      #no warnings 'portable';
++      hex($1);
++    }
++  }
++}
++
+ =item B<dirname>
+ 
+ Return the name of the temporary directory associated with this

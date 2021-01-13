@@ -45,3 +45,12 @@ echo "::group::build OpenSSL"
     make install_sw install_ssldirs
 )
 echo "::endgroup::"
+
+# configure for building Net::SSLeay
+cat <<__END__  >> "$GITHUB_ENV"
+OPENSSL_PREFIX=$(cygpath --windows "$PREFIX")
+__END__
+
+cat <<__END__  >> "$GITHUB_PATH"
+$(cygpath --windows "$PREFIX/bin")
+__END__

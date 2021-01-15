@@ -71,28 +71,10 @@ async function getPerl(version, thread) {
         core.debug('Perl tool is cached under ' + toolPath);
     }
     const bin = path.join(toolPath, 'bin');
-    const lib = path.join(toolPath, 'lib');
     //
     // prepend the tools path. instructs the agent to prepend for future tasks
     //
     core.addPath(bin);
-    // configure library path
-    if (osPlat === 'linux') {
-        let path = lib;
-        const pre = process.env['LD_LIBRARY_PATH'];
-        if (pre) {
-            path += ':' + pre;
-        }
-        core.exportVariable('LD_LIBRARY_PATH', path);
-    }
-    else if (osPlat === 'darwin') {
-        let path = lib;
-        const pre = process.env['DYLD_LIBRARY_PATH'];
-        if (pre) {
-            path += ':' + pre;
-        }
-        core.exportVariable('DYLD_LIBRARY_PATH', path);
-    }
 }
 exports.getPerl = getPerl;
 async function acquirePerl(version, thread) {

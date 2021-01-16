@@ -11243,11 +11243,11 @@ else
 	@(echo #undef NV_PRESERVES_UV&& \
 	echo #define NV_PRESERVES_UV_BITS 53)>> config.h
 endif
-	@(echo #define IVdf "I64d"&& \
-	echo #define UVuf "I64u"&& \
-	echo #define UVof "I64o"&& \
-	echo #define UVxf "I64x"&& \
-	echo #define UVXf "I64X"&& \
+	@(echo #define IVdf "ld"&& \
+	echo #define UVuf "lu"&& \
+	echo #define UVof "lo"&& \
+	echo #define UVxf "lx"&& \
+	echo #define UVXf "lX"&& \
 	echo #define USE_64_BIT_INT)>> config.h
 else
 	@(echo #define IVTYPE long&& \
@@ -12489,11 +12489,11 @@ else
 	@(echo #undef NV_PRESERVES_UV&& \
 	echo #define NV_PRESERVES_UV_BITS 53)>> config.h
 endif
-	@(echo #define IVdf "I64d"&& \
-	echo #define UVuf "I64u"&& \
-	echo #define UVof "I64o"&& \
-	echo #define UVxf "I64x"&& \
-	echo #define UVXf "I64X"&& \
+	@(echo #define IVdf "ld"&& \
+	echo #define UVuf "lu"&& \
+	echo #define UVof "lo"&& \
+	echo #define UVxf "lx"&& \
+	echo #define UVXf "lX"&& \
 	echo #define USE_64_BIT_INT)>> config.h
 else
 	@(echo #define IVTYPE long&& \

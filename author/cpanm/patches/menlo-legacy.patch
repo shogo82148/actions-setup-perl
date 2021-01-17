@@ -1,6 +1,6 @@
 --- Menlo/CLI/Compat.pm
 +++ Menlo/CLI/Compat.pm
-@@ -908,7 +908,9 @@
+@@ -908,12 +908,32 @@
          }
      }
  
@@ -9,9 +9,35 @@
 +        # very old perl doesn't support dup(2) mode ('>&')
 +        # fallback to system()
          $cmd = Menlo::Util::shell_quote(@$cmd) if ref $cmd eq 'ARRAY';
-         unless ($self->{verbose}) {
-             $cmd .= " >> " . Menlo::Util::shell_quote($self->{log}) . " 2>&1";
-@@ -947,7 +949,9 @@
+-        unless ($self->{verbose}) {
+-            $cmd .= " >> " . Menlo::Util::shell_quote($self->{log}) . " 2>&1";
++        my $log = $self->{verbose} ? '' : " >> " . Menlo::Util::shell_quote($self->{log}) . " 2>&1";
++        if (!WIN32 || $] >= 5.008) {
++            return !system "$cmd$log";
++        }
++
++        # system of perl < 5.008 doesn't handle the arguments of cmd.exe correctly.
++        # we call cmd.exe directly.
++        my $shell = $ENV{PERL5SHELL} || 'cmd.exe /x/d/c';
++
++        # tokenize
++        my @cmd = ($shell =~ m/(?:\\.|[^ ])+/g);
++        s/\\(.)/$1/ for @cmd;
++
++        # based on create_command_line of win32.c
++        # https://github.com/Perl/perl5/blob/c5f9609a1a8a7a902c023d06c8b2a4c42afce078/win32/win32.c#L3795-L3948
++        if ($cmd =~ /^".*"$/ && $cmd =~ /\s/) {
++            push @cmd, "\"$cmd$log\"";
++        } else {
++            push @cmd, "$cmd$log";
+         }
+-        !system $cmd;
++
++        !system @cmd;
+     } else {
+         my $pid = fork;
+         if ($pid) {
+@@ -947,7 +967,9 @@
  sub run_timeout {
      my($self, $cmd, $timeout) = @_;
  
@@ -22,7 +48,7 @@
  
      my $pid = fork;
      if ($pid) {
-@@ -2362,7 +2366,7 @@
+@@ -2362,7 +2384,7 @@
  
      require JSON::PP;
      open my $fh, ">", "blib/meta/install.json" or die $!;

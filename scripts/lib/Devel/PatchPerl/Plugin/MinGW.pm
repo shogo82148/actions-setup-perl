@@ -4212,6 +4212,9 @@ PATCH
 
 sub _patch_config_gc {
     my $version = shift;
+
+    my $fix_format = _ge($version, "5.8.0");
+
     open my $orig, '<', File::Spec->catfile('win32', 'config.gc') or die "failed to open win32/config.gc: $!";
     open my $new, '>', File::Spec->catfile('win32', 'config.gc.new') or die "failed to open win32/config.gc.new: $!";
 
@@ -4226,26 +4229,29 @@ sub _patch_config_gc {
         $line =~ s/^st_ino_size=.*/st_ino_size='8'/;
         $line =~ s/^d_nv_preserves_uv=.*/d_nv_preserves_uv='undef'/;
         $line =~ s/^nv_preserves_uv_bits=.*/nv_preserves_uv_bits='53'/;
-        $line =~ s/^ivdformat=.*/ivdformat='"I64d"'/;
         $line =~ s/^ivsize=.*/ivsize='8'/;
         $line =~ s/^ivtype=.*/ivtype='long long'/;
-        $line =~ s/^sPRIXU64=.*/sPRIXU64='"I64X"'/;
-        $line =~ s/^sPRId64=.*/sPRId64='"I64d"'/;
-        $line =~ s/^sPRIi64=.*/sPRIi64='"I64i"'/;
-        $line =~ s/^sPRIo64=.*/sPRIo64='"I64o"'/;
-        $line =~ s/^sPRIu64=.*/sPRIu64='"I64u"'/;
-        $line =~ s/^sPRIx64=.*/sPRIx64='"I64x"'/;
-        $line =~ s/^uvXUformat=.*/uvXUformat='"I64X"'/;
-        $line =~ s/^uvoformat=.*/uvoformat='"I64o"'/;
         $line =~ s/^uvsize=.*/uvsize='8'/;
         $line =~ s/^uvtype=.*/uvtype='unsigned long long'/;
-        $line =~ s/^uvuformat=.*/uvuformat='"I64u"'/;
-        $line =~ s/^uvxformat=.*/uvxformat='"I64x"'/;
         $line =~ s/^d_quad=.*/d_quad='define'/;
         $line =~ s/^quadkind=.*/quadkind='3'/;
         $line =~ s/^use64bitint=.*/use64bitint='define'/;
         $line =~ s/^lseeksize=.*/lseeksize='8'/;
         $line =~ s/^lseektype=.*/lseektype='long long'/;
+
+        if ($fix_format) {
+            $line =~ s/^ivdformat=.*/ivdformat='"I64d"'/;
+            $line =~ s/^sPRIXU64=.*/sPRIXU64='"I64X"'/;
+            $line =~ s/^sPRId64=.*/sPRId64='"I64d"'/;
+            $line =~ s/^sPRIi64=.*/sPRIi64='"I64i"'/;
+            $line =~ s/^sPRIo64=.*/sPRIo64='"I64o"'/;
+            $line =~ s/^sPRIu64=.*/sPRIu64='"I64u"'/;
+            $line =~ s/^sPRIx64=.*/sPRIx64='"I64x"'/;
+            $line =~ s/^uvXUformat=.*/uvXUformat='"I64X"'/;
+            $line =~ s/^uvoformat=.*/uvoformat='"I64o"'/;
+            $line =~ s/^uvuformat=.*/uvuformat='"I64u"'/;
+            $line =~ s/^uvxformat=.*/uvxformat='"I64x"'/;
+        }
         print $new $line;
     }
 
@@ -4480,7 +4486,8 @@ PATCH
         return;
     }
 
-    _patch(<<'PATCH');
+    if (_ge($version, "5.8.0")) {
+        _patch(<<'PATCH');
 --- win32/config_sh.PL
 +++ win32/config_sh.PL
 @@ -133,6 +133,34 @@ if ($opt{useithreads} eq 'define' && $opt{ccflags} =~ /-DPERL_IMPLICIT_SYS\b/) {
@@ -4513,6 +4520,37 @@ PATCH
 +$opt{uvtype} = qq{unsigned $int64};
 +$opt{uvuformat} = qq{"I64u"};
 +$opt{uvxformat} = qq{"I64x"};
++# end of 64-bit patch
++
+ while (<>) {
+     s/~([\w_]+)~/$opt{$1}/g;
+     if (/^([\w_]+)=(.*)$/) {
+PATCH
+        return;
+    }
+
+    _patch(<<'PATCH');
+--- win32/config_sh.PL
++++ win32/config_sh.PL
+@@ -65,6 +65,23 @@ $opt{'usemymalloc'} = 'y' if $opt{'d_mymalloc'} eq 'define';
+ $opt{libpth} = mungepath($opt{libpth}) if exists $opt{libpth};
+ $opt{incpath} = mungepath($opt{incpath}) if exists $opt{incpath};
+ 
++# 64-bit patch is hard coded from here
++my $int64  = 'long long';
++$opt{d_atoll} = 'define';
++$opt{d_strtoll} = 'define';
++$opt{d_strtoull} = 'define';
++$opt{ptrsize} = 8;
++$opt{sizesize} = 8;
++$opt{ssizetype} = $int64;
++$opt{st_ino_size} = 8;
++$opt{d_nv_preserves_uv} = 'undef';
++$opt{nv_preserves_uv_bits} = 53;
++$opt{ivsize} = 8;
++$opt{ivtype} = $int64;
++$opt{uvsize} = 8;
++$opt{uvtype} = qq{unsigned $int64};
 +# end of 64-bit patch
 +
  while (<>) {

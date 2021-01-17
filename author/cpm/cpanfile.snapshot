@@ -384,10 +384,10 @@ DISTRIBUTIONS
       Module::CPANfile 0
       Test::More 0.88
       version 0.76
-  ExtUtils-Manifest-1.72
-    pathname: E/ET/ETHER/ExtUtils-Manifest-1.72.tar.gz
+  ExtUtils-Manifest-1.73
+    pathname: E/ET/ETHER/ExtUtils-Manifest-1.73.tar.gz
     provides:
-      ExtUtils::Manifest 1.72
+      ExtUtils::Manifest 1.73
     requirements:
       Carp 0
       Exporter 0

@@ -11,7 +11,7 @@
          $cmd = Menlo::Util::shell_quote(@$cmd) if ref $cmd eq 'ARRAY';
 -        unless ($self->{verbose}) {
 -            $cmd .= " >> " . Menlo::Util::shell_quote($self->{log}) . " 2>&1";
-+        my $log = $self->{verbose} ? " >> " . Menlo::Util::shell_quote($self->{log}) . " 2>&1" : '';
++        my $log = $self->{verbose} ? '' : " >> " . Menlo::Util::shell_quote($self->{log}) . " 2>&1";
 +        if (!WIN32 || $] >= 5.008) {
 +            return !system "$cmd$log";
 +        }

@@ -1,6 +1,6 @@
 {
   "name": "actions-setup-perl",
-  "version": "1.9.4",
+  "version": "1.9.5",
   "description": "",
   "main": "lib/setup-perl.js",
   "scripts": {

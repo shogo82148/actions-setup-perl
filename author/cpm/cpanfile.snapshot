@@ -8,10 +8,10 @@ DISTRIBUTIONS
       Carp 0.01
       ExtUtils::MakeMaker 0
       perl 5.006
-  App-cpm-0.997000
-    pathname: S/SK/SKAJI/App-cpm-0.997000.tar.gz
+  App-cpm-0.997002
+    pathname: S/SK/SKAJI/App-cpm-0.997002.tar.gz
     provides:
-      App::cpm 0.997000
+      App::cpm 0.997002
       App::cpm::CLI undef
       App::cpm::CircularDependency undef
       App::cpm::DistNotation undef
@@ -37,6 +37,7 @@ DISTRIBUTIONS
       App::cpm::Worker::Installer::Menlo undef
       App::cpm::Worker::Installer::Prebuilt undef
       App::cpm::Worker::Resolver undef
+      App::cpm::file undef
       App::cpm::version undef
     requirements:
       CPAN::Common::Index 0
@@ -58,6 +59,7 @@ DISTRIBUTIONS
       Module::Metadata 0
       Parallel::Pipes 0.004
       Parse::PMFile 0.43
+      YAML::PP 0.026
       local::lib 2.000018
       parent 0
       perl 5.008001
@@ -1032,6 +1034,62 @@ DISTRIBUTIONS
       Win32::ShellQuote 0.003001
     requirements:
       perl 5.006
+  YAML-PP-0.026
+    pathname: T/TI/TINITA/YAML-PP-0.026.tar.gz
+    provides:
+      YAML::PP 0.026
+      YAML::PP::Common 0.026
+      YAML::PP::Constructor 0.026
+      YAML::PP::Dumper 0.026
+      YAML::PP::Emitter 0.026
+      YAML::PP::Exception 0.026
+      YAML::PP::Grammar 0.026
+      YAML::PP::Highlight 0.026
+      YAML::PP::Lexer 0.026
+      YAML::PP::Loader 0.026
+      YAML::PP::Parser 0.026
+      YAML::PP::Perl 0.026
+      YAML::PP::Preserve::Array 0.026
+      YAML::PP::Preserve::Hash 0.026
+      YAML::PP::Preserve::Scalar 0.026
+      YAML::PP::Reader 0.026
+      YAML::PP::Reader::File 0.026
+      YAML::PP::Render 0.026
+      YAML::PP::Representer 0.026
+      YAML::PP::Schema 0.026
+      YAML::PP::Schema::Binary 0.026
+      YAML::PP::Schema::Core 0.026
+      YAML::PP::Schema::Failsafe 0.026
+      YAML::PP::Schema::Include 0.026
+      YAML::PP::Schema::JSON 0.026
+      YAML::PP::Schema::Merge 0.026
+      YAML::PP::Schema::Perl 0.026
+      YAML::PP::Schema::Tie::IxHash 0.026
+      YAML::PP::Schema::YAML1_1 0.026
+      YAML::PP::Type::MergeKey 0.026
+      YAML::PP::Writer 0.026
+      YAML::PP::Writer::File 0.026
+    requirements:
+      B 0
+      B::Deparse 0
+      Carp 0
+      Data::Dumper 0
+      Encode 0
+      Exporter 0
+      ExtUtils::MakeMaker 0
+      File::Basename 0
+      Getopt::Long 0
+      MIME::Base64 0
+      Module::Load 0
+      Scalar::Util 1.07
+      Tie::Array 0
+      Tie::Hash 0
+      base 0
+      constant 0
+      overload 0
+      perl 5.008000
+      strict 0
+      warnings 0
   local-lib-2.000024
     pathname: H/HA/HAARG/local-lib-2.000024.tar.gz
     provides:

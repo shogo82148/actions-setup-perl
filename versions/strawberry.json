@@ -1,5 +1,9 @@
 [
     {
+        "version": "5.32.1",
+        "path": "strawberry-perl-5.32.1.1-64bit-portable.zip"
+    },
+    {
         "version": "5.32.0",
         "path": "strawberry-perl-5.32.0.1-64bit-portable.zip"
     },

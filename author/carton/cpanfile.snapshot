@@ -772,52 +772,52 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  URI-5.06
-    pathname: O/OA/OALDERS/URI-5.06.tar.gz
+  URI-5.07
+    pathname: O/OA/OALDERS/URI-5.07.tar.gz
     provides:
-      URI 5.06
-      URI::Escape 5.06
-      URI::Heuristic 5.06
-      URI::IRI 5.06
-      URI::QueryParam 5.06
-      URI::Split 5.06
-      URI::URL 5.06
-      URI::WithBase 5.06
-      URI::data 5.06
-      URI::file 5.06
-      URI::file::Base 5.06
-      URI::file::FAT 5.06
-      URI::file::Mac 5.06
-      URI::file::OS2 5.06
-      URI::file::QNX 5.06
-      URI::file::Unix 5.06
-      URI::file::Win32 5.06
-      URI::ftp 5.06
-      URI::gopher 5.06
-      URI::http 5.06
-      URI::https 5.06
-      URI::ldap 5.06
-      URI::ldapi 5.06
-      URI::ldaps 5.06
-      URI::mailto 5.06
-      URI::mms 5.06
-      URI::news 5.06
-      URI::nntp 5.06
-      URI::pop 5.06
-      URI::rlogin 5.06
-      URI::rsync 5.06
-      URI::rtsp 5.06
-      URI::rtspu 5.06
-      URI::sftp 5.06
-      URI::sip 5.06
-      URI::sips 5.06
-      URI::snews 5.06
-      URI::ssh 5.06
-      URI::telnet 5.06
-      URI::tn3270 5.06
-      URI::urn 5.06
-      URI::urn::isbn 5.06
-      URI::urn::oid 5.06
+      URI 5.07
+      URI::Escape 5.07
+      URI::Heuristic 5.07
+      URI::IRI 5.07
+      URI::QueryParam 5.07
+      URI::Split 5.07
+      URI::URL 5.07
+      URI::WithBase 5.07
+      URI::data 5.07
+      URI::file 5.07
+      URI::file::Base 5.07
+      URI::file::FAT 5.07
+      URI::file::Mac 5.07
+      URI::file::OS2 5.07
+      URI::file::QNX 5.07
+      URI::file::Unix 5.07
+      URI::file::Win32 5.07
+      URI::ftp 5.07
+      URI::gopher 5.07
+      URI::http 5.07
+      URI::https 5.07
+      URI::ldap 5.07
+      URI::ldapi 5.07
+      URI::ldaps 5.07
+      URI::mailto 5.07
+      URI::mms 5.07
+      URI::news 5.07
+      URI::nntp 5.07
+      URI::pop 5.07
+      URI::rlogin 5.07
+      URI::rsync 5.07
+      URI::rtsp 5.07
+      URI::rtspu 5.07
+      URI::sftp 5.07
+      URI::sip 5.07
+      URI::sips 5.07
+      URI::snews 5.07
+      URI::ssh 5.07
+      URI::telnet 5.07
+      URI::tn3270 5.07
+      URI::urn 5.07
+      URI::urn::isbn 5.07
+      URI::urn::oid 5.07
     requirements:
       Carp 0
       Cwd 0

@@ -134,7 +134,8 @@ jobs:
       - name: upload
         run: |
           ACTIONS_VERSION=v$(cat "$GITHUB_WORKSPACE/package.json" | jq -r .version)
-          aws --region us-east-1 s3 cp --acl public-read "$RUNNER_TEMP/perl.tar.xz" "s3://shogo82148-actions-setup-perl/$ACTIONS_VERSION/perl-$PERL_VERSION-linux-x64-multi-thread.tar.xz"
+          azcopy login --service-principal --application-id "$AZCOPY_SPA_CLIENT_ID"
+          azcopy cp "$RUNNER_TEMP/perl.tar.xz" "https://setupperl.blob.core.windows.net/actions-setup-perl/$ACTIONS_VERSION/perl-$PERL_VERSION-linux-x64-multi-thread.tar.xz"
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AZCOPY_SPA_CLIENT_ID: ${{ secrets.AZCOPY_SPA_CLIENT_ID }}
+          AZCOPY_SPA_CLIENT_SECRET: ${{ secrets.AZCOPY_SPA_CLIENT_SECRET }}

@@ -131,11 +131,14 @@ jobs:
           PERL5LIB: ${{ github.workspace }}/scripts/linux/local/lib/perl5
         working-directory: ./scripts/linux
 
+      - uses: kheiakiyama/install-azcopy-action@v1
+        with:
+          version: "v10"
       - name: upload
         run: |
           ACTIONS_VERSION=v$(cat "$GITHUB_WORKSPACE/package.json" | jq -r .version)
-          azcopy login --service-principal --application-id "$AZCOPY_SPA_CLIENT_ID"
-          azcopy cp "$RUNNER_TEMP/perl.tar.xz" "https://setupperl.blob.core.windows.net/actions-setup-perl/$ACTIONS_VERSION/perl-$PERL_VERSION-linux-x64-multi-thread.tar.xz"
+          azcopy_v10 login --service-principal --application-id "$AZCOPY_SPA_CLIENT_ID"
+          azcopy_v10 cp "$RUNNER_TEMP/perl.tar.xz" "https://setupperl.blob.core.windows.net/actions-setup-perl/$ACTIONS_VERSION/perl-$PERL_VERSION-linux-x64-multi-thread.tar.xz"
         env:
           AZCOPY_SPA_CLIENT_ID: ${{ secrets.AZCOPY_SPA_CLIENT_ID }}
           AZCOPY_SPA_CLIENT_SECRET: ${{ secrets.AZCOPY_SPA_CLIENT_SECRET }}

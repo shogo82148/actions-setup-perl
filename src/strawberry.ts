@@ -102,7 +102,7 @@ async function acquirePerl(version: PerlVersion): Promise<string> {
   //
 
   // download from a mirror for actions-setup-perl
-  const downloadUrl = `https://shogo82148-actions-setup-perl.s3.amazonaws.com/strawberry-perl/${version.path}`;
+  const downloadUrl = `https://setupperl.blob.core.windows.net/actions-setup-perl/strawberry-perl/${version.path}`;
   let downloadPath: string | null = null;
   try {
     downloadPath = await tc.downloadTool(downloadUrl);

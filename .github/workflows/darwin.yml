@@ -89,18 +89,18 @@ jobs:
           PERL5LIB: ${{ github.workspace }}/scripts/darwin/local/lib/perl5
         working-directory: ./scripts/darwin
 
+      - uses: kheiakiyama/install-azcopy-action@v1
+        with:
+          version: "v10"
       - name: upload
         run: |
-          # there is no aws cli in macOS, so use https://github.com/shogo82148/s3cli-mini
           ACTIONS_VERSION=v$(cat "$GITHUB_WORKSPACE/package.json" | jq -r .version)
-          curl --retry 3 -sSL https://github.com/shogo82148/s3cli-mini/releases/download/v0.0.6/s3cli-mini_darwin_amd64.tar.gz -o s3cli-mini.tar.gz
-          tar xzvf s3cli-mini.tar.gz
-
-          # upload
-          s3cli-mini_darwin_amd64/s3cli-mini --region us-east-1 cp --acl public-read "$RUNNER_TEMP/perl.tar.xz" "s3://shogo82148-actions-setup-perl/$ACTIONS_VERSION/perl-$PERL_VERSION-darwin-x64.tar.xz"
+          azcopy_v10 login --service-principal --application-id "$AZCOPY_SPA_APPLICATION_ID" --tenant-id "$AZCOPY_TENANT_ID"
+          azcopy_v10 cp "$RUNNER_TEMP/perl.tar.xz" "https://setupperl.blob.core.windows.net/actions-setup-perl/$ACTIONS_VERSION/perl-$PERL_VERSION-darwin-x64.tar.xz"
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AZCOPY_SPA_APPLICATION_ID: ${{ secrets.AZCOPY_SPA_APPLICATION_ID }}
+          AZCOPY_SPA_CLIENT_SECRET: ${{ secrets.AZCOPY_SPA_CLIENT_SECRET }}
+          AZCOPY_TENANT_ID: ${{ secrets.AZCOPY_TENANT_ID }}
 
   build-multi-thread:
     runs-on: macos-10.15
@@ -140,15 +140,15 @@ jobs:
           PERL5LIB: ${{ github.workspace }}/scripts/darwin/local/lib/perl5
         working-directory: ./scripts/darwin
 
+      - uses: kheiakiyama/install-azcopy-action@v1
+        with:
+          version: "v10"
       - name: upload
         run: |
-          # there is no aws cli in macOS, so use https://github.com/shogo82148/s3cli-mini
           ACTIONS_VERSION=v$(cat "$GITHUB_WORKSPACE/package.json" | jq -r .version)
-          curl --retry 3 -sSL https://github.com/shogo82148/s3cli-mini/releases/download/v0.0.6/s3cli-mini_darwin_amd64.tar.gz -o s3cli-mini.tar.gz
-          tar xzvf s3cli-mini.tar.gz
-
-          # upload
-          s3cli-mini_darwin_amd64/s3cli-mini --region us-east-1 cp --acl public-read "$RUNNER_TEMP/perl.tar.xz" "s3://shogo82148-actions-setup-perl/$ACTIONS_VERSION/perl-$PERL_VERSION-darwin-x64-multi-thread.tar.xz"
+          azcopy_v10 login --service-principal --application-id "$AZCOPY_SPA_APPLICATION_ID" --tenant-id "$AZCOPY_TENANT_ID"
+          azcopy_v10 cp "$RUNNER_TEMP/perl.tar.xz" "https://setupperl.blob.core.windows.net/actions-setup-perl/$ACTIONS_VERSION/perl-$PERL_VERSION-darwin-x64-multi-thread.tar.xz"
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AZCOPY_SPA_APPLICATION_ID: ${{ secrets.AZCOPY_SPA_APPLICATION_ID }}
+          AZCOPY_SPA_CLIENT_SECRET: ${{ secrets.AZCOPY_SPA_CLIENT_SECRET }}
+          AZCOPY_TENANT_ID: ${{ secrets.AZCOPY_TENANT_ID }}

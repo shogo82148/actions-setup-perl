@@ -119,7 +119,7 @@ async function getDownloadUrl(filename) {
         });
     }).then(info => {
         const actionsVersion = info.version;
-        return `https://shogo82148-actions-setup-perl.s3.amazonaws.com/v${actionsVersion}/${filename}`;
+        return `https://setupperl.blob.core.windows.net/actions-setup-perl/v${actionsVersion}/${filename}`;
     });
 }
 
@@ -343,7 +343,7 @@ async function acquirePerl(version) {
     // Download - a tool installer intimately knows how to get the tool (and construct urls)
     //
     // download from a mirror for actions-setup-perl
-    const downloadUrl = `https://shogo82148-actions-setup-perl.s3.amazonaws.com/strawberry-perl/${version.path}`;
+    const downloadUrl = `https://setupperl.blob.core.windows.net/actions-setup-perl/strawberry-perl/${version.path}`;
     let downloadPath = null;
     try {
         downloadPath = await tc.downloadTool(downloadUrl);

@@ -8,10 +8,10 @@ DISTRIBUTIONS
       Carp 0.01
       ExtUtils::MakeMaker 0
       perl 5.006
-  App-cpm-0.997002
-    pathname: S/SK/SKAJI/App-cpm-0.997002.tar.gz
+  App-cpm-0.997003
+    pathname: S/SK/SKAJI/App-cpm-0.997003.tar.gz
     provides:
-      App::cpm 0.997002
+      App::cpm 0.997003
       App::cpm::CLI undef
       App::cpm::CircularDependency undef
       App::cpm::DistNotation undef
@@ -40,7 +40,7 @@ DISTRIBUTIONS
       App::cpm::file undef
       App::cpm::version undef
     requirements:
-      CPAN::Common::Index 0
+      CPAN::02Packages::Search 0
       CPAN::DistnameInfo 0
       CPAN::Meta 0
       CPAN::Meta::Requirements 2.130
@@ -64,6 +64,15 @@ DISTRIBUTIONS
       parent 0
       perl 5.008001
       version 0.77
+  CPAN-02Packages-Search-0.001
+    pathname: S/SK/SKAJI/CPAN-02Packages-Search-0.001.tar.gz
+    provides:
+      CPAN::02Packages::Search 0.001
+    requirements:
+      Module::Build::Tiny 0.034
+      Search::Dict 1.07
+      Tie::Handle::SkipHeader 0.004
+      perl 5.008001
   CPAN-Common-Index-0.010
     pathname: D/DA/DAGOLDEN/CPAN-Common-Index-0.010.tar.gz
     provides:

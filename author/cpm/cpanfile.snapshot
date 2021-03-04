@@ -973,53 +973,53 @@ DISTRIBUTIONS
       Tie::Handle 0
       perl 5.006
       strict 0
-  URI-5.08
-    pathname: E/ET/ETHER/URI-5.08.tar.gz
+  URI-5.09
+    pathname: O/OA/OALDERS/URI-5.09.tar.gz
     provides:
-      URI 5.08
-      URI::Escape 5.08
-      URI::Heuristic 5.08
-      URI::IRI 5.08
-      URI::QueryParam 5.08
-      URI::Split 5.08
-      URI::URL 5.08
-      URI::WithBase 5.08
-      URI::data 5.08
-      URI::file 5.08
-      URI::file::Base 5.08
-      URI::file::FAT 5.08
-      URI::file::Mac 5.08
-      URI::file::OS2 5.08
-      URI::file::QNX 5.08
-      URI::file::Unix 5.08
-      URI::file::Win32 5.08
-      URI::ftp 5.08
-      URI::gopher 5.08
-      URI::http 5.08
-      URI::https 5.08
-      URI::ldap 5.08
-      URI::ldapi 5.08
-      URI::ldaps 5.08
-      URI::mailto 5.08
-      URI::mms 5.08
-      URI::news 5.08
-      URI::nntp 5.08
-      URI::nntps 5.08
-      URI::pop 5.08
-      URI::rlogin 5.08
-      URI::rsync 5.08
-      URI::rtsp 5.08
-      URI::rtspu 5.08
-      URI::sftp 5.08
-      URI::sip 5.08
-      URI::sips 5.08
-      URI::snews 5.08
-      URI::ssh 5.08
-      URI::telnet 5.08
-      URI::tn3270 5.08
-      URI::urn 5.08
-      URI::urn::isbn 5.08
-      URI::urn::oid 5.08
+      URI 5.09
+      URI::Escape 5.09
+      URI::Heuristic 5.09
+      URI::IRI 5.09
+      URI::QueryParam 5.09
+      URI::Split 5.09
+      URI::URL 5.09
+      URI::WithBase 5.09
+      URI::data 5.09
+      URI::file 5.09
+      URI::file::Base 5.09
+      URI::file::FAT 5.09
+      URI::file::Mac 5.09
+      URI::file::OS2 5.09
+      URI::file::QNX 5.09
+      URI::file::Unix 5.09
+      URI::file::Win32 5.09
+      URI::ftp 5.09
+      URI::gopher 5.09
+      URI::http 5.09
+      URI::https 5.09
+      URI::ldap 5.09
+      URI::ldapi 5.09
+      URI::ldaps 5.09
+      URI::mailto 5.09
+      URI::mms 5.09
+      URI::news 5.09
+      URI::nntp 5.09
+      URI::nntps 5.09
+      URI::pop 5.09
+      URI::rlogin 5.09
+      URI::rsync 5.09
+      URI::rtsp 5.09
+      URI::rtspu 5.09
+      URI::sftp 5.09
+      URI::sip 5.09
+      URI::sips 5.09
+      URI::snews 5.09
+      URI::ssh 5.09
+      URI::telnet 5.09
+      URI::tn3270 5.09
+      URI::urn 5.09
+      URI::urn::isbn 5.09
+      URI::urn::oid 5.09
     requirements:
       Carp 0
       Cwd 0

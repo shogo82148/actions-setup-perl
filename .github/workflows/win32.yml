@@ -24,11 +24,16 @@ jobs:
   list:
     runs-on: ubuntu-latest
     steps:
+      - id: perl
+        name: check pre-installed perl version
+        run: |
+          perl -e 'print "::set-output name=version::$^V"'
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
         with:
           path: scripts/windows/local
-          key: ${{ runner.os }}-sanity-check-${{ hashFiles('scripts/windows/cpanfile.snapshot') }}
+          key: ${{ runner.os }}-sanity-check-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
+          restore-keys: ${{ runner.os }}-sanity-check-perl-${{ steps.perl.outputs.version }}-
       - name: sanity check
         run: |
           ../../bin/carton install --deployment
@@ -69,7 +74,8 @@ jobs:
         run: .github/build-openssl-win32.sh
         shell: "msys2 {0}"
 
-      - name: setup host perl
+      - id: perl
+        name: setup host perl
         shell: bash
         run: |
           cat << 'END_OF_PATH' >> $GITHUB_PATH
@@ -77,6 +83,7 @@ jobs:
           C:\strawberry\perl\site\bin
           C:\strawberry\perl\bin
           END_OF_PATH
+          perl -e 'print "::set-output name=version::$^V"'
       - name: Host perl -V
         run: perl -V
       - name: gcc --version
@@ -94,7 +101,8 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: scripts/windows/local
-          key: ${{ runner.os }}-build-${{ hashFiles('scripts/windows/cpanfile.snapshot') }}
+          key: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/windows/cpanfile.snapshot') }}
+          restore-keys: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-
       - name: carton install
         shell: cmd
         run: ../../bin/carton install
@@ -167,7 +175,8 @@ jobs:
         run: .github/build-openssl-win32.sh
         shell: "msys2 {0}"
 
-      - name: setup host perl
+      - id: perl
+        name: setup host perl
         shell: bash
         run: |
           cat << 'END_OF_PATH' >> $GITHUB_PATH
@@ -175,6 +184,7 @@ jobs:
           C:\strawberry\perl\site\bin
           C:\strawberry\perl\bin
           END_OF_PATH
+          perl -e 'print "::set-output name=version::$^V"'
       - name: Host perl -V
         run: perl -V
       - name: gcc --version
@@ -192,7 +202,8 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: scripts/windows/local
-          key: ${{ runner.os }}-build-${{ hashFiles('scripts/windows/cpanfile.snapshot') }}
+          key: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/windows/cpanfile.snapshot') }}
+          restore-keys: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-
       - name: carton install
         shell: cmd
         run: ../../bin/carton install

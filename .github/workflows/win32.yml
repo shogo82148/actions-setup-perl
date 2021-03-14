@@ -32,8 +32,8 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: scripts/windows/local
-          key: ${{ runner.os }}-sanity-check-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
-          restore-keys: ${{ runner.os }}-sanity-check-perl-${{ steps.perl.outputs.version }}-
+          key: Windows-sanity-check-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/windows/cpanfile.snapshot') }}
+          restore-keys: Windows-sanity-check-perl-${{ steps.perl.outputs.version }}-
       - name: sanity check
         run: |
           ../../bin/carton install --deployment

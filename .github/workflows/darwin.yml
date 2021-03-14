@@ -32,8 +32,8 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: scripts/darwin/local
-          key: ${{ runner.os }}-sanity-check-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
-          restore-keys: ${{ runner.os }}-sanity-check-perl-${{ steps.perl.outputs.version }}-
+          key: Darwin-sanity-check-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
+          restore-keys: Darwin-sanity-check-perl-${{ steps.perl.outputs.version }}-
       - name: sanity check
         run: |
           ../../bin/carton install --deployment

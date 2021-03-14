@@ -32,7 +32,7 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: scripts/linux/local
-          key: ${{ runner.os }}-sanity-check-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
+          key: ${{ runner.os }}-sanity-check-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/linux/cpanfile.snapshot') }}
           restore-keys: ${{ runner.os }}-sanity-check-perl-${{ steps.perl.outputs.version }}-
       - name: sanity check
         run: |

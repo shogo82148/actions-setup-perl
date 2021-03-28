@@ -61,6 +61,18 @@ steps:
 
 This option is available on Windows and falls back to the default customized binaries on other platforms.
 
+### Supported Platforms
+
+The action works for [GitHub-hosted runners](https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners).
+
+| Operating System | Supported Versions |
+| --- | --- | --- |
+| Linux | `ubuntu-18.04`, `ubuntu-20.04` |
+| macOS | `macos-10.05`, `macos-11.0` |
+| Windows | `windows-2019` |
+
+[Self-hosted runners](https://docs.github.com/en/actions/hosting-your-own-runners) are not supported.
+
 ### Action inputs
 
 All inputs are **optional**. If not set, sensible defaults will be used.

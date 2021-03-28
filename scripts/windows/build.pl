@@ -25,7 +25,7 @@ my $tmpdir = File::Spec->rel2abs(
 my $runner_tool_cache = $tmpdir;
 if (my $cache = $ENV{RUNNER_TOOL_CACHE}) {
     # install path is hard coded in the action, so check whether it has expected value.
-    if ($cache ne 'C:/hostedtoolcache/windows') {
+    if ($cache ne 'C:\hostedtoolcache\windows') {
         die "unexpected RUNNER_TOOL_CACHE: $cache";
     }
     $runner_tool_cache = $cache;

@@ -7,6 +7,7 @@ const toolDir = path.join(__dirname, 'runner', 'tools');
 const tempDir = path.join(__dirname, 'runner', 'temp');
 // const dataDir = path.join(__dirname, 'data');
 
+process.env['ACTIONS_SETUP_PERL_TESTING'] = '1';
 process.env['RUNNER_TOOL_CACHE'] = toolDir;
 process.env['RUNNER_TEMP'] = tempDir;
 import * as installer from '../src/installer';

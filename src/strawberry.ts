@@ -1,24 +1,9 @@
-// Load tempDirectory before it gets wiped by tool-cache
-let tempDirectory = process.env['RUNNER_TEMPDIRECTORY'] || '';
-
 import * as core from '@actions/core';
 import * as tc from '@actions/tool-cache';
 import * as path from 'path';
 import * as semver from 'semver';
 import * as fs from 'fs';
-
-if (!tempDirectory) {
-  let baseLocation;
-  if (process.platform === 'win32') {
-    // On windows use the USERPROFILE env variable
-    baseLocation = process.env['USERPROFILE'] || 'C:\\';
-  } else if (process.platform === 'darwin') {
-    baseLocation = '/Users';
-  } else {
-    baseLocation = '/home';
-  }
-  tempDirectory = path.join(baseLocation, 'actions', 'temp');
-}
+import * as tcp from './tool-cache-port';
 
 interface PerlVersion {
   version: string;
@@ -72,7 +57,7 @@ export async function getPerl(version: string) {
   // check cache
   const selected = await determineVersion(version);
   let toolPath: string;
-  toolPath = tc.find('perl', selected.version);
+  toolPath = tcp.find('perl', selected.version);
 
   if (!toolPath) {
     // download, extract, cache
@@ -112,14 +97,6 @@ async function acquirePerl(version: PerlVersion): Promise<string> {
     throw `Failed to download version ${version.version}: ${error}`;
   }
 
-  //
-  // Extract
-  //
-  let extPath = tempDirectory;
-  if (!extPath) {
-    throw new Error('Temp directory not set');
-  }
-
-  extPath = await tc.extractZip(downloadPath);
-  return await tc.cacheDir(extPath, 'perl', version.version);
+  const extPath = await tc.extractZip(downloadPath);
+  return await tcp.cacheDir(extPath, 'strawberry-perl', version.version);
 }

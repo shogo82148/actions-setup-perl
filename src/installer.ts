@@ -4,6 +4,7 @@ import * as os from 'os';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as semver from 'semver';
+import * as tcp from './tool-cache-port';
 
 const osPlat = os.platform();
 const osArch = os.arch();
@@ -41,7 +42,7 @@ export async function getPerl(version: string, thread: boolean) {
 
   // check cache
   let toolPath: string;
-  toolPath = tc.find('perl', selected);
+  toolPath = tcp.find('perl', selected);
 
   if (!toolPath) {
     // download, extract, cache
@@ -81,7 +82,7 @@ async function acquirePerl(version: string, thread: boolean): Promise<string> {
     : downloadUrl.endsWith('.tar.bz2')
     ? await tc.extractTar(downloadPath, '', 'xj')
     : await tc.extractTar(downloadPath);
-  return await tc.cacheDir(extPath, 'perl', version + (thread ? '-thr' : ''));
+  return await tcp.cacheDir(extPath, 'perl', version + (thread ? '-thr' : ''));
 }
 
 function getFileName(version: string, thread: boolean): string {

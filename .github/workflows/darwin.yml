@@ -24,11 +24,16 @@ jobs:
   list:
     runs-on: ubuntu-latest
     steps:
+      - id: perl
+        name: check pre-installed perl version
+        run: |
+          perl -e 'print "::set-output name=version::$^V"'
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
         with:
           path: scripts/darwin/local
-          key: ${{ runner.os }}-sanity-check-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
+          key: Darwin-sanity-check-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
+          restore-keys: Darwin-sanity-check-perl-${{ steps.perl.outputs.version }}-
       - name: sanity check
         run: |
           ../../bin/carton install --deployment
@@ -63,8 +68,11 @@ jobs:
       PERL_VERSION: ${{ matrix.perl }}
     steps:
       - uses: actions/checkout@v2
-      - name: setup host perl
-        run: perl -MConfig -E 'say "$Config{bin}"' >> $GITHUB_PATH
+      - id: perl
+        name: setup host perl
+        run: |
+          perl -MConfig -E 'say "$Config{bin}"' >> $GITHUB_PATH
+          perl -e 'print "::set-output name=version::$^V"'
       - name: Host perl -V
         run: perl -V
       - name: gcc --version
@@ -76,7 +84,8 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: scripts/darwin/local
-          key: ${{ runner.os }}-build-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
+          key: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
+          restore-keys: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-
       - name: carton install --deployment
         shell: bash
         run: ../../bin/carton install --deployment
@@ -114,8 +123,11 @@ jobs:
       PERL_MULTI_THREAD: "1"
     steps:
       - uses: actions/checkout@v2
-      - name: setup host perl
-        run: perl -MConfig -E 'say "$Config{bin}"' >> $GITHUB_PATH
+      - id: perl
+        name: setup host perl
+        run: |
+          perl -MConfig -E 'say "$Config{bin}"' >> $GITHUB_PATH
+          perl -e 'print "::set-output name=version::$^V"'
       - name: Host perl -V
         run: perl -V
       - name: gcc --version
@@ -127,7 +139,8 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: scripts/darwin/local
-          key: ${{ runner.os }}-build-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
+          key: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
+          restore-keys: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-
       - name: carton install --deployment
         shell: bash
         run: ../../bin/carton install --deployment

@@ -22,8 +22,16 @@ my $version = $ENV{PERL_VERSION};
 my $thread = $ENV{PERL_MULTI_THREAD};
 my $tmpdir = File::Spec->rel2abs(
     File::Spec->catdir($ENV{RUNNER_TEMP} || "tmp"));
+my $runner_tool_cache = $tmpdir;
+if (my $cache = $ENV{RUNNER_TOOL_CACHE}) {
+    # install path is hard coded in the action, so check whether it has expected value.
+    if ($cache ne 'C:\hostedtoolcache\windows') {
+        die "unexpected RUNNER_TOOL_CACHE: $cache";
+    }
+    $runner_tool_cache = $cache;
+}
 my $install_dir = File::Spec->rel2abs(
-    File::Spec->catdir($ENV{RUNNER_TOOL_CACHE} || $tmpdir, "perl", $version . ($thread ? "-thr" : ""), "x64"));
+    File::Spec->catdir($runner_tool_cache, "perl", $version . ($thread ? "-thr" : ""), "x64"));
 my $perl = File::Spec->catfile($install_dir, 'bin', 'perl');
 
 sub perl_release {

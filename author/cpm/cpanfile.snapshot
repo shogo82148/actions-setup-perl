@@ -8,10 +8,10 @@ DISTRIBUTIONS
       Carp 0.01
       ExtUtils::MakeMaker 0
       perl 5.006
-  App-cpm-0.997002
-    pathname: S/SK/SKAJI/App-cpm-0.997002.tar.gz
+  App-cpm-0.997003
+    pathname: S/SK/SKAJI/App-cpm-0.997003.tar.gz
     provides:
-      App::cpm 0.997002
+      App::cpm 0.997003
       App::cpm::CLI undef
       App::cpm::CircularDependency undef
       App::cpm::DistNotation undef
@@ -40,7 +40,7 @@ DISTRIBUTIONS
       App::cpm::file undef
       App::cpm::version undef
     requirements:
-      CPAN::Common::Index 0
+      CPAN::02Packages::Search 0
       CPAN::DistnameInfo 0
       CPAN::Meta 0
       CPAN::Meta::Requirements 2.130
@@ -64,6 +64,15 @@ DISTRIBUTIONS
       parent 0
       perl 5.008001
       version 0.77
+  CPAN-02Packages-Search-0.001
+    pathname: S/SK/SKAJI/CPAN-02Packages-Search-0.001.tar.gz
+    provides:
+      CPAN::02Packages::Search 0.001
+    requirements:
+      Module::Build::Tiny 0.034
+      Search::Dict 1.07
+      Tie::Handle::SkipHeader 0.004
+      perl 5.008001
   CPAN-Common-Index-0.010
     pathname: D/DA/DAGOLDEN/CPAN-Common-Index-0.010.tar.gz
     provides:
@@ -242,23 +251,23 @@ DISTRIBUTIONS
     provides:
       Devel::GlobalDestruction::XS 0.03
     requirements:
-  ExtUtils-CBuilder-0.280235
-    pathname: A/AM/AMBS/ExtUtils-CBuilder-0.280235.tar.gz
+  ExtUtils-CBuilder-0.280236
+    pathname: A/AM/AMBS/ExtUtils-CBuilder-0.280236.tar.gz
     provides:
-      ExtUtils::CBuilder 0.280235
-      ExtUtils::CBuilder::Base 0.280235
-      ExtUtils::CBuilder::Platform::Unix 0.280235
-      ExtUtils::CBuilder::Platform::VMS 0.280235
-      ExtUtils::CBuilder::Platform::Windows 0.280235
-      ExtUtils::CBuilder::Platform::Windows::BCC 0.280235
-      ExtUtils::CBuilder::Platform::Windows::GCC 0.280235
-      ExtUtils::CBuilder::Platform::Windows::MSVC 0.280235
-      ExtUtils::CBuilder::Platform::aix 0.280235
-      ExtUtils::CBuilder::Platform::android 0.280235
-      ExtUtils::CBuilder::Platform::cygwin 0.280235
-      ExtUtils::CBuilder::Platform::darwin 0.280235
-      ExtUtils::CBuilder::Platform::dec_osf 0.280235
-      ExtUtils::CBuilder::Platform::os2 0.280235
+      ExtUtils::CBuilder 0.280236
+      ExtUtils::CBuilder::Base 0.280236
+      ExtUtils::CBuilder::Platform::Unix 0.280236
+      ExtUtils::CBuilder::Platform::VMS 0.280236
+      ExtUtils::CBuilder::Platform::Windows 0.280236
+      ExtUtils::CBuilder::Platform::Windows::BCC 0.280236
+      ExtUtils::CBuilder::Platform::Windows::GCC 0.280236
+      ExtUtils::CBuilder::Platform::Windows::MSVC 0.280236
+      ExtUtils::CBuilder::Platform::aix 0.280236
+      ExtUtils::CBuilder::Platform::android 0.280236
+      ExtUtils::CBuilder::Platform::cygwin 0.280236
+      ExtUtils::CBuilder::Platform::darwin 0.280236
+      ExtUtils::CBuilder::Platform::dec_osf 0.280236
+      ExtUtils::CBuilder::Platform::os2 0.280236
     requirements:
       Cwd 0
       ExtUtils::MakeMaker 6.30
@@ -328,45 +337,45 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  ExtUtils-MakeMaker-7.58
-    pathname: B/BI/BINGOS/ExtUtils-MakeMaker-7.58.tar.gz
+  ExtUtils-MakeMaker-7.60
+    pathname: B/BI/BINGOS/ExtUtils-MakeMaker-7.60.tar.gz
     provides:
-      ExtUtils::Command 7.58
-      ExtUtils::Command::MM 7.58
-      ExtUtils::Liblist 7.58
-      ExtUtils::Liblist::Kid 7.58
-      ExtUtils::MM 7.58
-      ExtUtils::MM_AIX 7.58
-      ExtUtils::MM_Any 7.58
-      ExtUtils::MM_BeOS 7.58
-      ExtUtils::MM_Cygwin 7.58
-      ExtUtils::MM_DOS 7.58
-      ExtUtils::MM_Darwin 7.58
-      ExtUtils::MM_MacOS 7.58
-      ExtUtils::MM_NW5 7.58
-      ExtUtils::MM_OS2 7.58
-      ExtUtils::MM_OS390 7.58
-      ExtUtils::MM_QNX 7.58
-      ExtUtils::MM_UWIN 7.58
-      ExtUtils::MM_Unix 7.58
-      ExtUtils::MM_VMS 7.58
-      ExtUtils::MM_VOS 7.58
-      ExtUtils::MM_Win32 7.58
-      ExtUtils::MM_Win95 7.58
-      ExtUtils::MY 7.58
-      ExtUtils::MakeMaker 7.58
-      ExtUtils::MakeMaker::Config 7.58
-      ExtUtils::MakeMaker::Locale 7.58
-      ExtUtils::MakeMaker::_version 7.58
-      ExtUtils::MakeMaker::charstar 7.58
-      ExtUtils::MakeMaker::version 7.58
-      ExtUtils::MakeMaker::version::regex 7.58
-      ExtUtils::MakeMaker::version::vpp 7.58
-      ExtUtils::Mkbootstrap 7.58
-      ExtUtils::Mksymlists 7.58
-      ExtUtils::testlib 7.58
-      MM 7.58
-      MY 7.58
+      ExtUtils::Command 7.60
+      ExtUtils::Command::MM 7.60
+      ExtUtils::Liblist 7.60
+      ExtUtils::Liblist::Kid 7.60
+      ExtUtils::MM 7.60
+      ExtUtils::MM_AIX 7.60
+      ExtUtils::MM_Any 7.60
+      ExtUtils::MM_BeOS 7.60
+      ExtUtils::MM_Cygwin 7.60
+      ExtUtils::MM_DOS 7.60
+      ExtUtils::MM_Darwin 7.60
+      ExtUtils::MM_MacOS 7.60
+      ExtUtils::MM_NW5 7.60
+      ExtUtils::MM_OS2 7.60
+      ExtUtils::MM_OS390 7.60
+      ExtUtils::MM_QNX 7.60
+      ExtUtils::MM_UWIN 7.60
+      ExtUtils::MM_Unix 7.60
+      ExtUtils::MM_VMS 7.60
+      ExtUtils::MM_VOS 7.60
+      ExtUtils::MM_Win32 7.60
+      ExtUtils::MM_Win95 7.60
+      ExtUtils::MY 7.60
+      ExtUtils::MakeMaker 7.60
+      ExtUtils::MakeMaker::Config 7.60
+      ExtUtils::MakeMaker::Locale 7.60
+      ExtUtils::MakeMaker::_version 7.60
+      ExtUtils::MakeMaker::charstar 7.60
+      ExtUtils::MakeMaker::version 7.60
+      ExtUtils::MakeMaker::version::regex 7.60
+      ExtUtils::MakeMaker::version::vpp 7.60
+      ExtUtils::Mkbootstrap 7.60
+      ExtUtils::Mksymlists 7.60
+      ExtUtils::testlib 7.60
+      MM 7.60
+      MY 7.60
     requirements:
       Data::Dumper 0
       Encode 0
@@ -402,10 +411,10 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  ExtUtils-PL2Bat-0.003
-    pathname: L/LE/LEONT/ExtUtils-PL2Bat-0.003.tar.gz
+  ExtUtils-PL2Bat-0.004
+    pathname: L/LE/LEONT/ExtUtils-PL2Bat-0.004.tar.gz
     provides:
-      ExtUtils::PL2Bat 0.003
+      ExtUtils::PL2Bat 0.004
     requirements:
       Carp 0
       ExtUtils::MakeMaker 0
@@ -495,12 +504,13 @@ DISTRIBUTIONS
       parent 0.221
       perl 5.006
       strict 0
-  File-Which-1.23
-    pathname: P/PL/PLICEASE/File-Which-1.23.tar.gz
+  File-Which-1.24
+    pathname: P/PL/PLICEASE/File-Which-1.24.tar.gz
     provides:
-      File::Which 1.23
+      File::Which 1.24
     requirements:
       ExtUtils::MakeMaker 0
+      base 0
       perl 5.006
   File-pushd-1.016
     pathname: D/DA/DAGOLDEN/File-pushd-1.016.tar.gz
@@ -694,11 +704,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20210123
-    pathname: B/BI/BINGOS/Module-CoreList-5.20210123.tar.gz
+  Module-CoreList-5.20210320
+    pathname: B/BI/BINGOS/Module-CoreList-5.20210320.tar.gz
     provides:
-      Module::CoreList 5.20210123
-      Module::CoreList::Utils 5.20210123
+      Module::CoreList 5.20210320
+      Module::CoreList::Utils 5.20210320
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0
@@ -964,52 +974,53 @@ DISTRIBUTIONS
       Tie::Handle 0
       perl 5.006
       strict 0
-  URI-5.07
-    pathname: O/OA/OALDERS/URI-5.07.tar.gz
+  URI-5.09
+    pathname: O/OA/OALDERS/URI-5.09.tar.gz
     provides:
-      URI 5.07
-      URI::Escape 5.07
-      URI::Heuristic 5.07
-      URI::IRI 5.07
-      URI::QueryParam 5.07
-      URI::Split 5.07
-      URI::URL 5.07
-      URI::WithBase 5.07
-      URI::data 5.07
-      URI::file 5.07
-      URI::file::Base 5.07
-      URI::file::FAT 5.07
-      URI::file::Mac 5.07
-      URI::file::OS2 5.07
-      URI::file::QNX 5.07
-      URI::file::Unix 5.07
-      URI::file::Win32 5.07
-      URI::ftp 5.07
-      URI::gopher 5.07
-      URI::http 5.07
-      URI::https 5.07
-      URI::ldap 5.07
-      URI::ldapi 5.07
-      URI::ldaps 5.07
-      URI::mailto 5.07
-      URI::mms 5.07
-      URI::news 5.07
-      URI::nntp 5.07
-      URI::pop 5.07
-      URI::rlogin 5.07
-      URI::rsync 5.07
-      URI::rtsp 5.07
-      URI::rtspu 5.07
-      URI::sftp 5.07
-      URI::sip 5.07
-      URI::sips 5.07
-      URI::snews 5.07
-      URI::ssh 5.07
-      URI::telnet 5.07
-      URI::tn3270 5.07
-      URI::urn 5.07
-      URI::urn::isbn 5.07
-      URI::urn::oid 5.07
+      URI 5.09
+      URI::Escape 5.09
+      URI::Heuristic 5.09
+      URI::IRI 5.09
+      URI::QueryParam 5.09
+      URI::Split 5.09
+      URI::URL 5.09
+      URI::WithBase 5.09
+      URI::data 5.09
+      URI::file 5.09
+      URI::file::Base 5.09
+      URI::file::FAT 5.09
+      URI::file::Mac 5.09
+      URI::file::OS2 5.09
+      URI::file::QNX 5.09
+      URI::file::Unix 5.09
+      URI::file::Win32 5.09
+      URI::ftp 5.09
+      URI::gopher 5.09
+      URI::http 5.09
+      URI::https 5.09
+      URI::ldap 5.09
+      URI::ldapi 5.09
+      URI::ldaps 5.09
+      URI::mailto 5.09
+      URI::mms 5.09
+      URI::news 5.09
+      URI::nntp 5.09
+      URI::nntps 5.09
+      URI::pop 5.09
+      URI::rlogin 5.09
+      URI::rsync 5.09
+      URI::rtsp 5.09
+      URI::rtspu 5.09
+      URI::sftp 5.09
+      URI::sip 5.09
+      URI::sips 5.09
+      URI::snews 5.09
+      URI::ssh 5.09
+      URI::telnet 5.09
+      URI::tn3270 5.09
+      URI::urn 5.09
+      URI::urn::isbn 5.09
+      URI::urn::oid 5.09
     requirements:
       Carp 0
       Cwd 0

@@ -34,6 +34,7 @@ const os = __importStar(__nccwpck_require__(2087));
 const fs = __importStar(__nccwpck_require__(5747));
 const path = __importStar(__nccwpck_require__(5622));
 const semver = __importStar(__nccwpck_require__(1383));
+const tcp = __importStar(__nccwpck_require__(6271));
 const osPlat = os.platform();
 const osArch = os.arch();
 async function getAvailableVersions() {
@@ -64,7 +65,7 @@ async function getPerl(version, thread) {
     const selected = await determineVersion(version);
     // check cache
     let toolPath;
-    toolPath = tc.find('perl', selected);
+    toolPath = tcp.find('perl', selected);
     if (!toolPath) {
         // download, extract, cache
         toolPath = await acquirePerl(selected, thread);
@@ -101,7 +102,7 @@ async function acquirePerl(version, thread) {
             : downloadUrl.endsWith('.tar.bz2')
                 ? await tc.extractTar(downloadPath, '', 'xj')
                 : await tc.extractTar(downloadPath);
-    return await tc.cacheDir(extPath, 'perl', version + (thread ? '-thr' : ''));
+    return await tcp.cacheDir(extPath, 'perl', version + (thread ? '-thr' : ''));
 }
 function getFileName(version, thread) {
     const suffix = thread ? '-multi-thread' : '';
@@ -253,27 +254,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getPerl = void 0;
-// Load tempDirectory before it gets wiped by tool-cache
-let tempDirectory = process.env['RUNNER_TEMPDIRECTORY'] || '';
 const core = __importStar(__nccwpck_require__(2186));
 const tc = __importStar(__nccwpck_require__(7784));
 const path = __importStar(__nccwpck_require__(5622));
 const semver = __importStar(__nccwpck_require__(1383));
 const fs = __importStar(__nccwpck_require__(5747));
-if (!tempDirectory) {
-    let baseLocation;
-    if (process.platform === 'win32') {
-        // On windows use the USERPROFILE env variable
-        baseLocation = process.env['USERPROFILE'] || 'C:\\';
-    }
-    else if (process.platform === 'darwin') {
-        baseLocation = '/Users';
-    }
-    else {
-        baseLocation = '/home';
-    }
-    tempDirectory = path.join(baseLocation, 'actions', 'temp');
-}
+const tcp = __importStar(__nccwpck_require__(6271));
 // NOTE:
 // I don't know why, but 5.18.3 is missing.
 // {
@@ -318,7 +304,7 @@ async function getPerl(version) {
     // check cache
     const selected = await determineVersion(version);
     let toolPath;
-    toolPath = tc.find('perl', selected.version);
+    toolPath = tcp.find('perl', selected.version);
     if (!toolPath) {
         // download, extract, cache
         toolPath = await acquirePerl(selected);
@@ -352,15 +338,124 @@ async function acquirePerl(version) {
         core.debug(error);
         throw `Failed to download version ${version.version}: ${error}`;
     }
-    //
-    // Extract
-    //
-    let extPath = tempDirectory;
-    if (!extPath) {
-        throw new Error('Temp directory not set');
+    const extPath = await tc.extractZip(downloadPath);
+    return await tcp.cacheDir(extPath, 'strawberry-perl', version.version);
+}
+
+
+/***/ }),
+
+/***/ 6271:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+// Ports of @actions/tool-cache
+// We use hard-coded paths rather than $RUNNER_TOOL_CACHE
+// because the prebuilt perl binaries cannot be moved anyway
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.cacheDir = exports.find = void 0;
+const os = __importStar(__nccwpck_require__(2087));
+const fs = __importStar(__nccwpck_require__(5747));
+const path = __importStar(__nccwpck_require__(5622));
+const core = __importStar(__nccwpck_require__(2186));
+const io = __importStar(__nccwpck_require__(7436));
+const semver = __importStar(__nccwpck_require__(1383));
+// Finds the path to a tool version in the local installed tool cache
+function find(toolName, versionSpec, arch) {
+    if (!toolName) {
+        throw new Error('toolName parameter is required');
     }
-    extPath = await tc.extractZip(downloadPath);
-    return await tc.cacheDir(extPath, 'perl', version.version);
+    if (!versionSpec) {
+        throw new Error('versionSpec parameter is required');
+    }
+    arch = arch || os.arch();
+    versionSpec = semver.clean(versionSpec) || '';
+    const cachePath = path.join(_getCacheDirectory(), toolName, versionSpec, arch);
+    let toolPath = '';
+    core.debug(`checking cache: ${cachePath}`);
+    if (fs.existsSync(cachePath) && fs.existsSync(`${cachePath}.complete`)) {
+        core.debug(`Found tool in cache ${toolName} ${versionSpec} ${arch}`);
+        toolPath = cachePath;
+    }
+    else {
+        core.debug('not found');
+    }
+    return toolPath;
+}
+exports.find = find;
+// Caches a directory and installs it into the tool cacheDir
+async function cacheDir(sourceDir, tool, version, arch) {
+    version = semver.clean(version) || version;
+    arch = arch || os.arch();
+    core.debug(`Caching tool ${tool} ${version} ${arch}`);
+    core.debug(`source dir: ${sourceDir}`);
+    if (!fs.statSync(sourceDir).isDirectory()) {
+        throw new Error('sourceDir is not a directory');
+    }
+    // Create the tool dir
+    const destPath = await _createToolPath(tool, version, arch);
+    // copy each child item. do not move. move can fail on Windows
+    // due to anti-virus software having an open handle on a file.
+    for (const itemName of fs.readdirSync(sourceDir)) {
+        const s = path.join(sourceDir, itemName);
+        await io.cp(s, destPath, { recursive: true });
+    }
+    // write .complete
+    _completeToolPath(tool, version, arch);
+    return destPath;
+}
+exports.cacheDir = cacheDir;
+async function _createToolPath(tool, version, arch) {
+    const folderPath = path.join(_getCacheDirectory(), tool, semver.clean(version) || version, arch || '');
+    core.debug(`destination ${folderPath}`);
+    const markerPath = `${folderPath}.complete`;
+    await io.rmRF(folderPath);
+    await io.rmRF(markerPath);
+    await io.mkdirP(folderPath);
+    return folderPath;
+}
+function _completeToolPath(tool, version, arch) {
+    const folderPath = path.join(_getCacheDirectory(), tool, semver.clean(version) || version, arch || '');
+    const markerPath = `${folderPath}.complete`;
+    fs.writeFileSync(markerPath, '');
+    core.debug('finished caching tool');
+}
+function _getCacheDirectory() {
+    if (process.env['ACTIONS_SETUP_PERL_TESTING']) {
+        // for testing
+        return process.env['RUNNER_TOOL_CACHE'] || '';
+    }
+    const platform = os.platform();
+    if (platform === 'linux') {
+        return '/opt/hostedtoolcache';
+    }
+    else if (platform === 'darwin') {
+        return '/Users/runner/hostedtoolcache';
+    }
+    else if (platform === 'win32') {
+        return 'C:\\hostedtoolcache\\windows';
+    }
+    throw new Error(`unknown platform: ${platform}`);
 }
 
 
@@ -7282,22 +7377,30 @@ module.exports = (versions, range, options) => {
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const Range = __nccwpck_require__(9828)
-const { ANY } = __nccwpck_require__(1532)
+const Comparator = __nccwpck_require__(1532)
+const { ANY } = Comparator
 const satisfies = __nccwpck_require__(6055)
 const compare = __nccwpck_require__(4309)
 
 // Complex range `r1 || r2 || ...` is a subset of `R1 || R2 || ...` iff:
-// - Every simple range `r1, r2, ...` is a subset of some `R1, R2, ...`
+// - Every simple range `r1, r2, ...` is a null set, OR
+// - Every simple range `r1, r2, ...` which is not a null set is a subset of
+//   some `R1, R2, ...`
 //
 // Simple range `c1 c2 ...` is a subset of simple range `C1 C2 ...` iff:
 // - If c is only the ANY comparator
 //   - If C is only the ANY comparator, return true
-//   - Else return false
+//   - Else if in prerelease mode, return false
+//   - else replace c with `[>=0.0.0]`
+// - If C is only the ANY comparator
+//   - if in prerelease mode, return true
+//   - else replace C with `[>=0.0.0]`
 // - Let EQ be the set of = comparators in c
 // - If EQ is more than one, return true (null set)
 // - Let GT be the highest > or >= comparator in c
 // - Let LT be the lowest < or <= comparator in c
 // - If GT and LT, and GT.semver > LT.semver, return true (null set)
+// - If any C is a = range, and GT or LT are set, return false
 // - If EQ
 //   - If GT, and EQ does not satisfy GT, return true (null set)
 //   - If LT, and EQ does not satisfy LT, return true (null set)
@@ -7306,13 +7409,16 @@ const compare = __nccwpck_require__(4309)
 // - If GT
 //   - If GT.semver is lower than any > or >= comp in C, return false
 //   - If GT is >=, and GT.semver does not satisfy every C, return false
+//   - If GT.semver has a prerelease, and not in prerelease mode
+//     - If no C has a prerelease and the GT.semver tuple, return false
 // - If LT
 //   - If LT.semver is greater than any < or <= comp in C, return false
 //   - If LT is <=, and LT.semver does not satisfy every C, return false
-// - If any C is a = range, and GT or LT are set, return false
+//   - If GT.semver has a prerelease, and not in prerelease mode
+//     - If no C has a prerelease and the LT.semver tuple, return false
 // - Else return true
 
-const subset = (sub, dom, options) => {
+const subset = (sub, dom, options = {}) => {
   if (sub === dom)
     return true
 
@@ -7341,8 +7447,21 @@ const simpleSubset = (sub, dom, options) => {
   if (sub === dom)
     return true
 
-  if (sub.length === 1 && sub[0].semver === ANY)
-    return dom.length === 1 && dom[0].semver === ANY
+  if (sub.length === 1 && sub[0].semver === ANY) {
+    if (dom.length === 1 && dom[0].semver === ANY)
+      return true
+    else if (options.includePrerelease)
+      sub = [ new Comparator('>=0.0.0-0') ]
+    else
+      sub = [ new Comparator('>=0.0.0') ]
+  }
+
+  if (dom.length === 1 && dom[0].semver === ANY) {
+    if (options.includePrerelease)
+      return true
+    else
+      dom = [ new Comparator('>=0.0.0') ]
+  }
 
   const eqSet = new Set()
   let gt, lt
@@ -7385,10 +7504,32 @@ const simpleSubset = (sub, dom, options) => {
 
   let higher, lower
   let hasDomLT, hasDomGT
+  // if the subset has a prerelease, we need a comparator in the superset
+  // with the same tuple and a prerelease, or it's not a subset
+  let needDomLTPre = lt &&
+    !options.includePrerelease &&
+    lt.semver.prerelease.length ? lt.semver : false
+  let needDomGTPre = gt &&
+    !options.includePrerelease &&
+    gt.semver.prerelease.length ? gt.semver : false
+  // exception: <1.2.3-0 is the same as <1.2.3
+  if (needDomLTPre && needDomLTPre.prerelease.length === 1 &&
+      lt.operator === '<' && needDomLTPre.prerelease[0] === 0) {
+    needDomLTPre = false
+  }
+
   for (const c of dom) {
     hasDomGT = hasDomGT || c.operator === '>' || c.operator === '>='
     hasDomLT = hasDomLT || c.operator === '<' || c.operator === '<='
     if (gt) {
+      if (needDomGTPre) {
+        if (c.semver.prerelease && c.semver.prerelease.length &&
+            c.semver.major === needDomGTPre.major &&
+            c.semver.minor === needDomGTPre.minor &&
+            c.semver.patch === needDomGTPre.patch) {
+          needDomGTPre = false
+        }
+      }
       if (c.operator === '>' || c.operator === '>=') {
         higher = higherGT(gt, c, options)
         if (higher === c && higher !== gt)
@@ -7397,6 +7538,14 @@ const simpleSubset = (sub, dom, options) => {
         return false
     }
     if (lt) {
+      if (needDomLTPre) {
+        if (c.semver.prerelease && c.semver.prerelease.length &&
+            c.semver.major === needDomLTPre.major &&
+            c.semver.minor === needDomLTPre.minor &&
+            c.semver.patch === needDomLTPre.patch) {
+          needDomLTPre = false
+        }
+      }
       if (c.operator === '<' || c.operator === '<=') {
         lower = lowerLT(lt, c, options)
         if (lower === c && lower !== lt)
@@ -7415,6 +7564,12 @@ const simpleSubset = (sub, dom, options) => {
     return false
 
   if (lt && hasDomGT && !gt && gtltComp !== 0)
+    return false
+
+  // we needed a prerelease range in a specific tuple, but didn't get one
+  // then this isn't a subset.  eg >=1.2.3-pre is not a subset of >=1.0.0,
+  // because it includes prereleases in the 1.2.3 tuple
+  if (needDomGTPre || needDomLTPre)
     return false
 
   return true

@@ -35,6 +35,10 @@ inputs:
     description: enable caching when install CPAN modules.
     default: true
     required: false
+  working-directory:
+    description: working directory.
+    default: "."
+    required: false
 runs:
   using: "node12"
   main: "dist/index.js"

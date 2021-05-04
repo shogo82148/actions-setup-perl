@@ -7,11 +7,13 @@ import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as stream from 'stream';
 import * as util from 'util';
+import * as path from 'path';
 
 interface Options {
   install_modules_with: string | null;
   install_modules: string | null;
   enable_modules_cache: string | null;
+  working_directory: string | null;
 }
 
 export async function install(opt: Options): Promise<void> {
@@ -35,10 +37,15 @@ export async function install(opt: Options): Promise<void> {
       return;
   }
 
-  const cachePath = 'local';
+  const workingDirectory = path.join(process.cwd(), opt.working_directory || '.');
+
+  const cachePath = path.join(workingDirectory, 'local');
 
   const baseKey = await cacheKey();
-  const cpanfileKey = await hashFiles('cpanfile', 'cpanfile.snapshot');
+  const cpanfileKey = await hashFiles(
+    path.join(workingDirectory, 'cpanfile'),
+    path.join(workingDirectory, 'cpanfile.snapshot')
+  );
   const installKey = hashString(opt.install_modules || '');
   const key = `${baseKey}-${cpanfileKey}-${installKey}`;
   const restoreKeys = [`${baseKey}-${cpanfileKey}-`, `${baseKey}-`];
@@ -113,14 +120,18 @@ function hashString(s: string): string {
 }
 
 async function installWithCpanm(opt: Options): Promise<void> {
+  const workingDirectory = path.join(process.cwd(), opt.working_directory || '.');
+  const execOpt = {
+    cwd: workingDirectory
+  };
   const args = ['--local-lib-contained', 'local', '--notest'];
   if (core.isDebug()) {
     args.push('--verbose');
   }
-  await exec.exec('cpanm', [...args, '--installdeps', '.']);
+  await exec.exec('cpanm', [...args, '--installdeps', '.'], execOpt);
   if (opt.install_modules) {
     const modules = opt.install_modules.split('\n');
-    await exec.exec('cpanm', [...args, ...modules]);
+    await exec.exec('cpanm', [...args, ...modules], execOpt);
   }
 }
 async function installWithCpm(opt: Options): Promise<void> {

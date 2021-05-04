@@ -85,6 +85,7 @@ All inputs are **optional**. If not set, sensible defaults will be used.
 | `install-modules-with`| install CPAN modules from your `cpanfile` with the specified installer. `cpanm`([App::cpanminus](https://metacpan.org/pod/App::cpanminus)), `cpm`([App::cpm](https://metacpan.org/pod/App::cpm)), and `carton`([Carton](https://metacpan.org/pod/Carton)) are available. By default, any CPAN modules are not installed. | Nothing |
 | `install-modules` | List of one or more CPAN modules, separated by a newline `\n` character. | Nothing |
 | `enable-modules-cache` | enable caching when install CPAN modules. | `true` |
+| `working-directory` | description: working directory. | `.` |
 
 # Supported Shells
 

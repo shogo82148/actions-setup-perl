@@ -2,6 +2,7 @@ name: Main workflow
 on:
   pull_request:
     paths:
+      - "__test__/**"
       - "src/**"
       - "package.json"
       - "package-lock.json"
@@ -87,6 +88,14 @@ jobs:
           cpanm --help
           cpm --help
 
+      - name: install CPAN modules with cpanm
+        uses: ./
+        with:
+          perl-version: "5.30.0"
+          multi-thread: ${{ matrix.multi-thread }}
+          install-with: cpanm
+          working-directory: __test__/p5-Test-Module
+
   test-darwin:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -159,6 +168,14 @@ jobs:
           carton --help
           cpanm --help
           cpm --help
+
+      - name: install CPAN modules with cpanm
+        uses: ./
+        with:
+          perl-version: "5.30.0"
+          multi-thread: ${{ matrix.multi-thread }}
+          install-with: cpanm
+          working-directory: __test__/p5-Test-Module
 
   test-windows:
     runs-on: ${{ matrix.os }}
@@ -238,6 +255,14 @@ jobs:
           cpanm --help
           cpm --help
 
+      - name: install CPAN modules with cpanm
+        uses: ./
+        with:
+          perl-version: "5.30.0"
+          multi-thread: ${{ matrix.multi-thread }}
+          install-with: cpanm
+          working-directory: __test__/p5-Test-Module
+
   test-strawberry:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -312,6 +337,14 @@ jobs:
           carton --help
           cpanm --help
           cpm --help
+
+      - name: install CPAN modules with cpanm
+        uses: ./
+        with:
+          perl-version: "5.30.0"
+          multi-thread: ${{ matrix.multi-thread }}
+          install-with: cpanm
+          working-directory: __test__/p5-Test-Module
 
   format:
     runs-on: ubuntu-latest

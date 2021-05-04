@@ -1,0 +1,123 @@
+// install CPAN modules and caching
+
+import * as core from '@actions/core';
+import * as exec from '@actions/exec';
+import * as cache from '@actions/cache';
+import * as crypto from 'crypto';
+import * as fs from 'fs';
+import * as stream from 'stream';
+import * as util from 'util';
+
+interface Options {
+  install_modules_with: string | null;
+  install_modules: string | null;
+  enable_modules_cache: string | null;
+}
+
+export async function install(opt: Options): Promise<void> {
+  if (!opt.install_modules_with) {
+    core.info('nothing to install');
+    return;
+  }
+  let installer: (opt: Options) => Promise<void>;
+  switch (opt.install_modules_with) {
+    case 'cpanm':
+      installer = installWithCpanm;
+      break;
+    case 'cpm':
+      installer = installWithCpm;
+      break;
+    case 'carton':
+      installer = installWithCarton;
+      break;
+    default:
+      core.error(`unknown installer: ${opt.install_modules_with}`);
+      return;
+  }
+
+  const cachePath = 'local';
+
+  const baseKey = await cacheKey();
+  const cpanfileKey = await hashFiles('cpanfile', 'cpanfile.snapshot');
+  const installKey = hashString(opt.install_modules || '');
+  const key = `${baseKey}-${cpanfileKey}-${installKey}`;
+  const restoreKeys = [`${baseKey}-${cpanfileKey}-`, `${baseKey}-`];
+
+  // restore cache
+  let cachedKey: string | undefined = undefined;
+  try {
+    cachedKey = await cache.restoreCache([cachePath], key, restoreKeys);
+  } catch (error) {
+    if (error.name === cache.ValidationError.name) {
+    } else {
+      core.info(`[warning] There was an error restoring the cache ${error.message}`);
+    }
+  }
+  if (cachedKey) {
+    core.info(`Found cache for key: ${cachedKey}`);
+  }
+
+  // install
+  await installer(opt);
+
+  return;
+}
+
+async function cacheKey(): Promise<string> {
+  let key = 'setup-perl-module-cache-v1-';
+  key += await digestOfPerlVersion();
+  return key;
+}
+
+// we use `perl -V` to the cache key.
+// it contains useful information to use as the cache key,
+// e.g. the platform, the version of perl, the compiler option for building perl
+async function digestOfPerlVersion(): Promise<string> {
+  const hash = crypto.createHash('sha256');
+  await exec.exec('perl', ['-V'], {
+    listeners: {
+      stdout: (data: Buffer) => {
+        hash.update(data);
+      }
+    }
+  });
+  hash.end();
+  return hash.digest('hex');
+}
+
+// see https://github.com/actions/runner/blob/master/src/Misc/expressionFunc/hashFiles/src/hashFiles.ts
+async function hashFiles(...files: string[]): Promise<string> {
+  const result = crypto.createHash('sha256');
+  for (const file of files) {
+    try {
+      const hash = crypto.createHash('sha256');
+      const pipeline = util.promisify(stream.pipeline);
+      await pipeline(fs.createReadStream(file), hash);
+      result.write(hash.digest());
+    } catch (err) {
+      // skip files that doesn't exist.
+      if (err.code !== 'ENOENT') {
+        throw err;
+      }
+    }
+  }
+  result.end();
+  return result.digest('hex');
+}
+
+function hashString(s: string): string {
+  const hash = crypto.createHash('sha256');
+  hash.update(s, 'utf-8');
+  hash.end();
+  return hash.digest('hex');
+}
+
+async function installWithCpanm(opt: Options): Promise<void> {
+  const args = ['--local-lib-contained', 'local', '--notest', '--installdeps', '.'];
+  if (core.isDebug()) {
+    args.push('--verbose');
+  }
+  await exec.exec('cpanm', args);
+}
+async function installWithCpm(opt: Options): Promise<void> {}
+async function installWithCarton(opt: Options): Promise<void> {}

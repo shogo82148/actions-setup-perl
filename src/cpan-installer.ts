@@ -113,11 +113,23 @@ function hashString(s: string): string {
 }
 
 async function installWithCpanm(opt: Options): Promise<void> {
-  const args = ['--local-lib-contained', 'local', '--notest', '--installdeps', '.'];
+  const args = ['--local-lib-contained', 'local', '--notest'];
   if (core.isDebug()) {
     args.push('--verbose');
   }
-  await exec.exec('cpanm', args);
+  await exec.exec('cpanm', [...args, '--installdeps', '.']);
+  if (opt.install_modules) {
+    const modules = opt.install_modules.split('\n');
+    await exec.exec('cpanm', [...args, ...modules]);
+  }
 }
-async function installWithCpm(opt: Options): Promise<void> {}
-async function installWithCarton(opt: Options): Promise<void> {}
+async function installWithCpm(opt: Options): Promise<void> {
+  if (opt.install_modules) {
+    // TODO
+  }
+}
+async function installWithCarton(opt: Options): Promise<void> {
+  if (opt.install_modules) {
+    // TODO
+  }
+}

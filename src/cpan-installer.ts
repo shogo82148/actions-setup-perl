@@ -67,6 +67,10 @@ export async function install(opt: Options): Promise<void> {
   // install
   await installer(opt);
 
+  // configure environment values
+  core.addPath(path.join(cachePath, 'bin'));
+  core.exportVariable('PERL5LIB', path.join(cachePath, 'lib', 'perl5') + path.delimiter + process.env['PERL5LIB']);
+
   return;
 }
 

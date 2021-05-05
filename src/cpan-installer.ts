@@ -40,6 +40,7 @@ export async function install(opt: Options): Promise<void> {
   const workingDirectory = path.join(process.cwd(), opt.working_directory || '.');
 
   const cachePath = path.join(workingDirectory, 'local');
+  const paths = [cachePath];
 
   const baseKey = await cacheKey(opt);
   const cpanfileKey = await hashFiles(
@@ -53,7 +54,7 @@ export async function install(opt: Options): Promise<void> {
   // restore cache
   let cachedKey: string | undefined = undefined;
   try {
-    cachedKey = await cache.restoreCache([cachePath], key, restoreKeys);
+    cachedKey = await cache.restoreCache(paths, key, restoreKeys);
   } catch (error) {
     if (error.name === cache.ValidationError.name) {
     } else {
@@ -62,6 +63,8 @@ export async function install(opt: Options): Promise<void> {
   }
   if (cachedKey) {
     core.info(`Found cache for key: ${cachedKey}`);
+  } else {
+    core.info(`cache not found for input keys: ${key}, ${restoreKeys.join(', ')}`);
   }
 
   // install
@@ -70,6 +73,24 @@ export async function install(opt: Options): Promise<void> {
   // configure environment values
   core.addPath(path.join(cachePath, 'bin'));
   core.exportVariable('PERL5LIB', path.join(cachePath, 'lib', 'perl5') + path.delimiter + process.env['PERL5LIB']);
+
+  // save cache
+  if (cachedKey !== key) {
+    core.info(`saving cache for ${key}.`);
+    try {
+      await cache.saveCache(paths, key);
+    } catch (error) {
+      if (error.name === cache.ValidationError.name) {
+        throw error;
+      } else if (error.name === cache.ReserveCacheError.name) {
+        core.info(error.message);
+      } else {
+        core.info(`[warning]${error.message}`);
+      }
+    }
+  } else {
+    core.info(`cache for ${key} already exists, skip saving.`);
+  }
 
   return;
 }

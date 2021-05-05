@@ -13,7 +13,7 @@ async function run() {
     const version = core.getInput('perl-version');
 
     let result: installer.Result;
-    core.group('install perl', async () => {
+    await core.group('install perl', async () => {
       let thread: boolean;
       if (platform === 'win32') {
         thread = utils.parseBoolean(multiThread || 'true');
@@ -53,7 +53,7 @@ async function run() {
       core.exportVariable('PERL5LIB', path.join(__dirname, '..', 'scripts', 'lib'));
     });
 
-    core.group('install CPAN modules', async () => {
+    await core.group('install CPAN modules', async () => {
       await cpan.install({
         toolPath: result.installedPath,
         install_modules_with: core.getInput('install-modules-with'),

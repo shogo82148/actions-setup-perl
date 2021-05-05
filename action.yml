@@ -5,6 +5,7 @@ inputs:
   perl-version:
     description: "The Perl version to download (if necessary) and use. Example: 5.30.0"
     default: "5"
+    required: false
   distribution:
     description: |
       The distribution of Perl binary.
@@ -12,12 +13,32 @@ inputs:
       "default" is the custom binaries for actions-setup-perl. It is available on Linux, macOS, and Windows.
       "strawberry" is from http://strawberryperl.com/ . It is available on Windows and falls back to default on other platform.
     default: "default"
+    required: false
   multi-thread:
     description: |
-      enables multi threading options(-Duseshrplib -Duseithreads).
+      enables multi threading options(-Duseithreads).
       "true" and "false" are accepted.
       On Linux and macOS, the default value is false (multi threading is disabled).
       On Windows, this option is ignored, multi-threading is always enabled.
+    required: false
+  install-modules-with:
+    description: |
+      install CPAN modules from your cpanfile with the specified installer.
+      cpanm(App::cpanminus), cpm(App::cpm), and carton(Carton) are available.
+      By default, any CPAN modules are not installed.
+    required: false
+  install-modules:
+    description: |
+      List of one or more CPAN modules, separated by a newline \n character.
+    required: false
+  enable-modules-cache:
+    description: enable caching when install CPAN modules.
+    default: true
+    required: false
+  working-directory:
+    description: working directory.
+    default: "."
+    required: false
 runs:
   using: "node12"
   main: "dist/index.js"

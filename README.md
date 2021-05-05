@@ -2,7 +2,7 @@
 
 [![Main workflow](https://github.com/shogo82148/actions-setup-perl/actions/workflows/test.yml/badge.svg)](https://github.com/shogo82148/actions-setup-perl/actions/workflows/test.yml)
 
-![social preview](social-preview.svg)
+![social preview](social-preview.png)
 
 This action sets by perl environment for use in actions by:
 

@@ -93,7 +93,7 @@ jobs:
         with:
           perl-version: "5.30.0"
           multi-thread: ${{ matrix.multi-thread }}
-          install-with: cpanm
+          install-modules-with: cpanm
           working-directory: __test__/p5-Test-Module
 
   test-darwin:
@@ -174,7 +174,7 @@ jobs:
         with:
           perl-version: "5.30.0"
           multi-thread: ${{ matrix.multi-thread }}
-          install-with: cpanm
+          install-modules-with: cpanm
           working-directory: __test__/p5-Test-Module
 
   test-windows:
@@ -343,7 +343,7 @@ jobs:
         with:
           perl-version: "5.30.0"
           multi-thread: ${{ matrix.multi-thread }}
-          install-with: cpanm
+          install-modules-with: cpanm
           working-directory: __test__/p5-Test-Module
 
   format:

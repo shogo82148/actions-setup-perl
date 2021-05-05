@@ -135,7 +135,7 @@ async function installWithCpanm(opt: Options): Promise<void> {
   }
   await exec.exec(cpanm, [...args, '--installdeps', '.'], execOpt);
   if (opt.install_modules) {
-    const modules = opt.install_modules.split('\n');
+    const modules = opt.install_modules.split('\n').map(s => s.trim());
     await exec.exec(cpanm, [...args, ...modules], execOpt);
   }
 }

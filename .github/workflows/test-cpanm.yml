@@ -56,7 +56,12 @@ jobs:
           install-modules: |
             ExtUtils::MakeMaker
           working-directory: __test__/p5-Test-Module
-      - run: perl -MModule::CPANfile -e 'print $Module::CPANfile::VERSION'
+      - name: print the version of Module::CPANfile
+        run: |
+          perl -MModule::CPANfile -e 'print $Module::CPANfile::VERSION'
+      - name: print the version of ExtUtils::MakeMaker
+        run: |
+          perl -MExtUtils::MakeMaker -e 'print $ExtUtils::MakeMaker::VERSION'
 
       - run: cpanm --help
       - run: cpanm --version

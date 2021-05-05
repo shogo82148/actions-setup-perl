@@ -1,6 +1,8 @@
 # actions-setup-perl
 
-![Main workflow](https://github.com/shogo82148/actions-setup-perl/workflows/Main%20workflow/badge.svg)
+[![Main workflow](https://github.com/shogo82148/actions-setup-perl/actions/workflows/test.yml/badge.svg)](https://github.com/shogo82148/actions-setup-perl/actions/workflows/test.yml)
+
+![social preview](social-preview.png)
 
 This action sets by perl environment for use in actions by:
 
@@ -19,6 +21,17 @@ steps:
   with:
     perl-version: '5.32'
 - run: cpanm --installdeps .
+- run: prove -lv t
+```
+
+Install CPAN Modules from cpanfile and cache them:
+```yaml
+steps:
+- uses: actions/checkout@v2
+- uses: shogo82148/actions-setup-perl@v1
+  with:
+    perl-version: '5.32'
+    install-modules-with: cpanm
 - run: prove -lv t
 ```
 
@@ -53,7 +66,7 @@ steps:
 - uses: actions/checkout@v2
 - uses: shogo82148/actions-setup-perl@v1
   with:
-    perl-version: '5.30'
+    perl-version: '5.32'
     distribution: strawberry
 - run: cpanm --installdeps .
 - run: prove -lv t
@@ -66,7 +79,7 @@ This option is available on Windows and falls back to the default customized bin
 The action works for [GitHub-hosted runners](https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners).
 
 | Operating System | Supported Versions |
-| --- | --- | --- |
+| --- | --- |
 | Linux | `ubuntu-18.04`, `ubuntu-20.04` |
 | macOS | `macos-10.05`, `macos-11.0` |
 | Windows | `windows-2019` |
@@ -82,6 +95,10 @@ All inputs are **optional**. If not set, sensible defaults will be used.
 | `perl-version` | Specifies the Perl version to setup. Minor version and patch level can be omitted. The action uses the latest Perl version available that matches the specified value. This defaults to `5`, which results in the latest available version of Perl 5. In addition, the value `latest` is available, the actions uses the latest available version of Perl including `5`, `7` or later major versions. | `5` |
 | `distribution` | Specify the distribution to use, this is either `default` or `strawberry`. (The value `strawberry` is ignored on anything but Windows.) | `default` |
 | `multi-thread` | Enables interpreter-based threads (ithread) options (-Duseithreads). "true" and "false" are accepted. On Linux and macOS, the default value is "false" (ithread is disabled). On Windows, the default value is "true" (ithread is enable) for fork emulation. | depends on platform |
+| `install-modules-with`| install CPAN modules from your `cpanfile` with the specified installer. `cpanm`([App::cpanminus](https://metacpan.org/pod/App::cpanminus)), `cpm`([App::cpm](https://metacpan.org/pod/App::cpm)), and `carton`([Carton](https://metacpan.org/pod/Carton)) are available. By default, any CPAN modules are not installed. | Nothing |
+| `install-modules` | List of one or more CPAN modules, separated by a newline `\n` character. | Nothing |
+| `enable-modules-cache` | enable caching when install CPAN modules. | `true` |
+| `working-directory` | description: working directory. | `.` |
 
 # Supported Shells
 

@@ -10,6 +10,10 @@ interface PerlVersion {
   path: string;
 }
 
+export interface Result {
+  installedPath: string;
+}
+
 // NOTE:
 // I don't know why, but 5.18.3 is missing.
 // {
@@ -53,7 +57,7 @@ async function determineVersion(version: string): Promise<PerlVersion> {
   throw new Error('unable to get latest version');
 }
 
-export async function getPerl(version: string) {
+export async function getPerl(version: string): Promise<Result> {
   // check cache
   const selected = await determineVersion(version);
   let toolPath: string;
@@ -79,6 +83,10 @@ export async function getPerl(version: string) {
   core.addPath(path.join(toolPath, 'c', 'bin'));
   core.addPath(path.join(toolPath, 'perl', 'bin'));
   core.addPath(path.join(toolPath, 'perl', 'site', 'bin'));
+
+  return {
+    installedPath: path.join(toolPath, 'perl')
+  };
 }
 
 async function acquirePerl(version: PerlVersion): Promise<string> {

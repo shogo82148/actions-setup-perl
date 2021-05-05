@@ -124,6 +124,7 @@ function hashString(s: string): string {
 }
 
 async function installWithCpanm(opt: Options): Promise<void> {
+  const cpanm = path.join(__dirname, '..', 'bin', 'cpanm');
   const workingDirectory = path.join(process.cwd(), opt.working_directory || '.');
   const execOpt = {
     cwd: workingDirectory
@@ -132,10 +133,10 @@ async function installWithCpanm(opt: Options): Promise<void> {
   if (core.isDebug()) {
     args.push('--verbose');
   }
-  await exec.exec('cpanm', [...args, '--installdeps', '.'], execOpt);
+  await exec.exec(cpanm, [...args, '--installdeps', '.'], execOpt);
   if (opt.install_modules) {
     const modules = opt.install_modules.split('\n');
-    await exec.exec('cpanm', [...args, ...modules], execOpt);
+    await exec.exec(cpanm, [...args, ...modules], execOpt);
   }
 }
 async function installWithCpm(opt: Options): Promise<void> {

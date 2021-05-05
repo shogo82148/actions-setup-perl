@@ -9,7 +9,10 @@ import * as stream from 'stream';
 import * as util from 'util';
 import * as path from 'path';
 
-interface Options {
+export interface Options {
+  // path to perl installed
+  toolPath: string;
+
   install_modules_with: string | null;
   install_modules: string | null;
   enable_modules_cache: string | null;
@@ -96,8 +99,8 @@ export async function install(opt: Options): Promise<void> {
 }
 
 async function cacheKey(opt: Options): Promise<string> {
-  let key = 'setup-perl-module-cache-v2-';
-  key += await digestOfPerlVersion();
+  let key = 'setup-perl-module-cache-v1-';
+  key += await digestOfPerlVersion(opt);
   key += '-' + (opt.install_modules_with || 'unknown');
   return key;
 }
@@ -105,9 +108,10 @@ async function cacheKey(opt: Options): Promise<string> {
 // we use `perl -V` to the cache key.
 // it contains useful information to use as the cache key,
 // e.g. the platform, the version of perl, the compiler option for building perl
-async function digestOfPerlVersion(): Promise<string> {
+async function digestOfPerlVersion(opt: Options): Promise<string> {
+  const perl = path.join(opt.toolPath, 'bin', 'perl');
   const hash = crypto.createHash('sha256');
-  await exec.exec('perl', ['-V'], {
+  await exec.exec(perl, ['-V'], {
     listeners: {
       stdout: (data: Buffer) => {
         hash.update(data);
@@ -146,54 +150,57 @@ function hashString(s: string): string {
 }
 
 async function installWithCpanm(opt: Options): Promise<void> {
+  const perl = path.join(opt.toolPath, 'bin', 'perl');
   const cpanm = path.join(__dirname, '..', 'bin', 'cpanm');
   const workingDirectory = path.join(process.cwd(), opt.working_directory || '.');
   const execOpt = {
     cwd: workingDirectory
   };
-  const args = ['--local-lib-contained', 'local', '--notest'];
+  const args = [cpanm, '--local-lib-contained', 'local', '--notest'];
   if (core.isDebug()) {
     args.push('--verbose');
   }
-  await exec.exec(cpanm, [...args, '--installdeps', '.'], execOpt);
+  await exec.exec(perl, [...args, '--installdeps', '.'], execOpt);
   if (opt.install_modules) {
     const modules = opt.install_modules.split('\n').map(s => s.trim());
-    await exec.exec(cpanm, [...args, ...modules], execOpt);
+    await exec.exec(perl, [...args, ...modules], execOpt);
   }
 }
 
 async function installWithCpm(opt: Options): Promise<void> {
+  const perl = path.join(opt.toolPath, 'bin', 'perl');
   const cpm = path.join(__dirname, '..', 'bin', 'cpm');
   const workingDirectory = path.join(process.cwd(), opt.working_directory || '.');
   const execOpt = {
     cwd: workingDirectory
   };
-  const args = ['install'];
+  const args = [cpm, 'install'];
   if (core.isDebug()) {
     args.push('--verbose');
   }
-  await exec.exec(cpm, [...args], execOpt);
+  await exec.exec(perl, [...args], execOpt);
   if (opt.install_modules) {
     const modules = opt.install_modules.split('\n').map(s => s.trim());
-    await exec.exec(cpm, [...args, ...modules], execOpt);
+    await exec.exec(perl, [...args, ...modules], execOpt);
   }
 }
 
 async function installWithCarton(opt: Options): Promise<void> {
+  const perl = path.join(opt.toolPath, 'bin', 'perl');
   const carton = path.join(__dirname, '..', 'bin', 'carton');
   const workingDirectory = path.join(process.cwd(), opt.working_directory || '.');
   const execOpt = {
     cwd: workingDirectory
   };
-  const args = ['install'];
-  await exec.exec(carton, [...args], execOpt);
+  const args = [carton, 'install'];
+  await exec.exec(perl, [...args], execOpt);
   if (opt.install_modules) {
     const cpanm = path.join(__dirname, '..', 'bin', 'cpanm');
     const modules = opt.install_modules.split('\n').map(s => s.trim());
-    const args = ['--local-lib-contained', 'local', '--notest'];
+    const args = [cpanm, '--local-lib-contained', 'local', '--notest'];
     if (core.isDebug()) {
       args.push('--verbose');
     }
-    await exec.exec(cpanm, [...args, ...modules], execOpt);
+    await exec.exec(perl, [...args, ...modules], execOpt);
   }
 }

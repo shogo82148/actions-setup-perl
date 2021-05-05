@@ -9,6 +9,10 @@ import * as tcp from './tool-cache-port';
 const osPlat = os.platform();
 const osArch = os.arch();
 
+export interface Result {
+  installedPath: string;
+}
+
 async function getAvailableVersions(): Promise<string[]> {
   return new Promise<string[]>((resolve, reject) => {
     fs.readFile(path.join(__dirname, '..', 'versions', `${osPlat}.json`), (err, data) => {
@@ -37,7 +41,7 @@ async function determineVersion(version: string): Promise<string> {
   throw new Error('unable to get latest version');
 }
 
-export async function getPerl(version: string, thread: boolean) {
+export async function getPerl(version: string, thread: boolean): Promise<Result> {
   const selected = await determineVersion(version);
 
   // check cache
@@ -55,6 +59,10 @@ export async function getPerl(version: string, thread: boolean) {
   // prepend the tools path. instructs the agent to prepend for future tasks
   //
   core.addPath(bin);
+
+  return {
+    installedPath: toolPath
+  };
 }
 
 async function acquirePerl(version: string, thread: boolean): Promise<string> {

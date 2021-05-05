@@ -12,6 +12,7 @@ async function run() {
     const multiThread = core.getInput('multi-thread');
     const version = core.getInput('perl-version');
 
+    let result: installer.Result;
     core.group('install perl', async () => {
       let thread: boolean;
       if (platform === 'win32') {
@@ -32,10 +33,10 @@ async function run() {
       if (version) {
         switch (dist) {
           case 'strawberry':
-            await strawberry.getPerl(version);
+            result = await strawberry.getPerl(version);
             break;
           case 'default':
-            await installer.getPerl(version, thread);
+            result = await installer.getPerl(version, thread);
             break;
           default:
             throw new Error(`unknown distribution: ${dist}`);
@@ -54,6 +55,7 @@ async function run() {
 
     core.group('install CPAN modules', async () => {
       await cpan.install({
+        toolPath: result.installedPath,
         install_modules_with: core.getInput('install-modules-with'),
         install_modules: core.getInput('install-modules'),
         enable_modules_cache: core.getInput('enable-modules-cache'),

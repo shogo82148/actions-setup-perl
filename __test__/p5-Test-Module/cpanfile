@@ -1,1 +1,1 @@
-requires 'Module::CPANfile';
+requires 'App::a2p';

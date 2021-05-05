@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  cpanm:
+  installer:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -83,5 +83,5 @@ jobs:
         run: |
           perl -MExtUtils::MakeMaker -e 'print $ExtUtils::MakeMaker::VERSION'
 
-      - run: cpanm --help
-      - run: cpanm --version
+      - run: ${{ matrix.installer }} --help
+      - run: ${{ matrix.installer }} --version

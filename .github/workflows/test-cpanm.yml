@@ -3,6 +3,11 @@ on:
   pull_request:
     paths:
       - "bin/cpanm"
+      - "__test__/**"
+      - "src/**"
+      - "package.json"
+      - "package-lock.json"
+      - "action.yml"
   push:
     branches:
       - "main"
@@ -10,10 +15,14 @@ on:
 
 jobs:
   cpanm:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
         perl:
           - "5" # latest version of Perl 5
           - "5.8.1" # oldest version the original cpanm supports
@@ -43,7 +52,11 @@ jobs:
         uses: ./
         with:
           perl-version: "${{ matrix.perl }}"
+          install-modules-with: cpanm
+          install-modules: |
+            ExtUtils::MakeMaker
+          working-directory: __test__/p5-Test-Module
+      - run: perl -MModule::CPANfile -e 'print $Module::CPANfile::VERSION'
 
       - run: cpanm --help
       - run: cpanm --version
-      - run: cpanm --notest ExtUtils::MakeMaker

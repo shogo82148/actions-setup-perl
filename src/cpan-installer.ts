@@ -180,8 +180,20 @@ async function installWithCpm(opt: Options): Promise<void> {
 }
 
 async function installWithCarton(opt: Options): Promise<void> {
+  const carton = path.join(__dirname, '..', 'bin', 'carton');
+  const workingDirectory = path.join(process.cwd(), opt.working_directory || '.');
+  const execOpt = {
+    cwd: workingDirectory
+  };
+  const args = ['install'];
+  await exec.exec(carton, [...args], execOpt);
   if (opt.install_modules) {
-    // TODO
+    const cpanm = path.join(__dirname, '..', 'bin', 'cpanm');
+    const modules = opt.install_modules.split('\n').map(s => s.trim());
+    const args = ['--local-lib-contained', 'local', '--notest'];
+    if (core.isDebug()) {
+      args.push('--verbose');
+    }
+    await exec.exec(cpanm, [...args, ...modules], execOpt);
   }
-  throw new Error('not implemented');
 }

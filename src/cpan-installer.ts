@@ -161,11 +161,24 @@ async function installWithCpanm(opt: Options): Promise<void> {
     await exec.exec(cpanm, [...args, ...modules], execOpt);
   }
 }
+
 async function installWithCpm(opt: Options): Promise<void> {
+  const cpm = path.join(__dirname, '..', 'bin', 'cpm');
+  const workingDirectory = path.join(process.cwd(), opt.working_directory || '.');
+  const execOpt = {
+    cwd: workingDirectory
+  };
+  const args = ['install'];
+  if (core.isDebug()) {
+    args.push('--verbose');
+  }
+  await exec.exec(cpm, [...args], execOpt);
   if (opt.install_modules) {
-    // TODO
+    const modules = opt.install_modules.split('\n').map(s => s.trim());
+    await exec.exec(cpm, [...args, ...modules], execOpt);
   }
 }
+
 async function installWithCarton(opt: Options): Promise<void> {
   if (opt.install_modules) {
     // TODO

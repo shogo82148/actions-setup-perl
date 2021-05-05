@@ -96,7 +96,7 @@ export async function install(opt: Options): Promise<void> {
 }
 
 async function cacheKey(opt: Options): Promise<string> {
-  let key = 'setup-perl-module-cache-v1-';
+  let key = 'setup-perl-module-cache-v2-';
   key += await digestOfPerlVersion();
   key += '-' + (opt.install_modules_with || 'unknown');
   return key;
@@ -183,4 +183,5 @@ async function installWithCarton(opt: Options): Promise<void> {
   if (opt.install_modules) {
     // TODO
   }
+  throw new Error('not implemented');
 }

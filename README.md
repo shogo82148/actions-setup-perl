@@ -1,6 +1,8 @@
 # actions-setup-perl
 
-![Main workflow](https://github.com/shogo82148/actions-setup-perl/workflows/Main%20workflow/badge.svg)
+[![Main workflow](https://github.com/shogo82148/actions-setup-perl/actions/workflows/test.yml/badge.svg)](https://github.com/shogo82148/actions-setup-perl/actions/workflows/test.yml)
+
+![social preview](social-preview.svg)
 
 This action sets by perl environment for use in actions by:
 
@@ -19,6 +21,17 @@ steps:
   with:
     perl-version: '5.32'
 - run: cpanm --installdeps .
+- run: prove -lv t
+```
+
+Install CPAN Modules from cpanfile and cache them:
+```yaml
+steps:
+- uses: actions/checkout@v2
+- uses: shogo82148/actions-setup-perl@v1
+  with:
+    perl-version: '5.32'
+    install-modules-with: cpanm
 - run: prove -lv t
 ```
 

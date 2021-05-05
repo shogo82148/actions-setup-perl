@@ -174,7 +174,7 @@ async function installWithCpm(opt: Options): Promise<void> {
   const execOpt = {
     cwd: workingDirectory
   };
-  const args = [cpm, 'install'];
+  const args = [cpm, 'install', '--show-build-log-on-failure'];
   if (core.isDebug()) {
     args.push('--verbose');
   }

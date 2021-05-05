@@ -116,7 +116,8 @@ async function digestOfPerlVersion(opt: Options): Promise<string> {
       stdout: (data: Buffer) => {
         hash.update(data);
       }
-    }
+    },
+    env: {}
   });
   hash.end();
   return hash.digest('hex');

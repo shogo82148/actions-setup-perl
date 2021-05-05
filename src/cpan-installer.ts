@@ -41,7 +41,7 @@ export async function install(opt: Options): Promise<void> {
 
   const cachePath = path.join(workingDirectory, 'local');
 
-  const baseKey = await cacheKey();
+  const baseKey = await cacheKey(opt);
   const cpanfileKey = await hashFiles(
     path.join(workingDirectory, 'cpanfile'),
     path.join(workingDirectory, 'cpanfile.snapshot')
@@ -74,9 +74,10 @@ export async function install(opt: Options): Promise<void> {
   return;
 }
 
-async function cacheKey(): Promise<string> {
+async function cacheKey(opt: Options): Promise<string> {
   let key = 'setup-perl-module-cache-v1-';
   key += await digestOfPerlVersion();
+  key += '-' + (opt.install_modules_with || 'unknown');
   return key;
 }
 

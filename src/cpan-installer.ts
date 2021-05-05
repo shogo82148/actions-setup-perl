@@ -161,7 +161,9 @@ async function installWithCpanm(opt: Options): Promise<void> {
   if (core.isDebug()) {
     args.push('--verbose');
   }
-  await exec.exec(perl, [...args, '--installdeps', '.'], execOpt);
+  if (await exists(path.join(workingDirectory, 'cpanfile'))) {
+    await exec.exec(perl, [...args, '--installdeps', '.'], execOpt);
+  }
   if (opt.install_modules) {
     const modules = opt.install_modules.split('\n').map(s => s.trim());
     await exec.exec(perl, [...args, ...modules], execOpt);
@@ -179,7 +181,12 @@ async function installWithCpm(opt: Options): Promise<void> {
   if (core.isDebug()) {
     args.push('--verbose');
   }
-  await exec.exec(perl, [...args], execOpt);
+  if (
+    (await exists(path.join(workingDirectory, 'cpanfile'))) ||
+    (await exists(path.join(workingDirectory, 'cpanfile.snapshot')))
+  ) {
+    await exec.exec(perl, [...args], execOpt);
+  }
   if (opt.install_modules) {
     const modules = opt.install_modules.split('\n').map(s => s.trim());
     await exec.exec(perl, [...args, ...modules], execOpt);
@@ -194,7 +201,12 @@ async function installWithCarton(opt: Options): Promise<void> {
     cwd: workingDirectory
   };
   const args = [carton, 'install'];
-  await exec.exec(perl, [...args], execOpt);
+  if (
+    (await exists(path.join(workingDirectory, 'cpanfile'))) ||
+    (await exists(path.join(workingDirectory, 'cpanfile.snapshot')))
+  ) {
+    await exec.exec(perl, [...args], execOpt);
+  }
   if (opt.install_modules) {
     const cpanm = path.join(__dirname, '..', 'bin', 'cpanm');
     const modules = opt.install_modules.split('\n').map(s => s.trim());
@@ -204,4 +216,20 @@ async function installWithCarton(opt: Options): Promise<void> {
     }
     await exec.exec(perl, [...args, ...modules], execOpt);
   }
+}
+
+async function exists(path: string): Promise<boolean> {
+  return new Promise((resolve, reject) => {
+    fs.stat(path, err => {
+      if (err) {
+        if (err.code === 'ENOENT') {
+          resolve(false);
+        } else {
+          reject(err);
+        }
+        return;
+      }
+      resolve(true);
+    });
+  });
 }

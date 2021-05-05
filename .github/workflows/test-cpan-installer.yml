@@ -1,4 +1,4 @@
-name: test CPAN module installer
+name: CPAN installer
 on:
   pull_request:
     paths:

@@ -60,53 +60,57 @@ async function install(opt) {
     const cachePath = path.join(workingDirectory, 'local');
     const paths = [cachePath];
     const baseKey = await cacheKey(opt);
-    const cpanfileKey = await hashFiles(path.join(workingDirectory, 'cpanfile'), path.join(workingDirectory, 'cpanfile.snapshot'));
+    const cpanfileKey = await hashFiles(opt, path.join(workingDirectory, 'cpanfile'), path.join(workingDirectory, 'cpanfile.snapshot'));
     const installKey = hashString(opt.install_modules || '');
     const key = `${baseKey}-${cpanfileKey}-${installKey}`;
     const restoreKeys = [`${baseKey}-${cpanfileKey}-`, `${baseKey}-`];
     // restore cache
     let cachedKey = undefined;
-    try {
-        cachedKey = await cache.restoreCache(paths, key, restoreKeys);
-    }
-    catch (error) {
-        if (error.name === cache.ValidationError.name) {
+    if (opt.enable_modules_cache) {
+        try {
+            cachedKey = await cache.restoreCache(paths, key, restoreKeys);
+        }
+        catch (error) {
+            if (error.name === cache.ValidationError.name) {
+            }
+            else {
+                core.info(`[warning] There was an error restoring the cache ${error.message}`);
+            }
+        }
+        if (cachedKey) {
+            core.info(`Found cache for key: ${cachedKey}`);
         }
         else {
-            core.info(`[warning] There was an error restoring the cache ${error.message}`);
+            core.info(`cache not found for input keys: ${key}, ${restoreKeys.join(', ')}`);
         }
-    }
-    if (cachedKey) {
-        core.info(`Found cache for key: ${cachedKey}`);
-    }
-    else {
-        core.info(`cache not found for input keys: ${key}, ${restoreKeys.join(', ')}`);
     }
     // install
     await installer(opt);
     // configure environment values
     core.addPath(path.join(cachePath, 'bin'));
     core.exportVariable('PERL5LIB', path.join(cachePath, 'lib', 'perl5') + path.delimiter + process.env['PERL5LIB']);
-    // save cache
-    if (cachedKey !== key) {
-        core.info(`saving cache for ${key}.`);
-        try {
-            await cache.saveCache(paths, key);
+    if (opt.enable_modules_cache) {
+        // save cache
+        if (cachedKey !== key) {
+            core.info(`saving cache for ${key}.`);
+            try {
+                await cache.saveCache(paths, key);
+            }
+            catch (error) {
+                if (error.name === cache.ValidationError.name) {
+                    throw error;
+                }
+                else if (error.name === cache.ReserveCacheError.name) {
+                    core.info(error.message);
+                }
+                else {
+                    core.info(`[warning]${error.message}`);
+                }
+            }
         }
-        catch (error) {
-            if (error.name === cache.ValidationError.name) {
-                throw error;
-            }
-            else if (error.name === cache.ReserveCacheError.name) {
-                core.info(error.message);
-            }
-            else {
-                core.info(`[warning]${error.message}`);
-            }
+        else {
+            core.info(`cache for ${key} already exists, skip saving.`);
         }
-    }
-    else {
-        core.info(`cache for ${key} already exists, skip saving.`);
     }
     return;
 }
@@ -135,8 +139,9 @@ async function digestOfPerlVersion(opt) {
     return hash.digest('hex');
 }
 // see https://github.com/actions/runner/blob/master/src/Misc/expressionFunc/hashFiles/src/hashFiles.ts
-async function hashFiles(...files) {
+async function hashFiles(opt, ...files) {
     const result = crypto.createHash('sha256');
+    result.update(opt.install_modules_args || '');
     for (const file of files) {
         try {
             const hash = crypto.createHash('sha256');
@@ -171,6 +176,7 @@ async function installWithCpanm(opt) {
     if (core.isDebug()) {
         args.push('--verbose');
     }
+    args.push(...splitArgs(opt.install_modules_args));
     if (await exists(path.join(workingDirectory, 'cpanfile'))) {
         await exec.exec(perl, [...args, '--installdeps', '.'], execOpt);
     }
@@ -190,6 +196,7 @@ async function installWithCpm(opt) {
     if (core.isDebug()) {
         args.push('--verbose');
     }
+    args.push(...splitArgs(opt.install_modules_args));
     if ((await exists(path.join(workingDirectory, 'cpanfile'))) ||
         (await exists(path.join(workingDirectory, 'cpanfile.snapshot')))) {
         await exec.exec(perl, [...args], execOpt);
@@ -207,6 +214,7 @@ async function installWithCarton(opt) {
         cwd: workingDirectory
     };
     const args = [carton, 'install'];
+    args.push(...splitArgs(opt.install_modules_args));
     if ((await exists(path.join(workingDirectory, 'cpanfile'))) ||
         (await exists(path.join(workingDirectory, 'cpanfile.snapshot')))) {
         await exec.exec(perl, [...args], execOpt);
@@ -236,6 +244,12 @@ async function exists(path) {
             resolve(true);
         });
     });
+}
+function splitArgs(args) {
+    if (!args) {
+        return [];
+    }
+    return args.split(/\s+/);
 }
 
 
@@ -445,8 +459,9 @@ async function run() {
             await cpan.install({
                 toolPath: result.installedPath,
                 install_modules_with: core.getInput('install-modules-with'),
+                install_modules_args: core.getInput('install-modules-args'),
                 install_modules: core.getInput('install-modules'),
-                enable_modules_cache: core.getInput('enable-modules-cache'),
+                enable_modules_cache: utils.parseBoolean(core.getInput('enable-modules-cache')),
                 working_directory: core.getInput('working-directory')
             });
         });

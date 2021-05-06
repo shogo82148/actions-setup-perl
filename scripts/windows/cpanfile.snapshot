@@ -39,50 +39,10 @@ DISTRIBUTIONS
       Encode::Alias 0
       ExtUtils::MakeMaker 0
       perl 5.008
-  ExtUtils-Config-0.008
-    pathname: L/LE/LEONT/ExtUtils-Config-0.008.tar.gz
+  ExtUtils-PL2Bat-0.004
+    pathname: L/LE/LEONT/ExtUtils-PL2Bat-0.004.tar.gz
     provides:
-      ExtUtils::Config 0.008
-    requirements:
-      Data::Dumper 0
-      ExtUtils::MakeMaker 6.30
-      strict 0
-      warnings 0
-  ExtUtils-Helpers-0.026
-    pathname: L/LE/LEONT/ExtUtils-Helpers-0.026.tar.gz
-    provides:
-      ExtUtils::Helpers 0.026
-      ExtUtils::Helpers::Unix 0.026
-      ExtUtils::Helpers::VMS 0.026
-      ExtUtils::Helpers::Windows 0.026
-    requirements:
-      Carp 0
-      Exporter 5.57
-      ExtUtils::MakeMaker 0
-      ExtUtils::PL2Bat 0
-      File::Basename 0
-      File::Copy 0
-      File::Spec::Functions 0
-      Text::ParseWords 3.24
-      perl 5.006
-      strict 0
-      warnings 0
-  ExtUtils-InstallPaths-0.012
-    pathname: L/LE/LEONT/ExtUtils-InstallPaths-0.012.tar.gz
-    provides:
-      ExtUtils::InstallPaths 0.012
-    requirements:
-      Carp 0
-      ExtUtils::Config 0.002
-      ExtUtils::MakeMaker 0
-      File::Spec 0
-      perl 5.006
-      strict 0
-      warnings 0
-  ExtUtils-PL2Bat-0.003
-    pathname: L/LE/LEONT/ExtUtils-PL2Bat-0.003.tar.gz
-    provides:
-      ExtUtils::PL2Bat 0.003
+      ExtUtils::PL2Bat 0.004
     requirements:
       Carp 0
       ExtUtils::MakeMaker 0
@@ -125,12 +85,13 @@ DISTRIBUTIONS
       POSIX 0
       strict 0
       warnings 0
-  File-Which-1.23
-    pathname: P/PL/PLICEASE/File-Which-1.23.tar.gz
+  File-Which-1.24
+    pathname: P/PL/PLICEASE/File-Which-1.24.tar.gz
     provides:
-      File::Which 1.23
+      File::Which 1.24
     requirements:
       ExtUtils::MakeMaker 0
+      base 0
       perl 5.006
   File-pushd-1.016
     pathname: D/DA/DAGOLDEN/File-pushd-1.016.tar.gz
@@ -148,16 +109,16 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  HTML-Parser-3.75
-    pathname: C/CA/CAPOEIRAB/HTML-Parser-3.75.tar.gz
+  HTML-Parser-3.76
+    pathname: O/OA/OALDERS/HTML-Parser-3.76.tar.gz
     provides:
-      HTML::Entities 3.75
-      HTML::Filter 3.75
-      HTML::HeadParser 3.75
-      HTML::LinkExtor 3.75
-      HTML::Parser 3.75
-      HTML::PullParser 3.75
-      HTML::TokeParser 3.75
+      HTML::Entities 3.76
+      HTML::Filter 3.76
+      HTML::HeadParser 3.76
+      HTML::LinkExtor 3.76
+      HTML::Parser 3.76
+      HTML::PullParser 3.76
+      HTML::TokeParser 3.76
     requirements:
       Carp 0
       Exporter 0
@@ -169,7 +130,6 @@ DISTRIBUTIONS
       URI::URL 0
       XSLoader 0
       strict 0
-      vars 0
   HTML-Tagset-3.20
     pathname: P/PE/PETDANCE/HTML-Tagset-3.20.tar.gz
     provides:
@@ -192,24 +152,6 @@ DISTRIBUTIONS
       locale 0
       perl 5.008001
       strict 0
-  HTTP-Daemon-6.12
-    pathname: O/OA/OALDERS/HTTP-Daemon-6.12.tar.gz
-    provides:
-      HTTP::Daemon 6.12
-    requirements:
-      Carp 0
-      ExtUtils::MakeMaker 0
-      HTTP::Date 6
-      HTTP::Request 6
-      HTTP::Response 6
-      HTTP::Status 6
-      IO::Socket::IP 0.25
-      LWP::MediaTypes 6
-      Module::Build::Tiny 0.034
-      Socket 0
-      perl 5.006
-      strict 0
-      warnings 0
   HTTP-Date-6.05
     pathname: O/OA/OALDERS/HTTP-Date-6.05.tar.gz
     provides:
@@ -221,19 +163,19 @@ DISTRIBUTIONS
       Time::Zone 0
       perl 5.006002
       strict 0
-  HTTP-Message-6.27
-    pathname: O/OA/OALDERS/HTTP-Message-6.27.tar.gz
+  HTTP-Message-6.29
+    pathname: O/OA/OALDERS/HTTP-Message-6.29.tar.gz
     provides:
-      HTTP::Config 6.27
-      HTTP::Headers 6.27
-      HTTP::Headers::Auth 6.27
-      HTTP::Headers::ETag 6.27
-      HTTP::Headers::Util 6.27
-      HTTP::Message 6.27
-      HTTP::Request 6.27
-      HTTP::Request::Common 6.27
-      HTTP::Response 6.27
-      HTTP::Status 6.27
+      HTTP::Config 6.29
+      HTTP::Headers 6.29
+      HTTP::Headers::Auth 6.29
+      HTTP::Headers::ETag 6.29
+      HTTP::Headers::Util 6.29
+      HTTP::Message 6.29
+      HTTP::Request 6.29
+      HTTP::Request::Common 6.29
+      HTTP::Response 6.29
+      HTTP::Status 6.29
     requirements:
       Carp 0
       Compress::Raw::Zlib 0
@@ -292,17 +234,17 @@ DISTRIBUTIONS
       Exporter 5.57
       ExtUtils::MakeMaker 0
       perl 5.008
-  IO-Socket-SSL-2.068
-    pathname: S/SU/SULLR/IO-Socket-SSL-2.068.tar.gz
+  IO-Socket-SSL-2.070
+    pathname: S/SU/SULLR/IO-Socket-SSL-2.070.tar.gz
     provides:
-      IO::Socket::SSL 2.068
+      IO::Socket::SSL 2.070
       IO::Socket::SSL::Intercept 2.056
-      IO::Socket::SSL::OCSP_Cache 2.068
-      IO::Socket::SSL::OCSP_Resolver 2.068
+      IO::Socket::SSL::OCSP_Cache 2.070
+      IO::Socket::SSL::OCSP_Resolver 2.070
       IO::Socket::SSL::PublicSuffix undef
-      IO::Socket::SSL::SSL_Context 2.068
-      IO::Socket::SSL::SSL_HANDLE 2.068
-      IO::Socket::SSL::Session_Cache 2.068
+      IO::Socket::SSL::SSL_Context 2.070
+      IO::Socket::SSL::SSL_HANDLE 2.070
+      IO::Socket::SSL::Session_Cache 2.070
       IO::Socket::SSL::Utils 2.014
     requirements:
       ExtUtils::MakeMaker 0
@@ -319,11 +261,11 @@ DISTRIBUTIONS
       Time::HiRes 0
       Win32 0
       Win32::ShellQuote 0
-  JSON-4.02
-    pathname: I/IS/ISHIGAKI/JSON-4.02.tar.gz
+  JSON-4.03
+    pathname: I/IS/ISHIGAKI/JSON-4.03.tar.gz
     provides:
-      JSON 4.02
-      JSON::Backend::PP 4.02
+      JSON 4.03
+      JSON::Backend::PP 4.03
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
@@ -410,31 +352,6 @@ DISTRIBUTIONS
       Text::ParseWords 0
       perl 5.006001
       version 0.87
-  Module-Build-Tiny-0.039
-    pathname: L/LE/LEONT/Module-Build-Tiny-0.039.tar.gz
-    provides:
-      Module::Build::Tiny 0.039
-    requirements:
-      CPAN::Meta 0
-      DynaLoader 0
-      Exporter 5.57
-      ExtUtils::CBuilder 0
-      ExtUtils::Config 0.003
-      ExtUtils::Helpers 0.020
-      ExtUtils::Install 0
-      ExtUtils::InstallPaths 0.002
-      ExtUtils::ParseXS 0
-      File::Basename 0
-      File::Find 0
-      File::Path 0
-      File::Spec::Functions 0
-      Getopt::Long 2.36
-      JSON::PP 2
-      Pod::Man 0
-      TAP::Harness::Env 0
-      perl 5.006
-      strict 0
-      warnings 0
   Module-Pluggable-5.2
     pathname: S/SI/SIMONW/Module-Pluggable-5.2.tar.gz
     provides:
@@ -449,7 +366,7 @@ DISTRIBUTIONS
       File::Spec 3.00
       File::Spec::Functions 0
       if 0
-      perl 5.00503
+      perl 5.005030
       strict 0
   Mozilla-CA-20200520
     pathname: A/AB/ABH/Mozilla-CA-20200520.tar.gz
@@ -459,13 +376,13 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Test 0
       perl 5.006
-  Net-HTTP-6.20
-    pathname: O/OA/OALDERS/Net-HTTP-6.20.tar.gz
+  Net-HTTP-6.21
+    pathname: O/OA/OALDERS/Net-HTTP-6.21.tar.gz
     provides:
-      Net::HTTP 6.20
-      Net::HTTP::Methods 6.20
-      Net::HTTP::NB 6.20
-      Net::HTTPS 6.20
+      Net::HTTP 6.21
+      Net::HTTP::Methods 6.21
+      Net::HTTP::NB 6.21
+      Net::HTTPS 6.21
     requirements:
       Carp 0
       Compress::Raw::Zlib 0
@@ -544,52 +461,53 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       common::sense 0
-  URI-5.06
-    pathname: O/OA/OALDERS/URI-5.06.tar.gz
+  URI-5.09
+    pathname: O/OA/OALDERS/URI-5.09.tar.gz
     provides:
-      URI 5.06
-      URI::Escape 5.06
-      URI::Heuristic 5.06
-      URI::IRI 5.06
-      URI::QueryParam 5.06
-      URI::Split 5.06
-      URI::URL 5.06
-      URI::WithBase 5.06
-      URI::data 5.06
-      URI::file 5.06
-      URI::file::Base 5.06
-      URI::file::FAT 5.06
-      URI::file::Mac 5.06
-      URI::file::OS2 5.06
-      URI::file::QNX 5.06
-      URI::file::Unix 5.06
-      URI::file::Win32 5.06
-      URI::ftp 5.06
-      URI::gopher 5.06
-      URI::http 5.06
-      URI::https 5.06
-      URI::ldap 5.06
-      URI::ldapi 5.06
-      URI::ldaps 5.06
-      URI::mailto 5.06
-      URI::mms 5.06
-      URI::news 5.06
-      URI::nntp 5.06
-      URI::pop 5.06
-      URI::rlogin 5.06
-      URI::rsync 5.06
-      URI::rtsp 5.06
-      URI::rtspu 5.06
-      URI::sftp 5.06
-      URI::sip 5.06
-      URI::sips 5.06
-      URI::snews 5.06
-      URI::ssh 5.06
-      URI::telnet 5.06
-      URI::tn3270 5.06
-      URI::urn 5.06
-      URI::urn::isbn 5.06
-      URI::urn::oid 5.06
+      URI 5.09
+      URI::Escape 5.09
+      URI::Heuristic 5.09
+      URI::IRI 5.09
+      URI::QueryParam 5.09
+      URI::Split 5.09
+      URI::URL 5.09
+      URI::WithBase 5.09
+      URI::data 5.09
+      URI::file 5.09
+      URI::file::Base 5.09
+      URI::file::FAT 5.09
+      URI::file::Mac 5.09
+      URI::file::OS2 5.09
+      URI::file::QNX 5.09
+      URI::file::Unix 5.09
+      URI::file::Win32 5.09
+      URI::ftp 5.09
+      URI::gopher 5.09
+      URI::http 5.09
+      URI::https 5.09
+      URI::ldap 5.09
+      URI::ldapi 5.09
+      URI::ldaps 5.09
+      URI::mailto 5.09
+      URI::mms 5.09
+      URI::news 5.09
+      URI::nntp 5.09
+      URI::nntps 5.09
+      URI::pop 5.09
+      URI::rlogin 5.09
+      URI::rsync 5.09
+      URI::rtsp 5.09
+      URI::rtspu 5.09
+      URI::sftp 5.09
+      URI::sip 5.09
+      URI::sips 5.09
+      URI::snews 5.09
+      URI::ssh 5.09
+      URI::telnet 5.09
+      URI::tn3270 5.09
+      URI::urn 5.09
+      URI::urn::isbn 5.09
+      URI::urn::oid 5.09
     requirements:
       Carp 0
       Cwd 0
@@ -632,32 +550,32 @@ DISTRIBUTIONS
       common::sense 3.75
     requirements:
       ExtUtils::MakeMaker 0
-  libwww-perl-6.52
-    pathname: O/OA/OALDERS/libwww-perl-6.52.tar.gz
+  libwww-perl-6.53
+    pathname: O/OA/OALDERS/libwww-perl-6.53.tar.gz
     provides:
-      LWP 6.52
-      LWP::Authen::Basic 6.52
-      LWP::Authen::Digest 6.52
-      LWP::Authen::Ntlm 6.52
-      LWP::ConnCache 6.52
-      LWP::Debug 6.52
-      LWP::Debug::TraceHTTP 6.52
-      LWP::DebugFile 6.52
-      LWP::MemberMixin 6.52
-      LWP::Protocol 6.52
-      LWP::Protocol::cpan 6.52
-      LWP::Protocol::data 6.52
-      LWP::Protocol::file 6.52
-      LWP::Protocol::ftp 6.52
-      LWP::Protocol::gopher 6.52
-      LWP::Protocol::http 6.52
-      LWP::Protocol::loopback 6.52
-      LWP::Protocol::mailto 6.52
-      LWP::Protocol::nntp 6.52
-      LWP::Protocol::nogo 6.52
-      LWP::RobotUA 6.52
-      LWP::Simple 6.52
-      LWP::UserAgent 6.52
+      LWP 6.53
+      LWP::Authen::Basic 6.53
+      LWP::Authen::Digest 6.53
+      LWP::Authen::Ntlm 6.53
+      LWP::ConnCache 6.53
+      LWP::Debug 6.53
+      LWP::Debug::TraceHTTP 6.53
+      LWP::DebugFile 6.53
+      LWP::MemberMixin 6.53
+      LWP::Protocol 6.53
+      LWP::Protocol::cpan 6.53
+      LWP::Protocol::data 6.53
+      LWP::Protocol::file 6.53
+      LWP::Protocol::ftp 6.53
+      LWP::Protocol::gopher 6.53
+      LWP::Protocol::http 6.53
+      LWP::Protocol::loopback 6.53
+      LWP::Protocol::mailto 6.53
+      LWP::Protocol::nntp 6.53
+      LWP::Protocol::nogo 6.53
+      LWP::RobotUA 6.53
+      LWP::Simple 6.53
+      LWP::UserAgent 6.53
       libwww::perl undef
     requirements:
       CPAN::Meta::Requirements 2.120620
@@ -671,7 +589,6 @@ DISTRIBUTIONS
       HTML::Entities 0
       HTML::HeadParser 0
       HTTP::Cookies 6
-      HTTP::Daemon 6
       HTTP::Date 6
       HTTP::Negotiate 6
       HTTP::Request 6

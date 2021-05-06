@@ -14,8 +14,9 @@ export interface Options {
   toolPath: string;
 
   install_modules_with: string | null;
+  install_modules_args: string | null;
   install_modules: string | null;
-  enable_modules_cache: string | null;
+  enable_modules_cache: boolean;
   working_directory: string | null;
 }
 
@@ -47,6 +48,7 @@ export async function install(opt: Options): Promise<void> {
 
   const baseKey = await cacheKey(opt);
   const cpanfileKey = await hashFiles(
+    opt,
     path.join(workingDirectory, 'cpanfile'),
     path.join(workingDirectory, 'cpanfile.snapshot')
   );
@@ -56,18 +58,20 @@ export async function install(opt: Options): Promise<void> {
 
   // restore cache
   let cachedKey: string | undefined = undefined;
-  try {
-    cachedKey = await cache.restoreCache(paths, key, restoreKeys);
-  } catch (error) {
-    if (error.name === cache.ValidationError.name) {
-    } else {
-      core.info(`[warning] There was an error restoring the cache ${error.message}`);
+  if (opt.enable_modules_cache) {
+    try {
+      cachedKey = await cache.restoreCache(paths, key, restoreKeys);
+    } catch (error) {
+      if (error.name === cache.ValidationError.name) {
+      } else {
+        core.info(`[warning] There was an error restoring the cache ${error.message}`);
+      }
     }
-  }
-  if (cachedKey) {
-    core.info(`Found cache for key: ${cachedKey}`);
-  } else {
-    core.info(`cache not found for input keys: ${key}, ${restoreKeys.join(', ')}`);
+    if (cachedKey) {
+      core.info(`Found cache for key: ${cachedKey}`);
+    } else {
+      core.info(`cache not found for input keys: ${key}, ${restoreKeys.join(', ')}`);
+    }
   }
 
   // install
@@ -77,22 +81,24 @@ export async function install(opt: Options): Promise<void> {
   core.addPath(path.join(cachePath, 'bin'));
   core.exportVariable('PERL5LIB', path.join(cachePath, 'lib', 'perl5') + path.delimiter + process.env['PERL5LIB']);
 
-  // save cache
-  if (cachedKey !== key) {
-    core.info(`saving cache for ${key}.`);
-    try {
-      await cache.saveCache(paths, key);
-    } catch (error) {
-      if (error.name === cache.ValidationError.name) {
-        throw error;
-      } else if (error.name === cache.ReserveCacheError.name) {
-        core.info(error.message);
-      } else {
-        core.info(`[warning]${error.message}`);
+  if (opt.enable_modules_cache) {
+    // save cache
+    if (cachedKey !== key) {
+      core.info(`saving cache for ${key}.`);
+      try {
+        await cache.saveCache(paths, key);
+      } catch (error) {
+        if (error.name === cache.ValidationError.name) {
+          throw error;
+        } else if (error.name === cache.ReserveCacheError.name) {
+          core.info(error.message);
+        } else {
+          core.info(`[warning]${error.message}`);
+        }
       }
+    } else {
+      core.info(`cache for ${key} already exists, skip saving.`);
     }
-  } else {
-    core.info(`cache for ${key} already exists, skip saving.`);
   }
 
   return;
@@ -124,8 +130,9 @@ async function digestOfPerlVersion(opt: Options): Promise<string> {
 }
 
 // see https://github.com/actions/runner/blob/master/src/Misc/expressionFunc/hashFiles/src/hashFiles.ts
-async function hashFiles(...files: string[]): Promise<string> {
+async function hashFiles(opt: Options, ...files: string[]): Promise<string> {
   const result = crypto.createHash('sha256');
+  result.update(opt.install_modules_args || '');
   for (const file of files) {
     try {
       const hash = crypto.createHash('sha256');
@@ -161,6 +168,7 @@ async function installWithCpanm(opt: Options): Promise<void> {
   if (core.isDebug()) {
     args.push('--verbose');
   }
+  args.push(...splitArgs(opt.install_modules_args));
   if (await exists(path.join(workingDirectory, 'cpanfile'))) {
     await exec.exec(perl, [...args, '--installdeps', '.'], execOpt);
   }
@@ -181,6 +189,7 @@ async function installWithCpm(opt: Options): Promise<void> {
   if (core.isDebug()) {
     args.push('--verbose');
   }
+  args.push(...splitArgs(opt.install_modules_args));
   if (
     (await exists(path.join(workingDirectory, 'cpanfile'))) ||
     (await exists(path.join(workingDirectory, 'cpanfile.snapshot')))
@@ -201,6 +210,7 @@ async function installWithCarton(opt: Options): Promise<void> {
     cwd: workingDirectory
   };
   const args = [carton, 'install'];
+  args.push(...splitArgs(opt.install_modules_args));
   if (
     (await exists(path.join(workingDirectory, 'cpanfile'))) ||
     (await exists(path.join(workingDirectory, 'cpanfile.snapshot')))
@@ -232,4 +242,11 @@ async function exists(path: string): Promise<boolean> {
       resolve(true);
     });
   });
+}
+
+function splitArgs(args: string | null): string[] {
+  if (!args) {
+    return [];
+  }
+  return args.split(/\s+/);
 }

@@ -166,6 +166,7 @@ async function installWithCpanm(opt: Options): Promise<void> {
   if (core.isDebug()) {
     args.push('--verbose');
   }
+  args.push(...splitArgs(opt.install_modules_args));
   if (await exists(path.join(workingDirectory, 'cpanfile'))) {
     await exec.exec(perl, [...args, '--installdeps', '.'], execOpt);
   }
@@ -186,6 +187,7 @@ async function installWithCpm(opt: Options): Promise<void> {
   if (core.isDebug()) {
     args.push('--verbose');
   }
+  args.push(...splitArgs(opt.install_modules_args));
   if (
     (await exists(path.join(workingDirectory, 'cpanfile'))) ||
     (await exists(path.join(workingDirectory, 'cpanfile.snapshot')))
@@ -206,6 +208,7 @@ async function installWithCarton(opt: Options): Promise<void> {
     cwd: workingDirectory
   };
   const args = [carton, 'install'];
+  args.push(...splitArgs(opt.install_modules_args));
   if (
     (await exists(path.join(workingDirectory, 'cpanfile'))) ||
     (await exists(path.join(workingDirectory, 'cpanfile.snapshot')))
@@ -237,4 +240,11 @@ async function exists(path: string): Promise<boolean> {
       resolve(true);
     });
   });
+}
+
+function splitArgs(args: string | null): string[] {
+  if (!args) {
+    return [];
+  }
+  return args.split(/\s+/);
 }

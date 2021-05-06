@@ -48,6 +48,7 @@ export async function install(opt: Options): Promise<void> {
 
   const baseKey = await cacheKey(opt);
   const cpanfileKey = await hashFiles(
+    opt,
     path.join(workingDirectory, 'cpanfile'),
     path.join(workingDirectory, 'cpanfile.snapshot')
   );
@@ -129,8 +130,9 @@ async function digestOfPerlVersion(opt: Options): Promise<string> {
 }
 
 // see https://github.com/actions/runner/blob/master/src/Misc/expressionFunc/hashFiles/src/hashFiles.ts
-async function hashFiles(...files: string[]): Promise<string> {
+async function hashFiles(opt: Options, ...files: string[]): Promise<string> {
   const result = crypto.createHash('sha256');
+  result.update(opt.install_modules_args || '');
   for (const file of files) {
     try {
       const hash = crypto.createHash('sha256');

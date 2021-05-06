@@ -57,8 +57,9 @@ async function run() {
       await cpan.install({
         toolPath: result.installedPath,
         install_modules_with: core.getInput('install-modules-with'),
+        install_modules_args: core.getInput('install-modules-args'),
         install_modules: core.getInput('install-modules'),
-        enable_modules_cache: core.getInput('enable-modules-cache'),
+        enable_modules_cache: utils.parseBoolean(core.getInput('enable-modules-cache')),
         working_directory: core.getInput('working-directory')
       });
     });

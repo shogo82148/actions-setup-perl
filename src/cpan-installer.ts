@@ -14,8 +14,9 @@ export interface Options {
   toolPath: string;
 
   install_modules_with: string | null;
+  install_modules_args: string | null;
   install_modules: string | null;
-  enable_modules_cache: string | null;
+  enable_modules_cache: boolean;
   working_directory: string | null;
 }
 
@@ -56,18 +57,20 @@ export async function install(opt: Options): Promise<void> {
 
   // restore cache
   let cachedKey: string | undefined = undefined;
-  try {
-    cachedKey = await cache.restoreCache(paths, key, restoreKeys);
-  } catch (error) {
-    if (error.name === cache.ValidationError.name) {
-    } else {
-      core.info(`[warning] There was an error restoring the cache ${error.message}`);
+  if (opt.enable_modules_cache) {
+    try {
+      cachedKey = await cache.restoreCache(paths, key, restoreKeys);
+    } catch (error) {
+      if (error.name === cache.ValidationError.name) {
+      } else {
+        core.info(`[warning] There was an error restoring the cache ${error.message}`);
+      }
     }
-  }
-  if (cachedKey) {
-    core.info(`Found cache for key: ${cachedKey}`);
-  } else {
-    core.info(`cache not found for input keys: ${key}, ${restoreKeys.join(', ')}`);
+    if (cachedKey) {
+      core.info(`Found cache for key: ${cachedKey}`);
+    } else {
+      core.info(`cache not found for input keys: ${key}, ${restoreKeys.join(', ')}`);
+    }
   }
 
   // install
@@ -77,22 +80,24 @@ export async function install(opt: Options): Promise<void> {
   core.addPath(path.join(cachePath, 'bin'));
   core.exportVariable('PERL5LIB', path.join(cachePath, 'lib', 'perl5') + path.delimiter + process.env['PERL5LIB']);
 
-  // save cache
-  if (cachedKey !== key) {
-    core.info(`saving cache for ${key}.`);
-    try {
-      await cache.saveCache(paths, key);
-    } catch (error) {
-      if (error.name === cache.ValidationError.name) {
-        throw error;
-      } else if (error.name === cache.ReserveCacheError.name) {
-        core.info(error.message);
-      } else {
-        core.info(`[warning]${error.message}`);
+  if (opt.enable_modules_cache) {
+    // save cache
+    if (cachedKey !== key) {
+      core.info(`saving cache for ${key}.`);
+      try {
+        await cache.saveCache(paths, key);
+      } catch (error) {
+        if (error.name === cache.ValidationError.name) {
+          throw error;
+        } else if (error.name === cache.ReserveCacheError.name) {
+          core.info(error.message);
+        } else {
+          core.info(`[warning]${error.message}`);
+        }
       }
+    } else {
+      core.info(`cache for ${key} already exists, skip saving.`);
     }
-  } else {
-    core.info(`cache for ${key} already exists, skip saving.`);
   }
 
   return;

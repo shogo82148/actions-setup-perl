@@ -27,6 +27,10 @@ inputs:
       cpanm(App::cpanminus), cpm(App::cpm), and carton(Carton) are available.
       By default, any CPAN modules are not installed.
     required: false
+  install-modules-args:
+    description: |
+      extra argument for CPAN module installer.
+    required: false
   install-modules:
     description: |
       List of one or more CPAN modules, separated by a newline \n character.

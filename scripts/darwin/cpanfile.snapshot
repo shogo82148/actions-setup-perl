@@ -1,9 +1,9 @@
 # carton snapshot format: version 1.0
 DISTRIBUTIONS
-  CPAN-Perl-Releases-5.20210109
-    pathname: B/BI/BINGOS/CPAN-Perl-Releases-5.20210109.tar.gz
+  CPAN-Perl-Releases-5.20210505
+    pathname: B/BI/BINGOS/CPAN-Perl-Releases-5.20210505.tar.gz
     provides:
-      CPAN::Perl::Releases 5.20210109
+      CPAN::Perl::Releases 5.20210505
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006000
@@ -55,12 +55,13 @@ DISTRIBUTIONS
       POSIX 0
       strict 0
       warnings 0
-  File-Which-1.23
-    pathname: P/PL/PLICEASE/File-Which-1.23.tar.gz
+  File-Which-1.24
+    pathname: P/PL/PLICEASE/File-Which-1.24.tar.gz
     provides:
-      File::Which 1.23
+      File::Which 1.24
     requirements:
       ExtUtils::MakeMaker 0
+      base 0
       perl 5.006
   File-pushd-1.016
     pathname: D/DA/DAGOLDEN/File-pushd-1.016.tar.gz
@@ -75,22 +76,6 @@ DISTRIBUTIONS
       File::Spec 0
       File::Temp 0
       overload 0
-      perl 5.006
-      strict 0
-      warnings 0
-  HTTP-Tiny-0.076
-    pathname: D/DA/DAGOLDEN/HTTP-Tiny-0.076.tar.gz
-    provides:
-      HTTP::Tiny 0.076
-    requirements:
-      Carp 0
-      ExtUtils::MakeMaker 6.17
-      Fcntl 0
-      IO::Socket 0
-      MIME::Base64 0
-      Socket 0
-      Time::Local 0
-      bytes 0
       perl 5.006
       strict 0
       warnings 0
@@ -118,11 +103,11 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Test::More 0.31
       Time::HiRes 0
-  JSON-4.02
-    pathname: I/IS/ISHIGAKI/JSON-4.02.tar.gz
+  JSON-4.03
+    pathname: I/IS/ISHIGAKI/JSON-4.03.tar.gz
     provides:
-      JSON 4.02
-      JSON::Backend::PP 4.02
+      JSON 4.03
+      JSON::Backend::PP 4.03
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
@@ -135,6 +120,52 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 6.52
       Types::Serialiser 0
       common::sense 0
+  Module-Build-0.4231
+    pathname: L/LE/LEONT/Module-Build-0.4231.tar.gz
+    provides:
+      Module::Build 0.4231
+      Module::Build::Base 0.4231
+      Module::Build::Compat 0.4231
+      Module::Build::Config 0.4231
+      Module::Build::Cookbook 0.4231
+      Module::Build::Dumper 0.4231
+      Module::Build::Notes 0.4231
+      Module::Build::PPMMaker 0.4231
+      Module::Build::Platform::Default 0.4231
+      Module::Build::Platform::MacOS 0.4231
+      Module::Build::Platform::Unix 0.4231
+      Module::Build::Platform::VMS 0.4231
+      Module::Build::Platform::VOS 0.4231
+      Module::Build::Platform::Windows 0.4231
+      Module::Build::Platform::aix 0.4231
+      Module::Build::Platform::cygwin 0.4231
+      Module::Build::Platform::darwin 0.4231
+      Module::Build::Platform::os2 0.4231
+      Module::Build::PodParser 0.4231
+    requirements:
+      CPAN::Meta 2.142060
+      Cwd 0
+      Data::Dumper 0
+      ExtUtils::CBuilder 0.27
+      ExtUtils::Install 0
+      ExtUtils::Manifest 0
+      ExtUtils::Mkbootstrap 0
+      ExtUtils::ParseXS 2.21
+      File::Basename 0
+      File::Compare 0
+      File::Copy 0
+      File::Find 0
+      File::Path 0
+      File::Spec 0.82
+      Getopt::Long 0
+      Module::Metadata 1.000002
+      Perl::OSType 1
+      Pod::Man 2.17
+      TAP::Harness 3.29
+      Text::Abbrev 0
+      Text::ParseWords 0
+      perl 5.006001
+      version 0.87
   Module-Pluggable-5.2
     pathname: S/SI/SIMONW/Module-Pluggable-5.2.tar.gz
     provides:
@@ -151,11 +182,11 @@ DISTRIBUTIONS
       if 0
       perl 5.00503
       strict 0
-  Perl-Build-1.31
-    pathname: S/SK/SKAJI/Perl-Build-1.31.tar.gz
+  Perl-Build-1.32
+    pathname: S/SK/SKAJI/Perl-Build-1.32.tar.gz
     provides:
-      Perl::Build 1.31
-      Perl::Build::Built 1.31
+      Perl::Build 1.32
+      Perl::Build::Built 1.32
     requirements:
       CPAN::Perl::Releases 3.58
       CPAN::Perl::Releases::MetaCPAN 0.006
@@ -168,101 +199,6 @@ DISTRIBUTIONS
       Module::Build 0.4005
       Pod::Usage 1.63
       perl 5.008001
-  Pod-Perldoc-3.28
-    pathname: M/MA/MALLEN/Pod-Perldoc-3.28.tar.gz
-    provides:
-      Pod::Perldoc 3.28
-      Pod::Perldoc::BaseTo 3.28
-      Pod::Perldoc::GetOptsOO 3.28
-      Pod::Perldoc::ToANSI 3.28
-      Pod::Perldoc::ToChecker 3.28
-      Pod::Perldoc::ToMan 3.28
-      Pod::Perldoc::ToNroff 3.28
-      Pod::Perldoc::ToPod 3.28
-      Pod::Perldoc::ToRtf 3.28
-      Pod::Perldoc::ToTerm 3.28
-      Pod::Perldoc::ToText 3.28
-      Pod::Perldoc::ToTk 3.28
-      Pod::Perldoc::ToXml 3.28
-    requirements:
-      Config 0
-      Encode 0
-      ExtUtils::MakeMaker 0
-      Fcntl 0
-      File::Spec::Functions 0
-      File::Temp 0.22
-      IO::Select 0
-      Pod::Man 2.18
-      Pod::Simple::RTF 3.16
-      Pod::Simple::XMLOutStream 3.16
-      Pod::Text 0
-      Symbol 0
-      Test::More 0
-      Text::ParseWords 0
-      parent 0
-      strict 0
-      warnings 0
-  Pod-Simple-3.42
-    pathname: K/KH/KHW/Pod-Simple-3.42.tar.gz
-    provides:
-      Pod::Simple 3.42
-      Pod::Simple::BlackBox 3.42
-      Pod::Simple::Checker 3.42
-      Pod::Simple::Debug 3.42
-      Pod::Simple::DumpAsText 3.42
-      Pod::Simple::DumpAsXML 3.42
-      Pod::Simple::HTML 3.42
-      Pod::Simple::HTMLBatch 3.42
-      Pod::Simple::HTMLLegacy 5.01
-      Pod::Simple::JustPod undef
-      Pod::Simple::LinkSection 3.42
-      Pod::Simple::Methody 3.42
-      Pod::Simple::Progress 3.42
-      Pod::Simple::PullParser 3.42
-      Pod::Simple::PullParserEndToken 3.42
-      Pod::Simple::PullParserStartToken 3.42
-      Pod::Simple::PullParserTextToken 3.42
-      Pod::Simple::PullParserToken 3.42
-      Pod::Simple::RTF 3.42
-      Pod::Simple::Search 3.42
-      Pod::Simple::SimpleTree 3.42
-      Pod::Simple::Text 3.42
-      Pod::Simple::TextContent 3.42
-      Pod::Simple::TiedOutFH 3.42
-      Pod::Simple::Transcode 3.42
-      Pod::Simple::TranscodeDumb 3.42
-      Pod::Simple::TranscodeSmart 3.42
-      Pod::Simple::XHTML 3.42
-      Pod::Simple::XMLOutStream 3.42
-    requirements:
-      Carp 0
-      Config 0
-      Cwd 0
-      ExtUtils::MakeMaker 0
-      File::Basename 0
-      File::Find 0
-      File::Spec 0
-      Pod::Escapes 1.04
-      Symbol 0
-      Test::More 0
-      Text::Wrap 98.112902
-      if 0
-      integer 0
-      overload 0
-      strict 0
-  Pod-Usage-2.01
-    pathname: A/AT/ATOOMIC/Pod-Usage-2.01.tar.gz
-    provides:
-      Pod::Usage 2.01
-    requirements:
-      Cwd 0
-      ExtUtils::MakeMaker 0
-      File::Basename 0
-      File::Spec 0.82
-      Pod::Perldoc 3.28
-      Pod::Simple 3.40
-      Pod::Text 4.00
-      perl 5.006
   Try-Tiny-0.30
     pathname: E/ET/ETHER/Try-Tiny-0.30.tar.gz
     provides:
@@ -291,17 +227,3 @@ DISTRIBUTIONS
       common::sense 3.75
     requirements:
       ExtUtils::MakeMaker 0
-  podlators-4.14
-    pathname: R/RR/RRA/podlators-4.14.tar.gz
-    provides:
-      Pod undef
-      Pod::Man 4.14
-      Pod::ParseLink 4.14
-      Pod::Text 4.14
-      Pod::Text::Color 4.14
-      Pod::Text::Overstrike 4.14
-      Pod::Text::Termcap 4.14
-    requirements:
-      ExtUtils::MakeMaker 0
-      Pod::Simple 3.06
-      perl 5.008

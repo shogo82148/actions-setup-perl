@@ -85,10 +85,10 @@ DISTRIBUTIONS
       POSIX 0
       strict 0
       warnings 0
-  File-Which-1.24
-    pathname: P/PL/PLICEASE/File-Which-1.24.tar.gz
+  File-Which-1.27
+    pathname: P/PL/PLICEASE/File-Which-1.27.tar.gz
     provides:
-      File::Which 1.24
+      File::Which 1.27
     requirements:
       ExtUtils::MakeMaker 0
       base 0

@@ -248,5 +248,9 @@ function splitArgs(args: string | null): string[] {
   if (!args) {
     return [];
   }
+  args = args.trim();
+  if (args === '') {
+    return [];
+  }
   return args.split(/\s+/);
 }

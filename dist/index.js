@@ -249,6 +249,10 @@ function splitArgs(args) {
     if (!args) {
         return [];
     }
+    args = args.trim();
+    if (args === '') {
+        return [];
+    }
     return args.split(/\s+/);
 }
 

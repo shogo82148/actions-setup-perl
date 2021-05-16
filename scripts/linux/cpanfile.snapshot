@@ -1,9 +1,9 @@
 # carton snapshot format: version 1.0
 DISTRIBUTIONS
-  CPAN-Perl-Releases-5.20210505
-    pathname: B/BI/BINGOS/CPAN-Perl-Releases-5.20210505.tar.gz
+  CPAN-Perl-Releases-5.20210515
+    pathname: B/BI/BINGOS/CPAN-Perl-Releases-5.20210515.tar.gz
     provides:
-      CPAN::Perl::Releases 5.20210505
+      CPAN::Perl::Releases 5.20210515
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006000
@@ -55,10 +55,10 @@ DISTRIBUTIONS
       POSIX 0
       strict 0
       warnings 0
-  File-Which-1.24
-    pathname: P/PL/PLICEASE/File-Which-1.24.tar.gz
+  File-Which-1.27
+    pathname: P/PL/PLICEASE/File-Which-1.27.tar.gz
     provides:
-      File::Which 1.24
+      File::Which 1.27
     requirements:
       ExtUtils::MakeMaker 0
       base 0

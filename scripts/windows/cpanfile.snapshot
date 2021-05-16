@@ -85,10 +85,10 @@ DISTRIBUTIONS
       POSIX 0
       strict 0
       warnings 0
-  File-Which-1.24
-    pathname: P/PL/PLICEASE/File-Which-1.24.tar.gz
+  File-Which-1.27
+    pathname: P/PL/PLICEASE/File-Which-1.27.tar.gz
     provides:
-      File::Which 1.24
+      File::Which 1.27
     requirements:
       ExtUtils::MakeMaker 0
       base 0
@@ -163,19 +163,19 @@ DISTRIBUTIONS
       Time::Zone 0
       perl 5.006002
       strict 0
-  HTTP-Message-6.29
-    pathname: O/OA/OALDERS/HTTP-Message-6.29.tar.gz
+  HTTP-Message-6.31
+    pathname: O/OA/OALDERS/HTTP-Message-6.31.tar.gz
     provides:
-      HTTP::Config 6.29
-      HTTP::Headers 6.29
-      HTTP::Headers::Auth 6.29
-      HTTP::Headers::ETag 6.29
-      HTTP::Headers::Util 6.29
-      HTTP::Message 6.29
-      HTTP::Request 6.29
-      HTTP::Request::Common 6.29
-      HTTP::Response 6.29
-      HTTP::Status 6.29
+      HTTP::Config 6.31
+      HTTP::Headers 6.31
+      HTTP::Headers::Auth 6.31
+      HTTP::Headers::ETag 6.31
+      HTTP::Headers::Util 6.31
+      HTTP::Message 6.31
+      HTTP::Request 6.31
+      HTTP::Request::Common 6.31
+      HTTP::Response 6.31
+      HTTP::Status 6.31
     requirements:
       Carp 0
       Compress::Raw::Zlib 0
@@ -550,32 +550,32 @@ DISTRIBUTIONS
       common::sense 3.75
     requirements:
       ExtUtils::MakeMaker 0
-  libwww-perl-6.53
-    pathname: O/OA/OALDERS/libwww-perl-6.53.tar.gz
+  libwww-perl-6.54
+    pathname: O/OA/OALDERS/libwww-perl-6.54.tar.gz
     provides:
-      LWP 6.53
-      LWP::Authen::Basic 6.53
-      LWP::Authen::Digest 6.53
-      LWP::Authen::Ntlm 6.53
-      LWP::ConnCache 6.53
-      LWP::Debug 6.53
-      LWP::Debug::TraceHTTP 6.53
-      LWP::DebugFile 6.53
-      LWP::MemberMixin 6.53
-      LWP::Protocol 6.53
-      LWP::Protocol::cpan 6.53
-      LWP::Protocol::data 6.53
-      LWP::Protocol::file 6.53
-      LWP::Protocol::ftp 6.53
-      LWP::Protocol::gopher 6.53
-      LWP::Protocol::http 6.53
-      LWP::Protocol::loopback 6.53
-      LWP::Protocol::mailto 6.53
-      LWP::Protocol::nntp 6.53
-      LWP::Protocol::nogo 6.53
-      LWP::RobotUA 6.53
-      LWP::Simple 6.53
-      LWP::UserAgent 6.53
+      LWP 6.54
+      LWP::Authen::Basic 6.54
+      LWP::Authen::Digest 6.54
+      LWP::Authen::Ntlm 6.54
+      LWP::ConnCache 6.54
+      LWP::Debug 6.54
+      LWP::Debug::TraceHTTP 6.54
+      LWP::DebugFile 6.54
+      LWP::MemberMixin 6.54
+      LWP::Protocol 6.54
+      LWP::Protocol::cpan 6.54
+      LWP::Protocol::data 6.54
+      LWP::Protocol::file 6.54
+      LWP::Protocol::ftp 6.54
+      LWP::Protocol::gopher 6.54
+      LWP::Protocol::http 6.54
+      LWP::Protocol::loopback 6.54
+      LWP::Protocol::mailto 6.54
+      LWP::Protocol::nntp 6.54
+      LWP::Protocol::nogo 6.54
+      LWP::RobotUA 6.54
+      LWP::Simple 6.54
+      LWP::UserAgent 6.54
       libwww::perl undef
     requirements:
       CPAN::Meta::Requirements 2.120620

@@ -163,19 +163,19 @@ DISTRIBUTIONS
       Time::Zone 0
       perl 5.006002
       strict 0
-  HTTP-Message-6.31
-    pathname: O/OA/OALDERS/HTTP-Message-6.31.tar.gz
+  HTTP-Message-6.32
+    pathname: O/OA/OALDERS/HTTP-Message-6.32.tar.gz
     provides:
-      HTTP::Config 6.31
-      HTTP::Headers 6.31
-      HTTP::Headers::Auth 6.31
-      HTTP::Headers::ETag 6.31
-      HTTP::Headers::Util 6.31
-      HTTP::Message 6.31
-      HTTP::Request 6.31
-      HTTP::Request::Common 6.31
-      HTTP::Response 6.31
-      HTTP::Status 6.31
+      HTTP::Config 6.32
+      HTTP::Headers 6.32
+      HTTP::Headers::Auth 6.32
+      HTTP::Headers::ETag 6.32
+      HTTP::Headers::Util 6.32
+      HTTP::Message 6.32
+      HTTP::Request 6.32
+      HTTP::Request::Common 6.32
+      HTTP::Response 6.32
+      HTTP::Status 6.32
     requirements:
       Carp 0
       Compress::Raw::Zlib 0
@@ -183,6 +183,7 @@ DISTRIBUTIONS
       Encode::Locale 1
       Exporter 5.57
       ExtUtils::MakeMaker 0
+      File::Spec 0
       HTTP::Date 6
       IO::Compress::Bzip2 2.021
       IO::Compress::Deflate 0

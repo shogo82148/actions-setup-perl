@@ -98,7 +98,7 @@ All inputs are **optional**. If not set, sensible defaults will be used.
 | `multi-thread` | Enables interpreter-based threads (ithread) options (-Duseithreads). "true" and "false" are accepted. On Linux and macOS, the default value is "false" (ithread is disabled). On Windows, the default value is "true" (ithread is enable) for fork emulation. | depends on platform |
 | `install-modules-with`| install CPAN modules from your `cpanfile` with the specified installer. `cpanm`([App::cpanminus](https://metacpan.org/pod/App::cpanminus)), `cpm`([App::cpm](https://metacpan.org/pod/App::cpm)), and `carton`([Carton](https://metacpan.org/pod/Carton)) are available. By default, any CPAN modules are not installed. | Nothing |
 | `install-modules-args` | The argument for CPAN module installer. | Nothing |
-| `install-modules` | List of one or more CPAN modules, separated by a newline `\n` character. | Nothing |
+| `install-modules` | List of one or more CPAN modules, separated by white spaces. | Nothing |
 | `enable-modules-cache` | Enable caching when install CPAN modules. | `true` |
 | `working-directory` | Working directory. | `.` |
 

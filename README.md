@@ -19,7 +19,7 @@ steps:
 - uses: actions/checkout@v2
 - uses: shogo82148/actions-setup-perl@v1
   with:
-    perl-version: '5.32'
+    perl-version: '5.34'
 - run: cpanm --installdeps .
 - run: prove -lv t
 ```
@@ -30,7 +30,7 @@ steps:
 - uses: actions/checkout@v2
 - uses: shogo82148/actions-setup-perl@v1
   with:
-    perl-version: '5.32'
+    perl-version: '5.34'
     install-modules-with: cpanm
     install-modules-args: --with-develop --with-configure
 - run: prove -lv t
@@ -44,7 +44,7 @@ jobs:
     strategy:
       matrix:
         os: ['ubuntu-latest', 'macos-latest', 'windows-latest']
-        perl: [ '5.32', '5.30', '5.28' ]
+        perl: [ '5.34', '5.32', '5.30' ]
     name: Perl ${{ matrix.perl }} on ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -186,12 +186,12 @@ my $result = group 'Do something async' => sub {
 
 # Custom Functions of actions-setup-perl
 # List Available Perl Versions
-my @available_perls_on_current_platform = perl_versions(); # ('5.32.0', '5.30.3', '5.28.3', ...)
+my @available_perls_on_current_platform = perl_versions(); # ('5.34.0', '5.32.1', '5.30.3', '5.28.3', ...)
 my @available_perls_on_linux   = perl_versions(platform => 'linux');
 my @available_perls_on_darwin  = perl_versions(platform => 'darwin');
 my @available_perls_on_win32   = perl_versions(platform => 'win32');
 my @available_strawberry_perls = perl_versions(platform => 'win32', distribution => 'strawberry');
-my @including_patch_versions   = perl_versions(patch => 1); # ('5.32.0', '5.30.3', '5.30.2', ...)
+my @including_patch_versions   = perl_versions(patch => 1); # ('5.34.0', '5.32.1', '5.32.0', '5.30.3', '5.30.2', ...)
 ```
 
 ### List Available Perl Versions
@@ -230,7 +230,7 @@ jobs:
 # Known Issues
 
 - On Windows, `shell: bash` steps continue to use the system perl [#328](https://github.com/shogo82148/actions-setup-perl/issues/328)
-- Perl 5.12, 5.10, and 5.8 of the default distribution on Windows sometimes cause `EXCEPTION_ACCESS_VIOLATION` [#225](https://github.com/shogo82148/actions-setup-perl/issues/225)
+- On Windows, Perl 5.34 is not available [#714](https://github.com/shogo82148/actions-setup-perl/issues/714)
 
 # License
 

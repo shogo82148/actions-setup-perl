@@ -117,7 +117,7 @@ sub run {
         cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-4.03.tar.gz', 'JSON', '5.5.3');
 
         # Cpanel::JSON::XS
-        cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.25.tar.gz', 'Cpanel::JSON::XS', '5.6.2');
+        cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.26.tar.gz', 'Cpanel::JSON::XS', '5.6.2');
 
         # some requirements of JSON::XS
         cpan_install('https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/Canary-Stability-2013.tar.gz', 'Canary::Stability', '5.8.3');
@@ -149,12 +149,12 @@ sub run {
         cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/YAML-Tiny-1.73.tar.gz', 'YAML::Tiny', '5.8.1');
 
         # YAML::XS
-        cpan_install('https://cpan.metacpan.org/authors/id/T/TI/TINITA/YAML-LibYAML-0.82.tar.gz', 'YAML::XS', '5.8.1');
+        cpan_install('https://cpan.metacpan.org/authors/id/T/TI/TINITA/YAML-LibYAML-0.83.tar.gz', 'YAML::XS', '5.8.1');
 
         ### SSL/TLS
 
         # Net::SSLeay
-        cpan_install('https://cpan.metacpan.org/authors/id/C/CH/CHRISN/Net-SSLeay-1.88.tar.gz', 'Net::SSLeay', '5.8.1');
+        cpan_install('https://cpan.metacpan.org/authors/id/C/CH/CHRISN/Net-SSLeay-1.90.tar.gz', 'Net::SSLeay', '5.8.1');
 
         # Mozilla::CA
         cpan_install('https://cpan.metacpan.org/authors/id/A/AB/ABH/Mozilla-CA-20200520.tar.gz', 'Mozilla::CA', '5.6.0');
@@ -162,7 +162,7 @@ sub run {
         # IO::Socket::SSL
         local $ENV{NO_NETWORK_TESTING} = 1;
         local $ENV{PERL_MM_USE_DEFAULT} = 1;
-        cpan_install('https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-2.068.tar.gz', 'IO::Socket::SSL', '5.8.1');
+        cpan_install('https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-2.070.tar.gz', 'IO::Socket::SSL', '5.8.1');
 
         # Test::Harness
         cpan_install('https://cpan.metacpan.org/authors/id/L/LE/LEONT/Test-Harness-3.42.tar.gz', 'Test::Harness', '5.6.0', '5.8.3');

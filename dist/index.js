@@ -180,8 +180,8 @@ async function installWithCpanm(opt) {
     if (await exists(path.join(workingDirectory, 'cpanfile'))) {
         await exec.exec(perl, [...args, '--installdeps', '.'], execOpt);
     }
-    if (opt.install_modules) {
-        const modules = opt.install_modules.split('\n').map(s => s.trim());
+    const modules = splitModules(opt.install_modules);
+    if (modules.length > 0) {
         await exec.exec(perl, [...args, ...modules], execOpt);
     }
 }
@@ -201,8 +201,8 @@ async function installWithCpm(opt) {
         (await exists(path.join(workingDirectory, 'cpanfile.snapshot')))) {
         await exec.exec(perl, [...args], execOpt);
     }
-    if (opt.install_modules) {
-        const modules = opt.install_modules.split('\n').map(s => s.trim());
+    const modules = splitModules(opt.install_modules);
+    if (modules.length > 0) {
         await exec.exec(perl, [...args, ...modules], execOpt);
     }
 }
@@ -219,9 +219,9 @@ async function installWithCarton(opt) {
         (await exists(path.join(workingDirectory, 'cpanfile.snapshot')))) {
         await exec.exec(perl, [...args], execOpt);
     }
-    if (opt.install_modules) {
+    const modules = splitModules(opt.install_modules);
+    if (modules.length > 0) {
         const cpanm = path.join(__dirname, '..', 'bin', 'cpanm');
-        const modules = opt.install_modules.split('\n').map(s => s.trim());
         const args = [cpanm, '--local-lib-contained', 'local', '--notest'];
         if (core.isDebug()) {
             args.push('--verbose');
@@ -254,6 +254,16 @@ function splitArgs(args) {
         return [];
     }
     return args.split(/\s+/);
+}
+function splitModules(modules) {
+    if (!modules) {
+        return [];
+    }
+    modules = modules.trim();
+    if (modules === '') {
+        return [];
+    }
+    return modules.split(/\s+/);
 }
 
 

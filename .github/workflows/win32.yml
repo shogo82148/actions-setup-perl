@@ -79,7 +79,7 @@ jobs:
         shell: bash
         run: |
           cat << 'END_OF_PATH' >> $GITHUB_PATH
-          C:\MinGW\bin
+          C:\strawberry\c\bin
           C:\strawberry\perl\site\bin
           C:\strawberry\perl\bin
           END_OF_PATH

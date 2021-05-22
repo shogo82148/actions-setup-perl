@@ -1,5 +1,6 @@
 # bundle OpenSSL for better reproducibility.
 
+$OPENSSL_VERSION = "1_1_1k"
 $RUNNER_TEMP = $env:RUNNER_TEMP
 if ($null -eq $RUNNER_TEMP) {
     $RUNNER_TEMP = Join-Path $ROOT "working"

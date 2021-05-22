@@ -167,7 +167,10 @@ sub run {
 
     group "install common CPAN modules" => sub {
         # Win32
-        cpan_install('https://cpan.metacpan.org/authors/id/J/JD/JDB/Win32-0.57.tar.gz', 'Win32', '5.6.0', '5.8.3');
+        # build broken from v0.55 https://github.com/perl-libwin32/win32/pull/26
+        # > undefined reference to `CreateEnvironmentBlock'
+        # > undefined reference to `DestroyEnvironmentBlock'
+        cpan_install('https://cpan.metacpan.org/authors/id/J/JD/JDB/Win32-0.54.tar.gz', 'Win32', '5.6.0', '5.8.3');
 
         # JSON
         cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-4.03.tar.gz', 'JSON', '5.5.3');

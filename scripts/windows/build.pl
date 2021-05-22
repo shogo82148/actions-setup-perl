@@ -81,7 +81,7 @@ sub cpan_install {
     return if $skip;
 
     try {
-        local $ENV{PATH} = "$install_dir\\bin;$ENV{PATH}";
+        local $ENV{PATH} = "$install_dir\\bin;C:\\strawberry\\c\\bin;$ENV{PATH}";
         my ($filename, $dirname);
         if ($url =~ m(/([^/]+)/archive/(([0-9a-fA-F]+)[.]tar[.][0-9a-z]+))) {
             $dirname = "$1-$3";
@@ -151,7 +151,7 @@ sub run {
             "-f", "GNUmakefile",
             "-j", jobs($version),
             "INST_TOP=$install_dir",
-            "CCHOME=C:\\MinGW",
+            'CCHOME=C:\strawberry\c',
         );
         if ($thread) {
             push @args, "USE_ITHREADS=define";
@@ -167,6 +167,9 @@ sub run {
 
     group "install common CPAN modules" => sub {
         # Win32
+        # build broken from v0.55 https://github.com/perl-libwin32/win32/pull/26
+        # > undefined reference to `CreateEnvironmentBlock'
+        # > undefined reference to `DestroyEnvironmentBlock'
         cpan_install('https://cpan.metacpan.org/authors/id/J/JD/JDB/Win32-0.54.tar.gz', 'Win32', '5.6.0', '5.8.3');
 
         # JSON
@@ -185,10 +188,7 @@ sub run {
         # some requirements of JSON::PP
         cpan_install('https://cpan.metacpan.org/authors/id/C/CO/CORION/parent-0.238.tar.gz', 'parent', '5.6.0', '5.10.1');
         cpan_install('https://cpan.metacpan.org/authors/id/J/JK/JKEENAN/File-Path-2.18.tar.gz', 'File::Path', '5.6.0', '5.6.1');
-        # https://metacpan.org/release/PEVANS/Scalar-List-Utils-1.55 provides Scalar::Util, but its build fails in perl v5.8.0.
-        # It was fixed by https://github.com/Dual-Life/Scalar-List-Utils/pull/106, but it is not released yet.
-        # So we download from GitHub instead of CPAN
-        cpan_install('https://github.com/shogo82148/Scalar-List-Utils/archive/8f0900dbdca45dccea9b47e77fe87917f3c43531.tar.gz', 'Scalar::Util', '5.6.0', '5.8.1');
+        cpan_install('https://cpan.metacpan.org/authors/id/P/PE/PEVANS/Scalar-List-Utils-1.56.tar.gz', 'Scalar::Util', '5.6.0', '5.8.1');
         cpan_install('https://cpan.metacpan.org/authors/id/T/TO/TODDR/Exporter-5.74.tar.gz', 'Exporter', '5.6.0', '5.6.1');
         cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/File-Temp-0.2311.tar.gz', 'File::Temp', '5.6.0', '5.6.1');
         cpan_install('https://cpan.metacpan.org/authors/id/M/MA/MAKAMAKA/JSON-PP-Compat5006-1.09.tar.gz', 'JSON::PP::Compat5006', '5.6.0', '5.8.0');

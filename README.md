@@ -230,7 +230,6 @@ jobs:
 # Known Issues
 
 - On Windows, `shell: bash` steps continue to use the system perl [#328](https://github.com/shogo82148/actions-setup-perl/issues/328)
-- On Windows, Perl 5.34 is not available [#714](https://github.com/shogo82148/actions-setup-perl/issues/714)
 
 # License
 

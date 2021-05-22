@@ -151,7 +151,7 @@ sub run {
             "-f", "GNUmakefile",
             "-j", jobs($version),
             "INST_TOP=$install_dir",
-            'CCHOME=C:\strawberry\c',
+            "CCHOME=C:\\MinGW",
         );
         if ($thread) {
             push @args, "USE_ITHREADS=define";

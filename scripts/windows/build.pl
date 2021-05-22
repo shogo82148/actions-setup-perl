@@ -81,7 +81,7 @@ sub cpan_install {
     return if $skip;
 
     try {
-        local $ENV{PATH} = "$install_dir\\bin;$ENV{PATH}";
+        local $ENV{PATH} = "$install_dir\\bin;C:\\strawberry\\c\\bin;$ENV{PATH}";
         my ($filename, $dirname);
         if ($url =~ m(/([^/]+)/archive/(([0-9a-fA-F]+)[.]tar[.][0-9a-z]+))) {
             $dirname = "$1-$3";

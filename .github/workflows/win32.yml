@@ -7,7 +7,7 @@ on:
       - "scripts/windows/**"
       - "scripts/lib/Devel/**"
       - ".github/workflows/win32.yml"
-      - ".github/build-openssl-win32.sh"
+      - ".github/build-openssl-win32.ps1"
   push:
     branches:
       - "releases/*"
@@ -67,12 +67,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: msys2/setup-msys2@v2
-        with:
-          install: make mingw-w64-x86_64-gcc nasm
       - name: install OpenSSL
-        run: .github/build-openssl-win32.sh
-        shell: "msys2 {0}"
+        run: .github\build-openssl-win32.ps1
 
       - id: perl
         name: setup host perl
@@ -168,12 +164,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: msys2/setup-msys2@v2
-        with:
-          install: make mingw-w64-x86_64-gcc nasm
       - name: install OpenSSL
-        run: .github/build-openssl-win32.sh
-        shell: "msys2 {0}"
+        run: .github\build-openssl-win32.ps1
 
       - id: perl
         name: setup host perl

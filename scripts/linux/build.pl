@@ -159,7 +159,7 @@ sub run {
         # IO::Socket::SSL
         local $ENV{NO_NETWORK_TESTING} = 1;
         local $ENV{PERL_MM_USE_DEFAULT} = 1;
-        cpan_install('https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-2.070.tar.gz', 'IO::Socket::SSL', '5.8.1');
+        cpan_install('https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-2.071.tar.gz', 'IO::Socket::SSL', '5.8.1');
 
         # Test::Harness
         cpan_install('https://cpan.metacpan.org/authors/id/L/LE/LEONT/Test-Harness-3.42.tar.gz', 'Test::Harness', '5.6.0', '5.8.3');

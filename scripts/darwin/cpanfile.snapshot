@@ -180,7 +180,7 @@ DISTRIBUTIONS
       File::Spec 3.00
       File::Spec::Functions 0
       if 0
-      perl 5.00503
+      perl 5.005030
       strict 0
   Perl-Build-1.32
     pathname: S/SK/SKAJI/Perl-Build-1.32.tar.gz

@@ -223,7 +223,7 @@ jobs:
     steps:
       - uses: shogo82148/actions-setup-perl@v1
         with:
-          perl_version: ${{ matrix.perl }}
+          perl-version: ${{ matrix.perl }}
       # do something
 ```
 

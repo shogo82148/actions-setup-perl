@@ -62,9 +62,13 @@ export async function install(opt: Options): Promise<void> {
     try {
       cachedKey = await cache.restoreCache(paths, key, restoreKeys);
     } catch (error) {
-      if (error.name === cache.ValidationError.name) {
+      if (error instanceof Error) {
+        if (error.name === cache.ValidationError.name) {
+        } else {
+          core.info(`[warning] There was an error restoring the cache ${error.message}`);
+        }
       } else {
-        core.info(`[warning] There was an error restoring the cache ${error.message}`);
+        core.info(`[warning] There was an error restoring the cache ${error}`);
       }
     }
     if (cachedKey) {
@@ -88,12 +92,16 @@ export async function install(opt: Options): Promise<void> {
       try {
         await cache.saveCache(paths, key);
       } catch (error) {
-        if (error.name === cache.ValidationError.name) {
-          throw error;
-        } else if (error.name === cache.ReserveCacheError.name) {
-          core.info(error.message);
+        if (error instanceof Error) {
+          if (error.name === cache.ValidationError.name) {
+            throw error;
+          } else if (error.name === cache.ReserveCacheError.name) {
+            core.info(error.message);
+          } else {
+            core.info(`[warning]${error.message}`);
+          }
         } else {
-          core.info(`[warning]${error.message}`);
+          core.info(`[warning]${error}`);
         }
       }
     } else {
@@ -141,7 +149,7 @@ async function hashFiles(opt: Options, ...files: string[]): Promise<string> {
       result.write(hash.digest());
     } catch (err) {
       // skip files that doesn't exist.
-      if (err.code !== 'ENOENT') {
+      if ((err as any)?.code !== 'ENOENT') {
         throw err;
       }
     }

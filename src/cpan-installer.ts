@@ -66,7 +66,7 @@ export async function install(opt: Options): Promise<void> {
         if (error.name === cache.ValidationError.name) {
         } else {
           core.info(`[warning] There was an error restoring the cache ${error.message}`);
-        }  
+        }
       } else {
         core.info(`[warning] There was an error restoring the cache ${error}`);
       }
@@ -99,7 +99,7 @@ export async function install(opt: Options): Promise<void> {
             core.info(error.message);
           } else {
             core.info(`[warning]${error.message}`);
-          }  
+          }
         } else {
           core.info(`[warning]${error}`);
         }

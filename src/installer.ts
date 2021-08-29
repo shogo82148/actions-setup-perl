@@ -75,9 +75,13 @@ async function acquirePerl(version: string, thread: boolean): Promise<string> {
   try {
     downloadPath = await tc.downloadTool(downloadUrl);
   } catch (error) {
-    core.debug(error);
+    if (error instanceof Error) {
+      core.debug(error.message);
+    } else {
+      core.debug(`${error}`);
+    }
 
-    throw `Failed to download version ${version}: ${error}`;
+    throw new Error(`Failed to download version ${version}: ${error}`);
   }
 
   //

@@ -163,19 +163,19 @@ DISTRIBUTIONS
       Time::Zone 0
       perl 5.006002
       strict 0
-  HTTP-Message-6.32
-    pathname: O/OA/OALDERS/HTTP-Message-6.32.tar.gz
+  HTTP-Message-6.33
+    pathname: O/OA/OALDERS/HTTP-Message-6.33.tar.gz
     provides:
-      HTTP::Config 6.32
-      HTTP::Headers 6.32
-      HTTP::Headers::Auth 6.32
-      HTTP::Headers::ETag 6.32
-      HTTP::Headers::Util 6.32
-      HTTP::Message 6.32
-      HTTP::Request 6.32
-      HTTP::Request::Common 6.32
-      HTTP::Response 6.32
-      HTTP::Status 6.32
+      HTTP::Config 6.33
+      HTTP::Headers 6.33
+      HTTP::Headers::Auth 6.33
+      HTTP::Headers::ETag 6.33
+      HTTP::Headers::Util 6.33
+      HTTP::Message 6.33
+      HTTP::Request 6.33
+      HTTP::Request::Common 6.33
+      HTTP::Response 6.33
+      HTTP::Status 6.33
     requirements:
       Carp 0
       Compress::Raw::Zlib 0
@@ -235,18 +235,18 @@ DISTRIBUTIONS
       Exporter 5.57
       ExtUtils::MakeMaker 0
       perl 5.008
-  IO-Socket-SSL-2.070
-    pathname: S/SU/SULLR/IO-Socket-SSL-2.070.tar.gz
+  IO-Socket-SSL-2.072
+    pathname: S/SU/SULLR/IO-Socket-SSL-2.072.tar.gz
     provides:
-      IO::Socket::SSL 2.070
+      IO::Socket::SSL 2.072
       IO::Socket::SSL::Intercept 2.056
-      IO::Socket::SSL::OCSP_Cache 2.070
-      IO::Socket::SSL::OCSP_Resolver 2.070
+      IO::Socket::SSL::OCSP_Cache 2.072
+      IO::Socket::SSL::OCSP_Resolver 2.072
       IO::Socket::SSL::PublicSuffix undef
-      IO::Socket::SSL::SSL_Context 2.070
-      IO::Socket::SSL::SSL_HANDLE 2.070
-      IO::Socket::SSL::Session_Cache 2.070
-      IO::Socket::SSL::Utils 2.014
+      IO::Socket::SSL::SSL_Context 2.072
+      IO::Socket::SSL::SSL_HANDLE 2.072
+      IO::Socket::SSL::Session_Cache 2.072
+      IO::Socket::SSL::Utils 2.015
     requirements:
       ExtUtils::MakeMaker 0
       Mozilla::CA 0
@@ -551,32 +551,32 @@ DISTRIBUTIONS
       common::sense 3.75
     requirements:
       ExtUtils::MakeMaker 0
-  libwww-perl-6.54
-    pathname: O/OA/OALDERS/libwww-perl-6.54.tar.gz
+  libwww-perl-6.56
+    pathname: O/OA/OALDERS/libwww-perl-6.56.tar.gz
     provides:
-      LWP 6.54
-      LWP::Authen::Basic 6.54
-      LWP::Authen::Digest 6.54
-      LWP::Authen::Ntlm 6.54
-      LWP::ConnCache 6.54
-      LWP::Debug 6.54
-      LWP::Debug::TraceHTTP 6.54
-      LWP::DebugFile 6.54
-      LWP::MemberMixin 6.54
-      LWP::Protocol 6.54
-      LWP::Protocol::cpan 6.54
-      LWP::Protocol::data 6.54
-      LWP::Protocol::file 6.54
-      LWP::Protocol::ftp 6.54
-      LWP::Protocol::gopher 6.54
-      LWP::Protocol::http 6.54
-      LWP::Protocol::loopback 6.54
-      LWP::Protocol::mailto 6.54
-      LWP::Protocol::nntp 6.54
-      LWP::Protocol::nogo 6.54
-      LWP::RobotUA 6.54
-      LWP::Simple 6.54
-      LWP::UserAgent 6.54
+      LWP 6.56
+      LWP::Authen::Basic 6.56
+      LWP::Authen::Digest 6.56
+      LWP::Authen::Ntlm 6.56
+      LWP::ConnCache 6.56
+      LWP::Debug 6.56
+      LWP::Debug::TraceHTTP 6.56
+      LWP::DebugFile 6.56
+      LWP::MemberMixin 6.56
+      LWP::Protocol 6.56
+      LWP::Protocol::cpan 6.56
+      LWP::Protocol::data 6.56
+      LWP::Protocol::file 6.56
+      LWP::Protocol::ftp 6.56
+      LWP::Protocol::gopher 6.56
+      LWP::Protocol::http 6.56
+      LWP::Protocol::loopback 6.56
+      LWP::Protocol::mailto 6.56
+      LWP::Protocol::nntp 6.56
+      LWP::Protocol::nogo 6.56
+      LWP::RobotUA 6.56
+      LWP::Simple 6.56
+      LWP::UserAgent 6.56
       libwww::perl undef
     requirements:
       CPAN::Meta::Requirements 2.120620

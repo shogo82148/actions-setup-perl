@@ -936,12 +936,12 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Test::More 0.47
       Tie::Handle 0
-  Storable-3.15
-    pathname: X/XS/XSAWYERX/Storable-3.15.tar.gz
+  Storable-3.25
+    pathname: N/NW/NWCLARK/Storable-3.25.tar.gz
     provides:
-      Storable 3.15
+      Storable 3.25
     requirements:
-      ExtUtils::MakeMaker 0
+      ExtUtils::MakeMaker 6.31
       XSLoader 0
   String-ShellQuote-1.04
     pathname: R/RO/ROSCH/String-ShellQuote-1.04.tar.gz

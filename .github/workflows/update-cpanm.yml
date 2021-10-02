@@ -3,17 +3,26 @@ on:
   schedule:
     - cron: "22 6 * * *"
   workflow_dispatch:
+  push:
+    paths:
+      - "author/cpanm/*"
+      - ".github/workflows/update-cpanm.yml"
+    branches-ignore:
+      # to avoid recursion
+      - "auto-update/*"
 
 jobs:
   cpanm:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      pull-requests: write
+
     steps:
       - name: Generate token
         id: generate_token
-        uses: tibdex/github-app-token@v1
-        with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.PRIVATE_KEY }}
+        uses: shogo82148/actions-github-app-token@v0
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -34,15 +43,13 @@ jobs:
 
       - name: commit
         env:
-          TOKEN: ${{ steps.generate_token.outputs.token }}
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
         run: |
-          branch=update-cpanm-$(date +"%Y-%m-%d-%H-%M-%S")
+          branch=auto-update/cpanm-$(date +"%Y-%m-%d-%H-%M-%S")
           git config --global user.name "Ichinose Shogo"
           git config --global user.email shogo82148@gmail.com
           git switch -c "$branch"
           git add .
           git commit -m "Update cpanm $(date +"%Y-%m-%d %H:%M:%S")" || exit 0
           git push -u origin $branch
-          curl -H "Authorization: token $TOKEN" \
-            -d "$(jq --arg branch $branch -n '{ "title": "Auto Update cpanm", "base": "main", "head": $branch }')" \
-            "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls"
+          gh pr create --title "Auto Update cpanm" --base main -head "$branch"

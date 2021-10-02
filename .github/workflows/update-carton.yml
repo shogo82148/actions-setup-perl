@@ -3,10 +3,22 @@ on:
   schedule:
     - cron: "41 16 * * *"
   workflow_dispatch:
+  push:
+    paths:
+      - "author/carton/*"
+      - ".github/workflows/update-carton.yml"
+    branches-ignore:
+      # to avoid recursion
+      - "auto-update/*"
 
 jobs:
   carton:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      pull-requests: write
+
     steps:
       - name: Generate token
         id: generate_token
@@ -31,15 +43,13 @@ jobs:
 
       - name: commit
         env:
-          TOKEN: ${{ steps.generate_token.outputs.token }}
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
         run: |
-          branch=update-carton-$(date +"%Y-%m-%d-%H-%M-%S")
+          branch=auto-update/carton-$(date +"%Y-%m-%d-%H-%M-%S")
           git config --global user.name "Ichinose Shogo"
           git config --global user.email shogo82148@gmail.com
           git switch -c "$branch"
           git add .
           git commit -m "Update carton $(date +"%Y-%m-%d %H:%M:%S")" || exit 0
           git push -u origin "$branch"
-          curl -H "Authorization: token $TOKEN" \
-            -d "$(jq --arg branch $branch -n '{ "title": "Auto Update carton", "base": "main", "head": $branch }')" \
-            "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls"
+          gh pr create --title "Auto Update carton" --base main -head "$branch"

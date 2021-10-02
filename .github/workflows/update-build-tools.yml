@@ -82,6 +82,11 @@ jobs:
       - linux
       - darwin
       - windows
+    permissions:
+      id-token: write
+      contents: write
+      pull-requests: write
+
     steps:
       - name: Generate token
         id: generate_token

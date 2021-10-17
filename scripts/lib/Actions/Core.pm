@@ -6,7 +6,25 @@ use warnings;
 use strict;
 
 use Exporter 'import';
-our @EXPORT = qw(export_variable add_secret add_path get_input set_output set_command_echo set_failed is_debug debug error warning info start_group end_group group perl_versions);
+our @EXPORT = qw(
+    export_variable
+    add_secret
+    add_path
+    get_input
+    get_boolean_input
+    set_output
+    set_command_echo
+    set_failed
+    is_debug
+    debug
+    error
+    warning
+    info
+    start_group
+    end_group
+    group
+    perl_versions
+);
 
 use IO::Handle;
 use Encode qw(decode_utf8 encode_utf8);
@@ -53,6 +71,17 @@ sub get_input {
     }
     $val =~ s/\A\s*(.*?)\s*\z/$1/;
     return $val;
+}
+
+sub get_boolean_input {
+    my ($name, $options) = @_;
+
+    my $val = get_input($name, $options);
+    return !!1 if grep { $val eq $_ } qw/true True TRUE/;
+    return !!0 if grep { $val eq $_ } qw/false False FALSE/;
+
+    croak "Input does not meet YAML 1.2 \"Core Schema\" specification: $name\n" .
+        "Support boolean input list: `true | True | TRUE | false | False | FALSE`";
 }
 
 sub set_output {

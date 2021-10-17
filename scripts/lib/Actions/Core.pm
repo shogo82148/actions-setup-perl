@@ -19,6 +19,7 @@ our @EXPORT = qw(
     debug
     error
     warning
+    notice
     info
     start_group
     end_group
@@ -86,7 +87,7 @@ sub get_boolean_input {
 
 sub set_output {
     my ($name, $value) = @_;
-    issue_command('set-output', { name => $name}, $value);
+    issue_command('set-output', { name => $name }, $value);
 }
 
 sub set_command_echo {
@@ -116,14 +117,33 @@ sub debug {
     issue('debug', $message);
 }
 
+# See IssueCommandProperties: https://github.com/actions/runner/blob/main/src/Runner.Worker/ActionCommandManager.cs#L646
+sub _to_command_properties {
+    my ($properties) = @_;
+    return {} unless $properties;
+    return {
+        title     => $properties->{title},
+        file      => $properties->{file},
+        line      => $properties->{start_line},
+        endLine   => $properties->{end_line},
+        col       => $properties->{start_column},
+        endColumn => $properties->{end_column},
+    };
+}
+
 sub error {
-    my ($message) = @_;
-    issue('error', $message);
+    my ($message, $properties) = @_;
+    issue_command('error', _to_command_properties($properties), $message);
 }
 
 sub warning {
-    my ($message) = @_;
-    issue('warning', $message);
+    my ($message, $properties) = @_;
+    issue_command('warning', _to_command_properties($properties), $message);
+}
+
+sub notice {
+    my ($message, $properties) = @_;
+    issue_command('notice', _to_command_properties($properties), $message);
 }
 
 sub info {

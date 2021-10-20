@@ -1,16 +1,27 @@
 import * as core from '@actions/core';
+import * as exec from '@actions/exec';
 import * as tc from '@actions/tool-cache';
 import * as os from 'os';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as semver from 'semver';
+import * as crypto from 'crypto';
 import * as tcp from './tool-cache-port';
 
 const osPlat = os.platform();
 const osArch = os.arch();
 
 export interface Result {
-  installedPath: string;
+  // the perl version actually installed.
+  version: string;
+
+  // the digest of `perl -V`.
+  // it contains useful information to use as the cache key,
+  // e.g. the platform, the version of perl, the compiler option for building perl
+  hash: string;
+
+  // installed path
+  path: string;
 }
 
 async function getAvailableVersions(): Promise<string[]> {
@@ -61,7 +72,9 @@ export async function getPerl(version: string, thread: boolean): Promise<Result>
   core.addPath(bin);
 
   return {
-    installedPath: toolPath
+    version: selected,
+    hash: await digestOfPerlVersion(toolPath),
+    path: toolPath
   };
 }
 
@@ -120,4 +133,22 @@ async function getDownloadUrl(filename: string): Promise<string> {
     const actionsVersion = info.version;
     return `https://setupperl.blob.core.windows.net/actions-setup-perl/v${actionsVersion}/${filename}`;
   });
+}
+
+// we use `perl -V` to the cache key.
+// it contains useful information to use as the cache key,
+// e.g. the platform, the version of perl, the compiler option for building perl
+async function digestOfPerlVersion(toolPath: string): Promise<string> {
+  const perl = path.join(toolPath, 'bin', 'perl');
+  const hash = crypto.createHash('sha256');
+  await exec.exec(perl, ['-V'], {
+    listeners: {
+      stdout: (data: Buffer) => {
+        hash.update(data);
+      }
+    },
+    env: {}
+  });
+  hash.end();
+  return hash.digest('hex');
 }

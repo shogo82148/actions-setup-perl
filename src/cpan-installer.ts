@@ -10,6 +10,9 @@ import * as util from 'util';
 import * as path from 'path';
 
 export interface Options {
+  // the digest of `perl -V`
+  perlHash: string;
+
   // path to perl installed
   toolPath: string;
 
@@ -114,27 +117,9 @@ export async function install(opt: Options): Promise<void> {
 
 async function cacheKey(opt: Options): Promise<string> {
   let key = 'setup-perl-module-cache-v1-';
-  key += await digestOfPerlVersion(opt);
+  key += opt.perlHash;
   key += '-' + (opt.install_modules_with || 'unknown');
   return key;
-}
-
-// we use `perl -V` to the cache key.
-// it contains useful information to use as the cache key,
-// e.g. the platform, the version of perl, the compiler option for building perl
-async function digestOfPerlVersion(opt: Options): Promise<string> {
-  const perl = path.join(opt.toolPath, 'bin', 'perl');
-  const hash = crypto.createHash('sha256');
-  await exec.exec(perl, ['-V'], {
-    listeners: {
-      stdout: (data: Buffer) => {
-        hash.update(data);
-      }
-    },
-    env: {}
-  });
-  hash.end();
-  return hash.digest('hex');
 }
 
 // see https://github.com/actions/runner/blob/master/src/Misc/expressionFunc/hashFiles/src/hashFiles.ts

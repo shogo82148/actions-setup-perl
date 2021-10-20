@@ -41,6 +41,8 @@ async function run() {
           default:
             throw new Error(`unknown distribution: ${dist}`);
         }
+        core.setOutput("perl-version", result.version);
+        core.setOutput("perl-hash", result.hash);
       }
 
       const matchersPath = path.join(__dirname, '..', '.github');
@@ -55,7 +57,8 @@ async function run() {
 
     await core.group('install CPAN modules', async () => {
       await cpan.install({
-        toolPath: result.installedPath,
+        perlHash: result.hash,
+        toolPath: result.path,
         install_modules_with: core.getInput('install-modules-with'),
         install_modules_args: core.getInput('install-modules-args'),
         install_modules: core.getInput('install-modules'),

@@ -41,14 +41,18 @@ jobs:
       - run: npm run package
       - run: npm test
 
-      - name: use the action
+      - id: setup-perl
+        name: use the action
         uses: ./
         with:
           perl-version: "5.30.0"
           multi-thread: ${{ matrix.multi-thread }}
+      - name: show outputs
+        run: |
+          echo "perl-version: ${{ steps.setup-perl.outputs.perl-version }}"
+          echo "perl-hash: ${{ steps.setup-perl.outputs.perl-hash }}"
 
       - run: gcc --version
-
       - name: run perl -V on bash
         run: perl -V
         shell: bash
@@ -115,14 +119,18 @@ jobs:
       - run: npm run package
       - run: npm test
 
-      - name: use the action
+      - id: setup-perl
+        name: use the action
         uses: ./
         with:
           perl-version: "5.30.0"
           multi-thread: ${{ matrix.multi-thread }}
+      - name: show outputs
+        run: |
+          echo "perl-version: ${{ steps.setup-perl.outputs.perl-version }}"
+          echo "perl-hash: ${{ steps.setup-perl.outputs.perl-hash }}"
 
       - run: gcc --version
-
       - name: run perl -V on bash
         run: perl -V
         shell: bash
@@ -192,14 +200,18 @@ jobs:
       - run: npm run package
       - run: npm test
 
-      - name: use the action
+      - id: setup-perl
+        name: use the action
         uses: ./
         with:
           perl-version: "5.30.0"
           multi-thread: ${{ matrix.multi-thread }}
+      - name: show outputs
+        run: |
+          Write-Output "perl-version: ${{ steps.setup-perl.outputs.perl-version }}"
+          Write-Output "perl-hash: ${{ steps.setup-perl.outputs.perl-hash }}"
 
       - run: gcc --version
-
       - name: run perl -V on bash
         run: perl -V
         shell: bash
@@ -268,14 +280,18 @@ jobs:
       - run: npm run package
       - run: npm test
 
-      - name: use the action
+      - id: setup-perl
+        name: use the action
         uses: ./
         with:
           perl-version: "5.30.0"
           distribution: strawberry
+      - name: show outputs
+        run: |
+          Write-Output "perl-version: ${{ steps.setup-perl.outputs.perl-version }}"
+          Write-Output "perl-hash: ${{ steps.setup-perl.outputs.perl-hash }}"
 
       - run: gcc --version
-
       - name: run perl -V on bash
         run: perl -V
         shell: bash

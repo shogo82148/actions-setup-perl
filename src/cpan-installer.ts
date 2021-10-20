@@ -1,13 +1,13 @@
 // install CPAN modules and caching
 
-import * as core from '@actions/core';
-import * as exec from '@actions/exec';
-import * as cache from '@actions/cache';
-import * as crypto from 'crypto';
-import * as fs from 'fs';
-import * as stream from 'stream';
-import * as util from 'util';
-import * as path from 'path';
+import * as core from "@actions/core";
+import * as exec from "@actions/exec";
+import * as cache from "@actions/cache";
+import * as crypto from "crypto";
+import * as fs from "fs";
+import * as stream from "stream";
+import * as util from "util";
+import * as path from "path";
 
 export interface Options {
   // the digest of `perl -V`
@@ -25,18 +25,18 @@ export interface Options {
 
 export async function install(opt: Options): Promise<void> {
   if (!opt.install_modules_with) {
-    core.info('nothing to install');
+    core.info("nothing to install");
     return;
   }
   let installer: (opt: Options) => Promise<void>;
   switch (opt.install_modules_with) {
-    case 'cpanm':
+    case "cpanm":
       installer = installWithCpanm;
       break;
-    case 'cpm':
+    case "cpm":
       installer = installWithCpm;
       break;
-    case 'carton':
+    case "carton":
       installer = installWithCarton;
       break;
     default:
@@ -44,18 +44,18 @@ export async function install(opt: Options): Promise<void> {
       return;
   }
 
-  const workingDirectory = path.join(process.cwd(), opt.working_directory || '.');
+  const workingDirectory = path.join(process.cwd(), opt.working_directory || ".");
 
-  const cachePath = path.join(workingDirectory, 'local');
+  const cachePath = path.join(workingDirectory, "local");
   const paths = [cachePath];
 
   const baseKey = await cacheKey(opt);
   const cpanfileKey = await hashFiles(
     opt,
-    path.join(workingDirectory, 'cpanfile'),
-    path.join(workingDirectory, 'cpanfile.snapshot')
+    path.join(workingDirectory, "cpanfile"),
+    path.join(workingDirectory, "cpanfile.snapshot")
   );
-  const installKey = hashString(opt.install_modules || '');
+  const installKey = hashString(opt.install_modules || "");
   const key = `${baseKey}-${cpanfileKey}-${installKey}`;
   const restoreKeys = [`${baseKey}-${cpanfileKey}-`, `${baseKey}-`];
 
@@ -77,7 +77,7 @@ export async function install(opt: Options): Promise<void> {
     if (cachedKey) {
       core.info(`Found cache for key: ${cachedKey}`);
     } else {
-      core.info(`cache not found for input keys: ${key}, ${restoreKeys.join(', ')}`);
+      core.info(`cache not found for input keys: ${key}, ${restoreKeys.join(", ")}`);
     }
   }
 
@@ -85,8 +85,8 @@ export async function install(opt: Options): Promise<void> {
   await installer(opt);
 
   // configure environment values
-  core.addPath(path.join(cachePath, 'bin'));
-  core.exportVariable('PERL5LIB', path.join(cachePath, 'lib', 'perl5') + path.delimiter + process.env['PERL5LIB']);
+  core.addPath(path.join(cachePath, "bin"));
+  core.exportVariable("PERL5LIB", path.join(cachePath, "lib", "perl5") + path.delimiter + process.env["PERL5LIB"]);
 
   if (opt.enable_modules_cache) {
     // save cache
@@ -116,54 +116,54 @@ export async function install(opt: Options): Promise<void> {
 }
 
 async function cacheKey(opt: Options): Promise<string> {
-  let key = 'setup-perl-module-cache-v1-';
+  let key = "setup-perl-module-cache-v1-";
   key += opt.perlHash;
-  key += '-' + (opt.install_modules_with || 'unknown');
+  key += "-" + (opt.install_modules_with || "unknown");
   return key;
 }
 
 // see https://github.com/actions/runner/blob/master/src/Misc/expressionFunc/hashFiles/src/hashFiles.ts
 async function hashFiles(opt: Options, ...files: string[]): Promise<string> {
-  const result = crypto.createHash('sha256');
-  result.update(opt.install_modules_args || '');
+  const result = crypto.createHash("sha256");
+  result.update(opt.install_modules_args || "");
   for (const file of files) {
     try {
-      const hash = crypto.createHash('sha256');
+      const hash = crypto.createHash("sha256");
       const pipeline = util.promisify(stream.pipeline);
       await pipeline(fs.createReadStream(file), hash);
       result.write(hash.digest());
     } catch (err) {
       // skip files that doesn't exist.
-      if ((err as any)?.code !== 'ENOENT') {
+      if ((err as any)?.code !== "ENOENT") {
         throw err;
       }
     }
   }
   result.end();
-  return result.digest('hex');
+  return result.digest("hex");
 }
 
 function hashString(s: string): string {
-  const hash = crypto.createHash('sha256');
-  hash.update(s, 'utf-8');
+  const hash = crypto.createHash("sha256");
+  hash.update(s, "utf-8");
   hash.end();
-  return hash.digest('hex');
+  return hash.digest("hex");
 }
 
 async function installWithCpanm(opt: Options): Promise<void> {
-  const perl = path.join(opt.toolPath, 'bin', 'perl');
-  const cpanm = path.join(__dirname, '..', 'bin', 'cpanm');
-  const workingDirectory = path.join(process.cwd(), opt.working_directory || '.');
+  const perl = path.join(opt.toolPath, "bin", "perl");
+  const cpanm = path.join(__dirname, "..", "bin", "cpanm");
+  const workingDirectory = path.join(process.cwd(), opt.working_directory || ".");
   const execOpt = {
-    cwd: workingDirectory
+    cwd: workingDirectory,
   };
-  const args = [cpanm, '--local-lib-contained', 'local', '--notest'];
+  const args = [cpanm, "--local-lib-contained", "local", "--notest"];
   if (core.isDebug()) {
-    args.push('--verbose');
+    args.push("--verbose");
   }
   args.push(...splitArgs(opt.install_modules_args));
-  if (await exists(path.join(workingDirectory, 'cpanfile'))) {
-    await exec.exec(perl, [...args, '--installdeps', '.'], execOpt);
+  if (await exists(path.join(workingDirectory, "cpanfile"))) {
+    await exec.exec(perl, [...args, "--installdeps", "."], execOpt);
   }
   const modules = splitModules(opt.install_modules);
   if (modules.length > 0) {
@@ -172,20 +172,20 @@ async function installWithCpanm(opt: Options): Promise<void> {
 }
 
 async function installWithCpm(opt: Options): Promise<void> {
-  const perl = path.join(opt.toolPath, 'bin', 'perl');
-  const cpm = path.join(__dirname, '..', 'bin', 'cpm');
-  const workingDirectory = path.join(process.cwd(), opt.working_directory || '.');
+  const perl = path.join(opt.toolPath, "bin", "perl");
+  const cpm = path.join(__dirname, "..", "bin", "cpm");
+  const workingDirectory = path.join(process.cwd(), opt.working_directory || ".");
   const execOpt = {
-    cwd: workingDirectory
+    cwd: workingDirectory,
   };
-  const args = [cpm, 'install', '--show-build-log-on-failure'];
+  const args = [cpm, "install", "--show-build-log-on-failure"];
   if (core.isDebug()) {
-    args.push('--verbose');
+    args.push("--verbose");
   }
   args.push(...splitArgs(opt.install_modules_args));
   if (
-    (await exists(path.join(workingDirectory, 'cpanfile'))) ||
-    (await exists(path.join(workingDirectory, 'cpanfile.snapshot')))
+    (await exists(path.join(workingDirectory, "cpanfile"))) ||
+    (await exists(path.join(workingDirectory, "cpanfile.snapshot")))
   ) {
     await exec.exec(perl, [...args], execOpt);
   }
@@ -196,26 +196,26 @@ async function installWithCpm(opt: Options): Promise<void> {
 }
 
 async function installWithCarton(opt: Options): Promise<void> {
-  const perl = path.join(opt.toolPath, 'bin', 'perl');
-  const carton = path.join(__dirname, '..', 'bin', 'carton');
-  const workingDirectory = path.join(process.cwd(), opt.working_directory || '.');
+  const perl = path.join(opt.toolPath, "bin", "perl");
+  const carton = path.join(__dirname, "..", "bin", "carton");
+  const workingDirectory = path.join(process.cwd(), opt.working_directory || ".");
   const execOpt = {
-    cwd: workingDirectory
+    cwd: workingDirectory,
   };
-  const args = [carton, 'install'];
+  const args = [carton, "install"];
   args.push(...splitArgs(opt.install_modules_args));
   if (
-    (await exists(path.join(workingDirectory, 'cpanfile'))) ||
-    (await exists(path.join(workingDirectory, 'cpanfile.snapshot')))
+    (await exists(path.join(workingDirectory, "cpanfile"))) ||
+    (await exists(path.join(workingDirectory, "cpanfile.snapshot")))
   ) {
     await exec.exec(perl, [...args], execOpt);
   }
   const modules = splitModules(opt.install_modules);
   if (modules.length > 0) {
-    const cpanm = path.join(__dirname, '..', 'bin', 'cpanm');
-    const args = [cpanm, '--local-lib-contained', 'local', '--notest'];
+    const cpanm = path.join(__dirname, "..", "bin", "cpanm");
+    const args = [cpanm, "--local-lib-contained", "local", "--notest"];
     if (core.isDebug()) {
-      args.push('--verbose');
+      args.push("--verbose");
     }
     await exec.exec(perl, [...args, ...modules], execOpt);
   }
@@ -223,9 +223,9 @@ async function installWithCarton(opt: Options): Promise<void> {
 
 async function exists(path: string): Promise<boolean> {
   return new Promise((resolve, reject) => {
-    fs.stat(path, err => {
+    fs.stat(path, (err) => {
       if (err) {
-        if (err.code === 'ENOENT') {
+        if (err.code === "ENOENT") {
           resolve(false);
         } else {
           reject(err);
@@ -242,7 +242,7 @@ function splitArgs(args: string | null): string[] {
     return [];
   }
   args = args.trim();
-  if (args === '') {
+  if (args === "") {
     return [];
   }
   return args.split(/\s+/);
@@ -253,7 +253,7 @@ function splitModules(modules: string | null): string[] {
     return [];
   }
   modules = modules.trim();
-  if (modules === '') {
+  if (modules === "") {
     return [];
   }
   return modules.split(/\s+/);

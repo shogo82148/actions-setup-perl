@@ -222,11 +222,23 @@ set_failed(`Action failed with error ${err}`);
 
 # Logging
 debug('debug message');
-warning('warning');
 if (is_debug()) {
   # print verbose log
 }
 info('Output to the actions build log');
+
+# Annotation
+error('error')
+warning('warning');
+notice('notice');
+notice('add an annotation to files', {
+  title => 'Title',
+  file => 'filename.txt',
+  start_line   => 1,
+  end_line     => 1,
+  start_column => 1,
+  end_column   => 10,
+});
 
 # Manually wrap output
 start_group('Do some function');

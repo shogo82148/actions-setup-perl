@@ -87,27 +87,74 @@ The action works for [GitHub-hosted runners](https://docs.github.com/en/actions/
 
 [Self-hosted runners](https://docs.github.com/en/actions/hosting-your-own-runners) are not supported.
 
-### Action inputs
+## Action inputs
 
 All inputs are **optional**. If not set, sensible defaults will be used.
 
-| Name | Description | Default |
-| --- | --- | --- |
-| `perl-version` | Specifies the Perl version to setup. Minor version and patch level can be omitted. The action uses the latest Perl version available that matches the specified value. This defaults to `5`, which results in the latest available version of Perl 5. In addition, the value `latest` is available, the actions uses the latest available version of Perl including `5`, `7` or later major versions. | `5` |
-| `distribution` | Specify the distribution to use, this is either `default` or `strawberry`. (The value `strawberry` is ignored on anything but Windows.) | `default` |
-| `multi-thread` | Enables interpreter-based threads (ithread) options (-Duseithreads). "true" and "false" are accepted. On Linux and macOS, the default value is "false" (ithread is disabled). On Windows, the default value is "true" (ithread is enable) for fork emulation. | depends on platform |
-| `install-modules-with`| install CPAN modules from your `cpanfile` with the specified installer. `cpanm`([App::cpanminus](https://metacpan.org/pod/App::cpanminus)), `cpm`([App::cpm](https://metacpan.org/pod/App::cpm)), and `carton`([Carton](https://metacpan.org/pod/Carton)) are available. By default, any CPAN modules are not installed. | Nothing |
-| `install-modules-args` | The argument for CPAN module installer. | Nothing |
-| `install-modules` | List of one or more CPAN modules, separated by white spaces. | Nothing |
-| `enable-modules-cache` | Enable caching when install CPAN modules. | `true` |
-| `working-directory` | Working directory. | `.` |
+### `perl-version`
 
-### Action outputs
+Specifies the Perl version to setup.
+Minor version and patch level can be omitted.
+The action uses the latest Perl version available that matches the specified value.
+This defaults to `5`, which results in the latest available version of Perl 5.
+In addition, the value `latest` is available, the actions uses the latest available version of Perl including `5`, `7` or later major versions.
 
-| Name | Description |
-| --- | --- | --- |
-| `perl-version` | the perl version actually installed. |
-| `perl-hash` | the digest of `perl -V`. It contains useful information to use as the cache key, e.g. the platform, the version of perl, the compiler option for building perl. |
+- Default: `5`
+
+### `distribution`
+
+Specify the distribution to use, this is either `default` or `strawberry`. (The value `strawberry` is ignored on anything but Windows.)
+
+- Default: `default`
+
+### `multi-thread`
+
+Enables interpreter-based threads (ithread) options (`-Duseithreads`). `true` and `false` are accepted.
+
+- Default: depends on platform. On Linux and macOS, the default value is "false" (ithread is disabled). On Windows, the default value is "true" (ithread is enable) for fork emulation.
+
+### `install-modules-with`
+
+Install CPAN modules from your `cpanfile` with the specified installer.
+`cpanm`([App::cpanminus](https://metacpan.org/pod/App::cpanminus)), `cpm`([App::cpm](https://metacpan.org/pod/App::cpm)), and `carton`([Carton](https://metacpan.org/pod/Carton)) are available.
+CPAN modules is installed into `${working-directory}/local/`.
+
+- Default: Nothing. Any CPAN module is not installed.
+
+### `install-modules-args`
+
+The argument for CPAN module installer.
+
+- Default: Nothing
+
+### `install-modules`
+
+List of one or more CPAN modules, separated by white spaces.
+
+- Default: Nothing
+
+### `enable-modules-cache`
+
+Enable caching when install CPAN modules. `true` and `false` are accepted.
+
+- Default: `true`
+
+### `working-directory`
+
+The working directory.
+
+- Default: `.`
+
+## Action outputs
+
+### `perl-version`
+
+The perl version actually installed. (e.g. `"5.34.0"`)
+
+### `perl-hash`
+
+The digest of `perl -V`.
+It is useful for the cache key, because this value vary the platform, the version of perl, the compiler option for building perl, etc.
 
 # Supported Shells
 

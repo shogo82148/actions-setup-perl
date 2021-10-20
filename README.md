@@ -206,6 +206,7 @@ use Actions::Core;
 
 # Inputs/Outputs
 my $input = get_input('inputName', { required: true });
+my $boolean_input = get_boolean_input('boolean-input'); # accepts YAML 1.2 boolean values.
 set_output('outputKey', 'outputVal');
 
 # Exporting variables
@@ -248,7 +249,7 @@ end_group();
 # Wrap Subroutines
 my $result = group 'Do something async' => sub {
   return 'some results';
-}
+};
 
 # Custom Functions of actions-setup-perl
 # List Available Perl Versions

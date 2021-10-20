@@ -1,10 +1,8 @@
 import * as core from "@actions/core";
-import * as exec from "@actions/exec";
 import * as tc from "@actions/tool-cache";
 import * as path from "path";
 import * as semver from "semver";
 import * as fs from "fs";
-import * as crypto from "crypto";
 import * as tcp from "./tool-cache-port";
 
 interface PerlVersion {
@@ -15,11 +13,6 @@ interface PerlVersion {
 export interface Result {
   // the perl version actually installed.
   version: string;
-
-  // the digest of `perl -V`.
-  // it contains useful information to use as the cache key,
-  // e.g. the platform, the version of perl, the compiler option for building perl
-  hash: string;
 
   // installed path
   path: string;
@@ -97,7 +90,6 @@ export async function getPerl(version: string): Promise<Result> {
 
   return {
     version: selected.version,
-    hash: await digestOfPerlVersion(toolPath),
     path: path.join(toolPath, "perl"),
   };
 }
@@ -124,22 +116,4 @@ async function acquirePerl(version: PerlVersion): Promise<string> {
 
   const extPath = await tc.extractZip(downloadPath);
   return await tcp.cacheDir(extPath, "strawberry-perl", version.version);
-}
-
-// we use `perl -V` to the cache key.
-// it contains useful information to use as the cache key,
-// e.g. the platform, the version of perl, the compiler option for building perl
-async function digestOfPerlVersion(toolPath: string): Promise<string> {
-  const perl = path.join(toolPath, "perl", "bin", "perl.exe");
-  const hash = crypto.createHash("sha256");
-  await exec.exec(perl, ["-V"], {
-    listeners: {
-      stdout: (data: Buffer) => {
-        hash.update(data);
-      },
-    },
-    env: {},
-  });
-  hash.end();
-  return hash.digest("hex");
 }

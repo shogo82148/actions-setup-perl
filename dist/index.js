@@ -38,30 +38,30 @@ const util = __importStar(__nccwpck_require__(1669));
 const path = __importStar(__nccwpck_require__(5622));
 async function install(opt) {
     if (!opt.install_modules_with) {
-        core.info('nothing to install');
+        core.info("nothing to install");
         return;
     }
     let installer;
     switch (opt.install_modules_with) {
-        case 'cpanm':
+        case "cpanm":
             installer = installWithCpanm;
             break;
-        case 'cpm':
+        case "cpm":
             installer = installWithCpm;
             break;
-        case 'carton':
+        case "carton":
             installer = installWithCarton;
             break;
         default:
             core.error(`unknown installer: ${opt.install_modules_with}`);
             return;
     }
-    const workingDirectory = path.join(process.cwd(), opt.working_directory || '.');
-    const cachePath = path.join(workingDirectory, 'local');
+    const workingDirectory = path.join(process.cwd(), opt.working_directory || ".");
+    const cachePath = path.join(workingDirectory, "local");
     const paths = [cachePath];
     const baseKey = await cacheKey(opt);
-    const cpanfileKey = await hashFiles(opt, path.join(workingDirectory, 'cpanfile'), path.join(workingDirectory, 'cpanfile.snapshot'));
-    const installKey = hashString(opt.install_modules || '');
+    const cpanfileKey = await hashFiles(opt, path.join(workingDirectory, "cpanfile"), path.join(workingDirectory, "cpanfile.snapshot"));
+    const installKey = hashString(opt.install_modules || "");
     const key = `${baseKey}-${cpanfileKey}-${installKey}`;
     const restoreKeys = [`${baseKey}-${cpanfileKey}-`, `${baseKey}-`];
     // restore cache
@@ -86,14 +86,14 @@ async function install(opt) {
             core.info(`Found cache for key: ${cachedKey}`);
         }
         else {
-            core.info(`cache not found for input keys: ${key}, ${restoreKeys.join(', ')}`);
+            core.info(`cache not found for input keys: ${key}, ${restoreKeys.join(", ")}`);
         }
     }
     // install
     await installer(opt);
     // configure environment values
-    core.addPath(path.join(cachePath, 'bin'));
-    core.exportVariable('PERL5LIB', path.join(cachePath, 'lib', 'perl5') + path.delimiter + process.env['PERL5LIB']);
+    core.addPath(path.join(cachePath, "bin"));
+    core.exportVariable("PERL5LIB", path.join(cachePath, "lib", "perl5") + path.delimiter + process.env["PERL5LIB"]);
     if (opt.enable_modules_cache) {
         // save cache
         if (cachedKey !== key) {
@@ -126,70 +126,53 @@ async function install(opt) {
 }
 exports.install = install;
 async function cacheKey(opt) {
-    let key = 'setup-perl-module-cache-v1-';
-    key += await digestOfPerlVersion(opt);
-    key += '-' + (opt.install_modules_with || 'unknown');
+    let key = "setup-perl-module-cache-v1-";
+    key += opt.perlHash;
+    key += "-" + (opt.install_modules_with || "unknown");
     return key;
-}
-// we use `perl -V` to the cache key.
-// it contains useful information to use as the cache key,
-// e.g. the platform, the version of perl, the compiler option for building perl
-async function digestOfPerlVersion(opt) {
-    const perl = path.join(opt.toolPath, 'bin', 'perl');
-    const hash = crypto.createHash('sha256');
-    await exec.exec(perl, ['-V'], {
-        listeners: {
-            stdout: (data) => {
-                hash.update(data);
-            }
-        },
-        env: {}
-    });
-    hash.end();
-    return hash.digest('hex');
 }
 // see https://github.com/actions/runner/blob/master/src/Misc/expressionFunc/hashFiles/src/hashFiles.ts
 async function hashFiles(opt, ...files) {
     var _a;
-    const result = crypto.createHash('sha256');
-    result.update(opt.install_modules_args || '');
+    const result = crypto.createHash("sha256");
+    result.update(opt.install_modules_args || "");
     for (const file of files) {
         try {
-            const hash = crypto.createHash('sha256');
+            const hash = crypto.createHash("sha256");
             const pipeline = util.promisify(stream.pipeline);
             await pipeline(fs.createReadStream(file), hash);
             result.write(hash.digest());
         }
         catch (err) {
             // skip files that doesn't exist.
-            if (((_a = err) === null || _a === void 0 ? void 0 : _a.code) !== 'ENOENT') {
+            if (((_a = err) === null || _a === void 0 ? void 0 : _a.code) !== "ENOENT") {
                 throw err;
             }
         }
     }
     result.end();
-    return result.digest('hex');
+    return result.digest("hex");
 }
 function hashString(s) {
-    const hash = crypto.createHash('sha256');
-    hash.update(s, 'utf-8');
+    const hash = crypto.createHash("sha256");
+    hash.update(s, "utf-8");
     hash.end();
-    return hash.digest('hex');
+    return hash.digest("hex");
 }
 async function installWithCpanm(opt) {
-    const perl = path.join(opt.toolPath, 'bin', 'perl');
-    const cpanm = path.join(__dirname, '..', 'bin', 'cpanm');
-    const workingDirectory = path.join(process.cwd(), opt.working_directory || '.');
+    const perl = path.join(opt.toolPath, "bin", "perl");
+    const cpanm = path.join(__dirname, "..", "bin", "cpanm");
+    const workingDirectory = path.join(process.cwd(), opt.working_directory || ".");
     const execOpt = {
-        cwd: workingDirectory
+        cwd: workingDirectory,
     };
-    const args = [cpanm, '--local-lib-contained', 'local', '--notest'];
+    const args = [cpanm, "--local-lib-contained", "local", "--notest"];
     if (core.isDebug()) {
-        args.push('--verbose');
+        args.push("--verbose");
     }
     args.push(...splitArgs(opt.install_modules_args));
-    if (await exists(path.join(workingDirectory, 'cpanfile'))) {
-        await exec.exec(perl, [...args, '--installdeps', '.'], execOpt);
+    if (await exists(path.join(workingDirectory, "cpanfile"))) {
+        await exec.exec(perl, [...args, "--installdeps", "."], execOpt);
     }
     const modules = splitModules(opt.install_modules);
     if (modules.length > 0) {
@@ -197,19 +180,19 @@ async function installWithCpanm(opt) {
     }
 }
 async function installWithCpm(opt) {
-    const perl = path.join(opt.toolPath, 'bin', 'perl');
-    const cpm = path.join(__dirname, '..', 'bin', 'cpm');
-    const workingDirectory = path.join(process.cwd(), opt.working_directory || '.');
+    const perl = path.join(opt.toolPath, "bin", "perl");
+    const cpm = path.join(__dirname, "..", "bin", "cpm");
+    const workingDirectory = path.join(process.cwd(), opt.working_directory || ".");
     const execOpt = {
-        cwd: workingDirectory
+        cwd: workingDirectory,
     };
-    const args = [cpm, 'install', '--show-build-log-on-failure'];
+    const args = [cpm, "install", "--show-build-log-on-failure"];
     if (core.isDebug()) {
-        args.push('--verbose');
+        args.push("--verbose");
     }
     args.push(...splitArgs(opt.install_modules_args));
-    if ((await exists(path.join(workingDirectory, 'cpanfile'))) ||
-        (await exists(path.join(workingDirectory, 'cpanfile.snapshot')))) {
+    if ((await exists(path.join(workingDirectory, "cpanfile"))) ||
+        (await exists(path.join(workingDirectory, "cpanfile.snapshot")))) {
         await exec.exec(perl, [...args], execOpt);
     }
     const modules = splitModules(opt.install_modules);
@@ -218,33 +201,33 @@ async function installWithCpm(opt) {
     }
 }
 async function installWithCarton(opt) {
-    const perl = path.join(opt.toolPath, 'bin', 'perl');
-    const carton = path.join(__dirname, '..', 'bin', 'carton');
-    const workingDirectory = path.join(process.cwd(), opt.working_directory || '.');
+    const perl = path.join(opt.toolPath, "bin", "perl");
+    const carton = path.join(__dirname, "..", "bin", "carton");
+    const workingDirectory = path.join(process.cwd(), opt.working_directory || ".");
     const execOpt = {
-        cwd: workingDirectory
+        cwd: workingDirectory,
     };
-    const args = [carton, 'install'];
+    const args = [carton, "install"];
     args.push(...splitArgs(opt.install_modules_args));
-    if ((await exists(path.join(workingDirectory, 'cpanfile'))) ||
-        (await exists(path.join(workingDirectory, 'cpanfile.snapshot')))) {
+    if ((await exists(path.join(workingDirectory, "cpanfile"))) ||
+        (await exists(path.join(workingDirectory, "cpanfile.snapshot")))) {
         await exec.exec(perl, [...args], execOpt);
     }
     const modules = splitModules(opt.install_modules);
     if (modules.length > 0) {
-        const cpanm = path.join(__dirname, '..', 'bin', 'cpanm');
-        const args = [cpanm, '--local-lib-contained', 'local', '--notest'];
+        const cpanm = path.join(__dirname, "..", "bin", "cpanm");
+        const args = [cpanm, "--local-lib-contained", "local", "--notest"];
         if (core.isDebug()) {
-            args.push('--verbose');
+            args.push("--verbose");
         }
         await exec.exec(perl, [...args, ...modules], execOpt);
     }
 }
 async function exists(path) {
     return new Promise((resolve, reject) => {
-        fs.stat(path, err => {
+        fs.stat(path, (err) => {
             if (err) {
-                if (err.code === 'ENOENT') {
+                if (err.code === "ENOENT") {
                     resolve(false);
                 }
                 else {
@@ -261,7 +244,7 @@ function splitArgs(args) {
         return [];
     }
     args = args.trim();
-    if (args === '') {
+    if (args === "") {
         return [];
     }
     return args.split(/\s+/);
@@ -271,7 +254,7 @@ function splitModules(modules) {
         return [];
     }
     modules = modules.trim();
-    if (modules === '') {
+    if (modules === "") {
         return [];
     }
     return modules.split(/\s+/);
@@ -317,7 +300,7 @@ const osPlat = os.platform();
 const osArch = os.arch();
 async function getAvailableVersions() {
     return new Promise((resolve, reject) => {
-        fs.readFile(path.join(__dirname, '..', 'versions', `${osPlat}.json`), (err, data) => {
+        fs.readFile(path.join(__dirname, "..", "versions", `${osPlat}.json`), (err, data) => {
             if (err) {
                 reject(err);
             }
@@ -329,7 +312,7 @@ async function getAvailableVersions() {
 async function determineVersion(version) {
     const availableVersions = await getAvailableVersions();
     // stable latest version
-    if (version === 'latest') {
+    if (version === "latest") {
         return availableVersions[0];
     }
     for (let v of availableVersions) {
@@ -337,25 +320,26 @@ async function determineVersion(version) {
             return v;
         }
     }
-    throw new Error('unable to get latest version');
+    throw new Error("unable to get latest version");
 }
 async function getPerl(version, thread) {
     const selected = await determineVersion(version);
     // check cache
     let toolPath;
-    toolPath = tcp.find('perl', selected);
+    toolPath = tcp.find("perl", selected);
     if (!toolPath) {
         // download, extract, cache
         toolPath = await acquirePerl(selected, thread);
-        core.debug('Perl tool is cached under ' + toolPath);
+        core.debug("Perl tool is cached under " + toolPath);
     }
-    const bin = path.join(toolPath, 'bin');
+    const bin = path.join(toolPath, "bin");
     //
     // prepend the tools path. instructs the agent to prepend for future tasks
     //
     core.addPath(bin);
     return {
-        installedPath: toolPath
+        version: selected,
+        path: toolPath,
     };
 }
 exports.getPerl = getPerl;
@@ -381,30 +365,30 @@ async function acquirePerl(version, thread) {
     //
     // Extract compressed archive
     //
-    const extPath = downloadUrl.endsWith('.zip')
+    const extPath = downloadUrl.endsWith(".zip")
         ? await tc.extractZip(downloadPath)
-        : downloadUrl.endsWith('.tar.xz')
-            ? await tc.extractTar(downloadPath, '', 'xJ')
-            : downloadUrl.endsWith('.tar.bz2')
-                ? await tc.extractTar(downloadPath, '', 'xj')
+        : downloadUrl.endsWith(".tar.xz")
+            ? await tc.extractTar(downloadPath, "", "xJ")
+            : downloadUrl.endsWith(".tar.bz2")
+                ? await tc.extractTar(downloadPath, "", "xj")
                 : await tc.extractTar(downloadPath);
-    return await tcp.cacheDir(extPath, 'perl', version + (thread ? '-thr' : ''));
+    return await tcp.cacheDir(extPath, "perl", version + (thread ? "-thr" : ""));
 }
 function getFileName(version, thread) {
-    const suffix = thread ? '-multi-thread' : '';
-    const ext = osPlat === 'win32' ? 'zip' : 'tar.xz';
+    const suffix = thread ? "-multi-thread" : "";
+    const ext = osPlat === "win32" ? "zip" : "tar.xz";
     return `perl-${version}-${osPlat}-${osArch}${suffix}.${ext}`;
 }
 async function getDownloadUrl(filename) {
     return new Promise((resolve, reject) => {
-        fs.readFile(path.join(__dirname, '..', 'package.json'), (err, data) => {
+        fs.readFile(path.join(__dirname, "..", "package.json"), (err, data) => {
             if (err) {
                 reject(err);
             }
             const info = JSON.parse(data.toString());
             resolve(info);
         });
-    }).then(info => {
+    }).then((info) => {
         const actionsVersion = info.version;
         return `https://setupperl.blob.core.windows.net/actions-setup-perl/v${actionsVersion}/${filename}`;
     });
@@ -439,60 +423,65 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
+const exec = __importStar(__nccwpck_require__(1514));
 const installer = __importStar(__nccwpck_require__(1480));
 const path = __importStar(__nccwpck_require__(5622));
+const crypto = __importStar(__nccwpck_require__(6417));
 const strawberry = __importStar(__nccwpck_require__(3776));
 const utils = __importStar(__nccwpck_require__(918));
 const cpan = __importStar(__nccwpck_require__(5017));
 async function run() {
     try {
         const platform = process.platform;
-        let dist = core.getInput('distribution');
-        const multiThread = core.getInput('multi-thread');
-        const version = core.getInput('perl-version');
+        let dist = core.getInput("distribution");
+        const multiThread = core.getInput("multi-thread");
+        const version = core.getInput("perl-version");
         let result;
-        await core.group('install perl', async () => {
+        let perlHash;
+        await core.group("install perl", async () => {
             let thread;
-            if (platform === 'win32') {
-                thread = utils.parseBoolean(multiThread || 'true');
-                if (dist === 'strawberry' && !thread) {
-                    core.warning('non-thread Strawberry Perl is not provided.');
+            if (platform === "win32") {
+                thread = utils.parseBoolean(multiThread || "true");
+                if (dist === "strawberry" && !thread) {
+                    core.warning("non-thread Strawberry Perl is not provided.");
                 }
             }
             else {
-                if (dist === 'strawberry') {
-                    core.warning('The strawberry distribution is not available on this platform. fallback to the default distribution.');
-                    dist = 'default';
+                if (dist === "strawberry") {
+                    core.warning("The strawberry distribution is not available on this platform. fallback to the default distribution.");
+                    dist = "default";
                 }
-                thread = utils.parseBoolean(multiThread || 'false');
+                thread = utils.parseBoolean(multiThread || "false");
             }
-            if (version) {
-                switch (dist) {
-                    case 'strawberry':
-                        result = await strawberry.getPerl(version);
-                        break;
-                    case 'default':
-                        result = await installer.getPerl(version, thread);
-                        break;
-                    default:
-                        throw new Error(`unknown distribution: ${dist}`);
-                }
+            switch (dist) {
+                case "strawberry":
+                    result = await strawberry.getPerl(version);
+                    break;
+                case "default":
+                    result = await installer.getPerl(version, thread);
+                    break;
+                default:
+                    throw new Error(`unknown distribution: ${dist}`);
             }
-            const matchersPath = path.join(__dirname, '..', '.github');
-            console.log(`##[add-matcher]${path.join(matchersPath, 'perl.json')}`);
+            core.setOutput("perl-version", result.version);
+            perlHash = await digestOfPerlVersion(result.path);
+            core.setOutput("perl-hash", perlHash);
+            const matchersPath = path.join(__dirname, "..", ".github");
+            console.log(`##[add-matcher]${path.join(matchersPath, "perl.json")}`);
             // for pre-installed scripts
-            core.addPath(path.join(__dirname, '..', 'bin'));
+            core.addPath(path.join(__dirname, "..", "bin"));
             // for pre-installed modules
-            core.exportVariable('PERL5LIB', path.join(__dirname, '..', 'scripts', 'lib'));
+            core.exportVariable("PERL5LIB", path.join(__dirname, "..", "scripts", "lib"));
         });
-        await core.group('install CPAN modules', async () => {
+        await core.group("install CPAN modules", async () => {
             await cpan.install({
-                toolPath: result.installedPath,
-                install_modules_with: core.getInput('install-modules-with'),
-                install_modules_args: core.getInput('install-modules-args'),
-                install_modules: core.getInput('install-modules'),
-                enable_modules_cache: utils.parseBoolean(core.getInput('enable-modules-cache')),
-                working_directory: core.getInput('working-directory')
+                perlHash: perlHash,
+                toolPath: result.path,
+                install_modules_with: core.getInput("install-modules-with"),
+                install_modules_args: core.getInput("install-modules-args"),
+                install_modules: core.getInput("install-modules"),
+                enable_modules_cache: utils.parseBoolean(core.getInput("enable-modules-cache")),
+                working_directory: core.getInput("working-directory"),
             });
         });
     }
@@ -504,6 +493,23 @@ async function run() {
             core.setFailed(`${error}`);
         }
     }
+}
+// we use `perl -V` to the cache key.
+// it contains useful information to use as the cache key,
+// e.g. the platform, the version of perl, the compiler option for building perl
+async function digestOfPerlVersion(toolPath) {
+    const perl = path.join(toolPath, "bin", "perl");
+    const hash = crypto.createHash("sha256");
+    await exec.exec(perl, ["-V"], {
+        listeners: {
+            stdout: (data) => {
+                hash.update(data);
+            },
+        },
+        env: {},
+    });
+    hash.end();
+    return hash.digest("hex");
 }
 run();
 
@@ -560,7 +566,7 @@ const tcp = __importStar(__nccwpck_require__(6271));
 // 64 bit Portable binaries are not available with Perl 5.12.x and older.
 async function getAvailableVersions() {
     return new Promise((resolve, reject) => {
-        fs.readFile(path.join(__dirname, '..', 'versions', `strawberry.json`), (err, data) => {
+        fs.readFile(path.join(__dirname, "..", "versions", `strawberry.json`), (err, data) => {
             if (err) {
                 reject(err);
             }
@@ -572,7 +578,7 @@ async function getAvailableVersions() {
 async function determineVersion(version) {
     const availableVersions = await getAvailableVersions();
     // stable latest version
-    if (version === 'latest') {
+    if (version === "latest") {
         return availableVersions[0];
     }
     for (let v of availableVersions) {
@@ -580,32 +586,33 @@ async function determineVersion(version) {
             return v;
         }
     }
-    throw new Error('unable to get latest version');
+    throw new Error("unable to get latest version");
 }
 async function getPerl(version) {
     // check cache
     const selected = await determineVersion(version);
     let toolPath;
-    toolPath = tcp.find('perl', selected.version);
+    toolPath = tcp.find("perl", selected.version);
     if (!toolPath) {
         // download, extract, cache
         toolPath = await acquirePerl(selected);
-        core.debug('Perl tool is cached under ' + toolPath);
+        core.debug("Perl tool is cached under " + toolPath);
     }
     // remove pre-installed Strawberry Perl and MinGW from Path
-    let pathEnv = (process.env.PATH || '').split(path.delimiter);
-    pathEnv = pathEnv.filter(p => !p.match(/.*(?:Strawberry|mingw).*/i));
+    let pathEnv = (process.env.PATH || "").split(path.delimiter);
+    pathEnv = pathEnv.filter((p) => !p.match(/.*(?:Strawberry|mingw).*/i));
     // add our new Strawberry Portable Perl Paths
     // from portableshell.bat https://github.com/StrawberryPerl/Perl-Dist-Strawberry/blob/9fb00a653ce2e6ed336045dd0a180409b98a72a9/share/portable/portableshell.bat#L5
-    pathEnv.unshift(path.join(toolPath, 'c', 'bin'));
-    pathEnv.unshift(path.join(toolPath, 'perl', 'bin'));
-    pathEnv.unshift(path.join(toolPath, 'perl', 'site', 'bin'));
-    core.exportVariable('PATH', pathEnv.join(path.delimiter));
-    core.addPath(path.join(toolPath, 'c', 'bin'));
-    core.addPath(path.join(toolPath, 'perl', 'bin'));
-    core.addPath(path.join(toolPath, 'perl', 'site', 'bin'));
+    pathEnv.unshift(path.join(toolPath, "c", "bin"));
+    pathEnv.unshift(path.join(toolPath, "perl", "bin"));
+    pathEnv.unshift(path.join(toolPath, "perl", "site", "bin"));
+    core.exportVariable("PATH", pathEnv.join(path.delimiter));
+    core.addPath(path.join(toolPath, "c", "bin"));
+    core.addPath(path.join(toolPath, "perl", "bin"));
+    core.addPath(path.join(toolPath, "perl", "site", "bin"));
     return {
-        installedPath: path.join(toolPath, 'perl')
+        version: selected.version,
+        path: path.join(toolPath, "perl"),
     };
 }
 exports.getPerl = getPerl;
@@ -629,7 +636,7 @@ async function acquirePerl(version) {
         throw new Error(`Failed to download version ${version}: ${error}`);
     }
     const extPath = await tc.extractZip(downloadPath);
-    return await tcp.cacheDir(extPath, 'strawberry-perl', version.version);
+    return await tcp.cacheDir(extPath, "strawberry-perl", version.version);
 }
 
 
@@ -673,22 +680,22 @@ const semver = __importStar(__nccwpck_require__(1383));
 // Finds the path to a tool version in the local installed tool cache
 function find(toolName, versionSpec, arch) {
     if (!toolName) {
-        throw new Error('toolName parameter is required');
+        throw new Error("toolName parameter is required");
     }
     if (!versionSpec) {
-        throw new Error('versionSpec parameter is required');
+        throw new Error("versionSpec parameter is required");
     }
     arch = arch || os.arch();
-    versionSpec = semver.clean(versionSpec) || '';
+    versionSpec = semver.clean(versionSpec) || "";
     const cachePath = path.join(_getCacheDirectory(), toolName, versionSpec, arch);
-    let toolPath = '';
+    let toolPath = "";
     core.debug(`checking cache: ${cachePath}`);
     if (fs.existsSync(cachePath) && fs.existsSync(`${cachePath}.complete`)) {
         core.debug(`Found tool in cache ${toolName} ${versionSpec} ${arch}`);
         toolPath = cachePath;
     }
     else {
-        core.debug('not found');
+        core.debug("not found");
     }
     return toolPath;
 }
@@ -700,7 +707,7 @@ async function cacheDir(sourceDir, tool, version, arch) {
     core.debug(`Caching tool ${tool} ${version} ${arch}`);
     core.debug(`source dir: ${sourceDir}`);
     if (!fs.statSync(sourceDir).isDirectory()) {
-        throw new Error('sourceDir is not a directory');
+        throw new Error("sourceDir is not a directory");
     }
     // Create the tool dir
     const destPath = await _createToolPath(tool, version, arch);
@@ -716,7 +723,7 @@ async function cacheDir(sourceDir, tool, version, arch) {
 }
 exports.cacheDir = cacheDir;
 async function _createToolPath(tool, version, arch) {
-    const folderPath = path.join(_getCacheDirectory(), tool, semver.clean(version) || version, arch || '');
+    const folderPath = path.join(_getCacheDirectory(), tool, semver.clean(version) || version, arch || "");
     core.debug(`destination ${folderPath}`);
     const markerPath = `${folderPath}.complete`;
     await io.rmRF(folderPath);
@@ -725,25 +732,25 @@ async function _createToolPath(tool, version, arch) {
     return folderPath;
 }
 function _completeToolPath(tool, version, arch) {
-    const folderPath = path.join(_getCacheDirectory(), tool, semver.clean(version) || version, arch || '');
+    const folderPath = path.join(_getCacheDirectory(), tool, semver.clean(version) || version, arch || "");
     const markerPath = `${folderPath}.complete`;
-    fs.writeFileSync(markerPath, '');
-    core.debug('finished caching tool');
+    fs.writeFileSync(markerPath, "");
+    core.debug("finished caching tool");
 }
 function _getCacheDirectory() {
-    if (process.env['ACTIONS_SETUP_PERL_TESTING']) {
+    if (process.env["ACTIONS_SETUP_PERL_TESTING"]) {
         // for testing
-        return process.env['RUNNER_TOOL_CACHE'] || '';
+        return process.env["RUNNER_TOOL_CACHE"] || "";
     }
     const platform = os.platform();
-    if (platform === 'linux') {
-        return '/opt/hostedtoolcache';
+    if (platform === "linux") {
+        return "/opt/hostedtoolcache";
     }
-    else if (platform === 'darwin') {
-        return '/Users/runner/hostedtoolcache';
+    else if (platform === "darwin") {
+        return "/Users/runner/hostedtoolcache";
     }
-    else if (platform === 'win32') {
-        return 'C:\\hostedtoolcache\\windows';
+    else if (platform === "win32") {
+        return "C:\\hostedtoolcache\\windows";
     }
     throw new Error(`unknown platform: ${platform}`);
 }
@@ -761,23 +768,23 @@ exports.parseBoolean = void 0;
 function parseBoolean(s) {
     // YAML 1.0 compatible boolean values
     switch (s) {
-        case 'y':
-        case 'Y':
-        case 'yes':
-        case 'Yes':
-        case 'YES':
-        case 'true':
-        case 'True':
-        case 'TRUE':
+        case "y":
+        case "Y":
+        case "yes":
+        case "Yes":
+        case "YES":
+        case "true":
+        case "True":
+        case "TRUE":
             return true;
-        case 'n':
-        case 'N':
-        case 'no':
-        case 'No':
-        case 'NO':
-        case 'false':
-        case 'False':
-        case 'FALSE':
+        case "n":
+        case "N":
+        case "no":
+        case "No":
+        case "NO":
+        case "false":
+        case "False":
+        case "FALSE":
             return false;
     }
     throw `invalid boolean value: ${s}`;
@@ -3718,12 +3725,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getState = exports.saveState = exports.group = exports.endGroup = exports.startGroup = exports.info = exports.notice = exports.warning = exports.error = exports.debug = exports.isDebug = exports.setFailed = exports.setCommandEcho = exports.setOutput = exports.getBooleanInput = exports.getMultilineInput = exports.getInput = exports.addPath = exports.setSecret = exports.exportVariable = exports.ExitCode = void 0;
+exports.getIDToken = exports.getState = exports.saveState = exports.group = exports.endGroup = exports.startGroup = exports.info = exports.notice = exports.warning = exports.error = exports.debug = exports.isDebug = exports.setFailed = exports.setCommandEcho = exports.setOutput = exports.getBooleanInput = exports.getMultilineInput = exports.getInput = exports.addPath = exports.setSecret = exports.exportVariable = exports.ExitCode = void 0;
 const command_1 = __nccwpck_require__(7351);
 const file_command_1 = __nccwpck_require__(717);
 const utils_1 = __nccwpck_require__(5278);
 const os = __importStar(__nccwpck_require__(2087));
 const path = __importStar(__nccwpck_require__(5622));
+const oidc_utils_1 = __nccwpck_require__(8041);
 /**
  * The code to exit an action
  */
@@ -3992,6 +4000,12 @@ function getState(name) {
     return process.env[`STATE_${name}`] || '';
 }
 exports.getState = getState;
+function getIDToken(aud) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield oidc_utils_1.OidcClient.getIDToken(aud);
+    });
+}
+exports.getIDToken = getIDToken;
 //# sourceMappingURL=core.js.map
 
 /***/ }),
@@ -4045,6 +4059,90 @@ exports.issueCommand = issueCommand;
 
 /***/ }),
 
+/***/ 8041:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.OidcClient = void 0;
+const http_client_1 = __nccwpck_require__(9925);
+const auth_1 = __nccwpck_require__(3702);
+const core_1 = __nccwpck_require__(2186);
+class OidcClient {
+    static createHttpClient(allowRetry = true, maxRetry = 10) {
+        const requestOptions = {
+            allowRetries: allowRetry,
+            maxRetries: maxRetry
+        };
+        return new http_client_1.HttpClient('actions/oidc-client', [new auth_1.BearerCredentialHandler(OidcClient.getRequestToken())], requestOptions);
+    }
+    static getRequestToken() {
+        const token = process.env['ACTIONS_ID_TOKEN_REQUEST_TOKEN'];
+        if (!token) {
+            throw new Error('Unable to get ACTIONS_ID_TOKEN_REQUEST_TOKEN env variable');
+        }
+        return token;
+    }
+    static getIDTokenUrl() {
+        const runtimeUrl = process.env['ACTIONS_ID_TOKEN_REQUEST_URL'];
+        if (!runtimeUrl) {
+            throw new Error('Unable to get ACTIONS_ID_TOKEN_REQUEST_URL env variable');
+        }
+        return runtimeUrl;
+    }
+    static getCall(id_token_url) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            const httpclient = OidcClient.createHttpClient();
+            const res = yield httpclient
+                .getJson(id_token_url)
+                .catch(error => {
+                throw new Error(`Failed to get ID Token. \n 
+        Error Code : ${error.statusCode}\n 
+        Error Message: ${error.result.message}`);
+            });
+            const id_token = (_a = res.result) === null || _a === void 0 ? void 0 : _a.value;
+            if (!id_token) {
+                throw new Error('Response json body do not have ID Token field');
+            }
+            return id_token;
+        });
+    }
+    static getIDToken(audience) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // New ID Token is requested from action service
+                let id_token_url = OidcClient.getIDTokenUrl();
+                if (audience) {
+                    const encodedAudience = encodeURIComponent(audience);
+                    id_token_url = `${id_token_url}&audience=${encodedAudience}`;
+                }
+                core_1.debug(`ID token url is ${id_token_url}`);
+                const id_token = yield OidcClient.getCall(id_token_url);
+                core_1.setSecret(id_token);
+                return id_token;
+            }
+            catch (error) {
+                throw new Error(`Error message: ${error.message}`);
+            }
+        });
+    }
+}
+exports.OidcClient = OidcClient;
+//# sourceMappingURL=oidc-utils.js.map
+
+/***/ }),
+
 /***/ 5278:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -4080,6 +4178,7 @@ function toCommandProperties(annotationProperties) {
     }
     return {
         title: annotationProperties.title,
+        file: annotationProperties.file,
         line: annotationProperties.startLine,
         endLine: annotationProperties.endLine,
         col: annotationProperties.startColumn,
@@ -6306,7 +6405,9 @@ class HttpClient {
                 maxSockets: maxSockets,
                 keepAlive: this._keepAlive,
                 proxy: {
-                    proxyAuth: `${proxyUrl.username}:${proxyUrl.password}`,
+                    ...((proxyUrl.username || proxyUrl.password) && {
+                        proxyAuth: `${proxyUrl.username}:${proxyUrl.password}`
+                    }),
                     host: proxyUrl.hostname,
                     port: proxyUrl.port
                 }

@@ -102,6 +102,13 @@ All inputs are **optional**. If not set, sensible defaults will be used.
 | `enable-modules-cache` | Enable caching when install CPAN modules. | `true` |
 | `working-directory` | Working directory. | `.` |
 
+### Action outputs
+
+| Name | Description |
+| --- | --- | --- |
+| `perl-version` | the perl version actually installed. |
+| `perl-hash` | the digest of `perl -V`. It contains useful information to use as the cache key, e.g. the platform, the version of perl, the compiler option for building perl. |
+
 # Supported Shells
 
 The GitHub runner come with a preinstalled version of Perl, used by the system Git. Unfortunately, some shell types prepend the directory containing the system Perl to the `PATH` which makes it impossible to use the Perl installed by this action.

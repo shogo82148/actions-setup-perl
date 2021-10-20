@@ -2,34 +2,34 @@
 // We use hard-coded paths rather than $RUNNER_TOOL_CACHE
 // because the prebuilt perl binaries cannot be moved anyway
 
-import * as os from 'os';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as core from '@actions/core';
-import * as io from '@actions/io';
-import * as semver from 'semver';
+import * as os from "os";
+import * as fs from "fs";
+import * as path from "path";
+import * as core from "@actions/core";
+import * as io from "@actions/io";
+import * as semver from "semver";
 
 // Finds the path to a tool version in the local installed tool cache
 export function find(toolName: string, versionSpec: string, arch?: string): string {
   if (!toolName) {
-    throw new Error('toolName parameter is required');
+    throw new Error("toolName parameter is required");
   }
 
   if (!versionSpec) {
-    throw new Error('versionSpec parameter is required');
+    throw new Error("versionSpec parameter is required");
   }
 
   arch = arch || os.arch();
-  versionSpec = semver.clean(versionSpec) || '';
+  versionSpec = semver.clean(versionSpec) || "";
   const cachePath = path.join(_getCacheDirectory(), toolName, versionSpec, arch);
 
-  let toolPath = '';
+  let toolPath = "";
   core.debug(`checking cache: ${cachePath}`);
   if (fs.existsSync(cachePath) && fs.existsSync(`${cachePath}.complete`)) {
     core.debug(`Found tool in cache ${toolName} ${versionSpec} ${arch}`);
     toolPath = cachePath;
   } else {
-    core.debug('not found');
+    core.debug("not found");
   }
   return toolPath;
 }
@@ -42,7 +42,7 @@ export async function cacheDir(sourceDir: string, tool: string, version: string,
 
   core.debug(`source dir: ${sourceDir}`);
   if (!fs.statSync(sourceDir).isDirectory()) {
-    throw new Error('sourceDir is not a directory');
+    throw new Error("sourceDir is not a directory");
   }
 
   // Create the tool dir
@@ -52,7 +52,7 @@ export async function cacheDir(sourceDir: string, tool: string, version: string,
   // due to anti-virus software having an open handle on a file.
   for (const itemName of fs.readdirSync(sourceDir)) {
     const s = path.join(sourceDir, itemName);
-    await io.cp(s, destPath, {recursive: true});
+    await io.cp(s, destPath, { recursive: true });
   }
 
   // write .complete
@@ -62,7 +62,7 @@ export async function cacheDir(sourceDir: string, tool: string, version: string,
 }
 
 async function _createToolPath(tool: string, version: string, arch?: string): Promise<string> {
-  const folderPath = path.join(_getCacheDirectory(), tool, semver.clean(version) || version, arch || '');
+  const folderPath = path.join(_getCacheDirectory(), tool, semver.clean(version) || version, arch || "");
   core.debug(`destination ${folderPath}`);
   const markerPath = `${folderPath}.complete`;
   await io.rmRF(folderPath);
@@ -72,24 +72,24 @@ async function _createToolPath(tool: string, version: string, arch?: string): Pr
 }
 
 function _completeToolPath(tool: string, version: string, arch?: string): void {
-  const folderPath = path.join(_getCacheDirectory(), tool, semver.clean(version) || version, arch || '');
+  const folderPath = path.join(_getCacheDirectory(), tool, semver.clean(version) || version, arch || "");
   const markerPath = `${folderPath}.complete`;
-  fs.writeFileSync(markerPath, '');
-  core.debug('finished caching tool');
+  fs.writeFileSync(markerPath, "");
+  core.debug("finished caching tool");
 }
 
 function _getCacheDirectory(): string {
-  if (process.env['ACTIONS_SETUP_PERL_TESTING']) {
+  if (process.env["ACTIONS_SETUP_PERL_TESTING"]) {
     // for testing
-    return process.env['RUNNER_TOOL_CACHE'] || '';
+    return process.env["RUNNER_TOOL_CACHE"] || "";
   }
   const platform = os.platform();
-  if (platform === 'linux') {
-    return '/opt/hostedtoolcache';
-  } else if (platform === 'darwin') {
-    return '/Users/runner/hostedtoolcache';
-  } else if (platform === 'win32') {
-    return 'C:\\hostedtoolcache\\windows';
+  if (platform === "linux") {
+    return "/opt/hostedtoolcache";
+  } else if (platform === "darwin") {
+    return "/Users/runner/hostedtoolcache";
+  } else if (platform === "win32") {
+    return "C:\\hostedtoolcache\\windows";
   }
 
   throw new Error(`unknown platform: ${platform}`);

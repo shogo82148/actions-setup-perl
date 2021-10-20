@@ -184,17 +184,17 @@ The following Perl scripts are pre-installed for convenience.
 
 ## CPAN Modules
 
-- JSON
-- Cpanel::JSON::XS
-- JSON::XS
-- JSON::MaybeXS
-- YAML
-- YAML::Tiny
-- YAML::XS
-- Net::SSLeay
-- IO::Socket::SSL
-- Mozilla::CA
-- Win32 (installed from CPAN in perl 5.8.3 or earlier. From perl 5.8.4, it is installed as a core module.)
+- [JSON](https://metacpan.org/pod/JSON)
+- [Cpanel::JSON::XS](https://metacpan.org/pod/Cpanel::JSON::XS)
+- [JSON::XS](https://metacpan.org/pod/JSON::XS)
+- [JSON::MaybeXS](https://metacpan.org/pod/JSON::MaybeXS)
+- [YAML](https://metacpan.org/dist/YAML/view/lib/YAML.pod)
+- [YAML::Tiny](https://metacpan.org/pod/YAML::Tiny)
+- [YAML::XS](https://metacpan.org/pod/YAML::XS)
+- [Net::SSLeay](https://metacpan.org/dist/Net-SSLeay/view/lib/Net/SSLeay.pod)
+- [IO::Socket::SSL](https://metacpan.org/dist/IO-Socket-SSL/view/lib/IO/Socket/SSL.pod)
+- [Mozilla::CA](https://metacpan.org/pod/Mozilla::CA)
+- [Win32](https://metacpan.org/pod/Win32) (installed from CPAN in perl 5.8.3 or earlier. From perl 5.8.4, it is installed as a core module.)
 
 ## Actions::Core
 

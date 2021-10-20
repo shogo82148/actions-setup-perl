@@ -6,7 +6,26 @@ use warnings;
 use strict;
 
 use Exporter 'import';
-our @EXPORT = qw(export_variable add_secret add_path get_input set_output set_command_echo set_failed is_debug debug error warning info start_group end_group group perl_versions);
+our @EXPORT = qw(
+    export_variable
+    add_secret
+    add_path
+    get_input
+    get_boolean_input
+    set_output
+    set_command_echo
+    set_failed
+    is_debug
+    debug
+    error
+    warning
+    notice
+    info
+    start_group
+    end_group
+    group
+    perl_versions
+);
 
 use IO::Handle;
 use Encode qw(decode_utf8 encode_utf8);
@@ -55,9 +74,20 @@ sub get_input {
     return $val;
 }
 
+sub get_boolean_input {
+    my ($name, $options) = @_;
+
+    my $val = get_input($name, $options);
+    return !!1 if grep { $val eq $_ } qw/true True TRUE/;
+    return !!0 if grep { $val eq $_ } qw/false False FALSE/;
+
+    croak "Input does not meet YAML 1.2 \"Core Schema\" specification: $name\n" .
+        "Support boolean input list: `true | True | TRUE | false | False | FALSE`";
+}
+
 sub set_output {
     my ($name, $value) = @_;
-    issue_command('set-output', { name => $name}, $value);
+    issue_command('set-output', { name => $name }, $value);
 }
 
 sub set_command_echo {
@@ -87,14 +117,33 @@ sub debug {
     issue('debug', $message);
 }
 
+# See IssueCommandProperties: https://github.com/actions/runner/blob/main/src/Runner.Worker/ActionCommandManager.cs#L646
+sub _to_command_properties {
+    my ($properties) = @_;
+    return {} unless $properties;
+    return {
+        title     => $properties->{title},
+        file      => $properties->{file},
+        line      => $properties->{start_line},
+        endLine   => $properties->{end_line},
+        col       => $properties->{start_column},
+        endColumn => $properties->{end_column},
+    };
+}
+
 sub error {
-    my ($message) = @_;
-    issue('error', $message);
+    my ($message, $properties) = @_;
+    issue_command('error', _to_command_properties($properties), $message);
 }
 
 sub warning {
-    my ($message) = @_;
-    issue('warning', $message);
+    my ($message, $properties) = @_;
+    issue_command('warning', _to_command_properties($properties), $message);
+}
+
+sub notice {
+    my ($message, $properties) = @_;
+    issue_command('notice', _to_command_properties($properties), $message);
 }
 
 sub info {

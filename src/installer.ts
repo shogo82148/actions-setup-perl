@@ -1,21 +1,25 @@
-import * as core from '@actions/core';
-import * as tc from '@actions/tool-cache';
-import * as os from 'os';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as semver from 'semver';
-import * as tcp from './tool-cache-port';
+import * as core from "@actions/core";
+import * as tc from "@actions/tool-cache";
+import * as os from "os";
+import * as fs from "fs";
+import * as path from "path";
+import * as semver from "semver";
+import * as tcp from "./tool-cache-port";
 
 const osPlat = os.platform();
 const osArch = os.arch();
 
 export interface Result {
-  installedPath: string;
+  // the perl version actually installed.
+  version: string;
+
+  // installed path
+  path: string;
 }
 
 async function getAvailableVersions(): Promise<string[]> {
   return new Promise<string[]>((resolve, reject) => {
-    fs.readFile(path.join(__dirname, '..', 'versions', `${osPlat}.json`), (err, data) => {
+    fs.readFile(path.join(__dirname, "..", "versions", `${osPlat}.json`), (err, data) => {
       if (err) {
         reject(err);
       }
@@ -29,7 +33,7 @@ async function determineVersion(version: string): Promise<string> {
   const availableVersions = await getAvailableVersions();
 
   // stable latest version
-  if (version === 'latest') {
+  if (version === "latest") {
     return availableVersions[0];
   }
 
@@ -38,7 +42,7 @@ async function determineVersion(version: string): Promise<string> {
       return v;
     }
   }
-  throw new Error('unable to get latest version');
+  throw new Error("unable to get latest version");
 }
 
 export async function getPerl(version: string, thread: boolean): Promise<Result> {
@@ -46,22 +50,23 @@ export async function getPerl(version: string, thread: boolean): Promise<Result>
 
   // check cache
   let toolPath: string;
-  toolPath = tcp.find('perl', selected);
+  toolPath = tcp.find("perl", selected);
 
   if (!toolPath) {
     // download, extract, cache
     toolPath = await acquirePerl(selected, thread);
-    core.debug('Perl tool is cached under ' + toolPath);
+    core.debug("Perl tool is cached under " + toolPath);
   }
 
-  const bin = path.join(toolPath, 'bin');
+  const bin = path.join(toolPath, "bin");
   //
   // prepend the tools path. instructs the agent to prepend for future tasks
   //
   core.addPath(bin);
 
   return {
-    installedPath: toolPath
+    version: selected,
+    path: toolPath,
   };
 }
 
@@ -87,19 +92,19 @@ async function acquirePerl(version: string, thread: boolean): Promise<string> {
   //
   // Extract compressed archive
   //
-  const extPath = downloadUrl.endsWith('.zip')
+  const extPath = downloadUrl.endsWith(".zip")
     ? await tc.extractZip(downloadPath)
-    : downloadUrl.endsWith('.tar.xz')
-    ? await tc.extractTar(downloadPath, '', 'xJ')
-    : downloadUrl.endsWith('.tar.bz2')
-    ? await tc.extractTar(downloadPath, '', 'xj')
+    : downloadUrl.endsWith(".tar.xz")
+    ? await tc.extractTar(downloadPath, "", "xJ")
+    : downloadUrl.endsWith(".tar.bz2")
+    ? await tc.extractTar(downloadPath, "", "xj")
     : await tc.extractTar(downloadPath);
-  return await tcp.cacheDir(extPath, 'perl', version + (thread ? '-thr' : ''));
+  return await tcp.cacheDir(extPath, "perl", version + (thread ? "-thr" : ""));
 }
 
 function getFileName(version: string, thread: boolean): string {
-  const suffix = thread ? '-multi-thread' : '';
-  const ext = osPlat === 'win32' ? 'zip' : 'tar.xz';
+  const suffix = thread ? "-multi-thread" : "";
+  const ext = osPlat === "win32" ? "zip" : "tar.xz";
   return `perl-${version}-${osPlat}-${osArch}${suffix}.${ext}`;
 }
 
@@ -109,14 +114,14 @@ interface PackageVersion {
 
 async function getDownloadUrl(filename: string): Promise<string> {
   return new Promise<PackageVersion>((resolve, reject) => {
-    fs.readFile(path.join(__dirname, '..', 'package.json'), (err, data) => {
+    fs.readFile(path.join(__dirname, "..", "package.json"), (err, data) => {
       if (err) {
         reject(err);
       }
       const info: PackageVersion = JSON.parse(data.toString());
       resolve(info);
     });
-  }).then(info => {
+  }).then((info) => {
     const actionsVersion = info.version;
     return `https://setupperl.blob.core.windows.net/actions-setup-perl/v${actionsVersion}/${filename}`;
   });

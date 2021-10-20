@@ -1,9 +1,9 @@
-import * as core from '@actions/core';
-import * as tc from '@actions/tool-cache';
-import * as path from 'path';
-import * as semver from 'semver';
-import * as fs from 'fs';
-import * as tcp from './tool-cache-port';
+import * as core from "@actions/core";
+import * as tc from "@actions/tool-cache";
+import * as path from "path";
+import * as semver from "semver";
+import * as fs from "fs";
+import * as tcp from "./tool-cache-port";
 
 interface PerlVersion {
   version: string;
@@ -11,7 +11,11 @@ interface PerlVersion {
 }
 
 export interface Result {
-  installedPath: string;
+  // the perl version actually installed.
+  version: string;
+
+  // installed path
+  path: string;
 }
 
 // NOTE:
@@ -32,7 +36,7 @@ export interface Result {
 // 64 bit Portable binaries are not available with Perl 5.12.x and older.
 async function getAvailableVersions(): Promise<PerlVersion[]> {
   return new Promise<PerlVersion[]>((resolve, reject) => {
-    fs.readFile(path.join(__dirname, '..', 'versions', `strawberry.json`), (err, data) => {
+    fs.readFile(path.join(__dirname, "..", "versions", `strawberry.json`), (err, data) => {
       if (err) {
         reject(err);
       }
@@ -45,7 +49,7 @@ async function getAvailableVersions(): Promise<PerlVersion[]> {
 async function determineVersion(version: string): Promise<PerlVersion> {
   const availableVersions = await getAvailableVersions();
   // stable latest version
-  if (version === 'latest') {
+  if (version === "latest") {
     return availableVersions[0];
   }
 
@@ -54,38 +58,39 @@ async function determineVersion(version: string): Promise<PerlVersion> {
       return v;
     }
   }
-  throw new Error('unable to get latest version');
+  throw new Error("unable to get latest version");
 }
 
 export async function getPerl(version: string): Promise<Result> {
   // check cache
   const selected = await determineVersion(version);
   let toolPath: string;
-  toolPath = tcp.find('perl', selected.version);
+  toolPath = tcp.find("perl", selected.version);
 
   if (!toolPath) {
     // download, extract, cache
     toolPath = await acquirePerl(selected);
-    core.debug('Perl tool is cached under ' + toolPath);
+    core.debug("Perl tool is cached under " + toolPath);
   }
 
   // remove pre-installed Strawberry Perl and MinGW from Path
-  let pathEnv = (process.env.PATH || '').split(path.delimiter);
-  pathEnv = pathEnv.filter(p => !p.match(/.*(?:Strawberry|mingw).*/i));
+  let pathEnv = (process.env.PATH || "").split(path.delimiter);
+  pathEnv = pathEnv.filter((p) => !p.match(/.*(?:Strawberry|mingw).*/i));
 
   // add our new Strawberry Portable Perl Paths
   // from portableshell.bat https://github.com/StrawberryPerl/Perl-Dist-Strawberry/blob/9fb00a653ce2e6ed336045dd0a180409b98a72a9/share/portable/portableshell.bat#L5
-  pathEnv.unshift(path.join(toolPath, 'c', 'bin'));
-  pathEnv.unshift(path.join(toolPath, 'perl', 'bin'));
-  pathEnv.unshift(path.join(toolPath, 'perl', 'site', 'bin'));
-  core.exportVariable('PATH', pathEnv.join(path.delimiter));
+  pathEnv.unshift(path.join(toolPath, "c", "bin"));
+  pathEnv.unshift(path.join(toolPath, "perl", "bin"));
+  pathEnv.unshift(path.join(toolPath, "perl", "site", "bin"));
+  core.exportVariable("PATH", pathEnv.join(path.delimiter));
 
-  core.addPath(path.join(toolPath, 'c', 'bin'));
-  core.addPath(path.join(toolPath, 'perl', 'bin'));
-  core.addPath(path.join(toolPath, 'perl', 'site', 'bin'));
+  core.addPath(path.join(toolPath, "c", "bin"));
+  core.addPath(path.join(toolPath, "perl", "bin"));
+  core.addPath(path.join(toolPath, "perl", "site", "bin"));
 
   return {
-    installedPath: path.join(toolPath, 'perl')
+    version: selected.version,
+    path: path.join(toolPath, "perl"),
   };
 }
 
@@ -110,5 +115,5 @@ async function acquirePerl(version: PerlVersion): Promise<string> {
   }
 
   const extPath = await tc.extractZip(downloadPath);
-  return await tcp.cacheDir(extPath, 'strawberry-perl', version.version);
+  return await tcp.cacheDir(extPath, "strawberry-perl", version.version);
 }

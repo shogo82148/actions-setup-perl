@@ -43,6 +43,15 @@ inputs:
     description: working directory.
     default: "."
     required: false
+outputs:
+  perl-version:
+    description: |
+      The version of perl actually installed.
+  perl-hash:
+    description: |
+      The digest of perl -V.
+      It contains useful information to use as the cache key,
+      e.g. the platform, the version of perl, the compiler option for building perl.
 runs:
   using: "node12"
   main: "dist/index.js"

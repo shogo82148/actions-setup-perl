@@ -14,6 +14,6 @@ is $versions->[-1], '5.6.0', 'the oldest version of perl';
 
 # distribution: 'stawberry'
 $versions = perl_versions( platform => 'win32', distribution => 'strawberry' );
-is $versions->[-1], '5.14.4', 'the latest version of strawberry perl 5.14.x';
+is $versions->[-1], '5.14.4', 'the oldest version of strawberry perl 5.14.x';
 
 done_testing;

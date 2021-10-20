@@ -917,13 +917,13 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       PPI 1.213
       common::sense 3.3
-  Scalar-List-Utils-1.59
-    pathname: P/PE/PEVANS/Scalar-List-Utils-1.59.tar.gz
+  Scalar-List-Utils-1.60
+    pathname: P/PE/PEVANS/Scalar-List-Utils-1.60.tar.gz
     provides:
-      List::Util 1.59
-      List::Util::XS 1.59
-      Scalar::Util 1.59
-      Sub::Util 1.59
+      List::Util 1.60
+      List::Util::XS 1.60
+      Scalar::Util 1.60
+      Sub::Util 1.60
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006
@@ -1203,11 +1203,11 @@ DISTRIBUTIONS
       if 0.0608
     requirements:
       ExtUtils::MakeMaker 0
-  local-lib-2.000024
-    pathname: H/HA/HAARG/local-lib-2.000024.tar.gz
+  local-lib-2.000028
+    pathname: H/HA/HAARG/local-lib-2.000028.tar.gz
     provides:
       lib::core::only undef
-      local::lib 2.000024
+      local::lib 2.000028
     requirements:
       perl 5.006
   parent-0.238

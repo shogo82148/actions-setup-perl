@@ -702,11 +702,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20210920
-    pathname: B/BI/BINGOS/Module-CoreList-5.20210920.tar.gz
+  Module-CoreList-5.20211020
+    pathname: B/BI/BINGOS/Module-CoreList-5.20211020.tar.gz
     provides:
-      Module::CoreList 5.20210920
-      Module::CoreList::Utils 5.20210920
+      Module::CoreList 5.20211020
+      Module::CoreList::Utils 5.20211020
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0
@@ -1056,41 +1056,41 @@ DISTRIBUTIONS
       Win32::ShellQuote 0.003001
     requirements:
       perl 5.006
-  YAML-PP-0.027
-    pathname: T/TI/TINITA/YAML-PP-0.027.tar.gz
+  YAML-PP-0.028
+    pathname: T/TI/TINITA/YAML-PP-0.028.tar.gz
     provides:
-      YAML::PP 0.027
-      YAML::PP::Common 0.027
-      YAML::PP::Constructor 0.027
-      YAML::PP::Dumper 0.027
-      YAML::PP::Emitter 0.027
-      YAML::PP::Exception 0.027
-      YAML::PP::Grammar 0.027
-      YAML::PP::Highlight 0.027
-      YAML::PP::Lexer 0.027
-      YAML::PP::Loader 0.027
-      YAML::PP::Parser 0.027
-      YAML::PP::Perl 0.027
-      YAML::PP::Preserve::Array 0.027
-      YAML::PP::Preserve::Hash 0.027
-      YAML::PP::Preserve::Scalar 0.027
-      YAML::PP::Reader 0.027
-      YAML::PP::Reader::File 0.027
-      YAML::PP::Render 0.027
-      YAML::PP::Representer 0.027
-      YAML::PP::Schema 0.027
-      YAML::PP::Schema::Binary 0.027
-      YAML::PP::Schema::Core 0.027
-      YAML::PP::Schema::Failsafe 0.027
-      YAML::PP::Schema::Include 0.027
-      YAML::PP::Schema::JSON 0.027
-      YAML::PP::Schema::Merge 0.027
-      YAML::PP::Schema::Perl 0.027
-      YAML::PP::Schema::Tie::IxHash 0.027
-      YAML::PP::Schema::YAML1_1 0.027
-      YAML::PP::Type::MergeKey 0.027
-      YAML::PP::Writer 0.027
-      YAML::PP::Writer::File 0.027
+      YAML::PP 0.028
+      YAML::PP::Common 0.028
+      YAML::PP::Constructor 0.028
+      YAML::PP::Dumper 0.028
+      YAML::PP::Emitter 0.028
+      YAML::PP::Exception 0.028
+      YAML::PP::Grammar 0.028
+      YAML::PP::Highlight 0.028
+      YAML::PP::Lexer 0.028
+      YAML::PP::Loader 0.028
+      YAML::PP::Parser 0.028
+      YAML::PP::Perl 0.028
+      YAML::PP::Preserve::Array 0.028
+      YAML::PP::Preserve::Hash 0.028
+      YAML::PP::Preserve::Scalar 0.028
+      YAML::PP::Reader 0.028
+      YAML::PP::Reader::File 0.028
+      YAML::PP::Render 0.028
+      YAML::PP::Representer 0.028
+      YAML::PP::Schema 0.028
+      YAML::PP::Schema::Binary 0.028
+      YAML::PP::Schema::Core 0.028
+      YAML::PP::Schema::Failsafe 0.028
+      YAML::PP::Schema::Include 0.028
+      YAML::PP::Schema::JSON 0.028
+      YAML::PP::Schema::Merge 0.028
+      YAML::PP::Schema::Perl 0.028
+      YAML::PP::Schema::Tie::IxHash 0.028
+      YAML::PP::Schema::YAML1_1 0.028
+      YAML::PP::Type::MergeKey 0.028
+      YAML::PP::Writer 0.028
+      YAML::PP::Writer::File 0.028
     requirements:
       B 0
       B::Deparse 0

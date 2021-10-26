@@ -461,53 +461,53 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       common::sense 0
-  URI-5.09
-    pathname: O/OA/OALDERS/URI-5.09.tar.gz
+  URI-5.10
+    pathname: O/OA/OALDERS/URI-5.10.tar.gz
     provides:
-      URI 5.09
-      URI::Escape 5.09
-      URI::Heuristic 5.09
-      URI::IRI 5.09
-      URI::QueryParam 5.09
-      URI::Split 5.09
-      URI::URL 5.09
-      URI::WithBase 5.09
-      URI::data 5.09
-      URI::file 5.09
-      URI::file::Base 5.09
-      URI::file::FAT 5.09
-      URI::file::Mac 5.09
-      URI::file::OS2 5.09
-      URI::file::QNX 5.09
-      URI::file::Unix 5.09
-      URI::file::Win32 5.09
-      URI::ftp 5.09
-      URI::gopher 5.09
-      URI::http 5.09
-      URI::https 5.09
-      URI::ldap 5.09
-      URI::ldapi 5.09
-      URI::ldaps 5.09
-      URI::mailto 5.09
-      URI::mms 5.09
-      URI::news 5.09
-      URI::nntp 5.09
-      URI::nntps 5.09
-      URI::pop 5.09
-      URI::rlogin 5.09
-      URI::rsync 5.09
-      URI::rtsp 5.09
-      URI::rtspu 5.09
-      URI::sftp 5.09
-      URI::sip 5.09
-      URI::sips 5.09
-      URI::snews 5.09
-      URI::ssh 5.09
-      URI::telnet 5.09
-      URI::tn3270 5.09
-      URI::urn 5.09
-      URI::urn::isbn 5.09
-      URI::urn::oid 5.09
+      URI 5.10
+      URI::Escape 5.10
+      URI::Heuristic 5.10
+      URI::IRI 5.10
+      URI::QueryParam 5.10
+      URI::Split 5.10
+      URI::URL 5.10
+      URI::WithBase 5.10
+      URI::data 5.10
+      URI::file 5.10
+      URI::file::Base 5.10
+      URI::file::FAT 5.10
+      URI::file::Mac 5.10
+      URI::file::OS2 5.10
+      URI::file::QNX 5.10
+      URI::file::Unix 5.10
+      URI::file::Win32 5.10
+      URI::ftp 5.10
+      URI::gopher 5.10
+      URI::http 5.10
+      URI::https 5.10
+      URI::ldap 5.10
+      URI::ldapi 5.10
+      URI::ldaps 5.10
+      URI::mailto 5.10
+      URI::mms 5.10
+      URI::news 5.10
+      URI::nntp 5.10
+      URI::nntps 5.10
+      URI::pop 5.10
+      URI::rlogin 5.10
+      URI::rsync 5.10
+      URI::rtsp 5.10
+      URI::rtspu 5.10
+      URI::sftp 5.10
+      URI::sip 5.10
+      URI::sips 5.10
+      URI::snews 5.10
+      URI::ssh 5.10
+      URI::telnet 5.10
+      URI::tn3270 5.10
+      URI::urn 5.10
+      URI::urn::isbn 5.10
+      URI::urn::oid 5.10
     requirements:
       Carp 0
       Cwd 0
@@ -550,32 +550,32 @@ DISTRIBUTIONS
       common::sense 3.75
     requirements:
       ExtUtils::MakeMaker 0
-  libwww-perl-6.57
-    pathname: O/OA/OALDERS/libwww-perl-6.57.tar.gz
+  libwww-perl-6.58
+    pathname: O/OA/OALDERS/libwww-perl-6.58.tar.gz
     provides:
-      LWP 6.57
-      LWP::Authen::Basic 6.57
-      LWP::Authen::Digest 6.57
-      LWP::Authen::Ntlm 6.57
-      LWP::ConnCache 6.57
-      LWP::Debug 6.57
-      LWP::Debug::TraceHTTP 6.57
-      LWP::DebugFile 6.57
-      LWP::MemberMixin 6.57
-      LWP::Protocol 6.57
-      LWP::Protocol::cpan 6.57
-      LWP::Protocol::data 6.57
-      LWP::Protocol::file 6.57
-      LWP::Protocol::ftp 6.57
-      LWP::Protocol::gopher 6.57
-      LWP::Protocol::http 6.57
-      LWP::Protocol::loopback 6.57
-      LWP::Protocol::mailto 6.57
-      LWP::Protocol::nntp 6.57
-      LWP::Protocol::nogo 6.57
-      LWP::RobotUA 6.57
-      LWP::Simple 6.57
-      LWP::UserAgent 6.57
+      LWP 6.58
+      LWP::Authen::Basic 6.58
+      LWP::Authen::Digest 6.58
+      LWP::Authen::Ntlm 6.58
+      LWP::ConnCache 6.58
+      LWP::Debug 6.58
+      LWP::Debug::TraceHTTP 6.58
+      LWP::DebugFile 6.58
+      LWP::MemberMixin 6.58
+      LWP::Protocol 6.58
+      LWP::Protocol::cpan 6.58
+      LWP::Protocol::data 6.58
+      LWP::Protocol::file 6.58
+      LWP::Protocol::ftp 6.58
+      LWP::Protocol::gopher 6.58
+      LWP::Protocol::http 6.58
+      LWP::Protocol::loopback 6.58
+      LWP::Protocol::mailto 6.58
+      LWP::Protocol::nntp 6.58
+      LWP::Protocol::nogo 6.58
+      LWP::RobotUA 6.58
+      LWP::Simple 6.58
+      LWP::UserAgent 6.58
       libwww::perl undef
     requirements:
       CPAN::Meta::Requirements 2.120620
@@ -607,7 +607,7 @@ DISTRIBUTIONS
       URI 1.10
       URI::Escape 0
       WWW::RobotRules 6
-      base 0
+      parent 0.217
       perl 5.008001
       strict 0
       warnings 0

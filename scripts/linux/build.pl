@@ -167,7 +167,7 @@ sub run {
 
     group "archiving" => sub {
         chdir $install_dir or die "failed to cd $install_dir: $!";
-        system("tar", "Jcvf", "$tmpdir/perl.tar.xz", ".") == 0
+        system("tar", "--use-compress-program", "zstd -T0 --long=30 --ultra -22", "-cf", "$tmpdir/perl.tar.zstd", ".") == 0
             or die "failed to archive";
     };
 }

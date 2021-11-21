@@ -160,7 +160,7 @@ jobs:
         run: |
           ACTIONS_VERSION=v$(cat "$GITHUB_WORKSPACE/package.json" | jq -r .version)
           azcopy_v10 login --service-principal --application-id "$AZCOPY_SPA_APPLICATION_ID" --tenant-id "$AZCOPY_TENANT_ID"
-          azcopy_v10 cp "$RUNNER_TEMP/perl.tar.xz" "https://setupperl.blob.core.windows.net/actions-setup-perl/$ACTIONS_VERSION/perl-$PERL_VERSION-darwin-x64-multi-thread.tar.xz"
+          azcopy_v10 cp "$RUNNER_TEMP/perl.tar.zstd" "https://setupperl.blob.core.windows.net/actions-setup-perl/$ACTIONS_VERSION/perl-$PERL_VERSION-darwin-x64-multi-thread.tar.zstd"
         env:
           AZCOPY_SPA_APPLICATION_ID: ${{ secrets.AZCOPY_SPA_APPLICATION_ID }}
           AZCOPY_SPA_CLIENT_SECRET: ${{ secrets.AZCOPY_SPA_CLIENT_SECRET }}

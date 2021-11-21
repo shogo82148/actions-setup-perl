@@ -535,10 +535,10 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Pod::Usage 1.14
-  HTTP-Tiny-0.078
-    pathname: D/DA/DAGOLDEN/HTTP-Tiny-0.078.tar.gz
+  HTTP-Tiny-0.080
+    pathname: D/DA/DAGOLDEN/HTTP-Tiny-0.080.tar.gz
     provides:
-      HTTP::Tiny 0.078
+      HTTP::Tiny 0.080
     requirements:
       Carp 0
       ExtUtils::MakeMaker 6.17
@@ -702,11 +702,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20210920
-    pathname: B/BI/BINGOS/Module-CoreList-5.20210920.tar.gz
+  Module-CoreList-5.20211120
+    pathname: B/BI/BINGOS/Module-CoreList-5.20211120.tar.gz
     provides:
-      Module::CoreList 5.20210920
-      Module::CoreList::Utils 5.20210920
+      Module::CoreList 5.20211120
+      Module::CoreList::Utils 5.20211120
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0
@@ -985,53 +985,53 @@ DISTRIBUTIONS
       Tie::Handle 0
       perl 5.006
       strict 0
-  URI-5.09
-    pathname: O/OA/OALDERS/URI-5.09.tar.gz
+  URI-5.10
+    pathname: O/OA/OALDERS/URI-5.10.tar.gz
     provides:
-      URI 5.09
-      URI::Escape 5.09
-      URI::Heuristic 5.09
-      URI::IRI 5.09
-      URI::QueryParam 5.09
-      URI::Split 5.09
-      URI::URL 5.09
-      URI::WithBase 5.09
-      URI::data 5.09
-      URI::file 5.09
-      URI::file::Base 5.09
-      URI::file::FAT 5.09
-      URI::file::Mac 5.09
-      URI::file::OS2 5.09
-      URI::file::QNX 5.09
-      URI::file::Unix 5.09
-      URI::file::Win32 5.09
-      URI::ftp 5.09
-      URI::gopher 5.09
-      URI::http 5.09
-      URI::https 5.09
-      URI::ldap 5.09
-      URI::ldapi 5.09
-      URI::ldaps 5.09
-      URI::mailto 5.09
-      URI::mms 5.09
-      URI::news 5.09
-      URI::nntp 5.09
-      URI::nntps 5.09
-      URI::pop 5.09
-      URI::rlogin 5.09
-      URI::rsync 5.09
-      URI::rtsp 5.09
-      URI::rtspu 5.09
-      URI::sftp 5.09
-      URI::sip 5.09
-      URI::sips 5.09
-      URI::snews 5.09
-      URI::ssh 5.09
-      URI::telnet 5.09
-      URI::tn3270 5.09
-      URI::urn 5.09
-      URI::urn::isbn 5.09
-      URI::urn::oid 5.09
+      URI 5.10
+      URI::Escape 5.10
+      URI::Heuristic 5.10
+      URI::IRI 5.10
+      URI::QueryParam 5.10
+      URI::Split 5.10
+      URI::URL 5.10
+      URI::WithBase 5.10
+      URI::data 5.10
+      URI::file 5.10
+      URI::file::Base 5.10
+      URI::file::FAT 5.10
+      URI::file::Mac 5.10
+      URI::file::OS2 5.10
+      URI::file::QNX 5.10
+      URI::file::Unix 5.10
+      URI::file::Win32 5.10
+      URI::ftp 5.10
+      URI::gopher 5.10
+      URI::http 5.10
+      URI::https 5.10
+      URI::ldap 5.10
+      URI::ldapi 5.10
+      URI::ldaps 5.10
+      URI::mailto 5.10
+      URI::mms 5.10
+      URI::news 5.10
+      URI::nntp 5.10
+      URI::nntps 5.10
+      URI::pop 5.10
+      URI::rlogin 5.10
+      URI::rsync 5.10
+      URI::rtsp 5.10
+      URI::rtspu 5.10
+      URI::sftp 5.10
+      URI::sip 5.10
+      URI::sips 5.10
+      URI::snews 5.10
+      URI::ssh 5.10
+      URI::telnet 5.10
+      URI::tn3270 5.10
+      URI::urn 5.10
+      URI::urn::isbn 5.10
+      URI::urn::oid 5.10
     requirements:
       Carp 0
       Cwd 0
@@ -1056,41 +1056,41 @@ DISTRIBUTIONS
       Win32::ShellQuote 0.003001
     requirements:
       perl 5.006
-  YAML-PP-0.027
-    pathname: T/TI/TINITA/YAML-PP-0.027.tar.gz
+  YAML-PP-0.030
+    pathname: T/TI/TINITA/YAML-PP-0.030.tar.gz
     provides:
-      YAML::PP 0.027
-      YAML::PP::Common 0.027
-      YAML::PP::Constructor 0.027
-      YAML::PP::Dumper 0.027
-      YAML::PP::Emitter 0.027
-      YAML::PP::Exception 0.027
-      YAML::PP::Grammar 0.027
-      YAML::PP::Highlight 0.027
-      YAML::PP::Lexer 0.027
-      YAML::PP::Loader 0.027
-      YAML::PP::Parser 0.027
-      YAML::PP::Perl 0.027
-      YAML::PP::Preserve::Array 0.027
-      YAML::PP::Preserve::Hash 0.027
-      YAML::PP::Preserve::Scalar 0.027
-      YAML::PP::Reader 0.027
-      YAML::PP::Reader::File 0.027
-      YAML::PP::Render 0.027
-      YAML::PP::Representer 0.027
-      YAML::PP::Schema 0.027
-      YAML::PP::Schema::Binary 0.027
-      YAML::PP::Schema::Core 0.027
-      YAML::PP::Schema::Failsafe 0.027
-      YAML::PP::Schema::Include 0.027
-      YAML::PP::Schema::JSON 0.027
-      YAML::PP::Schema::Merge 0.027
-      YAML::PP::Schema::Perl 0.027
-      YAML::PP::Schema::Tie::IxHash 0.027
-      YAML::PP::Schema::YAML1_1 0.027
-      YAML::PP::Type::MergeKey 0.027
-      YAML::PP::Writer 0.027
-      YAML::PP::Writer::File 0.027
+      YAML::PP 0.030
+      YAML::PP::Common 0.030
+      YAML::PP::Constructor 0.030
+      YAML::PP::Dumper 0.030
+      YAML::PP::Emitter 0.030
+      YAML::PP::Exception 0.030
+      YAML::PP::Grammar 0.030
+      YAML::PP::Highlight 0.030
+      YAML::PP::Lexer 0.030
+      YAML::PP::Loader 0.030
+      YAML::PP::Parser 0.030
+      YAML::PP::Perl 0.030
+      YAML::PP::Preserve::Array 0.030
+      YAML::PP::Preserve::Hash 0.030
+      YAML::PP::Preserve::Scalar 0.030
+      YAML::PP::Reader 0.030
+      YAML::PP::Reader::File 0.030
+      YAML::PP::Render 0.030
+      YAML::PP::Representer 0.030
+      YAML::PP::Schema 0.030
+      YAML::PP::Schema::Binary 0.030
+      YAML::PP::Schema::Core 0.030
+      YAML::PP::Schema::Failsafe 0.030
+      YAML::PP::Schema::Include 0.030
+      YAML::PP::Schema::JSON 0.030
+      YAML::PP::Schema::Merge 0.030
+      YAML::PP::Schema::Perl 0.030
+      YAML::PP::Schema::Tie::IxHash 0.030
+      YAML::PP::Schema::YAML1_1 0.030
+      YAML::PP::Type::MergeKey 0.030
+      YAML::PP::Writer 0.030
+      YAML::PP::Writer::File 0.030
     requirements:
       B 0
       B::Deparse 0

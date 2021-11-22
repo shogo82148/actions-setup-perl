@@ -119,6 +119,6 @@ async function getDownloadUrl(filename: string): Promise<string> {
     });
   }).then((info) => {
     const actionsVersion = info.version;
-    return `https://setupperl.blob.core.windows.net/actions-setup-perl/v${actionsVersion}/${filename}`;
+    return `https://github.com/shogo82148/actions-setup-perl/releases/download/v${actionsVersion}/${filename}`;
   });
 }

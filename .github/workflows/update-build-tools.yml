@@ -33,7 +33,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: setup host perl
-        run: perl -MConfig -E 'say "$Config{bin}"' >> $GITHUB_PATH
+        run: perl -MConfig -E 'say "$Config{bin}"' >> "$GITHUB_PATH"
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -55,7 +55,7 @@ jobs:
       - name: setup host perl
         shell: bash
         run: |
-          cat << 'END_OF_PATH' >> $GITHUB_PATH
+          cat << 'END_OF_PATH' >> "$GITHUB_PATH"
           C:\MinGW\bin
           C:\strawberry\perl\site\bin
           C:\strawberry\perl\bin
@@ -131,5 +131,5 @@ jobs:
           git commit -m "Update cpanfile.snapshot $(date +"%Y-%m-%d %H:%M:%S")" || exit 0
           git push -u origin "$branch"
           curl -H "Authorization: token $TOKEN" \
-            -d "$(jq --arg branch $branch -n '{ "title": "Auto Update build tools", "base": "main", "head": $branch }')" \
+            -d "$(jq --arg branch "$branch" -n '{ "title": "Auto Update build tools", "base": "main", "head": $branch }')" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls"

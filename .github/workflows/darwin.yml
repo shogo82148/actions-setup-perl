@@ -50,7 +50,7 @@ jobs:
           if [ -n "$PERL_VERSIONS" ]; then
             echo "::set-output name=matrix::$(printenv PERL_VERSIONS | jq -c '{perl: .}')"
           else
-            echo "::set-output name=matrix::$(cat versions/darwin.json | jq -c '{perl: .}')"
+            echo "::set-output name=matrix::$(<versions/darwin.json jq -c '{perl: .}')"
           fi
         env:
           PERL_VERSIONS: ${{ github.event.inputs.perl-versions }}
@@ -71,7 +71,7 @@ jobs:
       - id: perl
         name: setup host perl
         run: |
-          perl -MConfig -E 'say "$Config{bin}"' >> $GITHUB_PATH
+          perl -MConfig -E 'say "$Config{bin}"' >> "$GITHUB_PATH"
           perl -e 'print "::set-output name=version::$^V"'
       - name: Host perl -V
         run: perl -V
@@ -100,7 +100,7 @@ jobs:
 
       - name: upload
         run: |
-          ACTIONS_VERSION=v$(cat "$GITHUB_WORKSPACE/package.json" | jq -r .version)
+          ACTIONS_VERSION=v$(<"$GITHUB_WORKSPACE/package.json" jq -r .version)
           mv "$RUNNER_TEMP/perl.tar.zstd" "$RUNNER_TEMP/perl-$PERL_VERSION-darwin-x64.tar.zstd"
           gh release upload --clobber "$ACTIONS_VERSION" "$RUNNER_TEMP/perl-$PERL_VERSION-darwin-x64.tar.zstd"
         env:
@@ -121,7 +121,8 @@ jobs:
       - id: perl
         name: setup host perl
         run: |
-          perl -MConfig -E 'say "$Config{bin}"' >> $GITHUB_PATH
+          perl -MConfig -E 'say "$Config{bin}"' >> "$GITHUB_PATH"
+          # shellcheck disable=SC2016
           perl -e 'print "::set-output name=version::$^V"'
       - name: Host perl -V
         run: perl -V
@@ -150,7 +151,7 @@ jobs:
 
       - name: upload
         run: |
-          ACTIONS_VERSION=v$(cat "$GITHUB_WORKSPACE/package.json" | jq -r .version)
+          ACTIONS_VERSION=v$(<"$GITHUB_WORKSPACE/package.json" jq -r .version)
           mv "$RUNNER_TEMP/perl.tar.zstd" "$RUNNER_TEMP/perl-$PERL_VERSION-darwin-x64-multi-thread.tar.zstd"
           gh release upload --clobber "$ACTIONS_VERSION" "$RUNNER_TEMP/perl-$PERL_VERSION-darwin-x64-multi-thread.tar.zstd"
         env:

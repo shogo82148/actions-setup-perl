@@ -154,4 +154,4 @@ jobs:
           mv "$RUNNER_TEMP/perl.tar.zstd" "$RUNNER_TEMP/perl-$PERL_VERSION-darwin-x64-multi-thread.tar.zstd"
           gh release upload --clobber "$ACTIONS_VERSION" "$RUNNER_TEMP/perl-$PERL_VERSION-darwin-x64-multi-thread.tar.zstd"
         env:
-          GITHUB_TOKEN: ${{ github_token }}
+          GITHUB_TOKEN: ${{ github.token }}

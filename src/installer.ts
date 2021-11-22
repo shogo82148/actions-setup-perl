@@ -104,7 +104,7 @@ async function acquirePerl(version: string, thread: boolean): Promise<string> {
 
 function getFileName(version: string, thread: boolean): string {
   const suffix = thread ? "-multi-thread" : "";
-  const ext = osPlat === "win32" ? "zip" : "tar.xz";
+  const ext = osPlat === "win32" ? "zip" : "tar.zstd";
   return `perl-${version}-${osPlat}-${osArch}${suffix}.${ext}`;
 }
 

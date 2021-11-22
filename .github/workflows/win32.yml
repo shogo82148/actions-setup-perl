@@ -48,7 +48,7 @@ jobs:
           if [ -n "$PERL_VERSIONS" ]; then
             echo "::set-output name=matrix::$(printenv PERL_VERSIONS | jq -c '{perl: .}')"
           else
-            echo "::set-output name=matrix::$(cat versions/win32.json | jq -c '{perl: .}')"
+            echo "::set-output name=matrix::$(<versions/win32.json jq -c '{perl: .}')"
           fi
         env:
           PERL_VERSIONS: ${{ github.event.inputs.perl-versions }}
@@ -78,7 +78,7 @@ jobs:
         name: setup host perl
         shell: bash
         run: |
-          cat << 'END_OF_PATH' >> $GITHUB_PATH
+          cat << 'END_OF_PATH' >> "$GITHUB_PATH"
           C:\strawberry\c\bin
           C:\strawberry\perl\site\bin
           C:\strawberry\perl\bin
@@ -133,27 +133,21 @@ jobs:
         if: failure()
       - run: |
           pip install minidump
-          minidump --all *.dmp
+          minidump --all ./*.dmp
         if: failure()
         shell: bash
         working-directory: ${{ runner.temp }}/perl-wer
 
-      - uses: kheiakiyama/install-azcopy-action@v1
-        with:
-          version: "v10"
       - name: upload
-        shell: pwsh
+        shell: bash
         run: |
-          Set-Location ${env:RUNNER_TEMP}
-          $pkg = Get-Content "${env:GITHUB_WORKSPACE}/package.json" -Encoding UTF8 -Raw | ConvertFrom-Json
-          $version = $pkg.version
-          azcopy_v10 login --service-principal --application-id $env:AZCOPY_SPA_APPLICATION_ID --tenant-id $env:AZCOPY_TENANT_ID
-          azcopy_v10 cp perl.zip "https://setupperl.blob.core.windows.net/actions-setup-perl/v$version/perl-${env:PERL_VERSION}-win32-x64.zip"
+          ACTIONS_VERSION=v$(< "$GITHUB_WORKSPACE/package.json" jq -r .version)
+          TEMP_DIR=$(cygpath "$RUNNER_TEMP")
+          mv "$TEMP_DIR/perl.zip" "$TEMP_DIR/perl-$PERL_VERSION-win32-x64.zip"
+          gh release upload --clobber "$ACTIONS_VERSION" "$TEMP_DIR/perl-$PERL_VERSION-win32-x64.zip"
         env:
           PERL_VERSION: ${{ matrix.perl }}
-          AZCOPY_SPA_APPLICATION_ID: ${{ secrets.AZCOPY_SPA_APPLICATION_ID }}
-          AZCOPY_SPA_CLIENT_SECRET: ${{ secrets.AZCOPY_SPA_CLIENT_SECRET }}
-          AZCOPY_TENANT_ID: ${{ secrets.AZCOPY_TENANT_ID }}
+          GITHUB_TOKEN: ${{ github.token }}
 
   build-multi-thread:
     runs-on: windows-2019
@@ -179,7 +173,7 @@ jobs:
         name: setup host perl
         shell: bash
         run: |
-          cat << 'END_OF_PATH' >> $GITHUB_PATH
+          cat << 'END_OF_PATH' >> "$GITHUB_PATH"
           C:\MinGW\bin
           C:\strawberry\perl\site\bin
           C:\strawberry\perl\bin
@@ -228,24 +222,18 @@ jobs:
         if: failure()
       - run: |
           pip install minidump
-          minidump --all *.dmp
+          minidump --all ./*.dmp
         if: failure()
         shell: bash
         working-directory: ${{ runner.temp }}/perl-wer
 
-      - uses: kheiakiyama/install-azcopy-action@v1
-        with:
-          version: "v10"
       - name: upload
-        shell: pwsh
+        shell: bash
         run: |
-          Set-Location ${env:RUNNER_TEMP}
-          $pkg = Get-Content "${env:GITHUB_WORKSPACE}/package.json" -Encoding UTF8 -Raw | ConvertFrom-Json
-          $version = $pkg.version
-          azcopy_v10 login --service-principal --application-id $env:AZCOPY_SPA_APPLICATION_ID --tenant-id $env:AZCOPY_TENANT_ID
-          azcopy_v10 cp perl.zip "https://setupperl.blob.core.windows.net/actions-setup-perl/v$version/perl-${env:PERL_VERSION}-win32-x64-multi-thread.zip"
+          ACTIONS_VERSION=v$(< "$GITHUB_WORKSPACE/package.json" jq -r .version)
+          TEMP_DIR=$(cygpath "$RUNNER_TEMP")
+          mv "$TEMP_DIR/perl.zip" "$TEMP_DIR/perl-$PERL_VERSION-win32-x64-multi-thread.zip"
+          gh release upload --clobber "$ACTIONS_VERSION" "$TEMP_DIR/perl-$PERL_VERSION-win32-x64-multi-thread.zip"
         env:
           PERL_VERSION: ${{ matrix.perl }}
-          AZCOPY_SPA_APPLICATION_ID: ${{ secrets.AZCOPY_SPA_APPLICATION_ID }}
-          AZCOPY_SPA_CLIENT_SECRET: ${{ secrets.AZCOPY_SPA_CLIENT_SECRET }}
-          AZCOPY_TENANT_ID: ${{ secrets.AZCOPY_TENANT_ID }}
+          GITHUB_TOKEN: ${{ github.token }}

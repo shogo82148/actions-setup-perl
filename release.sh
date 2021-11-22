@@ -29,15 +29,11 @@ rm -rf "$WORKING"
 git clone "$ORIGIN" "$WORKING"
 cd "$WORKING"
 
-: release the action
-git checkout "v$MAJOR.$MINOR.$PATCH" || (
-    : it looks that "v$MAJOR.$MINOR.$PATCH" is not tagged.
-    : run ./prepare.sh "v$MAJOR.$MINOR.$PATCH" at first.
-    : see the comments of ./release.sh for more details.
-    exit 1
-)
-git tag -fa "v$MAJOR" -m "release v$MAJOR.$MINOR.$PATCH"
+git checkout "$(echo "$RELEASE" | jq -r .targetCommitish)"
+git tag -sfa "v$MAJOR" -m "release v$MAJOR.$MINOR.$PATCH"
 git push -f origin "v$MAJOR"
 
 cd "$CURRENT"
 rm -rf "$WORKING"
+
+open "$(echo "$RELEASE" | jq -r .url)"

@@ -6,7 +6,7 @@
 set -uex
 
 CURRENT=$(cd "$(dirname "$0")" && pwd)
-VERSION=$1
+VERSION=${1#v}
 MAJOR=$(echo "$VERSION" | cut -d. -f1)
 MINOR=$(echo "$VERSION" | cut -d. -f2)
 PATCH=$(echo "$VERSION" | cut -d. -f3)
@@ -42,8 +42,8 @@ perl -ne 'print unless m(^/dist/$)' -i .gitignore
 git add .
 git commit -m "build v$MAJOR.$MINOR.$PATCH" || true
 git push origin "releases/v$MAJOR"
-git tag -a "v$MAJOR.$MINOR.$PATCH" -m "release v$MAJOR.$MINOR.$PATCH"
-git push origin "v$MAJOR.$MINOR.$PATCH"
+gh release create "v$MAJOR.$MINOR.$PATCH" \
+    --draft --target "$(git rev-parse HEAD)" --title "v$MAJOR.$MINOR.$PATCH" --notes ""
 
 cd "$CURRENT"
 rm -rf "$WORKING"

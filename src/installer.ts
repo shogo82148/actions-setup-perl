@@ -94,11 +94,7 @@ async function acquirePerl(version: string, thread: boolean): Promise<string> {
   //
   const extPath = downloadUrl.endsWith(".zip")
     ? await tc.extractZip(downloadPath)
-    : downloadUrl.endsWith(".tar.xz")
-    ? await tc.extractTar(downloadPath, "", "xJ")
-    : downloadUrl.endsWith(".tar.bz2")
-    ? await tc.extractTar(downloadPath, "", "xj")
-    : await tc.extractTar(downloadPath);
+    : await tc.extractTar(downloadPath, "", ["--use-compress-program", "zstd -d --long=30", "-x"]);
   return await tcp.cacheDir(extPath, "perl", version + (thread ? "-thr" : ""));
 }
 

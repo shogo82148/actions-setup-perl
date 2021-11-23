@@ -94,17 +94,13 @@ async function acquirePerl(version: string, thread: boolean): Promise<string> {
   //
   const extPath = downloadUrl.endsWith(".zip")
     ? await tc.extractZip(downloadPath)
-    : downloadUrl.endsWith(".tar.xz")
-    ? await tc.extractTar(downloadPath, "", "xJ")
-    : downloadUrl.endsWith(".tar.bz2")
-    ? await tc.extractTar(downloadPath, "", "xj")
-    : await tc.extractTar(downloadPath);
+    : await tc.extractTar(downloadPath, "", ["--use-compress-program", "zstd -d --long=30", "-x"]);
   return await tcp.cacheDir(extPath, "perl", version + (thread ? "-thr" : ""));
 }
 
 function getFileName(version: string, thread: boolean): string {
   const suffix = thread ? "-multi-thread" : "";
-  const ext = osPlat === "win32" ? "zip" : "tar.xz";
+  const ext = osPlat === "win32" ? "zip" : "tar.zstd";
   return `perl-${version}-${osPlat}-${osArch}${suffix}.${ext}`;
 }
 
@@ -123,6 +119,6 @@ async function getDownloadUrl(filename: string): Promise<string> {
     });
   }).then((info) => {
     const actionsVersion = info.version;
-    return `https://setupperl.blob.core.windows.net/actions-setup-perl/v${actionsVersion}/${filename}`;
+    return `https://github.com/shogo82148/actions-setup-perl/releases/download/v${actionsVersion}/${filename}`;
   });
 }

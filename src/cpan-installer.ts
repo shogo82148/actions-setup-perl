@@ -24,12 +24,8 @@ export interface Options {
 }
 
 export async function install(opt: Options): Promise<void> {
-  if (!opt.install_modules_with) {
-    core.info("nothing to install");
-    return;
-  }
   let installer: (opt: Options) => Promise<void>;
-  switch (opt.install_modules_with) {
+  switch (opt.install_modules_with || "cpanm") {
     case "cpanm":
       installer = installWithCpanm;
       break;
@@ -162,8 +158,10 @@ async function installWithCpanm(opt: Options): Promise<void> {
     args.push("--verbose");
   }
   args.push(...splitArgs(opt.install_modules_args));
-  if (await exists(path.join(workingDirectory, "cpanfile"))) {
-    await exec.exec(perl, [...args, "--installdeps", "."], execOpt);
+  if (opt.install_modules_with) {
+    if (await exists(path.join(workingDirectory, "cpanfile"))) {
+      await exec.exec(perl, [...args, "--installdeps", "."], execOpt);
+    }
   }
   const modules = splitModules(opt.install_modules);
   if (modules.length > 0) {

@@ -17,11 +17,19 @@
 set -uex
 
 CURRENT=$(cd "$(dirname "$0")" && pwd)
-VERSION=$1
+VERSION=${1#v}
 MAJOR=$(echo "$VERSION" | cut -d. -f1)
 MINOR=$(echo "$VERSION" | cut -d. -f2)
 PATCH=$(echo "$VERSION" | cut -d. -f3)
 WORKING=$CURRENT/.working
+
+: release the action
+if ! RELEASE=$(gh release view "v$MAJOR.$MINOR.$PATCH" --json url,targetCommitish); then
+    : it looks that "v$MAJOR.$MINOR.$PATCH" is not tagged.
+    : run ./prepare.sh "v$MAJOR.$MINOR.$PATCH" at first.
+    : see the comments of ./release.sh for more details.
+    exit 1
+fi
 
 : clone
 ORIGIN=$(git remote get-url origin)

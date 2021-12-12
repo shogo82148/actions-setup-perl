@@ -37,12 +37,8 @@ const stream = __importStar(__nccwpck_require__(2781));
 const util = __importStar(__nccwpck_require__(3837));
 const path = __importStar(__nccwpck_require__(1017));
 async function install(opt) {
-    if (!opt.install_modules_with) {
-        core.info("nothing to install");
-        return;
-    }
     let installer;
-    switch (opt.install_modules_with) {
+    switch (opt.install_modules_with || "cpanm") {
         case "cpanm":
             installer = installWithCpanm;
             break;
@@ -171,8 +167,10 @@ async function installWithCpanm(opt) {
         args.push("--verbose");
     }
     args.push(...splitArgs(opt.install_modules_args));
-    if (await exists(path.join(workingDirectory, "cpanfile"))) {
-        await exec.exec(perl, [...args, "--installdeps", "."], execOpt);
+    if (opt.install_modules_with) {
+        if (await exists(path.join(workingDirectory, "cpanfile"))) {
+            await exec.exec(perl, [...args, "--installdeps", "."], execOpt);
+        }
     }
     const modules = splitModules(opt.install_modules);
     if (modules.length > 0) {

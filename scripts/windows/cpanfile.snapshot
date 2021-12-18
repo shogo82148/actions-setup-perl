@@ -262,11 +262,11 @@ DISTRIBUTIONS
       Time::HiRes 0
       Win32 0
       Win32::ShellQuote 0
-  JSON-4.03
-    pathname: I/IS/ISHIGAKI/JSON-4.03.tar.gz
+  JSON-4.04
+    pathname: I/IS/ISHIGAKI/JSON-4.04.tar.gz
     provides:
-      JSON 4.03
-      JSON::Backend::PP 4.03
+      JSON 4.04
+      JSON::Backend::PP 4.04
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
@@ -550,32 +550,32 @@ DISTRIBUTIONS
       common::sense 3.75
     requirements:
       ExtUtils::MakeMaker 0
-  libwww-perl-6.59
-    pathname: O/OA/OALDERS/libwww-perl-6.59.tar.gz
+  libwww-perl-6.60
+    pathname: O/OA/OALDERS/libwww-perl-6.60.tar.gz
     provides:
-      LWP 6.59
-      LWP::Authen::Basic 6.59
-      LWP::Authen::Digest 6.59
-      LWP::Authen::Ntlm 6.59
-      LWP::ConnCache 6.59
-      LWP::Debug 6.59
-      LWP::Debug::TraceHTTP 6.59
-      LWP::DebugFile 6.59
-      LWP::MemberMixin 6.59
-      LWP::Protocol 6.59
-      LWP::Protocol::cpan 6.59
-      LWP::Protocol::data 6.59
-      LWP::Protocol::file 6.59
-      LWP::Protocol::ftp 6.59
-      LWP::Protocol::gopher 6.59
-      LWP::Protocol::http 6.59
-      LWP::Protocol::loopback 6.59
-      LWP::Protocol::mailto 6.59
-      LWP::Protocol::nntp 6.59
-      LWP::Protocol::nogo 6.59
-      LWP::RobotUA 6.59
-      LWP::Simple 6.59
-      LWP::UserAgent 6.59
+      LWP 6.60
+      LWP::Authen::Basic 6.60
+      LWP::Authen::Digest 6.60
+      LWP::Authen::Ntlm 6.60
+      LWP::ConnCache 6.60
+      LWP::Debug 6.60
+      LWP::Debug::TraceHTTP 6.60
+      LWP::DebugFile 6.60
+      LWP::MemberMixin 6.60
+      LWP::Protocol 6.60
+      LWP::Protocol::cpan 6.60
+      LWP::Protocol::data 6.60
+      LWP::Protocol::file 6.60
+      LWP::Protocol::ftp 6.60
+      LWP::Protocol::gopher 6.60
+      LWP::Protocol::http 6.60
+      LWP::Protocol::loopback 6.60
+      LWP::Protocol::mailto 6.60
+      LWP::Protocol::nntp 6.60
+      LWP::Protocol::nogo 6.60
+      LWP::RobotUA 6.60
+      LWP::Simple 6.60
+      LWP::UserAgent 6.60
       libwww::perl undef
     requirements:
       CPAN::Meta::Requirements 2.120620

@@ -4,7 +4,7 @@
 
 set -e
 
-OPENSSL_VERSION=1_1_1l
+OPENSSL_VERSION=3.0.1
 ROOT=$(cd "$(dirname "$0")" && pwd)
 : "${RUNNER_TEMP:=$ROOT/working}"
 : "${RUNNER_TOOL_CACHE:=$RUNNER_TEMP/dist}"
@@ -25,7 +25,7 @@ echo "::group::download OpenSSL source"
 (
     set -eux
     cd "$RUNNER_TEMP"
-    curl --retry 3 -sSL "https://github.com/openssl/openssl/archive/OpenSSL_$OPENSSL_VERSION.tar.gz" -o openssl.tar.gz
+    curl --retry 3 -sSL "https://github.com/openssl/openssl/archive/openssl-$OPENSSL_VERSION.tar.gz" -o openssl.tar.gz
 )
 echo "::endgroup::"
 
@@ -40,7 +40,7 @@ echo "::endgroup::"
 echo "::group::build OpenSSL"
 (
     set -eux
-    cd "$RUNNER_TEMP/openssl-OpenSSL_$OPENSSL_VERSION"
+    cd "$RUNNER_TEMP/openssl-openssl-$OPENSSL_VERSION"
     ./Configure --prefix="$PREFIX" darwin64-x86_64-cc
     make "-j$JOBS"
     make install_sw install_ssldirs

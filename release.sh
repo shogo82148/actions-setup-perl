@@ -36,11 +36,11 @@ fi
 : clone
 ORIGIN=$(git remote get-url origin)
 rm -rf "$WORKING"
-git clone "$ORIGIN" "$WORKING"
+git clone --depth 1 "$ORIGIN" "$WORKING"
 cd "$WORKING"
 
 : make a draft release public.
-echo '{"draft":false}' | gh api -X PATCH --input - "$(echo "$RELEASE" | jq '.apiUrl')" --jq '.html_url'
+echo '{"draft":false}' | gh api -X PATCH --input - "$(echo "$RELEASE" | jq -r '.apiUrl')" --jq '.html_url'
 
 : make a tag.
 git checkout "$(echo "$RELEASE" | jq -r .targetCommitish)"
@@ -49,5 +49,3 @@ git push -f origin "v$MAJOR"
 
 cd "$CURRENT"
 rm -rf "$WORKING"
-
-open "$(echo "$RELEASE" | jq -r .url)"

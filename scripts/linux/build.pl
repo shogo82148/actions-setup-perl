@@ -114,7 +114,7 @@ sub run {
 
     group "install common CPAN modules" => sub {
         # JSON
-        cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-4.03.tar.gz', 'JSON', '5.5.3');
+        cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-4.04.tar.gz', 'JSON', '5.5.3');
 
         # Cpanel::JSON::XS
         cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.27.tar.gz', 'Cpanel::JSON::XS', '5.6.2');
@@ -134,7 +134,7 @@ sub run {
         cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/File-Temp-0.2311.tar.gz', 'File::Temp', '5.6.0', '5.6.1');
         cpan_install('https://cpan.metacpan.org/authors/id/M/MA/MAKAMAKA/JSON-PP-Compat5006-1.09.tar.gz', 'JSON::PP::Compat5006', '5.6.0', '5.8.0');
         # JSON::PP
-        cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-PP-4.06.tar.gz', 'JSON::PP', '5.6.0');
+        cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-PP-4.07.tar.gz', 'JSON::PP', '5.6.0');
 
         # JSON::MaybeXS
         cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004003.tar.gz', 'JSON::MaybeXS', '5.6.0');
@@ -159,7 +159,7 @@ sub run {
         # IO::Socket::SSL
         local $ENV{NO_NETWORK_TESTING} = 1;
         local $ENV{PERL_MM_USE_DEFAULT} = 1;
-        cpan_install('https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-2.072.tar.gz', 'IO::Socket::SSL', '5.8.1');
+        cpan_install('https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-2.073.tar.gz', 'IO::Socket::SSL', '5.8.1');
 
         # Test::Harness
         cpan_install('https://cpan.metacpan.org/authors/id/L/LE/LEONT/Test-Harness-3.42.tar.gz', 'Test::Harness', '5.6.0', '5.8.3');

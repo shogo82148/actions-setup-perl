@@ -43,7 +43,7 @@ git add .
 git commit -m "build v$MAJOR.$MINOR.$PATCH" || true
 git push origin "releases/v$MAJOR"
 gh release create "v$MAJOR.$MINOR.$PATCH" \
-    --draft --target "$(git rev-parse HEAD)" --title "v$MAJOR.$MINOR.$PATCH" --notes ""
+    --draft --target "$(git rev-parse HEAD)" --title "v$MAJOR.$MINOR.$PATCH" --generate-notes
 
 cd "$CURRENT"
 rm -rf "$WORKING"

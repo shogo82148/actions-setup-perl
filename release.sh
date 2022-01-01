@@ -23,8 +23,10 @@ MINOR=$(echo "$VERSION" | cut -d. -f2)
 PATCH=$(echo "$VERSION" | cut -d. -f3)
 WORKING=$CURRENT/.working
 
-: release the action
-if ! RELEASE=$(gh release view "v$MAJOR.$MINOR.$PATCH" --json url,targetCommitish); then
+cd "$CURRENT"
+
+: check whether the release is already created.
+if ! RELEASE=$(gh release view "v$MAJOR.$MINOR.$PATCH" --json url,targetCommitish,apiUrl); then
     : it looks that "v$MAJOR.$MINOR.$PATCH" is not tagged.
     : run ./prepare.sh "v$MAJOR.$MINOR.$PATCH" at first.
     : see the comments of ./release.sh for more details.
@@ -37,6 +39,10 @@ rm -rf "$WORKING"
 git clone "$ORIGIN" "$WORKING"
 cd "$WORKING"
 
+: make a draft release public.
+echo '{"draft":false}' | gh api -X PATCH --input - "$(echo "$RELEASE" | jq '.apiUrl')" --jq '.html_url'
+
+: make a tag.
 git checkout "$(echo "$RELEASE" | jq -r .targetCommitish)"
 git tag -sfa "v$MAJOR" -m "release v$MAJOR.$MINOR.$PATCH"
 git push -f origin "v$MAJOR"

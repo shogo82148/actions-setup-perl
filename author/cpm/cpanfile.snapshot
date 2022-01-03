@@ -747,10 +747,10 @@ DISTRIBUTIONS
       strict 0
       version 0.87
       warnings 0
-  Module-cpmfile-0.003
-    pathname: S/SK/SKAJI/Module-cpmfile-0.003.tar.gz
+  Module-cpmfile-0.004
+    pathname: S/SK/SKAJI/Module-cpmfile-0.004.tar.gz
     provides:
-      Module::cpmfile 0.003
+      Module::cpmfile 0.004
       Module::cpmfile::Prereqs undef
       Module::cpmfile::Util undef
     requirements:

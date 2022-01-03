@@ -46,4 +46,4 @@ jobs:
         uses: shogo82148/actions-commit-and-create-pr@v1
         with:
           github-token: ${{ steps.generate_token.outputs.token }}
-          message: "update cpm"
+          commit-message: "update cpm"

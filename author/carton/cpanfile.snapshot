@@ -482,10 +482,10 @@ DISTRIBUTIONS
       Locale::Maketext::Simple 0.21
     requirements:
       ExtUtils::MakeMaker 0
-  MRO-Compat-0.13
-    pathname: H/HA/HAARG/MRO-Compat-0.13.tar.gz
+  MRO-Compat-0.15
+    pathname: H/HA/HAARG/MRO-Compat-0.15.tar.gz
     provides:
-      MRO::Compat 0.13
+      MRO::Compat 0.15
     requirements:
       Class::C3 0.24
       ExtUtils::MakeMaker 0

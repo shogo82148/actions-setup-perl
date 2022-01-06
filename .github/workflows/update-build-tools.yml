@@ -5,7 +5,8 @@ on:
       - "scripts/*/cpanfile"
       - ".github/workflows/update-build-tools.yml"
     branches-ignore:
-      - "update-build-tools-*"
+      # to avoid recursion
+      - "auto-update/**"
   schedule:
     - cron: "27 23 * * *"
   workflow_dispatch:
@@ -88,15 +89,10 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: Generate token
-        id: generate_token
-        uses: shogo82148/actions-github-app-token@v0
-
       - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-          token: ${{ steps.generate_token.outputs.token }}
       - name: cleanup
         run: |
           rm -f scripts/linux/cpanfile.snapshot
@@ -119,17 +115,13 @@ jobs:
           name: cpanfile.snapshot-windows
           path: scripts/windows
 
+      - name: Generate token
+        id: generate_token
+        uses: shogo82148/actions-github-app-token@v0
+
       - name: commit
-        env:
-          TOKEN: ${{ steps.generate_token.outputs.token }}
-        run: |
-          branch=update-build-tools-$(date +"%Y-%m-%d-%H-%M-%S")
-          git config --global user.name "Ichinose Shogo"
-          git config --global user.email shogo82148@gmail.com
-          git switch -c "$branch"
-          git add .
-          git commit -m "Update cpanfile.snapshot $(date +"%Y-%m-%d %H:%M:%S")" || exit 0
-          git push -u origin "$branch"
-          curl -H "Authorization: token $TOKEN" \
-            -d "$(jq --arg branch "$branch" -n '{ "title": "Auto Update build tools", "base": "main", "head": $branch }')" \
-            "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls"
+        uses: shogo82148/actions-commit-and-create-pr@v1
+        with:
+          github-token: ${{ steps.generate_token.outputs.token }}
+          head-branch-prefix: "auto-update/build-tools-"
+          commit-message: "update build tools"

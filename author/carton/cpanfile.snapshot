@@ -333,10 +333,10 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  File-Fetch-1.00
-    pathname: B/BI/BINGOS/File-Fetch-1.00.tar.gz
+  File-Fetch-1.02
+    pathname: B/BI/BINGOS/File-Fetch-1.02.tar.gz
     provides:
-      File::Fetch 1.00
+      File::Fetch 1.02
     requirements:
       ExtUtils::MakeMaker 0
       File::Basename 0

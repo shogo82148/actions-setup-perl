@@ -392,19 +392,19 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  ExtUtils-ParseXS-3.35
-    pathname: S/SM/SMUELLER/ExtUtils-ParseXS-3.35.tar.gz
+  ExtUtils-ParseXS-3.44
+    pathname: X/XS/XSAWYERX/ExtUtils-ParseXS-3.44.tar.gz
     provides:
-      ExtUtils::ParseXS 3.35
-      ExtUtils::ParseXS::Constants 3.35
-      ExtUtils::ParseXS::CountLines 3.35
-      ExtUtils::ParseXS::Eval 3.35
-      ExtUtils::ParseXS::Utilities 3.35
-      ExtUtils::Typemaps 3.35
-      ExtUtils::Typemaps::Cmd 3.35
-      ExtUtils::Typemaps::InputMap 3.35
-      ExtUtils::Typemaps::OutputMap 3.35
-      ExtUtils::Typemaps::Type 3.35
+      ExtUtils::ParseXS 3.44
+      ExtUtils::ParseXS::Constants 3.44
+      ExtUtils::ParseXS::CountLines 3.44
+      ExtUtils::ParseXS::Eval 3.44
+      ExtUtils::ParseXS::Utilities 3.44
+      ExtUtils::Typemaps 3.44
+      ExtUtils::Typemaps::Cmd 3.44
+      ExtUtils::Typemaps::InputMap 3.44
+      ExtUtils::Typemaps::OutputMap 3.44
+      ExtUtils::Typemaps::Type 3.44
     requirements:
       Carp 0
       Cwd 0
@@ -586,10 +586,10 @@ DISTRIBUTIONS
       Locale::Maketext::Simple 0.21
     requirements:
       ExtUtils::MakeMaker 0
-  MRO-Compat-0.13
-    pathname: H/HA/HAARG/MRO-Compat-0.13.tar.gz
+  MRO-Compat-0.15
+    pathname: H/HA/HAARG/MRO-Compat-0.15.tar.gz
     provides:
-      MRO::Compat 0.13
+      MRO::Compat 0.15
     requirements:
       Class::C3 0.24
       ExtUtils::MakeMaker 0

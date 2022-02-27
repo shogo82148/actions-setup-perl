@@ -8,10 +8,10 @@ DISTRIBUTIONS
       Carp 0.01
       ExtUtils::MakeMaker 0
       perl 5.006
-  App-cpm-0.997007
-    pathname: S/SK/SKAJI/App-cpm-0.997007.tar.gz
+  App-cpm-0.997008
+    pathname: S/SK/SKAJI/App-cpm-0.997008.tar.gz
     provides:
-      App::cpm 0.997007
+      App::cpm 0.997008
       App::cpm::CLI undef
       App::cpm::CircularDependency undef
       App::cpm::DistNotation undef
@@ -56,7 +56,7 @@ DISTRIBUTIONS
       Module::CPANfile 0
       Module::Metadata 0
       Module::cpmfile 0.001
-      Parallel::Pipes 0.004
+      Parallel::Pipes::App 0.100
       Parse::PMFile 0.43
       local::lib 2.000018
       parent 0
@@ -761,10 +761,11 @@ DISTRIBUTIONS
       Scalar::Util 0
       YAML::PP 0.027
       perl 5.008001
-  Parallel-Pipes-0.005
-    pathname: S/SK/SKAJI/Parallel-Pipes-0.005.tar.gz
+  Parallel-Pipes-0.100
+    pathname: S/SK/SKAJI/Parallel-Pipes-0.100.tar.gz
     provides:
-      Parallel::Pipes 0.005
+      Parallel::Pipes 0.100
+      Parallel::Pipes::App 0.100
     requirements:
       Module::Build::Tiny 0.034
       perl 5.008001

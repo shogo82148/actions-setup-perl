@@ -16,7 +16,7 @@ See [action.yml](action.yml)
 Basic:
 ```yaml
 steps:
-- uses: actions/checkout@v2
+- uses: actions/checkout@v3
 - uses: shogo82148/actions-setup-perl@v1
   with:
     perl-version: '5.34'
@@ -27,7 +27,7 @@ steps:
 Install CPAN Modules from cpanfile and cache them:
 ```yaml
 steps:
-- uses: actions/checkout@v2
+- uses: actions/checkout@v3
 - uses: shogo82148/actions-setup-perl@v1
   with:
     perl-version: '5.34'
@@ -47,7 +47,7 @@ jobs:
         perl: [ '5.34', '5.32', '5.30' ]
     name: Perl ${{ matrix.perl }} on ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up perl
         uses: shogo82148/actions-setup-perl@v1
         with:
@@ -64,7 +64,7 @@ If you want to use [Strawberry Perl](http://strawberryperl.com/) on Windows, add
 
 ```yaml
 steps:
-- uses: actions/checkout@v2
+- uses: actions/checkout@v3
 - uses: shogo82148/actions-setup-perl@v1
   with:
     perl-version: '5.32'

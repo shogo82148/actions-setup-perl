@@ -761,11 +761,11 @@ DISTRIBUTIONS
       Scalar::Util 0
       YAML::PP 0.027
       perl 5.008001
-  Parallel-Pipes-0.101
-    pathname: S/SK/SKAJI/Parallel-Pipes-0.101.tar.gz
+  Parallel-Pipes-0.102
+    pathname: S/SK/SKAJI/Parallel-Pipes-0.102.tar.gz
     provides:
-      Parallel::Pipes 0.101
-      Parallel::Pipes::App 0.101
+      Parallel::Pipes 0.102
+      Parallel::Pipes::App 0.102
     requirements:
       Module::Build::Tiny 0.034
       perl 5.008001

@@ -109,16 +109,16 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  HTML-Parser-3.76
-    pathname: O/OA/OALDERS/HTML-Parser-3.76.tar.gz
+  HTML-Parser-3.77
+    pathname: O/OA/OALDERS/HTML-Parser-3.77.tar.gz
     provides:
-      HTML::Entities 3.76
-      HTML::Filter 3.76
-      HTML::HeadParser 3.76
-      HTML::LinkExtor 3.76
-      HTML::Parser 3.76
-      HTML::PullParser 3.76
-      HTML::TokeParser 3.76
+      HTML::Entities 3.77
+      HTML::Filter 3.77
+      HTML::HeadParser 3.77
+      HTML::LinkExtor 3.77
+      HTML::Parser 3.77
+      HTML::PullParser 3.77
+      HTML::TokeParser 3.77
     requirements:
       Carp 0
       Exporter 0

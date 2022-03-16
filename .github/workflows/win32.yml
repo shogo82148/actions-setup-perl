@@ -28,7 +28,7 @@ jobs:
         name: check pre-installed perl version
         run: |
           perl -e 'print "::set-output name=version::$^V"'
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/cache@v2
         with:
           path: scripts/windows/local
@@ -65,7 +65,7 @@ jobs:
     env:
       PERL_VERSION: ${{ matrix.perl }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: msys2/setup-msys2@v2
         with:
@@ -160,7 +160,7 @@ jobs:
       PERL_VERSION: ${{ matrix.perl }}
       PERL_MULTI_THREAD: "1"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: msys2/setup-msys2@v2
         with:

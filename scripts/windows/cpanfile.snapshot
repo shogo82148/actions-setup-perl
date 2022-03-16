@@ -109,16 +109,16 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  HTML-Parser-3.76
-    pathname: O/OA/OALDERS/HTML-Parser-3.76.tar.gz
+  HTML-Parser-3.77
+    pathname: O/OA/OALDERS/HTML-Parser-3.77.tar.gz
     provides:
-      HTML::Entities 3.76
-      HTML::Filter 3.76
-      HTML::HeadParser 3.76
-      HTML::LinkExtor 3.76
-      HTML::Parser 3.76
-      HTML::PullParser 3.76
-      HTML::TokeParser 3.76
+      HTML::Entities 3.77
+      HTML::Filter 3.77
+      HTML::HeadParser 3.77
+      HTML::LinkExtor 3.77
+      HTML::Parser 3.77
+      HTML::PullParser 3.77
+      HTML::TokeParser 3.77
     requirements:
       Carp 0
       Exporter 0
@@ -163,19 +163,19 @@ DISTRIBUTIONS
       Time::Zone 0
       perl 5.006002
       strict 0
-  HTTP-Message-6.35
-    pathname: O/OA/OALDERS/HTTP-Message-6.35.tar.gz
+  HTTP-Message-6.36
+    pathname: O/OA/OALDERS/HTTP-Message-6.36.tar.gz
     provides:
-      HTTP::Config 6.35
-      HTTP::Headers 6.35
-      HTTP::Headers::Auth 6.35
-      HTTP::Headers::ETag 6.35
-      HTTP::Headers::Util 6.35
-      HTTP::Message 6.35
-      HTTP::Request 6.35
-      HTTP::Request::Common 6.35
-      HTTP::Response 6.35
-      HTTP::Status 6.35
+      HTTP::Config 6.36
+      HTTP::Headers 6.36
+      HTTP::Headers::Auth 6.36
+      HTTP::Headers::ETag 6.36
+      HTTP::Headers::Util 6.36
+      HTTP::Message 6.36
+      HTTP::Request 6.36
+      HTTP::Request::Common 6.36
+      HTTP::Response 6.36
+      HTTP::Status 6.36
     requirements:
       Carp 0
       Compress::Raw::Zlib 0
@@ -235,17 +235,17 @@ DISTRIBUTIONS
       Exporter 5.57
       ExtUtils::MakeMaker 0
       perl 5.008
-  IO-Socket-SSL-2.073
-    pathname: S/SU/SULLR/IO-Socket-SSL-2.073.tar.gz
+  IO-Socket-SSL-2.074
+    pathname: S/SU/SULLR/IO-Socket-SSL-2.074.tar.gz
     provides:
-      IO::Socket::SSL 2.073
+      IO::Socket::SSL 2.074
       IO::Socket::SSL::Intercept 2.056
-      IO::Socket::SSL::OCSP_Cache 2.073
-      IO::Socket::SSL::OCSP_Resolver 2.073
+      IO::Socket::SSL::OCSP_Cache 2.074
+      IO::Socket::SSL::OCSP_Resolver 2.074
       IO::Socket::SSL::PublicSuffix undef
-      IO::Socket::SSL::SSL_Context 2.073
-      IO::Socket::SSL::SSL_HANDLE 2.073
-      IO::Socket::SSL::Session_Cache 2.073
+      IO::Socket::SSL::SSL_Context 2.074
+      IO::Socket::SSL::SSL_HANDLE 2.074
+      IO::Socket::SSL::Session_Cache 2.074
       IO::Socket::SSL::Utils 2.015
     requirements:
       ExtUtils::MakeMaker 0
@@ -262,11 +262,11 @@ DISTRIBUTIONS
       Time::HiRes 0
       Win32 0
       Win32::ShellQuote 0
-  JSON-4.04
-    pathname: I/IS/ISHIGAKI/JSON-4.04.tar.gz
+  JSON-4.05
+    pathname: I/IS/ISHIGAKI/JSON-4.05.tar.gz
     provides:
-      JSON 4.04
-      JSON::Backend::PP 4.04
+      JSON 4.05
+      JSON::Backend::PP 4.05
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
@@ -376,13 +376,13 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006
-  Net-HTTP-6.21
-    pathname: O/OA/OALDERS/Net-HTTP-6.21.tar.gz
+  Net-HTTP-6.22
+    pathname: O/OA/OALDERS/Net-HTTP-6.22.tar.gz
     provides:
-      Net::HTTP 6.21
-      Net::HTTP::Methods 6.21
-      Net::HTTP::NB 6.21
-      Net::HTTPS 6.21
+      Net::HTTP 6.22
+      Net::HTTP::Methods 6.22
+      Net::HTTP::NB 6.22
+      Net::HTTPS 6.22
     requirements:
       Carp 0
       Compress::Raw::Zlib 0
@@ -550,32 +550,32 @@ DISTRIBUTIONS
       common::sense 3.75
     requirements:
       ExtUtils::MakeMaker 0
-  libwww-perl-6.60
-    pathname: O/OA/OALDERS/libwww-perl-6.60.tar.gz
+  libwww-perl-6.61
+    pathname: O/OA/OALDERS/libwww-perl-6.61.tar.gz
     provides:
-      LWP 6.60
-      LWP::Authen::Basic 6.60
-      LWP::Authen::Digest 6.60
-      LWP::Authen::Ntlm 6.60
-      LWP::ConnCache 6.60
-      LWP::Debug 6.60
-      LWP::Debug::TraceHTTP 6.60
-      LWP::DebugFile 6.60
-      LWP::MemberMixin 6.60
-      LWP::Protocol 6.60
-      LWP::Protocol::cpan 6.60
-      LWP::Protocol::data 6.60
-      LWP::Protocol::file 6.60
-      LWP::Protocol::ftp 6.60
-      LWP::Protocol::gopher 6.60
-      LWP::Protocol::http 6.60
-      LWP::Protocol::loopback 6.60
-      LWP::Protocol::mailto 6.60
-      LWP::Protocol::nntp 6.60
-      LWP::Protocol::nogo 6.60
-      LWP::RobotUA 6.60
-      LWP::Simple 6.60
-      LWP::UserAgent 6.60
+      LWP 6.61
+      LWP::Authen::Basic 6.61
+      LWP::Authen::Digest 6.61
+      LWP::Authen::Ntlm 6.61
+      LWP::ConnCache 6.61
+      LWP::Debug 6.61
+      LWP::Debug::TraceHTTP 6.61
+      LWP::DebugFile 6.61
+      LWP::MemberMixin 6.61
+      LWP::Protocol 6.61
+      LWP::Protocol::cpan 6.61
+      LWP::Protocol::data 6.61
+      LWP::Protocol::file 6.61
+      LWP::Protocol::ftp 6.61
+      LWP::Protocol::gopher 6.61
+      LWP::Protocol::http 6.61
+      LWP::Protocol::loopback 6.61
+      LWP::Protocol::mailto 6.61
+      LWP::Protocol::nntp 6.61
+      LWP::Protocol::nogo 6.61
+      LWP::RobotUA 6.61
+      LWP::Simple 6.61
+      LWP::UserAgent 6.61
       libwww::perl undef
     requirements:
       CPAN::Meta::Requirements 2.120620
@@ -585,6 +585,7 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       File::Copy 0
       File::Listing 6
+      File::Temp 0
       Getopt::Long 0
       HTML::Entities 0
       HTML::HeadParser 0

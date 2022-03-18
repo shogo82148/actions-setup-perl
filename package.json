@@ -24,7 +24,7 @@
     "@actions/cache": "^1.0.10",
     "@actions/core": "^1.6.0",
     "@actions/exec": "^1.1.1",
-    "@actions/tool-cache": "^1.7.1",
+    "@actions/tool-cache": "^1.7.2",
     "semver": "^7.3.5"
   },
   "devDependencies": {

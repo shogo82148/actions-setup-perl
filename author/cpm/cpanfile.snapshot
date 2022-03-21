@@ -221,16 +221,17 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  Command-Runner-0.103
-    pathname: S/SK/SKAJI/Command-Runner-0.103.tar.gz
+  Command-Runner-0.200
+    pathname: S/SK/SKAJI/Command-Runner-0.200.tar.gz
     provides:
-      Command::Runner 0.103
+      Command::Runner 0.200
       Command::Runner::Format undef
       Command::Runner::LineBuffer undef
       Command::Runner::Quote undef
       Command::Runner::Timeout undef
     requirements:
       Capture::Tiny 0
+      File::pushd 0
       Module::Build::Tiny 0.034
       String::ShellQuote 0
       Win32::ShellQuote 0

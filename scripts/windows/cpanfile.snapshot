@@ -85,14 +85,6 @@ DISTRIBUTIONS
       POSIX 0
       strict 0
       warnings 0
-  File-Which-1.27
-    pathname: P/PL/PLICEASE/File-Which-1.27.tar.gz
-    provides:
-      File::Which 1.27
-    requirements:
-      ExtUtils::MakeMaker 0
-      base 0
-      perl 5.006
   File-pushd-1.016
     pathname: D/DA/DAGOLDEN/File-pushd-1.016.tar.gz
     provides:
@@ -109,33 +101,6 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  HTML-Parser-3.78
-    pathname: O/OA/OALDERS/HTML-Parser-3.78.tar.gz
-    provides:
-      HTML::Entities 3.78
-      HTML::Filter 3.78
-      HTML::HeadParser 3.78
-      HTML::LinkExtor 3.78
-      HTML::Parser 3.78
-      HTML::PullParser 3.78
-      HTML::TokeParser 3.78
-    requirements:
-      Carp 0
-      Exporter 0
-      ExtUtils::MakeMaker 6.52
-      HTML::Tagset 0
-      HTTP::Headers 0
-      IO::File 0
-      URI 0
-      URI::URL 0
-      XSLoader 0
-      strict 0
-  HTML-Tagset-3.20
-    pathname: P/PE/PETDANCE/HTML-Tagset-3.20.tar.gz
-    provides:
-      HTML::Tagset 3.20
-    requirements:
-      ExtUtils::MakeMaker 0
   HTTP-Cookies-6.10
     pathname: O/OA/OALDERS/HTTP-Cookies-6.10.tar.gz
     provides:
@@ -163,44 +128,6 @@ DISTRIBUTIONS
       Time::Zone 0
       perl 5.006002
       strict 0
-  HTTP-Message-6.36
-    pathname: O/OA/OALDERS/HTTP-Message-6.36.tar.gz
-    provides:
-      HTTP::Config 6.36
-      HTTP::Headers 6.36
-      HTTP::Headers::Auth 6.36
-      HTTP::Headers::ETag 6.36
-      HTTP::Headers::Util 6.36
-      HTTP::Message 6.36
-      HTTP::Request 6.36
-      HTTP::Request::Common 6.36
-      HTTP::Response 6.36
-      HTTP::Status 6.36
-    requirements:
-      Carp 0
-      Compress::Raw::Zlib 0
-      Encode 3.01
-      Encode::Locale 1
-      Exporter 5.57
-      ExtUtils::MakeMaker 0
-      File::Spec 0
-      HTTP::Date 6
-      IO::Compress::Bzip2 2.021
-      IO::Compress::Deflate 0
-      IO::Compress::Gzip 0
-      IO::HTML 0
-      IO::Uncompress::Bunzip2 2.021
-      IO::Uncompress::Gunzip 0
-      IO::Uncompress::Inflate 0
-      IO::Uncompress::RawInflate 0
-      LWP::MediaTypes 6
-      MIME::Base64 2.1
-      MIME::QuotedPrint 0
-      URI 1.10
-      base 0
-      perl 5.008001
-      strict 0
-      warnings 0
   HTTP-Negotiate-6.01
     pathname: G/GA/GAAS/HTTP-Negotiate-6.01.tar.gz
     provides:
@@ -225,43 +152,6 @@ DISTRIBUTIONS
       IPC::Run3 0
       parent 0
       perl 5.008001
-  IO-HTML-1.004
-    pathname: C/CJ/CJM/IO-HTML-1.004.tar.gz
-    provides:
-      IO::HTML 1.004
-    requirements:
-      Carp 0
-      Encode 2.10
-      Exporter 5.57
-      ExtUtils::MakeMaker 0
-      perl 5.008
-  IO-Socket-SSL-2.074
-    pathname: S/SU/SULLR/IO-Socket-SSL-2.074.tar.gz
-    provides:
-      IO::Socket::SSL 2.074
-      IO::Socket::SSL::Intercept 2.056
-      IO::Socket::SSL::OCSP_Cache 2.074
-      IO::Socket::SSL::OCSP_Resolver 2.074
-      IO::Socket::SSL::PublicSuffix undef
-      IO::Socket::SSL::SSL_Context 2.074
-      IO::Socket::SSL::SSL_HANDLE 2.074
-      IO::Socket::SSL::Session_Cache 2.074
-      IO::Socket::SSL::Utils 2.015
-    requirements:
-      ExtUtils::MakeMaker 0
-      Mozilla::CA 0
-      Net::SSLeay 1.46
-      Scalar::Util 0
-  IPC-Run3-0.048
-    pathname: R/RJ/RJBS/IPC-Run3-0.048.tar.gz
-    provides:
-      IPC::Run3 0.048
-    requirements:
-      ExtUtils::MakeMaker 0
-      Test::More 0.31
-      Time::HiRes 0
-      Win32 0
-      Win32::ShellQuote 0
   JSON-4.05
     pathname: I/IS/ISHIGAKI/JSON-4.05.tar.gz
     provides:
@@ -538,12 +428,6 @@ DISTRIBUTIONS
       Fcntl 0
       URI 1.10
       perl 5.008001
-  Win32-ShellQuote-0.003001
-    pathname: H/HA/HAARG/Win32-ShellQuote-0.003001.tar.gz
-    provides:
-      Win32::ShellQuote 0.003001
-    requirements:
-      perl 5.006
   common-sense-3.75
     pathname: M/ML/MLEHMANN/common-sense-3.75.tar.gz
     provides:

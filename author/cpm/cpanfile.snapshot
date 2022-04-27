@@ -8,10 +8,10 @@ DISTRIBUTIONS
       Carp 0.01
       ExtUtils::MakeMaker 0
       perl 5.006
-  App-cpm-0.997010
-    pathname: S/SK/SKAJI/App-cpm-0.997010.tar.gz
+  App-cpm-0.997011
+    pathname: S/SK/SKAJI/App-cpm-0.997011.tar.gz
     provides:
-      App::cpm 0.997010
+      App::cpm 0.997011
       App::cpm::CLI undef
       App::cpm::CircularDependency undef
       App::cpm::DistNotation undef

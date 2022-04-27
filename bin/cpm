@@ -9,7 +9,7 @@ $fatpacked{"Algorithm/C3.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'AL
 ALGORITHM_C3
 
 $fatpacked{"App/cpm.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'APP_CPM';
-  package App::cpm;use strict;use warnings;our$VERSION='0.997010';our ($GIT_DESCRIBE,$GIT_URL);1;
+  package App::cpm;use strict;use warnings;our$VERSION='0.997011';our ($GIT_DESCRIBE,$GIT_URL);1;
 APP_CPM
 
 $fatpacked{"App/cpm/CLI.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'APP_CPM_CLI';

@@ -29,7 +29,7 @@ jobs:
         run: |
           perl -e 'print "::set-output name=version::$^V"'
       - uses: actions/checkout@v3
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: scripts/darwin/local
           key: Darwin-sanity-check-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
@@ -81,7 +81,7 @@ jobs:
       - name: build OpenSSL
         run: .github/build-openssl-darwin.sh
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: scripts/darwin/local
           key: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
@@ -132,7 +132,7 @@ jobs:
       - name: build OpenSSL
         run: .github/build-openssl-darwin.sh
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: scripts/darwin/local
           key: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}

@@ -127,7 +127,7 @@ jobs:
           name: perl-${{ matrix.perl }}-wer
           path: ${{ runner.temp }}/perl-wer
         if: failure()
-      - uses: actions/setup-python@v1
+      - uses: actions/setup-python@v3
         with:
           python-version: "3.x"
         if: failure()
@@ -216,7 +216,7 @@ jobs:
           name: perl-${{ matrix.perl }}-wer
           path: ${{ runner.temp }}/perl-wer
         if: failure()
-      - uses: actions/setup-python@v1
+      - uses: actions/setup-python@v3
         with:
           python-version: "3.x"
         if: failure()

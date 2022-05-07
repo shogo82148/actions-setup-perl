@@ -125,10 +125,10 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  Carton-v1.0.34
-    pathname: M/MI/MIYAGAWA/Carton-v1.0.34.tar.gz
+  Carton-v1.0.35
+    pathname: M/MI/MIYAGAWA/Carton-v1.0.35.tar.gz
     provides:
-      Carton 1.000034
+      Carton 1.000035
       Carton::Builder undef
       Carton::CLI undef
       Carton::CPANfile undef

@@ -32,7 +32,7 @@
     "@types/node": "^17.0.0",
     "@types/semver": "^7.3.9",
     "@vercel/ncc": "^0.33.4",
-    "jest": "^28.0.3",
+    "jest": "^28.1.0",
     "jest-circus": "^28.0.3",
     "prettier": "^2.6.2",
     "ts-jest": "^28.0.1",

@@ -4,7 +4,7 @@
 
 set -e
 
-OPENSSL_VERSION=1_1_1n
+OPENSSL_VERSION=1_1_1o
 ROOT=$(cd "$(dirname "$0")" && pwd)
 : "${RUNNER_TEMP:=$ROOT/working}"
 : "${RUNNER_TOOL_CACHE:=$RUNNER_TEMP/dist}"

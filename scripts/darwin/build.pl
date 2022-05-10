@@ -118,7 +118,7 @@ sub run {
         cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-4.05.tar.gz', 'JSON', '5.5.3');
 
         # Cpanel::JSON::XS
-        cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.27.tar.gz', 'Cpanel::JSON::XS', '5.6.2');
+        cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.28.tar.gz', 'Cpanel::JSON::XS', '5.6.2');
 
         # some requirements of JSON::XS
         cpan_install('https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/Canary-Stability-2013.tar.gz', 'Canary::Stability', '5.8.3');

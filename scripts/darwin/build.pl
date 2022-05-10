@@ -152,7 +152,7 @@ sub run {
         ### SSL/TLS
 
         # Net::SSLeay
-        cpan_install('https://cpan.metacpan.org/authors/id/C/CH/CHRISN/Net-SSLeay-1.90.tar.gz', 'Net::SSLeay', '5.8.1');
+        cpan_install('https://cpan.metacpan.org/authors/id/C/CH/CHRISN/Net-SSLeay-1.92.tar.gz', 'Net::SSLeay', '5.8.1');
 
         # Mozilla::CA
         cpan_install('https://cpan.metacpan.org/authors/id/A/AB/ABH/Mozilla-CA-20211001.tar.gz', 'Mozilla::CA', '5.6.0');

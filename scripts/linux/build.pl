@@ -162,7 +162,7 @@ sub run {
         cpan_install('https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-2.074.tar.gz', 'IO::Socket::SSL', '5.8.1');
 
         # Test::Harness
-        cpan_install('https://cpan.metacpan.org/authors/id/L/LE/LEONT/Test-Harness-3.42.tar.gz', 'Test::Harness', '5.6.0', '5.8.3');
+        cpan_install('https://cpan.metacpan.org/authors/id/L/LE/LEONT/Test-Harness-3.44.tar.gz', 'Test::Harness', '5.6.0', '5.8.3');
     };
 
     group "archiving" => sub {

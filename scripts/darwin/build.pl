@@ -115,7 +115,7 @@ sub run {
 
     group "install common CPAN modules" => sub {
         # JSON
-        cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-4.04.tar.gz', 'JSON', '5.5.3');
+        cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-4.05.tar.gz', 'JSON', '5.5.3');
 
         # Cpanel::JSON::XS
         cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.27.tar.gz', 'Cpanel::JSON::XS', '5.6.2');

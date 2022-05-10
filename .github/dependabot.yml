@@ -9,3 +9,9 @@ updates:
       # update too often, ignore patch releases
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-patch"]
+
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"

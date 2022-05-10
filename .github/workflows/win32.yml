@@ -29,7 +29,7 @@ jobs:
         run: |
           perl -e 'print "::set-output name=version::$^V"'
       - uses: actions/checkout@v3
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: scripts/windows/local
           key: Windows-sanity-check-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/windows/cpanfile.snapshot') }}
@@ -98,7 +98,7 @@ jobs:
           reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpFolder /t REG_EXPAND_SZ /d "${{ runner.temp }}/perl-wer"
         shell: cmd
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: scripts/windows/local
           key: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/windows/cpanfile.snapshot') }}
@@ -117,17 +117,17 @@ jobs:
         working-directory: ./scripts/windows
 
       # for debugging
-      # - uses: actions/upload-artifact@v1
+      # - uses: actions/upload-artifact@v3
       #   with:
       #     name: perl-${{ matrix.perl }}
       #     path: ${{ runner.temp }}/perl-${{ matrix.perl }}
       #   if: failure()
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v3
         with:
           name: perl-${{ matrix.perl }}-wer
           path: ${{ runner.temp }}/perl-wer
         if: failure()
-      - uses: actions/setup-python@v1
+      - uses: actions/setup-python@v3
         with:
           python-version: "3.x"
         if: failure()
@@ -193,7 +193,7 @@ jobs:
           reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpFolder /t REG_EXPAND_SZ /d "${{ runner.temp }}/perl-wer"
         shell: cmd
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: scripts/windows/local
           key: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/windows/cpanfile.snapshot') }}
@@ -211,12 +211,12 @@ jobs:
           # PERL_DL_DEBUG: "10" # enables debugging
         working-directory: ./scripts/windows
 
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v3
         with:
           name: perl-${{ matrix.perl }}-wer
           path: ${{ runner.temp }}/perl-wer
         if: failure()
-      - uses: actions/setup-python@v1
+      - uses: actions/setup-python@v3
         with:
           python-version: "3.x"
         if: failure()

@@ -50,22 +50,19 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  File-Listing-6.14
-    pathname: P/PL/PLICEASE/File-Listing-6.14.tar.gz
+  File-Listing-6.15
+    pathname: P/PL/PLICEASE/File-Listing-6.15.tar.gz
     provides:
-      File::Listing 6.14
-      File::Listing::apache 6.14
-      File::Listing::dosftp 6.14
-      File::Listing::netware 6.14
-      File::Listing::unix 6.14
-      File::Listing::vms 6.14
+      File::Listing 6.15
+      File::Listing::apache 6.15
+      File::Listing::dosftp 6.15
+      File::Listing::netware 6.15
+      File::Listing::unix 6.15
+      File::Listing::vms 6.15
     requirements:
-      Carp 0
-      Exporter 0
+      Exporter 5.57
       ExtUtils::MakeMaker 0
       HTTP::Date 0
-      Time::Local 0
-      base 0
       perl 5.006
   File-Slurp-9999.32
     pathname: C/CA/CAPOEIRAB/File-Slurp-9999.32.tar.gz
@@ -109,16 +106,16 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  HTML-Parser-3.77
-    pathname: O/OA/OALDERS/HTML-Parser-3.77.tar.gz
+  HTML-Parser-3.78
+    pathname: O/OA/OALDERS/HTML-Parser-3.78.tar.gz
     provides:
-      HTML::Entities 3.77
-      HTML::Filter 3.77
-      HTML::HeadParser 3.77
-      HTML::LinkExtor 3.77
-      HTML::Parser 3.77
-      HTML::PullParser 3.77
-      HTML::TokeParser 3.77
+      HTML::Entities 3.78
+      HTML::Filter 3.78
+      HTML::HeadParser 3.78
+      HTML::LinkExtor 3.78
+      HTML::Parser 3.78
+      HTML::PullParser 3.78
+      HTML::TokeParser 3.78
     requirements:
       Carp 0
       Exporter 0
@@ -550,33 +547,32 @@ DISTRIBUTIONS
       common::sense 3.75
     requirements:
       ExtUtils::MakeMaker 0
-  libwww-perl-6.61
-    pathname: O/OA/OALDERS/libwww-perl-6.61.tar.gz
+  libwww-perl-6.65
+    pathname: O/OA/OALDERS/libwww-perl-6.65.tar.gz
     provides:
-      LWP 6.61
-      LWP::Authen::Basic 6.61
-      LWP::Authen::Digest 6.61
-      LWP::Authen::Ntlm 6.61
-      LWP::ConnCache 6.61
-      LWP::Debug 6.61
-      LWP::Debug::TraceHTTP 6.61
-      LWP::DebugFile 6.61
-      LWP::MemberMixin 6.61
-      LWP::Protocol 6.61
-      LWP::Protocol::cpan 6.61
-      LWP::Protocol::data 6.61
-      LWP::Protocol::file 6.61
-      LWP::Protocol::ftp 6.61
-      LWP::Protocol::gopher 6.61
-      LWP::Protocol::http 6.61
-      LWP::Protocol::loopback 6.61
-      LWP::Protocol::mailto 6.61
-      LWP::Protocol::nntp 6.61
-      LWP::Protocol::nogo 6.61
-      LWP::RobotUA 6.61
-      LWP::Simple 6.61
-      LWP::UserAgent 6.61
-      libwww::perl undef
+      LWP 6.65
+      LWP::Authen::Basic 6.65
+      LWP::Authen::Digest 6.65
+      LWP::Authen::Ntlm 6.65
+      LWP::ConnCache 6.65
+      LWP::Debug 6.65
+      LWP::Debug::TraceHTTP 6.65
+      LWP::DebugFile 6.65
+      LWP::MemberMixin 6.65
+      LWP::Protocol 6.65
+      LWP::Protocol::cpan 6.65
+      LWP::Protocol::data 6.65
+      LWP::Protocol::file 6.65
+      LWP::Protocol::ftp 6.65
+      LWP::Protocol::gopher 6.65
+      LWP::Protocol::http 6.65
+      LWP::Protocol::loopback 6.65
+      LWP::Protocol::mailto 6.65
+      LWP::Protocol::nntp 6.65
+      LWP::Protocol::nogo 6.65
+      LWP::RobotUA 6.65
+      LWP::Simple 6.65
+      LWP::UserAgent 6.65
     requirements:
       CPAN::Meta::Requirements 2.120620
       Digest::MD5 0

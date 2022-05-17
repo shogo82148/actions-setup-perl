@@ -58,7 +58,7 @@ jobs:
   build:
     runs-on: windows-2019
     needs: list
-    timeout-minutes: 25
+    timeout-minutes: 120
     strategy:
       fail-fast: false
       matrix: ${{fromJson(needs.list.outputs.matrix)}}
@@ -152,7 +152,7 @@ jobs:
   build-multi-thread:
     runs-on: windows-2019
     needs: list
-    timeout-minutes: 25
+    timeout-minutes: 120
     strategy:
       fail-fast: false
       matrix: ${{fromJson(needs.list.outputs.matrix)}}

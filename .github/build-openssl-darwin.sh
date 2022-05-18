@@ -4,7 +4,7 @@
 
 set -e
 
-OPENSSL_VERSION=1_1_1o
+OPENSSL_VERSION=3.0.3
 ROOT=$(cd "$(dirname "$0")" && pwd)
 : "${RUNNER_TEMP:=$ROOT/working}"
 : "${RUNNER_TOOL_CACHE:=$RUNNER_TEMP/dist}"
@@ -20,12 +20,11 @@ JOBS=$(sysctl -n hw.logicalcpu_max)
 mkdir -p "$RUNNER_TEMP"
 cd "$RUNNER_TEMP"
 
-# system SSL/TLS library is too old. so we use custom build.
 echo "::group::download OpenSSL source"
 (
     set -eux
     cd "$RUNNER_TEMP"
-    curl --retry 3 -sSL "https://github.com/openssl/openssl/archive/OpenSSL_$OPENSSL_VERSION.tar.gz" -o openssl.tar.gz
+    curl --retry 3 -sSL "https://github.com/openssl/openssl/archive/refs/tags/openssl-$OPENSSL_VERSION.tar.gz" -o openssl.tar.gz
 )
 echo "::endgroup::"
 
@@ -40,10 +39,10 @@ echo "::endgroup::"
 echo "::group::build OpenSSL"
 (
     set -eux
-    cd "$RUNNER_TEMP/openssl-OpenSSL_$OPENSSL_VERSION"
-    ./Configure --prefix="$PREFIX" darwin64-x86_64-cc
+    cd "$RUNNER_TEMP/openssl-openssl-$OPENSSL_VERSION"
+    ./Configure --prefix="$PREFIX" --openssldir="$PREFIX" "-Wl,-rpath,\$(LIBRPATH)"
     make "-j$JOBS"
-    make install_sw install_ssldirs
+    make install
 )
 echo "::endgroup::"
 

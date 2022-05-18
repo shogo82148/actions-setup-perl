@@ -40,7 +40,7 @@ echo "::group::build OpenSSL"
 (
     set -eux
     cd "$RUNNER_TEMP/openssl-openssl-$OPENSSL_VERSION"
-    ./Configure --prefix="$PREFIX" --openssldir="$PREFIX" mingw64
+    ./Configure --prefix="$PREFIX" --openssldir="$PREFIX" --libdir=lib mingw64
     make "-j$JOBS"
     make install
 )

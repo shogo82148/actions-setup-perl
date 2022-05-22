@@ -549,20 +549,20 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Test::More 0.31
       Time::HiRes 0
-  JSON-4.05
-    pathname: I/IS/ISHIGAKI/JSON-4.05.tar.gz
+  JSON-4.06
+    pathname: I/IS/ISHIGAKI/JSON-4.06.tar.gz
     provides:
-      JSON 4.05
-      JSON::Backend::PP 4.05
+      JSON 4.06
+      JSON::Backend::PP 4.06
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
-  JSON-PP-4.08
-    pathname: I/IS/ISHIGAKI/JSON-PP-4.08.tar.gz
+  JSON-PP-4.09
+    pathname: I/IS/ISHIGAKI/JSON-PP-4.09.tar.gz
     provides:
-      JSON::PP 4.08
-      JSON::PP::Boolean 4.08
-      JSON::PP::IncrParser 4.08
+      JSON::PP 4.09
+      JSON::PP::Boolean 4.09
+      JSON::PP::IncrParser 4.09
     requirements:
       ExtUtils::MakeMaker 0
       Scalar::Util 1.08

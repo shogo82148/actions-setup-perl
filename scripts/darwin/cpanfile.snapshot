@@ -1,9 +1,9 @@
 # carton snapshot format: version 1.0
 DISTRIBUTIONS
-  CPAN-Perl-Releases-5.20220420
-    pathname: B/BI/BINGOS/CPAN-Perl-Releases-5.20220420.tar.gz
+  CPAN-Perl-Releases-5.20220528
+    pathname: B/BI/BINGOS/CPAN-Perl-Releases-5.20220528.tar.gz
     provides:
-      CPAN::Perl::Releases 5.20220420
+      CPAN::Perl::Releases 5.20220528
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006000
@@ -103,11 +103,11 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Test::More 0.31
       Time::HiRes 0
-  JSON-4.05
-    pathname: I/IS/ISHIGAKI/JSON-4.05.tar.gz
+  JSON-4.06
+    pathname: I/IS/ISHIGAKI/JSON-4.06.tar.gz
     provides:
-      JSON 4.05
-      JSON::Backend::PP 4.05
+      JSON 4.06
+      JSON::Backend::PP 4.06
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0

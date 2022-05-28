@@ -466,12 +466,12 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Test::More 0.31
       Time::HiRes 0
-  JSON-PP-4.08
-    pathname: I/IS/ISHIGAKI/JSON-PP-4.08.tar.gz
+  JSON-PP-4.09
+    pathname: I/IS/ISHIGAKI/JSON-PP-4.09.tar.gz
     provides:
-      JSON::PP 4.08
-      JSON::PP::Boolean 4.08
-      JSON::PP::IncrParser 4.08
+      JSON::PP 4.09
+      JSON::PP::Boolean 4.09
+      JSON::PP::IncrParser 4.09
     requirements:
       ExtUtils::MakeMaker 0
       Scalar::Util 1.08
@@ -556,11 +556,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20220420
-    pathname: B/BI/BINGOS/Module-CoreList-5.20220420.tar.gz
+  Module-CoreList-5.20220527
+    pathname: B/BI/BINGOS/Module-CoreList-5.20220527.tar.gz
     provides:
-      Module::CoreList 5.20220420
-      Module::CoreList::Utils 5.20220420
+      Module::CoreList 5.20220527
+      Module::CoreList::Utils 5.20220527
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0

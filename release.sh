@@ -36,7 +36,7 @@ fi
 : clone
 ORIGIN=$(git remote get-url origin)
 rm -rf "$WORKING"
-git clone --depth 1 "$ORIGIN" "$WORKING"
+git clone --depth 1 --branch "release/v$MAJOR" "$ORIGIN" "$WORKING"
 cd "$WORKING"
 
 : make a draft release public.

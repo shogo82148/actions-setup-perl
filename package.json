@@ -30,7 +30,7 @@
   "devDependencies": {
     "@types/jest": "^28.1.1",
     "@types/node": "^16.11.35",
-    "@types/semver": "^7.3.9",
+    "@types/semver": "^7.3.10",
     "@vercel/ncc": "^0.34.0",
     "jest": "^28.1.1",
     "jest-circus": "^28.1.1",

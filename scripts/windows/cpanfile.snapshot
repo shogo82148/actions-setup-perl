@@ -160,19 +160,19 @@ DISTRIBUTIONS
       Time::Zone 0
       perl 5.006002
       strict 0
-  HTTP-Message-6.36
-    pathname: O/OA/OALDERS/HTTP-Message-6.36.tar.gz
+  HTTP-Message-6.37
+    pathname: O/OA/OALDERS/HTTP-Message-6.37.tar.gz
     provides:
-      HTTP::Config 6.36
-      HTTP::Headers 6.36
-      HTTP::Headers::Auth 6.36
-      HTTP::Headers::ETag 6.36
-      HTTP::Headers::Util 6.36
-      HTTP::Message 6.36
-      HTTP::Request 6.36
-      HTTP::Request::Common 6.36
-      HTTP::Response 6.36
-      HTTP::Status 6.36
+      HTTP::Config 6.37
+      HTTP::Headers 6.37
+      HTTP::Headers::Auth 6.37
+      HTTP::Headers::ETag 6.37
+      HTTP::Headers::Util 6.37
+      HTTP::Message 6.37
+      HTTP::Request 6.37
+      HTTP::Request::Common 6.37
+      HTTP::Response 6.37
+      HTTP::Status 6.37
     requirements:
       Carp 0
       Compress::Raw::Zlib 0
@@ -206,10 +206,10 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       HTTP::Headers 6
       perl 5.008001
-  HTTP-Tinyish-0.17
-    pathname: M/MI/MIYAGAWA/HTTP-Tinyish-0.17.tar.gz
+  HTTP-Tinyish-0.18
+    pathname: M/MI/MIYAGAWA/HTTP-Tinyish-0.18.tar.gz
     provides:
-      HTTP::Tinyish 0.17
+      HTTP::Tinyish 0.18
       HTTP::Tinyish::Base undef
       HTTP::Tinyish::Curl undef
       HTTP::Tinyish::HTTPTiny undef
@@ -259,11 +259,11 @@ DISTRIBUTIONS
       Time::HiRes 0
       Win32 0
       Win32::ShellQuote 0
-  JSON-4.06
-    pathname: I/IS/ISHIGAKI/JSON-4.06.tar.gz
+  JSON-4.07
+    pathname: I/IS/ISHIGAKI/JSON-4.07.tar.gz
     provides:
-      JSON 4.06
-      JSON::Backend::PP 4.06
+      JSON 4.07
+      JSON::Backend::PP 4.07
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
@@ -547,32 +547,32 @@ DISTRIBUTIONS
       common::sense 3.75
     requirements:
       ExtUtils::MakeMaker 0
-  libwww-perl-6.66
-    pathname: O/OA/OALDERS/libwww-perl-6.66.tar.gz
+  libwww-perl-6.67
+    pathname: O/OA/OALDERS/libwww-perl-6.67.tar.gz
     provides:
-      LWP 6.66
-      LWP::Authen::Basic 6.66
-      LWP::Authen::Digest 6.66
-      LWP::Authen::Ntlm 6.66
-      LWP::ConnCache 6.66
-      LWP::Debug 6.66
-      LWP::Debug::TraceHTTP 6.66
-      LWP::DebugFile 6.66
-      LWP::MemberMixin 6.66
-      LWP::Protocol 6.66
-      LWP::Protocol::cpan 6.66
-      LWP::Protocol::data 6.66
-      LWP::Protocol::file 6.66
-      LWP::Protocol::ftp 6.66
-      LWP::Protocol::gopher 6.66
-      LWP::Protocol::http 6.66
-      LWP::Protocol::loopback 6.66
-      LWP::Protocol::mailto 6.66
-      LWP::Protocol::nntp 6.66
-      LWP::Protocol::nogo 6.66
-      LWP::RobotUA 6.66
-      LWP::Simple 6.66
-      LWP::UserAgent 6.66
+      LWP 6.67
+      LWP::Authen::Basic 6.67
+      LWP::Authen::Digest 6.67
+      LWP::Authen::Ntlm 6.67
+      LWP::ConnCache 6.67
+      LWP::Debug 6.67
+      LWP::Debug::TraceHTTP 6.67
+      LWP::DebugFile 6.67
+      LWP::MemberMixin 6.67
+      LWP::Protocol 6.67
+      LWP::Protocol::cpan 6.67
+      LWP::Protocol::data 6.67
+      LWP::Protocol::file 6.67
+      LWP::Protocol::ftp 6.67
+      LWP::Protocol::gopher 6.67
+      LWP::Protocol::http 6.67
+      LWP::Protocol::loopback 6.67
+      LWP::Protocol::mailto 6.67
+      LWP::Protocol::nntp 6.67
+      LWP::Protocol::nogo 6.67
+      LWP::RobotUA 6.67
+      LWP::Simple 6.67
+      LWP::UserAgent 6.67
     requirements:
       CPAN::Meta::Requirements 2.120620
       Digest::MD5 0

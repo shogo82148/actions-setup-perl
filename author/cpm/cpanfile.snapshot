@@ -1059,41 +1059,41 @@ DISTRIBUTIONS
       Win32::ShellQuote 0.003001
     requirements:
       perl 5.006
-  YAML-PP-0.033
-    pathname: T/TI/TINITA/YAML-PP-0.033.tar.gz
+  YAML-PP-0.034
+    pathname: T/TI/TINITA/YAML-PP-0.034.tar.gz
     provides:
-      YAML::PP 0.033
-      YAML::PP::Common 0.033
-      YAML::PP::Constructor 0.033
-      YAML::PP::Dumper 0.033
-      YAML::PP::Emitter 0.033
-      YAML::PP::Exception 0.033
-      YAML::PP::Grammar 0.033
-      YAML::PP::Highlight 0.033
-      YAML::PP::Lexer 0.033
-      YAML::PP::Loader 0.033
-      YAML::PP::Parser 0.033
-      YAML::PP::Perl 0.033
-      YAML::PP::Preserve::Array 0.033
-      YAML::PP::Preserve::Hash 0.033
-      YAML::PP::Preserve::Scalar 0.033
-      YAML::PP::Reader 0.033
-      YAML::PP::Reader::File 0.033
-      YAML::PP::Render 0.033
-      YAML::PP::Representer 0.033
-      YAML::PP::Schema 0.033
-      YAML::PP::Schema::Binary 0.033
-      YAML::PP::Schema::Core 0.033
-      YAML::PP::Schema::Failsafe 0.033
-      YAML::PP::Schema::Include 0.033
-      YAML::PP::Schema::JSON 0.033
-      YAML::PP::Schema::Merge 0.033
-      YAML::PP::Schema::Perl 0.033
-      YAML::PP::Schema::Tie::IxHash 0.033
-      YAML::PP::Schema::YAML1_1 0.033
-      YAML::PP::Type::MergeKey 0.033
-      YAML::PP::Writer 0.033
-      YAML::PP::Writer::File 0.033
+      YAML::PP 0.034
+      YAML::PP::Common 0.034
+      YAML::PP::Constructor 0.034
+      YAML::PP::Dumper 0.034
+      YAML::PP::Emitter 0.034
+      YAML::PP::Exception 0.034
+      YAML::PP::Grammar 0.034
+      YAML::PP::Highlight 0.034
+      YAML::PP::Lexer 0.034
+      YAML::PP::Loader 0.034
+      YAML::PP::Parser 0.034
+      YAML::PP::Perl 0.034
+      YAML::PP::Preserve::Array 0.034
+      YAML::PP::Preserve::Hash 0.034
+      YAML::PP::Preserve::Scalar 0.034
+      YAML::PP::Reader 0.034
+      YAML::PP::Reader::File 0.034
+      YAML::PP::Render 0.034
+      YAML::PP::Representer 0.034
+      YAML::PP::Schema 0.034
+      YAML::PP::Schema::Binary 0.034
+      YAML::PP::Schema::Core 0.034
+      YAML::PP::Schema::Failsafe 0.034
+      YAML::PP::Schema::Include 0.034
+      YAML::PP::Schema::JSON 0.034
+      YAML::PP::Schema::Merge 0.034
+      YAML::PP::Schema::Perl 0.034
+      YAML::PP::Schema::Tie::IxHash 0.034
+      YAML::PP::Schema::YAML1_1 0.034
+      YAML::PP::Type::MergeKey 0.034
+      YAML::PP::Writer 0.034
+      YAML::PP::Writer::File 0.034
     requirements:
       B 0
       B::Deparse 0

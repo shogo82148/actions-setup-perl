@@ -64,11 +64,11 @@ jobs:
           install-modules: |
             ExtUtils::MakeMaker
           working-directory: __test__/p5-Test-Module
-      - name: print the version of App::a2p and use it
+      - name: print the version of App::p and use it
         run: |
           # shellcheck disable=SC2016
-          perl -MApp::a2p -e 'print $App::a2p::VERSION'
-          echo "\$1" | a2p
+          perl -MApp::p -e 'print $App::p::VERSION'
+          p --version
 
       - name: print the version of ExtUtils::MakeMaker
         run: |

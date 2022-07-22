@@ -67,8 +67,8 @@ jobs:
       - name: print the version of App::p and use it
         run: |
           # shellcheck disable=SC2016
-          perl -MApp::p -e 'print $App::p::VERSION'
-          p --version
+          perl -MApp::p -e 'print "$App::p::VERSION\n"'
+          p 'print "Hello World\n"'
 
       - name: print the version of ExtUtils::MakeMaker
         run: |

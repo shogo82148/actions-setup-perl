@@ -114,7 +114,7 @@ sub run {
 
     group "install common CPAN modules" => sub {
         # JSON
-        cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-4.07.tar.gz', 'JSON', '5.5.3');
+        cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-4.08.tar.gz', 'JSON', '5.5.3');
 
         # Cpanel::JSON::XS
         cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.29.tar.gz', 'Cpanel::JSON::XS', '5.6.2');
@@ -134,7 +134,7 @@ sub run {
         cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/File-Temp-0.2311.tar.gz', 'File::Temp', '5.6.0', '5.6.1');
         cpan_install('https://cpan.metacpan.org/authors/id/M/MA/MAKAMAKA/JSON-PP-Compat5006-1.09.tar.gz', 'JSON::PP::Compat5006', '5.6.0', '5.8.0');
         # JSON::PP
-        cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-PP-4.10.tar.gz', 'JSON::PP', '5.6.0');
+        cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-PP-4.11.tar.gz', 'JSON::PP', '5.6.0');
 
         # JSON::MaybeXS
         cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004003.tar.gz', 'JSON::MaybeXS', '5.6.0');

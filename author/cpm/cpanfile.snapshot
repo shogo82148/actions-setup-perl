@@ -410,10 +410,10 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  ExtUtils-PL2Bat-0.004
-    pathname: L/LE/LEONT/ExtUtils-PL2Bat-0.004.tar.gz
+  ExtUtils-PL2Bat-0.005
+    pathname: L/LE/LEONT/ExtUtils-PL2Bat-0.005.tar.gz
     provides:
-      ExtUtils::PL2Bat 0.004
+      ExtUtils::PL2Bat 0.005
     requirements:
       Carp 0
       ExtUtils::MakeMaker 0

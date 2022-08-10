@@ -81,9 +81,9 @@ The action works for [GitHub-hosted runners](https://docs.github.com/en/actions/
 
 | Operating System | Supported Versions |
 | --- | --- |
-| Linux | `ubuntu-18.04`, `ubuntu-20.04` |
-| macOS | `macos-10.05`, `macos-11.0` |
-| Windows | `windows-2019` |
+| Linux | `ubuntu-20.04`, `ubuntu-22.04` |
+| macOS | `macos-11`, `macos-12` |
+| Windows | `windows-2019`, `windows-2022` |
 
 [Self-hosted runners](https://docs.github.com/en/actions/hosting-your-own-runners) are not supported.
 

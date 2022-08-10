@@ -13,7 +13,7 @@ on:
 
 jobs:
   linux:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -31,7 +31,7 @@ jobs:
           path: scripts/linux/cpanfile.snapshot
 
   darwin:
-    runs-on: macos-latest
+    runs-on: macos-11
     steps:
       - name: setup host perl
         run: perl -MConfig -E 'say "$Config{bin}"' >> "$GITHUB_PATH"
@@ -51,7 +51,7 @@ jobs:
           path: scripts/darwin/cpanfile.snapshot
 
   windows:
-    runs-on: windows-latest
+    runs-on: windows-2019
     steps:
       - name: setup host perl
         shell: bash

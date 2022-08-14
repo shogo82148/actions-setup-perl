@@ -410,10 +410,10 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  ExtUtils-PL2Bat-0.004
-    pathname: L/LE/LEONT/ExtUtils-PL2Bat-0.004.tar.gz
+  ExtUtils-PL2Bat-0.005
+    pathname: L/LE/LEONT/ExtUtils-PL2Bat-0.005.tar.gz
     provides:
-      ExtUtils::PL2Bat 0.004
+      ExtUtils::PL2Bat 0.005
     requirements:
       Carp 0
       ExtUtils::MakeMaker 0
@@ -536,10 +536,10 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Pod::Usage 1.14
-  HTTP-Tiny-0.080
-    pathname: D/DA/DAGOLDEN/HTTP-Tiny-0.080.tar.gz
+  HTTP-Tiny-0.082
+    pathname: D/DA/DAGOLDEN/HTTP-Tiny-0.082.tar.gz
     provides:
-      HTTP::Tiny 0.080
+      HTTP::Tiny 0.082
     requirements:
       Carp 0
       ExtUtils::MakeMaker 6.17
@@ -588,12 +588,12 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Test::More 0.31
       Time::HiRes 0
-  JSON-PP-4.10
-    pathname: I/IS/ISHIGAKI/JSON-PP-4.10.tar.gz
+  JSON-PP-4.11
+    pathname: I/IS/ISHIGAKI/JSON-PP-4.11.tar.gz
     provides:
-      JSON::PP 4.10
-      JSON::PP::Boolean 4.10
-      JSON::PP::IncrParser 4.10
+      JSON::PP 4.11
+      JSON::PP::Boolean 4.11
+      JSON::PP::IncrParser 4.11
     requirements:
       ExtUtils::MakeMaker 0
       Scalar::Util 1.08
@@ -703,11 +703,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20220620
-    pathname: B/BI/BINGOS/Module-CoreList-5.20220620.tar.gz
+  Module-CoreList-5.20220720
+    pathname: B/BI/BINGOS/Module-CoreList-5.20220720.tar.gz
     provides:
-      Module::CoreList 5.20220620
-      Module::CoreList::Utils 5.20220620
+      Module::CoreList 5.20220720
+      Module::CoreList::Utils 5.20220720
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0
@@ -895,81 +895,81 @@ DISTRIBUTIONS
       Test::Harness 3.44
     requirements:
       ExtUtils::MakeMaker 0
-  Test-Simple-1.302190
-    pathname: E/EX/EXODIST/Test-Simple-1.302190.tar.gz
+  Test-Simple-1.302191
+    pathname: E/EX/EXODIST/Test-Simple-1.302191.tar.gz
     provides:
-      Test2 1.302190
-      Test2::API 1.302190
-      Test2::API::Breakage 1.302190
-      Test2::API::Context 1.302190
-      Test2::API::Instance 1.302190
-      Test2::API::InterceptResult 1.302190
-      Test2::API::InterceptResult::Event 1.302190
-      Test2::API::InterceptResult::Facet 1.302190
-      Test2::API::InterceptResult::Hub 1.302190
-      Test2::API::InterceptResult::Squasher 1.302190
-      Test2::API::Stack 1.302190
-      Test2::Event 1.302190
-      Test2::Event::Bail 1.302190
-      Test2::Event::Diag 1.302190
-      Test2::Event::Encoding 1.302190
-      Test2::Event::Exception 1.302190
-      Test2::Event::Fail 1.302190
-      Test2::Event::Generic 1.302190
-      Test2::Event::Note 1.302190
-      Test2::Event::Ok 1.302190
-      Test2::Event::Pass 1.302190
-      Test2::Event::Plan 1.302190
-      Test2::Event::Skip 1.302190
-      Test2::Event::Subtest 1.302190
-      Test2::Event::TAP::Version 1.302190
-      Test2::Event::V2 1.302190
-      Test2::Event::Waiting 1.302190
-      Test2::EventFacet 1.302190
-      Test2::EventFacet::About 1.302190
-      Test2::EventFacet::Amnesty 1.302190
-      Test2::EventFacet::Assert 1.302190
-      Test2::EventFacet::Control 1.302190
-      Test2::EventFacet::Error 1.302190
-      Test2::EventFacet::Hub 1.302190
-      Test2::EventFacet::Info 1.302190
-      Test2::EventFacet::Info::Table 1.302190
-      Test2::EventFacet::Meta 1.302190
-      Test2::EventFacet::Parent 1.302190
-      Test2::EventFacet::Plan 1.302190
-      Test2::EventFacet::Render 1.302190
-      Test2::EventFacet::Trace 1.302190
-      Test2::Formatter 1.302190
-      Test2::Formatter::TAP 1.302190
-      Test2::Hub 1.302190
-      Test2::Hub::Interceptor 1.302190
-      Test2::Hub::Interceptor::Terminator 1.302190
-      Test2::Hub::Subtest 1.302190
-      Test2::IPC 1.302190
-      Test2::IPC::Driver 1.302190
-      Test2::IPC::Driver::Files 1.302190
-      Test2::Tools::Tiny 1.302190
-      Test2::Util 1.302190
-      Test2::Util::ExternalMeta 1.302190
-      Test2::Util::Facets2Legacy 1.302190
-      Test2::Util::HashBase 1.302190
-      Test2::Util::Trace 1.302190
-      Test::Builder 1.302190
-      Test::Builder::Formatter 1.302190
+      Test2 1.302191
+      Test2::API 1.302191
+      Test2::API::Breakage 1.302191
+      Test2::API::Context 1.302191
+      Test2::API::Instance 1.302191
+      Test2::API::InterceptResult 1.302191
+      Test2::API::InterceptResult::Event 1.302191
+      Test2::API::InterceptResult::Facet 1.302191
+      Test2::API::InterceptResult::Hub 1.302191
+      Test2::API::InterceptResult::Squasher 1.302191
+      Test2::API::Stack 1.302191
+      Test2::Event 1.302191
+      Test2::Event::Bail 1.302191
+      Test2::Event::Diag 1.302191
+      Test2::Event::Encoding 1.302191
+      Test2::Event::Exception 1.302191
+      Test2::Event::Fail 1.302191
+      Test2::Event::Generic 1.302191
+      Test2::Event::Note 1.302191
+      Test2::Event::Ok 1.302191
+      Test2::Event::Pass 1.302191
+      Test2::Event::Plan 1.302191
+      Test2::Event::Skip 1.302191
+      Test2::Event::Subtest 1.302191
+      Test2::Event::TAP::Version 1.302191
+      Test2::Event::V2 1.302191
+      Test2::Event::Waiting 1.302191
+      Test2::EventFacet 1.302191
+      Test2::EventFacet::About 1.302191
+      Test2::EventFacet::Amnesty 1.302191
+      Test2::EventFacet::Assert 1.302191
+      Test2::EventFacet::Control 1.302191
+      Test2::EventFacet::Error 1.302191
+      Test2::EventFacet::Hub 1.302191
+      Test2::EventFacet::Info 1.302191
+      Test2::EventFacet::Info::Table 1.302191
+      Test2::EventFacet::Meta 1.302191
+      Test2::EventFacet::Parent 1.302191
+      Test2::EventFacet::Plan 1.302191
+      Test2::EventFacet::Render 1.302191
+      Test2::EventFacet::Trace 1.302191
+      Test2::Formatter 1.302191
+      Test2::Formatter::TAP 1.302191
+      Test2::Hub 1.302191
+      Test2::Hub::Interceptor 1.302191
+      Test2::Hub::Interceptor::Terminator 1.302191
+      Test2::Hub::Subtest 1.302191
+      Test2::IPC 1.302191
+      Test2::IPC::Driver 1.302191
+      Test2::IPC::Driver::Files 1.302191
+      Test2::Tools::Tiny 1.302191
+      Test2::Util 1.302191
+      Test2::Util::ExternalMeta 1.302191
+      Test2::Util::Facets2Legacy 1.302191
+      Test2::Util::HashBase 1.302191
+      Test2::Util::Trace 1.302191
+      Test::Builder 1.302191
+      Test::Builder::Formatter 1.302191
       Test::Builder::IO::Scalar 2.114
-      Test::Builder::Module 1.302190
-      Test::Builder::Tester 1.302190
-      Test::Builder::Tester::Color 1.302190
-      Test::Builder::Tester::Tie 1.302190
-      Test::Builder::TodoDiag 1.302190
-      Test::More 1.302190
-      Test::Simple 1.302190
-      Test::Tester 1.302190
-      Test::Tester::Capture 1.302190
-      Test::Tester::CaptureRunner 1.302190
-      Test::Tester::Delegate 1.302190
-      Test::use::ok 1.302190
-      ok 1.302190
+      Test::Builder::Module 1.302191
+      Test::Builder::Tester 1.302191
+      Test::Builder::Tester::Color 1.302191
+      Test::Builder::Tester::Tie 1.302191
+      Test::Builder::TodoDiag 1.302191
+      Test::More 1.302191
+      Test::Simple 1.302191
+      Test::Tester 1.302191
+      Test::Tester::Capture 1.302191
+      Test::Tester::CaptureRunner 1.302191
+      Test::Tester::Delegate 1.302191
+      Test::use::ok 1.302191
+      ok 1.302191
     requirements:
       ExtUtils::MakeMaker 0
       File::Spec 0
@@ -988,53 +988,53 @@ DISTRIBUTIONS
       Tie::Handle 0
       perl 5.006
       strict 0
-  URI-5.11
-    pathname: O/OA/OALDERS/URI-5.11.tar.gz
+  URI-5.12
+    pathname: O/OA/OALDERS/URI-5.12.tar.gz
     provides:
-      URI 5.11
-      URI::Escape 5.11
-      URI::Heuristic 5.11
-      URI::IRI 5.11
-      URI::QueryParam 5.11
-      URI::Split 5.11
-      URI::URL 5.11
-      URI::WithBase 5.11
-      URI::data 5.11
-      URI::file 5.11
-      URI::file::Base 5.11
-      URI::file::FAT 5.11
-      URI::file::Mac 5.11
-      URI::file::OS2 5.11
-      URI::file::QNX 5.11
-      URI::file::Unix 5.11
-      URI::file::Win32 5.11
-      URI::ftp 5.11
-      URI::gopher 5.11
-      URI::http 5.11
-      URI::https 5.11
-      URI::ldap 5.11
-      URI::ldapi 5.11
-      URI::ldaps 5.11
-      URI::mailto 5.11
-      URI::mms 5.11
-      URI::news 5.11
-      URI::nntp 5.11
-      URI::nntps 5.11
-      URI::pop 5.11
-      URI::rlogin 5.11
-      URI::rsync 5.11
-      URI::rtsp 5.11
-      URI::rtspu 5.11
-      URI::sftp 5.11
-      URI::sip 5.11
-      URI::sips 5.11
-      URI::snews 5.11
-      URI::ssh 5.11
-      URI::telnet 5.11
-      URI::tn3270 5.11
-      URI::urn 5.11
-      URI::urn::isbn 5.11
-      URI::urn::oid 5.11
+      URI 5.12
+      URI::Escape 5.12
+      URI::Heuristic 5.12
+      URI::IRI 5.12
+      URI::QueryParam 5.12
+      URI::Split 5.12
+      URI::URL 5.12
+      URI::WithBase 5.12
+      URI::data 5.12
+      URI::file 5.12
+      URI::file::Base 5.12
+      URI::file::FAT 5.12
+      URI::file::Mac 5.12
+      URI::file::OS2 5.12
+      URI::file::QNX 5.12
+      URI::file::Unix 5.12
+      URI::file::Win32 5.12
+      URI::ftp 5.12
+      URI::gopher 5.12
+      URI::http 5.12
+      URI::https 5.12
+      URI::ldap 5.12
+      URI::ldapi 5.12
+      URI::ldaps 5.12
+      URI::mailto 5.12
+      URI::mms 5.12
+      URI::news 5.12
+      URI::nntp 5.12
+      URI::nntps 5.12
+      URI::pop 5.12
+      URI::rlogin 5.12
+      URI::rsync 5.12
+      URI::rtsp 5.12
+      URI::rtspu 5.12
+      URI::sftp 5.12
+      URI::sip 5.12
+      URI::sips 5.12
+      URI::snews 5.12
+      URI::ssh 5.12
+      URI::telnet 5.12
+      URI::tn3270 5.12
+      URI::urn 5.12
+      URI::urn::isbn 5.12
+      URI::urn::oid 5.12
     requirements:
       Carp 0
       Cwd 0

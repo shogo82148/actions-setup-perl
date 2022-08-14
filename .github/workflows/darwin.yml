@@ -58,7 +58,7 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
 
   build:
-    runs-on: macos-10.15
+    runs-on: macos-11
     needs: list
     timeout-minutes: 120
     strategy:
@@ -107,7 +107,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
   build-multi-thread:
-    runs-on: macos-10.15
+    runs-on: macos-11
     needs: list
     timeout-minutes: 120
     strategy:

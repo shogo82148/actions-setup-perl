@@ -381,10 +381,10 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  ExtUtils-PL2Bat-0.004
-    pathname: L/LE/LEONT/ExtUtils-PL2Bat-0.004.tar.gz
+  ExtUtils-PL2Bat-0.005
+    pathname: L/LE/LEONT/ExtUtils-PL2Bat-0.005.tar.gz
     provides:
-      ExtUtils::PL2Bat 0.004
+      ExtUtils::PL2Bat 0.005
     requirements:
       Carp 0
       ExtUtils::MakeMaker 0
@@ -497,10 +497,10 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Pod::Usage 1.14
-  HTTP-Tiny-0.080
-    pathname: D/DA/DAGOLDEN/HTTP-Tiny-0.080.tar.gz
+  HTTP-Tiny-0.082
+    pathname: D/DA/DAGOLDEN/HTTP-Tiny-0.082.tar.gz
     provides:
-      HTTP::Tiny 0.080
+      HTTP::Tiny 0.082
     requirements:
       Carp 0
       ExtUtils::MakeMaker 6.17
@@ -549,20 +549,20 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Test::More 0.31
       Time::HiRes 0
-  JSON-4.07
-    pathname: I/IS/ISHIGAKI/JSON-4.07.tar.gz
+  JSON-4.09
+    pathname: I/IS/ISHIGAKI/JSON-4.09.tar.gz
     provides:
-      JSON 4.07
-      JSON::Backend::PP 4.07
+      JSON 4.09
+      JSON::Backend::PP 4.09
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
-  JSON-PP-4.10
-    pathname: I/IS/ISHIGAKI/JSON-PP-4.10.tar.gz
+  JSON-PP-4.11
+    pathname: I/IS/ISHIGAKI/JSON-PP-4.11.tar.gz
     provides:
-      JSON::PP 4.10
-      JSON::PP::Boolean 4.10
-      JSON::PP::IncrParser 4.10
+      JSON::PP 4.11
+      JSON::PP::Boolean 4.11
+      JSON::PP::IncrParser 4.11
     requirements:
       ExtUtils::MakeMaker 0
       Scalar::Util 1.08
@@ -679,11 +679,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20220620
-    pathname: B/BI/BINGOS/Module-CoreList-5.20220620.tar.gz
+  Module-CoreList-5.20220720
+    pathname: B/BI/BINGOS/Module-CoreList-5.20220720.tar.gz
     provides:
-      Module::CoreList 5.20220620
-      Module::CoreList::Utils 5.20220620
+      Module::CoreList 5.20220720
+      Module::CoreList::Utils 5.20220720
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0
@@ -724,100 +724,100 @@ DISTRIBUTIONS
       strict 0
       version 0.87
       warnings 0
-  PPI-1.274
-    pathname: O/OA/OALDERS/PPI-1.274.tar.gz
+  PPI-1.276
+    pathname: O/OA/OALDERS/PPI-1.276.tar.gz
     provides:
-      PPI 1.274
-      PPI::Cache 1.274
-      PPI::Document 1.274
-      PPI::Document::File 1.274
-      PPI::Document::Fragment 1.274
-      PPI::Document::Normalized 1.274
-      PPI::Dumper 1.274
-      PPI::Element 1.274
-      PPI::Exception 1.274
-      PPI::Exception::ParserRejection 1.274
-      PPI::Find 1.274
-      PPI::Lexer 1.274
-      PPI::Node 1.274
-      PPI::Normal 1.274
-      PPI::Normal::Standard 1.274
-      PPI::Singletons 1.274
-      PPI::Statement 1.274
-      PPI::Statement::Break 1.274
-      PPI::Statement::Compound 1.274
-      PPI::Statement::Data 1.274
-      PPI::Statement::End 1.274
-      PPI::Statement::Expression 1.274
-      PPI::Statement::Given 1.274
-      PPI::Statement::Include 1.274
-      PPI::Statement::Include::Perl6 1.274
-      PPI::Statement::Null 1.274
-      PPI::Statement::Package 1.274
-      PPI::Statement::Scheduled 1.274
-      PPI::Statement::Sub 1.274
-      PPI::Statement::Unknown 1.274
-      PPI::Statement::UnmatchedBrace 1.274
-      PPI::Statement::Variable 1.274
-      PPI::Statement::When 1.274
-      PPI::Structure 1.274
-      PPI::Structure::Block 1.274
-      PPI::Structure::Condition 1.274
-      PPI::Structure::Constructor 1.274
-      PPI::Structure::For 1.274
-      PPI::Structure::Given 1.274
-      PPI::Structure::List 1.274
-      PPI::Structure::Subscript 1.274
-      PPI::Structure::Unknown 1.274
-      PPI::Structure::When 1.274
-      PPI::Token 1.274
-      PPI::Token::ArrayIndex 1.274
-      PPI::Token::Attribute 1.274
-      PPI::Token::BOM 1.274
-      PPI::Token::Cast 1.274
-      PPI::Token::Comment 1.274
-      PPI::Token::DashedWord 1.274
-      PPI::Token::Data 1.274
-      PPI::Token::End 1.274
-      PPI::Token::HereDoc 1.274
-      PPI::Token::Label 1.274
-      PPI::Token::Magic 1.274
-      PPI::Token::Number 1.274
-      PPI::Token::Number::Binary 1.274
-      PPI::Token::Number::Exp 1.274
-      PPI::Token::Number::Float 1.274
-      PPI::Token::Number::Hex 1.274
-      PPI::Token::Number::Octal 1.274
-      PPI::Token::Number::Version 1.274
-      PPI::Token::Operator 1.274
-      PPI::Token::Pod 1.274
-      PPI::Token::Prototype 1.274
-      PPI::Token::Quote 1.274
-      PPI::Token::Quote::Double 1.274
-      PPI::Token::Quote::Interpolate 1.274
-      PPI::Token::Quote::Literal 1.274
-      PPI::Token::Quote::Single 1.274
-      PPI::Token::QuoteLike 1.274
-      PPI::Token::QuoteLike::Backtick 1.274
-      PPI::Token::QuoteLike::Command 1.274
-      PPI::Token::QuoteLike::Readline 1.274
-      PPI::Token::QuoteLike::Regexp 1.274
-      PPI::Token::QuoteLike::Words 1.274
-      PPI::Token::Regexp 1.274
-      PPI::Token::Regexp::Match 1.274
-      PPI::Token::Regexp::Substitute 1.274
-      PPI::Token::Regexp::Transliterate 1.274
-      PPI::Token::Separator 1.274
-      PPI::Token::Structure 1.274
-      PPI::Token::Symbol 1.274
-      PPI::Token::Unknown 1.274
-      PPI::Token::Whitespace 1.274
-      PPI::Token::Word 1.274
-      PPI::Tokenizer 1.274
-      PPI::Transform 1.274
-      PPI::Transform::UpdateCopyright 1.274
-      PPI::Util 1.274
-      PPI::XSAccessor 1.274
+      PPI 1.276
+      PPI::Cache 1.276
+      PPI::Document 1.276
+      PPI::Document::File 1.276
+      PPI::Document::Fragment 1.276
+      PPI::Document::Normalized 1.276
+      PPI::Dumper 1.276
+      PPI::Element 1.276
+      PPI::Exception 1.276
+      PPI::Exception::ParserRejection 1.276
+      PPI::Find 1.276
+      PPI::Lexer 1.276
+      PPI::Node 1.276
+      PPI::Normal 1.276
+      PPI::Normal::Standard 1.276
+      PPI::Singletons 1.276
+      PPI::Statement 1.276
+      PPI::Statement::Break 1.276
+      PPI::Statement::Compound 1.276
+      PPI::Statement::Data 1.276
+      PPI::Statement::End 1.276
+      PPI::Statement::Expression 1.276
+      PPI::Statement::Given 1.276
+      PPI::Statement::Include 1.276
+      PPI::Statement::Include::Perl6 1.276
+      PPI::Statement::Null 1.276
+      PPI::Statement::Package 1.276
+      PPI::Statement::Scheduled 1.276
+      PPI::Statement::Sub 1.276
+      PPI::Statement::Unknown 1.276
+      PPI::Statement::UnmatchedBrace 1.276
+      PPI::Statement::Variable 1.276
+      PPI::Statement::When 1.276
+      PPI::Structure 1.276
+      PPI::Structure::Block 1.276
+      PPI::Structure::Condition 1.276
+      PPI::Structure::Constructor 1.276
+      PPI::Structure::For 1.276
+      PPI::Structure::Given 1.276
+      PPI::Structure::List 1.276
+      PPI::Structure::Subscript 1.276
+      PPI::Structure::Unknown 1.276
+      PPI::Structure::When 1.276
+      PPI::Token 1.276
+      PPI::Token::ArrayIndex 1.276
+      PPI::Token::Attribute 1.276
+      PPI::Token::BOM 1.276
+      PPI::Token::Cast 1.276
+      PPI::Token::Comment 1.276
+      PPI::Token::DashedWord 1.276
+      PPI::Token::Data 1.276
+      PPI::Token::End 1.276
+      PPI::Token::HereDoc 1.276
+      PPI::Token::Label 1.276
+      PPI::Token::Magic 1.276
+      PPI::Token::Number 1.276
+      PPI::Token::Number::Binary 1.276
+      PPI::Token::Number::Exp 1.276
+      PPI::Token::Number::Float 1.276
+      PPI::Token::Number::Hex 1.276
+      PPI::Token::Number::Octal 1.276
+      PPI::Token::Number::Version 1.276
+      PPI::Token::Operator 1.276
+      PPI::Token::Pod 1.276
+      PPI::Token::Prototype 1.276
+      PPI::Token::Quote 1.276
+      PPI::Token::Quote::Double 1.276
+      PPI::Token::Quote::Interpolate 1.276
+      PPI::Token::Quote::Literal 1.276
+      PPI::Token::Quote::Single 1.276
+      PPI::Token::QuoteLike 1.276
+      PPI::Token::QuoteLike::Backtick 1.276
+      PPI::Token::QuoteLike::Command 1.276
+      PPI::Token::QuoteLike::Readline 1.276
+      PPI::Token::QuoteLike::Regexp 1.276
+      PPI::Token::QuoteLike::Words 1.276
+      PPI::Token::Regexp 1.276
+      PPI::Token::Regexp::Match 1.276
+      PPI::Token::Regexp::Substitute 1.276
+      PPI::Token::Regexp::Transliterate 1.276
+      PPI::Token::Separator 1.276
+      PPI::Token::Structure 1.276
+      PPI::Token::Symbol 1.276
+      PPI::Token::Unknown 1.276
+      PPI::Token::Whitespace 1.276
+      PPI::Token::Word 1.276
+      PPI::Tokenizer 1.276
+      PPI::Transform 1.276
+      PPI::Transform::UpdateCopyright 1.276
+      PPI::Util 1.276
+      PPI::XSAccessor 1.276
     requirements:
       Carp 0
       Clone 0.30
@@ -911,13 +911,13 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       PPI 1.213
       common::sense 3.3
-  Scalar-List-Utils-1.62
-    pathname: P/PE/PEVANS/Scalar-List-Utils-1.62.tar.gz
+  Scalar-List-Utils-1.63
+    pathname: P/PE/PEVANS/Scalar-List-Utils-1.63.tar.gz
     provides:
-      List::Util 1.62
-      List::Util::XS 1.62
-      Scalar::Util 1.62
-      Sub::Util 1.62
+      List::Util 1.63
+      List::Util::XS 1.63
+      Scalar::Util 1.63
+      Sub::Util 1.63
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006
@@ -1014,81 +1014,81 @@ DISTRIBUTIONS
       Test::Harness 3.44
     requirements:
       ExtUtils::MakeMaker 0
-  Test-Simple-1.302190
-    pathname: E/EX/EXODIST/Test-Simple-1.302190.tar.gz
+  Test-Simple-1.302191
+    pathname: E/EX/EXODIST/Test-Simple-1.302191.tar.gz
     provides:
-      Test2 1.302190
-      Test2::API 1.302190
-      Test2::API::Breakage 1.302190
-      Test2::API::Context 1.302190
-      Test2::API::Instance 1.302190
-      Test2::API::InterceptResult 1.302190
-      Test2::API::InterceptResult::Event 1.302190
-      Test2::API::InterceptResult::Facet 1.302190
-      Test2::API::InterceptResult::Hub 1.302190
-      Test2::API::InterceptResult::Squasher 1.302190
-      Test2::API::Stack 1.302190
-      Test2::Event 1.302190
-      Test2::Event::Bail 1.302190
-      Test2::Event::Diag 1.302190
-      Test2::Event::Encoding 1.302190
-      Test2::Event::Exception 1.302190
-      Test2::Event::Fail 1.302190
-      Test2::Event::Generic 1.302190
-      Test2::Event::Note 1.302190
-      Test2::Event::Ok 1.302190
-      Test2::Event::Pass 1.302190
-      Test2::Event::Plan 1.302190
-      Test2::Event::Skip 1.302190
-      Test2::Event::Subtest 1.302190
-      Test2::Event::TAP::Version 1.302190
-      Test2::Event::V2 1.302190
-      Test2::Event::Waiting 1.302190
-      Test2::EventFacet 1.302190
-      Test2::EventFacet::About 1.302190
-      Test2::EventFacet::Amnesty 1.302190
-      Test2::EventFacet::Assert 1.302190
-      Test2::EventFacet::Control 1.302190
-      Test2::EventFacet::Error 1.302190
-      Test2::EventFacet::Hub 1.302190
-      Test2::EventFacet::Info 1.302190
-      Test2::EventFacet::Info::Table 1.302190
-      Test2::EventFacet::Meta 1.302190
-      Test2::EventFacet::Parent 1.302190
-      Test2::EventFacet::Plan 1.302190
-      Test2::EventFacet::Render 1.302190
-      Test2::EventFacet::Trace 1.302190
-      Test2::Formatter 1.302190
-      Test2::Formatter::TAP 1.302190
-      Test2::Hub 1.302190
-      Test2::Hub::Interceptor 1.302190
-      Test2::Hub::Interceptor::Terminator 1.302190
-      Test2::Hub::Subtest 1.302190
-      Test2::IPC 1.302190
-      Test2::IPC::Driver 1.302190
-      Test2::IPC::Driver::Files 1.302190
-      Test2::Tools::Tiny 1.302190
-      Test2::Util 1.302190
-      Test2::Util::ExternalMeta 1.302190
-      Test2::Util::Facets2Legacy 1.302190
-      Test2::Util::HashBase 1.302190
-      Test2::Util::Trace 1.302190
-      Test::Builder 1.302190
-      Test::Builder::Formatter 1.302190
+      Test2 1.302191
+      Test2::API 1.302191
+      Test2::API::Breakage 1.302191
+      Test2::API::Context 1.302191
+      Test2::API::Instance 1.302191
+      Test2::API::InterceptResult 1.302191
+      Test2::API::InterceptResult::Event 1.302191
+      Test2::API::InterceptResult::Facet 1.302191
+      Test2::API::InterceptResult::Hub 1.302191
+      Test2::API::InterceptResult::Squasher 1.302191
+      Test2::API::Stack 1.302191
+      Test2::Event 1.302191
+      Test2::Event::Bail 1.302191
+      Test2::Event::Diag 1.302191
+      Test2::Event::Encoding 1.302191
+      Test2::Event::Exception 1.302191
+      Test2::Event::Fail 1.302191
+      Test2::Event::Generic 1.302191
+      Test2::Event::Note 1.302191
+      Test2::Event::Ok 1.302191
+      Test2::Event::Pass 1.302191
+      Test2::Event::Plan 1.302191
+      Test2::Event::Skip 1.302191
+      Test2::Event::Subtest 1.302191
+      Test2::Event::TAP::Version 1.302191
+      Test2::Event::V2 1.302191
+      Test2::Event::Waiting 1.302191
+      Test2::EventFacet 1.302191
+      Test2::EventFacet::About 1.302191
+      Test2::EventFacet::Amnesty 1.302191
+      Test2::EventFacet::Assert 1.302191
+      Test2::EventFacet::Control 1.302191
+      Test2::EventFacet::Error 1.302191
+      Test2::EventFacet::Hub 1.302191
+      Test2::EventFacet::Info 1.302191
+      Test2::EventFacet::Info::Table 1.302191
+      Test2::EventFacet::Meta 1.302191
+      Test2::EventFacet::Parent 1.302191
+      Test2::EventFacet::Plan 1.302191
+      Test2::EventFacet::Render 1.302191
+      Test2::EventFacet::Trace 1.302191
+      Test2::Formatter 1.302191
+      Test2::Formatter::TAP 1.302191
+      Test2::Hub 1.302191
+      Test2::Hub::Interceptor 1.302191
+      Test2::Hub::Interceptor::Terminator 1.302191
+      Test2::Hub::Subtest 1.302191
+      Test2::IPC 1.302191
+      Test2::IPC::Driver 1.302191
+      Test2::IPC::Driver::Files 1.302191
+      Test2::Tools::Tiny 1.302191
+      Test2::Util 1.302191
+      Test2::Util::ExternalMeta 1.302191
+      Test2::Util::Facets2Legacy 1.302191
+      Test2::Util::HashBase 1.302191
+      Test2::Util::Trace 1.302191
+      Test::Builder 1.302191
+      Test::Builder::Formatter 1.302191
       Test::Builder::IO::Scalar 2.114
-      Test::Builder::Module 1.302190
-      Test::Builder::Tester 1.302190
-      Test::Builder::Tester::Color 1.302190
-      Test::Builder::Tester::Tie 1.302190
-      Test::Builder::TodoDiag 1.302190
-      Test::More 1.302190
-      Test::Simple 1.302190
-      Test::Tester 1.302190
-      Test::Tester::Capture 1.302190
-      Test::Tester::CaptureRunner 1.302190
-      Test::Tester::Delegate 1.302190
-      Test::use::ok 1.302190
-      ok 1.302190
+      Test::Builder::Module 1.302191
+      Test::Builder::Tester 1.302191
+      Test::Builder::Tester::Color 1.302191
+      Test::Builder::Tester::Tie 1.302191
+      Test::Builder::TodoDiag 1.302191
+      Test::More 1.302191
+      Test::Simple 1.302191
+      Test::Tester 1.302191
+      Test::Tester::Capture 1.302191
+      Test::Tester::CaptureRunner 1.302191
+      Test::Tester::Delegate 1.302191
+      Test::use::ok 1.302191
+      ok 1.302191
     requirements:
       ExtUtils::MakeMaker 0
       File::Spec 0
@@ -1107,53 +1107,53 @@ DISTRIBUTIONS
       Tie::Handle 0
       perl 5.006
       strict 0
-  URI-5.11
-    pathname: O/OA/OALDERS/URI-5.11.tar.gz
+  URI-5.12
+    pathname: O/OA/OALDERS/URI-5.12.tar.gz
     provides:
-      URI 5.11
-      URI::Escape 5.11
-      URI::Heuristic 5.11
-      URI::IRI 5.11
-      URI::QueryParam 5.11
-      URI::Split 5.11
-      URI::URL 5.11
-      URI::WithBase 5.11
-      URI::data 5.11
-      URI::file 5.11
-      URI::file::Base 5.11
-      URI::file::FAT 5.11
-      URI::file::Mac 5.11
-      URI::file::OS2 5.11
-      URI::file::QNX 5.11
-      URI::file::Unix 5.11
-      URI::file::Win32 5.11
-      URI::ftp 5.11
-      URI::gopher 5.11
-      URI::http 5.11
-      URI::https 5.11
-      URI::ldap 5.11
-      URI::ldapi 5.11
-      URI::ldaps 5.11
-      URI::mailto 5.11
-      URI::mms 5.11
-      URI::news 5.11
-      URI::nntp 5.11
-      URI::nntps 5.11
-      URI::pop 5.11
-      URI::rlogin 5.11
-      URI::rsync 5.11
-      URI::rtsp 5.11
-      URI::rtspu 5.11
-      URI::sftp 5.11
-      URI::sip 5.11
-      URI::sips 5.11
-      URI::snews 5.11
-      URI::ssh 5.11
-      URI::telnet 5.11
-      URI::tn3270 5.11
-      URI::urn 5.11
-      URI::urn::isbn 5.11
-      URI::urn::oid 5.11
+      URI 5.12
+      URI::Escape 5.12
+      URI::Heuristic 5.12
+      URI::IRI 5.12
+      URI::QueryParam 5.12
+      URI::Split 5.12
+      URI::URL 5.12
+      URI::WithBase 5.12
+      URI::data 5.12
+      URI::file 5.12
+      URI::file::Base 5.12
+      URI::file::FAT 5.12
+      URI::file::Mac 5.12
+      URI::file::OS2 5.12
+      URI::file::QNX 5.12
+      URI::file::Unix 5.12
+      URI::file::Win32 5.12
+      URI::ftp 5.12
+      URI::gopher 5.12
+      URI::http 5.12
+      URI::https 5.12
+      URI::ldap 5.12
+      URI::ldapi 5.12
+      URI::ldaps 5.12
+      URI::mailto 5.12
+      URI::mms 5.12
+      URI::news 5.12
+      URI::nntp 5.12
+      URI::nntps 5.12
+      URI::pop 5.12
+      URI::rlogin 5.12
+      URI::rsync 5.12
+      URI::rtsp 5.12
+      URI::rtspu 5.12
+      URI::sftp 5.12
+      URI::sip 5.12
+      URI::sips 5.12
+      URI::snews 5.12
+      URI::ssh 5.12
+      URI::telnet 5.12
+      URI::tn3270 5.12
+      URI::urn 5.12
+      URI::urn::isbn 5.12
+      URI::urn::oid 5.12
     requirements:
       Carp 0
       Cwd 0

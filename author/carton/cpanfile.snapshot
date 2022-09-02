@@ -621,11 +621,11 @@ DISTRIBUTIONS
       JSON::PP 2.00
       Safe 0
       version 0.83
-  Path-Tiny-0.122
-    pathname: D/DA/DAGOLDEN/Path-Tiny-0.122.tar.gz
+  Path-Tiny-0.124
+    pathname: D/DA/DAGOLDEN/Path-Tiny-0.124.tar.gz
     provides:
-      Path::Tiny 0.122
-      Path::Tiny::Error 0.122
+      Path::Tiny 0.124
+      Path::Tiny::Error 0.124
     requirements:
       Carp 0
       Cwd 0

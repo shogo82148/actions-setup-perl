@@ -146,7 +146,7 @@ sub run {
         cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/YAML-Tiny-1.73.tar.gz', 'YAML::Tiny', '5.8.1');
 
         # YAML::XS
-        cpan_install('https://cpan.metacpan.org/authors/id/T/TI/TINITA/YAML-LibYAML-0.83.tar.gz', 'YAML::XS', '5.8.1');
+        cpan_install('https://cpan.metacpan.org/authors/id/T/TI/TINITA/YAML-LibYAML-0.84.tar.gz', 'YAML::XS', '5.8.1');
 
         ### SSL/TLS
 

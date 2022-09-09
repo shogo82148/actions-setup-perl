@@ -1,7 +1,7 @@
 import * as core from "@actions/core";
 import * as tc from "@actions/tool-cache";
 import * as os from "os";
-import * as fs from "fs";
+import { readFile } from "fs/promises";
 import * as path from "path";
 import * as semver from "semver";
 import * as tcp from "./tool-cache-port";
@@ -17,16 +17,13 @@ export interface Result {
   path: string;
 }
 
+async function readJSON<T>(path: string): Promise<T> {
+  const data = await readFile(path, "utf8");
+  return JSON.parse(data) as T;
+}
 async function getAvailableVersions(): Promise<string[]> {
-  return new Promise<string[]>((resolve, reject) => {
-    fs.readFile(path.join(__dirname, "..", "versions", `${osPlat}.json`), (err, data) => {
-      if (err) {
-        reject(err);
-      }
-      const info = JSON.parse(data.toString()) as string[];
-      resolve(info);
-    });
-  });
+  const filename = path.join(__dirname, "..", "versions", `${osPlat}.json`);
+  return readJSON<string[]>(filename);
 }
 
 async function determineVersion(version: string): Promise<string> {
@@ -109,16 +106,8 @@ interface PackageVersion {
 }
 
 async function getDownloadUrl(filename: string): Promise<string> {
-  return new Promise<PackageVersion>((resolve, reject) => {
-    fs.readFile(path.join(__dirname, "..", "package.json"), (err, data) => {
-      if (err) {
-        reject(err);
-      }
-      const info: PackageVersion = JSON.parse(data.toString());
-      resolve(info);
-    });
-  }).then((info) => {
-    const actionsVersion = info.version;
-    return `https://github.com/shogo82148/actions-setup-perl/releases/download/v${actionsVersion}/${filename}`;
-  });
+  const pkg = path.join(__dirname, "..", "package.json");
+  const info = await readJSON<PackageVersion>(pkg);
+  const actionsVersion = info.version;
+  return `https://github.com/shogo82148/actions-setup-perl/releases/download/v${actionsVersion}/${filename}`;
 }

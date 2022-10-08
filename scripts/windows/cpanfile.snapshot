@@ -160,19 +160,19 @@ DISTRIBUTIONS
       Time::Zone 0
       perl 5.006002
       strict 0
-  HTTP-Message-6.38
-    pathname: O/OA/OALDERS/HTTP-Message-6.38.tar.gz
+  HTTP-Message-6.39
+    pathname: S/SI/SIMBABQUE/HTTP-Message-6.39.tar.gz
     provides:
-      HTTP::Config 6.38
-      HTTP::Headers 6.38
-      HTTP::Headers::Auth 6.38
-      HTTP::Headers::ETag 6.38
-      HTTP::Headers::Util 6.38
-      HTTP::Message 6.38
-      HTTP::Request 6.38
-      HTTP::Request::Common 6.38
-      HTTP::Response 6.38
-      HTTP::Status 6.38
+      HTTP::Config 6.39
+      HTTP::Headers 6.39
+      HTTP::Headers::Auth 6.39
+      HTTP::Headers::ETag 6.39
+      HTTP::Headers::Util 6.39
+      HTTP::Message 6.39
+      HTTP::Request 6.39
+      HTTP::Request::Common 6.39
+      HTTP::Response 6.39
+      HTTP::Status 6.39
     requirements:
       Carp 0
       Compress::Raw::Zlib 0

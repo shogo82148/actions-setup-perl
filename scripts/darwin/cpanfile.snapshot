@@ -103,11 +103,11 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Test::More 0.31
       Time::HiRes 0
-  JSON-4.09
-    pathname: I/IS/ISHIGAKI/JSON-4.09.tar.gz
+  JSON-4.10
+    pathname: I/IS/ISHIGAKI/JSON-4.10.tar.gz
     provides:
-      JSON 4.09
-      JSON::Backend::PP 4.09
+      JSON 4.10
+      JSON::Backend::PP 4.10
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0

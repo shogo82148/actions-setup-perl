@@ -773,53 +773,53 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  URI-5.13
-    pathname: O/OA/OALDERS/URI-5.13.tar.gz
+  URI-5.15
+    pathname: O/OA/OALDERS/URI-5.15.tar.gz
     provides:
-      URI 5.13
-      URI::Escape 5.13
-      URI::Heuristic 5.13
-      URI::IRI 5.13
-      URI::QueryParam 5.13
-      URI::Split 5.13
-      URI::URL 5.13
-      URI::WithBase 5.13
-      URI::data 5.13
-      URI::file 5.13
-      URI::file::Base 5.13
-      URI::file::FAT 5.13
-      URI::file::Mac 5.13
-      URI::file::OS2 5.13
-      URI::file::QNX 5.13
-      URI::file::Unix 5.13
-      URI::file::Win32 5.13
-      URI::ftp 5.13
-      URI::gopher 5.13
-      URI::http 5.13
-      URI::https 5.13
-      URI::ldap 5.13
-      URI::ldapi 5.13
-      URI::ldaps 5.13
-      URI::mailto 5.13
-      URI::mms 5.13
-      URI::news 5.13
-      URI::nntp 5.13
-      URI::nntps 5.13
-      URI::pop 5.13
-      URI::rlogin 5.13
-      URI::rsync 5.13
-      URI::rtsp 5.13
-      URI::rtspu 5.13
-      URI::sftp 5.13
-      URI::sip 5.13
-      URI::sips 5.13
-      URI::snews 5.13
-      URI::ssh 5.13
-      URI::telnet 5.13
-      URI::tn3270 5.13
-      URI::urn 5.13
-      URI::urn::isbn 5.13
-      URI::urn::oid 5.13
+      URI 5.15
+      URI::Escape 5.15
+      URI::Heuristic 5.15
+      URI::IRI 5.15
+      URI::QueryParam 5.15
+      URI::Split 5.15
+      URI::URL 5.15
+      URI::WithBase 5.15
+      URI::data 5.15
+      URI::file 5.15
+      URI::file::Base 5.15
+      URI::file::FAT 5.15
+      URI::file::Mac 5.15
+      URI::file::OS2 5.15
+      URI::file::QNX 5.15
+      URI::file::Unix 5.15
+      URI::file::Win32 5.15
+      URI::ftp 5.15
+      URI::gopher 5.15
+      URI::http 5.15
+      URI::https 5.15
+      URI::ldap 5.15
+      URI::ldapi 5.15
+      URI::ldaps 5.15
+      URI::mailto 5.15
+      URI::mms 5.15
+      URI::news 5.15
+      URI::nntp 5.15
+      URI::nntps 5.15
+      URI::pop 5.15
+      URI::rlogin 5.15
+      URI::rsync 5.15
+      URI::rtsp 5.15
+      URI::rtspu 5.15
+      URI::sftp 5.15
+      URI::sip 5.15
+      URI::sips 5.15
+      URI::snews 5.15
+      URI::ssh 5.15
+      URI::telnet 5.15
+      URI::tn3270 5.15
+      URI::urn 5.15
+      URI::urn::isbn 5.15
+      URI::urn::oid 5.15
     requirements:
       Carp 0
       Cwd 0

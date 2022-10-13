@@ -106,16 +106,16 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  HTML-Parser-3.78
-    pathname: O/OA/OALDERS/HTML-Parser-3.78.tar.gz
+  HTML-Parser-3.79
+    pathname: O/OA/OALDERS/HTML-Parser-3.79.tar.gz
     provides:
-      HTML::Entities 3.78
-      HTML::Filter 3.78
-      HTML::HeadParser 3.78
-      HTML::LinkExtor 3.78
-      HTML::Parser 3.78
-      HTML::PullParser 3.78
-      HTML::TokeParser 3.78
+      HTML::Entities 3.79
+      HTML::Filter 3.79
+      HTML::HeadParser 3.79
+      HTML::LinkExtor 3.79
+      HTML::Parser 3.79
+      HTML::PullParser 3.79
+      HTML::TokeParser 3.79
     requirements:
       Carp 0
       Exporter 0
@@ -160,21 +160,22 @@ DISTRIBUTIONS
       Time::Zone 0
       perl 5.006002
       strict 0
-  HTTP-Message-6.39
-    pathname: S/SI/SIMBABQUE/HTTP-Message-6.39.tar.gz
+  HTTP-Message-6.41
+    pathname: O/OA/OALDERS/HTTP-Message-6.41.tar.gz
     provides:
-      HTTP::Config 6.39
-      HTTP::Headers 6.39
-      HTTP::Headers::Auth 6.39
-      HTTP::Headers::ETag 6.39
-      HTTP::Headers::Util 6.39
-      HTTP::Message 6.39
-      HTTP::Request 6.39
-      HTTP::Request::Common 6.39
-      HTTP::Response 6.39
-      HTTP::Status 6.39
+      HTTP::Config 6.41
+      HTTP::Headers 6.41
+      HTTP::Headers::Auth 6.41
+      HTTP::Headers::ETag 6.41
+      HTTP::Headers::Util 6.41
+      HTTP::Message 6.41
+      HTTP::Request 6.41
+      HTTP::Request::Common 6.41
+      HTTP::Response 6.41
+      HTTP::Status 6.41
     requirements:
       Carp 0
+      Compress::Raw::Bzip2 0
       Compress::Raw::Zlib 0
       Encode 3.01
       Encode::Locale 1
@@ -458,53 +459,53 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       common::sense 0
-  URI-5.15
-    pathname: O/OA/OALDERS/URI-5.15.tar.gz
+  URI-5.16
+    pathname: O/OA/OALDERS/URI-5.16.tar.gz
     provides:
-      URI 5.15
-      URI::Escape 5.15
-      URI::Heuristic 5.15
-      URI::IRI 5.15
-      URI::QueryParam 5.15
-      URI::Split 5.15
-      URI::URL 5.15
-      URI::WithBase 5.15
-      URI::data 5.15
-      URI::file 5.15
-      URI::file::Base 5.15
-      URI::file::FAT 5.15
-      URI::file::Mac 5.15
-      URI::file::OS2 5.15
-      URI::file::QNX 5.15
-      URI::file::Unix 5.15
-      URI::file::Win32 5.15
-      URI::ftp 5.15
-      URI::gopher 5.15
-      URI::http 5.15
-      URI::https 5.15
-      URI::ldap 5.15
-      URI::ldapi 5.15
-      URI::ldaps 5.15
-      URI::mailto 5.15
-      URI::mms 5.15
-      URI::news 5.15
-      URI::nntp 5.15
-      URI::nntps 5.15
-      URI::pop 5.15
-      URI::rlogin 5.15
-      URI::rsync 5.15
-      URI::rtsp 5.15
-      URI::rtspu 5.15
-      URI::sftp 5.15
-      URI::sip 5.15
-      URI::sips 5.15
-      URI::snews 5.15
-      URI::ssh 5.15
-      URI::telnet 5.15
-      URI::tn3270 5.15
-      URI::urn 5.15
-      URI::urn::isbn 5.15
-      URI::urn::oid 5.15
+      URI 5.16
+      URI::Escape 5.16
+      URI::Heuristic 5.16
+      URI::IRI 5.16
+      URI::QueryParam 5.16
+      URI::Split 5.16
+      URI::URL 5.16
+      URI::WithBase 5.16
+      URI::data 5.16
+      URI::file 5.16
+      URI::file::Base 5.16
+      URI::file::FAT 5.16
+      URI::file::Mac 5.16
+      URI::file::OS2 5.16
+      URI::file::QNX 5.16
+      URI::file::Unix 5.16
+      URI::file::Win32 5.16
+      URI::ftp 5.16
+      URI::gopher 5.16
+      URI::http 5.16
+      URI::https 5.16
+      URI::ldap 5.16
+      URI::ldapi 5.16
+      URI::ldaps 5.16
+      URI::mailto 5.16
+      URI::mms 5.16
+      URI::news 5.16
+      URI::nntp 5.16
+      URI::nntps 5.16
+      URI::pop 5.16
+      URI::rlogin 5.16
+      URI::rsync 5.16
+      URI::rtsp 5.16
+      URI::rtspu 5.16
+      URI::sftp 5.16
+      URI::sip 5.16
+      URI::sips 5.16
+      URI::snews 5.16
+      URI::ssh 5.16
+      URI::telnet 5.16
+      URI::tn3270 5.16
+      URI::urn 5.16
+      URI::urn::isbn 5.16
+      URI::urn::oid 5.16
     requirements:
       Carp 0
       Cwd 0

@@ -9,6 +9,7 @@ on:
       - "action.yml"
       - ".prettierrc.json"
       - "tsconfig.json"
+      - "scripts/lib/Actions/**"
   push:
     branches:
       - "main"

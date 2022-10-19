@@ -178,7 +178,7 @@ jobs:
           C:\strawberry\perl\site\bin
           C:\strawberry\perl\bin
           END_OF_PATH
-          perl -e 'print "version::$^V\n"' >> "$GITHUB_OUTPUT"
+          perl -e 'print "version=$^V\n"' >> "$GITHUB_OUTPUT"
       - name: Host perl -V
         run: perl -V
       - name: gcc --version

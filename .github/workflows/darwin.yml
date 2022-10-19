@@ -27,7 +27,7 @@ jobs:
       - id: perl
         name: check pre-installed perl version
         run: |
-          perl -e 'print "::set-output name=version::$^V"'
+          perl -e 'print "version=$^V\n"' >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
         with:
@@ -48,9 +48,9 @@ jobs:
         name: list available perl versions
         run: |
           if [ -n "$PERL_VERSIONS" ]; then
-            echo "::set-output name=matrix::$(printenv PERL_VERSIONS | jq -c '{perl: .}')"
+            echo "matrix=$(printenv PERL_VERSIONS | jq -c '{perl: .}')" >> "$GITHUB_OUTPUT"
           else
-            echo "::set-output name=matrix::$(<versions/darwin.json jq -c '{perl: .}')"
+            echo "matrix=$(<versions/darwin.json jq -c '{perl: .}')" >> "$GITHUB_OUTPUT"
           fi
         env:
           PERL_VERSIONS: ${{ github.event.inputs.perl-versions }}
@@ -72,7 +72,7 @@ jobs:
         name: setup host perl
         run: |
           perl -MConfig -E 'say "$Config{bin}"' >> "$GITHUB_PATH"
-          perl -e 'print "::set-output name=version::$^V"'
+          perl -e 'print "version=$^V\n"' >> "$GITHUB_OUTPUT"
       - name: Host perl -V
         run: perl -V
       - name: gcc --version
@@ -123,7 +123,7 @@ jobs:
         run: |
           perl -MConfig -E 'say "$Config{bin}"' >> "$GITHUB_PATH"
           # shellcheck disable=SC2016
-          perl -e 'print "::set-output name=version::$^V"'
+          perl -e 'print "version=$^V\n"' >> "$GITHUB_OUTPUT"
       - name: Host perl -V
         run: perl -V
       - name: gcc --version

@@ -27,7 +27,7 @@ jobs:
       - id: perl
         name: check pre-installed perl version
         run: |
-          perl -e 'print "::set-output name=version::$^V"'
+          perl -e 'print "version=$^V"' >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
         with:
@@ -46,9 +46,9 @@ jobs:
         name: list available perl versions
         run: |
           if [ -n "$PERL_VERSIONS" ]; then
-            echo "::set-output name=matrix::$(printenv PERL_VERSIONS | jq -c '{perl: .}')"
+            echo "matrix=$(printenv PERL_VERSIONS | jq -c '{perl: .}')" >> "$GITHUB_OUTPUT"
           else
-            echo "::set-output name=matrix::$(<versions/win32.json jq -c '{perl: .}')"
+            echo "matrix=$(<versions/win32.json jq -c '{perl: .}')" >> "$GITHUB_OUTPUT"
           fi
         env:
           PERL_VERSIONS: ${{ github.event.inputs.perl-versions }}
@@ -83,7 +83,7 @@ jobs:
           C:\strawberry\perl\site\bin
           C:\strawberry\perl\bin
           END_OF_PATH
-          perl -e 'print "::set-output name=version::$^V"'
+          perl -e 'print "name=version$^V\n"' >> "$GITHUB_OUTPUT"
       - name: Host perl -V
         run: perl -V
       - name: gcc --version
@@ -178,7 +178,7 @@ jobs:
           C:\strawberry\perl\site\bin
           C:\strawberry\perl\bin
           END_OF_PATH
-          perl -e 'print "::set-output name=version::$^V"'
+          perl -e 'print "version=$^V\n"' >> "$GITHUB_OUTPUT"
       - name: Host perl -V
         run: perl -V
       - name: gcc --version

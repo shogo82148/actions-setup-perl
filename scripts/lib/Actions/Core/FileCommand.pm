@@ -8,7 +8,6 @@ use strict;
 use IO::Handle;
 use Encode qw(encode_utf8);
 use Actions::Core::Utils qw(to_command_value);
-use if ($^O eq 'MSWin32' || $^O eq 'cygwin'), "Win32::API";
 
 use Exporter 'import';
 our @EXPORT_OK = qw(issue_command prepare_key_value_message);

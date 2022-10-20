@@ -5,6 +5,7 @@ use utf8;
 use warnings;
 use strict;
 use JSON::PP qw(encode_json);
+use if ($^O eq 'MSWin32' || $^O eq 'cygwin'), "Win32::API";
 
 use Exporter 'import';
 our @EXPORT_OK = qw(to_command_value prepare_key_value_message);

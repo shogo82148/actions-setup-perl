@@ -556,11 +556,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20220920
-    pathname: B/BI/BINGOS/Module-CoreList-5.20220920.tar.gz
+  Module-CoreList-5.20221020
+    pathname: B/BI/BINGOS/Module-CoreList-5.20221020.tar.gz
     provides:
-      Module::CoreList 5.20220920
-      Module::CoreList::Utils 5.20220920
+      Module::CoreList 5.20221020
+      Module::CoreList::Utils 5.20221020
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0
@@ -621,11 +621,11 @@ DISTRIBUTIONS
       JSON::PP 2.00
       Safe 0
       version 0.83
-  Path-Tiny-0.128
-    pathname: D/DA/DAGOLDEN/Path-Tiny-0.128.tar.gz
+  Path-Tiny-0.130
+    pathname: D/DA/DAGOLDEN/Path-Tiny-0.130.tar.gz
     provides:
-      Path::Tiny 0.128
-      Path::Tiny::Error 0.128
+      Path::Tiny 0.130
+      Path::Tiny::Error 0.130
     requirements:
       Carp 0
       Cwd 0

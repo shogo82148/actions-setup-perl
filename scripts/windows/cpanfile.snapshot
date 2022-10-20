@@ -106,16 +106,16 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  HTML-Parser-3.78
-    pathname: O/OA/OALDERS/HTML-Parser-3.78.tar.gz
+  HTML-Parser-3.79
+    pathname: O/OA/OALDERS/HTML-Parser-3.79.tar.gz
     provides:
-      HTML::Entities 3.78
-      HTML::Filter 3.78
-      HTML::HeadParser 3.78
-      HTML::LinkExtor 3.78
-      HTML::Parser 3.78
-      HTML::PullParser 3.78
-      HTML::TokeParser 3.78
+      HTML::Entities 3.79
+      HTML::Filter 3.79
+      HTML::HeadParser 3.79
+      HTML::LinkExtor 3.79
+      HTML::Parser 3.79
+      HTML::PullParser 3.79
+      HTML::TokeParser 3.79
     requirements:
       Carp 0
       Exporter 0
@@ -160,21 +160,22 @@ DISTRIBUTIONS
       Time::Zone 0
       perl 5.006002
       strict 0
-  HTTP-Message-6.37
-    pathname: O/OA/OALDERS/HTTP-Message-6.37.tar.gz
+  HTTP-Message-6.42
+    pathname: O/OA/OALDERS/HTTP-Message-6.42.tar.gz
     provides:
-      HTTP::Config 6.37
-      HTTP::Headers 6.37
-      HTTP::Headers::Auth 6.37
-      HTTP::Headers::ETag 6.37
-      HTTP::Headers::Util 6.37
-      HTTP::Message 6.37
-      HTTP::Request 6.37
-      HTTP::Request::Common 6.37
-      HTTP::Response 6.37
-      HTTP::Status 6.37
+      HTTP::Config 6.42
+      HTTP::Headers 6.42
+      HTTP::Headers::Auth 6.42
+      HTTP::Headers::ETag 6.42
+      HTTP::Headers::Util 6.42
+      HTTP::Message 6.42
+      HTTP::Request 6.42
+      HTTP::Request::Common 6.42
+      HTTP::Response 6.42
+      HTTP::Status 6.42
     requirements:
       Carp 0
+      Compress::Raw::Bzip2 0
       Compress::Raw::Zlib 0
       Encode 3.01
       Encode::Locale 1
@@ -194,7 +195,7 @@ DISTRIBUTIONS
       MIME::Base64 2.1
       MIME::QuotedPrint 0
       URI 1.10
-      base 0
+      parent 0
       perl 5.008001
       strict 0
       warnings 0
@@ -232,17 +233,17 @@ DISTRIBUTIONS
       Exporter 5.57
       ExtUtils::MakeMaker 0
       perl 5.008
-  IO-Socket-SSL-2.074
-    pathname: S/SU/SULLR/IO-Socket-SSL-2.074.tar.gz
+  IO-Socket-SSL-2.075
+    pathname: S/SU/SULLR/IO-Socket-SSL-2.075.tar.gz
     provides:
-      IO::Socket::SSL 2.074
+      IO::Socket::SSL 2.075
       IO::Socket::SSL::Intercept 2.056
-      IO::Socket::SSL::OCSP_Cache 2.074
-      IO::Socket::SSL::OCSP_Resolver 2.074
+      IO::Socket::SSL::OCSP_Cache 2.075
+      IO::Socket::SSL::OCSP_Resolver 2.075
       IO::Socket::SSL::PublicSuffix undef
-      IO::Socket::SSL::SSL_Context 2.074
-      IO::Socket::SSL::SSL_HANDLE 2.074
-      IO::Socket::SSL::Session_Cache 2.074
+      IO::Socket::SSL::SSL_Context 2.075
+      IO::Socket::SSL::SSL_HANDLE 2.075
+      IO::Socket::SSL::Session_Cache 2.075
       IO::Socket::SSL::Utils 2.015
     requirements:
       ExtUtils::MakeMaker 0
@@ -259,11 +260,11 @@ DISTRIBUTIONS
       Time::HiRes 0
       Win32 0
       Win32::ShellQuote 0
-  JSON-4.09
-    pathname: I/IS/ISHIGAKI/JSON-4.09.tar.gz
+  JSON-4.10
+    pathname: I/IS/ISHIGAKI/JSON-4.10.tar.gz
     provides:
-      JSON 4.09
-      JSON::Backend::PP 4.09
+      JSON 4.10
+      JSON::Backend::PP 4.10
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
@@ -458,53 +459,53 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       common::sense 0
-  URI-5.12
-    pathname: O/OA/OALDERS/URI-5.12.tar.gz
+  URI-5.16
+    pathname: O/OA/OALDERS/URI-5.16.tar.gz
     provides:
-      URI 5.12
-      URI::Escape 5.12
-      URI::Heuristic 5.12
-      URI::IRI 5.12
-      URI::QueryParam 5.12
-      URI::Split 5.12
-      URI::URL 5.12
-      URI::WithBase 5.12
-      URI::data 5.12
-      URI::file 5.12
-      URI::file::Base 5.12
-      URI::file::FAT 5.12
-      URI::file::Mac 5.12
-      URI::file::OS2 5.12
-      URI::file::QNX 5.12
-      URI::file::Unix 5.12
-      URI::file::Win32 5.12
-      URI::ftp 5.12
-      URI::gopher 5.12
-      URI::http 5.12
-      URI::https 5.12
-      URI::ldap 5.12
-      URI::ldapi 5.12
-      URI::ldaps 5.12
-      URI::mailto 5.12
-      URI::mms 5.12
-      URI::news 5.12
-      URI::nntp 5.12
-      URI::nntps 5.12
-      URI::pop 5.12
-      URI::rlogin 5.12
-      URI::rsync 5.12
-      URI::rtsp 5.12
-      URI::rtspu 5.12
-      URI::sftp 5.12
-      URI::sip 5.12
-      URI::sips 5.12
-      URI::snews 5.12
-      URI::ssh 5.12
-      URI::telnet 5.12
-      URI::tn3270 5.12
-      URI::urn 5.12
-      URI::urn::isbn 5.12
-      URI::urn::oid 5.12
+      URI 5.16
+      URI::Escape 5.16
+      URI::Heuristic 5.16
+      URI::IRI 5.16
+      URI::QueryParam 5.16
+      URI::Split 5.16
+      URI::URL 5.16
+      URI::WithBase 5.16
+      URI::data 5.16
+      URI::file 5.16
+      URI::file::Base 5.16
+      URI::file::FAT 5.16
+      URI::file::Mac 5.16
+      URI::file::OS2 5.16
+      URI::file::QNX 5.16
+      URI::file::Unix 5.16
+      URI::file::Win32 5.16
+      URI::ftp 5.16
+      URI::gopher 5.16
+      URI::http 5.16
+      URI::https 5.16
+      URI::ldap 5.16
+      URI::ldapi 5.16
+      URI::ldaps 5.16
+      URI::mailto 5.16
+      URI::mms 5.16
+      URI::news 5.16
+      URI::nntp 5.16
+      URI::nntps 5.16
+      URI::pop 5.16
+      URI::rlogin 5.16
+      URI::rsync 5.16
+      URI::rtsp 5.16
+      URI::rtspu 5.16
+      URI::sftp 5.16
+      URI::sip 5.16
+      URI::sips 5.16
+      URI::snews 5.16
+      URI::ssh 5.16
+      URI::telnet 5.16
+      URI::tn3270 5.16
+      URI::urn 5.16
+      URI::urn::isbn 5.16
+      URI::urn::oid 5.16
     requirements:
       Carp 0
       Cwd 0

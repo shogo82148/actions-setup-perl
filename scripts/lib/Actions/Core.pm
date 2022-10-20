@@ -24,6 +24,8 @@ our @EXPORT = qw(
     start_group
     end_group
     group
+    save_state
+    get_state
     perl_versions
 );
 
@@ -33,18 +35,22 @@ use JSON::PP qw(decode_json);
 use File::Basename qw(dirname);
 use File::Spec;
 use Carp qw(croak carp);
-use Actions::Core::Utils qw(to_command_value);
+use Actions::Core::Utils qw(to_command_value prepare_key_value_message);
 use Actions::Core::Command qw(issue_command issue);
 use Actions::Core::FileCommand qw();
 
 sub export_variable {
     my ($name, $val) = @_;
-    my $coverted_val = to_command_value($val);
 
+    my $coverted_val = to_command_value($val);
     $ENV{$name} = $coverted_val;
-    my $delimiter = '_GitHubActionsFileCommandDelimeter_';
-    my $value = "$name<<$delimiter\n$coverted_val\n$delimiter";
-    Actions::Core::FileCommand::issue_command("ENV", $value);
+
+    if ($ENV{GITHUB_ENV}) {
+        my $value = prepare_key_value_message($name, $val);
+        Actions::Core::FileCommand::issue_command("ENV", $value);
+    } else {
+        issue_command('set-env', {name => $name}, $coverted_val);
+    }
 }
 
 sub add_secret {
@@ -58,8 +64,12 @@ sub add_path {
     if ($^O eq "MSWin32") {
         $del = ";";
     }
+    if ($ENV{GITHUB_PATH}) {
+        Actions::Core::FileCommand::issue_command("PATH", $path);
+    } else {
+        issue_command('add-path', {}, $path);
+    }
     $ENV{PATH} = $path . $del . $ENV{PATH};
-    Actions::Core::FileCommand::issue_command("PATH", $path);
 }
 
 sub get_input {
@@ -87,7 +97,14 @@ sub get_boolean_input {
 
 sub set_output {
     my ($name, $value) = @_;
-    issue_command('set-output', { name => $name }, $value);
+    if ($ENV{GITHUB_OUTPUT}) {
+        my $msg = prepare_key_value_message($name, $value);
+        Actions::Core::FileCommand::issue_command("OUTPUT", $msg);
+    } else {
+        print STDOUT "\n";
+        STDOUT->flush();
+        issue_command('set-output', { name => $name }, $value);
+    }
 }
 
 sub set_command_echo {
@@ -148,7 +165,7 @@ sub notice {
 
 sub info {
     my ($message) = @_;
-    print STDOUT "$message\n";
+    print STDOUT decode_utf8("$message\n");
     STDOUT->flush();
 }
 
@@ -180,6 +197,23 @@ sub group {
     end_group();
     die $err if $failed;
     return $wantarray ? @ret : $ret[0];
+}
+
+sub save_state {
+    my ($name, $value) = @_;
+    if ($ENV{GITHUB_STATE}) {
+        my $msg = prepare_key_value_message($name, $value);
+        Actions::Core::FileCommand::issue_command("STATE", $msg);
+    } else {
+        print STDOUT "\n";
+        STDOUT->flush();
+        issue_command('set-state', { name => $name }, $value);
+    }
+}
+
+sub get_state {
+    my $name = shift;
+    return ${"STATE_$name"} || "";
 }
 
 sub _perl_versions_default {

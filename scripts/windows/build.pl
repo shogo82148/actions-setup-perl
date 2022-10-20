@@ -170,7 +170,7 @@ sub run {
         cpan_install('https://cpan.metacpan.org/authors/id/J/JD/JDB/Win32-0.59.tar.gz', 'Win32', '5.6.0', '5.8.3');
 
         # JSON
-        cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-4.08.tar.gz', 'JSON', '5.5.3');
+        cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-4.10.tar.gz', 'JSON', '5.5.3');
 
         # Cpanel::JSON::XS
         cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.32.tar.gz', 'Cpanel::JSON::XS', '5.6.2');
@@ -190,7 +190,7 @@ sub run {
         cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/File-Temp-0.2311.tar.gz', 'File::Temp', '5.6.0', '5.6.1');
         cpan_install('https://cpan.metacpan.org/authors/id/M/MA/MAKAMAKA/JSON-PP-Compat5006-1.09.tar.gz', 'JSON::PP::Compat5006', '5.6.0', '5.8.0');
         # JSON::PP
-        cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-PP-4.11.tar.gz', 'JSON::PP', '5.6.0');
+        cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-PP-4.12.tar.gz', 'JSON::PP', '5.6.0');
 
         # JSON::MaybeXS
         cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004003.tar.gz', 'JSON::MaybeXS', '5.6.0');
@@ -202,7 +202,7 @@ sub run {
         cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/YAML-Tiny-1.73.tar.gz', 'YAML::Tiny', '5.8.1');
 
         # YAML::XS
-        cpan_install('https://cpan.metacpan.org/authors/id/T/TI/TINITA/YAML-LibYAML-0.83.tar.gz', 'YAML::XS', '5.8.1');
+        cpan_install('https://cpan.metacpan.org/authors/id/T/TI/TINITA/YAML-LibYAML-0.84.tar.gz', 'YAML::XS', '5.8.1');
 
         ### SSL/TLS
 
@@ -218,7 +218,7 @@ sub run {
         # NOTE:
         # IO::Socket::SSL supports v5.8.1, but it doesn't work on Windows
         # https://github.com/shogo82148/actions-setup-perl/pull/480#issuecomment-735391122
-        cpan_install('https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-2.074.tar.gz', 'IO::Socket::SSL', '5.8.1');
+        cpan_install('https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-2.075.tar.gz', 'IO::Socket::SSL', '5.8.1');
 
         # Test::Harness
         cpan_install('https://cpan.metacpan.org/authors/id/L/LE/LEONT/Test-Harness-3.44.tar.gz', 'Test::Harness', '5.6.0', '5.8.3');

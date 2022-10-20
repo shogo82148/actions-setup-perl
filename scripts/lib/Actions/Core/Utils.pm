@@ -34,7 +34,7 @@ sub prepare_key_value_message {
     return "$key<<$delimiter\n$convertedValue\n$delimiter";
 }
 
-INIT {
+BEGIN {
     # use Net::SSLey
     eval {
         require "Net/SSLeay.pm";

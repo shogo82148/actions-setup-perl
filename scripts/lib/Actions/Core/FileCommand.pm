@@ -10,7 +10,7 @@ use Encode qw(encode_utf8);
 use Actions::Core::Utils qw(to_command_value);
 
 use Exporter 'import';
-our @EXPORT_OK = qw(issue_command);
+our @EXPORT_OK = qw(issue_command prepare_key_value_message);
 
 sub issue_command {
     my ($command, $message) = @_;
@@ -18,7 +18,9 @@ sub issue_command {
         or die "Unable to find environment variable for file command ${command}";
 
     open my $fh, ">>", $filepath or die "failed to open $filepath: $!";
-    my $msg = to_command_value($message);
+    my $msg = encode_utf8(to_command_value($message));
     print $fh "$msg\n";
     close($fh);
 }
+
+1;

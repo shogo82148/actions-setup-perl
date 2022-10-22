@@ -160,19 +160,19 @@ DISTRIBUTIONS
       Time::Zone 0
       perl 5.006002
       strict 0
-  HTTP-Message-6.42
-    pathname: O/OA/OALDERS/HTTP-Message-6.42.tar.gz
+  HTTP-Message-6.43
+    pathname: S/SI/SIMBABQUE/HTTP-Message-6.43.tar.gz
     provides:
-      HTTP::Config 6.42
-      HTTP::Headers 6.42
-      HTTP::Headers::Auth 6.42
-      HTTP::Headers::ETag 6.42
-      HTTP::Headers::Util 6.42
-      HTTP::Message 6.42
-      HTTP::Request 6.42
-      HTTP::Request::Common 6.42
-      HTTP::Response 6.42
-      HTTP::Status 6.42
+      HTTP::Config 6.43
+      HTTP::Headers 6.43
+      HTTP::Headers::Auth 6.43
+      HTTP::Headers::ETag 6.43
+      HTTP::Headers::Util 6.43
+      HTTP::Message 6.43
+      HTTP::Request 6.43
+      HTTP::Request::Common 6.43
+      HTTP::Response 6.43
+      HTTP::Status 6.43
     requirements:
       Carp 0
       Compress::Raw::Bzip2 0
@@ -187,8 +187,6 @@ DISTRIBUTIONS
       IO::Compress::Deflate 0
       IO::Compress::Gzip 0
       IO::HTML 0
-      IO::Uncompress::Bunzip2 2.021
-      IO::Uncompress::Gunzip 0
       IO::Uncompress::Inflate 0
       IO::Uncompress::RawInflate 0
       LWP::MediaTypes 6

@@ -16,6 +16,12 @@ DISTRIBUTIONS
       Canary::Stability 2013
     requirements:
       ExtUtils::MakeMaker 0
+  Clone-0.46
+    pathname: G/GA/GARU/Clone-0.46.tar.gz
+    provides:
+      Clone 0.46
+    requirements:
+      ExtUtils::MakeMaker 0
   Devel-PatchPerl-2.08
     pathname: B/BI/BINGOS/Devel-PatchPerl-2.08.tar.gz
     provides:
@@ -160,23 +166,24 @@ DISTRIBUTIONS
       Time::Zone 0
       perl 5.006002
       strict 0
-  HTTP-Message-6.43
-    pathname: S/SI/SIMBABQUE/HTTP-Message-6.43.tar.gz
+  HTTP-Message-6.44
+    pathname: O/OA/OALDERS/HTTP-Message-6.44.tar.gz
     provides:
-      HTTP::Config 6.43
-      HTTP::Headers 6.43
-      HTTP::Headers::Auth 6.43
-      HTTP::Headers::ETag 6.43
-      HTTP::Headers::Util 6.43
-      HTTP::Message 6.43
-      HTTP::Request 6.43
-      HTTP::Request::Common 6.43
-      HTTP::Response 6.43
-      HTTP::Status 6.43
+      HTTP::Config 6.44
+      HTTP::Headers 6.44
+      HTTP::Headers::Auth 6.44
+      HTTP::Headers::ETag 6.44
+      HTTP::Headers::Util 6.44
+      HTTP::Message 6.44
+      HTTP::Request 6.44
+      HTTP::Request::Common 6.44
+      HTTP::Response 6.44
+      HTTP::Status 6.44
     requirements:
       Carp 0
+      Clone 0.46
       Compress::Raw::Bzip2 0
-      Compress::Raw::Zlib 0
+      Compress::Raw::Zlib 2.062
       Encode 3.01
       Encode::Locale 1
       Exporter 5.57

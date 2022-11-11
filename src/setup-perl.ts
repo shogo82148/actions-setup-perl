@@ -47,8 +47,8 @@ async function run() {
       perlHash = await digestOfPerlVersion(result.path);
       core.setOutput("perl-hash", perlHash);
 
-      const matchersPath = path.join(__dirname, "..", ".github");
-      console.log(`##[add-matcher]${path.join(matchersPath, "perl.json")}`);
+      const matchersPath = path.join(__dirname, "..", "scripts");
+      console.log(`::add-matcher::${path.join(matchersPath, "perl.json")}`);
 
       // for pre-installed scripts
       core.addPath(path.join(__dirname, "..", "bin"));

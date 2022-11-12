@@ -1,801 +1,6 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 5017:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-// install CPAN modules and caching
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.install = void 0;
-const core = __importStar(__nccwpck_require__(2186));
-const exec = __importStar(__nccwpck_require__(1514));
-const cache = __importStar(__nccwpck_require__(7799));
-const crypto = __importStar(__nccwpck_require__(6113));
-const fs = __importStar(__nccwpck_require__(7147));
-const stream = __importStar(__nccwpck_require__(2781));
-const util = __importStar(__nccwpck_require__(3837));
-const path = __importStar(__nccwpck_require__(1017));
-async function install(opt) {
-    let installer;
-    switch (opt.install_modules_with || "cpanm") {
-        case "cpanm":
-            installer = installWithCpanm;
-            break;
-        case "cpm":
-            installer = installWithCpm;
-            break;
-        case "carton":
-            installer = installWithCarton;
-            break;
-        default:
-            core.error(`unknown installer: ${opt.install_modules_with}`);
-            return;
-    }
-    const workingDirectory = path.join(process.cwd(), opt.working_directory || ".");
-    const cachePath = path.join(workingDirectory, "local");
-    const paths = [cachePath];
-    const baseKey = await cacheKey(opt);
-    const cpanfileKey = await hashFiles(opt, path.join(workingDirectory, "cpanfile"), path.join(workingDirectory, "cpanfile.snapshot"));
-    const installKey = hashString(opt.install_modules || "");
-    const key = `${baseKey}-${cpanfileKey}-${installKey}`;
-    const restoreKeys = [`${baseKey}-${cpanfileKey}-`, `${baseKey}-`];
-    // restore cache
-    let cachedKey = undefined;
-    if (opt.enable_modules_cache) {
-        try {
-            cachedKey = await cache.restoreCache(paths, key, restoreKeys);
-        }
-        catch (error) {
-            if (error instanceof Error) {
-                if (error.name === cache.ValidationError.name) {
-                }
-                else {
-                    core.info(`[warning] There was an error restoring the cache ${error.message}`);
-                }
-            }
-            else {
-                core.info(`[warning] There was an error restoring the cache ${error}`);
-            }
-        }
-        if (cachedKey) {
-            core.info(`Found cache for key: ${cachedKey}`);
-        }
-        else {
-            core.info(`cache not found for input keys: ${key}, ${restoreKeys.join(", ")}`);
-        }
-    }
-    // install
-    await installer(opt);
-    // configure environment values
-    core.addPath(path.join(cachePath, "bin"));
-    core.exportVariable("PERL5LIB", path.join(cachePath, "lib", "perl5") + path.delimiter + process.env["PERL5LIB"]);
-    if (opt.enable_modules_cache) {
-        // save cache
-        if (cachedKey !== key) {
-            core.info(`saving cache for ${key}.`);
-            try {
-                await cache.saveCache(paths, key);
-            }
-            catch (error) {
-                if (error instanceof Error) {
-                    if (error.name === cache.ValidationError.name) {
-                        throw error;
-                    }
-                    else if (error.name === cache.ReserveCacheError.name) {
-                        core.info(error.message);
-                    }
-                    else {
-                        core.info(`[warning]${error.message}`);
-                    }
-                }
-                else {
-                    core.info(`[warning]${error}`);
-                }
-            }
-        }
-        else {
-            core.info(`cache for ${key} already exists, skip saving.`);
-        }
-    }
-    return;
-}
-exports.install = install;
-async function cacheKey(opt) {
-    let key = "setup-perl-module-cache-v1-";
-    key += opt.perlHash;
-    key += "-" + (opt.install_modules_with || "unknown");
-    return key;
-}
-// see https://github.com/actions/runner/blob/master/src/Misc/expressionFunc/hashFiles/src/hashFiles.ts
-async function hashFiles(opt, ...files) {
-    const result = crypto.createHash("sha256");
-    result.update(opt.install_modules_args || "");
-    for (const file of files) {
-        try {
-            const hash = crypto.createHash("sha256");
-            const pipeline = util.promisify(stream.pipeline);
-            await pipeline(fs.createReadStream(file), hash);
-            result.write(hash.digest());
-        }
-        catch (err) {
-            // skip files that doesn't exist.
-            if (err?.code !== "ENOENT") {
-                throw err;
-            }
-        }
-    }
-    result.end();
-    return result.digest("hex");
-}
-function hashString(s) {
-    const hash = crypto.createHash("sha256");
-    hash.update(s, "utf-8");
-    hash.end();
-    return hash.digest("hex");
-}
-async function installWithCpanm(opt) {
-    const perl = path.join(opt.toolPath, "bin", "perl");
-    const cpanm = path.join(__dirname, "..", "bin", "cpanm");
-    const workingDirectory = path.join(process.cwd(), opt.working_directory || ".");
-    const execOpt = {
-        cwd: workingDirectory,
-    };
-    const args = [cpanm, "--local-lib-contained", "local", "--notest"];
-    if (core.isDebug()) {
-        args.push("--verbose");
-    }
-    args.push(...splitArgs(opt.install_modules_args));
-    if (opt.install_modules_with) {
-        if (await exists(path.join(workingDirectory, "cpanfile"))) {
-            await exec.exec(perl, [...args, "--installdeps", "."], execOpt);
-        }
-    }
-    const modules = splitModules(opt.install_modules);
-    if (modules.length > 0) {
-        await exec.exec(perl, [...args, ...modules], execOpt);
-    }
-}
-async function installWithCpm(opt) {
-    const perl = path.join(opt.toolPath, "bin", "perl");
-    const cpm = path.join(__dirname, "..", "bin", "cpm");
-    const workingDirectory = path.join(process.cwd(), opt.working_directory || ".");
-    const execOpt = {
-        cwd: workingDirectory,
-    };
-    const args = [cpm, "install", "--show-build-log-on-failure"];
-    if (core.isDebug()) {
-        args.push("--verbose");
-    }
-    args.push(...splitArgs(opt.install_modules_args));
-    if ((await exists(path.join(workingDirectory, "cpanfile"))) ||
-        (await exists(path.join(workingDirectory, "cpanfile.snapshot")))) {
-        await exec.exec(perl, [...args], execOpt);
-    }
-    const modules = splitModules(opt.install_modules);
-    if (modules.length > 0) {
-        await exec.exec(perl, [...args, ...modules], execOpt);
-    }
-}
-async function installWithCarton(opt) {
-    const perl = path.join(opt.toolPath, "bin", "perl");
-    const carton = path.join(__dirname, "..", "bin", "carton");
-    const workingDirectory = path.join(process.cwd(), opt.working_directory || ".");
-    const execOpt = {
-        cwd: workingDirectory,
-    };
-    const args = [carton, "install"];
-    args.push(...splitArgs(opt.install_modules_args));
-    if ((await exists(path.join(workingDirectory, "cpanfile"))) ||
-        (await exists(path.join(workingDirectory, "cpanfile.snapshot")))) {
-        await exec.exec(perl, [...args], execOpt);
-    }
-    const modules = splitModules(opt.install_modules);
-    if (modules.length > 0) {
-        const cpanm = path.join(__dirname, "..", "bin", "cpanm");
-        const args = [cpanm, "--local-lib-contained", "local", "--notest"];
-        if (core.isDebug()) {
-            args.push("--verbose");
-        }
-        await exec.exec(perl, [...args, ...modules], execOpt);
-    }
-}
-async function exists(path) {
-    return new Promise((resolve, reject) => {
-        fs.stat(path, (err) => {
-            if (err) {
-                if (err.code === "ENOENT") {
-                    resolve(false);
-                }
-                else {
-                    reject(err);
-                }
-                return;
-            }
-            resolve(true);
-        });
-    });
-}
-function splitArgs(args) {
-    if (!args) {
-        return [];
-    }
-    args = args.trim();
-    if (args === "") {
-        return [];
-    }
-    return args.split(/\s+/);
-}
-function splitModules(modules) {
-    if (!modules) {
-        return [];
-    }
-    modules = modules.trim();
-    if (modules === "") {
-        return [];
-    }
-    return modules.split(/\s+/);
-}
-
-
-/***/ }),
-
-/***/ 1480:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getPerl = void 0;
-const core = __importStar(__nccwpck_require__(2186));
-const tc = __importStar(__nccwpck_require__(7784));
-const os = __importStar(__nccwpck_require__(2037));
-const promises_1 = __nccwpck_require__(3292);
-const path = __importStar(__nccwpck_require__(1017));
-const semver = __importStar(__nccwpck_require__(1383));
-const tcp = __importStar(__nccwpck_require__(6271));
-const osPlat = os.platform();
-const osArch = os.arch();
-async function readJSON(path) {
-    const data = await (0, promises_1.readFile)(path, "utf8");
-    return JSON.parse(data);
-}
-async function getAvailableVersions() {
-    const filename = path.join(__dirname, "..", "versions", `${osPlat}.json`);
-    return readJSON(filename);
-}
-async function determineVersion(version) {
-    const availableVersions = await getAvailableVersions();
-    // stable latest version
-    if (version === "latest") {
-        return availableVersions[0];
-    }
-    for (let v of availableVersions) {
-        if (semver.satisfies(v, version)) {
-            return v;
-        }
-    }
-    throw new Error("unable to get latest version");
-}
-async function getPerl(version, thread) {
-    const selected = await determineVersion(version);
-    // check cache
-    let toolPath;
-    toolPath = tcp.find("perl", selected);
-    if (!toolPath) {
-        // download, extract, cache
-        toolPath = await acquirePerl(selected, thread);
-        core.debug("Perl tool is cached under " + toolPath);
-    }
-    const bin = path.join(toolPath, "bin");
-    //
-    // prepend the tools path. instructs the agent to prepend for future tasks
-    //
-    core.addPath(bin);
-    return {
-        version: selected,
-        path: toolPath,
-    };
-}
-exports.getPerl = getPerl;
-async function acquirePerl(version, thread) {
-    //
-    // Download - a tool installer intimately knows how to get the tool (and construct urls)
-    //
-    const fileName = getFileName(version, thread);
-    const downloadUrl = await getDownloadUrl(fileName);
-    let downloadPath = null;
-    try {
-        downloadPath = await tc.downloadTool(downloadUrl);
-    }
-    catch (error) {
-        if (error instanceof Error) {
-            core.debug(error.message);
-        }
-        else {
-            core.debug(`${error}`);
-        }
-        throw new Error(`Failed to download version ${version}: ${error}`);
-    }
-    //
-    // Extract compressed archive
-    //
-    const extPath = downloadUrl.endsWith(".zip")
-        ? await tc.extractZip(downloadPath)
-        : await tc.extractTar(downloadPath, "", ["--use-compress-program", "zstd -d --long=30", "-x"]);
-    return await tcp.cacheDir(extPath, "perl", version + (thread ? "-thr" : ""));
-}
-function getFileName(version, thread) {
-    const suffix = thread ? "-multi-thread" : "";
-    const ext = osPlat === "win32" ? "zip" : "tar.zstd";
-    return `perl-${version}-${osPlat}-${osArch}${suffix}.${ext}`;
-}
-async function getDownloadUrl(filename) {
-    const pkg = path.join(__dirname, "..", "package.json");
-    const info = await readJSON(pkg);
-    const actionsVersion = info.version;
-    return `https://github.com/shogo82148/actions-setup-perl/releases/download/v${actionsVersion}/${filename}`;
-}
-
-
-/***/ }),
-
-/***/ 5613:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core = __importStar(__nccwpck_require__(2186));
-const exec = __importStar(__nccwpck_require__(1514));
-const installer = __importStar(__nccwpck_require__(1480));
-const path = __importStar(__nccwpck_require__(1017));
-const crypto = __importStar(__nccwpck_require__(6113));
-const strawberry = __importStar(__nccwpck_require__(3776));
-const utils = __importStar(__nccwpck_require__(918));
-const cpan = __importStar(__nccwpck_require__(5017));
-async function run() {
-    try {
-        const platform = process.platform;
-        let dist = core.getInput("distribution");
-        const multiThread = core.getInput("multi-thread");
-        const version = core.getInput("perl-version");
-        let result;
-        let perlHash;
-        await core.group("install perl", async () => {
-            let thread;
-            if (platform === "win32") {
-                thread = utils.parseBoolean(multiThread || "true");
-                if (dist === "strawberry" && !thread) {
-                    core.warning("non-thread Strawberry Perl is not provided.");
-                }
-            }
-            else {
-                if (dist === "strawberry") {
-                    core.warning("The strawberry distribution is not available on this platform. fallback to the default distribution.");
-                    dist = "default";
-                }
-                thread = utils.parseBoolean(multiThread || "false");
-            }
-            switch (dist) {
-                case "strawberry":
-                    result = await strawberry.getPerl(version);
-                    break;
-                case "default":
-                    result = await installer.getPerl(version, thread);
-                    break;
-                default:
-                    throw new Error(`unknown distribution: ${dist}`);
-            }
-            core.setOutput("perl-version", result.version);
-            perlHash = await digestOfPerlVersion(result.path);
-            core.setOutput("perl-hash", perlHash);
-            const matchersPath = path.join(__dirname, "..", ".github");
-            console.log(`##[add-matcher]${path.join(matchersPath, "perl.json")}`);
-            // for pre-installed scripts
-            core.addPath(path.join(__dirname, "..", "bin"));
-            // for pre-installed modules
-            core.exportVariable("PERL5LIB", path.join(__dirname, "..", "scripts", "lib"));
-        });
-        await core.group("install CPAN modules", async () => {
-            await cpan.install({
-                perlHash: perlHash,
-                toolPath: result.path,
-                install_modules_with: core.getInput("install-modules-with"),
-                install_modules_args: core.getInput("install-modules-args"),
-                install_modules: core.getInput("install-modules"),
-                enable_modules_cache: utils.parseBoolean(core.getInput("enable-modules-cache")),
-                working_directory: core.getInput("working-directory"),
-            });
-        });
-    }
-    catch (error) {
-        if (error instanceof Error) {
-            core.setFailed(error);
-        }
-        else {
-            core.setFailed(`${error}`);
-        }
-    }
-}
-// we use `perl -V` to the cache key.
-// it contains useful information to use as the cache key,
-// e.g. the platform, the version of perl, the compiler option for building perl
-async function digestOfPerlVersion(toolPath) {
-    const perl = path.join(toolPath, "bin", "perl");
-    const hash = crypto.createHash("sha256");
-    await exec.exec(perl, ["-V"], {
-        listeners: {
-            stdout: (data) => {
-                hash.update(data);
-            },
-        },
-        env: {},
-    });
-    hash.end();
-    return hash.digest("hex");
-}
-run();
-
-
-/***/ }),
-
-/***/ 3776:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getPerl = void 0;
-const core = __importStar(__nccwpck_require__(2186));
-const tc = __importStar(__nccwpck_require__(7784));
-const path = __importStar(__nccwpck_require__(1017));
-const semver = __importStar(__nccwpck_require__(1383));
-const fs = __importStar(__nccwpck_require__(7147));
-const tcp = __importStar(__nccwpck_require__(6271));
-// NOTE:
-// I don't know why, but 5.18.3 is missing.
-// {
-//   version: '5.18.3',
-//   path: 'strawberry-perl-5.18.3.1-64bit-portable.zip'
-// },
-// I don't know why, but 5.14.1 and 5.14.0 are missing.
-// {
-//   version: '5.14.1',
-//   path: 'strawberry-perl-5.14.1.1-64bit-portable.zip'
-// },
-// {
-//   version: '5.14.0',
-//   path: 'strawberry-perl-5.14.0.1-64bit-portable.zip'
-// },
-// 64 bit Portable binaries are not available with Perl 5.12.x and older.
-async function getAvailableVersions() {
-    return new Promise((resolve, reject) => {
-        fs.readFile(path.join(__dirname, "..", "versions", `strawberry.json`), (err, data) => {
-            if (err) {
-                reject(err);
-            }
-            const info = JSON.parse(data.toString());
-            resolve(info);
-        });
-    });
-}
-async function determineVersion(version) {
-    const availableVersions = await getAvailableVersions();
-    // stable latest version
-    if (version === "latest") {
-        return availableVersions[0];
-    }
-    for (let v of availableVersions) {
-        if (semver.satisfies(v.version, version)) {
-            return v;
-        }
-    }
-    throw new Error("unable to get latest version");
-}
-async function getPerl(version) {
-    // check cache
-    const selected = await determineVersion(version);
-    let toolPath;
-    toolPath = tcp.find("perl", selected.version);
-    if (!toolPath) {
-        // download, extract, cache
-        toolPath = await acquirePerl(selected);
-        core.debug("Perl tool is cached under " + toolPath);
-    }
-    // remove pre-installed Strawberry Perl and MinGW from Path
-    let pathEnv = (process.env.PATH || "").split(path.delimiter);
-    pathEnv = pathEnv.filter((p) => !p.match(/.*(?:Strawberry|mingw).*/i));
-    // add our new Strawberry Portable Perl Paths
-    // from portableshell.bat https://github.com/StrawberryPerl/Perl-Dist-Strawberry/blob/9fb00a653ce2e6ed336045dd0a180409b98a72a9/share/portable/portableshell.bat#L5
-    pathEnv.unshift(path.join(toolPath, "c", "bin"));
-    pathEnv.unshift(path.join(toolPath, "perl", "bin"));
-    pathEnv.unshift(path.join(toolPath, "perl", "site", "bin"));
-    core.exportVariable("PATH", pathEnv.join(path.delimiter));
-    core.addPath(path.join(toolPath, "c", "bin"));
-    core.addPath(path.join(toolPath, "perl", "bin"));
-    core.addPath(path.join(toolPath, "perl", "site", "bin"));
-    return {
-        version: selected.version,
-        path: path.join(toolPath, "perl"),
-    };
-}
-exports.getPerl = getPerl;
-async function acquirePerl(version) {
-    //
-    // Download - a tool installer intimately knows how to get the tool (and construct urls)
-    //
-    // download from a mirror for actions-setup-perl
-    const downloadUrl = `https://setupperl.blob.core.windows.net/actions-setup-perl/strawberry-perl/${version.path}`;
-    let downloadPath = null;
-    try {
-        downloadPath = await tc.downloadTool(downloadUrl);
-    }
-    catch (error) {
-        if (error instanceof Error) {
-            core.debug(error.message);
-        }
-        else {
-            core.debug(`${error}`);
-        }
-        throw new Error(`Failed to download version ${version}: ${error}`);
-    }
-    const extPath = await tc.extractZip(downloadPath);
-    return await tcp.cacheDir(extPath, "strawberry-perl", version.version);
-}
-
-
-/***/ }),
-
-/***/ 6271:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-// Ports of @actions/tool-cache
-// We use hard-coded paths rather than $RUNNER_TOOL_CACHE
-// because the prebuilt perl binaries cannot be moved anyway
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.cacheDir = exports.find = void 0;
-const os = __importStar(__nccwpck_require__(2037));
-const fs = __importStar(__nccwpck_require__(7147));
-const path = __importStar(__nccwpck_require__(1017));
-const core = __importStar(__nccwpck_require__(2186));
-const io = __importStar(__nccwpck_require__(7436));
-const semver = __importStar(__nccwpck_require__(1383));
-// Finds the path to a tool version in the local installed tool cache
-function find(toolName, versionSpec, arch) {
-    if (!toolName) {
-        throw new Error("toolName parameter is required");
-    }
-    if (!versionSpec) {
-        throw new Error("versionSpec parameter is required");
-    }
-    arch = arch || os.arch();
-    versionSpec = semver.clean(versionSpec) || "";
-    const cachePath = path.join(_getCacheDirectory(), toolName, versionSpec, arch);
-    let toolPath = "";
-    core.debug(`checking cache: ${cachePath}`);
-    if (fs.existsSync(cachePath) && fs.existsSync(`${cachePath}.complete`)) {
-        core.debug(`Found tool in cache ${toolName} ${versionSpec} ${arch}`);
-        toolPath = cachePath;
-    }
-    else {
-        core.debug("not found");
-    }
-    return toolPath;
-}
-exports.find = find;
-// Caches a directory and installs it into the tool cacheDir
-async function cacheDir(sourceDir, tool, version, arch) {
-    version = semver.clean(version) || version;
-    arch = arch || os.arch();
-    core.debug(`Caching tool ${tool} ${version} ${arch}`);
-    core.debug(`source dir: ${sourceDir}`);
-    if (!fs.statSync(sourceDir).isDirectory()) {
-        throw new Error("sourceDir is not a directory");
-    }
-    // Create the tool dir
-    const destPath = await _createToolPath(tool, version, arch);
-    // copy each child item. do not move. move can fail on Windows
-    // due to anti-virus software having an open handle on a file.
-    for (const itemName of fs.readdirSync(sourceDir)) {
-        const s = path.join(sourceDir, itemName);
-        await io.cp(s, destPath, { recursive: true });
-    }
-    // write .complete
-    _completeToolPath(tool, version, arch);
-    return destPath;
-}
-exports.cacheDir = cacheDir;
-async function _createToolPath(tool, version, arch) {
-    const folderPath = path.join(_getCacheDirectory(), tool, semver.clean(version) || version, arch || "");
-    core.debug(`destination ${folderPath}`);
-    const markerPath = `${folderPath}.complete`;
-    await io.rmRF(folderPath);
-    await io.rmRF(markerPath);
-    await io.mkdirP(folderPath);
-    return folderPath;
-}
-function _completeToolPath(tool, version, arch) {
-    const folderPath = path.join(_getCacheDirectory(), tool, semver.clean(version) || version, arch || "");
-    const markerPath = `${folderPath}.complete`;
-    fs.writeFileSync(markerPath, "");
-    core.debug("finished caching tool");
-}
-function _getCacheDirectory() {
-    if (process.env["ACTIONS_SETUP_PERL_TESTING"]) {
-        // for testing
-        return process.env["RUNNER_TOOL_CACHE"] || "";
-    }
-    const platform = os.platform();
-    if (platform === "linux") {
-        return "/opt/hostedtoolcache";
-    }
-    else if (platform === "darwin") {
-        return "/Users/runner/hostedtoolcache";
-    }
-    else if (platform === "win32") {
-        return "C:\\hostedtoolcache\\windows";
-    }
-    throw new Error(`unknown platform: ${platform}`);
-}
-
-
-/***/ }),
-
-/***/ 918:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.parseBoolean = void 0;
-function parseBoolean(s) {
-    // YAML 1.0 compatible boolean values
-    switch (s) {
-        case "y":
-        case "Y":
-        case "yes":
-        case "Yes":
-        case "YES":
-        case "true":
-        case "True":
-        case "TRUE":
-            return true;
-        case "n":
-        case "N":
-        case "no":
-        case "No":
-        case "NO":
-        case "false":
-        case "False":
-        case "FALSE":
-            return false;
-    }
-    throw `invalid boolean value: ${s}`;
-}
-exports.parseBoolean = parseBoolean;
-
-
-/***/ }),
-
 /***/ 7799:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -65036,6 +64241,845 @@ try {
 
 /***/ }),
 
+/***/ 9042:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Outputs = exports.State = void 0;
+var State;
+(function (State) {
+    State["CachePrimaryKey"] = "CACHE_KEY";
+    State["CacheMatchedKey"] = "CACHE_RESULT";
+    State["CachePath"] = "CACHE_PATH";
+})(State = exports.State || (exports.State = {}));
+var Outputs;
+(function (Outputs) {
+    Outputs["CacheHit"] = "cache-hit";
+})(Outputs = exports.Outputs || (exports.Outputs = {}));
+
+
+/***/ }),
+
+/***/ 6734:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+// install CPAN modules and caching
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.install = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+const exec = __importStar(__nccwpck_require__(1514));
+const cache = __importStar(__nccwpck_require__(7799));
+const crypto = __importStar(__nccwpck_require__(6113));
+const fs = __importStar(__nccwpck_require__(7147));
+const stream = __importStar(__nccwpck_require__(2781));
+const util = __importStar(__nccwpck_require__(3837));
+const path = __importStar(__nccwpck_require__(1017));
+const constants_1 = __nccwpck_require__(9042);
+const utils_1 = __nccwpck_require__(1314);
+async function install(opt) {
+    let installer;
+    switch (opt.install_modules_with || "cpanm") {
+        case "cpanm":
+            installer = installWithCpanm;
+            break;
+        case "cpm":
+            installer = installWithCpm;
+            break;
+        case "carton":
+            installer = installWithCarton;
+            break;
+        default:
+            core.error(`unknown installer: ${opt.install_modules_with}`);
+            return;
+    }
+    const workingDirectory = path.join(process.cwd(), opt.working_directory || ".");
+    const cachePath = path.join(workingDirectory, "local");
+    const paths = [cachePath];
+    const baseKey = await cacheKey(opt);
+    const cpanfileKey = await hashFiles(opt, path.join(workingDirectory, "cpanfile"), path.join(workingDirectory, "cpanfile.snapshot"));
+    const installKey = hashString(opt.install_modules || "");
+    const key = `${baseKey}-${cpanfileKey}-${installKey}`;
+    const restoreKeys = [`${baseKey}-${cpanfileKey}-`, `${baseKey}-`];
+    // restore cache
+    let cachedKey = undefined;
+    if (opt.enable_modules_cache) {
+        try {
+            cachedKey = await cache.restoreCache(paths, key, restoreKeys);
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                if (error.name === cache.ValidationError.name) {
+                }
+                else {
+                    core.info(`[warning] There was an error restoring the cache ${error.message}`);
+                }
+            }
+            else {
+                core.info(`[warning] There was an error restoring the cache ${error}`);
+            }
+        }
+        if (cachedKey) {
+            core.info(`Found cache for key: ${cachedKey}`);
+            core.setOutput(constants_1.Outputs.CacheHit, "true");
+        }
+        else {
+            core.info(`cache not found for input keys: ${key}, ${restoreKeys.join(", ")}`);
+            core.setOutput(constants_1.Outputs.CacheHit, "false");
+        }
+    }
+    // install
+    await installer(opt);
+    // configure environment values
+    core.addPath(path.join(cachePath, "bin"));
+    const archName = await getArchName(opt);
+    const libPath = path.join(cachePath, "lib", "perl5");
+    const libArchPath = path.join(cachePath, "lib", "perl5", archName);
+    core.exportVariable("PERL5LIB", libPath + path.delimiter + libArchPath + path.delimiter + process.env["PERL5LIB"]);
+    if (opt.enable_modules_cache) {
+        core.saveState(constants_1.State.CachePath, cachePath);
+        core.saveState(constants_1.State.CachePrimaryKey, key);
+        core.saveState(constants_1.State.CacheMatchedKey, cachedKey);
+    }
+    return;
+}
+exports.install = install;
+async function cacheKey(opt) {
+    let key = "setup-perl-module-cache-v1-";
+    key += opt.perlHash;
+    key += "-" + (opt.install_modules_with || "unknown");
+    return key;
+}
+// see https://github.com/actions/runner/blob/master/src/Misc/expressionFunc/hashFiles/src/hashFiles.ts
+async function hashFiles(opt, ...files) {
+    const result = crypto.createHash("sha256");
+    result.update(opt.install_modules_args || "");
+    for (const file of files) {
+        try {
+            const hash = crypto.createHash("sha256");
+            const pipeline = util.promisify(stream.pipeline);
+            await pipeline(fs.createReadStream(file), hash);
+            result.write(hash.digest());
+        }
+        catch (err) {
+            // skip files that doesn't exist.
+            if (err?.code !== "ENOENT") {
+                throw err;
+            }
+        }
+    }
+    result.end();
+    return result.digest("hex");
+}
+function hashString(s) {
+    const hash = crypto.createHash("sha256");
+    hash.update(s, "utf-8");
+    hash.end();
+    return hash.digest("hex");
+}
+async function installWithCpanm(opt) {
+    const perl = path.join(opt.toolPath, "bin", "perl");
+    const cpanm = path.join((0, utils_1.getPackagePath)(), "bin", "cpanm");
+    const workingDirectory = path.join(process.cwd(), opt.working_directory || ".");
+    const execOpt = {
+        cwd: workingDirectory,
+    };
+    const args = [cpanm, "--local-lib-contained", "local", "--notest"];
+    if (core.isDebug()) {
+        args.push("--verbose");
+    }
+    args.push(...splitArgs(opt.install_modules_args));
+    if (opt.install_modules_with) {
+        if (await exists(path.join(workingDirectory, "cpanfile"))) {
+            await exec.exec(perl, [...args, "--installdeps", "."], execOpt);
+        }
+    }
+    const modules = splitModules(opt.install_modules);
+    if (modules.length > 0) {
+        await exec.exec(perl, [...args, ...modules], execOpt);
+    }
+}
+async function installWithCpm(opt) {
+    const perl = path.join(opt.toolPath, "bin", "perl");
+    const cpm = path.join((0, utils_1.getPackagePath)(), "bin", "cpm");
+    const workingDirectory = path.join(process.cwd(), opt.working_directory || ".");
+    const execOpt = {
+        cwd: workingDirectory,
+    };
+    const args = [cpm, "install", "--show-build-log-on-failure"];
+    if (core.isDebug()) {
+        args.push("--verbose");
+    }
+    args.push(...splitArgs(opt.install_modules_args));
+    if ((await exists(path.join(workingDirectory, "cpanfile"))) ||
+        (await exists(path.join(workingDirectory, "cpanfile.snapshot")))) {
+        await exec.exec(perl, [...args], execOpt);
+    }
+    const modules = splitModules(opt.install_modules);
+    if (modules.length > 0) {
+        await exec.exec(perl, [...args, ...modules], execOpt);
+    }
+}
+async function installWithCarton(opt) {
+    const perl = path.join(opt.toolPath, "bin", "perl");
+    const carton = path.join((0, utils_1.getPackagePath)(), "bin", "carton");
+    const workingDirectory = path.join(process.cwd(), opt.working_directory || ".");
+    const execOpt = {
+        cwd: workingDirectory,
+    };
+    const args = [carton, "install"];
+    args.push(...splitArgs(opt.install_modules_args));
+    if ((await exists(path.join(workingDirectory, "cpanfile"))) ||
+        (await exists(path.join(workingDirectory, "cpanfile.snapshot")))) {
+        await exec.exec(perl, [...args], execOpt);
+    }
+    const modules = splitModules(opt.install_modules);
+    if (modules.length > 0) {
+        const cpanm = path.join((0, utils_1.getPackagePath)(), "bin", "cpanm");
+        const args = [cpanm, "--local-lib-contained", "local", "--notest"];
+        if (core.isDebug()) {
+            args.push("--verbose");
+        }
+        await exec.exec(perl, [...args, ...modules], execOpt);
+    }
+}
+// getArchName gets the arch name such as x86_64-linux, darwin-thread-multi-2level, etc.
+async function getArchName(opt) {
+    const perl = path.join(opt.toolPath, "bin", "perl");
+    const out = await exec.getExecOutput(perl, ["-MConfig", "-E", "print $Config{archname}"]);
+    return out.stdout;
+}
+async function exists(path) {
+    return new Promise((resolve, reject) => {
+        fs.stat(path, (err) => {
+            if (err) {
+                if (err.code === "ENOENT") {
+                    resolve(false);
+                }
+                else {
+                    reject(err);
+                }
+                return;
+            }
+            resolve(true);
+        });
+    });
+}
+function splitArgs(args) {
+    if (!args) {
+        return [];
+    }
+    args = args.trim();
+    if (args === "") {
+        return [];
+    }
+    return args.split(/\s+/);
+}
+function splitModules(modules) {
+    if (!modules) {
+        return [];
+    }
+    modules = modules.trim();
+    if (modules === "") {
+        return [];
+    }
+    return modules.split(/\s+/);
+}
+
+
+/***/ }),
+
+/***/ 2574:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getPerl = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+const tc = __importStar(__nccwpck_require__(7784));
+const os = __importStar(__nccwpck_require__(2037));
+const promises_1 = __nccwpck_require__(3292);
+const path = __importStar(__nccwpck_require__(1017));
+const semver = __importStar(__nccwpck_require__(1383));
+const tcp = __importStar(__nccwpck_require__(2580));
+const utils_1 = __nccwpck_require__(1314);
+const osPlat = os.platform();
+const osArch = os.arch();
+async function readJSON(path) {
+    const data = await (0, promises_1.readFile)(path, "utf8");
+    return JSON.parse(data);
+}
+async function getAvailableVersions() {
+    const filename = path.join((0, utils_1.getPackagePath)(), "versions", `${osPlat}.json`);
+    return readJSON(filename);
+}
+async function determineVersion(version) {
+    const availableVersions = await getAvailableVersions();
+    // stable latest version
+    if (version === "latest") {
+        return availableVersions[0];
+    }
+    for (let v of availableVersions) {
+        if (semver.satisfies(v, version)) {
+            return v;
+        }
+    }
+    throw new Error("unable to get latest version");
+}
+async function getPerl(version, thread) {
+    const selected = await determineVersion(version);
+    // check cache
+    let toolPath;
+    toolPath = tcp.find("perl", selected);
+    if (!toolPath) {
+        // download, extract, cache
+        toolPath = await acquirePerl(selected, thread);
+        core.debug("Perl tool is cached under " + toolPath);
+    }
+    const bin = path.join(toolPath, "bin");
+    //
+    // prepend the tools path. instructs the agent to prepend for future tasks
+    //
+    core.addPath(bin);
+    return {
+        version: selected,
+        path: toolPath,
+    };
+}
+exports.getPerl = getPerl;
+async function acquirePerl(version, thread) {
+    //
+    // Download - a tool installer intimately knows how to get the tool (and construct urls)
+    //
+    const fileName = getFileName(version, thread);
+    const downloadUrl = await getDownloadUrl(fileName);
+    let downloadPath = null;
+    try {
+        downloadPath = await tc.downloadTool(downloadUrl);
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            core.debug(error.message);
+        }
+        else {
+            core.debug(`${error}`);
+        }
+        throw new Error(`Failed to download version ${version}: ${error}`);
+    }
+    //
+    // Extract compressed archive
+    //
+    const extPath = downloadUrl.endsWith(".zip")
+        ? await tc.extractZip(downloadPath)
+        : await tc.extractTar(downloadPath, "", ["--use-compress-program", "zstd -d --long=30", "-x"]);
+    return await tcp.cacheDir(extPath, "perl", version + (thread ? "-thr" : ""));
+}
+function getFileName(version, thread) {
+    const suffix = thread ? "-multi-thread" : "";
+    const ext = osPlat === "win32" ? "zip" : "tar.zstd";
+    return `perl-${version}-${osPlat}-${osArch}${suffix}.${ext}`;
+}
+async function getDownloadUrl(filename) {
+    const pkg = path.join((0, utils_1.getPackagePath)(), "package.json");
+    const info = await readJSON(pkg);
+    const actionsVersion = info.version;
+    return `https://github.com/shogo82148/actions-setup-perl/releases/download/v${actionsVersion}/${filename}`;
+}
+
+
+/***/ }),
+
+/***/ 9659:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core = __importStar(__nccwpck_require__(2186));
+const exec = __importStar(__nccwpck_require__(1514));
+const installer = __importStar(__nccwpck_require__(2574));
+const path = __importStar(__nccwpck_require__(1017));
+const crypto = __importStar(__nccwpck_require__(6113));
+const strawberry = __importStar(__nccwpck_require__(2912));
+const cpan = __importStar(__nccwpck_require__(6734));
+const utils_1 = __nccwpck_require__(1314);
+async function run() {
+    try {
+        const platform = process.platform;
+        let dist = core.getInput("distribution");
+        const multiThread = core.getInput("multi-thread");
+        const version = core.getInput("perl-version");
+        let result;
+        let perlHash;
+        await core.group("install perl", async () => {
+            let thread;
+            if (platform === "win32") {
+                thread = (0, utils_1.parseBoolean)(multiThread || "true");
+                if (dist === "strawberry" && !thread) {
+                    core.warning("non-thread Strawberry Perl is not provided.");
+                }
+            }
+            else {
+                if (dist === "strawberry") {
+                    core.warning("The strawberry distribution is not available on this platform. fallback to the default distribution.");
+                    dist = "default";
+                }
+                thread = (0, utils_1.parseBoolean)(multiThread || "false");
+            }
+            switch (dist) {
+                case "strawberry":
+                    result = await strawberry.getPerl(version);
+                    break;
+                case "default":
+                    result = await installer.getPerl(version, thread);
+                    break;
+                default:
+                    throw new Error(`unknown distribution: ${dist}`);
+            }
+            core.setOutput("perl-version", result.version);
+            perlHash = await digestOfPerlVersion(result.path);
+            core.setOutput("perl-hash", perlHash);
+            const matchersPath = path.join((0, utils_1.getPackagePath)(), "scripts");
+            console.log(`::add-matcher::${path.join(matchersPath, "perl.json")}`);
+            // for pre-installed scripts
+            core.addPath(path.join((0, utils_1.getPackagePath)(), "bin"));
+            // for pre-installed modules
+            core.exportVariable("PERL5LIB", path.join((0, utils_1.getPackagePath)(), "scripts", "lib"));
+        });
+        await core.group("install CPAN modules", async () => {
+            await cpan.install({
+                perlHash: perlHash,
+                toolPath: result.path,
+                install_modules_with: core.getInput("install-modules-with"),
+                install_modules_args: core.getInput("install-modules-args"),
+                install_modules: core.getInput("install-modules"),
+                enable_modules_cache: (0, utils_1.parseBoolean)(core.getInput("enable-modules-cache")),
+                working_directory: core.getInput("working-directory"),
+            });
+        });
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            core.setFailed(error);
+        }
+        else {
+            core.setFailed(`${error}`);
+        }
+    }
+}
+// we use `perl -V` to the cache key.
+// it contains useful information to use as the cache key,
+// e.g. the platform, the version of perl, the compiler option for building perl
+async function digestOfPerlVersion(toolPath) {
+    const perl = path.join(toolPath, "bin", "perl");
+    const hash = crypto.createHash("sha256");
+    await exec.exec(perl, ["-V"], {
+        listeners: {
+            stdout: (data) => {
+                hash.update(data);
+            },
+        },
+        env: {},
+    });
+    hash.end();
+    return hash.digest("hex");
+}
+run();
+
+
+/***/ }),
+
+/***/ 2912:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getPerl = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+const tc = __importStar(__nccwpck_require__(7784));
+const path = __importStar(__nccwpck_require__(1017));
+const semver = __importStar(__nccwpck_require__(1383));
+const fs = __importStar(__nccwpck_require__(7147));
+const tcp = __importStar(__nccwpck_require__(2580));
+const utils_1 = __nccwpck_require__(1314);
+// NOTE:
+// I don't know why, but 5.18.3 is missing.
+// {
+//   version: '5.18.3',
+//   path: 'strawberry-perl-5.18.3.1-64bit-portable.zip'
+// },
+// I don't know why, but 5.14.1 and 5.14.0 are missing.
+// {
+//   version: '5.14.1',
+//   path: 'strawberry-perl-5.14.1.1-64bit-portable.zip'
+// },
+// {
+//   version: '5.14.0',
+//   path: 'strawberry-perl-5.14.0.1-64bit-portable.zip'
+// },
+// 64 bit Portable binaries are not available with Perl 5.12.x and older.
+async function getAvailableVersions() {
+    return new Promise((resolve, reject) => {
+        fs.readFile(path.join((0, utils_1.getPackagePath)(), "versions", `strawberry.json`), (err, data) => {
+            if (err) {
+                reject(err);
+            }
+            const info = JSON.parse(data.toString());
+            resolve(info);
+        });
+    });
+}
+async function determineVersion(version) {
+    const availableVersions = await getAvailableVersions();
+    // stable latest version
+    if (version === "latest") {
+        return availableVersions[0];
+    }
+    for (let v of availableVersions) {
+        if (semver.satisfies(v.version, version)) {
+            return v;
+        }
+    }
+    throw new Error("unable to get latest version");
+}
+async function getPerl(version) {
+    // check cache
+    const selected = await determineVersion(version);
+    let toolPath;
+    toolPath = tcp.find("perl", selected.version);
+    if (!toolPath) {
+        // download, extract, cache
+        toolPath = await acquirePerl(selected);
+        core.debug("Perl tool is cached under " + toolPath);
+    }
+    // remove pre-installed Strawberry Perl and MinGW from Path
+    let pathEnv = (process.env.PATH || "").split(path.delimiter);
+    pathEnv = pathEnv.filter((p) => !p.match(/.*(?:Strawberry|mingw).*/i));
+    // add our new Strawberry Portable Perl Paths
+    // from portableshell.bat https://github.com/StrawberryPerl/Perl-Dist-Strawberry/blob/9fb00a653ce2e6ed336045dd0a180409b98a72a9/share/portable/portableshell.bat#L5
+    pathEnv.unshift(path.join(toolPath, "c", "bin"));
+    pathEnv.unshift(path.join(toolPath, "perl", "bin"));
+    pathEnv.unshift(path.join(toolPath, "perl", "site", "bin"));
+    core.exportVariable("PATH", pathEnv.join(path.delimiter));
+    core.addPath(path.join(toolPath, "c", "bin"));
+    core.addPath(path.join(toolPath, "perl", "bin"));
+    core.addPath(path.join(toolPath, "perl", "site", "bin"));
+    return {
+        version: selected.version,
+        path: path.join(toolPath, "perl"),
+    };
+}
+exports.getPerl = getPerl;
+async function acquirePerl(version) {
+    //
+    // Download - a tool installer intimately knows how to get the tool (and construct urls)
+    //
+    // download from a mirror for actions-setup-perl
+    const downloadUrl = `https://setupperl.blob.core.windows.net/actions-setup-perl/strawberry-perl/${version.path}`;
+    let downloadPath = null;
+    try {
+        downloadPath = await tc.downloadTool(downloadUrl);
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            core.debug(error.message);
+        }
+        else {
+            core.debug(`${error}`);
+        }
+        throw new Error(`Failed to download version ${version}: ${error}`);
+    }
+    const extPath = await tc.extractZip(downloadPath);
+    return await tcp.cacheDir(extPath, "strawberry-perl", version.version);
+}
+
+
+/***/ }),
+
+/***/ 2580:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+// Ports of @actions/tool-cache
+// We use hard-coded paths rather than $RUNNER_TOOL_CACHE
+// because the prebuilt perl binaries cannot be moved anyway
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.cacheDir = exports.find = void 0;
+const os = __importStar(__nccwpck_require__(2037));
+const fs = __importStar(__nccwpck_require__(7147));
+const path = __importStar(__nccwpck_require__(1017));
+const core = __importStar(__nccwpck_require__(2186));
+const io = __importStar(__nccwpck_require__(7436));
+const semver = __importStar(__nccwpck_require__(1383));
+// Finds the path to a tool version in the local installed tool cache
+function find(toolName, versionSpec, arch) {
+    if (!toolName) {
+        throw new Error("toolName parameter is required");
+    }
+    if (!versionSpec) {
+        throw new Error("versionSpec parameter is required");
+    }
+    arch = arch || os.arch();
+    versionSpec = semver.clean(versionSpec) || "";
+    const cachePath = path.join(_getCacheDirectory(), toolName, versionSpec, arch);
+    let toolPath = "";
+    core.debug(`checking cache: ${cachePath}`);
+    if (fs.existsSync(cachePath) && fs.existsSync(`${cachePath}.complete`)) {
+        core.debug(`Found tool in cache ${toolName} ${versionSpec} ${arch}`);
+        toolPath = cachePath;
+    }
+    else {
+        core.debug("not found");
+    }
+    return toolPath;
+}
+exports.find = find;
+// Caches a directory and installs it into the tool cacheDir
+async function cacheDir(sourceDir, tool, version, arch) {
+    version = semver.clean(version) || version;
+    arch = arch || os.arch();
+    core.debug(`Caching tool ${tool} ${version} ${arch}`);
+    core.debug(`source dir: ${sourceDir}`);
+    if (!fs.statSync(sourceDir).isDirectory()) {
+        throw new Error("sourceDir is not a directory");
+    }
+    // Create the tool dir
+    const destPath = await _createToolPath(tool, version, arch);
+    // copy each child item. do not move. move can fail on Windows
+    // due to anti-virus software having an open handle on a file.
+    for (const itemName of fs.readdirSync(sourceDir)) {
+        const s = path.join(sourceDir, itemName);
+        await io.cp(s, destPath, { recursive: true });
+    }
+    // write .complete
+    _completeToolPath(tool, version, arch);
+    return destPath;
+}
+exports.cacheDir = cacheDir;
+async function _createToolPath(tool, version, arch) {
+    const folderPath = path.join(_getCacheDirectory(), tool, semver.clean(version) || version, arch || "");
+    core.debug(`destination ${folderPath}`);
+    const markerPath = `${folderPath}.complete`;
+    await io.rmRF(folderPath);
+    await io.rmRF(markerPath);
+    await io.mkdirP(folderPath);
+    return folderPath;
+}
+function _completeToolPath(tool, version, arch) {
+    const folderPath = path.join(_getCacheDirectory(), tool, semver.clean(version) || version, arch || "");
+    const markerPath = `${folderPath}.complete`;
+    fs.writeFileSync(markerPath, "");
+    core.debug("finished caching tool");
+}
+function _getCacheDirectory() {
+    if (process.env["ACTIONS_SETUP_PERL_TESTING"]) {
+        // for testing
+        return process.env["RUNNER_TOOL_CACHE"] || "";
+    }
+    const platform = os.platform();
+    if (platform === "linux") {
+        return "/opt/hostedtoolcache";
+    }
+    else if (platform === "darwin") {
+        return "/Users/runner/hostedtoolcache";
+    }
+    else if (platform === "win32") {
+        return "C:\\hostedtoolcache\\windows";
+    }
+    throw new Error(`unknown platform: ${platform}`);
+}
+
+
+/***/ }),
+
+/***/ 1314:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getPackagePath = exports.parseBoolean = void 0;
+const path = __importStar(__nccwpck_require__(1017));
+function parseBoolean(s) {
+    // YAML 1.0 compatible boolean values
+    switch (s) {
+        case "y":
+        case "Y":
+        case "yes":
+        case "Yes":
+        case "YES":
+        case "true":
+        case "True":
+        case "TRUE":
+            return true;
+        case "n":
+        case "N":
+        case "no":
+        case "No":
+        case "NO":
+        case "false":
+        case "False":
+        case "FALSE":
+            return false;
+    }
+    throw `invalid boolean value: ${s}`;
+}
+exports.parseBoolean = parseBoolean;
+function getPackagePath() {
+    if (process.env["ACTIONS_SETUP_PERL_TESTING"]) {
+        return path.join(__dirname, "..");
+    }
+    return path.join(__dirname, "..", "..");
+}
+exports.getPackagePath = getPackagePath;
+
+
+/***/ }),
+
 /***/ 2877:
 /***/ ((module) => {
 
@@ -65270,7 +65314,7 @@ module.exports = JSON.parse('["ac","com.ac","edu.ac","gov.ac","net.ac","mil.ac",
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(5613);
+/******/ 	var __webpack_exports__ = __nccwpck_require__(9659);
 /******/ 	module.exports = __webpack_exports__;
 /******/ 	
 /******/ })()

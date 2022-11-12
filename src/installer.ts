@@ -22,7 +22,7 @@ async function readJSON<T>(path: string): Promise<T> {
   return JSON.parse(data) as T;
 }
 async function getAvailableVersions(): Promise<string[]> {
-  const filename = path.join(__dirname, "..", "versions", `${osPlat}.json`);
+  const filename = path.join(__dirname, "..", "..", "versions", `${osPlat}.json`);
   return readJSON<string[]>(filename);
 }
 

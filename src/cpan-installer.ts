@@ -8,6 +8,7 @@ import * as fs from "fs";
 import * as stream from "stream";
 import * as util from "util";
 import * as path from "path";
+import {State, Outputs} from './constants';
 
 export interface Options {
   // the digest of `perl -V`
@@ -72,8 +73,10 @@ export async function install(opt: Options): Promise<void> {
     }
     if (cachedKey) {
       core.info(`Found cache for key: ${cachedKey}`);
+      core.setOutput(Outputs.CacheHit, 'true');
     } else {
       core.info(`cache not found for input keys: ${key}, ${restoreKeys.join(", ")}`);
+      core.setOutput(Outputs.CacheHit, 'false');
     }
   }
 
@@ -88,27 +91,9 @@ export async function install(opt: Options): Promise<void> {
   core.exportVariable("PERL5LIB", libPath + path.delimiter + libArchPath + path.delimiter + process.env["PERL5LIB"]);
 
   if (opt.enable_modules_cache) {
-    // save cache
-    if (cachedKey !== key) {
-      core.info(`saving cache for ${key}.`);
-      try {
-        await cache.saveCache(paths, key);
-      } catch (error) {
-        if (error instanceof Error) {
-          if (error.name === cache.ValidationError.name) {
-            throw error;
-          } else if (error.name === cache.ReserveCacheError.name) {
-            core.info(error.message);
-          } else {
-            core.info(`[warning]${error.message}`);
-          }
-        } else {
-          core.info(`[warning]${error}`);
-        }
-      }
-    } else {
-      core.info(`cache for ${key} already exists, skip saving.`);
-    }
+    core.saveState(State.CachePath, cachePath)
+    core.saveState(State.CachePrimaryKey, key);
+    core.saveState(State.CacheMatchedKey, cachedKey);
   }
 
   return;

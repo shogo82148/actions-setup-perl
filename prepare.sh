@@ -35,6 +35,7 @@ git push origin main
 : build the action
 npm ci
 npm run build
+rm -rf dist
 npm run package
 perl -ne 'print unless m(^/dist/$)' -i .gitignore
 

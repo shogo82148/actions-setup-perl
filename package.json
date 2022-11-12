@@ -7,7 +7,7 @@
     "build": "tsc",
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
-    "package": "ncc build --source-map --license licenses.txt",
+    "package": "tsc && ncc build -o dist/setup --source-map --license licenses.txt src/setup-perl.ts && ncc build -o dist/cache-save --source-map --license licenses.txt src/cache-save.ts",
     "test": "jest"
   },
   "repository": {
@@ -33,7 +33,7 @@
     "@types/semver": "^7.3.13",
     "@vercel/ncc": "^0.34.0",
     "jest": "^28.1.3",
-    "jest-circus": "^29.2.2",
+    "jest-circus": "^29.3.1",
     "prettier": "^2.7.1",
     "ts-jest": "^28.0.8",
     "typescript": "^4.8.4"

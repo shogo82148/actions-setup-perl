@@ -26,5 +26,8 @@ export function parseBoolean(s: string): boolean {
 }
 
 export function getPackagePath(): string {
+  if (process.env["ACTIONS_SETUP_PERL_TESTING"]) {
+    return path.join(__dirname, "..");
+  }
   return path.join(__dirname, "..", "..");
 }

@@ -1,3 +1,5 @@
+import * as path from "path";
+
 export function parseBoolean(s: string): boolean {
   // YAML 1.0 compatible boolean values
   switch (s) {
@@ -21,4 +23,11 @@ export function parseBoolean(s: string): boolean {
       return false;
   }
   throw `invalid boolean value: ${s}`;
+}
+
+export function getPackagePath(): string {
+  if (process.env["ACTIONS_SETUP_PERL_TESTING"]) {
+    return path.join(__dirname, "..");
+  }
+  return path.join(__dirname, "..", "..");
 }

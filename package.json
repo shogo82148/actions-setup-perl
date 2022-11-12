@@ -7,7 +7,7 @@
     "build": "tsc",
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
-    "package": "ncc build --source-map --license licenses.txt",
+    "package": "tsc && ncc build -o dist/setup --source-map --license licenses.txt src/setup-perl.ts && ncc build -o dist/cache-save --source-map --license licenses.txt src/cache-save.ts",
     "test": "jest"
   },
   "repository": {

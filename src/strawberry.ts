@@ -4,6 +4,7 @@ import * as path from "path";
 import * as semver from "semver";
 import * as fs from "fs";
 import * as tcp from "./tool-cache-port";
+import { getPackagePath } from "./utils";
 
 interface PerlVersion {
   version: string;
@@ -36,7 +37,7 @@ export interface Result {
 // 64 bit Portable binaries are not available with Perl 5.12.x and older.
 async function getAvailableVersions(): Promise<PerlVersion[]> {
   return new Promise<PerlVersion[]>((resolve, reject) => {
-    fs.readFile(path.join(__dirname, "..", "versions", `strawberry.json`), (err, data) => {
+    fs.readFile(path.join(getPackagePath(), "versions", `strawberry.json`), (err, data) => {
       if (err) {
         reject(err);
       }

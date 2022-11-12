@@ -8,6 +8,8 @@ import * as fs from "fs";
 import * as stream from "stream";
 import * as util from "util";
 import * as path from "path";
+import { State, Outputs } from "./constants";
+import { getPackagePath } from "./utils";
 
 export interface Options {
   // the digest of `perl -V`
@@ -72,8 +74,10 @@ export async function install(opt: Options): Promise<void> {
     }
     if (cachedKey) {
       core.info(`Found cache for key: ${cachedKey}`);
+      core.setOutput(Outputs.CacheHit, "true");
     } else {
       core.info(`cache not found for input keys: ${key}, ${restoreKeys.join(", ")}`);
+      core.setOutput(Outputs.CacheHit, "false");
     }
   }
 
@@ -88,27 +92,9 @@ export async function install(opt: Options): Promise<void> {
   core.exportVariable("PERL5LIB", libPath + path.delimiter + libArchPath + path.delimiter + process.env["PERL5LIB"]);
 
   if (opt.enable_modules_cache) {
-    // save cache
-    if (cachedKey !== key) {
-      core.info(`saving cache for ${key}.`);
-      try {
-        await cache.saveCache(paths, key);
-      } catch (error) {
-        if (error instanceof Error) {
-          if (error.name === cache.ValidationError.name) {
-            throw error;
-          } else if (error.name === cache.ReserveCacheError.name) {
-            core.info(error.message);
-          } else {
-            core.info(`[warning]${error.message}`);
-          }
-        } else {
-          core.info(`[warning]${error}`);
-        }
-      }
-    } else {
-      core.info(`cache for ${key} already exists, skip saving.`);
-    }
+    core.saveState(State.CachePath, cachePath);
+    core.saveState(State.CachePrimaryKey, key);
+    core.saveState(State.CacheMatchedKey, cachedKey);
   }
 
   return;
@@ -151,7 +137,7 @@ function hashString(s: string): string {
 
 async function installWithCpanm(opt: Options): Promise<void> {
   const perl = path.join(opt.toolPath, "bin", "perl");
-  const cpanm = path.join(__dirname, "..", "bin", "cpanm");
+  const cpanm = path.join(getPackagePath(), "bin", "cpanm");
   const workingDirectory = path.join(process.cwd(), opt.working_directory || ".");
   const execOpt = {
     cwd: workingDirectory,
@@ -174,7 +160,7 @@ async function installWithCpanm(opt: Options): Promise<void> {
 
 async function installWithCpm(opt: Options): Promise<void> {
   const perl = path.join(opt.toolPath, "bin", "perl");
-  const cpm = path.join(__dirname, "..", "bin", "cpm");
+  const cpm = path.join(getPackagePath(), "bin", "cpm");
   const workingDirectory = path.join(process.cwd(), opt.working_directory || ".");
   const execOpt = {
     cwd: workingDirectory,
@@ -198,7 +184,7 @@ async function installWithCpm(opt: Options): Promise<void> {
 
 async function installWithCarton(opt: Options): Promise<void> {
   const perl = path.join(opt.toolPath, "bin", "perl");
-  const carton = path.join(__dirname, "..", "bin", "carton");
+  const carton = path.join(getPackagePath(), "bin", "carton");
   const workingDirectory = path.join(process.cwd(), opt.working_directory || ".");
   const execOpt = {
     cwd: workingDirectory,
@@ -213,7 +199,7 @@ async function installWithCarton(opt: Options): Promise<void> {
   }
   const modules = splitModules(opt.install_modules);
   if (modules.length > 0) {
-    const cpanm = path.join(__dirname, "..", "bin", "cpanm");
+    const cpanm = path.join(getPackagePath(), "bin", "cpanm");
     const args = [cpanm, "--local-lib-contained", "local", "--notest"];
     if (core.isDebug()) {
       args.push("--verbose");

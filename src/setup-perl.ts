@@ -4,8 +4,8 @@ import * as installer from "./installer";
 import * as path from "path";
 import * as crypto from "crypto";
 import * as strawberry from "./strawberry";
-import * as utils from "./utils";
 import * as cpan from "./cpan-installer";
+import { getPackagePath, parseBoolean } from "./utils";
 
 async function run() {
   try {
@@ -19,7 +19,7 @@ async function run() {
     await core.group("install perl", async () => {
       let thread: boolean;
       if (platform === "win32") {
-        thread = utils.parseBoolean(multiThread || "true");
+        thread = parseBoolean(multiThread || "true");
         if (dist === "strawberry" && !thread) {
           core.warning("non-thread Strawberry Perl is not provided.");
         }
@@ -30,7 +30,7 @@ async function run() {
           );
           dist = "default";
         }
-        thread = utils.parseBoolean(multiThread || "false");
+        thread = parseBoolean(multiThread || "false");
       }
 
       switch (dist) {
@@ -47,14 +47,14 @@ async function run() {
       perlHash = await digestOfPerlVersion(result.path);
       core.setOutput("perl-hash", perlHash);
 
-      const matchersPath = path.join(__dirname, "..", "scripts");
+      const matchersPath = path.join(getPackagePath(), "scripts");
       console.log(`::add-matcher::${path.join(matchersPath, "perl.json")}`);
 
       // for pre-installed scripts
-      core.addPath(path.join(__dirname, "..", "bin"));
+      core.addPath(path.join(getPackagePath(), "bin"));
 
       // for pre-installed modules
-      core.exportVariable("PERL5LIB", path.join(__dirname, "..", "scripts", "lib"));
+      core.exportVariable("PERL5LIB", path.join(getPackagePath(), "scripts", "lib"));
     });
 
     await core.group("install CPAN modules", async () => {
@@ -64,7 +64,7 @@ async function run() {
         install_modules_with: core.getInput("install-modules-with"),
         install_modules_args: core.getInput("install-modules-args"),
         install_modules: core.getInput("install-modules"),
-        enable_modules_cache: utils.parseBoolean(core.getInput("enable-modules-cache")),
+        enable_modules_cache: parseBoolean(core.getInput("enable-modules-cache")),
         working_directory: core.getInput("working-directory"),
       });
     });

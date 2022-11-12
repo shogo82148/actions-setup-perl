@@ -5,6 +5,7 @@ import { readFile } from "fs/promises";
 import * as path from "path";
 import * as semver from "semver";
 import * as tcp from "./tool-cache-port";
+import { getPackagePath } from "./utils";
 
 const osPlat = os.platform();
 const osArch = os.arch();
@@ -22,7 +23,7 @@ async function readJSON<T>(path: string): Promise<T> {
   return JSON.parse(data) as T;
 }
 async function getAvailableVersions(): Promise<string[]> {
-  const filename = path.join(__dirname, "..", "..", "versions", `${osPlat}.json`);
+  const filename = path.join(getPackagePath(), `${osPlat}.json`);
   return readJSON<string[]>(filename);
 }
 
@@ -106,7 +107,7 @@ interface PackageVersion {
 }
 
 async function getDownloadUrl(filename: string): Promise<string> {
-  const pkg = path.join(__dirname, "..", "package.json");
+  const pkg = path.join(getPackagePath(), "package.json");
   const info = await readJSON<PackageVersion>(pkg);
   const actionsVersion = info.version;
   return `https://github.com/shogo82148/actions-setup-perl/releases/download/v${actionsVersion}/${filename}`;

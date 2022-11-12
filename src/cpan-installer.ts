@@ -9,6 +9,7 @@ import * as stream from "stream";
 import * as util from "util";
 import * as path from "path";
 import { State, Outputs } from "./constants";
+import { getPackagePath } from "./utils";
 
 export interface Options {
   // the digest of `perl -V`
@@ -136,7 +137,7 @@ function hashString(s: string): string {
 
 async function installWithCpanm(opt: Options): Promise<void> {
   const perl = path.join(opt.toolPath, "bin", "perl");
-  const cpanm = path.join(__dirname, "..", "bin", "cpanm");
+  const cpanm = path.join(getPackagePath(), "bin", "cpanm");
   const workingDirectory = path.join(process.cwd(), opt.working_directory || ".");
   const execOpt = {
     cwd: workingDirectory,
@@ -159,7 +160,7 @@ async function installWithCpanm(opt: Options): Promise<void> {
 
 async function installWithCpm(opt: Options): Promise<void> {
   const perl = path.join(opt.toolPath, "bin", "perl");
-  const cpm = path.join(__dirname, "..", "bin", "cpm");
+  const cpm = path.join(getPackagePath(), "bin", "cpm");
   const workingDirectory = path.join(process.cwd(), opt.working_directory || ".");
   const execOpt = {
     cwd: workingDirectory,
@@ -183,7 +184,7 @@ async function installWithCpm(opt: Options): Promise<void> {
 
 async function installWithCarton(opt: Options): Promise<void> {
   const perl = path.join(opt.toolPath, "bin", "perl");
-  const carton = path.join(__dirname, "..", "bin", "carton");
+  const carton = path.join(getPackagePath(), "bin", "carton");
   const workingDirectory = path.join(process.cwd(), opt.working_directory || ".");
   const execOpt = {
     cwd: workingDirectory,
@@ -198,7 +199,7 @@ async function installWithCarton(opt: Options): Promise<void> {
   }
   const modules = splitModules(opt.install_modules);
   if (modules.length > 0) {
-    const cpanm = path.join(__dirname, "..", "bin", "cpanm");
+    const cpanm = path.join(getPackagePath(), "bin", "cpanm");
     const args = [cpanm, "--local-lib-contained", "local", "--notest"];
     if (core.isDebug()) {
       args.push("--verbose");

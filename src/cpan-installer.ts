@@ -82,7 +82,10 @@ export async function install(opt: Options): Promise<void> {
 
   // configure environment values
   core.addPath(path.join(cachePath, "bin"));
-  core.exportVariable("PERL5LIB", path.join(cachePath, "lib", "perl5") + path.delimiter + process.env["PERL5LIB"]);
+  const archName = await getArchName(opt);
+  const libPath = path.join(cachePath, "lib", "perl5");
+  const libArchPath = path.join(cachePath, "lib", "perl5", archName);
+  core.exportVariable("PERL5LIB", libPath + path.delimiter + libArchPath + path.delimiter + process.env["PERL5LIB"]);
 
   if (opt.enable_modules_cache) {
     // save cache
@@ -217,6 +220,13 @@ async function installWithCarton(opt: Options): Promise<void> {
     }
     await exec.exec(perl, [...args, ...modules], execOpt);
   }
+}
+
+// getArchName gets the arch name such as x86_64-linux, darwin-thread-multi-2level, etc.
+async function getArchName(opt: Options): Promise<string> {
+  const perl = path.join(opt.toolPath, "bin", "perl");
+  const out = await exec.getExecOutput(perl, ['-MConfig', '-E', 'print $Config{archname}']);
+  return out.stdout;
 }
 
 async function exists(path: string): Promise<boolean> {

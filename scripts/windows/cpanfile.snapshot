@@ -22,6 +22,22 @@ DISTRIBUTIONS
       Clone 0.46
     requirements:
       ExtUtils::MakeMaker 0
+  Cpanel-JSON-XS-4.32
+    pathname: R/RU/RURBAN/Cpanel-JSON-XS-4.32.tar.gz
+    provides:
+      Cpanel::JSON::XS 4.32
+      Cpanel::JSON::XS::Type undef
+    requirements:
+      Carp 0
+      Config 0
+      Encode 1.9801
+      Exporter 0
+      ExtUtils::MakeMaker 0
+      Pod::Text 2.08
+      XSLoader 0
+      overload 0
+      strict 0
+      warnings 0
   Devel-PatchPerl-2.08
     pathname: B/BI/BINGOS/Devel-PatchPerl-2.08.tar.gz
     provides:
@@ -45,17 +61,6 @@ DISTRIBUTIONS
       Encode::Alias 0
       ExtUtils::MakeMaker 0
       perl 5.008
-  ExtUtils-PL2Bat-0.005
-    pathname: L/LE/LEONT/ExtUtils-PL2Bat-0.005.tar.gz
-    provides:
-      ExtUtils::PL2Bat 0.005
-    requirements:
-      Carp 0
-      ExtUtils::MakeMaker 0
-      Getopt::Std 0
-      perl 5.006
-      strict 0
-      warnings 0
   File-Listing-6.15
     pathname: P/PL/PLICEASE/File-Listing-6.15.tar.gz
     provides:
@@ -151,7 +156,6 @@ DISTRIBUTIONS
       HTTP::Date 6
       HTTP::Headers::Util 6
       HTTP::Request 0
-      Win32 0
       locale 0
       perl 5.008001
       strict 0
@@ -263,13 +267,29 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Test::More 0.31
       Time::HiRes 0
-      Win32 0
-      Win32::ShellQuote 0
   JSON-4.10
     pathname: I/IS/ISHIGAKI/JSON-4.10.tar.gz
     provides:
       JSON 4.10
       JSON::Backend::PP 4.10
+    requirements:
+      ExtUtils::MakeMaker 0
+      Test::More 0
+  JSON-MaybeXS-1.004004
+    pathname: E/ET/ETHER/JSON-MaybeXS-1.004004.tar.gz
+    provides:
+      JSON::MaybeXS 1.004004
+    requirements:
+      Carp 0
+      Cpanel::JSON::XS 2.3310
+      ExtUtils::MakeMaker 0
+      JSON::PP 2.27300
+      Scalar::Util 0
+      perl 5.006
+  JSON-PP-Compat5006-1.09
+    pathname: M/MA/MAKAMAKA/JSON-PP-Compat5006-1.09.tar.gz
+    provides:
+      JSON::PP::Compat5006 1.09
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
@@ -339,14 +359,13 @@ DISTRIBUTIONS
       ExtUtils::Install 0
       ExtUtils::Manifest 0
       ExtUtils::Mkbootstrap 0
-      ExtUtils::PL2Bat 0
       ExtUtils::ParseXS 2.21
       File::Basename 0
       File::Compare 0
       File::Copy 0
       File::Find 0
       File::Path 0
-      File::Spec 3.3
+      File::Spec 0.82
       Getopt::Long 0
       Module::Metadata 1.000002
       Perl::OSType 1
@@ -397,6 +416,19 @@ DISTRIBUTIONS
       perl 5.006002
       strict 0
       warnings 0
+  Net-SSLeay-1.92
+    pathname: C/CH/CHRISN/Net-SSLeay-1.92.tar.gz
+    provides:
+      Net::SSLeay 1.92
+      Net::SSLeay::Handle 1.92
+    requirements:
+      English 0
+      ExtUtils::MakeMaker 0
+      File::Spec::Functions 0
+      MIME::Base64 0
+      Text::Wrap 0
+      constant 0
+      perl 5.008001
   TimeDate-2.33
     pathname: A/AT/ATOOMIC/TimeDate-2.33.tar.gz
     provides:
@@ -541,12 +573,57 @@ DISTRIBUTIONS
       Fcntl 0
       URI 1.10
       perl 5.008001
-  Win32-ShellQuote-0.003001
-    pathname: H/HA/HAARG/Win32-ShellQuote-0.003001.tar.gz
+  YAML-1.30
+    pathname: T/TI/TINITA/YAML-1.30.tar.gz
     provides:
-      Win32::ShellQuote 0.003001
+      YAML 1.30
+      YAML::Any 1.30
+      YAML::Dumper undef
+      YAML::Dumper::Base undef
+      YAML::Error undef
+      YAML::Loader undef
+      YAML::Loader::Base undef
+      YAML::Marshall undef
+      YAML::Mo undef
+      YAML::Node undef
+      YAML::Tag undef
+      YAML::Type::blessed undef
+      YAML::Type::code undef
+      YAML::Type::glob undef
+      YAML::Type::ref undef
+      YAML::Type::regexp undef
+      YAML::Type::undef undef
+      YAML::Types undef
+      YAML::Warning undef
+      yaml_mapping undef
+      yaml_scalar undef
+      yaml_sequence undef
     requirements:
-      perl 5.006
+      ExtUtils::MakeMaker 0
+      perl 5.008001
+  YAML-LibYAML-0.85
+    pathname: I/IN/INGY/YAML-LibYAML-0.85.tar.gz
+    provides:
+      YAML::LibYAML 0.85
+      YAML::XS 0.85
+      YAML::XS::LibYAML undef
+    requirements:
+      ExtUtils::MakeMaker 0
+      perl 5.008001
+  YAML-Tiny-1.73
+    pathname: E/ET/ETHER/YAML-Tiny-1.73.tar.gz
+    provides:
+      YAML::Tiny 1.73
+    requirements:
+      B 0
+      Carp 0
+      Exporter 0
+      ExtUtils::MakeMaker 0
+      Fcntl 0
+      Scalar::Util 0
+      perl 5.008001
+      strict 0
+      warnings 0
   common-sense-3.75
     pathname: M/ML/MLEHMANN/common-sense-3.75.tar.gz
     provides:

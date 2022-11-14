@@ -83,12 +83,16 @@ sub cpan_install {
     try {
         local $ENV{PATH} = "$install_dir\\bin;C:\\strawberry\\c\\bin;$ENV{PATH}";
         my ($filename, $dirname);
-        if ($url =~ m(/([^/]+)/archive/(([0-9a-fA-F]+)[.]tar[.][0-9a-z]+))) {
+        if ($url =~ m(^http://.*/([^/]+)/archive/(([0-9a-fA-F]+)[.]tar[.][0-9a-z]+))) {
             $dirname = "$1-$3";
             $filename = $2;
-        } elsif ($url =~ m(/(([^/]+)[.]tar[.][0-9a-z]+))) {
+        } elsif ($url =~ m(^https://.*/(([^/]+)[.]tar[.][0-9a-z]+))) {
             $dirname = $2;
             $filename = $1
+        } elsif ($snapshot =~ m(pathname:\s*(.*/(($url-[0-9.]+)[.]tar[.][0-9a-z]+)))) {
+            $dirname = $3;
+            $filename = $2;
+            $url = "https://cpan.metacpan.org/authors/id/$1";
         }
 
         info "installing $name from $url";
@@ -166,62 +170,59 @@ sub run {
     };
 
     group "install common CPAN modules" => sub {
-        # Win32
-        cpan_install('https://cpan.metacpan.org/authors/id/J/JD/JDB/Win32-0.59.tar.gz', 'Win32', '5.6.0', '5.8.3');
-
         # JSON
-        cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-4.10.tar.gz', 'JSON', '5.5.3');
+        cpan_install('JSON', 'JSON', '5.5.3');
 
         # Cpanel::JSON::XS
-        cpan_install('https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.32.tar.gz', 'Cpanel::JSON::XS', '5.6.2');
+        cpan_install('Cpanel-JSON-XS', 'Cpanel::JSON::XS', '5.6.2');
 
         # some requirements of JSON::XS
-        cpan_install('https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/Canary-Stability-2013.tar.gz', 'Canary::Stability', '5.8.3');
-        cpan_install('https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/common-sense-3.75.tar.gz', 'common::sense', '5.8.3');
-        cpan_install('https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/Types-Serialiser-1.01.tar.gz', 'Types::Serialiser', '5.8.3');
+        cpan_install('Canary-Stability', 'Canary::Stability', '5.8.3');
+        cpan_install('common-sense', 'common::sense', '5.8.3');
+        cpan_install('Types-Serialiser', 'Types::Serialiser', '5.8.3');
         # JSON::XS
-        cpan_install('https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/JSON-XS-4.03.tar.gz', 'JSON::XS', '5.8.3');
+        cpan_install('JSON-XS', 'JSON::XS', '5.8.3');
 
         # some requirements of JSON::PP
-        cpan_install('https://cpan.metacpan.org/authors/id/C/CO/CORION/parent-0.238.tar.gz', 'parent', '5.6.0', '5.10.1');
-        cpan_install('https://cpan.metacpan.org/authors/id/J/JK/JKEENAN/File-Path-2.18.tar.gz', 'File::Path', '5.6.0', '5.6.1');
-        cpan_install('https://cpan.metacpan.org/authors/id/P/PE/PEVANS/Scalar-List-Utils-1.63.tar.gz', 'Scalar::Util', '5.6.0', '5.8.1');
-        cpan_install('https://cpan.metacpan.org/authors/id/T/TO/TODDR/Exporter-5.74.tar.gz', 'Exporter', '5.6.0', '5.6.1');
-        cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/File-Temp-0.2311.tar.gz', 'File::Temp', '5.6.0', '5.6.1');
-        cpan_install('https://cpan.metacpan.org/authors/id/M/MA/MAKAMAKA/JSON-PP-Compat5006-1.09.tar.gz', 'JSON::PP::Compat5006', '5.6.0', '5.8.0');
+        cpan_install('parent', 'parent', '5.6.0', '5.10.1');
+        cpan_install('File-Path', 'File::Path', '5.6.0', '5.6.1');
+        cpan_install('Scalar-List-Utils', 'Scalar::Util', '5.6.0', '5.8.1');
+        cpan_install('Exporter', 'Exporter', '5.6.0', '5.6.1');
+        cpan_install('File-Temp', 'File::Temp', '5.6.0', '5.6.1');
+        cpan_install('JSON-PP-Compat5006', 'JSON::PP::Compat5006', '5.6.0', '5.8.0');
         # JSON::PP
-        cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-PP-4.12.tar.gz', 'JSON::PP', '5.6.0');
+        cpan_install('JSON-PP', 'JSON::PP', '5.6.0');
 
         # JSON::MaybeXS
-        cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004003.tar.gz', 'JSON::MaybeXS', '5.6.0');
+        cpan_install('JSON-MaybeXS', 'JSON::MaybeXS', '5.6.0');
 
         # YAML
-        cpan_install('https://cpan.metacpan.org/authors/id/T/TI/TINITA/YAML-1.30.tar.gz', 'YAML', '5.8.1');
+        cpan_install('YAML', 'YAML', '5.8.1');
 
         # YAML::Tiny
-        cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/YAML-Tiny-1.73.tar.gz', 'YAML::Tiny', '5.8.1');
+        cpan_install('YAML-Tiny', 'YAML::Tiny', '5.8.1');
 
         # YAML::XS
-        cpan_install('https://cpan.metacpan.org/authors/id/T/TI/TINITA/YAML-LibYAML-0.84.tar.gz', 'YAML::XS', '5.8.1');
+        cpan_install('YAML-LibYAML', 'YAML::XS', '5.8.1');
 
         ### SSL/TLS
 
         # Net::SSLeay
-        cpan_install('https://cpan.metacpan.org/authors/id/C/CH/CHRISN/Net-SSLeay-1.92.tar.gz', 'Net::SSLeay', '5.8.1');
+        cpan_install('Net-SSLeay', 'Net::SSLeay', '5.8.1');
 
         # Mozilla::CA
-        cpan_install('https://cpan.metacpan.org/authors/id/A/AB/ABH/Mozilla-CA-20211001.tar.gz', 'Mozilla::CA', '5.6.0');
+        cpan_install('Mozilla-CA', 'Mozilla::CA', '5.6.0');
 
         # IO::Socket::SSL
-        local $ENV{NO_NETWORK_TESTING} = 1;
-        local $ENV{PERL_MM_USE_DEFAULT} = 1;
         # NOTE:
         # IO::Socket::SSL supports v5.8.1, but it doesn't work on Windows
         # https://github.com/shogo82148/actions-setup-perl/pull/480#issuecomment-735391122
-        cpan_install('https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-2.075.tar.gz', 'IO::Socket::SSL', '5.8.1');
+        local $ENV{NO_NETWORK_TESTING} = 1;
+        local $ENV{PERL_MM_USE_DEFAULT} = 1;
+        cpan_install('IO-Socket-SSL', 'IO::Socket::SSL', '5.8.1');
 
         # Test::Harness
-        cpan_install('https://cpan.metacpan.org/authors/id/L/LE/LEONT/Test-Harness-3.44.tar.gz', 'Test::Harness', '5.6.0', '5.8.3');
+        cpan_install('Test-Harness', 'Test::Harness', '5.6.0', '5.8.3');
     };
 
     group "archiving" => sub {

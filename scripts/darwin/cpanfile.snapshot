@@ -23,6 +23,22 @@ DISTRIBUTIONS
       Canary::Stability 2013
     requirements:
       ExtUtils::MakeMaker 0
+  Cpanel-JSON-XS-4.32
+    pathname: R/RU/RURBAN/Cpanel-JSON-XS-4.32.tar.gz
+    provides:
+      Cpanel::JSON::XS 4.32
+      Cpanel::JSON::XS::Type undef
+    requirements:
+      Carp 0
+      Config 0
+      Encode 1.9801
+      Exporter 0
+      ExtUtils::MakeMaker 0
+      Pod::Text 2.08
+      XSLoader 0
+      overload 0
+      strict 0
+      warnings 0
   Devel-PatchPerl-2.08
     pathname: B/BI/BINGOS/Devel-PatchPerl-2.08.tar.gz
     provides:
@@ -95,6 +111,24 @@ DISTRIBUTIONS
       IPC::Run3 0
       parent 0
       perl 5.008001
+  IO-Socket-SSL-2.076
+    pathname: S/SU/SULLR/IO-Socket-SSL-2.076.tar.gz
+    provides:
+      IO::Socket::SSL 2.076
+      IO::Socket::SSL::Intercept 2.056
+      IO::Socket::SSL::OCSP_Cache 2.076
+      IO::Socket::SSL::OCSP_Resolver 2.076
+      IO::Socket::SSL::PublicSuffix undef
+      IO::Socket::SSL::SSL_Context 2.076
+      IO::Socket::SSL::SSL_HANDLE 2.076
+      IO::Socket::SSL::Session_Cache 2.076
+      IO::Socket::SSL::Trace 2.076
+      IO::Socket::SSL::Utils 2.015
+    requirements:
+      ExtUtils::MakeMaker 0
+      Mozilla::CA 0
+      Net::SSLeay 1.46
+      Scalar::Util 0
   IPC-Run3-0.048
     pathname: R/RJ/RJBS/IPC-Run3-0.048.tar.gz
     provides:
@@ -108,6 +142,24 @@ DISTRIBUTIONS
     provides:
       JSON 4.10
       JSON::Backend::PP 4.10
+    requirements:
+      ExtUtils::MakeMaker 0
+      Test::More 0
+  JSON-MaybeXS-1.004004
+    pathname: E/ET/ETHER/JSON-MaybeXS-1.004004.tar.gz
+    provides:
+      JSON::MaybeXS 1.004004
+    requirements:
+      Carp 0
+      Cpanel::JSON::XS 2.3310
+      ExtUtils::MakeMaker 0
+      JSON::PP 2.27300
+      Scalar::Util 0
+      perl 5.006
+  JSON-PP-Compat5006-1.09
+    pathname: M/MA/MAKAMAKA/JSON-PP-Compat5006-1.09.tar.gz
+    provides:
+      JSON::PP::Compat5006 1.09
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
@@ -182,6 +234,26 @@ DISTRIBUTIONS
       if 0
       perl 5.005030
       strict 0
+  Mozilla-CA-20221114
+    pathname: H/HA/HAARG/Mozilla-CA-20221114.tar.gz
+    provides:
+      Mozilla::CA 20221114
+    requirements:
+      ExtUtils::MakeMaker 0
+      perl 5.006
+  Net-SSLeay-1.92
+    pathname: C/CH/CHRISN/Net-SSLeay-1.92.tar.gz
+    provides:
+      Net::SSLeay 1.92
+      Net::SSLeay::Handle 1.92
+    requirements:
+      English 0
+      ExtUtils::MakeMaker 0
+      File::Spec::Functions 0
+      MIME::Base64 0
+      Text::Wrap 0
+      constant 0
+      perl 5.008001
   Perl-Build-1.33
     pathname: S/SK/SKAJI/Perl-Build-1.33.tar.gz
     provides:
@@ -221,6 +293,57 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       common::sense 0
+  YAML-1.30
+    pathname: T/TI/TINITA/YAML-1.30.tar.gz
+    provides:
+      YAML 1.30
+      YAML::Any 1.30
+      YAML::Dumper undef
+      YAML::Dumper::Base undef
+      YAML::Error undef
+      YAML::Loader undef
+      YAML::Loader::Base undef
+      YAML::Marshall undef
+      YAML::Mo undef
+      YAML::Node undef
+      YAML::Tag undef
+      YAML::Type::blessed undef
+      YAML::Type::code undef
+      YAML::Type::glob undef
+      YAML::Type::ref undef
+      YAML::Type::regexp undef
+      YAML::Type::undef undef
+      YAML::Types undef
+      YAML::Warning undef
+      yaml_mapping undef
+      yaml_scalar undef
+      yaml_sequence undef
+    requirements:
+      ExtUtils::MakeMaker 0
+      perl 5.008001
+  YAML-LibYAML-0.85
+    pathname: I/IN/INGY/YAML-LibYAML-0.85.tar.gz
+    provides:
+      YAML::LibYAML 0.85
+      YAML::XS 0.85
+      YAML::XS::LibYAML undef
+    requirements:
+      ExtUtils::MakeMaker 0
+      perl 5.008001
+  YAML-Tiny-1.73
+    pathname: E/ET/ETHER/YAML-Tiny-1.73.tar.gz
+    provides:
+      YAML::Tiny 1.73
+    requirements:
+      B 0
+      Carp 0
+      Exporter 0
+      ExtUtils::MakeMaker 0
+      Fcntl 0
+      Scalar::Util 0
+      perl 5.008001
+      strict 0
+      warnings 0
   common-sense-3.75
     pathname: M/ML/MLEHMANN/common-sense-3.75.tar.gz
     provides:

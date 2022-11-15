@@ -22,6 +22,22 @@ DISTRIBUTIONS
       Clone 0.46
     requirements:
       ExtUtils::MakeMaker 0
+  Cpanel-JSON-XS-4.32
+    pathname: R/RU/RURBAN/Cpanel-JSON-XS-4.32.tar.gz
+    provides:
+      Cpanel::JSON::XS 4.32
+      Cpanel::JSON::XS::Type undef
+    requirements:
+      Carp 0
+      Config 0
+      Encode 1.9801
+      Exporter 0
+      ExtUtils::MakeMaker 0
+      Pod::Text 2.08
+      XSLoader 0
+      overload 0
+      strict 0
+      warnings 0
   Devel-PatchPerl-2.08
     pathname: B/BI/BINGOS/Devel-PatchPerl-2.08.tar.gz
     provides:
@@ -238,17 +254,18 @@ DISTRIBUTIONS
       Exporter 5.57
       ExtUtils::MakeMaker 0
       perl 5.008
-  IO-Socket-SSL-2.075
-    pathname: S/SU/SULLR/IO-Socket-SSL-2.075.tar.gz
+  IO-Socket-SSL-2.076
+    pathname: S/SU/SULLR/IO-Socket-SSL-2.076.tar.gz
     provides:
-      IO::Socket::SSL 2.075
+      IO::Socket::SSL 2.076
       IO::Socket::SSL::Intercept 2.056
-      IO::Socket::SSL::OCSP_Cache 2.075
-      IO::Socket::SSL::OCSP_Resolver 2.075
+      IO::Socket::SSL::OCSP_Cache 2.076
+      IO::Socket::SSL::OCSP_Resolver 2.076
       IO::Socket::SSL::PublicSuffix undef
-      IO::Socket::SSL::SSL_Context 2.075
-      IO::Socket::SSL::SSL_HANDLE 2.075
-      IO::Socket::SSL::Session_Cache 2.075
+      IO::Socket::SSL::SSL_Context 2.076
+      IO::Socket::SSL::SSL_HANDLE 2.076
+      IO::Socket::SSL::Session_Cache 2.076
+      IO::Socket::SSL::Trace 2.076
       IO::Socket::SSL::Utils 2.015
     requirements:
       ExtUtils::MakeMaker 0
@@ -270,6 +287,24 @@ DISTRIBUTIONS
     provides:
       JSON 4.10
       JSON::Backend::PP 4.10
+    requirements:
+      ExtUtils::MakeMaker 0
+      Test::More 0
+  JSON-MaybeXS-1.004004
+    pathname: E/ET/ETHER/JSON-MaybeXS-1.004004.tar.gz
+    provides:
+      JSON::MaybeXS 1.004004
+    requirements:
+      Carp 0
+      Cpanel::JSON::XS 2.3310
+      ExtUtils::MakeMaker 0
+      JSON::PP 2.27300
+      Scalar::Util 0
+      perl 5.006
+  JSON-PP-Compat5006-1.09
+    pathname: M/MA/MAKAMAKA/JSON-PP-Compat5006-1.09.tar.gz
+    provides:
+      JSON::PP::Compat5006 1.09
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
@@ -372,10 +407,10 @@ DISTRIBUTIONS
       if 0
       perl 5.005030
       strict 0
-  Mozilla-CA-20211001
-    pathname: A/AB/ABH/Mozilla-CA-20211001.tar.gz
+  Mozilla-CA-20221114
+    pathname: H/HA/HAARG/Mozilla-CA-20221114.tar.gz
     provides:
-      Mozilla::CA 20211001
+      Mozilla::CA 20221114
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006
@@ -547,6 +582,29 @@ DISTRIBUTIONS
       Win32::ShellQuote 0.003001
     requirements:
       perl 5.006
+  YAML-LibYAML-0.85
+    pathname: I/IN/INGY/YAML-LibYAML-0.85.tar.gz
+    provides:
+      YAML::LibYAML 0.85
+      YAML::XS 0.85
+      YAML::XS::LibYAML undef
+    requirements:
+      ExtUtils::MakeMaker 0
+      perl 5.008001
+  YAML-Tiny-1.73
+    pathname: E/ET/ETHER/YAML-Tiny-1.73.tar.gz
+    provides:
+      YAML::Tiny 1.73
+    requirements:
+      B 0
+      Carp 0
+      Exporter 0
+      ExtUtils::MakeMaker 0
+      Fcntl 0
+      Scalar::Util 0
+      perl 5.008001
+      strict 0
+      warnings 0
   common-sense-3.75
     pathname: M/ML/MLEHMANN/common-sense-3.75.tar.gz
     provides:

@@ -24,24 +24,6 @@ jobs:
   list:
     runs-on: ubuntu-latest
     steps:
-      - id: perl
-        name: check pre-installed perl version
-        run: |
-          perl -e 'print "version=$^V"' >> "$GITHUB_OUTPUT"
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: scripts/windows/local
-          key: Windows-sanity-check-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/windows/cpanfile.snapshot') }}
-          restore-keys: Windows-sanity-check-perl-${{ steps.perl.outputs.version }}-
-      - name: sanity check
-        run: |
-          ../../bin/carton install --deployment
-          ../../bin/carton exec perl -c build.pl
-          ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/GitHubActions.pm
-          ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/MinGW.pm
-          ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/MinGWGNUmakefile.pm
-        working-directory: ./scripts/windows
       - id: set-matrix
         name: list available perl versions
         run: |
@@ -56,7 +38,7 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
 
   sanity-check:
-    runs-on: windows-latest
+    runs-on: windows-2019
     steps:
       - id: perl
         name: check pre-installed perl version

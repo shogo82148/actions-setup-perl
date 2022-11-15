@@ -61,6 +61,17 @@ DISTRIBUTIONS
       Encode::Alias 0
       ExtUtils::MakeMaker 0
       perl 5.008
+  ExtUtils-PL2Bat-0.005
+    pathname: L/LE/LEONT/ExtUtils-PL2Bat-0.005.tar.gz
+    provides:
+      ExtUtils::PL2Bat 0.005
+    requirements:
+      Carp 0
+      ExtUtils::MakeMaker 0
+      Getopt::Std 0
+      perl 5.006
+      strict 0
+      warnings 0
   File-Listing-6.15
     pathname: P/PL/PLICEASE/File-Listing-6.15.tar.gz
     provides:
@@ -156,6 +167,7 @@ DISTRIBUTIONS
       HTTP::Date 6
       HTTP::Headers::Util 6
       HTTP::Request 0
+      Win32 0
       locale 0
       perl 5.008001
       strict 0
@@ -242,17 +254,18 @@ DISTRIBUTIONS
       Exporter 5.57
       ExtUtils::MakeMaker 0
       perl 5.008
-  IO-Socket-SSL-2.075
-    pathname: S/SU/SULLR/IO-Socket-SSL-2.075.tar.gz
+  IO-Socket-SSL-2.076
+    pathname: S/SU/SULLR/IO-Socket-SSL-2.076.tar.gz
     provides:
-      IO::Socket::SSL 2.075
+      IO::Socket::SSL 2.076
       IO::Socket::SSL::Intercept 2.056
-      IO::Socket::SSL::OCSP_Cache 2.075
-      IO::Socket::SSL::OCSP_Resolver 2.075
+      IO::Socket::SSL::OCSP_Cache 2.076
+      IO::Socket::SSL::OCSP_Resolver 2.076
       IO::Socket::SSL::PublicSuffix undef
-      IO::Socket::SSL::SSL_Context 2.075
-      IO::Socket::SSL::SSL_HANDLE 2.075
-      IO::Socket::SSL::Session_Cache 2.075
+      IO::Socket::SSL::SSL_Context 2.076
+      IO::Socket::SSL::SSL_HANDLE 2.076
+      IO::Socket::SSL::Session_Cache 2.076
+      IO::Socket::SSL::Trace 2.076
       IO::Socket::SSL::Utils 2.015
     requirements:
       ExtUtils::MakeMaker 0
@@ -267,6 +280,8 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Test::More 0.31
       Time::HiRes 0
+      Win32 0
+      Win32::ShellQuote 0
   JSON-4.10
     pathname: I/IS/ISHIGAKI/JSON-4.10.tar.gz
     provides:
@@ -359,13 +374,14 @@ DISTRIBUTIONS
       ExtUtils::Install 0
       ExtUtils::Manifest 0
       ExtUtils::Mkbootstrap 0
+      ExtUtils::PL2Bat 0
       ExtUtils::ParseXS 2.21
       File::Basename 0
       File::Compare 0
       File::Copy 0
       File::Find 0
       File::Path 0
-      File::Spec 0.82
+      File::Spec 3.3
       Getopt::Long 0
       Module::Metadata 1.000002
       Perl::OSType 1
@@ -391,10 +407,10 @@ DISTRIBUTIONS
       if 0
       perl 5.005030
       strict 0
-  Mozilla-CA-20211001
-    pathname: A/AB/ABH/Mozilla-CA-20211001.tar.gz
+  Mozilla-CA-20221114
+    pathname: H/HA/HAARG/Mozilla-CA-20221114.tar.gz
     provides:
-      Mozilla::CA 20211001
+      Mozilla::CA 20221114
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006
@@ -416,19 +432,6 @@ DISTRIBUTIONS
       perl 5.006002
       strict 0
       warnings 0
-  Net-SSLeay-1.92
-    pathname: C/CH/CHRISN/Net-SSLeay-1.92.tar.gz
-    provides:
-      Net::SSLeay 1.92
-      Net::SSLeay::Handle 1.92
-    requirements:
-      English 0
-      ExtUtils::MakeMaker 0
-      File::Spec::Functions 0
-      MIME::Base64 0
-      Text::Wrap 0
-      constant 0
-      perl 5.008001
   TimeDate-2.33
     pathname: A/AT/ATOOMIC/TimeDate-2.33.tar.gz
     provides:
@@ -573,6 +576,12 @@ DISTRIBUTIONS
       Fcntl 0
       URI 1.10
       perl 5.008001
+  Win32-ShellQuote-0.003001
+    pathname: H/HA/HAARG/Win32-ShellQuote-0.003001.tar.gz
+    provides:
+      Win32::ShellQuote 0.003001
+    requirements:
+      perl 5.006
   YAML-1.30
     pathname: T/TI/TINITA/YAML-1.30.tar.gz
     provides:

@@ -59,7 +59,7 @@ jobs:
           ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/MinGW.pm
           ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/MinGWGNUmakefile.pm
         working-directory: ./scripts/windows
-
+        shell: cmd
 
   build:
     runs-on: windows-2019

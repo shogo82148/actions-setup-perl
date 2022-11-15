@@ -24,26 +24,7 @@ jobs:
   list:
     runs-on: ubuntu-latest
     steps:
-      - id: perl
-        name: check pre-installed perl version
-        run: |
-          perl -e 'print "version=$^V\n"' >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: scripts/darwin/local
-          key: Darwin-sanity-check-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
-          restore-keys: Darwin-sanity-check-perl-${{ steps.perl.outputs.version }}-
-      # - name: sanity check
-      #   run: |
-      #     ../../bin/carton install --deployment
-      #     ../../bin/carton exec perl -c build.pl
-      #     ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/GitHubActions.pm
-      #     ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/MinGW.pm
-      #     ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/MinGWGNUmakefile.pm
-      #   working-directory: ./scripts/darwin
-      #   env:
-      #     PERL5LIB: ${{ github.workspace }}/scripts/lib
       - id: set-matrix
         name: list available perl versions
         run: |

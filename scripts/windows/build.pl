@@ -36,7 +36,7 @@ my $perl = File::Spec->catfile($install_dir, 'bin', 'perl');
 
 # read cpanfile snapshot
 my $snapshot = do {
-    my $cpanfile = File::Spec->catdir($FindBin::Bin, "cpanfile.snapshot");
+    my $cpanfile = File::Spec->catdir($FindBin::Bin, "..", "common", "cpanfile.snapshot");
     open my $fh, "<", $cpanfile or die "failed to open cpanfile.snapshot: $!";
     local $/;
     my $snapshot = <$fh>;

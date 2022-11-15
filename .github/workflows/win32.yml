@@ -24,24 +24,7 @@ jobs:
   list:
     runs-on: ubuntu-latest
     steps:
-      - id: perl
-        name: check pre-installed perl version
-        run: |
-          perl -e 'print "version=$^V"' >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: scripts/windows/local
-          key: Windows-sanity-check-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/windows/cpanfile.snapshot') }}
-          restore-keys: Windows-sanity-check-perl-${{ steps.perl.outputs.version }}-
-      - name: sanity check
-        run: |
-          ../../bin/carton install --deployment
-          ../../bin/carton exec perl -c build.pl
-          ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/GitHubActions.pm
-          ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/MinGW.pm
-          ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/MinGWGNUmakefile.pm
-        working-directory: ./scripts/windows
       - id: set-matrix
         name: list available perl versions
         run: |
@@ -56,13 +39,21 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
 
   sanity-check:
-    runs-on: windows-latest
+    runs-on: windows-2019
     steps:
-      - id: perl
-        name: check pre-installed perl version
-        run: |
-          perl -e 'print "version=$^V"' >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v3
+
+      - id: perl
+        name: setup host perl
+        shell: bash
+        run: |
+          cat << 'END_OF_PATH' >> "$GITHUB_PATH"
+          C:\strawberry\c\bin
+          C:\strawberry\perl\site\bin
+          C:\strawberry\perl\bin
+          END_OF_PATH
+          perl -e 'print "version=$^V\n"' >> "$GITHUB_OUTPUT"
+
       - uses: actions/cache@v3
         with:
           path: scripts/windows/local
@@ -76,7 +67,7 @@ jobs:
           ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/MinGW.pm
           ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/MinGWGNUmakefile.pm
         working-directory: ./scripts/windows
-
+        shell: cmd
 
   build:
     runs-on: windows-2019
@@ -108,7 +99,7 @@ jobs:
           C:\strawberry\perl\site\bin
           C:\strawberry\perl\bin
           END_OF_PATH
-          perl -e 'print "name=version$^V\n"' >> "$GITHUB_OUTPUT"
+          perl -e 'print "version=$^V\n"' >> "$GITHUB_OUTPUT"
       - name: Host perl -V
         run: perl -V
       - name: gcc --version

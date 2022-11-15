@@ -5,23 +5,3 @@ requires "File::Slurp";
 requires "JSON";
 requires "JSON::XS";
 
-# for tracking dependencies of actions-setup-perl
-requires "Cpanel::JSON::XS";
-requires "Canary::Stability";
-requires "common::sense";
-requires "Types::Serialiser";
-requires "parent";
-requires "File::Path";
-requires "Scalar::Util";
-requires "Exporter";
-requires "File::Temp";
-requires "JSON::PP::Compat5006";
-requires "JSON::PP";
-requires "JSON::MaybeXS";
-requires "YAML";
-requires "YAML::Tiny";
-requires "YAML::XS";
-requires "Net::SSLeay";
-requires "Mozilla::CA";
-requires "IO::Socket::SSL";
-requires "Test::Harness";

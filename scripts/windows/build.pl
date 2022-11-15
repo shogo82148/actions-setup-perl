@@ -34,6 +34,17 @@ my $install_dir = File::Spec->rel2abs(
     File::Spec->catdir($runner_tool_cache, "perl", $version . ($thread ? "-thr" : ""), "x64"));
 my $perl = File::Spec->catfile($install_dir, 'bin', 'perl');
 
+# read cpanfile snapshot
+my $snapshot = do {
+    my $cpanfile = File::Spec->catdir($FindBin::Bin, "cpanfile.snapshot");
+    open my $fh, "<", $cpanfile or die "failed to open cpanfile.snapshot: $!";
+    local $/;
+    my $snapshot = <$fh>;
+    close $fh;
+    $snapshot;
+};
+
+
 sub perl_release {
     my $version = shift;
 

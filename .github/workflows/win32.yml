@@ -43,7 +43,7 @@ jobs:
       - id: perl
         name: check pre-installed perl version
         run: |
-          perl -e 'print "version=$^V"' >> "$GITHUB_OUTPUT"
+          perl -e 'printf "version=%s\n", $^V;' >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
         with:

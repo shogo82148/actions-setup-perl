@@ -40,12 +40,26 @@ jobs:
   sanity-check:
     runs-on: windows-2019
     steps:
-      - id: perl
-        shell: bash
-        name: check pre-installed perl version
-        run: |
-          perl -e 'print "name=version$^V\n"' >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v3
+
+      - uses: msys2/setup-msys2@v2
+        with:
+          install: make mingw-w64-x86_64-gcc nasm
+      - name: install OpenSSL
+        run: .github/build-openssl-win32.sh
+        shell: "msys2 {0}"
+
+      - id: perl
+        name: setup host perl
+        shell: bash
+        run: |
+          cat << 'END_OF_PATH' >> "$GITHUB_PATH"
+          C:\strawberry\c\bin
+          C:\strawberry\perl\site\bin
+          C:\strawberry\perl\bin
+          END_OF_PATH
+          perl -e 'print "name=version$^V\n"' >> "$GITHUB_OUTPUT"
+
       - uses: actions/cache@v3
         with:
           path: scripts/windows/local

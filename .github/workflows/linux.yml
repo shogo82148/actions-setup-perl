@@ -24,6 +24,7 @@ jobs:
   list:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - id: set-matrix
         name: list available perl versions
         run: |

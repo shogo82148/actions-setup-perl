@@ -41,9 +41,10 @@ jobs:
     runs-on: windows-2019
     steps:
       - id: perl
+        shell: bash
         name: check pre-installed perl version
         run: |
-          perl -e 'printf "version=%s\n", $^V;' >> "$GITHUB_OUTPUT"
+          perl -e 'print "name=version$^V\n"' >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
         with:

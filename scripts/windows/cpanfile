@@ -11,6 +11,7 @@ requires "JSON";
 requires "JSON::XS";
 
 # for tracking dependencies of actions-setup-perl
+requires "Win32";
 requires "Cpanel::JSON::XS";
 requires "Canary::Stability";
 requires "common::sense";

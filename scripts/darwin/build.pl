@@ -132,7 +132,7 @@ sub run {
         cpan_install('https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/common-sense-3.75.tar.gz', 'common-sense', 'common::sense', '5.8.3');
         cpan_install('https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/Types-Serialiser-1.01.tar.gz', 'Types-Serialiser', 'Types::Serialiser', '5.8.3');
         # JSON::XS
-        cpan_install('JSON-XS', 'JSON::XS', '5.8.3');
+        cpan_install('https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/JSON-XS-4.03.tar.gz', 'JSON-XS', 'JSON::XS', '5.8.3');
 
         # some requirements of JSON::PP
         cpan_install('https://cpan.metacpan.org/authors/id/C/CO/CORION/parent-0.238.tar.gz', 'parent', 'parent', '5.6.0', '5.10.1');
@@ -151,7 +151,7 @@ sub run {
         cpan_install('https://cpan.metacpan.org/authors/id/T/TI/TINITA/YAML-1.30.tar.gz', 'YAML', 'YAML', '5.8.1');
 
         # YAML::Tiny
-        cpan_install(('https://cpan.metacpan.org/authors/id/E/ET/ETHER/YAML-Tiny-1.73.tar.gz', 'YAML-Tiny', 'YAML::Tiny', '5.8.1');
+        cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/YAML-Tiny-1.73.tar.gz', 'YAML-Tiny', 'YAML::Tiny', '5.8.1');
 
         # YAML::XS
         cpan_install('https://cpan.metacpan.org/authors/id/T/TI/TINITA/YAML-LibYAML-0.84.tar.gz', 'YAML-LibYAML', 'YAML::XS', '5.8.1');

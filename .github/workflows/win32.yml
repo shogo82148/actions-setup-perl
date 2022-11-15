@@ -42,13 +42,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: msys2/setup-msys2@v2
-        with:
-          install: make mingw-w64-x86_64-gcc nasm
-      - name: install OpenSSL
-        run: .github/build-openssl-win32.sh
-        shell: "msys2 {0}"
-
       - id: perl
         name: setup host perl
         shell: bash

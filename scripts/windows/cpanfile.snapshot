@@ -238,18 +238,18 @@ DISTRIBUTIONS
       Exporter 5.57
       ExtUtils::MakeMaker 0
       perl 5.008
-  IO-Socket-SSL-2.076
-    pathname: S/SU/SULLR/IO-Socket-SSL-2.076.tar.gz
+  IO-Socket-SSL-2.077
+    pathname: S/SU/SULLR/IO-Socket-SSL-2.077.tar.gz
     provides:
-      IO::Socket::SSL 2.076
+      IO::Socket::SSL 2.077
       IO::Socket::SSL::Intercept 2.056
-      IO::Socket::SSL::OCSP_Cache 2.076
-      IO::Socket::SSL::OCSP_Resolver 2.076
+      IO::Socket::SSL::OCSP_Cache 2.077
+      IO::Socket::SSL::OCSP_Resolver 2.077
       IO::Socket::SSL::PublicSuffix undef
-      IO::Socket::SSL::SSL_Context 2.076
-      IO::Socket::SSL::SSL_HANDLE 2.076
-      IO::Socket::SSL::Session_Cache 2.076
-      IO::Socket::SSL::Trace 2.076
+      IO::Socket::SSL::SSL_Context 2.077
+      IO::Socket::SSL::SSL_HANDLE 2.077
+      IO::Socket::SSL::Session_Cache 2.077
+      IO::Socket::SSL::Trace 2.077
       IO::Socket::SSL::Utils 2.015
     requirements:
       ExtUtils::MakeMaker 0

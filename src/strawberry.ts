@@ -8,7 +8,7 @@ import { getPackagePath } from "./utils";
 
 interface PerlVersion {
   version: string;
-  path: string;
+  release: string;
 }
 
 export interface Result {
@@ -101,7 +101,7 @@ async function acquirePerl(version: PerlVersion): Promise<string> {
   //
 
   // download from a mirror for actions-setup-perl
-  const downloadUrl = `https://github.com/shogo82148/strawberry-perl-releases/releases/download/${version.version}/${version.path}`;
+  const downloadUrl = `https://github.com/shogo82148/strawberry-perl-releases/releases/download/${version.version}.${version.release}/strawberry-perl-${version.version}.${version.release}-64bit-portable.zip`;
   let downloadPath: string | null = null;
   try {
     downloadPath = await tc.downloadTool(downloadUrl);

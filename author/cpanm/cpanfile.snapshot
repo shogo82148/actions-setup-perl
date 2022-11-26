@@ -488,12 +488,12 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  Getopt-Long-2.52
-    pathname: J/JV/JV/Getopt-Long-2.52.tar.gz
+  Getopt-Long-2.54
+    pathname: J/JV/JV/Getopt-Long-2.54.tar.gz
     provides:
-      Getopt::Long 2.52
-      Getopt::Long::CallBack 2.52
-      Getopt::Long::Parser 2.52
+      Getopt::Long 2.54
+      Getopt::Long::CallBack 2.54
+      Getopt::Long::Parser 2.54
     requirements:
       ExtUtils::MakeMaker 0
       Pod::Usage 1.14
@@ -679,11 +679,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20221020
-    pathname: B/BI/BINGOS/Module-CoreList-5.20221020.tar.gz
+  Module-CoreList-5.20221120
+    pathname: B/BI/BINGOS/Module-CoreList-5.20221120.tar.gz
     provides:
-      Module::CoreList 5.20221020
-      Module::CoreList::Utils 5.20221020
+      Module::CoreList 5.20221120
+      Module::CoreList::Utils 5.20221120
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0

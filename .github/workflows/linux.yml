@@ -24,6 +24,23 @@ jobs:
   list:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+      - id: set-matrix
+        name: list available perl versions
+        run: |
+          if [ -n "$PERL_VERSIONS" ]; then
+            echo "matrix=$(printenv PERL_VERSIONS | jq -c '{perl: .}')" >> "$GITHUB_OUTPUT"
+          else
+            echo "matrix=$(<versions/linux.json jq -c '{perl: .}')" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          PERL_VERSIONS: ${{ github.event.inputs.perl-versions }}
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+
+  sanity-check:
+    runs-on: ubuntu-latest
+    steps:
       - id: perl
         name: check pre-installed perl version
         run: |
@@ -44,22 +61,12 @@ jobs:
         working-directory: ./scripts/linux
         env:
           PERL5LIB: ${{ github.workspace }}/scripts/lib
-      - id: set-matrix
-        name: list available perl versions
-        run: |
-          if [ -n "$PERL_VERSIONS" ]; then
-            echo "matrix=$(printenv PERL_VERSIONS | jq -c '{perl: .}')" >> "$GITHUB_OUTPUT"
-          else
-            echo "matrix=$(<versions/linux.json jq -c '{perl: .}')" >> "$GITHUB_OUTPUT"
-          fi
-        env:
-          PERL_VERSIONS: ${{ github.event.inputs.perl-versions }}
-    outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
 
   build:
     runs-on: ubuntu-20.04
-    needs: list
+    needs:
+      - list
+      - sanity-check
     timeout-minutes: 25
     strategy:
       fail-fast: false

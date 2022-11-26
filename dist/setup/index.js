@@ -64872,7 +64872,7 @@ async function acquirePerl(version) {
     // Download - a tool installer intimately knows how to get the tool (and construct urls)
     //
     // download from a mirror for actions-setup-perl
-    const downloadUrl = `https://setupperl.blob.core.windows.net/actions-setup-perl/strawberry-perl/${version.path}`;
+    const downloadUrl = `https://github.com/shogo82148/strawberry-perl-releases/releases/download/${version.version}.${version.release}/strawberry-perl-${version.version}.${version.release}-64bit-portable.zip`;
     let downloadPath = null;
     try {
         downloadPath = await tc.downloadTool(downloadUrl);

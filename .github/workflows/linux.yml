@@ -115,7 +115,9 @@ jobs:
 
   build-multi-thread:
     runs-on: ubuntu-20.04
-    needs: list
+    needs:
+      - sanity-check
+      - list
     timeout-minutes: 25
     strategy:
       fail-fast: false

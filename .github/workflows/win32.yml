@@ -167,7 +167,9 @@ jobs:
 
   build-multi-thread:
     runs-on: windows-2019
-    needs: list
+    needs:
+      - sanity-check
+      - list
     timeout-minutes: 120
     strategy:
       fail-fast: false

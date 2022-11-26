@@ -39,7 +39,7 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
 
   sanity-check:
-    runs-on: darwin-latest
+    runs-on: macos-latest
     steps:
       - id: perl
         name: check pre-installed perl version
@@ -115,7 +115,9 @@ jobs:
 
   build-multi-thread:
     runs-on: macos-11
-    needs: list
+    needs:
+      - sanity-check
+      - list
     timeout-minutes: 120
     strategy:
       fail-fast: false

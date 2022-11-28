@@ -5,6 +5,8 @@ use utf8;
 use warnings;
 use strict;
 
+use Carp qw(croak);
+
 sub new {
     my $class = shift;
     my %args = @_;
@@ -20,13 +22,27 @@ sub filepath {
     }
 
     my $filepath = $ENV{GITHUB_STEP_SUMMARY}
-        or die "Unable to find environment variable for \$GITHUB_STEP_SUMMARY. Check if your runtime environment supports job summaries.";
+        or croak "Unable to find environment variable for \$GITHUB_STEP_SUMMARY. Check if your runtime environment supports job summaries.";
     if (!(-f $filepath && -w $filepath)) {
-        die "Unable to access summary file: '$filepath'. Check if the file has correct read/write permissions.";
+        croak "Unable to access summary file: '$filepath'. Check if the file has correct read/write permissions.";
     }
 
     $self->{filepath} = $filepath;
     return $filepath;
+}
+
+sub add_raw {
+    my $self = shift;
+    # TODO: implement me
+    return $self;
+}
+
+sub write {
+    my $self = shift;
+    my $filepath = $self->filepath();
+    open my $fh, ">", $filepath or croak "failed to open $filepath: $!";
+    # TODO: implement me
+    close $fh or croak "failed to close";
 }
 
 1;

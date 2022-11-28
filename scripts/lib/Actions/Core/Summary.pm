@@ -46,6 +46,12 @@ sub add_raw {
     return $self;
 }
 
+sub add_eol {
+    my $self = shift;
+    $self->{buffer} .= $/;
+    return $self;
+}
+
 sub write {
     my ($self, %args) = @_;
     my $filepath = $self->filepath();

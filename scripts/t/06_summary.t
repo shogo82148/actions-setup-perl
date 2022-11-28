@@ -6,7 +6,7 @@ use Actions::Core::Summary;
 
 my $fixtures = {
     "text" => "hello world 🌎",
-    "code" => "func fork() {\n    for {\n      go fork()\n    }\n}\n",
+    "code" => "func fork() {\n  for {\n    go fork()\n  }\n}",
     "list" => ['foo', 'bar', 'baz', '💣'],
     "table" => [
         [
@@ -168,6 +168,19 @@ subtest "return correct values for isEmptyBuffer" => sub {
 
     $summary->empty_buffer();
     ok $summary->is_empty_buffer();
+};
+
+subtest "adds EOL" => sub {
+    local $ENV{GITHUB_STEP_SUMMARY};
+    my $tmp = setup('');
+
+    my $summary = Actions::Core::Summary->new();
+    $summary
+        ->add_raw($fixtures->{text})
+        ->add_eol()
+        ->write();
+
+    is get_summary(), $fixtures->{text} . $/;
 };
 
 done_testing;

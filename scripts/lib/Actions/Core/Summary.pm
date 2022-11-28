@@ -36,6 +36,15 @@ sub filepath {
     return $filepath;
 }
 
+sub _wrap {
+    my ($self, $tag, $content, $attrs) = @_;
+    my $html_attrs = join '', map { " $_=\"$attrs->{$_}\"" } sort keys %$attrs;
+    if (!$content) {
+        return "<${tag}${html_attrs}>";
+    }
+    return "<${tag}${html_attrs}>$content</${tag}>";
+}
+
 sub add_raw {
     my $self = shift;
     my ($text, $eol) = @_;
@@ -76,6 +85,16 @@ sub empty_buffer {
 sub stringify {
     my $self = shift;
     return $self->{buffer};
+}
+
+sub add_code_block {
+    my ($self, $code, $lang) = @_;
+    my $attrs = {};
+    if ($lang) {
+        $attrs->{lang} = $lang;
+    }
+    my $element = $self->_wrap('pre', $self->_wrap('code', $code), $attrs);
+    return $self->add_raw($element)->add_eol();
 }
 
 1;

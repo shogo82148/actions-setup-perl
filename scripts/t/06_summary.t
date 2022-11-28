@@ -183,4 +183,28 @@ subtest "adds EOL" => sub {
     is get_summary(), $fixtures->{text} . $/;
 };
 
+subtest "adds a code block without language" => sub {
+    local $ENV{GITHUB_STEP_SUMMARY};
+    my $tmp = setup('');
+
+    my $summary = Actions::Core::Summary->new();
+    $summary
+        ->add_code_block($fixtures->{code})
+        ->write();
+
+    is get_summary(), "<pre><code>func fork() {\n  for {\n    go fork()\n  }\n}</code></pre>" . $/;
+};
+
+subtest "adds a code block with a language" => sub {
+    local $ENV{GITHUB_STEP_SUMMARY};
+    my $tmp = setup('');
+
+    my $summary = Actions::Core::Summary->new();
+    $summary
+        ->add_code_block($fixtures->{code}, "go")
+        ->write();
+
+    is get_summary(), "<pre lang=\"go\"><code>func fork() {\n  for {\n    go fork()\n  }\n}</code></pre>" . $/;
+};
+
 done_testing;

@@ -155,4 +155,19 @@ subtest "empties buffer after write" => sub {
     ok $summary->is_empty_buffer();
 };
 
+subtest "returns summary buffer as string" => sub {
+    my $summary = Actions::Core::Summary->new();
+    $summary->add_raw($fixtures->{text});
+    is "$summary", $fixtures->{text};
+};
+
+subtest "return correct values for isEmptyBuffer" => sub {
+    my $summary = Actions::Core::Summary->new();
+    $summary->add_raw($fixtures->{text});
+    ok !$summary->is_empty_buffer();
+
+    $summary->empty_buffer();
+    ok $summary->is_empty_buffer();
+};
+
 done_testing;

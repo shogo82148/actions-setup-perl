@@ -5,6 +5,9 @@ use utf8;
 use warnings;
 use strict;
 
+use overload
+    '""' => \&stringify
+    ;
 use Encode qw(encode_utf8 decode_utf8);
 use Carp qw(croak);
 
@@ -64,5 +67,9 @@ sub empty_buffer {
     return $self;
 }
 
+sub stringify {
+    my $self = shift;
+    return $self->{buffer};
+}
 
 1;

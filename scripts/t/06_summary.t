@@ -1,4 +1,5 @@
 use Test::More;
+use Encode qw(encode_utf8 decode_utf8);
 use File::Temp;
 use File::Spec;
 use Actions::Core::Summary;
@@ -53,6 +54,27 @@ my $fixtures = {
     },
 };
 
+sub setup {
+    my $data = shift;
+    my $dir = File::Temp->newdir();
+    my $filepath = File::Spec->catfile($dir->dirname, "summary.md");
+    $ENV{GITHUB_STEP_SUMMARY} = $filepath;
+    open my $fh, ">", $filepath or die "failed to open $filepath: $!";
+    if ($data) {
+        $fh->print(encode_utf8($data));
+    }
+    close($fh);
+    return $dir;
+}
+
+sub get_summary {
+    local $\;
+    open my $fh, "<", $ENV{GITHUB_STEP_SUMMARY} or die "failed to open $filepath: $!";
+    my $data = <$fh>;
+    close($fh);
+    return decode_utf8($data);
+}
+
 subtest "throws if summary env var is undefined" => sub {
     local $ENV{GITHUB_STEP_SUMMARY};
     eval {
@@ -76,6 +98,26 @@ subtest "throws if summary file does not exist" => sub {
     my $err = $@;
     diag $err;
     ok $@;
+};
+
+subtest "appends text to summary file" => sub {
+    local $ENV{GITHUB_STEP_SUMMARY};
+    my $tmp = setup('# ');
+
+    my $summary = Actions::Core::Summary->new();
+    $summary->add_raw($fixtures->{text})->write();
+
+    is get_summary(), "# hello world 🌎";
+};
+
+subtest "overwrites text to summary file" => sub {
+    local $ENV{GITHUB_STEP_SUMMARY};
+    my $tmp = setup('# ');
+
+    my $summary = Actions::Core::Summary->new();
+    $summary->add_raw($fixtures->{text})->write(overwrite => 1);
+
+    is get_summary(), "hello world 🌎";
 };
 
 done_testing;

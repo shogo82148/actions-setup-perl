@@ -5,6 +5,7 @@ use utf8;
 use warnings;
 use strict;
 
+use Encode qw(encode_utf8 decode_utf8);
 use Carp qw(croak);
 
 sub new {
@@ -35,15 +36,19 @@ sub filepath {
 sub add_raw {
     my $self = shift;
     my ($text, $eol) = @_;
-    $self->{buffer} .= $text . $\;
+    $self->{buffer} .= $text;
+    if ($eol) {
+        $self->{buffer} .= $\;
+    }
     return $self;
 }
 
 sub write {
-    my $self = shift;
+    my ($self, %args) = @_;
     my $filepath = $self->filepath();
-    open my $fh, ">", $filepath or croak "failed to open $filepath: $!";
-    # TODO: implement me
+    my $mode = $args{overwrite} ? ">" : ">>";
+    open my $fh, $mode, $filepath or croak "failed to open $filepath: $!";
+    $fh->print(encode_utf8($self->{buffer}));
     close $fh or croak "failed to close";
 }
 

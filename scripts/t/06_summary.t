@@ -68,7 +68,7 @@ sub setup {
 }
 
 sub get_summary {
-    local $\;
+    local $/;
     open my $fh, "<", $ENV{GITHUB_STEP_SUMMARY} or die "failed to open $filepath: $!";
     my $data = <$fh>;
     close($fh);
@@ -107,7 +107,7 @@ subtest "appends text to summary file" => sub {
     my $summary = Actions::Core::Summary->new();
     $summary->add_raw($fixtures->{text})->write();
 
-    is get_summary(), "# hello world 🌎";
+    is get_summary(), "# $fixtures->{text}";
 };
 
 subtest "overwrites text to summary file" => sub {
@@ -117,7 +117,42 @@ subtest "overwrites text to summary file" => sub {
     my $summary = Actions::Core::Summary->new();
     $summary->add_raw($fixtures->{text})->write(overwrite => 1);
 
-    is get_summary(), "hello world 🌎";
+    is get_summary(), $fixtures->{text};
+};
+
+subtest "appends text with EOL to summary file" => sub {
+    local $ENV{GITHUB_STEP_SUMMARY};
+    my $tmp = setup('');
+
+    my $summary = Actions::Core::Summary->new();
+    $summary->add_raw($fixtures->{text}, 1)->write();
+
+    is get_summary(), $fixtures->{text} . $/;
+};
+
+subtest "chains appends text to summary file'" => sub {
+    local $ENV{GITHUB_STEP_SUMMARY};
+    my $tmp = setup('');
+
+    my $summary = Actions::Core::Summary->new();
+    $summary
+        ->add_raw($fixtures->{text})
+        ->add_raw($fixtures->{text})
+        ->add_raw($fixtures->{text})
+        ->write();
+
+    is get_summary(), $fixtures->{text} x 3;
+};
+
+subtest "empties buffer after write" => sub {
+    local $ENV{GITHUB_STEP_SUMMARY};
+    my $tmp = setup('');
+
+    my $summary = Actions::Core::Summary->new();
+    $summary->add_raw($fixtures->{text})->write();
+    is get_summary(), $fixtures->{text};
+
+    ok $summary->is_empty_buffer();
 };
 
 done_testing;

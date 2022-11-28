@@ -37,8 +37,8 @@ sub add_raw {
     my $self = shift;
     my ($text, $eol) = @_;
     $self->{buffer} .= $text;
-    if ($eol) {
-        $self->{buffer} .= $\;
+    if ($eol && $/) {
+        $self->{buffer} .= $/;
     }
     return $self;
 }
@@ -50,6 +50,19 @@ sub write {
     open my $fh, $mode, $filepath or croak "failed to open $filepath: $!";
     $fh->print(encode_utf8($self->{buffer}));
     close $fh or croak "failed to close";
+    return $self->empty_buffer;
 }
+
+sub is_empty_buffer {
+    my $self = shift;
+    return $self->{buffer} eq '';
+}
+
+sub empty_buffer {
+    my $self = shift;
+    $self->{buffer} = '';
+    return $self;
+}
+
 
 1;

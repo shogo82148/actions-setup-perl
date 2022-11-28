@@ -64472,7 +64472,7 @@ async function installWithCarton(opt) {
 // getArchName gets the arch name such as x86_64-linux, darwin-thread-multi-2level, etc.
 async function getArchName(opt) {
     const perl = path.join(opt.toolPath, "bin", "perl");
-    const out = await exec.getExecOutput(perl, ["-MConfig", "-E", "print $Config{archname}"]);
+    const out = await exec.getExecOutput(perl, ["-MConfig", "-e", "print $Config{archname}"]);
     return out.stdout;
 }
 async function exists(path) {

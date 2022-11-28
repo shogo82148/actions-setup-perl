@@ -97,4 +97,12 @@ sub add_code_block {
     return $self->add_raw($element)->add_eol();
 }
 
+sub add_list {
+    my ($self, $items, $ordered) = @_;
+    my $tag = $ordered ? 'ol' : 'ul';
+    my $list_items = join '', map { $self->_wrap('li', $_) } @$items;
+    my $element = $self->_wrap($tag, $list_items);
+    return $self->add_raw($element)->add_eol();
+}
+
 1;

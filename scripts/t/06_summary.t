@@ -207,4 +207,28 @@ subtest "adds a code block with a language" => sub {
     is get_summary(), "<pre lang=\"go\"><code>func fork() {\n  for {\n    go fork()\n  }\n}</code></pre>" . $/;
 };
 
+subtest "adds an unordered list" => sub {
+    local $ENV{GITHUB_STEP_SUMMARY};
+    my $tmp = setup('');
+
+    my $summary = Actions::Core::Summary->new();
+    $summary
+        ->add_list($fixtures->{list})
+        ->write();
+
+    is get_summary(), '<ul><li>foo</li><li>bar</li><li>baz</li><li>💣</li></ul>' . $/;
+};
+
+subtest "adds an ordered list" => sub {
+    local $ENV{GITHUB_STEP_SUMMARY};
+    my $tmp = setup('');
+
+    my $summary = Actions::Core::Summary->new();
+    $summary
+        ->add_list($fixtures->{list}, 1)
+        ->write();
+
+    is get_summary(), '<ol><li>foo</li><li>bar</li><li>baz</li><li>💣</li></ol>' . $/;
+};
+
 done_testing;

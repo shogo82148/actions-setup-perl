@@ -12,6 +12,7 @@ sub new {
     my %args = @_;
     my $self  = bless {}, $class;
 
+    $self->{buffer} = "";
     return $self;
 }
 
@@ -33,7 +34,8 @@ sub filepath {
 
 sub add_raw {
     my $self = shift;
-    # TODO: implement me
+    my ($text, $eol) = @_;
+    $self->{buffer} .= $text . $\;
     return $self;
 }
 

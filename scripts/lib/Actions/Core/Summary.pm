@@ -159,4 +159,10 @@ sub add_heading {
     return $self->add_raw($element)->add_eol();
 }
 
+sub add_separator {
+    my ($self) = @_;
+    my $element = $self->_wrap('hr', undef);
+    return $self->add_raw($element)->add_eol();
+}
+
 1;

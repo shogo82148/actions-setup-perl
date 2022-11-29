@@ -319,4 +319,16 @@ subtest "uses h1 if heading level is garbage or out of range" => sub {
     is get_summary(), "<h1>heading</h1>$/<h1>heading</h1>$/<h1>heading</h1>$/";
 };
 
+subtest "adds a separator" => sub {
+    local $ENV{GITHUB_STEP_SUMMARY};
+    my $tmp = setup('');
+
+    my $summary = Actions::Core::Summary->new();
+    $summary
+        ->add_separator()
+        ->write();
+
+    is get_summary(), "<hr>$/";
+};
+
 done_testing;

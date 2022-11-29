@@ -282,4 +282,41 @@ subtest "adds an image with custom dimensions" => sub {
     is get_summary(), '<img alt="actions logo" height="32" src="https://github.com/actions.png" width="32">' . $/;
 };
 
+subtest "adds headings h1...h6" => sub {
+    local $ENV{GITHUB_STEP_SUMMARY};
+    my $tmp = setup('');
+
+    my $summary = Actions::Core::Summary->new();
+    for $i (1..6) {
+        $summary->add_heading('heading', $i);
+    }
+    $summary->write();
+
+    is get_summary(), "<h1>heading</h1>$/<h2>heading</h2>$/<h3>heading</h3>$/<h4>heading</h4>$/<h5>heading</h5>$/<h6>heading</h6>$/";
+};
+
+subtest "adds h1 if heading level not specified" => sub {
+    local $ENV{GITHUB_STEP_SUMMARY};
+    my $tmp = setup('');
+
+    my $summary = Actions::Core::Summary->new();
+    $summary->add_heading('heading')->write();
+
+    is get_summary(), "<h1>heading</h1>$/";
+};
+
+subtest "uses h1 if heading level is garbage or out of range" => sub {
+    local $ENV{GITHUB_STEP_SUMMARY};
+    my $tmp = setup('');
+
+    my $summary = Actions::Core::Summary->new();
+    $summary
+        ->add_heading('heading', 'foobar')
+        ->add_heading('heading', 1337)
+        ->add_heading('heading', -1)
+        ->write();
+
+    is get_summary(), "<h1>heading</h1>$/<h1>heading</h1>$/<h1>heading</h1>$/";
+};
+
 done_testing;

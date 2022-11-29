@@ -148,4 +148,15 @@ sub add_image {
     return $self->add_raw($element)->add_eol();
 }
 
+sub add_heading {
+    my ($self, $text, $level) = @_;
+    $level ||= 1;
+    my $tag = "h$level";
+    if ($tag !~ /^h[1-6]$/) {
+        $tag = "h1";
+    }
+    my $element = $self->_wrap($tag, $text);
+    return $self->add_raw($element)->add_eol();
+}
+
 1;

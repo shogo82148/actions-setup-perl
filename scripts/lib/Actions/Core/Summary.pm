@@ -176,7 +176,16 @@ sub add_quote {
     my $attrs = {
         $cite ? (cite => $cite) : (),
     };
-    my $element = $self->_wrap('blockquote', $text);
+    my $element = $self->_wrap('blockquote', $text, $attrs);
+    return $self->add_raw($element)->add_eol();
+}
+
+sub add_link {
+    my ($self, $text, $href) = @_;
+    my $attrs = {
+        href => $href,
+    };
+    my $element = $self->_wrap('a', $text, $attrs);
     return $self->add_raw($element)->add_eol();
 }
 

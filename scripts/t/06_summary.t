@@ -364,7 +364,19 @@ subtest "adds a quote with citation" => sub {
         ->add_quote($fixtures->{quote}{text}, $fixtures->{quote}{cite})
         ->write();
 
-    is get_summary(), "<blockquote>Where the world builds software</blockquote>$/";
+    is get_summary(), "<blockquote cite=\"https://github.com/about\">Where the world builds software</blockquote>$/";
+};
+
+subtest "adds a link with href" => sub {
+    local $ENV{GITHUB_STEP_SUMMARY};
+    my $tmp = setup('');
+
+    my $summary = Actions::Core::Summary->new();
+    $summary
+        ->add_link($fixtures->{link}{text}, $fixtures->{link}{href})
+        ->write();
+
+    is get_summary(), '<a href="https://github.com/">GitHub</a>' . $/;
 };
 
 done_testing;

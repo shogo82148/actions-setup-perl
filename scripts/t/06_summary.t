@@ -258,4 +258,16 @@ subtest "adds a details element" => sub {
     is get_summary(), '<details><summary>open me</summary>🎉 surprise</details>' . $/;
 };
 
+subtest "adds an image with alt text" => sub {
+    local $ENV{GITHUB_STEP_SUMMARY};
+    my $tmp = setup('');
+
+    my $summary = Actions::Core::Summary->new();
+    $summary
+        ->add_image($fixtures->{img}{src}, $fixtures->{img}{alt})
+        ->write();
+
+    is get_summary(), '<img alt="actions logo" src="https://github.com/actions.png">' . $/;
+};
+
 done_testing;

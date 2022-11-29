@@ -134,4 +134,18 @@ sub add_details {
     return $self->add_raw($element)->add_eol();
 }
 
+sub add_image {
+    my ($self, $src, $alt, $options) = @_;
+    my $width = $options && $options->{width};
+    my $height = $options && $options->{height};
+    my $attrs = {
+        src => $src,
+        alt => $alt,
+        $width ? (width => $width) : (),
+        $height ? (height => $height) : (),
+    };
+    my $element = $self->_wrap('img', undef, $attrs);
+    return $self->add_raw($element)->add_eol();
+}
+
 1;

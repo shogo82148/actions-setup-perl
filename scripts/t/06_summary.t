@@ -331,4 +331,16 @@ subtest "adds a separator" => sub {
     is get_summary(), "<hr>$/";
 };
 
+subtest "adds a break" => sub {
+    local $ENV{GITHUB_STEP_SUMMARY};
+    my $tmp = setup('');
+
+    my $summary = Actions::Core::Summary->new();
+    $summary
+        ->add_break()
+        ->write();
+
+    is get_summary(), "<br>$/";
+};
+
 done_testing;

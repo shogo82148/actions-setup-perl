@@ -165,4 +165,10 @@ sub add_separator {
     return $self->add_raw($element)->add_eol();
 }
 
+sub add_break {
+    my ($self) = @_;
+    my $element = $self->_wrap('br', undef);
+    return $self->add_raw($element)->add_eol();
+}
+
 1;

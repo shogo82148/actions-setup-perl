@@ -128,4 +128,10 @@ sub add_table {
     return $self->add_raw($element)->add_eol();
 }
 
+sub add_details {
+    my ($self, $label, $content) = @_;
+    my $element = $self->_wrap('details', $self->_wrap('summary', $label) . $content);
+    return $self->add_raw($element)->add_eol();
+}
+
 1;

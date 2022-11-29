@@ -35,7 +35,10 @@ my $fixtures = {
             }
         ],
     ],
-    "details" => {},
+    "details" => {
+        "label" => 'open me',
+        "content" => '🎉 surprise',
+    },
     "img" => {
         "src" => "https://github.com/actions.png",
         "alt" => "actions logo",
@@ -241,6 +244,18 @@ subtest "adds a table" => sub {
         ->write();
 
     is get_summary(), '<table><tr><th>foo</th><th>bar</th><th>baz</th><td rowspan="3">tall</td></tr><tr><td>one</td><td>two</td><td>three</td></tr><tr><td colspan="3">wide</td></tr></table>' . $/;
+};
+
+subtest "adds a details element" => sub {
+    local $ENV{GITHUB_STEP_SUMMARY};
+    my $tmp = setup('');
+
+    my $summary = Actions::Core::Summary->new();
+    $summary
+        ->add_details($fixtures->{details}{label}, $fixtures->{details}{content})
+        ->write();
+
+    is get_summary(), '<details><summary>open me</summary>🎉 surprise</details>' . $/;
 };
 
 done_testing;

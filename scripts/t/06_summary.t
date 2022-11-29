@@ -231,4 +231,16 @@ subtest "adds an ordered list" => sub {
     is get_summary(), '<ol><li>foo</li><li>bar</li><li>baz</li><li>💣</li></ol>' . $/;
 };
 
+subtest "adds a table" => sub {
+    local $ENV{GITHUB_STEP_SUMMARY};
+    my $tmp = setup('');
+
+    my $summary = Actions::Core::Summary->new();
+    $summary
+        ->add_table($fixtures->{table})
+        ->write();
+
+    is get_summary(), '<table><tr><th>foo</th><th>bar</th><th>baz</th><td rowspan="3">tall</td></tr><tr><td>one</td><td>two</td><td>three</td></tr><tr><td colspan="3">wide</td></tr></table>' . $/;
+};
+
 done_testing;

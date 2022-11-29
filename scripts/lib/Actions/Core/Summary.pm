@@ -105,4 +105,27 @@ sub add_list {
     return $self->add_raw($element)->add_eol();
 }
 
+sub add_table {
+    my ($self, $rows) = @_;
+    my $tableBody = '';
+    for my $row (@$rows) {
+        my $cells = '';
+        for my $cell (@$row) {
+            if (!ref($cell)) {
+                $cells .= $self->_wrap('td', $cell);
+                next;
+            }
+            my $tag = $cell->{header} ? 'th' : 'td';
+            my $attrs = {
+                $cell->{colspan} ? (colspan => $cell->{colspan}) : (),
+                $cell->{rowspan} ? (rowspan => $cell->{rowspan}) : (),
+            };
+            $cells .= $self->_wrap($tag, $cell->{data}, $attrs);
+        }
+        $tableBody .= $self->_wrap('tr',$cells);
+    }
+    my $element = $self->_wrap('table', $tableBody);
+    return $self->add_raw($element)->add_eol();
+}
+
 1;

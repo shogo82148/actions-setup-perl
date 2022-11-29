@@ -171,4 +171,13 @@ sub add_break {
     return $self->add_raw($element)->add_eol();
 }
 
+sub add_quote {
+    my ($self, $text, $cite) = @_;
+    my $attrs = {
+        $cite ? (cite => $cite) : (),
+    };
+    my $element = $self->_wrap('blockquote', $text);
+    return $self->add_raw($element)->add_eol();
+}
+
 1;

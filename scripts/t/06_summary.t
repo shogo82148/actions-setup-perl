@@ -48,7 +48,7 @@ my $fixtures = {
         },
     },
     "quote" => {
-        "text" => "here the world builds software",
+        "text" => "Where the world builds software",
         "cite" => "https://github.com/about",
     },
     "link" => {
@@ -341,6 +341,30 @@ subtest "adds a break" => sub {
         ->write();
 
     is get_summary(), "<br>$/";
+};
+
+subtest "adds a quote" => sub {
+    local $ENV{GITHUB_STEP_SUMMARY};
+    my $tmp = setup('');
+
+    my $summary = Actions::Core::Summary->new();
+    $summary
+        ->add_quote($fixtures->{quote}{text})
+        ->write();
+
+    is get_summary(), "<blockquote>Where the world builds software</blockquote>$/";
+};
+
+subtest "adds a quote with citation" => sub {
+    local $ENV{GITHUB_STEP_SUMMARY};
+    my $tmp = setup('');
+
+    my $summary = Actions::Core::Summary->new();
+    $summary
+        ->add_quote($fixtures->{quote}{text}, $fixtures->{quote}{cite})
+        ->write();
+
+    is get_summary(), "<blockquote>Where the world builds software</blockquote>$/";
 };
 
 done_testing;

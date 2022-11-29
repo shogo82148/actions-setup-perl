@@ -270,4 +270,16 @@ subtest "adds an image with alt text" => sub {
     is get_summary(), '<img alt="actions logo" src="https://github.com/actions.png">' . $/;
 };
 
+subtest "adds an image with custom dimensions" => sub {
+    local $ENV{GITHUB_STEP_SUMMARY};
+    my $tmp = setup('');
+
+    my $summary = Actions::Core::Summary->new();
+    $summary
+        ->add_image($fixtures->{img}{src}, $fixtures->{img}{alt}, $fixtures->{img}{options})
+        ->write();
+
+    is get_summary(), '<img alt="actions logo" height="32" src="https://github.com/actions.png" width="32">' . $/;
+};
+
 done_testing;

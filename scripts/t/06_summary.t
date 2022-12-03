@@ -379,4 +379,19 @@ subtest "adds a link with href" => sub {
     is get_summary(), '<a href="https://github.com/">GitHub</a>' . $/;
 };
 
+# integrated test
+if ($ENV{GITHUB_STEP_SUMMARY}) {
+    my $summary = Actions::Core::Summary->new();
+    $summary
+        ->add_raw($fixtures->{text})
+        ->add_code_block($fixtures->{code}, "go")
+        ->add_list($fixtures->{list})
+        ->add_list($fixtures->{list}, 1)
+        ->add_separator()
+        ->add_image($fixtures->{img}{src}, $fixtures->{img}{alt}, $fixtures->{img}{options})
+        ->add_quote($fixtures->{quote}{text}, $fixtures->{quote}{cite})
+        ->add_link($fixtures->{link}{text}, $fixtures->{link}{href})
+        ->write();
+}
+
 done_testing;

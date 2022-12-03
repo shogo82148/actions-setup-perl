@@ -82,7 +82,7 @@ EOF
             $getrandom = 278;
         } elsif (($Config{archname}) =~ /^x86_64-linux/) {
             $getrandom = 318;
-        } elsif (($Config{archname}) =~ /^i686-linux-gnu/) {
+        } elsif (($Config{archname}) =~ /^i686-linux/) {
             $getrandom = 355;
         } elsif (($Config{archname}) =~ /^arm-linux/) {
             $getrandom = 384;

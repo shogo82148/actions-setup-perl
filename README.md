@@ -249,6 +249,21 @@ start_group('Do some function');
 do_some_function();
 end_group();
 
+# Summary
+use Actions::Core::Summary;
+Actions::Core::Summary->new()
+  ->add_raw("some text")
+  ->add_code_block("print 'Hello';", "perl")
+  ->add_list(['item1', 'item2', 'item3'])
+  ->add_table([['1', '2', '3'], ['one', 'two', 'three']])
+  ->add_separator()
+  ->add_heading('heading')
+  ->add_details('label', 'content')
+  ->add_image('https://github.com/actions.png', 'alt', { width => "32", height => "32" })
+  ->add_quote('text', 'cite')
+  ->add_link("Example", "http://example.com")
+  ->write();
+
 # Wrap Subroutines
 my $result = group 'Do something async' => sub {
   return 'some results';

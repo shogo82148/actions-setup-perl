@@ -1,3 +1,7 @@
+use utf8;
+use warnings;
+use strict;
+
 use Test::More;
 use Encode qw(encode_utf8 decode_utf8);
 use File::Temp;
@@ -72,7 +76,8 @@ sub setup {
 
 sub get_summary {
     local $/;
-    open my $fh, "<", $ENV{GITHUB_STEP_SUMMARY} or die "failed to open $filepath: $!";
+    my $filepath = $ENV{GITHUB_STEP_SUMMARY};
+    open my $fh, "<", $filepath or die "failed to open $filepath: $!";
     my $data = <$fh>;
     close($fh);
     return decode_utf8($data);
@@ -287,7 +292,7 @@ subtest "adds headings h1...h6" => sub {
     my $tmp = setup('');
 
     my $summary = Actions::Core::Summary->new();
-    for $i (1..6) {
+    for my $i (1..6) {
         $summary->add_heading('heading', $i);
     }
     $summary->write();
@@ -378,5 +383,25 @@ subtest "adds a link with href" => sub {
 
     is get_summary(), '<a href="https://github.com/">GitHub</a>' . $/;
 };
+
+# integrated test
+if ($ENV{GITHUB_STEP_SUMMARY}) {
+    diag "GITHUB_STEP_SUMMARY: $ENV{GITHUB_STEP_SUMMARY}";
+    diag "run integrated test...";
+    my $summary = Actions::Core::Summary->new();
+    $summary
+        ->add_raw($fixtures->{text})
+        ->add_code_block($fixtures->{code}, "go")
+        ->add_list($fixtures->{list})
+        ->add_list($fixtures->{list}, 1)
+        ->add_table($fixtures->{table})
+        ->add_separator()
+        ->add_heading('heading')
+        ->add_details($fixtures->{details}{label}, $fixtures->{details}{content})
+        ->add_image($fixtures->{img}{src}, $fixtures->{img}{alt}, $fixtures->{img}{options})
+        ->add_quote($fixtures->{quote}{text}, $fixtures->{quote}{cite})
+        ->add_link($fixtures->{link}{text}, $fixtures->{link}{href})
+        ->write();
+}
 
 done_testing;

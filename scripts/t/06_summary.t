@@ -76,7 +76,8 @@ sub setup {
 
 sub get_summary {
     local $/;
-    open my $fh, "<", $ENV{GITHUB_STEP_SUMMARY} or die "failed to open $filepath: $!";
+    my $filepath = $ENV{GITHUB_STEP_SUMMARY};
+    open my $fh, "<", $filepath or die "failed to open $filepath: $!";
     my $data = <$fh>;
     close($fh);
     return decode_utf8($data);
@@ -291,7 +292,7 @@ subtest "adds headings h1...h6" => sub {
     my $tmp = setup('');
 
     my $summary = Actions::Core::Summary->new();
-    for $i (1..6) {
+    for my $i (1..6) {
         $summary->add_heading('heading', $i);
     }
     $summary->write();

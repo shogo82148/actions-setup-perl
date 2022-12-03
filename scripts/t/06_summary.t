@@ -1,3 +1,7 @@
+use utf8;
+use warnings;
+use strict;
+
 use Test::More;
 use Encode qw(encode_utf8 decode_utf8);
 use File::Temp;

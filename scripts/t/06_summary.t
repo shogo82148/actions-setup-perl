@@ -381,6 +381,8 @@ subtest "adds a link with href" => sub {
 
 # integrated test
 if ($ENV{GITHUB_STEP_SUMMARY}) {
+    diag "GITHUB_STEP_SUMMARY: $ENV{GITHUB_STEP_SUMMARY}";
+    diag "run integrated test...";
     my $summary = Actions::Core::Summary->new();
     $summary
         ->add_raw($fixtures->{text})

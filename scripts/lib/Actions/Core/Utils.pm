@@ -4,6 +4,7 @@ use 5.8.5;
 use utf8;
 use warnings;
 use strict;
+use Config;
 use JSON::PP qw(encode_json);
 
 use Exporter 'import';
@@ -51,6 +52,7 @@ BEGIN {
     };
     return unless $@;
 
+    # on Windows
     if ($^O eq 'MSWin32' || $^O eq 'cygwin') {
         eval {
             require "Win32/API.pm";
@@ -71,6 +73,43 @@ EOF
             };
         };
         return unless $@;
+    }
+
+    # on Linux
+    if ($Config{d_syscall}) {
+        my $getrandom;
+        if (($Config{archname}) =~ /^aarch64-linux/) {
+            $getrandom = 278;
+        } elsif (($Config{archname}) =~ /^x86_64-linux/) {
+            $getrandom = 318;
+        } elsif (($Config{archname}) =~ /^i686-linux-gnu/) {
+            $getrandom = 355;
+        } elsif (($Config{archname}) =~ /^arm-linux/) {
+            $getrandom = 384;
+        } elsif (($Config{archname}) =~ /^mips64el-linux/) {
+            $getrandom = 5313;
+        } elsif ($Config{archname} =~ /^powerpc64le-linux/) {
+            $getrandom = 359;
+        } elsif ($Config{archname} =~ /^s390x-linux/) {
+            $getrandom = 349;
+        }
+        if ($getrandom) {
+            *_random_string = sub {
+                my $n = 32;
+                my $buf = "\0" x $n;
+                while(1) {
+                    if (syscall($getrandom, $buf, $n, 0) < $n) {
+                        if ($!{EINTR}) {
+                            next;
+                        }
+                        die $!;
+                    }
+                    last;
+                }
+                return unpack 'H*', $buf;
+            };
+            return;
+        }
     }
 
     # fallback to /dev/urandom

@@ -390,6 +390,7 @@ if ($ENV{GITHUB_STEP_SUMMARY}) {
         ->add_list($fixtures->{list})
         ->add_list($fixtures->{list}, 1)
         ->add_separator()
+        ->add_details($fixtures->{details}{label}, $fixtures->{details}{content})
         ->add_image($fixtures->{img}{src}, $fixtures->{img}{alt}, $fixtures->{img}{options})
         ->add_quote($fixtures->{quote}{text}, $fixtures->{quote}{cite})
         ->add_link($fixtures->{link}{text}, $fixtures->{link}{href})

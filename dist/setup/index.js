@@ -64673,6 +64673,7 @@ const exec = __importStar(__nccwpck_require__(1514));
 const installer = __importStar(__nccwpck_require__(2574));
 const path = __importStar(__nccwpck_require__(1017));
 const crypto = __importStar(__nccwpck_require__(6113));
+const fs = __importStar(__nccwpck_require__(3292));
 const strawberry = __importStar(__nccwpck_require__(2912));
 const cpan = __importStar(__nccwpck_require__(6734));
 const utils_1 = __nccwpck_require__(1314);
@@ -64681,7 +64682,7 @@ async function run() {
         const platform = process.platform;
         let dist = core.getInput("distribution");
         const multiThread = core.getInput("multi-thread");
-        const version = core.getInput("perl-version");
+        const version = await resolveVersionInput();
         let result;
         let perlHash;
         await core.group("install perl", async () => {
@@ -64756,6 +64757,20 @@ async function digestOfPerlVersion(toolPath) {
     });
     hash.end();
     return hash.digest("hex");
+}
+async function resolveVersionInput() {
+    let version = core.getInput("perl-version");
+    const versionFile = core.getInput("perl-version-file");
+    if (version && versionFile) {
+        core.warning("Both perl-version and perl-version-file inputs are specified, only perl-version will be used");
+    }
+    if (version) {
+        return version;
+    }
+    const versionFilePath = path.join(process.env.GITHUB_WORKSPACE || "", versionFile || ".python-version");
+    version = await fs.readFile(versionFilePath, "utf8");
+    core.info(`Resolved ${versionFile} as ${version}`);
+    return version;
 }
 run();
 

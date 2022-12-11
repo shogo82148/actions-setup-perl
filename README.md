@@ -99,7 +99,9 @@ The action uses the latest Perl version available that matches the specified val
 This defaults to `5`, which results in the latest available version of Perl 5.
 In addition, the value `latest` is available, the actions uses the latest available version of Perl including `5`, `7` or later major versions.
 
-- Default: `5`
+### `perl-version-file`
+
+Specifies the path to the version file such as `.perl-version`.
 
 ### `distribution`
 

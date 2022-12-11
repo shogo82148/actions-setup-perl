@@ -3,6 +3,7 @@ import * as exec from "@actions/exec";
 import * as installer from "./installer";
 import * as path from "path";
 import * as crypto from "crypto";
+import * as fs from "fs/promises";
 import * as strawberry from "./strawberry";
 import * as cpan from "./cpan-installer";
 import { getPackagePath, parseBoolean } from "./utils";
@@ -12,7 +13,7 @@ async function run() {
     const platform = process.platform;
     let dist = core.getInput("distribution");
     const multiThread = core.getInput("multi-thread");
-    const version = core.getInput("perl-version");
+    const version = await resolveVersionInput();
 
     let result: installer.Result;
     let perlHash: string;
@@ -93,6 +94,22 @@ async function digestOfPerlVersion(toolPath: string): Promise<string> {
   });
   hash.end();
   return hash.digest("hex");
+}
+
+async function resolveVersionInput(): Promise<string> {
+  let version = core.getInput("perl-version");
+  const versionFile = core.getInput("perl-version-file");
+  if (version && versionFile) {
+    core.warning("Both perl-version and perl-version-file inputs are specified, only perl-version will be used");
+  }
+  if (version) {
+    return version;
+  }
+
+  const versionFilePath = path.join(process.env.GITHUB_WORKSPACE || "", versionFile || ".python-version");
+  version = await fs.readFile(versionFilePath, "utf8");
+  core.info(`Resolved ${versionFile} as ${version}`);
+  return version;
 }
 
 run();

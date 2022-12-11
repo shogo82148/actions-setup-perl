@@ -13,8 +13,6 @@ on:
   push:
     branches:
       - "main"
-    branches-ignore:
-      - "releases/*"
   workflow_dispatch:
 
 jobs:

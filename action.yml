@@ -4,7 +4,9 @@ author: "Ichinose Shogo"
 inputs:
   perl-version:
     description: "The Perl version to download (if necessary) and use. Example: 5.30.0"
-    default: "5"
+    required: false
+  perl-version-file:
+    description: "File containing the Perl version. Example: .perl-version"
     required: false
   distribution:
     description: |

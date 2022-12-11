@@ -13,6 +13,8 @@ on:
   push:
     branches:
       - "main"
+    branches-ignore:
+      - "releases/*"
   workflow_dispatch:
 
 jobs:
@@ -335,6 +337,32 @@ jobs:
           carton --help
           cpanm --help
           cpm --help
+
+  test-version-file:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+      - run: npm run package
+      - run: echo "5.30.0" > .perl-version
+
+      - id: setup-perl
+        name: use the action
+        uses: ./
+        with:
+          perl-version-file: ".perl-version"
+      - name: show the version
+        run: |
+          perl -V
 
   format:
     runs-on: ubuntu-latest

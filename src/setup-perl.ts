@@ -111,14 +111,14 @@ async function resolveVersionInput(): Promise<string> {
     version = await fs.readFile(versionFilePath, "utf8");
     core.info(`Resolved ${versionFile} as ${version}`);
     return version;
-  } catch(err) {
+  } catch (err) {
     if ((err as any)?.code !== "ENOENT" || versionFile) {
       throw err;
     }
   }
 
   // use the default version.
-  return '5';
+  return "5";
 }
 
 run();

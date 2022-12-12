@@ -106,7 +106,7 @@ async function resolveVersionInput(): Promise<string> {
     return version;
   }
 
-  const versionFilePath = path.join(process.env.GITHUB_WORKSPACE || "", versionFile || ".python-version");
+  const versionFilePath = path.join(process.env.GITHUB_WORKSPACE || "", versionFile || ".perl-version");
   version = await fs.readFile(versionFilePath, "utf8");
   core.info(`Resolved ${versionFile} as ${version}`);
   return version;

@@ -106,10 +106,19 @@ async function resolveVersionInput(): Promise<string> {
     return version;
   }
 
-  const versionFilePath = path.join(process.env.GITHUB_WORKSPACE || "", versionFile || ".python-version");
-  version = await fs.readFile(versionFilePath, "utf8");
-  core.info(`Resolved ${versionFile} as ${version}`);
-  return version;
+  try {
+    const versionFilePath = path.join(process.env.GITHUB_WORKSPACE || "", versionFile || ".perl-version");
+    version = await fs.readFile(versionFilePath, "utf8");
+    core.info(`Resolved ${versionFile} as ${version}`);
+    return version;
+  } catch (err) {
+    if ((err as any)?.code !== "ENOENT" || versionFile) {
+      throw err;
+    }
+  }
+
+  // use the default version.
+  return "5";
 }
 
 run();

@@ -557,12 +557,12 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
-  JSON-PP-4.12
-    pathname: I/IS/ISHIGAKI/JSON-PP-4.12.tar.gz
+  JSON-PP-4.15
+    pathname: I/IS/ISHIGAKI/JSON-PP-4.15.tar.gz
     provides:
-      JSON::PP 4.12
-      JSON::PP::Boolean 4.12
-      JSON::PP::IncrParser 4.12
+      JSON::PP 4.15
+      JSON::PP::Boolean 4.15
+      JSON::PP::IncrParser 4.15
     requirements:
       ExtUtils::MakeMaker 0
       Scalar::Util 1.08

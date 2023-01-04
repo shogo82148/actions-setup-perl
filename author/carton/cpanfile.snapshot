@@ -70,10 +70,10 @@ DISTRIBUTIONS
       strict 0
       version 0.88
       warnings 0
-  CPAN-Meta-Check-0.016
-    pathname: L/LE/LEONT/CPAN-Meta-Check-0.016.tar.gz
+  CPAN-Meta-Check-0.017
+    pathname: L/LE/LEONT/CPAN-Meta-Check-0.017.tar.gz
     provides:
-      CPAN::Meta::Check 0.016
+      CPAN::Meta::Check 0.017
     requirements:
       CPAN::Meta::Prereqs 2.132830
       CPAN::Meta::Requirements 2.121

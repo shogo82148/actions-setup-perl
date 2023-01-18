@@ -22,18 +22,18 @@ DISTRIBUTIONS
       overload 0
       strict 0
       warnings 0
-  IO-Socket-SSL-2.079
-    pathname: S/SU/SULLR/IO-Socket-SSL-2.079.tar.gz
+  IO-Socket-SSL-2.080
+    pathname: S/SU/SULLR/IO-Socket-SSL-2.080.tar.gz
     provides:
-      IO::Socket::SSL 2.079
+      IO::Socket::SSL 2.080
       IO::Socket::SSL::Intercept 2.056
-      IO::Socket::SSL::OCSP_Cache 2.079
-      IO::Socket::SSL::OCSP_Resolver 2.079
+      IO::Socket::SSL::OCSP_Cache 2.080
+      IO::Socket::SSL::OCSP_Resolver 2.080
       IO::Socket::SSL::PublicSuffix undef
-      IO::Socket::SSL::SSL_Context 2.079
-      IO::Socket::SSL::SSL_HANDLE 2.079
-      IO::Socket::SSL::Session_Cache 2.079
-      IO::Socket::SSL::Trace 2.079
+      IO::Socket::SSL::SSL_Context 2.080
+      IO::Socket::SSL::SSL_HANDLE 2.080
+      IO::Socket::SSL::Session_Cache 2.080
+      IO::Socket::SSL::Trace 2.080
       IO::Socket::SSL::Utils 2.015
     requirements:
       ExtUtils::MakeMaker 0

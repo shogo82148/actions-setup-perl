@@ -2315,7 +2315,7 @@ $fatpacked{"newgetopt.pl"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'NEWGE
 NEWGETOPT.PL
 
 $fatpacked{"parent.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PARENT';
-  package parent;use strict;our$VERSION='0.239';sub import {my$class=shift;my$inheritor=caller(0);if (@_ and $_[0]eq '-norequire'){shift @_}else {for (my@filename=@_){s{::|'}{/}g;require "$_.pm"}}{no strict 'refs';push @{"$inheritor\::ISA"},@_}};1;
+  package parent;use strict;our$VERSION='0.240';sub import {my$class=shift;my$inheritor=caller(0);if (@_ and $_[0]eq '-norequire'){shift @_}else {for (my@filename=@_){s{::|'}{/}g;require "$_.pm"}}{no strict 'refs';push @{"$inheritor\::ISA"},@_}};1;
 PARENT
 
 $fatpacked{"version.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'VERSION';

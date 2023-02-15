@@ -1122,10 +1122,10 @@ DISTRIBUTIONS
       local::lib 2.000029
     requirements:
       perl 5.006
-  parent-0.240
-    pathname: C/CO/CORION/parent-0.240.tar.gz
+  parent-0.241
+    pathname: C/CO/CORION/parent-0.241.tar.gz
     provides:
-      parent 0.240
+      parent 0.241
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006

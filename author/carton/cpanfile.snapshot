@@ -213,10 +213,10 @@ DISTRIBUTIONS
     provides:
       Devel::GlobalDestruction::XS 0.03
     requirements:
-  Digest-SHA-6.03
-    pathname: M/MS/MSHELOR/Digest-SHA-6.03.tar.gz
+  Digest-SHA-6.04
+    pathname: M/MS/MSHELOR/Digest-SHA-6.04.tar.gz
     provides:
-      Digest::SHA 6.03
+      Digest::SHA 6.04
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.003

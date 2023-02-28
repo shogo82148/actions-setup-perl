@@ -553,34 +553,33 @@ DISTRIBUTIONS
       common::sense 3.75
     requirements:
       ExtUtils::MakeMaker 0
-  libwww-perl-6.67
-    pathname: O/OA/OALDERS/libwww-perl-6.67.tar.gz
+  libwww-perl-6.68
+    pathname: O/OA/OALDERS/libwww-perl-6.68.tar.gz
     provides:
-      LWP 6.67
-      LWP::Authen::Basic 6.67
-      LWP::Authen::Digest 6.67
-      LWP::Authen::Ntlm 6.67
-      LWP::ConnCache 6.67
-      LWP::Debug 6.67
-      LWP::Debug::TraceHTTP 6.67
-      LWP::DebugFile 6.67
-      LWP::MemberMixin 6.67
-      LWP::Protocol 6.67
-      LWP::Protocol::cpan 6.67
-      LWP::Protocol::data 6.67
-      LWP::Protocol::file 6.67
-      LWP::Protocol::ftp 6.67
-      LWP::Protocol::gopher 6.67
-      LWP::Protocol::http 6.67
-      LWP::Protocol::loopback 6.67
-      LWP::Protocol::mailto 6.67
-      LWP::Protocol::nntp 6.67
-      LWP::Protocol::nogo 6.67
-      LWP::RobotUA 6.67
-      LWP::Simple 6.67
-      LWP::UserAgent 6.67
+      LWP 6.68
+      LWP::Authen::Basic 6.68
+      LWP::Authen::Digest 6.68
+      LWP::Authen::Ntlm 6.68
+      LWP::ConnCache 6.68
+      LWP::Debug 6.68
+      LWP::Debug::TraceHTTP 6.68
+      LWP::DebugFile 6.68
+      LWP::MemberMixin 6.68
+      LWP::Protocol 6.68
+      LWP::Protocol::cpan 6.68
+      LWP::Protocol::data 6.68
+      LWP::Protocol::file 6.68
+      LWP::Protocol::ftp 6.68
+      LWP::Protocol::gopher 6.68
+      LWP::Protocol::http 6.68
+      LWP::Protocol::loopback 6.68
+      LWP::Protocol::mailto 6.68
+      LWP::Protocol::nntp 6.68
+      LWP::Protocol::nogo 6.68
+      LWP::RobotUA 6.68
+      LWP::Simple 6.68
+      LWP::UserAgent 6.68
     requirements:
-      CPAN::Meta::Requirements 2.120620
       Digest::MD5 0
       Encode 2.12
       Encode::Locale 0
@@ -590,19 +589,18 @@ DISTRIBUTIONS
       File::Temp 0
       Getopt::Long 0
       HTML::Entities 0
-      HTML::HeadParser 0
+      HTML::HeadParser 3.71
       HTTP::Cookies 6
       HTTP::Date 6
       HTTP::Negotiate 6
-      HTTP::Request 6
-      HTTP::Request::Common 6
-      HTTP::Response 6
+      HTTP::Request 6.18
+      HTTP::Request::Common 6.18
+      HTTP::Response 6.18
       HTTP::Status 6.18
       IO::Select 0
       IO::Socket 0
       LWP::MediaTypes 6
       MIME::Base64 2.1
-      Module::Metadata 0
       Net::FTP 2.58
       Net::HTTP 6.18
       Scalar::Util 0

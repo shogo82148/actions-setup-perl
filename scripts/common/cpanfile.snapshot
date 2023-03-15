@@ -6,10 +6,10 @@ DISTRIBUTIONS
       Canary::Stability 2013
     requirements:
       ExtUtils::MakeMaker 0
-  Cpanel-JSON-XS-4.32
-    pathname: R/RU/RURBAN/Cpanel-JSON-XS-4.32.tar.gz
+  Cpanel-JSON-XS-4.36
+    pathname: R/RU/RURBAN/Cpanel-JSON-XS-4.36.tar.gz
     provides:
-      Cpanel::JSON::XS 4.32
+      Cpanel::JSON::XS 4.36
       Cpanel::JSON::XS::Type undef
     requirements:
       Carp 0
@@ -22,18 +22,18 @@ DISTRIBUTIONS
       overload 0
       strict 0
       warnings 0
-  IO-Socket-SSL-2.078
-    pathname: S/SU/SULLR/IO-Socket-SSL-2.078.tar.gz
+  IO-Socket-SSL-2.081
+    pathname: S/SU/SULLR/IO-Socket-SSL-2.081.tar.gz
     provides:
-      IO::Socket::SSL 2.078
+      IO::Socket::SSL 2.081
       IO::Socket::SSL::Intercept 2.056
-      IO::Socket::SSL::OCSP_Cache 2.078
-      IO::Socket::SSL::OCSP_Resolver 2.078
+      IO::Socket::SSL::OCSP_Cache 2.081
+      IO::Socket::SSL::OCSP_Resolver 2.081
       IO::Socket::SSL::PublicSuffix undef
-      IO::Socket::SSL::SSL_Context 2.078
-      IO::Socket::SSL::SSL_HANDLE 2.078
-      IO::Socket::SSL::Session_Cache 2.078
-      IO::Socket::SSL::Trace 2.078
+      IO::Socket::SSL::SSL_Context 2.081
+      IO::Socket::SSL::SSL_HANDLE 2.081
+      IO::Socket::SSL::Session_Cache 2.081
+      IO::Socket::SSL::Trace 2.081
       IO::Socket::SSL::Utils 2.015
     requirements:
       ExtUtils::MakeMaker 0
@@ -133,11 +133,11 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.008001
-  YAML-LibYAML-0.85
-    pathname: I/IN/INGY/YAML-LibYAML-0.85.tar.gz
+  YAML-LibYAML-0.86
+    pathname: I/IN/INGY/YAML-LibYAML-0.86.tar.gz
     provides:
-      YAML::LibYAML 0.85
-      YAML::XS 0.85
+      YAML::LibYAML 0.86
+      YAML::XS 0.86
       YAML::XS::LibYAML undef
     requirements:
       ExtUtils::MakeMaker 0

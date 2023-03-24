@@ -142,10 +142,10 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.008001
-  YAML-Tiny-1.73
-    pathname: E/ET/ETHER/YAML-Tiny-1.73.tar.gz
+  YAML-Tiny-1.74
+    pathname: E/ET/ETHER/YAML-Tiny-1.74.tar.gz
     provides:
-      YAML::Tiny 1.73
+      YAML::Tiny 1.74
     requirements:
       B 0
       Carp 0

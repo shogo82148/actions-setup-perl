@@ -307,45 +307,45 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  ExtUtils-MakeMaker-7.68
-    pathname: B/BI/BINGOS/ExtUtils-MakeMaker-7.68.tar.gz
+  ExtUtils-MakeMaker-7.70
+    pathname: B/BI/BINGOS/ExtUtils-MakeMaker-7.70.tar.gz
     provides:
-      ExtUtils::Command 7.68
-      ExtUtils::Command::MM 7.68
-      ExtUtils::Liblist 7.68
-      ExtUtils::Liblist::Kid 7.68
-      ExtUtils::MM 7.68
-      ExtUtils::MM_AIX 7.68
-      ExtUtils::MM_Any 7.68
-      ExtUtils::MM_BeOS 7.68
-      ExtUtils::MM_Cygwin 7.68
-      ExtUtils::MM_DOS 7.68
-      ExtUtils::MM_Darwin 7.68
-      ExtUtils::MM_MacOS 7.68
-      ExtUtils::MM_NW5 7.68
-      ExtUtils::MM_OS2 7.68
-      ExtUtils::MM_OS390 7.68
-      ExtUtils::MM_QNX 7.68
-      ExtUtils::MM_UWIN 7.68
-      ExtUtils::MM_Unix 7.68
-      ExtUtils::MM_VMS 7.68
-      ExtUtils::MM_VOS 7.68
-      ExtUtils::MM_Win32 7.68
-      ExtUtils::MM_Win95 7.68
-      ExtUtils::MY 7.68
-      ExtUtils::MakeMaker 7.68
-      ExtUtils::MakeMaker::Config 7.68
-      ExtUtils::MakeMaker::Locale 7.68
-      ExtUtils::MakeMaker::_version 7.68
-      ExtUtils::MakeMaker::charstar 7.68
-      ExtUtils::MakeMaker::version 7.68
-      ExtUtils::MakeMaker::version::regex 7.68
-      ExtUtils::MakeMaker::version::vpp 7.68
-      ExtUtils::Mkbootstrap 7.68
-      ExtUtils::Mksymlists 7.68
-      ExtUtils::testlib 7.68
-      MM 7.68
-      MY 7.68
+      ExtUtils::Command 7.70
+      ExtUtils::Command::MM 7.70
+      ExtUtils::Liblist 7.70
+      ExtUtils::Liblist::Kid 7.70
+      ExtUtils::MM 7.70
+      ExtUtils::MM_AIX 7.70
+      ExtUtils::MM_Any 7.70
+      ExtUtils::MM_BeOS 7.70
+      ExtUtils::MM_Cygwin 7.70
+      ExtUtils::MM_DOS 7.70
+      ExtUtils::MM_Darwin 7.70
+      ExtUtils::MM_MacOS 7.70
+      ExtUtils::MM_NW5 7.70
+      ExtUtils::MM_OS2 7.70
+      ExtUtils::MM_OS390 7.70
+      ExtUtils::MM_QNX 7.70
+      ExtUtils::MM_UWIN 7.70
+      ExtUtils::MM_Unix 7.70
+      ExtUtils::MM_VMS 7.70
+      ExtUtils::MM_VOS 7.70
+      ExtUtils::MM_Win32 7.70
+      ExtUtils::MM_Win95 7.70
+      ExtUtils::MY 7.70
+      ExtUtils::MakeMaker 7.70
+      ExtUtils::MakeMaker::Config 7.70
+      ExtUtils::MakeMaker::Locale 7.70
+      ExtUtils::MakeMaker::_version 7.70
+      ExtUtils::MakeMaker::charstar 7.70
+      ExtUtils::MakeMaker::version 7.70
+      ExtUtils::MakeMaker::version::regex 7.70
+      ExtUtils::MakeMaker::version::vpp 7.70
+      ExtUtils::Mkbootstrap 7.70
+      ExtUtils::Mksymlists 7.70
+      ExtUtils::testlib 7.70
+      MM 7.70
+      MY 7.70
     requirements:
       Data::Dumper 0
       Encode 0

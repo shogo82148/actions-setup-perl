@@ -336,45 +336,45 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  ExtUtils-MakeMaker-7.68
-    pathname: B/BI/BINGOS/ExtUtils-MakeMaker-7.68.tar.gz
+  ExtUtils-MakeMaker-7.70
+    pathname: B/BI/BINGOS/ExtUtils-MakeMaker-7.70.tar.gz
     provides:
-      ExtUtils::Command 7.68
-      ExtUtils::Command::MM 7.68
-      ExtUtils::Liblist 7.68
-      ExtUtils::Liblist::Kid 7.68
-      ExtUtils::MM 7.68
-      ExtUtils::MM_AIX 7.68
-      ExtUtils::MM_Any 7.68
-      ExtUtils::MM_BeOS 7.68
-      ExtUtils::MM_Cygwin 7.68
-      ExtUtils::MM_DOS 7.68
-      ExtUtils::MM_Darwin 7.68
-      ExtUtils::MM_MacOS 7.68
-      ExtUtils::MM_NW5 7.68
-      ExtUtils::MM_OS2 7.68
-      ExtUtils::MM_OS390 7.68
-      ExtUtils::MM_QNX 7.68
-      ExtUtils::MM_UWIN 7.68
-      ExtUtils::MM_Unix 7.68
-      ExtUtils::MM_VMS 7.68
-      ExtUtils::MM_VOS 7.68
-      ExtUtils::MM_Win32 7.68
-      ExtUtils::MM_Win95 7.68
-      ExtUtils::MY 7.68
-      ExtUtils::MakeMaker 7.68
-      ExtUtils::MakeMaker::Config 7.68
-      ExtUtils::MakeMaker::Locale 7.68
-      ExtUtils::MakeMaker::_version 7.68
-      ExtUtils::MakeMaker::charstar 7.68
-      ExtUtils::MakeMaker::version 7.68
-      ExtUtils::MakeMaker::version::regex 7.68
-      ExtUtils::MakeMaker::version::vpp 7.68
-      ExtUtils::Mkbootstrap 7.68
-      ExtUtils::Mksymlists 7.68
-      ExtUtils::testlib 7.68
-      MM 7.68
-      MY 7.68
+      ExtUtils::Command 7.70
+      ExtUtils::Command::MM 7.70
+      ExtUtils::Liblist 7.70
+      ExtUtils::Liblist::Kid 7.70
+      ExtUtils::MM 7.70
+      ExtUtils::MM_AIX 7.70
+      ExtUtils::MM_Any 7.70
+      ExtUtils::MM_BeOS 7.70
+      ExtUtils::MM_Cygwin 7.70
+      ExtUtils::MM_DOS 7.70
+      ExtUtils::MM_Darwin 7.70
+      ExtUtils::MM_MacOS 7.70
+      ExtUtils::MM_NW5 7.70
+      ExtUtils::MM_OS2 7.70
+      ExtUtils::MM_OS390 7.70
+      ExtUtils::MM_QNX 7.70
+      ExtUtils::MM_UWIN 7.70
+      ExtUtils::MM_Unix 7.70
+      ExtUtils::MM_VMS 7.70
+      ExtUtils::MM_VOS 7.70
+      ExtUtils::MM_Win32 7.70
+      ExtUtils::MM_Win95 7.70
+      ExtUtils::MY 7.70
+      ExtUtils::MakeMaker 7.70
+      ExtUtils::MakeMaker::Config 7.70
+      ExtUtils::MakeMaker::Locale 7.70
+      ExtUtils::MakeMaker::_version 7.70
+      ExtUtils::MakeMaker::charstar 7.70
+      ExtUtils::MakeMaker::version 7.70
+      ExtUtils::MakeMaker::version::regex 7.70
+      ExtUtils::MakeMaker::version::vpp 7.70
+      ExtUtils::Mkbootstrap 7.70
+      ExtUtils::Mksymlists 7.70
+      ExtUtils::testlib 7.70
+      MM 7.70
+      MY 7.70
     requirements:
       Data::Dumper 0
       Encode 0
@@ -665,10 +665,10 @@ DISTRIBUTIONS
       Menlo 1.9018
       perl 5.008001
       version 0.9905
-  Module-Build-Tiny-0.039
-    pathname: L/LE/LEONT/Module-Build-Tiny-0.039.tar.gz
+  Module-Build-Tiny-0.043
+    pathname: L/LE/LEONT/Module-Build-Tiny-0.043.tar.gz
     provides:
-      Module::Build::Tiny 0.039
+      Module::Build::Tiny 0.043
     requirements:
       CPAN::Meta 0
       DynaLoader 0
@@ -703,11 +703,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20230220
-    pathname: B/BI/BINGOS/Module-CoreList-5.20230220.tar.gz
+  Module-CoreList-5.20230423
+    pathname: B/BI/BINGOS/Module-CoreList-5.20230423.tar.gz
     provides:
-      Module::CoreList 5.20230220
-      Module::CoreList::Utils 5.20230220
+      Module::CoreList 5.20230423
+      Module::CoreList::Utils 5.20230423
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0
@@ -762,11 +762,11 @@ DISTRIBUTIONS
       Scalar::Util 0
       YAML::PP 0.027
       perl 5.008001
-  Parallel-Pipes-0.102
-    pathname: S/SK/SKAJI/Parallel-Pipes-0.102.tar.gz
+  Parallel-Pipes-0.200
+    pathname: S/SK/SKAJI/Parallel-Pipes-0.200.tar.gz
     provides:
-      Parallel::Pipes 0.102
-      Parallel::Pipes::App 0.102
+      Parallel::Pipes 0.200
+      Parallel::Pipes::App 0.200
     requirements:
       Module::Build::Tiny 0.034
       perl 5.008001

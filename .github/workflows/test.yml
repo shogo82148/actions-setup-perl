@@ -139,11 +139,12 @@ jobs:
       - name: run perl -V on pwsh
         run: perl -V
         shell: pwsh
-      - name: run perl -V on python
-        run: |
-          import subprocess
-          subprocess.call(['perl', '-V'])
-        shell: python
+      # skip this test because it fails on macos-13: https://github.com/actions/runner-images/issues/7488
+      # - name: run perl -V on python
+      #   run: |
+      #     import subprocess
+      #     subprocess.call(['perl', '-V'])
+      #   shell: python
       - name: run perl -V on sh
         run: perl -V
         shell: sh

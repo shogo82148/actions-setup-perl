@@ -365,10 +365,10 @@ DISTRIBUTIONS
       Module::CPANfile 0
       Test::More 0.88
       version 0.76
-  ExtUtils-Manifest-1.74
-    pathname: E/ET/ETHER/ExtUtils-Manifest-1.74.tar.gz
+  ExtUtils-Manifest-1.75
+    pathname: E/ET/ETHER/ExtUtils-Manifest-1.75.tar.gz
     provides:
-      ExtUtils::Manifest 1.74
+      ExtUtils::Manifest 1.75
     requirements:
       Carp 0
       Exporter 0
@@ -1107,53 +1107,53 @@ DISTRIBUTIONS
       Tie::Handle 0
       perl 5.006
       strict 0
-  URI-5.17
-    pathname: O/OA/OALDERS/URI-5.17.tar.gz
+  URI-5.18
+    pathname: S/SI/SIMBABQUE/URI-5.18.tar.gz
     provides:
-      URI 5.17
-      URI::Escape 5.17
-      URI::Heuristic 5.17
-      URI::IRI 5.17
-      URI::QueryParam 5.17
-      URI::Split 5.17
-      URI::URL 5.17
-      URI::WithBase 5.17
-      URI::data 5.17
-      URI::file 5.17
-      URI::file::Base 5.17
-      URI::file::FAT 5.17
-      URI::file::Mac 5.17
-      URI::file::OS2 5.17
-      URI::file::QNX 5.17
-      URI::file::Unix 5.17
-      URI::file::Win32 5.17
-      URI::ftp 5.17
-      URI::gopher 5.17
-      URI::http 5.17
-      URI::https 5.17
-      URI::ldap 5.17
-      URI::ldapi 5.17
-      URI::ldaps 5.17
-      URI::mailto 5.17
-      URI::mms 5.17
-      URI::news 5.17
-      URI::nntp 5.17
-      URI::nntps 5.17
-      URI::pop 5.17
-      URI::rlogin 5.17
-      URI::rsync 5.17
-      URI::rtsp 5.17
-      URI::rtspu 5.17
-      URI::sftp 5.17
-      URI::sip 5.17
-      URI::sips 5.17
-      URI::snews 5.17
-      URI::ssh 5.17
-      URI::telnet 5.17
-      URI::tn3270 5.17
-      URI::urn 5.17
-      URI::urn::isbn 5.17
-      URI::urn::oid 5.17
+      URI 5.18
+      URI::Escape 5.18
+      URI::Heuristic 5.18
+      URI::IRI 5.18
+      URI::QueryParam 5.18
+      URI::Split 5.18
+      URI::URL 5.18
+      URI::WithBase 5.18
+      URI::data 5.18
+      URI::file 5.18
+      URI::file::Base 5.18
+      URI::file::FAT 5.18
+      URI::file::Mac 5.18
+      URI::file::OS2 5.18
+      URI::file::QNX 5.18
+      URI::file::Unix 5.18
+      URI::file::Win32 5.18
+      URI::ftp 5.18
+      URI::gopher 5.18
+      URI::http 5.18
+      URI::https 5.18
+      URI::ldap 5.18
+      URI::ldapi 5.18
+      URI::ldaps 5.18
+      URI::mailto 5.18
+      URI::mms 5.18
+      URI::news 5.18
+      URI::nntp 5.18
+      URI::nntps 5.18
+      URI::pop 5.18
+      URI::rlogin 5.18
+      URI::rsync 5.18
+      URI::rtsp 5.18
+      URI::rtspu 5.18
+      URI::sftp 5.18
+      URI::sip 5.18
+      URI::sips 5.18
+      URI::snews 5.18
+      URI::ssh 5.18
+      URI::telnet 5.18
+      URI::tn3270 5.18
+      URI::urn 5.18
+      URI::urn::isbn 5.18
+      URI::urn::oid 5.18
     requirements:
       Carp 0
       Cwd 0

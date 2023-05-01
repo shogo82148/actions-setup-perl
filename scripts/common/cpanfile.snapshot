@@ -48,10 +48,10 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
-  JSON-MaybeXS-1.004004
-    pathname: E/ET/ETHER/JSON-MaybeXS-1.004004.tar.gz
+  JSON-MaybeXS-1.004005
+    pathname: E/ET/ETHER/JSON-MaybeXS-1.004005.tar.gz
     provides:
-      JSON::MaybeXS 1.004004
+      JSON::MaybeXS 1.004005
     requirements:
       Carp 0
       Cpanel::JSON::XS 2.3310

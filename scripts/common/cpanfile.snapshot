@@ -133,11 +133,11 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.008001
-  YAML-LibYAML-0.86
-    pathname: I/IN/INGY/YAML-LibYAML-0.86.tar.gz
+  YAML-LibYAML-0.87
+    pathname: I/IN/INGY/YAML-LibYAML-0.87.tar.gz
     provides:
-      YAML::LibYAML 0.86
-      YAML::XS 0.86
+      YAML::LibYAML 0.87
+      YAML::XS 0.87
       YAML::XS::LibYAML undef
     requirements:
       ExtUtils::MakeMaker 0

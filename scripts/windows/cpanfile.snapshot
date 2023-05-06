@@ -139,6 +139,20 @@ DISTRIBUTIONS
       HTML::Tagset 3.20
     requirements:
       ExtUtils::MakeMaker 0
+  HTTP-CookieJar-0.014
+    pathname: D/DA/DAGOLDEN/HTTP-CookieJar-0.014.tar.gz
+    provides:
+      HTTP::CookieJar 0.014
+      HTTP::CookieJar::LWP 0.014
+    requirements:
+      Carp 0
+      ExtUtils::MakeMaker 6.17
+      HTTP::Date 0
+      Time::Local 1.1901
+      parent 0
+      perl 5.008001
+      strict 0
+      warnings 0
   HTTP-Cookies-6.10
     pathname: O/OA/OALDERS/HTTP-Cookies-6.10.tar.gz
     provides:
@@ -553,32 +567,32 @@ DISTRIBUTIONS
       common::sense 3.75
     requirements:
       ExtUtils::MakeMaker 0
-  libwww-perl-6.68
-    pathname: O/OA/OALDERS/libwww-perl-6.68.tar.gz
+  libwww-perl-6.70
+    pathname: S/SI/SIMBABQUE/libwww-perl-6.70.tar.gz
     provides:
-      LWP 6.68
-      LWP::Authen::Basic 6.68
-      LWP::Authen::Digest 6.68
-      LWP::Authen::Ntlm 6.68
-      LWP::ConnCache 6.68
-      LWP::Debug 6.68
-      LWP::Debug::TraceHTTP 6.68
-      LWP::DebugFile 6.68
-      LWP::MemberMixin 6.68
-      LWP::Protocol 6.68
-      LWP::Protocol::cpan 6.68
-      LWP::Protocol::data 6.68
-      LWP::Protocol::file 6.68
-      LWP::Protocol::ftp 6.68
-      LWP::Protocol::gopher 6.68
-      LWP::Protocol::http 6.68
-      LWP::Protocol::loopback 6.68
-      LWP::Protocol::mailto 6.68
-      LWP::Protocol::nntp 6.68
-      LWP::Protocol::nogo 6.68
-      LWP::RobotUA 6.68
-      LWP::Simple 6.68
-      LWP::UserAgent 6.68
+      LWP 6.70
+      LWP::Authen::Basic 6.70
+      LWP::Authen::Digest 6.70
+      LWP::Authen::Ntlm 6.70
+      LWP::ConnCache 6.70
+      LWP::Debug 6.70
+      LWP::Debug::TraceHTTP 6.70
+      LWP::DebugFile 6.70
+      LWP::MemberMixin 6.70
+      LWP::Protocol 6.70
+      LWP::Protocol::cpan 6.70
+      LWP::Protocol::data 6.70
+      LWP::Protocol::file 6.70
+      LWP::Protocol::ftp 6.70
+      LWP::Protocol::gopher 6.70
+      LWP::Protocol::http 6.70
+      LWP::Protocol::loopback 6.70
+      LWP::Protocol::mailto 6.70
+      LWP::Protocol::nntp 6.70
+      LWP::Protocol::nogo 6.70
+      LWP::RobotUA 6.70
+      LWP::Simple 6.70
+      LWP::UserAgent 6.70
     requirements:
       Digest::MD5 0
       Encode 2.12
@@ -590,6 +604,7 @@ DISTRIBUTIONS
       Getopt::Long 0
       HTML::Entities 0
       HTML::HeadParser 3.71
+      HTTP::CookieJar::LWP 0
       HTTP::Cookies 6
       HTTP::Date 6
       HTTP::Negotiate 6
@@ -601,6 +616,7 @@ DISTRIBUTIONS
       IO::Socket 0
       LWP::MediaTypes 6
       MIME::Base64 2.1
+      Module::Load 0
       Net::FTP 2.58
       Net::HTTP 6.18
       Scalar::Util 0

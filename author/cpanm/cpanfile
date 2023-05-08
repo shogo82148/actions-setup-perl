@@ -1,5 +1,6 @@
 requires 'perl', '5.006';
 requires 'Menlo::Legacy';
+requires 'Distribution::Metadata', '==0.06';
 requires 'App::FatPacker::Simple', '==0.09';
 
 # runtime dependencies. Mostly core and fatpackable back to 5.8

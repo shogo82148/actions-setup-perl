@@ -59204,11 +59204,11 @@ var State;
     State["CachePrimaryKey"] = "CACHE_KEY";
     State["CacheMatchedKey"] = "CACHE_RESULT";
     State["CachePath"] = "CACHE_PATH";
-})(State = exports.State || (exports.State = {}));
+})(State || (exports.State = State = {}));
 var Outputs;
 (function (Outputs) {
     Outputs["CacheHit"] = "cache-hit";
-})(Outputs = exports.Outputs || (exports.Outputs = {}));
+})(Outputs || (exports.Outputs = Outputs = {}));
 
 
 /***/ }),

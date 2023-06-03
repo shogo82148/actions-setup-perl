@@ -120,28 +120,28 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 6.52
       Types::Serialiser 0
       common::sense 0
-  Module-Build-0.4232
-    pathname: L/LE/LEONT/Module-Build-0.4232.tar.gz
+  Module-Build-0.4234
+    pathname: L/LE/LEONT/Module-Build-0.4234.tar.gz
     provides:
-      Module::Build 0.4232
-      Module::Build::Base 0.4232
-      Module::Build::Compat 0.4232
-      Module::Build::Config 0.4232
-      Module::Build::Cookbook 0.4232
-      Module::Build::Dumper 0.4232
-      Module::Build::Notes 0.4232
-      Module::Build::PPMMaker 0.4232
-      Module::Build::Platform::Default 0.4232
-      Module::Build::Platform::MacOS 0.4232
-      Module::Build::Platform::Unix 0.4232
-      Module::Build::Platform::VMS 0.4232
-      Module::Build::Platform::VOS 0.4232
-      Module::Build::Platform::Windows 0.4232
-      Module::Build::Platform::aix 0.4232
-      Module::Build::Platform::cygwin 0.4232
-      Module::Build::Platform::darwin 0.4232
-      Module::Build::Platform::os2 0.4232
-      Module::Build::PodParser 0.4232
+      Module::Build 0.4234
+      Module::Build::Base 0.4234
+      Module::Build::Compat 0.4234
+      Module::Build::Config 0.4234
+      Module::Build::Cookbook 0.4234
+      Module::Build::Dumper 0.4234
+      Module::Build::Notes 0.4234
+      Module::Build::PPMMaker 0.4234
+      Module::Build::Platform::Default 0.4234
+      Module::Build::Platform::MacOS 0.4234
+      Module::Build::Platform::Unix 0.4234
+      Module::Build::Platform::VMS 0.4234
+      Module::Build::Platform::VOS 0.4234
+      Module::Build::Platform::Windows 0.4234
+      Module::Build::Platform::aix 0.4234
+      Module::Build::Platform::cygwin 0.4234
+      Module::Build::Platform::darwin 0.4234
+      Module::Build::Platform::os2 0.4234
+      Module::Build::PodParser 0.4234
     requirements:
       CPAN::Meta 2.142060
       Cwd 0

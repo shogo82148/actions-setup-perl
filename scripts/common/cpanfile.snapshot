@@ -22,18 +22,18 @@ DISTRIBUTIONS
       overload 0
       strict 0
       warnings 0
-  IO-Socket-SSL-2.081
-    pathname: S/SU/SULLR/IO-Socket-SSL-2.081.tar.gz
+  IO-Socket-SSL-2.083
+    pathname: S/SU/SULLR/IO-Socket-SSL-2.083.tar.gz
     provides:
-      IO::Socket::SSL 2.081
+      IO::Socket::SSL 2.083
       IO::Socket::SSL::Intercept 2.056
-      IO::Socket::SSL::OCSP_Cache 2.081
-      IO::Socket::SSL::OCSP_Resolver 2.081
+      IO::Socket::SSL::OCSP_Cache 2.083
+      IO::Socket::SSL::OCSP_Resolver 2.083
       IO::Socket::SSL::PublicSuffix undef
-      IO::Socket::SSL::SSL_Context 2.081
-      IO::Socket::SSL::SSL_HANDLE 2.081
-      IO::Socket::SSL::Session_Cache 2.081
-      IO::Socket::SSL::Trace 2.081
+      IO::Socket::SSL::SSL_Context 2.083
+      IO::Socket::SSL::SSL_HANDLE 2.083
+      IO::Socket::SSL::Session_Cache 2.083
+      IO::Socket::SSL::Trace 2.083
       IO::Socket::SSL::Utils 2.015
     requirements:
       ExtUtils::MakeMaker 0
@@ -48,10 +48,10 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
-  JSON-MaybeXS-1.004004
-    pathname: E/ET/ETHER/JSON-MaybeXS-1.004004.tar.gz
+  JSON-MaybeXS-1.004005
+    pathname: E/ET/ETHER/JSON-MaybeXS-1.004005.tar.gz
     provides:
-      JSON::MaybeXS 1.004004
+      JSON::MaybeXS 1.004005
     requirements:
       Carp 0
       Cpanel::JSON::XS 2.3310
@@ -133,11 +133,11 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.008001
-  YAML-LibYAML-0.86
-    pathname: I/IN/INGY/YAML-LibYAML-0.86.tar.gz
+  YAML-LibYAML-0.88
+    pathname: I/IN/INGY/YAML-LibYAML-0.88.tar.gz
     provides:
-      YAML::LibYAML 0.86
-      YAML::XS 0.86
+      YAML::LibYAML 0.88
+      YAML::XS 0.88
       YAML::XS::LibYAML undef
     requirements:
       ExtUtils::MakeMaker 0

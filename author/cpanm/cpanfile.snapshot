@@ -112,6 +112,18 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
+  CPAN-Meta-Requirements-2.140
+    pathname: D/DA/DAGOLDEN/CPAN-Meta-Requirements-2.140.tar.gz
+    provides:
+      CPAN::Meta::Requirements 2.140
+    requirements:
+      B 0
+      Carp 0
+      ExtUtils::MakeMaker 6.17
+      perl 5.006
+      strict 0
+      version 0.88
+      warnings 0
   CPAN-Meta-YAML-0.018
     pathname: D/DA/DAGOLDEN/CPAN-Meta-YAML-0.018.tar.gz
     provides:

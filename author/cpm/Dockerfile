@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:3.18.0
 
 # build perl
 RUN apk add --no-cache gcc libc-dev curl perl patch make wget

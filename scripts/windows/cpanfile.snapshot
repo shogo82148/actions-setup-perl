@@ -393,13 +393,13 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006
-  Net-HTTP-6.22
-    pathname: O/OA/OALDERS/Net-HTTP-6.22.tar.gz
+  Net-HTTP-6.23
+    pathname: O/OA/OALDERS/Net-HTTP-6.23.tar.gz
     provides:
-      Net::HTTP 6.22
-      Net::HTTP::Methods 6.22
-      Net::HTTP::NB 6.22
-      Net::HTTPS 6.22
+      Net::HTTP 6.23
+      Net::HTTP::Methods 6.23
+      Net::HTTP::NB 6.23
+      Net::HTTPS 6.23
     requirements:
       Carp 0
       Compress::Raw::Zlib 0
@@ -567,32 +567,32 @@ DISTRIBUTIONS
       common::sense 3.75
     requirements:
       ExtUtils::MakeMaker 0
-  libwww-perl-6.70
-    pathname: S/SI/SIMBABQUE/libwww-perl-6.70.tar.gz
+  libwww-perl-6.71
+    pathname: O/OA/OALDERS/libwww-perl-6.71.tar.gz
     provides:
-      LWP 6.70
-      LWP::Authen::Basic 6.70
-      LWP::Authen::Digest 6.70
-      LWP::Authen::Ntlm 6.70
-      LWP::ConnCache 6.70
-      LWP::Debug 6.70
-      LWP::Debug::TraceHTTP 6.70
-      LWP::DebugFile 6.70
-      LWP::MemberMixin 6.70
-      LWP::Protocol 6.70
-      LWP::Protocol::cpan 6.70
-      LWP::Protocol::data 6.70
-      LWP::Protocol::file 6.70
-      LWP::Protocol::ftp 6.70
-      LWP::Protocol::gopher 6.70
-      LWP::Protocol::http 6.70
-      LWP::Protocol::loopback 6.70
-      LWP::Protocol::mailto 6.70
-      LWP::Protocol::nntp 6.70
-      LWP::Protocol::nogo 6.70
-      LWP::RobotUA 6.70
-      LWP::Simple 6.70
-      LWP::UserAgent 6.70
+      LWP 6.71
+      LWP::Authen::Basic 6.71
+      LWP::Authen::Digest 6.71
+      LWP::Authen::Ntlm 6.71
+      LWP::ConnCache 6.71
+      LWP::Debug 6.71
+      LWP::Debug::TraceHTTP 6.71
+      LWP::DebugFile 6.71
+      LWP::MemberMixin 6.71
+      LWP::Protocol 6.71
+      LWP::Protocol::cpan 6.71
+      LWP::Protocol::data 6.71
+      LWP::Protocol::file 6.71
+      LWP::Protocol::ftp 6.71
+      LWP::Protocol::gopher 6.71
+      LWP::Protocol::http 6.71
+      LWP::Protocol::loopback 6.71
+      LWP::Protocol::mailto 6.71
+      LWP::Protocol::nntp 6.71
+      LWP::Protocol::nogo 6.71
+      LWP::RobotUA 6.71
+      LWP::Simple 6.71
+      LWP::UserAgent 6.71
     requirements:
       Digest::MD5 0
       Encode 2.12

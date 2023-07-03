@@ -170,6 +170,18 @@ sub run {
             "-j", jobs($version),
             "INST_TOP=$install_dir",
             'CCHOME=C:\strawberry\c',
+
+            # I don't know why, but the build fails with the following error on Windows, Perl 5.38.0 threaded:
+            #   ..\miniperl.exe -I..\lib ..\make_patchnum.pl
+            #   Updating 'git_version.h' and 'lib/Config_git.pl'
+            #   'CCLIBDIR' contains the following non-existing paths:
+            #   	C:\strawberry\c\lib\gcc\x86_64-w64-mingw32\8.1.0
+            #   Did you provide a correct value for the 'CCHOME' option?
+            
+            #   (This check can be skipped by using the SKIP_CCHOME_CHECK=1 option)
+            #   gmake: *** [GNUmakefile:1202: ..\config.sh] Error 1
+            # https://github.com/shogo82148/actions-setup-perl/pull/1555#issuecomment-1618505106
+            'SKIP_CCHOME_CHECK=1',
         );
         if ($thread) {
             push @args, "USE_ITHREADS=define";

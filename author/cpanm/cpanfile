@@ -9,7 +9,7 @@ requires 'CPAN::Common::Index', 0.006;
 requires 'CPAN::DistnameInfo';
 requires 'CPAN::Meta', '2.132830';
 requires 'CPAN::Meta::Check';
-requires 'CPAN::Meta::Requirements';
+requires 'CPAN::Meta::Requirements', '==2.140'; # 2.141 doesn't support perl 5.8.
 requires 'CPAN::Meta::YAML';
 requires 'Capture::Tiny';
 requires 'Class::Tiny', 1.001;

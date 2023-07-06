@@ -169,10 +169,10 @@ DISTRIBUTIONS
       locale 0
       perl 5.008001
       strict 0
-  HTTP-Date-6.05
-    pathname: O/OA/OALDERS/HTTP-Date-6.05.tar.gz
+  HTTP-Date-6.06
+    pathname: O/OA/OALDERS/HTTP-Date-6.06.tar.gz
     provides:
-      HTTP::Date 6.05
+      HTTP::Date 6.06
     requirements:
       Exporter 0
       ExtUtils::MakeMaker 0

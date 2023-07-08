@@ -9,11 +9,6 @@ updates:
       # update too often, ignore patch releases
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-patch"]
-    groups:
-      jest-monorepo:
-        patterns:
-          - jest
-          - jest-circus
 
   # Maintain dependencies for GitHub Actions
   - package-ecosystem: "github-actions"

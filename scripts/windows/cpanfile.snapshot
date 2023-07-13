@@ -56,15 +56,15 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  File-Listing-6.15
-    pathname: P/PL/PLICEASE/File-Listing-6.15.tar.gz
+  File-Listing-6.16
+    pathname: P/PL/PLICEASE/File-Listing-6.16.tar.gz
     provides:
-      File::Listing 6.15
-      File::Listing::apache 6.15
-      File::Listing::dosftp 6.15
-      File::Listing::netware 6.15
-      File::Listing::unix 6.15
-      File::Listing::vms 6.15
+      File::Listing 6.16
+      File::Listing::apache 6.16
+      File::Listing::dosftp 6.16
+      File::Listing::netware 6.16
+      File::Listing::unix 6.16
+      File::Listing::vms 6.16
     requirements:
       Exporter 5.57
       ExtUtils::MakeMaker 0

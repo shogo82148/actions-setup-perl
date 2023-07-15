@@ -6,10 +6,10 @@ DISTRIBUTIONS
       Canary::Stability 2013
     requirements:
       ExtUtils::MakeMaker 0
-  Cpanel-JSON-XS-4.36
-    pathname: R/RU/RURBAN/Cpanel-JSON-XS-4.36.tar.gz
+  Cpanel-JSON-XS-4.37
+    pathname: R/RU/RURBAN/Cpanel-JSON-XS-4.37.tar.gz
     provides:
-      Cpanel::JSON::XS 4.36
+      Cpanel::JSON::XS 4.37
       Cpanel::JSON::XS::Type undef
     requirements:
       Carp 0

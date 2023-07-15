@@ -56,15 +56,15 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  File-Listing-6.15
-    pathname: P/PL/PLICEASE/File-Listing-6.15.tar.gz
+  File-Listing-6.16
+    pathname: P/PL/PLICEASE/File-Listing-6.16.tar.gz
     provides:
-      File::Listing 6.15
-      File::Listing::apache 6.15
-      File::Listing::dosftp 6.15
-      File::Listing::netware 6.15
-      File::Listing::unix 6.15
-      File::Listing::vms 6.15
+      File::Listing 6.16
+      File::Listing::apache 6.16
+      File::Listing::dosftp 6.16
+      File::Listing::netware 6.16
+      File::Listing::unix 6.16
+      File::Listing::vms 6.16
     requirements:
       Exporter 5.57
       ExtUtils::MakeMaker 0
@@ -169,10 +169,10 @@ DISTRIBUTIONS
       locale 0
       perl 5.008001
       strict 0
-  HTTP-Date-6.05
-    pathname: O/OA/OALDERS/HTTP-Date-6.05.tar.gz
+  HTTP-Date-6.06
+    pathname: O/OA/OALDERS/HTTP-Date-6.06.tar.gz
     provides:
-      HTTP::Date 6.05
+      HTTP::Date 6.06
     requirements:
       Exporter 0
       ExtUtils::MakeMaker 0
@@ -309,17 +309,16 @@ DISTRIBUTIONS
       Scalar::Util 0
       perl 5.006002
       strict 0
-  LWP-Protocol-https-6.10
-    pathname: O/OA/OALDERS/LWP-Protocol-https-6.10.tar.gz
+  LWP-Protocol-https-6.11
+    pathname: O/OA/OALDERS/LWP-Protocol-https-6.11.tar.gz
     provides:
-      LWP::Protocol::https 6.10
-      LWP::Protocol::https::Socket 6.10
+      LWP::Protocol::https 6.11
+      LWP::Protocol::https::Socket 6.11
     requirements:
       ExtUtils::MakeMaker 0
-      IO::Socket::SSL 1.54
+      IO::Socket::SSL 1.970
       LWP::Protocol::http 0
       LWP::UserAgent 6.06
-      Mozilla::CA 20180117
       Net::HTTPS 6
       base 0
       perl 5.008001

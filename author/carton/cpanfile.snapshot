@@ -70,10 +70,10 @@ DISTRIBUTIONS
       strict 0
       version 0.88
       warnings 0
-  CPAN-Meta-Check-0.017
-    pathname: L/LE/LEONT/CPAN-Meta-Check-0.017.tar.gz
+  CPAN-Meta-Check-0.018
+    pathname: L/LE/LEONT/CPAN-Meta-Check-0.018.tar.gz
     provides:
-      CPAN::Meta::Check 0.017
+      CPAN::Meta::Check 0.018
     requirements:
       CPAN::Meta::Prereqs 2.132830
       CPAN::Meta::Requirements 2.121
@@ -544,11 +544,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20230520
-    pathname: B/BI/BINGOS/Module-CoreList-5.20230520.tar.gz
+  Module-CoreList-5.20230720
+    pathname: B/BI/BINGOS/Module-CoreList-5.20230720.tar.gz
     provides:
-      Module::CoreList 5.20230520
-      Module::CoreList::Utils 5.20230520
+      Module::CoreList 5.20230720
+      Module::CoreList::Utils 5.20230720
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0

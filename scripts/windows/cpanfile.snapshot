@@ -385,10 +385,10 @@ DISTRIBUTIONS
       if 0
       perl 5.005030
       strict 0
-  Mozilla-CA-20221114
-    pathname: H/HA/HAARG/Mozilla-CA-20221114.tar.gz
+  Mozilla-CA-20230801
+    pathname: L/LW/LWP/Mozilla-CA-20230801.tar.gz
     provides:
-      Mozilla::CA 20221114
+      Mozilla::CA 20230801
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006

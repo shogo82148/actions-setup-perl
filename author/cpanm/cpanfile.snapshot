@@ -902,10 +902,10 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  Perl-Strip-1.1
-    pathname: M/ML/MLEHMANN/Perl-Strip-1.1.tar.gz
+  Perl-Strip-1.2
+    pathname: M/ML/MLEHMANN/Perl-Strip-1.2.tar.gz
     provides:
-      Perl::Strip 1.1
+      Perl::Strip 1.2
     requirements:
       Digest::MD5 2
       ExtUtils::MakeMaker 0

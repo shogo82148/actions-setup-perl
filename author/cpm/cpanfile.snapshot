@@ -8,10 +8,10 @@ DISTRIBUTIONS
       Carp 0.01
       ExtUtils::MakeMaker 0
       perl 5.006
-  App-cpm-0.997012
-    pathname: S/SK/SKAJI/App-cpm-0.997012.tar.gz
+  App-cpm-0.997013
+    pathname: S/SK/SKAJI/App-cpm-0.997013.tar.gz
     provides:
-      App::cpm 0.997012
+      App::cpm 0.997013
       App::cpm::CLI undef
       App::cpm::CircularDependency undef
       App::cpm::DistNotation undef
@@ -40,7 +40,7 @@ DISTRIBUTIONS
       App::cpm::Worker::Resolver undef
       App::cpm::version undef
     requirements:
-      CPAN::02Packages::Search 0
+      CPAN::02Packages::Search 0.100
       CPAN::DistnameInfo 0
       CPAN::Meta 0
       CPAN::Meta::Requirements 2.130
@@ -59,14 +59,15 @@ DISTRIBUTIONS
       Module::cpmfile 0.001
       Parallel::Pipes::App 0.100
       Parse::PMFile 0.43
+      Proc::ForkSafe 0.001
       local::lib 2.000018
       parent 0
       perl 5.008001
       version 0.77
-  CPAN-02Packages-Search-0.002
-    pathname: S/SK/SKAJI/CPAN-02Packages-Search-0.002.tar.gz
+  CPAN-02Packages-Search-0.100
+    pathname: S/SK/SKAJI/CPAN-02Packages-Search-0.100.tar.gz
     provides:
-      CPAN::02Packages::Search 0.002
+      CPAN::02Packages::Search 0.100
     requirements:
       Module::Build::Tiny 0.034
       Search::Dict 1.07
@@ -821,6 +822,13 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
+  Proc-ForkSafe-0.001
+    pathname: S/SK/SKAJI/Proc-ForkSafe-0.001.tar.gz
+    provides:
+      Proc::ForkSafe 0.001
+    requirements:
+      Module::Build::Tiny 0.034
+      perl 5.008001
   Search-Dict-1.07
     pathname: D/DA/DAGOLDEN/Search-Dict-1.07.tar.gz
     provides:

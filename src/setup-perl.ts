@@ -27,7 +27,7 @@ async function run() {
       } else {
         if (dist === "strawberry") {
           core.warning(
-            "The strawberry distribution is not available on this platform. fallback to the default distribution."
+            "The strawberry distribution is not available on this platform. fallback to the default distribution.",
           );
           dist = "default";
         }

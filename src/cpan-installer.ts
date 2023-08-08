@@ -51,7 +51,7 @@ export async function install(opt: Options): Promise<void> {
   const cpanfileKey = await hashFiles(
     opt,
     path.join(workingDirectory, "cpanfile"),
-    path.join(workingDirectory, "cpanfile.snapshot")
+    path.join(workingDirectory, "cpanfile.snapshot"),
   );
   const installKey = hashString(opt.install_modules || "");
   const key = `${baseKey}-${cpanfileKey}-${installKey}`;

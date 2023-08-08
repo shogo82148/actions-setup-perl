@@ -140,6 +140,11 @@ jobs:
         with:
           name: cpanfile.snapshot-common
           path: scripts/common
+      - name: update other dependencies
+        run: |
+          ./.github/update-dependencies.sh
+        env:
+          GH_TOKEN: ${{ github.token }}
 
       - name: Generate token
         id: generate_token

@@ -762,53 +762,55 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  URI-5.19
-    pathname: S/SI/SIMBABQUE/URI-5.19.tar.gz
+  URI-5.20
+    pathname: O/OA/OALDERS/URI-5.20.tar.gz
     provides:
-      URI 5.19
-      URI::Escape 5.19
-      URI::Heuristic 5.19
-      URI::IRI 5.19
-      URI::QueryParam 5.19
-      URI::Split 5.19
-      URI::URL 5.19
-      URI::WithBase 5.19
-      URI::data 5.19
-      URI::file 5.19
-      URI::file::Base 5.19
-      URI::file::FAT 5.19
-      URI::file::Mac 5.19
-      URI::file::OS2 5.19
-      URI::file::QNX 5.19
-      URI::file::Unix 5.19
-      URI::file::Win32 5.19
-      URI::ftp 5.19
-      URI::gopher 5.19
-      URI::http 5.19
-      URI::https 5.19
-      URI::ldap 5.19
-      URI::ldapi 5.19
-      URI::ldaps 5.19
-      URI::mailto 5.19
-      URI::mms 5.19
-      URI::news 5.19
-      URI::nntp 5.19
-      URI::nntps 5.19
-      URI::pop 5.19
-      URI::rlogin 5.19
-      URI::rsync 5.19
-      URI::rtsp 5.19
-      URI::rtspu 5.19
-      URI::sftp 5.19
-      URI::sip 5.19
-      URI::sips 5.19
-      URI::snews 5.19
-      URI::ssh 5.19
-      URI::telnet 5.19
-      URI::tn3270 5.19
-      URI::urn 5.19
-      URI::urn::isbn 5.19
-      URI::urn::oid 5.19
+      URI 5.20
+      URI::Escape 5.20
+      URI::Heuristic 5.20
+      URI::IRI 5.20
+      URI::QueryParam 5.20
+      URI::Split 5.20
+      URI::URL 5.20
+      URI::WithBase 5.20
+      URI::data 5.20
+      URI::file 5.20
+      URI::file::Base 5.20
+      URI::file::FAT 5.20
+      URI::file::Mac 5.20
+      URI::file::OS2 5.20
+      URI::file::QNX 5.20
+      URI::file::Unix 5.20
+      URI::file::Win32 5.20
+      URI::ftp 5.20
+      URI::gopher 5.20
+      URI::http 5.20
+      URI::https 5.20
+      URI::icap 5.2
+      URI::icaps 5.2
+      URI::ldap 5.20
+      URI::ldapi 5.20
+      URI::ldaps 5.20
+      URI::mailto 5.20
+      URI::mms 5.20
+      URI::news 5.20
+      URI::nntp 5.20
+      URI::nntps 5.20
+      URI::pop 5.20
+      URI::rlogin 5.20
+      URI::rsync 5.20
+      URI::rtsp 5.20
+      URI::rtspu 5.20
+      URI::sftp 5.20
+      URI::sip 5.20
+      URI::sips 5.20
+      URI::snews 5.20
+      URI::ssh 5.20
+      URI::telnet 5.20
+      URI::tn3270 5.20
+      URI::urn 5.20
+      URI::urn::isbn 5.20
+      URI::urn::oid 5.20
     requirements:
       Carp 0
       Cwd 0

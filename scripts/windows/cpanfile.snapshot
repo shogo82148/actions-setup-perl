@@ -385,10 +385,10 @@ DISTRIBUTIONS
       if 0
       perl 5.005030
       strict 0
-  Mozilla-CA-20230807
-    pathname: L/LW/LWP/Mozilla-CA-20230807.tar.gz
+  Mozilla-CA-20230821
+    pathname: L/LW/LWP/Mozilla-CA-20230821.tar.gz
     provides:
-      Mozilla::CA 20230807
+      Mozilla::CA 20230821
     requirements:
       ExtUtils::MakeMaker 0
   Net-HTTP-6.23

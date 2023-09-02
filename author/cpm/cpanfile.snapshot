@@ -423,19 +423,19 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  ExtUtils-ParseXS-3.44
-    pathname: X/XS/XSAWYERX/ExtUtils-ParseXS-3.44.tar.gz
+  ExtUtils-ParseXS-3.51
+    pathname: L/LE/LEONT/ExtUtils-ParseXS-3.51.tar.gz
     provides:
-      ExtUtils::ParseXS 3.44
-      ExtUtils::ParseXS::Constants 3.44
-      ExtUtils::ParseXS::CountLines 3.44
-      ExtUtils::ParseXS::Eval 3.44
-      ExtUtils::ParseXS::Utilities 3.44
-      ExtUtils::Typemaps 3.44
-      ExtUtils::Typemaps::Cmd 3.44
-      ExtUtils::Typemaps::InputMap 3.44
-      ExtUtils::Typemaps::OutputMap 3.44
-      ExtUtils::Typemaps::Type 3.44
+      ExtUtils::ParseXS 3.51
+      ExtUtils::ParseXS::Constants 3.51
+      ExtUtils::ParseXS::CountLines 3.51
+      ExtUtils::ParseXS::Eval 3.51
+      ExtUtils::ParseXS::Utilities 3.51
+      ExtUtils::Typemaps 3.51
+      ExtUtils::Typemaps::Cmd 3.51
+      ExtUtils::Typemaps::InputMap 3.51
+      ExtUtils::Typemaps::OutputMap 3.51
+      ExtUtils::Typemaps::Type 3.51
     requirements:
       Carp 0
       Cwd 0

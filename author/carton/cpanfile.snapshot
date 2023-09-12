@@ -849,13 +849,13 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006
-  version-0.9929
-    pathname: L/LE/LEONT/version-0.9929.tar.gz
+  version-0.9930
+    pathname: L/LE/LEONT/version-0.9930.tar.gz
     provides:
-      version 0.9929
-      version::regex 0.9929
-      version::vpp 0.9929
-      version::vxs 0.9929
+      version 0.9930
+      version::regex 0.9930
+      version::vpp 0.9930
+      version::vxs 0.9930
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006002

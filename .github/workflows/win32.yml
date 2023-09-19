@@ -24,7 +24,7 @@ jobs:
   list:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - id: set-matrix
         name: list available perl versions
         run: |
@@ -41,7 +41,7 @@ jobs:
   sanity-check:
     runs-on: windows-2019
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - id: perl
         name: setup host perl
@@ -81,7 +81,7 @@ jobs:
     env:
       PERL_VERSION: ${{ matrix.perl }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: msys2/setup-msys2@v2
         with:
@@ -178,7 +178,7 @@ jobs:
       PERL_VERSION: ${{ matrix.perl }}
       PERL_MULTI_THREAD: "1"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: msys2/setup-msys2@v2
         with:

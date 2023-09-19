@@ -392,19 +392,19 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  ExtUtils-ParseXS-3.44
-    pathname: X/XS/XSAWYERX/ExtUtils-ParseXS-3.44.tar.gz
+  ExtUtils-ParseXS-3.51
+    pathname: L/LE/LEONT/ExtUtils-ParseXS-3.51.tar.gz
     provides:
-      ExtUtils::ParseXS 3.44
-      ExtUtils::ParseXS::Constants 3.44
-      ExtUtils::ParseXS::CountLines 3.44
-      ExtUtils::ParseXS::Eval 3.44
-      ExtUtils::ParseXS::Utilities 3.44
-      ExtUtils::Typemaps 3.44
-      ExtUtils::Typemaps::Cmd 3.44
-      ExtUtils::Typemaps::InputMap 3.44
-      ExtUtils::Typemaps::OutputMap 3.44
-      ExtUtils::Typemaps::Type 3.44
+      ExtUtils::ParseXS 3.51
+      ExtUtils::ParseXS::Constants 3.51
+      ExtUtils::ParseXS::CountLines 3.51
+      ExtUtils::ParseXS::Eval 3.51
+      ExtUtils::ParseXS::Utilities 3.51
+      ExtUtils::Typemaps 3.51
+      ExtUtils::Typemaps::Cmd 3.51
+      ExtUtils::Typemaps::InputMap 3.51
+      ExtUtils::Typemaps::OutputMap 3.51
+      ExtUtils::Typemaps::Type 3.51
     requirements:
       Carp 0
       Cwd 0
@@ -679,11 +679,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20230720
-    pathname: B/BI/BINGOS/Module-CoreList-5.20230720.tar.gz
+  Module-CoreList-5.20230820
+    pathname: B/BI/BINGOS/Module-CoreList-5.20230820.tar.gz
     provides:
-      Module::CoreList 5.20230720
-      Module::CoreList::Utils 5.20230720
+      Module::CoreList 5.20230820
+      Module::CoreList::Utils 5.20230820
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0
@@ -960,58 +960,58 @@ DISTRIBUTIONS
       Scalar::Util 1.14
       perl 5.006
       strict 0
-  Test-Harness-3.46
-    pathname: L/LE/LEONT/Test-Harness-3.46.tar.gz
+  Test-Harness-3.47
+    pathname: L/LE/LEONT/Test-Harness-3.47.tar.gz
     provides:
-      App::Prove 3.46
-      App::Prove::State 3.46
-      App::Prove::State::Result 3.46
-      App::Prove::State::Result::Test 3.46
+      App::Prove 3.47
+      App::Prove::State 3.47
+      App::Prove::State::Result 3.47
+      App::Prove::State::Result::Test 3.47
       Harness::Hook undef
-      TAP::Base 3.46
-      TAP::Formatter::Base 3.46
-      TAP::Formatter::Color 3.46
-      TAP::Formatter::Console 3.46
-      TAP::Formatter::Console::ParallelSession 3.46
-      TAP::Formatter::Console::Session 3.46
-      TAP::Formatter::File 3.46
-      TAP::Formatter::File::Session 3.46
-      TAP::Formatter::Session 3.46
-      TAP::Harness 3.46
-      TAP::Harness::Env 3.46
-      TAP::Object 3.46
-      TAP::Parser 3.46
-      TAP::Parser::Aggregator 3.46
-      TAP::Parser::Grammar 3.46
-      TAP::Parser::Iterator 3.46
-      TAP::Parser::Iterator::Array 3.46
-      TAP::Parser::Iterator::Process 3.46
-      TAP::Parser::Iterator::Stream 3.46
-      TAP::Parser::IteratorFactory 3.46
-      TAP::Parser::Multiplexer 3.46
-      TAP::Parser::Result 3.46
-      TAP::Parser::Result::Bailout 3.46
-      TAP::Parser::Result::Comment 3.46
-      TAP::Parser::Result::Plan 3.46
-      TAP::Parser::Result::Pragma 3.46
-      TAP::Parser::Result::Test 3.46
-      TAP::Parser::Result::Unknown 3.46
-      TAP::Parser::Result::Version 3.46
-      TAP::Parser::Result::YAML 3.46
-      TAP::Parser::ResultFactory 3.46
-      TAP::Parser::Scheduler 3.46
-      TAP::Parser::Scheduler::Job 3.46
-      TAP::Parser::Scheduler::Spinner 3.46
-      TAP::Parser::Source 3.46
-      TAP::Parser::SourceHandler 3.46
-      TAP::Parser::SourceHandler::Executable 3.46
-      TAP::Parser::SourceHandler::File 3.46
-      TAP::Parser::SourceHandler::Handle 3.46
-      TAP::Parser::SourceHandler::Perl 3.46
-      TAP::Parser::SourceHandler::RawTAP 3.46
-      TAP::Parser::YAMLish::Reader 3.46
-      TAP::Parser::YAMLish::Writer 3.46
-      Test::Harness 3.46
+      TAP::Base 3.47
+      TAP::Formatter::Base 3.47
+      TAP::Formatter::Color 3.47
+      TAP::Formatter::Console 3.47
+      TAP::Formatter::Console::ParallelSession 3.47
+      TAP::Formatter::Console::Session 3.47
+      TAP::Formatter::File 3.47
+      TAP::Formatter::File::Session 3.47
+      TAP::Formatter::Session 3.47
+      TAP::Harness 3.47
+      TAP::Harness::Env 3.47
+      TAP::Object 3.47
+      TAP::Parser 3.47
+      TAP::Parser::Aggregator 3.47
+      TAP::Parser::Grammar 3.47
+      TAP::Parser::Iterator 3.47
+      TAP::Parser::Iterator::Array 3.47
+      TAP::Parser::Iterator::Process 3.47
+      TAP::Parser::Iterator::Stream 3.47
+      TAP::Parser::IteratorFactory 3.47
+      TAP::Parser::Multiplexer 3.47
+      TAP::Parser::Result 3.47
+      TAP::Parser::Result::Bailout 3.47
+      TAP::Parser::Result::Comment 3.47
+      TAP::Parser::Result::Plan 3.47
+      TAP::Parser::Result::Pragma 3.47
+      TAP::Parser::Result::Test 3.47
+      TAP::Parser::Result::Unknown 3.47
+      TAP::Parser::Result::Version 3.47
+      TAP::Parser::Result::YAML 3.47
+      TAP::Parser::ResultFactory 3.47
+      TAP::Parser::Scheduler 3.47
+      TAP::Parser::Scheduler::Job 3.47
+      TAP::Parser::Scheduler::Spinner 3.47
+      TAP::Parser::Source 3.47
+      TAP::Parser::SourceHandler 3.47
+      TAP::Parser::SourceHandler::Executable 3.47
+      TAP::Parser::SourceHandler::File 3.47
+      TAP::Parser::SourceHandler::Handle 3.47
+      TAP::Parser::SourceHandler::Perl 3.47
+      TAP::Parser::SourceHandler::RawTAP 3.47
+      TAP::Parser::YAMLish::Reader 3.47
+      TAP::Parser::YAMLish::Writer 3.47
+      Test::Harness 3.47
     requirements:
       ExtUtils::MakeMaker 0
   Test-Simple-1.302195
@@ -1107,53 +1107,55 @@ DISTRIBUTIONS
       Tie::Handle 0
       perl 5.006
       strict 0
-  URI-5.19
-    pathname: S/SI/SIMBABQUE/URI-5.19.tar.gz
+  URI-5.21
+    pathname: O/OA/OALDERS/URI-5.21.tar.gz
     provides:
-      URI 5.19
-      URI::Escape 5.19
-      URI::Heuristic 5.19
-      URI::IRI 5.19
-      URI::QueryParam 5.19
-      URI::Split 5.19
-      URI::URL 5.19
-      URI::WithBase 5.19
-      URI::data 5.19
-      URI::file 5.19
-      URI::file::Base 5.19
-      URI::file::FAT 5.19
-      URI::file::Mac 5.19
-      URI::file::OS2 5.19
-      URI::file::QNX 5.19
-      URI::file::Unix 5.19
-      URI::file::Win32 5.19
-      URI::ftp 5.19
-      URI::gopher 5.19
-      URI::http 5.19
-      URI::https 5.19
-      URI::ldap 5.19
-      URI::ldapi 5.19
-      URI::ldaps 5.19
-      URI::mailto 5.19
-      URI::mms 5.19
-      URI::news 5.19
-      URI::nntp 5.19
-      URI::nntps 5.19
-      URI::pop 5.19
-      URI::rlogin 5.19
-      URI::rsync 5.19
-      URI::rtsp 5.19
-      URI::rtspu 5.19
-      URI::sftp 5.19
-      URI::sip 5.19
-      URI::sips 5.19
-      URI::snews 5.19
-      URI::ssh 5.19
-      URI::telnet 5.19
-      URI::tn3270 5.19
-      URI::urn 5.19
-      URI::urn::isbn 5.19
-      URI::urn::oid 5.19
+      URI 5.21
+      URI::Escape 5.21
+      URI::Heuristic 5.21
+      URI::IRI 5.21
+      URI::QueryParam 5.21
+      URI::Split 5.21
+      URI::URL 5.21
+      URI::WithBase 5.21
+      URI::data 5.21
+      URI::file 5.21
+      URI::file::Base 5.21
+      URI::file::FAT 5.21
+      URI::file::Mac 5.21
+      URI::file::OS2 5.21
+      URI::file::QNX 5.21
+      URI::file::Unix 5.21
+      URI::file::Win32 5.21
+      URI::ftp 5.21
+      URI::gopher 5.21
+      URI::http 5.21
+      URI::https 5.21
+      URI::icap 5.21
+      URI::icaps 5.21
+      URI::ldap 5.21
+      URI::ldapi 5.21
+      URI::ldaps 5.21
+      URI::mailto 5.21
+      URI::mms 5.21
+      URI::news 5.21
+      URI::nntp 5.21
+      URI::nntps 5.21
+      URI::pop 5.21
+      URI::rlogin 5.21
+      URI::rsync 5.21
+      URI::rtsp 5.21
+      URI::rtspu 5.21
+      URI::sftp 5.21
+      URI::sip 5.21
+      URI::sips 5.21
+      URI::snews 5.21
+      URI::ssh 5.21
+      URI::telnet 5.21
+      URI::tn3270 5.21
+      URI::urn 5.21
+      URI::urn::isbn 5.21
+      URI::urn::oid 5.21
     requirements:
       Carp 0
       Cwd 0
@@ -1211,13 +1213,13 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006
-  version-0.9929
-    pathname: L/LE/LEONT/version-0.9929.tar.gz
+  version-0.9930
+    pathname: L/LE/LEONT/version-0.9930.tar.gz
     provides:
-      version 0.9929
-      version::regex 0.9929
-      version::vpp 0.9929
-      version::vxs 0.9929
+      version 0.9930
+      version::regex 0.9930
+      version::vpp 0.9930
+      version::vxs 0.9930
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006002

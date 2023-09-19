@@ -29,12 +29,12 @@ jobs:
           - true
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Set Node.js 16.x
+      - name: Set Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version-file: "package.json"
           cache: npm
 
       - run: npm ci
@@ -108,12 +108,12 @@ jobs:
           - true
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Set Node.js 16.x
+      - name: Set Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version-file: "package.json"
           cache: npm
 
       - run: npm ci
@@ -190,12 +190,12 @@ jobs:
         run: git config --global core.autocrlf false
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Set Node.js 16.x
+      - name: Set Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version-file: "package.json"
           cache: npm
 
       - run: npm ci
@@ -270,12 +270,12 @@ jobs:
         run: git config --global core.autocrlf false
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Set Node.js 16.x
+      - name: Set Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version-file: "package.json"
           cache: npm
 
       - run: npm ci
@@ -342,12 +342,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Set Node.js 16.x
+      - name: Set Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version-file: "package.json"
           cache: npm
 
       - run: npm ci
@@ -368,12 +368,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Set Node.js 16.x
+      - name: Set Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version-file: "package.json"
           cache: npm
       - run: npm ci
       - run: npm run format-check

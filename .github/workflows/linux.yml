@@ -24,7 +24,7 @@ jobs:
   list:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - id: set-matrix
         name: list available perl versions
         run: |
@@ -45,7 +45,7 @@ jobs:
         name: check pre-installed perl version
         run: |
           perl -e 'print "version=$^V\n"' >> "$GITHUB_OUTPUT"
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/cache@v3
         with:
           path: scripts/linux/local
@@ -74,7 +74,7 @@ jobs:
     env:
       PERL_VERSION: ${{ matrix.perl }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - id: perl
         name: setup host perl
         run: |
@@ -126,7 +126,7 @@ jobs:
       PERL_VERSION: ${{ matrix.perl }}
       PERL_MULTI_THREAD: "1"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - id: perl
         name: setup host perl
         run: |

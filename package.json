@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "",
   "main": "lib/setup-perl.js",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "build": "tsc",
     "format": "prettier --write **/*.ts",

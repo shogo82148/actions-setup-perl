@@ -31,10 +31,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set Node.js 16.x
+      - name: Set Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version-file: "package.json"
           cache: npm
 
       - run: npm ci
@@ -110,10 +110,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set Node.js 16.x
+      - name: Set Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version-file: "package.json"
           cache: npm
 
       - run: npm ci
@@ -192,10 +192,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set Node.js 16.x
+      - name: Set Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version-file: "package.json"
           cache: npm
 
       - run: npm ci
@@ -272,10 +272,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set Node.js 16.x
+      - name: Set Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version-file: "package.json"
           cache: npm
 
       - run: npm ci
@@ -344,10 +344,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set Node.js 16.x
+      - name: Set Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version-file: "package.json"
           cache: npm
 
       - run: npm ci
@@ -370,10 +370,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set Node.js 16.x
+      - name: Set Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version-file: "package.json"
           cache: npm
       - run: npm ci
       - run: npm run format-check

@@ -7,10 +7,10 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006000
-  CPAN-Perl-Releases-MetaCPAN-0.006
-    pathname: S/SK/SKAJI/CPAN-Perl-Releases-MetaCPAN-0.006.tar.gz
+  CPAN-Perl-Releases-MetaCPAN-0.007
+    pathname: S/SK/SKAJI/CPAN-Perl-Releases-MetaCPAN-0.007.tar.gz
     provides:
-      CPAN::Perl::Releases::MetaCPAN 0.006
+      CPAN::Perl::Releases::MetaCPAN 0.007
     requirements:
       HTTP::Tiny 0.055
       HTTP::Tinyish 0

@@ -16,12 +16,6 @@ DISTRIBUTIONS
       Canary::Stability 2013
     requirements:
       ExtUtils::MakeMaker 0
-  Clone-0.46
-    pathname: G/GA/GARU/Clone-0.46.tar.gz
-    provides:
-      Clone 0.46
-    requirements:
-      ExtUtils::MakeMaker 0
   Devel-PatchPerl-2.08
     pathname: B/BI/BINGOS/Devel-PatchPerl-2.08.tar.gz
     provides:
@@ -45,17 +39,6 @@ DISTRIBUTIONS
       Encode::Alias 0
       ExtUtils::MakeMaker 0
       perl 5.008
-  ExtUtils-PL2Bat-0.005
-    pathname: L/LE/LEONT/ExtUtils-PL2Bat-0.005.tar.gz
-    provides:
-      ExtUtils::PL2Bat 0.005
-    requirements:
-      Carp 0
-      ExtUtils::MakeMaker 0
-      Getopt::Std 0
-      perl 5.006
-      strict 0
-      warnings 0
   File-Listing-6.16
     pathname: P/PL/PLICEASE/File-Listing-6.16.tar.gz
     provides:
@@ -112,27 +95,6 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  HTML-Parser-3.81
-    pathname: O/OA/OALDERS/HTML-Parser-3.81.tar.gz
-    provides:
-      HTML::Entities 3.81
-      HTML::Filter 3.81
-      HTML::HeadParser 3.81
-      HTML::LinkExtor 3.81
-      HTML::Parser 3.81
-      HTML::PullParser 3.81
-      HTML::TokeParser 3.81
-    requirements:
-      Carp 0
-      Exporter 0
-      ExtUtils::MakeMaker 6.52
-      HTML::Tagset 0
-      HTTP::Headers 0
-      IO::File 0
-      URI 0
-      URI::URL 0
-      XSLoader 0
-      strict 0
   HTML-Tagset-3.20
     pathname: P/PE/PETDANCE/HTML-Tagset-3.20.tar.gz
     provides:
@@ -288,15 +250,6 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
-  JSON-XS-4.03
-    pathname: M/ML/MLEHMANN/JSON-XS-4.03.tar.gz
-    provides:
-      JSON::XS 4.03
-    requirements:
-      Canary::Stability 0
-      ExtUtils::MakeMaker 6.52
-      Types::Serialiser 0
-      common::sense 0
   LWP-MediaTypes-6.04
     pathname: O/OA/OALDERS/LWP-MediaTypes-6.04.tar.gz
     provides:

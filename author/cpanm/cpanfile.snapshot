@@ -641,10 +641,10 @@ DISTRIBUTIONS
       Menlo 1.9018
       perl 5.008001
       version 0.9905
-  Module-Build-Tiny-0.046
-    pathname: L/LE/LEONT/Module-Build-Tiny-0.046.tar.gz
+  Module-Build-Tiny-0.047
+    pathname: L/LE/LEONT/Module-Build-Tiny-0.047.tar.gz
     provides:
-      Module::Build::Tiny 0.046
+      Module::Build::Tiny 0.047
     requirements:
       CPAN::Meta 0
       DynaLoader 0
@@ -679,11 +679,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20230920
-    pathname: B/BI/BINGOS/Module-CoreList-5.20230920.tar.gz
+  Module-CoreList-5.20231025
+    pathname: B/BI/BINGOS/Module-CoreList-5.20231025.tar.gz
     provides:
-      Module::CoreList 5.20230920
-      Module::CoreList::Utils 5.20230920
+      Module::CoreList 5.20231025
+      Module::CoreList::Utils 5.20231025
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0
@@ -724,100 +724,100 @@ DISTRIBUTIONS
       strict 0
       version 0.87
       warnings 0
-  PPI-1.276
-    pathname: O/OA/OALDERS/PPI-1.276.tar.gz
+  PPI-1.277
+    pathname: M/MI/MITHALDU/PPI-1.277.tar.gz
     provides:
-      PPI 1.276
-      PPI::Cache 1.276
-      PPI::Document 1.276
-      PPI::Document::File 1.276
-      PPI::Document::Fragment 1.276
-      PPI::Document::Normalized 1.276
-      PPI::Dumper 1.276
-      PPI::Element 1.276
-      PPI::Exception 1.276
-      PPI::Exception::ParserRejection 1.276
-      PPI::Find 1.276
-      PPI::Lexer 1.276
-      PPI::Node 1.276
-      PPI::Normal 1.276
-      PPI::Normal::Standard 1.276
-      PPI::Singletons 1.276
-      PPI::Statement 1.276
-      PPI::Statement::Break 1.276
-      PPI::Statement::Compound 1.276
-      PPI::Statement::Data 1.276
-      PPI::Statement::End 1.276
-      PPI::Statement::Expression 1.276
-      PPI::Statement::Given 1.276
-      PPI::Statement::Include 1.276
-      PPI::Statement::Include::Perl6 1.276
-      PPI::Statement::Null 1.276
-      PPI::Statement::Package 1.276
-      PPI::Statement::Scheduled 1.276
-      PPI::Statement::Sub 1.276
-      PPI::Statement::Unknown 1.276
-      PPI::Statement::UnmatchedBrace 1.276
-      PPI::Statement::Variable 1.276
-      PPI::Statement::When 1.276
-      PPI::Structure 1.276
-      PPI::Structure::Block 1.276
-      PPI::Structure::Condition 1.276
-      PPI::Structure::Constructor 1.276
-      PPI::Structure::For 1.276
-      PPI::Structure::Given 1.276
-      PPI::Structure::List 1.276
-      PPI::Structure::Subscript 1.276
-      PPI::Structure::Unknown 1.276
-      PPI::Structure::When 1.276
-      PPI::Token 1.276
-      PPI::Token::ArrayIndex 1.276
-      PPI::Token::Attribute 1.276
-      PPI::Token::BOM 1.276
-      PPI::Token::Cast 1.276
-      PPI::Token::Comment 1.276
-      PPI::Token::DashedWord 1.276
-      PPI::Token::Data 1.276
-      PPI::Token::End 1.276
-      PPI::Token::HereDoc 1.276
-      PPI::Token::Label 1.276
-      PPI::Token::Magic 1.276
-      PPI::Token::Number 1.276
-      PPI::Token::Number::Binary 1.276
-      PPI::Token::Number::Exp 1.276
-      PPI::Token::Number::Float 1.276
-      PPI::Token::Number::Hex 1.276
-      PPI::Token::Number::Octal 1.276
-      PPI::Token::Number::Version 1.276
-      PPI::Token::Operator 1.276
-      PPI::Token::Pod 1.276
-      PPI::Token::Prototype 1.276
-      PPI::Token::Quote 1.276
-      PPI::Token::Quote::Double 1.276
-      PPI::Token::Quote::Interpolate 1.276
-      PPI::Token::Quote::Literal 1.276
-      PPI::Token::Quote::Single 1.276
-      PPI::Token::QuoteLike 1.276
-      PPI::Token::QuoteLike::Backtick 1.276
-      PPI::Token::QuoteLike::Command 1.276
-      PPI::Token::QuoteLike::Readline 1.276
-      PPI::Token::QuoteLike::Regexp 1.276
-      PPI::Token::QuoteLike::Words 1.276
-      PPI::Token::Regexp 1.276
-      PPI::Token::Regexp::Match 1.276
-      PPI::Token::Regexp::Substitute 1.276
-      PPI::Token::Regexp::Transliterate 1.276
-      PPI::Token::Separator 1.276
-      PPI::Token::Structure 1.276
-      PPI::Token::Symbol 1.276
-      PPI::Token::Unknown 1.276
-      PPI::Token::Whitespace 1.276
-      PPI::Token::Word 1.276
-      PPI::Tokenizer 1.276
-      PPI::Transform 1.276
-      PPI::Transform::UpdateCopyright 1.276
-      PPI::Util 1.276
-      PPI::XSAccessor 1.276
+      PPI 1.277
+      PPI::Cache 1.277
+      PPI::Document 1.277
+      PPI::Document::File 1.277
+      PPI::Document::Fragment 1.277
+      PPI::Document::Normalized 1.277
+      PPI::Dumper 1.277
+      PPI::Element 1.277
+      PPI::Exception 1.277
+      PPI::Exception::ParserRejection 1.277
+      PPI::Find 1.277
+      PPI::Lexer 1.277
+      PPI::Node 1.277
+      PPI::Normal 1.277
+      PPI::Normal::Standard 1.277
+      PPI::Singletons 1.277
+      PPI::Statement 1.277
+      PPI::Statement::Break 1.277
+      PPI::Statement::Compound 1.277
+      PPI::Statement::Data 1.277
+      PPI::Statement::End 1.277
+      PPI::Statement::Expression 1.277
+      PPI::Statement::Given 1.277
+      PPI::Statement::Include 1.277
+      PPI::Statement::Include::Perl6 1.277
+      PPI::Statement::Null 1.277
+      PPI::Statement::Package 1.277
+      PPI::Statement::Scheduled 1.277
+      PPI::Statement::Sub 1.277
+      PPI::Statement::Unknown 1.277
+      PPI::Statement::UnmatchedBrace 1.277
+      PPI::Statement::Variable 1.277
+      PPI::Statement::When 1.277
+      PPI::Structure 1.277
+      PPI::Structure::Block 1.277
+      PPI::Structure::Condition 1.277
+      PPI::Structure::Constructor 1.277
+      PPI::Structure::For 1.277
+      PPI::Structure::Given 1.277
+      PPI::Structure::List 1.277
+      PPI::Structure::Subscript 1.277
+      PPI::Structure::Unknown 1.277
+      PPI::Structure::When 1.277
+      PPI::Token 1.277
+      PPI::Token::ArrayIndex 1.277
+      PPI::Token::Attribute 1.277
+      PPI::Token::BOM 1.277
+      PPI::Token::Cast 1.277
+      PPI::Token::Comment 1.277
+      PPI::Token::DashedWord 1.277
+      PPI::Token::Data 1.277
+      PPI::Token::End 1.277
+      PPI::Token::HereDoc 1.277
+      PPI::Token::Label 1.277
+      PPI::Token::Magic 1.277
+      PPI::Token::Number 1.277
+      PPI::Token::Number::Binary 1.277
+      PPI::Token::Number::Exp 1.277
+      PPI::Token::Number::Float 1.277
+      PPI::Token::Number::Hex 1.277
+      PPI::Token::Number::Octal 1.277
+      PPI::Token::Number::Version 1.277
+      PPI::Token::Operator 1.277
+      PPI::Token::Pod 1.277
+      PPI::Token::Prototype 1.277
+      PPI::Token::Quote 1.277
+      PPI::Token::Quote::Double 1.277
+      PPI::Token::Quote::Interpolate 1.277
+      PPI::Token::Quote::Literal 1.277
+      PPI::Token::Quote::Single 1.277
+      PPI::Token::QuoteLike 1.277
+      PPI::Token::QuoteLike::Backtick 1.277
+      PPI::Token::QuoteLike::Command 1.277
+      PPI::Token::QuoteLike::Readline 1.277
+      PPI::Token::QuoteLike::Regexp 1.277
+      PPI::Token::QuoteLike::Words 1.277
+      PPI::Token::Regexp 1.277
+      PPI::Token::Regexp::Match 1.277
+      PPI::Token::Regexp::Substitute 1.277
+      PPI::Token::Regexp::Transliterate 1.277
+      PPI::Token::Separator 1.277
+      PPI::Token::Structure 1.277
+      PPI::Token::Symbol 1.277
+      PPI::Token::Unknown 1.277
+      PPI::Token::Whitespace 1.277
+      PPI::Token::Word 1.277
+      PPI::Tokenizer 1.277
+      PPI::Transform 1.277
+      PPI::Transform::UpdateCopyright 1.277
+      PPI::Util 1.277
+      PPI::XSAccessor 1.277
     requirements:
       Carp 0
       Clone 0.30
@@ -960,58 +960,58 @@ DISTRIBUTIONS
       Scalar::Util 1.14
       perl 5.006
       strict 0
-  Test-Harness-3.47
-    pathname: L/LE/LEONT/Test-Harness-3.47.tar.gz
+  Test-Harness-3.48
+    pathname: L/LE/LEONT/Test-Harness-3.48.tar.gz
     provides:
-      App::Prove 3.47
-      App::Prove::State 3.47
-      App::Prove::State::Result 3.47
-      App::Prove::State::Result::Test 3.47
+      App::Prove 3.48
+      App::Prove::State 3.48
+      App::Prove::State::Result 3.48
+      App::Prove::State::Result::Test 3.48
       Harness::Hook undef
-      TAP::Base 3.47
-      TAP::Formatter::Base 3.47
-      TAP::Formatter::Color 3.47
-      TAP::Formatter::Console 3.47
-      TAP::Formatter::Console::ParallelSession 3.47
-      TAP::Formatter::Console::Session 3.47
-      TAP::Formatter::File 3.47
-      TAP::Formatter::File::Session 3.47
-      TAP::Formatter::Session 3.47
-      TAP::Harness 3.47
-      TAP::Harness::Env 3.47
-      TAP::Object 3.47
-      TAP::Parser 3.47
-      TAP::Parser::Aggregator 3.47
-      TAP::Parser::Grammar 3.47
-      TAP::Parser::Iterator 3.47
-      TAP::Parser::Iterator::Array 3.47
-      TAP::Parser::Iterator::Process 3.47
-      TAP::Parser::Iterator::Stream 3.47
-      TAP::Parser::IteratorFactory 3.47
-      TAP::Parser::Multiplexer 3.47
-      TAP::Parser::Result 3.47
-      TAP::Parser::Result::Bailout 3.47
-      TAP::Parser::Result::Comment 3.47
-      TAP::Parser::Result::Plan 3.47
-      TAP::Parser::Result::Pragma 3.47
-      TAP::Parser::Result::Test 3.47
-      TAP::Parser::Result::Unknown 3.47
-      TAP::Parser::Result::Version 3.47
-      TAP::Parser::Result::YAML 3.47
-      TAP::Parser::ResultFactory 3.47
-      TAP::Parser::Scheduler 3.47
-      TAP::Parser::Scheduler::Job 3.47
-      TAP::Parser::Scheduler::Spinner 3.47
-      TAP::Parser::Source 3.47
-      TAP::Parser::SourceHandler 3.47
-      TAP::Parser::SourceHandler::Executable 3.47
-      TAP::Parser::SourceHandler::File 3.47
-      TAP::Parser::SourceHandler::Handle 3.47
-      TAP::Parser::SourceHandler::Perl 3.47
-      TAP::Parser::SourceHandler::RawTAP 3.47
-      TAP::Parser::YAMLish::Reader 3.47
-      TAP::Parser::YAMLish::Writer 3.47
-      Test::Harness 3.47
+      TAP::Base 3.48
+      TAP::Formatter::Base 3.48
+      TAP::Formatter::Color 3.48
+      TAP::Formatter::Console 3.48
+      TAP::Formatter::Console::ParallelSession 3.48
+      TAP::Formatter::Console::Session 3.48
+      TAP::Formatter::File 3.48
+      TAP::Formatter::File::Session 3.48
+      TAP::Formatter::Session 3.48
+      TAP::Harness 3.48
+      TAP::Harness::Env 3.48
+      TAP::Object 3.48
+      TAP::Parser 3.48
+      TAP::Parser::Aggregator 3.48
+      TAP::Parser::Grammar 3.48
+      TAP::Parser::Iterator 3.48
+      TAP::Parser::Iterator::Array 3.48
+      TAP::Parser::Iterator::Process 3.48
+      TAP::Parser::Iterator::Stream 3.48
+      TAP::Parser::IteratorFactory 3.48
+      TAP::Parser::Multiplexer 3.48
+      TAP::Parser::Result 3.48
+      TAP::Parser::Result::Bailout 3.48
+      TAP::Parser::Result::Comment 3.48
+      TAP::Parser::Result::Plan 3.48
+      TAP::Parser::Result::Pragma 3.48
+      TAP::Parser::Result::Test 3.48
+      TAP::Parser::Result::Unknown 3.48
+      TAP::Parser::Result::Version 3.48
+      TAP::Parser::Result::YAML 3.48
+      TAP::Parser::ResultFactory 3.48
+      TAP::Parser::Scheduler 3.48
+      TAP::Parser::Scheduler::Job 3.48
+      TAP::Parser::Scheduler::Spinner 3.48
+      TAP::Parser::Source 3.48
+      TAP::Parser::SourceHandler 3.48
+      TAP::Parser::SourceHandler::Executable 3.48
+      TAP::Parser::SourceHandler::File 3.48
+      TAP::Parser::SourceHandler::Handle 3.48
+      TAP::Parser::SourceHandler::Perl 3.48
+      TAP::Parser::SourceHandler::RawTAP 3.48
+      TAP::Parser::YAMLish::Reader 3.48
+      TAP::Parser::YAMLish::Writer 3.48
+      Test::Harness 3.48
     requirements:
       ExtUtils::MakeMaker 0
   Test-Simple-1.302195

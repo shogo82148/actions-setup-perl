@@ -667,10 +667,10 @@ DISTRIBUTIONS
       Menlo 1.9018
       perl 5.008001
       version 0.9905
-  Module-Build-Tiny-0.046
-    pathname: L/LE/LEONT/Module-Build-Tiny-0.046.tar.gz
+  Module-Build-Tiny-0.047
+    pathname: L/LE/LEONT/Module-Build-Tiny-0.047.tar.gz
     provides:
-      Module::Build::Tiny 0.046
+      Module::Build::Tiny 0.047
     requirements:
       CPAN::Meta 0
       DynaLoader 0
@@ -705,11 +705,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20230820
-    pathname: B/BI/BINGOS/Module-CoreList-5.20230820.tar.gz
+  Module-CoreList-5.20231025
+    pathname: B/BI/BINGOS/Module-CoreList-5.20231025.tar.gz
     provides:
-      Module::CoreList 5.20230820
-      Module::CoreList::Utils 5.20230820
+      Module::CoreList 5.20231025
+      Module::CoreList::Utils 5.20231025
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0
@@ -850,58 +850,58 @@ DISTRIBUTIONS
       Sub::Exporter::Progressive 0.001013
     requirements:
       ExtUtils::MakeMaker 0
-  Test-Harness-3.47
-    pathname: L/LE/LEONT/Test-Harness-3.47.tar.gz
+  Test-Harness-3.48
+    pathname: L/LE/LEONT/Test-Harness-3.48.tar.gz
     provides:
-      App::Prove 3.47
-      App::Prove::State 3.47
-      App::Prove::State::Result 3.47
-      App::Prove::State::Result::Test 3.47
+      App::Prove 3.48
+      App::Prove::State 3.48
+      App::Prove::State::Result 3.48
+      App::Prove::State::Result::Test 3.48
       Harness::Hook undef
-      TAP::Base 3.47
-      TAP::Formatter::Base 3.47
-      TAP::Formatter::Color 3.47
-      TAP::Formatter::Console 3.47
-      TAP::Formatter::Console::ParallelSession 3.47
-      TAP::Formatter::Console::Session 3.47
-      TAP::Formatter::File 3.47
-      TAP::Formatter::File::Session 3.47
-      TAP::Formatter::Session 3.47
-      TAP::Harness 3.47
-      TAP::Harness::Env 3.47
-      TAP::Object 3.47
-      TAP::Parser 3.47
-      TAP::Parser::Aggregator 3.47
-      TAP::Parser::Grammar 3.47
-      TAP::Parser::Iterator 3.47
-      TAP::Parser::Iterator::Array 3.47
-      TAP::Parser::Iterator::Process 3.47
-      TAP::Parser::Iterator::Stream 3.47
-      TAP::Parser::IteratorFactory 3.47
-      TAP::Parser::Multiplexer 3.47
-      TAP::Parser::Result 3.47
-      TAP::Parser::Result::Bailout 3.47
-      TAP::Parser::Result::Comment 3.47
-      TAP::Parser::Result::Plan 3.47
-      TAP::Parser::Result::Pragma 3.47
-      TAP::Parser::Result::Test 3.47
-      TAP::Parser::Result::Unknown 3.47
-      TAP::Parser::Result::Version 3.47
-      TAP::Parser::Result::YAML 3.47
-      TAP::Parser::ResultFactory 3.47
-      TAP::Parser::Scheduler 3.47
-      TAP::Parser::Scheduler::Job 3.47
-      TAP::Parser::Scheduler::Spinner 3.47
-      TAP::Parser::Source 3.47
-      TAP::Parser::SourceHandler 3.47
-      TAP::Parser::SourceHandler::Executable 3.47
-      TAP::Parser::SourceHandler::File 3.47
-      TAP::Parser::SourceHandler::Handle 3.47
-      TAP::Parser::SourceHandler::Perl 3.47
-      TAP::Parser::SourceHandler::RawTAP 3.47
-      TAP::Parser::YAMLish::Reader 3.47
-      TAP::Parser::YAMLish::Writer 3.47
-      Test::Harness 3.47
+      TAP::Base 3.48
+      TAP::Formatter::Base 3.48
+      TAP::Formatter::Color 3.48
+      TAP::Formatter::Console 3.48
+      TAP::Formatter::Console::ParallelSession 3.48
+      TAP::Formatter::Console::Session 3.48
+      TAP::Formatter::File 3.48
+      TAP::Formatter::File::Session 3.48
+      TAP::Formatter::Session 3.48
+      TAP::Harness 3.48
+      TAP::Harness::Env 3.48
+      TAP::Object 3.48
+      TAP::Parser 3.48
+      TAP::Parser::Aggregator 3.48
+      TAP::Parser::Grammar 3.48
+      TAP::Parser::Iterator 3.48
+      TAP::Parser::Iterator::Array 3.48
+      TAP::Parser::Iterator::Process 3.48
+      TAP::Parser::Iterator::Stream 3.48
+      TAP::Parser::IteratorFactory 3.48
+      TAP::Parser::Multiplexer 3.48
+      TAP::Parser::Result 3.48
+      TAP::Parser::Result::Bailout 3.48
+      TAP::Parser::Result::Comment 3.48
+      TAP::Parser::Result::Plan 3.48
+      TAP::Parser::Result::Pragma 3.48
+      TAP::Parser::Result::Test 3.48
+      TAP::Parser::Result::Unknown 3.48
+      TAP::Parser::Result::Version 3.48
+      TAP::Parser::Result::YAML 3.48
+      TAP::Parser::ResultFactory 3.48
+      TAP::Parser::Scheduler 3.48
+      TAP::Parser::Scheduler::Job 3.48
+      TAP::Parser::Scheduler::Spinner 3.48
+      TAP::Parser::Source 3.48
+      TAP::Parser::SourceHandler 3.48
+      TAP::Parser::SourceHandler::Executable 3.48
+      TAP::Parser::SourceHandler::File 3.48
+      TAP::Parser::SourceHandler::Handle 3.48
+      TAP::Parser::SourceHandler::Perl 3.48
+      TAP::Parser::SourceHandler::RawTAP 3.48
+      TAP::Parser::YAMLish::Reader 3.48
+      TAP::Parser::YAMLish::Writer 3.48
+      Test::Harness 3.48
     requirements:
       ExtUtils::MakeMaker 0
   Test-Simple-1.302195

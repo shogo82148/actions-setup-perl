@@ -529,12 +529,11 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  Getopt-Long-2.54
-    pathname: J/JV/JV/Getopt-Long-2.54.tar.gz
+  Getopt-Long-2.56
+    pathname: J/JV/JV/Getopt-Long-2.56.tar.gz
     provides:
-      Getopt::Long 2.54
-      Getopt::Long::CallBack 2.54
-      Getopt::Long::Parser 2.54
+      Getopt::Long 2.56
+      Getopt::Long::Parser 2.56
     requirements:
       ExtUtils::MakeMaker 0
       Pod::Usage 1.14
@@ -1070,41 +1069,41 @@ DISTRIBUTIONS
       Win32::ShellQuote 0.003001
     requirements:
       perl 5.006
-  YAML-PP-0.036
-    pathname: T/TI/TINITA/YAML-PP-0.036.tar.gz
+  YAML-PP-v0.37.0
+    pathname: T/TI/TINITA/YAML-PP-v0.37.0.tar.gz
     provides:
-      YAML::PP 0.036
-      YAML::PP::Common 0.036
-      YAML::PP::Constructor 0.036
-      YAML::PP::Dumper 0.036
-      YAML::PP::Emitter 0.036
-      YAML::PP::Exception 0.036
-      YAML::PP::Grammar 0.036
-      YAML::PP::Highlight 0.036
-      YAML::PP::Lexer 0.036
-      YAML::PP::Loader 0.036
-      YAML::PP::Parser 0.036
-      YAML::PP::Perl 0.036
-      YAML::PP::Preserve::Array 0.036
-      YAML::PP::Preserve::Hash 0.036
-      YAML::PP::Preserve::Scalar 0.036
-      YAML::PP::Reader 0.036
-      YAML::PP::Reader::File 0.036
-      YAML::PP::Render 0.036
-      YAML::PP::Representer 0.036
-      YAML::PP::Schema 0.036
-      YAML::PP::Schema::Binary 0.036
-      YAML::PP::Schema::Core 0.036
-      YAML::PP::Schema::Failsafe 0.036
-      YAML::PP::Schema::Include 0.036
-      YAML::PP::Schema::JSON 0.036
-      YAML::PP::Schema::Merge 0.036
-      YAML::PP::Schema::Perl 0.036
-      YAML::PP::Schema::Tie::IxHash 0.036
-      YAML::PP::Schema::YAML1_1 0.036
-      YAML::PP::Type::MergeKey 0.036
-      YAML::PP::Writer 0.036
-      YAML::PP::Writer::File 0.036
+      YAML::PP v0.37.0
+      YAML::PP::Common v0.37.0
+      YAML::PP::Constructor v0.37.0
+      YAML::PP::Dumper v0.37.0
+      YAML::PP::Emitter v0.37.0
+      YAML::PP::Exception v0.37.0
+      YAML::PP::Grammar v0.37.0
+      YAML::PP::Highlight v0.37.0
+      YAML::PP::Lexer v0.37.0
+      YAML::PP::Loader v0.37.0
+      YAML::PP::Parser v0.37.0
+      YAML::PP::Perl v0.37.0
+      YAML::PP::Preserve::Array v0.37.0
+      YAML::PP::Preserve::Hash v0.37.0
+      YAML::PP::Preserve::Scalar v0.37.0
+      YAML::PP::Reader v0.37.0
+      YAML::PP::Reader::File v0.37.0
+      YAML::PP::Render v0.37.0
+      YAML::PP::Representer v0.37.0
+      YAML::PP::Schema v0.37.0
+      YAML::PP::Schema::Binary v0.37.0
+      YAML::PP::Schema::Core v0.37.0
+      YAML::PP::Schema::Failsafe v0.37.0
+      YAML::PP::Schema::Include v0.37.0
+      YAML::PP::Schema::JSON v0.37.0
+      YAML::PP::Schema::Merge v0.37.0
+      YAML::PP::Schema::Perl v0.37.0
+      YAML::PP::Schema::Tie::IxHash v0.37.0
+      YAML::PP::Schema::YAML1_1 v0.37.0
+      YAML::PP::Type::MergeKey v0.37.0
+      YAML::PP::Writer v0.37.0
+      YAML::PP::Writer::File v0.37.0
     requirements:
       B 0
       B::Deparse 0

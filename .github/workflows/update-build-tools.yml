@@ -25,7 +25,7 @@ jobs:
           ../../bin/carton install
         working-directory: ./scripts/linux
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: cpanfile.snapshot-linux
           path: scripts/linux/cpanfile.snapshot
@@ -45,7 +45,7 @@ jobs:
           ../../bin/carton install
         working-directory: ./scripts/darwin
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: cpanfile.snapshot-darwin
           path: scripts/darwin/cpanfile.snapshot
@@ -73,7 +73,7 @@ jobs:
         run: ..\..\bin\carton install
         working-directory: ./scripts/windows
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: cpanfile.snapshot-windows
           path: scripts/windows/cpanfile.snapshot
@@ -91,7 +91,7 @@ jobs:
           ../../bin/carton install
         working-directory: ./scripts/common
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: cpanfile.snapshot-common
           path: scripts/common/cpanfile.snapshot

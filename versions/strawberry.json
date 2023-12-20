@@ -1,6 +1,14 @@
 [
     {
+        "version": "5.38.2",
+        "release": "2"
+    },
+    {
         "version": "5.38.0",
+        "release": "1"
+    },
+    {
+        "version": "5.36.3",
         "release": "1"
     },
     {

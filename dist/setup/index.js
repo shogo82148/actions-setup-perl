@@ -65480,6 +65480,10 @@ async function getPerl(version, thread) {
     // prepend the tools path. instructs the agent to prepend for future tasks
     //
     core.addPath(bin);
+    if (osPlat === "win32") {
+        // on Windows, add the path to the Strawberry Perl's C compiler.
+        core.addPath("C:\\strawberry\\c\\bin");
+    }
     return {
         version: selected,
         path: toolPath,

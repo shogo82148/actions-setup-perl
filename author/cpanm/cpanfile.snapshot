@@ -233,11 +233,11 @@ DISTRIBUTIONS
       Module::Build::Tiny 0.034
       Module::Metadata 0
       perl 5.008001
-  Exporter-5.77
-    pathname: T/TO/TODDR/Exporter-5.77.tar.gz
+  Exporter-5.78
+    pathname: T/TO/TODDR/Exporter-5.78.tar.gz
     provides:
-      Exporter 5.77
-      Exporter::Heavy 5.77
+      Exporter 5.78
+      Exporter::Heavy 5.78
     requirements:
       Carp 1.05
       ExtUtils::MakeMaker 0

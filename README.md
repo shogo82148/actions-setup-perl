@@ -205,7 +205,6 @@ The following Perl scripts are pre-installed for convenience.
 - [Net::SSLeay](https://metacpan.org/dist/Net-SSLeay/view/lib/Net/SSLeay.pod)
 - [IO::Socket::SSL](https://metacpan.org/dist/IO-Socket-SSL/view/lib/IO/Socket/SSL.pod)
 - [Mozilla::CA](https://metacpan.org/pod/Mozilla::CA)
-- [local::lib](https://metacpan.org/pod/local::lib)
 - [Win32](https://metacpan.org/pod/Win32) (installed from CPAN in perl 5.8.3 or earlier. From perl 5.8.4, it is installed as a core module.)
 
 ## Actions::Core

@@ -185,6 +185,9 @@ sub run {
 
         # local::lib
         cpan_install('https://cpan.metacpan.org/authors/id/H/HA/HAARG/local-lib-2.000029.tar.gz', 'local-lib', 'local::lib', '5.6.0');
+
+        # Module::CoreList
+        cpan_install('https://cpan.metacpan.org/authors/id/B/BI/BINGOS/Module-CoreList-5.20231230.tar.gz', 'Module-CoreList', 'Module::CoreList', '5.6.0', '5.8.8');
     };
 
     group "archiving" => sub {

@@ -22,6 +22,8 @@ fatpack(
         'Devel::GlobalDestruction::XS',
         # test modules
         'Test2', 'App::Prove','TAP::Harness', 'Perl::OSType',
+        # core modules of perl 5
+        'Module::CoreList',
         # XS
         'Cwd',
         'Class::C3::XS',

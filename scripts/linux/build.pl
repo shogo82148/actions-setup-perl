@@ -182,6 +182,9 @@ sub run {
 
         # Test::Harness
         cpan_install('https://cpan.metacpan.org/authors/id/L/LE/LEONT/Test-Harness-3.48.tar.gz', 'Test-Harness', 'Test::Harness', '5.6.0', '5.8.3');
+
+        # local::lib
+        cpan_install('https://cpan.metacpan.org/authors/id/H/HA/HAARG/local-lib-2.000029.tar.gz', 'local-lib', 'local::lib', '5.6.0');
     };
 
     group "archiving" => sub {

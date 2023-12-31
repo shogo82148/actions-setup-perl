@@ -153,12 +153,12 @@ DISTRIBUTIONS
       perl 5.008001
       strict 0
       warnings 0
-  HTTP-Cookies-6.10
-    pathname: O/OA/OALDERS/HTTP-Cookies-6.10.tar.gz
+  HTTP-Cookies-6.11
+    pathname: O/OA/OALDERS/HTTP-Cookies-6.11.tar.gz
     provides:
-      HTTP::Cookies 6.10
-      HTTP::Cookies::Microsoft 6.10
-      HTTP::Cookies::Netscape 6.10
+      HTTP::Cookies 6.11
+      HTTP::Cookies::Microsoft 6.11
+      HTTP::Cookies::Netscape 6.11
     requirements:
       Carp 0
       ExtUtils::MakeMaker 0
@@ -252,18 +252,18 @@ DISTRIBUTIONS
       Exporter 5.57
       ExtUtils::MakeMaker 0
       perl 5.008
-  IO-Socket-SSL-2.083
-    pathname: S/SU/SULLR/IO-Socket-SSL-2.083.tar.gz
+  IO-Socket-SSL-2.084
+    pathname: S/SU/SULLR/IO-Socket-SSL-2.084.tar.gz
     provides:
-      IO::Socket::SSL 2.083
+      IO::Socket::SSL 2.084
       IO::Socket::SSL::Intercept 2.056
-      IO::Socket::SSL::OCSP_Cache 2.083
-      IO::Socket::SSL::OCSP_Resolver 2.083
+      IO::Socket::SSL::OCSP_Cache 2.084
+      IO::Socket::SSL::OCSP_Resolver 2.084
       IO::Socket::SSL::PublicSuffix undef
-      IO::Socket::SSL::SSL_Context 2.083
-      IO::Socket::SSL::SSL_HANDLE 2.083
-      IO::Socket::SSL::Session_Cache 2.083
-      IO::Socket::SSL::Trace 2.083
+      IO::Socket::SSL::SSL_Context 2.084
+      IO::Socket::SSL::SSL_HANDLE 2.084
+      IO::Socket::SSL::Session_Cache 2.084
+      IO::Socket::SSL::Trace 2.084
       IO::Socket::SSL::Utils 2.015
     requirements:
       ExtUtils::MakeMaker 0
@@ -385,10 +385,10 @@ DISTRIBUTIONS
       if 0
       perl 5.005030
       strict 0
-  Mozilla-CA-20230821
-    pathname: L/LW/LWP/Mozilla-CA-20230821.tar.gz
+  Mozilla-CA-20231213
+    pathname: L/LW/LWP/Mozilla-CA-20231213.tar.gz
     provides:
-      Mozilla::CA 20230821
+      Mozilla::CA 20231213
     requirements:
       ExtUtils::MakeMaker 0
   Net-HTTP-6.23

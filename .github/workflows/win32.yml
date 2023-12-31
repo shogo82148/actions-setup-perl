@@ -39,7 +39,7 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
 
   sanity-check:
-    runs-on: windows-2019
+    runs-on: windows-2022
     steps:
       - uses: actions/checkout@v4
 
@@ -70,7 +70,7 @@ jobs:
         shell: cmd
 
   build:
-    runs-on: windows-2019
+    runs-on: windows-2022
     needs:
       - list
       - sanity-check
@@ -166,7 +166,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
   build-multi-thread:
-    runs-on: windows-2019
+    runs-on: windows-2022
     needs:
       - sanity-check
       - list

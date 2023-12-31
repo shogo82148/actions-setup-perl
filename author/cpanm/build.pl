@@ -28,6 +28,8 @@ fatpack(
         'Task::Weaken', 'Perl::OSType', 'XSLoader', 'common::sense',
         # test modules
         'Test2', 'App::Prove','TAP::Harness',
+        # core modules of perl 5
+        'Module::CoreList',
         # XS modules
         'Cwd',
     ),

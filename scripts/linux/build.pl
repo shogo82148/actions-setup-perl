@@ -156,7 +156,7 @@ sub run {
         cpan_install('https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-PP-4.16.tar.gz', 'JSON-PP', 'JSON::PP', '5.6.0');
 
         # JSON::MaybeXS
-        cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004004.tar.gz', 'JSON-MaybeXS', 'JSON::MaybeXS', '5.6.0');
+        cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004005.tar.gz', 'JSON-MaybeXS', 'JSON::MaybeXS', '5.6.0');
 
         # YAML
         cpan_install('https://cpan.metacpan.org/authors/id/T/TI/TINITA/YAML-1.30.tar.gz', 'YAML', 'YAML', '5.8.1');

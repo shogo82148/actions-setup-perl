@@ -159,7 +159,7 @@ sub run {
         cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004005.tar.gz', 'JSON-MaybeXS', 'JSON::MaybeXS', '5.6.0');
 
         # YAML
-        cpan_install('https://cpan.metacpan.org/authors/id/T/TI/TINITA/YAML-1.30.tar.gz', 'YAML', 'YAML', '5.8.1');
+        cpan_install('https://cpan.metacpan.org/authors/id/I/IN/INGY/YAML-1.31.tar.gz', 'YAML', 'YAML', '5.8.1');
 
         # YAML::Tiny
         cpan_install('https://cpan.metacpan.org/authors/id/E/ET/ETHER/YAML-Tiny-1.74.tar.gz', 'YAML-Tiny', 'YAML::Tiny', '5.8.1');

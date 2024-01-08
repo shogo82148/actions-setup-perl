@@ -81,11 +81,11 @@ DISTRIBUTIONS
       Mozilla::CA 20231213
     requirements:
       ExtUtils::MakeMaker 0
-  Net-SSLeay-1.92
-    pathname: C/CH/CHRISN/Net-SSLeay-1.92.tar.gz
+  Net-SSLeay-1.94
+    pathname: C/CH/CHRISN/Net-SSLeay-1.94.tar.gz
     provides:
-      Net::SSLeay 1.92
-      Net::SSLeay::Handle 1.92
+      Net::SSLeay 1.94
+      Net::SSLeay::Handle 1.94
     requirements:
       English 0
       ExtUtils::MakeMaker 0

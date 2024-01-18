@@ -46,7 +46,7 @@ jobs:
         run: |
           perl -e 'print "version=$^V\n"' >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: scripts/linux/local
           key: Linux-sanity-check-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/linux/cpanfile.snapshot') }}
@@ -88,7 +88,7 @@ jobs:
       - name: build OpenSSL
         run: .github/build-openssl-linux.sh
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: scripts/linux/local
           key: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/linux/cpanfile.snapshot') }}
@@ -140,7 +140,7 @@ jobs:
       - name: build OpenSSL
         run: .github/build-openssl-linux.sh
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: scripts/linux/local
           key: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/linux/cpanfile.snapshot') }}

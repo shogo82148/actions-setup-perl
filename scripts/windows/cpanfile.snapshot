@@ -252,18 +252,18 @@ DISTRIBUTIONS
       Exporter 5.57
       ExtUtils::MakeMaker 0
       perl 5.008
-  IO-Socket-SSL-2.084
-    pathname: S/SU/SULLR/IO-Socket-SSL-2.084.tar.gz
+  IO-Socket-SSL-2.085
+    pathname: S/SU/SULLR/IO-Socket-SSL-2.085.tar.gz
     provides:
-      IO::Socket::SSL 2.084
+      IO::Socket::SSL 2.085
       IO::Socket::SSL::Intercept 2.056
-      IO::Socket::SSL::OCSP_Cache 2.084
-      IO::Socket::SSL::OCSP_Resolver 2.084
+      IO::Socket::SSL::OCSP_Cache 2.085
+      IO::Socket::SSL::OCSP_Resolver 2.085
       IO::Socket::SSL::PublicSuffix undef
-      IO::Socket::SSL::SSL_Context 2.084
-      IO::Socket::SSL::SSL_HANDLE 2.084
-      IO::Socket::SSL::Session_Cache 2.084
-      IO::Socket::SSL::Trace 2.084
+      IO::Socket::SSL::SSL_Context 2.085
+      IO::Socket::SSL::SSL_HANDLE 2.085
+      IO::Socket::SSL::Session_Cache 2.085
+      IO::Socket::SSL::Trace 2.085
       IO::Socket::SSL::Utils 2.015
     requirements:
       ExtUtils::MakeMaker 0
@@ -309,11 +309,11 @@ DISTRIBUTIONS
       Scalar::Util 0
       perl 5.006002
       strict 0
-  LWP-Protocol-https-6.11
-    pathname: O/OA/OALDERS/LWP-Protocol-https-6.11.tar.gz
+  LWP-Protocol-https-6.12
+    pathname: O/OA/OALDERS/LWP-Protocol-https-6.12.tar.gz
     provides:
-      LWP::Protocol::https 6.11
-      LWP::Protocol::https::Socket 6.11
+      LWP::Protocol::https 6.12
+      LWP::Protocol::https::Socket 6.12
     requirements:
       ExtUtils::MakeMaker 0
       IO::Socket::SSL 1.970
@@ -567,32 +567,32 @@ DISTRIBUTIONS
       common::sense 3.75
     requirements:
       ExtUtils::MakeMaker 0
-  libwww-perl-6.73
-    pathname: O/OA/OALDERS/libwww-perl-6.73.tar.gz
+  libwww-perl-6.74
+    pathname: O/OA/OALDERS/libwww-perl-6.74.tar.gz
     provides:
-      LWP 6.73
-      LWP::Authen::Basic 6.73
-      LWP::Authen::Digest 6.73
-      LWP::Authen::Ntlm 6.73
-      LWP::ConnCache 6.73
-      LWP::Debug 6.73
-      LWP::Debug::TraceHTTP 6.73
-      LWP::DebugFile 6.73
-      LWP::MemberMixin 6.73
-      LWP::Protocol 6.73
-      LWP::Protocol::cpan 6.73
-      LWP::Protocol::data 6.73
-      LWP::Protocol::file 6.73
-      LWP::Protocol::ftp 6.73
-      LWP::Protocol::gopher 6.73
-      LWP::Protocol::http 6.73
-      LWP::Protocol::loopback 6.73
-      LWP::Protocol::mailto 6.73
-      LWP::Protocol::nntp 6.73
-      LWP::Protocol::nogo 6.73
-      LWP::RobotUA 6.73
-      LWP::Simple 6.73
-      LWP::UserAgent 6.73
+      LWP 6.74
+      LWP::Authen::Basic 6.74
+      LWP::Authen::Digest 6.74
+      LWP::Authen::Ntlm 6.74
+      LWP::ConnCache 6.74
+      LWP::Debug 6.74
+      LWP::Debug::TraceHTTP 6.74
+      LWP::DebugFile 6.74
+      LWP::MemberMixin 6.74
+      LWP::Protocol 6.74
+      LWP::Protocol::cpan 6.74
+      LWP::Protocol::data 6.74
+      LWP::Protocol::file 6.74
+      LWP::Protocol::ftp 6.74
+      LWP::Protocol::gopher 6.74
+      LWP::Protocol::http 6.74
+      LWP::Protocol::loopback 6.74
+      LWP::Protocol::mailto 6.74
+      LWP::Protocol::nntp 6.74
+      LWP::Protocol::nogo 6.74
+      LWP::RobotUA 6.74
+      LWP::Simple 6.74
+      LWP::UserAgent 6.74
     requirements:
       Digest::MD5 0
       Encode 2.12

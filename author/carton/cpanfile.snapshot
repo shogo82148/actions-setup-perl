@@ -761,55 +761,55 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  URI-5.21
-    pathname: O/OA/OALDERS/URI-5.21.tar.gz
+  URI-5.22
+    pathname: O/OA/OALDERS/URI-5.22.tar.gz
     provides:
-      URI 5.21
-      URI::Escape 5.21
-      URI::Heuristic 5.21
-      URI::IRI 5.21
-      URI::QueryParam 5.21
-      URI::Split 5.21
-      URI::URL 5.21
-      URI::WithBase 5.21
-      URI::data 5.21
-      URI::file 5.21
-      URI::file::Base 5.21
-      URI::file::FAT 5.21
-      URI::file::Mac 5.21
-      URI::file::OS2 5.21
-      URI::file::QNX 5.21
-      URI::file::Unix 5.21
-      URI::file::Win32 5.21
-      URI::ftp 5.21
-      URI::gopher 5.21
-      URI::http 5.21
-      URI::https 5.21
-      URI::icap 5.21
-      URI::icaps 5.21
-      URI::ldap 5.21
-      URI::ldapi 5.21
-      URI::ldaps 5.21
-      URI::mailto 5.21
-      URI::mms 5.21
-      URI::news 5.21
-      URI::nntp 5.21
-      URI::nntps 5.21
-      URI::pop 5.21
-      URI::rlogin 5.21
-      URI::rsync 5.21
-      URI::rtsp 5.21
-      URI::rtspu 5.21
-      URI::sftp 5.21
-      URI::sip 5.21
-      URI::sips 5.21
-      URI::snews 5.21
-      URI::ssh 5.21
-      URI::telnet 5.21
-      URI::tn3270 5.21
-      URI::urn 5.21
-      URI::urn::isbn 5.21
-      URI::urn::oid 5.21
+      URI 5.22
+      URI::Escape 5.22
+      URI::Heuristic 5.22
+      URI::IRI 5.22
+      URI::QueryParam 5.22
+      URI::Split 5.22
+      URI::URL 5.22
+      URI::WithBase 5.22
+      URI::data 5.22
+      URI::file 5.22
+      URI::file::Base 5.22
+      URI::file::FAT 5.22
+      URI::file::Mac 5.22
+      URI::file::OS2 5.22
+      URI::file::QNX 5.22
+      URI::file::Unix 5.22
+      URI::file::Win32 5.22
+      URI::ftp 5.22
+      URI::gopher 5.22
+      URI::http 5.22
+      URI::https 5.22
+      URI::icap 5.22
+      URI::icaps 5.22
+      URI::ldap 5.22
+      URI::ldapi 5.22
+      URI::ldaps 5.22
+      URI::mailto 5.22
+      URI::mms 5.22
+      URI::news 5.22
+      URI::nntp 5.22
+      URI::nntps 5.22
+      URI::pop 5.22
+      URI::rlogin 5.22
+      URI::rsync 5.22
+      URI::rtsp 5.22
+      URI::rtspu 5.22
+      URI::sftp 5.22
+      URI::sip 5.22
+      URI::sips 5.22
+      URI::snews 5.22
+      URI::ssh 5.22
+      URI::telnet 5.22
+      URI::tn3270 5.22
+      URI::urn 5.22
+      URI::urn::isbn 5.22
+      URI::urn::oid 5.22
     requirements:
       Carp 0
       Cwd 0

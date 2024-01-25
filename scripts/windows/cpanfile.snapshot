@@ -139,20 +139,6 @@ DISTRIBUTIONS
       HTML::Tagset 3.20
     requirements:
       ExtUtils::MakeMaker 0
-  HTTP-CookieJar-0.014
-    pathname: D/DA/DAGOLDEN/HTTP-CookieJar-0.014.tar.gz
-    provides:
-      HTTP::CookieJar 0.014
-      HTTP::CookieJar::LWP 0.014
-    requirements:
-      Carp 0
-      ExtUtils::MakeMaker 6.17
-      HTTP::Date 0
-      Time::Local 1.1901
-      parent 0
-      perl 5.008001
-      strict 0
-      warnings 0
   HTTP-Cookies-6.11
     pathname: O/OA/OALDERS/HTTP-Cookies-6.11.tar.gz
     provides:
@@ -476,55 +462,55 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       common::sense 0
-  URI-5.21
-    pathname: O/OA/OALDERS/URI-5.21.tar.gz
+  URI-5.23
+    pathname: O/OA/OALDERS/URI-5.23.tar.gz
     provides:
-      URI 5.21
-      URI::Escape 5.21
-      URI::Heuristic 5.21
-      URI::IRI 5.21
-      URI::QueryParam 5.21
-      URI::Split 5.21
-      URI::URL 5.21
-      URI::WithBase 5.21
-      URI::data 5.21
-      URI::file 5.21
-      URI::file::Base 5.21
-      URI::file::FAT 5.21
-      URI::file::Mac 5.21
-      URI::file::OS2 5.21
-      URI::file::QNX 5.21
-      URI::file::Unix 5.21
-      URI::file::Win32 5.21
-      URI::ftp 5.21
-      URI::gopher 5.21
-      URI::http 5.21
-      URI::https 5.21
-      URI::icap 5.21
-      URI::icaps 5.21
-      URI::ldap 5.21
-      URI::ldapi 5.21
-      URI::ldaps 5.21
-      URI::mailto 5.21
-      URI::mms 5.21
-      URI::news 5.21
-      URI::nntp 5.21
-      URI::nntps 5.21
-      URI::pop 5.21
-      URI::rlogin 5.21
-      URI::rsync 5.21
-      URI::rtsp 5.21
-      URI::rtspu 5.21
-      URI::sftp 5.21
-      URI::sip 5.21
-      URI::sips 5.21
-      URI::snews 5.21
-      URI::ssh 5.21
-      URI::telnet 5.21
-      URI::tn3270 5.21
-      URI::urn 5.21
-      URI::urn::isbn 5.21
-      URI::urn::oid 5.21
+      URI 5.23
+      URI::Escape 5.23
+      URI::Heuristic 5.23
+      URI::IRI 5.23
+      URI::QueryParam 5.23
+      URI::Split 5.23
+      URI::URL 5.23
+      URI::WithBase 5.23
+      URI::data 5.23
+      URI::file 5.23
+      URI::file::Base 5.23
+      URI::file::FAT 5.23
+      URI::file::Mac 5.23
+      URI::file::OS2 5.23
+      URI::file::QNX 5.23
+      URI::file::Unix 5.23
+      URI::file::Win32 5.23
+      URI::ftp 5.23
+      URI::gopher 5.23
+      URI::http 5.23
+      URI::https 5.23
+      URI::icap 5.23
+      URI::icaps 5.23
+      URI::ldap 5.23
+      URI::ldapi 5.23
+      URI::ldaps 5.23
+      URI::mailto 5.23
+      URI::mms 5.23
+      URI::news 5.23
+      URI::nntp 5.23
+      URI::nntps 5.23
+      URI::pop 5.23
+      URI::rlogin 5.23
+      URI::rsync 5.23
+      URI::rtsp 5.23
+      URI::rtspu 5.23
+      URI::sftp 5.23
+      URI::sip 5.23
+      URI::sips 5.23
+      URI::snews 5.23
+      URI::ssh 5.23
+      URI::telnet 5.23
+      URI::tn3270 5.23
+      URI::urn 5.23
+      URI::urn::isbn 5.23
+      URI::urn::oid 5.23
     requirements:
       Carp 0
       Cwd 0
@@ -567,32 +553,32 @@ DISTRIBUTIONS
       common::sense 3.75
     requirements:
       ExtUtils::MakeMaker 0
-  libwww-perl-6.75
-    pathname: O/OA/OALDERS/libwww-perl-6.75.tar.gz
+  libwww-perl-6.76
+    pathname: O/OA/OALDERS/libwww-perl-6.76.tar.gz
     provides:
-      LWP 6.75
-      LWP::Authen::Basic 6.75
-      LWP::Authen::Digest 6.75
-      LWP::Authen::Ntlm 6.75
-      LWP::ConnCache 6.75
-      LWP::Debug 6.75
-      LWP::Debug::TraceHTTP 6.75
-      LWP::DebugFile 6.75
-      LWP::MemberMixin 6.75
-      LWP::Protocol 6.75
-      LWP::Protocol::cpan 6.75
-      LWP::Protocol::data 6.75
-      LWP::Protocol::file 6.75
-      LWP::Protocol::ftp 6.75
-      LWP::Protocol::gopher 6.75
-      LWP::Protocol::http 6.75
-      LWP::Protocol::loopback 6.75
-      LWP::Protocol::mailto 6.75
-      LWP::Protocol::nntp 6.75
-      LWP::Protocol::nogo 6.75
-      LWP::RobotUA 6.75
-      LWP::Simple 6.75
-      LWP::UserAgent 6.75
+      LWP 6.76
+      LWP::Authen::Basic 6.76
+      LWP::Authen::Digest 6.76
+      LWP::Authen::Ntlm 6.76
+      LWP::ConnCache 6.76
+      LWP::Debug 6.76
+      LWP::Debug::TraceHTTP 6.76
+      LWP::DebugFile 6.76
+      LWP::MemberMixin 6.76
+      LWP::Protocol 6.76
+      LWP::Protocol::cpan 6.76
+      LWP::Protocol::data 6.76
+      LWP::Protocol::file 6.76
+      LWP::Protocol::ftp 6.76
+      LWP::Protocol::gopher 6.76
+      LWP::Protocol::http 6.76
+      LWP::Protocol::loopback 6.76
+      LWP::Protocol::mailto 6.76
+      LWP::Protocol::nntp 6.76
+      LWP::Protocol::nogo 6.76
+      LWP::RobotUA 6.76
+      LWP::Simple 6.76
+      LWP::UserAgent 6.76
     requirements:
       Digest::MD5 0
       Encode 2.12
@@ -604,7 +590,6 @@ DISTRIBUTIONS
       Getopt::Long 0
       HTML::Entities 0
       HTML::HeadParser 3.71
-      HTTP::CookieJar::LWP 0
       HTTP::Cookies 6
       HTTP::Date 6
       HTTP::Negotiate 6

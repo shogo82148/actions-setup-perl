@@ -462,55 +462,55 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       common::sense 0
-  URI-5.23
-    pathname: O/OA/OALDERS/URI-5.23.tar.gz
+  URI-5.24
+    pathname: O/OA/OALDERS/URI-5.24.tar.gz
     provides:
-      URI 5.23
-      URI::Escape 5.23
-      URI::Heuristic 5.23
-      URI::IRI 5.23
-      URI::QueryParam 5.23
-      URI::Split 5.23
-      URI::URL 5.23
-      URI::WithBase 5.23
-      URI::data 5.23
-      URI::file 5.23
-      URI::file::Base 5.23
-      URI::file::FAT 5.23
-      URI::file::Mac 5.23
-      URI::file::OS2 5.23
-      URI::file::QNX 5.23
-      URI::file::Unix 5.23
-      URI::file::Win32 5.23
-      URI::ftp 5.23
-      URI::gopher 5.23
-      URI::http 5.23
-      URI::https 5.23
-      URI::icap 5.23
-      URI::icaps 5.23
-      URI::ldap 5.23
-      URI::ldapi 5.23
-      URI::ldaps 5.23
-      URI::mailto 5.23
-      URI::mms 5.23
-      URI::news 5.23
-      URI::nntp 5.23
-      URI::nntps 5.23
-      URI::pop 5.23
-      URI::rlogin 5.23
-      URI::rsync 5.23
-      URI::rtsp 5.23
-      URI::rtspu 5.23
-      URI::sftp 5.23
-      URI::sip 5.23
-      URI::sips 5.23
-      URI::snews 5.23
-      URI::ssh 5.23
-      URI::telnet 5.23
-      URI::tn3270 5.23
-      URI::urn 5.23
-      URI::urn::isbn 5.23
-      URI::urn::oid 5.23
+      URI 5.24
+      URI::Escape 5.24
+      URI::Heuristic 5.24
+      URI::IRI 5.24
+      URI::QueryParam 5.24
+      URI::Split 5.24
+      URI::URL 5.24
+      URI::WithBase 5.24
+      URI::data 5.24
+      URI::file 5.24
+      URI::file::Base 5.24
+      URI::file::FAT 5.24
+      URI::file::Mac 5.24
+      URI::file::OS2 5.24
+      URI::file::QNX 5.24
+      URI::file::Unix 5.24
+      URI::file::Win32 5.24
+      URI::ftp 5.24
+      URI::gopher 5.24
+      URI::http 5.24
+      URI::https 5.24
+      URI::icap 5.24
+      URI::icaps 5.24
+      URI::ldap 5.24
+      URI::ldapi 5.24
+      URI::ldaps 5.24
+      URI::mailto 5.24
+      URI::mms 5.24
+      URI::news 5.24
+      URI::nntp 5.24
+      URI::nntps 5.24
+      URI::pop 5.24
+      URI::rlogin 5.24
+      URI::rsync 5.24
+      URI::rtsp 5.24
+      URI::rtspu 5.24
+      URI::sftp 5.24
+      URI::sip 5.24
+      URI::sips 5.24
+      URI::snews 5.24
+      URI::ssh 5.24
+      URI::telnet 5.24
+      URI::tn3270 5.24
+      URI::urn 5.24
+      URI::urn::isbn 5.24
+      URI::urn::oid 5.24
     requirements:
       Carp 0
       Cwd 0

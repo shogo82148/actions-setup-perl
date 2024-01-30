@@ -27,8 +27,16 @@ if (my $cache = $ENV{RUNNER_TOOL_CACHE}) {
     }
     $runner_tool_cache = $cache;
 }
+chomp (my $arch = `uname -m`);
+if ($arch eq 'x86_64') {
+    $arch = 'x64';
+} elsif ($arch eq 'aarch64') {
+    $arch = 'arm64';
+} else {
+    die "unsupported arch: $arch";
+}
 my $install_dir = File::Spec->rel2abs(
-    File::Spec->catdir($runner_tool_cache, "perl", $version . ($thread ? "-thr" : ""), "x64"));
+    File::Spec->catdir($runner_tool_cache, "perl", $version . ($thread ? "-thr" : ""), $arch));
 my $perl = File::Spec->catfile($install_dir, 'bin', 'perl');
 
 # read cpanfile snapshot

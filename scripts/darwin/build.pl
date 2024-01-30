@@ -30,7 +30,7 @@ if (my $cache = $ENV{RUNNER_TOOL_CACHE}) {
 chomp (my $arch = `uname -m`);
 if ($arch eq 'x86_64') {
     $arch = 'x64';
-} elsif ($arch eq 'aarch64') {
+} elsif ($arch eq 'arm64') {
     $arch = 'arm64';
 } else {
     die "unsupported arch: $arch";

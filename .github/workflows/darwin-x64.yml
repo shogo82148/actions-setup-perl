@@ -1,4 +1,4 @@
-name: build on darwin
+name: build on darwin-x64
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
       - "versions/darwin.json"
       - "scripts/darwin/**"
       - "scripts/lib/Devel/**"
-      - ".github/workflows/darwin.yml"
+      - ".github/workflows/darwin-x64.yml"
       - ".github/build-openssl-darwin.sh"
   push:
     branches:
@@ -39,7 +39,7 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
 
   sanity-check:
-    runs-on: macos-latest
+    runs-on: macos-11
     steps:
       - id: perl
         name: check pre-installed perl version
@@ -91,7 +91,7 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: scripts/darwin/local
-          key: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
+          key: ${{ runner.os }}-${{ runner.arch }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
           restore-keys: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-
       - name: carton install --deployment
         shell: bash
@@ -144,7 +144,7 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: scripts/darwin/local
-          key: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
+          key: ${{ runner.os }}-${{ runner.arch }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
           restore-keys: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-
       - name: carton install --deployment
         shell: bash

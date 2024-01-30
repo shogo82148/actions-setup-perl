@@ -16,7 +16,7 @@ fi
 case $(uname -m) in
   "x86_64")
     ARCH=x64;;
-  "aarch64")
+  "arm64")
     ARCH=arm64;;
   *)
     echo "unknown architecture: $(uname -m)"

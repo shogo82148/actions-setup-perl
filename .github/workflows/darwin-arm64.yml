@@ -1,18 +1,18 @@
-name: build on linux
+name: build on darwin-arm64
 
 on:
   pull_request:
     paths:
-      - "versions/linux.json"
-      - "scripts/linux/**"
+      - "versions/darwin.json"
+      - "scripts/darwin/**"
       - "scripts/lib/Devel/**"
-      - ".github/workflows/linux.yml"
-      - ".github/build-openssl-linux.sh"
+      - ".github/workflows/darwin-arm64.yml"
+      - ".github/build-openssl-darwin.sh"
   push:
     branches:
       - "releases/*"
   schedule:
-    - cron: "15 6 * * 5"
+    - cron: "10 15 * * 5"
   workflow_dispatch:
     inputs:
       perl-versions:
@@ -31,7 +31,7 @@ jobs:
           if [ -n "$PERL_VERSIONS" ]; then
             echo "matrix=$(printenv PERL_VERSIONS | jq -c '{perl: .}')" >> "$GITHUB_OUTPUT"
           else
-            echo "matrix=$(<versions/linux.json jq -c '{perl: .}')" >> "$GITHUB_OUTPUT"
+            echo "matrix=$(<versions/darwin.json jq -c '{perl: .}')" >> "$GITHUB_OUTPUT"
           fi
         env:
           PERL_VERSIONS: ${{ github.event.inputs.perl-versions }}
@@ -39,7 +39,7 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
 
   sanity-check:
-    runs-on: ubuntu-latest
+    runs-on: macos-14
     steps:
       - id: perl
         name: check pre-installed perl version
@@ -48,9 +48,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/cache@v4
         with:
-          path: scripts/linux/local
-          key: Linux-sanity-check-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/linux/cpanfile.snapshot') }}
-          restore-keys: Linux-sanity-check-perl-${{ steps.perl.outputs.version }}-
+          path: scripts/darwin/local
+          key: Darwin-sanity-check-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
+          restore-keys: Darwin-sanity-check-perl-${{ steps.perl.outputs.version }}-
       - name: sanity check
         run: |
           ../../bin/carton install --deployment
@@ -58,16 +58,16 @@ jobs:
           ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/GitHubActions.pm
           ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/MinGW.pm
           ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/MinGWGNUmakefile.pm
-        working-directory: ./scripts/linux
+        working-directory: ./scripts/darwin
         env:
           PERL5LIB: ${{ github.workspace }}/scripts/lib
 
   build:
-    runs-on: ubuntu-20.04
+    runs-on: macos-14
     needs:
-      - list
       - sanity-check
-    timeout-minutes: 25
+      - list
+    timeout-minutes: 120
     strategy:
       fail-fast: false
       matrix: ${{fromJson(needs.list.outputs.matrix)}}
@@ -86,39 +86,39 @@ jobs:
         run: gcc --version
 
       - name: build OpenSSL
-        run: .github/build-openssl-linux.sh
+        run: .github/build-openssl-darwin.sh
 
       - uses: actions/cache@v4
         with:
-          path: scripts/linux/local
-          key: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/linux/cpanfile.snapshot') }}
+          path: scripts/darwin/local
+          key: ${{ runner.os }}-${{ runner.arch }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
           restore-keys: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-
       - name: carton install --deployment
         shell: bash
         run: ../../bin/carton install --deployment
-        working-directory: ./scripts/linux
+        working-directory: ./scripts/darwin
 
       - name: build
         shell: bash
         run: perl build.pl
         env:
-          PERL5LIB: ${{ github.workspace }}/scripts/linux/local/lib/perl5
-        working-directory: ./scripts/linux
+          PERL5LIB: ${{ github.workspace }}/scripts/darwin/local/lib/perl5
+        working-directory: ./scripts/darwin
 
       - name: upload
         run: |
           ACTIONS_VERSION=v$(<"$GITHUB_WORKSPACE/package.json" jq -r .version)
-          mv "$RUNNER_TEMP/perl.tar.zstd" "$RUNNER_TEMP/perl-$PERL_VERSION-linux-x64.tar.zstd"
-          gh release upload --clobber "$ACTIONS_VERSION" "$RUNNER_TEMP/perl-$PERL_VERSION-linux-x64.tar.zstd"
+          mv "$RUNNER_TEMP/perl.tar.zstd" "$RUNNER_TEMP/perl-$PERL_VERSION-darwin-arm64.tar.zstd"
+          gh release upload --clobber "$ACTIONS_VERSION" "$RUNNER_TEMP/perl-$PERL_VERSION-darwin-arm64.tar.zstd"
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
   build-multi-thread:
-    runs-on: ubuntu-20.04
+    runs-on: macos-14
     needs:
       - sanity-check
       - list
-    timeout-minutes: 25
+    timeout-minutes: 120
     strategy:
       fail-fast: false
       matrix: ${{fromJson(needs.list.outputs.matrix)}}
@@ -131,6 +131,7 @@ jobs:
         name: setup host perl
         run: |
           perl -MConfig -E 'say "$Config{bin}"' >> "$GITHUB_PATH"
+          # shellcheck disable=SC2016
           perl -e 'print "version=$^V\n"' >> "$GITHUB_OUTPUT"
       - name: Host perl -V
         run: perl -V
@@ -138,29 +139,29 @@ jobs:
         run: gcc --version
 
       - name: build OpenSSL
-        run: .github/build-openssl-linux.sh
+        run: .github/build-openssl-darwin.sh
 
       - uses: actions/cache@v4
         with:
-          path: scripts/linux/local
-          key: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/linux/cpanfile.snapshot') }}
+          path: scripts/darwin/local
+          key: ${{ runner.os }}-${{ runner.arch }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/darwin/cpanfile.snapshot') }}
           restore-keys: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-
       - name: carton install --deployment
         shell: bash
         run: ../../bin/carton install --deployment
-        working-directory: ./scripts/linux
+        working-directory: ./scripts/darwin
 
       - name: build
         shell: bash
         run: perl build.pl
         env:
-          PERL5LIB: ${{ github.workspace }}/scripts/linux/local/lib/perl5
-        working-directory: ./scripts/linux
+          PERL5LIB: ${{ github.workspace }}/scripts/darwin/local/lib/perl5
+        working-directory: ./scripts/darwin
 
       - name: upload
         run: |
           ACTIONS_VERSION=v$(<"$GITHUB_WORKSPACE/package.json" jq -r .version)
-          mv "$RUNNER_TEMP/perl.tar.zstd" "$RUNNER_TEMP/perl-$PERL_VERSION-linux-x64-multi-thread.tar.zstd"
-          gh release upload --clobber "$ACTIONS_VERSION" "$RUNNER_TEMP/perl-$PERL_VERSION-linux-x64-multi-thread.tar.zstd"
+          mv "$RUNNER_TEMP/perl.tar.zstd" "$RUNNER_TEMP/perl-$PERL_VERSION-darwin-arm64-multi-thread.tar.zstd"
+          gh release upload --clobber "$ACTIONS_VERSION" "$RUNNER_TEMP/perl-$PERL_VERSION-darwin-arm64-multi-thread.tar.zstd"
         env:
           GITHUB_TOKEN: ${{ github.token }}

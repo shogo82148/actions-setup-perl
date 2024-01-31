@@ -1,16 +1,16 @@
 # carton snapshot format: version 1.0
 DISTRIBUTIONS
-  CPAN-Perl-Releases-5.20231129
-    pathname: B/BI/BINGOS/CPAN-Perl-Releases-5.20231129.tar.gz
+  CPAN-Perl-Releases-5.20240120
+    pathname: B/BI/BINGOS/CPAN-Perl-Releases-5.20240120.tar.gz
     provides:
-      CPAN::Perl::Releases 5.20231129
+      CPAN::Perl::Releases 5.20240120
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006000
-  CPAN-Perl-Releases-MetaCPAN-0.007
-    pathname: S/SK/SKAJI/CPAN-Perl-Releases-MetaCPAN-0.007.tar.gz
+  CPAN-Perl-Releases-MetaCPAN-0.009
+    pathname: S/SK/SKAJI/CPAN-Perl-Releases-MetaCPAN-0.009.tar.gz
     provides:
-      CPAN::Perl::Releases::MetaCPAN 0.007
+      CPAN::Perl::Releases::MetaCPAN 0.009
     requirements:
       HTTP::Tiny 0.055
       HTTP::Tinyish 0
@@ -95,10 +95,10 @@ DISTRIBUTIONS
       IPC::Run3 0
       parent 0
       perl 5.008001
-  IPC-Run3-0.048
-    pathname: R/RJ/RJBS/IPC-Run3-0.048.tar.gz
+  IPC-Run3-0.049
+    pathname: R/RJ/RJBS/IPC-Run3-0.049.tar.gz
     provides:
-      IPC::Run3 0.048
+      IPC::Run3 0.049
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0.31

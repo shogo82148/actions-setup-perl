@@ -8,10 +8,10 @@ DISTRIBUTIONS
       Carp 0.01
       ExtUtils::MakeMaker 0
       perl 5.006
-  App-cpm-0.997014
-    pathname: S/SK/SKAJI/App-cpm-0.997014.tar.gz
+  App-cpm-0.997015
+    pathname: S/SK/SKAJI/App-cpm-0.997015.tar.gz
     provides:
-      App::cpm 0.997014
+      App::cpm 0.997015
       App::cpm::CLI undef
       App::cpm::CircularDependency undef
       App::cpm::DistNotation undef
@@ -581,10 +581,10 @@ DISTRIBUTIONS
       Module::Load::Conditional 0.66
       Params::Check 0.20
       Test::More 0
-  IPC-Run3-0.048
-    pathname: R/RJ/RJBS/IPC-Run3-0.048.tar.gz
+  IPC-Run3-0.049
+    pathname: R/RJ/RJBS/IPC-Run3-0.049.tar.gz
     provides:
-      IPC::Run3 0.048
+      IPC::Run3 0.049
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0.31
@@ -704,11 +704,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20231230
-    pathname: B/BI/BINGOS/Module-CoreList-5.20231230.tar.gz
+  Module-CoreList-5.20240129
+    pathname: B/BI/BINGOS/Module-CoreList-5.20240129.tar.gz
     provides:
-      Module::CoreList 5.20231230
-      Module::CoreList::Utils 5.20231230
+      Module::CoreList 5.20240129
+      Module::CoreList::Utils 5.20240129
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0
@@ -779,10 +779,10 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Locale::Maketext::Simple 0
       Test::More 0
-  Parse-PMFile-0.44
-    pathname: I/IS/ISHIGAKI/Parse-PMFile-0.44.tar.gz
+  Parse-PMFile-0.45
+    pathname: I/IS/ISHIGAKI/Parse-PMFile-0.45.tar.gz
     provides:
-      Parse::PMFile 0.44
+      Parse::PMFile 0.45
     requirements:
       Dumpvalue 0
       ExtUtils::MakeMaker 0
@@ -996,55 +996,55 @@ DISTRIBUTIONS
       Tie::Handle 0
       perl 5.006
       strict 0
-  URI-5.21
-    pathname: O/OA/OALDERS/URI-5.21.tar.gz
+  URI-5.25
+    pathname: O/OA/OALDERS/URI-5.25.tar.gz
     provides:
-      URI 5.21
-      URI::Escape 5.21
-      URI::Heuristic 5.21
-      URI::IRI 5.21
-      URI::QueryParam 5.21
-      URI::Split 5.21
-      URI::URL 5.21
-      URI::WithBase 5.21
-      URI::data 5.21
-      URI::file 5.21
-      URI::file::Base 5.21
-      URI::file::FAT 5.21
-      URI::file::Mac 5.21
-      URI::file::OS2 5.21
-      URI::file::QNX 5.21
-      URI::file::Unix 5.21
-      URI::file::Win32 5.21
-      URI::ftp 5.21
-      URI::gopher 5.21
-      URI::http 5.21
-      URI::https 5.21
-      URI::icap 5.21
-      URI::icaps 5.21
-      URI::ldap 5.21
-      URI::ldapi 5.21
-      URI::ldaps 5.21
-      URI::mailto 5.21
-      URI::mms 5.21
-      URI::news 5.21
-      URI::nntp 5.21
-      URI::nntps 5.21
-      URI::pop 5.21
-      URI::rlogin 5.21
-      URI::rsync 5.21
-      URI::rtsp 5.21
-      URI::rtspu 5.21
-      URI::sftp 5.21
-      URI::sip 5.21
-      URI::sips 5.21
-      URI::snews 5.21
-      URI::ssh 5.21
-      URI::telnet 5.21
-      URI::tn3270 5.21
-      URI::urn 5.21
-      URI::urn::isbn 5.21
-      URI::urn::oid 5.21
+      URI 5.25
+      URI::Escape 5.25
+      URI::Heuristic 5.25
+      URI::IRI 5.25
+      URI::QueryParam 5.25
+      URI::Split 5.25
+      URI::URL 5.25
+      URI::WithBase 5.25
+      URI::data 5.25
+      URI::file 5.25
+      URI::file::Base 5.25
+      URI::file::FAT 5.25
+      URI::file::Mac 5.25
+      URI::file::OS2 5.25
+      URI::file::QNX 5.25
+      URI::file::Unix 5.25
+      URI::file::Win32 5.25
+      URI::ftp 5.25
+      URI::gopher 5.25
+      URI::http 5.25
+      URI::https 5.25
+      URI::icap 5.25
+      URI::icaps 5.25
+      URI::ldap 5.25
+      URI::ldapi 5.25
+      URI::ldaps 5.25
+      URI::mailto 5.25
+      URI::mms 5.25
+      URI::news 5.25
+      URI::nntp 5.25
+      URI::nntps 5.25
+      URI::pop 5.25
+      URI::rlogin 5.25
+      URI::rsync 5.25
+      URI::rtsp 5.25
+      URI::rtspu 5.25
+      URI::sftp 5.25
+      URI::sip 5.25
+      URI::sips 5.25
+      URI::snews 5.25
+      URI::ssh 5.25
+      URI::telnet 5.25
+      URI::tn3270 5.25
+      URI::urn 5.25
+      URI::urn::isbn 5.25
+      URI::urn::oid 5.25
     requirements:
       Carp 0
       Cwd 0
@@ -1069,41 +1069,41 @@ DISTRIBUTIONS
       Win32::ShellQuote 0.003001
     requirements:
       perl 5.006
-  YAML-PP-v0.37.0
-    pathname: T/TI/TINITA/YAML-PP-v0.37.0.tar.gz
+  YAML-PP-v0.38.0
+    pathname: T/TI/TINITA/YAML-PP-v0.38.0.tar.gz
     provides:
-      YAML::PP v0.37.0
-      YAML::PP::Common v0.37.0
-      YAML::PP::Constructor v0.37.0
-      YAML::PP::Dumper v0.37.0
-      YAML::PP::Emitter v0.37.0
-      YAML::PP::Exception v0.37.0
-      YAML::PP::Grammar v0.37.0
-      YAML::PP::Highlight v0.37.0
-      YAML::PP::Lexer v0.37.0
-      YAML::PP::Loader v0.37.0
-      YAML::PP::Parser v0.37.0
-      YAML::PP::Perl v0.37.0
-      YAML::PP::Preserve::Array v0.37.0
-      YAML::PP::Preserve::Hash v0.37.0
-      YAML::PP::Preserve::Scalar v0.37.0
-      YAML::PP::Reader v0.37.0
-      YAML::PP::Reader::File v0.37.0
-      YAML::PP::Render v0.37.0
-      YAML::PP::Representer v0.37.0
-      YAML::PP::Schema v0.37.0
-      YAML::PP::Schema::Binary v0.37.0
-      YAML::PP::Schema::Core v0.37.0
-      YAML::PP::Schema::Failsafe v0.37.0
-      YAML::PP::Schema::Include v0.37.0
-      YAML::PP::Schema::JSON v0.37.0
-      YAML::PP::Schema::Merge v0.37.0
-      YAML::PP::Schema::Perl v0.37.0
-      YAML::PP::Schema::Tie::IxHash v0.37.0
-      YAML::PP::Schema::YAML1_1 v0.37.0
-      YAML::PP::Type::MergeKey v0.37.0
-      YAML::PP::Writer v0.37.0
-      YAML::PP::Writer::File v0.37.0
+      YAML::PP v0.38.0
+      YAML::PP::Common v0.38.0
+      YAML::PP::Constructor v0.38.0
+      YAML::PP::Dumper v0.38.0
+      YAML::PP::Emitter v0.38.0
+      YAML::PP::Exception v0.38.0
+      YAML::PP::Grammar v0.38.0
+      YAML::PP::Highlight v0.38.0
+      YAML::PP::Lexer v0.38.0
+      YAML::PP::Loader v0.38.0
+      YAML::PP::Parser v0.38.0
+      YAML::PP::Perl v0.38.0
+      YAML::PP::Preserve::Array v0.38.0
+      YAML::PP::Preserve::Hash v0.38.0
+      YAML::PP::Preserve::Scalar v0.38.0
+      YAML::PP::Reader v0.38.0
+      YAML::PP::Reader::File v0.38.0
+      YAML::PP::Render v0.38.0
+      YAML::PP::Representer v0.38.0
+      YAML::PP::Schema v0.38.0
+      YAML::PP::Schema::Binary v0.38.0
+      YAML::PP::Schema::Core v0.38.0
+      YAML::PP::Schema::Failsafe v0.38.0
+      YAML::PP::Schema::Include v0.38.0
+      YAML::PP::Schema::JSON v0.38.0
+      YAML::PP::Schema::Merge v0.38.0
+      YAML::PP::Schema::Perl v0.38.0
+      YAML::PP::Schema::Tie::IxHash v0.38.0
+      YAML::PP::Schema::YAML1_1 v0.38.0
+      YAML::PP::Type::MergeKey v0.38.0
+      YAML::PP::Writer v0.38.0
+      YAML::PP::Writer::File v0.38.0
     requirements:
       B 0
       B::Deparse 0

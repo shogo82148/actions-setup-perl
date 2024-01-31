@@ -253,9 +253,8 @@ sub run {
         # Test::Harness
         cpan_install('https://cpan.metacpan.org/authors/id/L/LE/LEONT/Test-Harness-3.48.tar.gz', 'Test-Harness', 'Test::Harness', '5.6.0', '5.8.3');
 
-        # local::lib
-        cpan_install('https://cpan.metacpan.org/authors/id/H/HA/HAARG/local-lib-2.000029.tar.gz', 'local-lib', 'local::lib', '5.6.0');
-
+        # requirements of Module::CoreList
+        cpan_install('https://cpan.metacpan.org/authors/id/L/LE/LEONT/version-0.9930.tar.gz', 'version', 'version', '5.6.0', '5.8.9');
         # Module::CoreList
         cpan_install('https://cpan.metacpan.org/authors/id/B/BI/BINGOS/Module-CoreList-5.20231230.tar.gz', 'Module-CoreList', 'Module::CoreList', '5.6.0', '5.8.9');
     };

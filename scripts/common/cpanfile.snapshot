@@ -22,18 +22,18 @@ DISTRIBUTIONS
       overload 0
       strict 0
       warnings 0
-  IO-Socket-SSL-2.084
-    pathname: S/SU/SULLR/IO-Socket-SSL-2.084.tar.gz
+  IO-Socket-SSL-2.085
+    pathname: S/SU/SULLR/IO-Socket-SSL-2.085.tar.gz
     provides:
-      IO::Socket::SSL 2.084
+      IO::Socket::SSL 2.085
       IO::Socket::SSL::Intercept 2.056
-      IO::Socket::SSL::OCSP_Cache 2.084
-      IO::Socket::SSL::OCSP_Resolver 2.084
+      IO::Socket::SSL::OCSP_Cache 2.085
+      IO::Socket::SSL::OCSP_Resolver 2.085
       IO::Socket::SSL::PublicSuffix undef
-      IO::Socket::SSL::SSL_Context 2.084
-      IO::Socket::SSL::SSL_HANDLE 2.084
-      IO::Socket::SSL::Session_Cache 2.084
-      IO::Socket::SSL::Trace 2.084
+      IO::Socket::SSL::SSL_Context 2.085
+      IO::Socket::SSL::SSL_HANDLE 2.085
+      IO::Socket::SSL::Session_Cache 2.085
+      IO::Socket::SSL::Trace 2.085
       IO::Socket::SSL::Utils 2.015
     requirements:
       ExtUtils::MakeMaker 0
@@ -81,11 +81,11 @@ DISTRIBUTIONS
       Mozilla::CA 20231213
     requirements:
       ExtUtils::MakeMaker 0
-  Net-SSLeay-1.92
-    pathname: C/CH/CHRISN/Net-SSLeay-1.92.tar.gz
+  Net-SSLeay-1.94
+    pathname: C/CH/CHRISN/Net-SSLeay-1.94.tar.gz
     provides:
-      Net::SSLeay 1.92
-      Net::SSLeay::Handle 1.92
+      Net::SSLeay 1.94
+      Net::SSLeay::Handle 1.94
     requirements:
       English 0
       ExtUtils::MakeMaker 0
@@ -132,11 +132,11 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.008001
-  YAML-LibYAML-0.88
-    pathname: I/IN/INGY/YAML-LibYAML-0.88.tar.gz
+  YAML-LibYAML-0.89
+    pathname: T/TI/TINITA/YAML-LibYAML-0.89.tar.gz
     provides:
-      YAML::LibYAML 0.88
-      YAML::XS 0.88
+      YAML::LibYAML 0.89
+      YAML::XS 0.89
       YAML::XS::LibYAML undef
     requirements:
       ExtUtils::MakeMaker 0

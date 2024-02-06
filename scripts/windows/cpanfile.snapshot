@@ -295,11 +295,11 @@ DISTRIBUTIONS
       Scalar::Util 0
       perl 5.006002
       strict 0
-  LWP-Protocol-https-6.12
-    pathname: O/OA/OALDERS/LWP-Protocol-https-6.12.tar.gz
+  LWP-Protocol-https-6.13
+    pathname: O/OA/OALDERS/LWP-Protocol-https-6.13.tar.gz
     provides:
-      LWP::Protocol::https 6.12
-      LWP::Protocol::https::Socket 6.12
+      LWP::Protocol::https 6.13
+      LWP::Protocol::https::Socket 6.13
     requirements:
       ExtUtils::MakeMaker 0
       IO::Socket::SSL 1.970

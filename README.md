@@ -7,44 +7,47 @@
 This action sets by perl environment for use in actions by:
 
 - optionally downloading and caching a version of perl
-- registering problem matchers for error output 
+- registering problem matchers for error output
 
 # Usage
 
 See [action.yml](action.yml)
 
 Basic:
+
 ```yaml
 steps:
-- uses: actions/checkout@v3
-- uses: shogo82148/actions-setup-perl@v1
-  with:
-    perl-version: '5.34'
-- run: cpanm --installdeps .
-- run: prove -lv t
+  - uses: actions/checkout@v3
+  - uses: shogo82148/actions-setup-perl@v1
+    with:
+      perl-version: "5.38"
+  - run: cpanm --installdeps .
+  - run: prove -lv t
 ```
 
 Install CPAN Modules from cpanfile and cache them:
+
 ```yaml
 steps:
-- uses: actions/checkout@v3
-- uses: shogo82148/actions-setup-perl@v1
-  with:
-    perl-version: '5.34'
-    install-modules-with: cpanm
-    install-modules-args: --with-develop --with-configure
-- run: prove -lv t
+  - uses: actions/checkout@v3
+  - uses: shogo82148/actions-setup-perl@v1
+    with:
+      perl-version: "5.38"
+      install-modules-with: cpanm
+      install-modules-args: --with-develop --with-configure
+  - run: prove -lv t
 ```
 
 Matrix Testing:
+
 ```yaml
 jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: ['ubuntu-latest', 'macos-latest', 'windows-latest']
-        perl: [ '5.34', '5.32', '5.30' ]
+        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
+        perl: ["5.38", "5.36", "5.34"]
     name: Perl ${{ matrix.perl }} on ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -64,13 +67,13 @@ If you want to use [Strawberry Perl](http://strawberryperl.com/) on Windows, add
 
 ```yaml
 steps:
-- uses: actions/checkout@v3
-- uses: shogo82148/actions-setup-perl@v1
-  with:
-    perl-version: '5.32'
-    distribution: strawberry
-- run: cpanm --installdeps .
-- run: prove -lv t
+  - uses: actions/checkout@v3
+  - uses: shogo82148/actions-setup-perl@v1
+    with:
+      perl-version: "5.32"
+      distribution: strawberry
+  - run: cpanm --installdeps .
+  - run: prove -lv t
 ```
 
 This option is available on Windows and falls back to the default customized binaries on other platforms.
@@ -79,11 +82,11 @@ This option is available on Windows and falls back to the default customized bin
 
 The action works for [GitHub-hosted runners](https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners).
 
-| Operating System | Supported Versions |
-| --- | --- |
-| Linux | `ubuntu-20.04`, `ubuntu-22.04` |
-| macOS | `macos-11`, `macos-12` |
-| Windows | `windows-2019`, `windows-2022` |
+| Operating System | Supported Versions                             |
+| ---------------- | ---------------------------------------------- |
+| Linux            | `ubuntu-20.04`, `ubuntu-22.04`                 |
+| macOS            | `macos-11`, `macos-12`, `macos-13`, `macos-14` |
+| Windows          | `windows-2019`, `windows-2022`                 |
 
 [Self-hosted runners](https://docs.github.com/en/actions/hosting-your-own-runners) are not supported.
 
@@ -160,7 +163,7 @@ The working directory.
 
 ### `perl-version`
 
-The perl version actually installed. (e.g. `"5.34.0"`)
+The perl version actually installed. (e.g. `"5.38.2"`)
 
 ### `perl-hash`
 
@@ -171,17 +174,17 @@ It is useful for the cache key, because this value vary the platform, the versio
 
 The GitHub runner come with a preinstalled version of Perl, used by the system Git. Unfortunately, some shell types prepend the directory containing the system Perl to the `PATH` which makes it impossible to use the Perl installed by this action.
 
-`shell` parameter | Linux | macOS | Windows (default) | Windows (Strawberry)
---- | --- | --- | --- | ---
-`bash` | :heavy_check_mark: | :heavy_check_mark: | :x:<sup>1)</sup> | :x:<sup>1)</sup>
-`pwsh` | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
-`python` | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
-`sh` | :heavy_check_mark: | :heavy_check_mark: | n/a | n/a
-`cmd` | n/a | n/a | :heavy_check_mark: | :heavy_check_mark:
-`powershell` | n/a |  n/a | :heavy_check_mark: | :heavy_check_mark:
-custom shell `perl {0}` | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
+| `shell` parameter       | Linux              | macOS              | Windows (default)  | Windows (Strawberry) |
+| ----------------------- | ------------------ | ------------------ | ------------------ | -------------------- |
+| `bash`                  | :heavy_check_mark: | :heavy_check_mark: | :x:<sup>1)</sup>   | :x:<sup>1)</sup>     |
+| `pwsh`                  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:   |
+| `python`                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:   |
+| `sh`                    | :heavy_check_mark: | :heavy_check_mark: | n/a                | n/a                  |
+| `cmd`                   | n/a                | n/a                | :heavy_check_mark: | :heavy_check_mark:   |
+| `powershell`            | n/a                | n/a                | :heavy_check_mark: | :heavy_check_mark:   |
+| custom shell `perl {0}` | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:   |
 
-1) On Windows, the bash shell always gets `/usr/bin` prepended to the `PATH` which contains the system Perl.
+1. On Windows, the bash shell always gets `/usr/bin` prepended to the `PATH` which contains the system Perl.
 
 # Pre-installed Scripts
 
@@ -212,6 +215,7 @@ The following Perl scripts are pre-installed for convenience.
 Perl port of [@actions/core](https://github.com/actions/toolkit/tree/main/packages/core).
 
 ### SYNOPSIS
+
 ```perl
 use Actions::Core;
 

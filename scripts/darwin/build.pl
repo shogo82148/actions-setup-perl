@@ -120,7 +120,13 @@ sub run {
             $jobs = 1;
         }
 
-        my @options = ("-de", "-Dman1dir=none", "-Dman3dir=none");
+        my @options = (
+            "-de",
+            # omit man
+            "-Dman1dir=none", "-Dman3dir=none",
+            # enable shared library and PIC, fixes https://github.com/shogo82148/actions-setup-perl/issues/1756
+            "-Dcccdlflags=-fPIC", "-Duseshrplib",
+        );
         if ($thread) {
             # enable multi threading
             push @options, "-Duseithreads";

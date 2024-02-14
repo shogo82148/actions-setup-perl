@@ -32,13 +32,6 @@ git add package.json package-lock.json
 git commit -m "bump up to v$MAJOR.$MINOR.$PATCH"
 git push origin main
 
-: build the action
-npm ci
-npm run build
-rm -rf dist
-npm run package
-perl -ne 'print unless m(^/dist/$)' -i .gitignore
-
 : publish to GitHub
 git add .
 git commit -m "build v$MAJOR.$MINOR.$PATCH" || true

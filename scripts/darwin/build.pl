@@ -120,7 +120,16 @@ sub run {
             $jobs = 1;
         }
 
-        my @options = ("-de", "-Dman1dir=none", "-Dman3dir=none");
+        my @options = (
+            "-de",
+            # omit man
+            "-Dman1dir=none", "-Dman3dir=none",
+        );
+        # enable shared library and PIC, fixes https://github.com/shogo82148/actions-setup-perl/issues/1756
+        # on perl 5.8.8 or earlier, useshrplib doesn't work.
+        if (version->parse("v$version") >= version->parse("v5.8.9")) {
+            push @options, "-Dcccdlflags=-fPIC", "-Duseshrplib";
+        }
         if ($thread) {
             # enable multi threading
             push @options, "-Duseithreads";

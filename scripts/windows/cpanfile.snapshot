@@ -212,10 +212,10 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       HTTP::Headers 6
       perl 5.008001
-  HTTP-Tinyish-0.18
-    pathname: M/MI/MIYAGAWA/HTTP-Tinyish-0.18.tar.gz
+  HTTP-Tinyish-0.19
+    pathname: M/MI/MIYAGAWA/HTTP-Tinyish-0.19.tar.gz
     provides:
-      HTTP::Tinyish 0.18
+      HTTP::Tinyish 0.19
       HTTP::Tinyish::Base undef
       HTTP::Tinyish::Curl undef
       HTTP::Tinyish::HTTPTiny undef

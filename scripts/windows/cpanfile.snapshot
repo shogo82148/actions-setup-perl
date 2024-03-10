@@ -133,12 +133,13 @@ DISTRIBUTIONS
       URI::URL 0
       XSLoader 0
       strict 0
-  HTML-Tagset-3.20
-    pathname: P/PE/PETDANCE/HTML-Tagset-3.20.tar.gz
+  HTML-Tagset-3.22
+    pathname: P/PE/PETDANCE/HTML-Tagset-3.22.tar.gz
     provides:
-      HTML::Tagset 3.20
+      HTML::Tagset 3.22
     requirements:
       ExtUtils::MakeMaker 0
+      perl 5.010001
   HTTP-Cookies-6.11
     pathname: O/OA/OALDERS/HTTP-Cookies-6.11.tar.gz
     provides:

@@ -112,16 +112,16 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  HTML-Parser-3.81
-    pathname: O/OA/OALDERS/HTML-Parser-3.81.tar.gz
+  HTML-Parser-3.82
+    pathname: O/OA/OALDERS/HTML-Parser-3.82.tar.gz
     provides:
-      HTML::Entities 3.81
-      HTML::Filter 3.81
-      HTML::HeadParser 3.81
-      HTML::LinkExtor 3.81
-      HTML::Parser 3.81
-      HTML::PullParser 3.81
-      HTML::TokeParser 3.81
+      HTML::Entities 3.82
+      HTML::Filter 3.82
+      HTML::HeadParser 3.82
+      HTML::LinkExtor 3.82
+      HTML::Parser 3.82
+      HTML::PullParser 3.82
+      HTML::TokeParser 3.82
     requirements:
       Carp 0
       Exporter 0
@@ -372,10 +372,10 @@ DISTRIBUTIONS
       if 0
       perl 5.005030
       strict 0
-  Mozilla-CA-20231213
-    pathname: L/LW/LWP/Mozilla-CA-20231213.tar.gz
+  Mozilla-CA-20240313
+    pathname: L/LW/LWP/Mozilla-CA-20240313.tar.gz
     provides:
-      Mozilla::CA 20231213
+      Mozilla::CA 20240313
     requirements:
       ExtUtils::MakeMaker 0
   Net-HTTP-6.23

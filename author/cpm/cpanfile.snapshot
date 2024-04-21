@@ -779,10 +779,10 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Locale::Maketext::Simple 0
       Test::More 0
-  Parse-PMFile-0.46
-    pathname: I/IS/ISHIGAKI/Parse-PMFile-0.46.tar.gz
+  Parse-PMFile-0.47
+    pathname: I/IS/ISHIGAKI/Parse-PMFile-0.47.tar.gz
     provides:
-      Parse::PMFile 0.46
+      Parse::PMFile 0.47
     requirements:
       Dumpvalue 0
       ExtUtils::MakeMaker 0

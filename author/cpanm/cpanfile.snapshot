@@ -681,11 +681,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20240320
-    pathname: B/BI/BINGOS/Module-CoreList-5.20240320.tar.gz
+  Module-CoreList-5.20240420
+    pathname: B/BI/BINGOS/Module-CoreList-5.20240420.tar.gz
     provides:
-      Module::CoreList 5.20240320
-      Module::CoreList::Utils 5.20240320
+      Module::CoreList 5.20240420
+      Module::CoreList::Utils 5.20240420
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0
@@ -1216,13 +1216,13 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006
-  version-0.9930
-    pathname: L/LE/LEONT/version-0.9930.tar.gz
+  version-0.9931
+    pathname: L/LE/LEONT/version-0.9931.tar.gz
     provides:
-      version 0.9930
-      version::regex 0.9930
-      version::vpp 0.9930
-      version::vxs 0.9930
+      version 0.9931
+      version::regex 0.9931
+      version::vpp 0.9931
+      version::vxs 0.9931
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006002

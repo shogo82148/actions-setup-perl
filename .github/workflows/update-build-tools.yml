@@ -31,7 +31,7 @@ jobs:
           path: scripts/linux/cpanfile.snapshot
 
   darwin:
-    runs-on: macos-11
+    runs-on: macos-12
     steps:
       - name: setup host perl
         run: perl -MConfig -E 'say "$Config{bin}"' >> "$GITHUB_PATH"

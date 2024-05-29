@@ -49,8 +49,4 @@ echo "::endgroup::"
 # configure for building Net::SSLeay
 cat <<__END__  >> "$GITHUB_ENV"
 OPENSSL_PREFIX=$PREFIX
-LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH
 __END__
-
-export LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH
-sudo ldconfig

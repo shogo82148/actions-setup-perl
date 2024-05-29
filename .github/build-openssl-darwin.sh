@@ -58,5 +58,4 @@ echo "::endgroup::"
 # configure for building Net::SSLeay
 cat <<__END__  >> "$GITHUB_ENV"
 OPENSSL_PREFIX=$PREFIX
-DYLD_LIBRARY_PATH=$PREFIX/lib:$DYLD_LIBRARY_PATH
 __END__

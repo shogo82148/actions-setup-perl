@@ -1,6 +1,6 @@
 requires 'perl', '5.006';
 requires "Devel::GlobalDestruction::XS";
-requires "Module::Build::Tiny";
+requires 'Module::Build::Tiny', '==0.047'; # 0.048 doesn't work on perl 5.8.
 requires 'CPAN::Meta::Requirements', '==2.140'; # 2.141 doesn't support perl 5.8.
 
 requires "App::cpm";

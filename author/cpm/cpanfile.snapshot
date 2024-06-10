@@ -8,10 +8,38 @@ DISTRIBUTIONS
       Carp 0.01
       ExtUtils::MakeMaker 0
       perl 5.006
-  App-cpm-0.997015
-    pathname: S/SK/SKAJI/App-cpm-0.997015.tar.gz
+  App-FatPacker-0.010008
+    pathname: M/MS/MSTROUT/App-FatPacker-0.010008.tar.gz
     provides:
-      App::cpm 0.997015
+      App::FatPacker 0.010008
+      App::FatPacker::Trace undef
+    requirements:
+      B 1.01
+      Cwd 0
+      ExtUtils::MakeMaker 0
+      File::Copy 0
+      File::Find 0
+      File::Path 0
+      File::Spec::Functions 0
+      File::Spec::Unix 0
+      Getopt::Long 0
+      perl 5.008000
+  App-FatPacker-Simple-0.09
+    pathname: S/SK/SKAJI/App-FatPacker-Simple-0.09.tar.gz
+    provides:
+      App::FatPacker::Simple 0.09
+      App::FatPacker::Simple::Tutorial undef
+    requirements:
+      App::FatPacker 0
+      Distribution::Metadata 0.05
+      Module::Build::Tiny 0.034
+      Perl::Strip 0
+      Pod::Usage 1.33
+      perl 5.008001
+  App-cpm-0.997017
+    pathname: S/SK/SKAJI/App-cpm-0.997017.tar.gz
+    provides:
+      App::cpm 0.997017
       App::cpm::CLI undef
       App::cpm::CircularDependency undef
       App::cpm::DistNotation undef
@@ -223,6 +251,12 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
+  Clone-0.46
+    pathname: G/GA/GARU/Clone-0.46.tar.gz
+    provides:
+      Clone 0.46
+    requirements:
+      ExtUtils::MakeMaker 0
   Command-Runner-0.200
     pathname: S/SK/SKAJI/Command-Runner-0.200.tar.gz
     provides:
@@ -252,6 +286,19 @@ DISTRIBUTIONS
     provides:
       Devel::GlobalDestruction::XS 0.03
     requirements:
+  Distribution-Metadata-0.06
+    pathname: S/SK/SKAJI/Distribution-Metadata-0.06.tar.gz
+    provides:
+      Distribution::Metadata 0.06
+      Distribution::Metadata::Factory undef
+    requirements:
+      CPAN::DistnameInfo 0
+      CPAN::Meta 0
+      ExtUtils::Packlist 0
+      JSON 0
+      Module::Build::Tiny 0.034
+      Module::Metadata 0
+      perl 5.008001
   ExtUtils-CBuilder-0.280236
     pathname: A/AM/AMBS/ExtUtils-CBuilder-0.280236.tar.gz
     provides:
@@ -592,6 +639,14 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Test::More 0.31
       Time::HiRes 0
+  JSON-4.10
+    pathname: I/IS/ISHIGAKI/JSON-4.10.tar.gz
+    provides:
+      JSON 4.10
+      JSON::Backend::PP 4.10
+    requirements:
+      ExtUtils::MakeMaker 0
+      Test::More 0
   JSON-PP-4.16
     pathname: I/IS/ISHIGAKI/JSON-PP-4.16.tar.gz
     provides:
@@ -707,11 +762,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20240320
-    pathname: B/BI/BINGOS/Module-CoreList-5.20240320.tar.gz
+  Module-CoreList-5.20240609
+    pathname: B/BI/BINGOS/Module-CoreList-5.20240609.tar.gz
     provides:
-      Module::CoreList 5.20240320
-      Module::CoreList::Utils 5.20240320
+      Module::CoreList 5.20240609
+      Module::CoreList::Utils 5.20240609
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0
@@ -766,6 +821,118 @@ DISTRIBUTIONS
       Scalar::Util 0
       YAML::PP 0.027
       perl 5.008001
+  PPI-1.278
+    pathname: O/OA/OALDERS/PPI-1.278.tar.gz
+    provides:
+      PPI 1.278
+      PPI::Cache 1.278
+      PPI::Document 1.278
+      PPI::Document::File 1.278
+      PPI::Document::Fragment 1.278
+      PPI::Document::Normalized 1.278
+      PPI::Dumper 1.278
+      PPI::Element 1.278
+      PPI::Exception 1.278
+      PPI::Exception::ParserRejection 1.278
+      PPI::Find 1.278
+      PPI::Lexer 1.278
+      PPI::Node 1.278
+      PPI::Normal 1.278
+      PPI::Normal::Standard 1.278
+      PPI::Singletons 1.278
+      PPI::Statement 1.278
+      PPI::Statement::Break 1.278
+      PPI::Statement::Compound 1.278
+      PPI::Statement::Data 1.278
+      PPI::Statement::End 1.278
+      PPI::Statement::Expression 1.278
+      PPI::Statement::Given 1.278
+      PPI::Statement::Include 1.278
+      PPI::Statement::Include::Perl6 1.278
+      PPI::Statement::Null 1.278
+      PPI::Statement::Package 1.278
+      PPI::Statement::Scheduled 1.278
+      PPI::Statement::Sub 1.278
+      PPI::Statement::Unknown 1.278
+      PPI::Statement::UnmatchedBrace 1.278
+      PPI::Statement::Variable 1.278
+      PPI::Statement::When 1.278
+      PPI::Structure 1.278
+      PPI::Structure::Block 1.278
+      PPI::Structure::Condition 1.278
+      PPI::Structure::Constructor 1.278
+      PPI::Structure::For 1.278
+      PPI::Structure::Given 1.278
+      PPI::Structure::List 1.278
+      PPI::Structure::Subscript 1.278
+      PPI::Structure::Unknown 1.278
+      PPI::Structure::When 1.278
+      PPI::Token 1.278
+      PPI::Token::ArrayIndex 1.278
+      PPI::Token::Attribute 1.278
+      PPI::Token::BOM 1.278
+      PPI::Token::Cast 1.278
+      PPI::Token::Comment 1.278
+      PPI::Token::DashedWord 1.278
+      PPI::Token::Data 1.278
+      PPI::Token::End 1.278
+      PPI::Token::HereDoc 1.278
+      PPI::Token::Label 1.278
+      PPI::Token::Magic 1.278
+      PPI::Token::Number 1.278
+      PPI::Token::Number::Binary 1.278
+      PPI::Token::Number::Exp 1.278
+      PPI::Token::Number::Float 1.278
+      PPI::Token::Number::Hex 1.278
+      PPI::Token::Number::Octal 1.278
+      PPI::Token::Number::Version 1.278
+      PPI::Token::Operator 1.278
+      PPI::Token::Pod 1.278
+      PPI::Token::Prototype 1.278
+      PPI::Token::Quote 1.278
+      PPI::Token::Quote::Double 1.278
+      PPI::Token::Quote::Interpolate 1.278
+      PPI::Token::Quote::Literal 1.278
+      PPI::Token::Quote::Single 1.278
+      PPI::Token::QuoteLike 1.278
+      PPI::Token::QuoteLike::Backtick 1.278
+      PPI::Token::QuoteLike::Command 1.278
+      PPI::Token::QuoteLike::Readline 1.278
+      PPI::Token::QuoteLike::Regexp 1.278
+      PPI::Token::QuoteLike::Words 1.278
+      PPI::Token::Regexp 1.278
+      PPI::Token::Regexp::Match 1.278
+      PPI::Token::Regexp::Substitute 1.278
+      PPI::Token::Regexp::Transliterate 1.278
+      PPI::Token::Separator 1.278
+      PPI::Token::Structure 1.278
+      PPI::Token::Symbol 1.278
+      PPI::Token::Unknown 1.278
+      PPI::Token::Whitespace 1.278
+      PPI::Token::Word 1.278
+      PPI::Tokenizer 1.278
+      PPI::Transform 1.278
+      PPI::Transform::UpdateCopyright 1.278
+      PPI::Util 1.278
+      PPI::XSAccessor 1.278
+    requirements:
+      Carp 0
+      Clone 0.30
+      Digest::MD5 2.35
+      Exporter 0
+      ExtUtils::MakeMaker 0
+      File::Path 0
+      File::Spec 0.84
+      List::Util 1.33
+      Params::Util 1.00
+      Scalar::Util 0
+      Storable 2.17
+      Task::Weaken 0
+      constant 0
+      if 0
+      overload 0
+      perl 5.006
+      strict 0
   Parallel-Pipes-0.200
     pathname: S/SK/SKAJI/Parallel-Pipes-0.200.tar.gz
     provides:
@@ -782,6 +949,22 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Locale::Maketext::Simple 0
       Test::More 0
+  Params-Util-1.102
+    pathname: R/RE/REHSACK/Params-Util-1.102.tar.gz
+    provides:
+      Params::Util 1.102
+      Params::Util::PP 1.102
+    requirements:
+      Carp 0
+      ExtUtils::MakeMaker 0
+      File::Basename 0
+      File::Copy 0
+      File::Path 0
+      File::Spec 0
+      IPC::Cmd 0
+      Scalar::Util 1.18
+      XSLoader 0.22
+      parent 0
   Parse-PMFile-0.47
     pathname: I/IS/ISHIGAKI/Parse-PMFile-0.47.tar.gz
     provides:
@@ -824,6 +1007,15 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
+  Perl-Strip-1.2
+    pathname: M/ML/MLEHMANN/Perl-Strip-1.2.tar.gz
+    provides:
+      Perl::Strip 1.2
+    requirements:
+      Digest::MD5 2
+      ExtUtils::MakeMaker 0
+      PPI 1.213
+      common::sense 3.3
   Proc-ForkSafe-0.001
     pathname: S/SK/SKAJI/Proc-ForkSafe-0.001.tar.gz
     provides:
@@ -831,6 +1023,16 @@ DISTRIBUTIONS
     requirements:
       Module::Build::Tiny 0.034
       perl 5.008001
+  Scalar-List-Utils-1.63
+    pathname: P/PE/PEVANS/Scalar-List-Utils-1.63.tar.gz
+    provides:
+      List::Util 1.63
+      List::Util::XS 1.63
+      Scalar::Util 1.63
+      Sub::Util 1.63
+    requirements:
+      ExtUtils::MakeMaker 0
+      perl 5.006
   Search-Dict-1.07
     pathname: D/DA/DAGOLDEN/Search-Dict-1.07.tar.gz
     provides:
@@ -840,6 +1042,13 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Test::More 0.47
       Tie::Handle 0
+  Storable-3.25
+    pathname: N/NW/NWCLARK/Storable-3.25.tar.gz
+    provides:
+      Storable 3.25
+    requirements:
+      ExtUtils::MakeMaker 6.31
+      XSLoader 0
   String-ShellQuote-1.04
     pathname: R/RO/ROSCH/String-ShellQuote-1.04.tar.gz
     provides:
@@ -852,6 +1061,17 @@ DISTRIBUTIONS
       Sub::Exporter::Progressive 0.001013
     requirements:
       ExtUtils::MakeMaker 0
+  Task-Weaken-1.06
+    pathname: E/ET/ETHER/Task-Weaken-1.06.tar.gz
+    provides:
+      Task::Weaken 1.06
+    requirements:
+      Config 0
+      ExtUtils::MakeMaker 0
+      File::Spec 0
+      Scalar::Util 1.14
+      perl 5.006
+      strict 0
   Test-Harness-3.48
     pathname: L/LE/LEONT/Test-Harness-3.48.tar.gz
     provides:
@@ -1073,6 +1293,13 @@ DISTRIBUTIONS
       Win32::ShellQuote 0.003001
     requirements:
       perl 5.006
+  XSLoader-0.24
+    pathname: S/SA/SAPER/XSLoader-0.24.tar.gz
+    provides:
+      XSLoader 0.24
+    requirements:
+      ExtUtils::MakeMaker 0
+      Test::More 0.47
   YAML-PP-v0.38.0
     pathname: T/TI/TINITA/YAML-PP-v0.38.0.tar.gz
     provides:
@@ -1129,6 +1356,12 @@ DISTRIBUTIONS
       perl 5.008000
       strict 0
       warnings 0
+  common-sense-3.75
+    pathname: M/ML/MLEHMANN/common-sense-3.75.tar.gz
+    provides:
+      common::sense 3.75
+    requirements:
+      ExtUtils::MakeMaker 0
   local-lib-2.000029
     pathname: H/HA/HAARG/local-lib-2.000029.tar.gz
     provides:
@@ -1143,13 +1376,13 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006
-  version-0.9930
-    pathname: L/LE/LEONT/version-0.9930.tar.gz
+  version-0.9932
+    pathname: L/LE/LEONT/version-0.9932.tar.gz
     provides:
-      version 0.9930
-      version::regex 0.9930
-      version::vpp 0.9930
-      version::vxs 0.9930
+      version 0.9932
+      version::regex 0.9932
+      version::vpp 0.9932
+      version::vxs 0.9932
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006002

@@ -3,6 +3,11 @@ requires 'perl', '5.006';
 requires 'Carton';
 requires 'Menlo::Legacy';
 requires 'Menlo';
+requires 'CPAN::Meta::Requirements', '==2.140'; # 2.141 doesn't support perl 5.8.
+requires 'Distribution::Metadata', '==0.06';
+requires 'App::FatPacker::Simple', '==0.09';
+requires 'Module::Build::Tiny', '==0.047'; # 0.048 doesn't work on perl 5.8.
+
 requires 'Menlo::Index::Mirror';
 requires 'ExtUtils::Manifest', '1.70';
 requires 'ExtUtils::MakeMaker', '7.52';

@@ -28,6 +28,7 @@ requires 'HTTP::Tiny', '0.054';
 requires 'HTTP::Tinyish', '0.04';
 requires 'JSON::PP', '2';
 requires 'JSON::PP::Compat5006', '1.09';
+requires 'Module::Build::Tiny', '==0.047'; # 0.048 doesn't work on perl 5.8.
 requires 'Module::CPANfile';
 requires 'Module::CoreList';
 requires 'Module::Metadata';

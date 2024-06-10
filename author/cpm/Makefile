@@ -14,20 +14,30 @@ image: .image.exists ## build docker image of packing environment
 	docker build -t $(IMAGE_NAME) .
 	touch .image.exists
 
-.container.exists: .image.exists
-	-docker rm $(IMAGE_NAME)-tmp
-	docker run --name $(IMAGE_NAME)-tmp $(IMAGE_NAME) perl build.pl
-	touch .container.exists
+cpm: .deps.exists build.pl ## generate fat-packed cpm
+	cat build.pl | docker run --rm -i --volumes-from $(IMAGE_NAME)-deps $(IMAGE_NAME) perl -
+	docker cp $(IMAGE_NAME)-deps:/tmp/cpm/cpm cpm
 
-cpm: .container.exists ## generate fat-packed cpm
-	docker cp $(IMAGE_NAME)-tmp:/tmp/cpm/cpm cpm
+.PHONY: deps
+deps: .deps.exists ## install dependencies
+.DELETE_ON_ERROR: .deps.exists
+.deps.exists: .image.exists cpanfile.snapshot
+	touch .deps.exists
+	-docker rm $(IMAGE_NAME)-deps
+	docker create -v /tmp/cpm --name $(IMAGE_NAME)-deps $(IMAGE_NAME) /bin/true
+	docker cp cpanfile $(IMAGE_NAME)-deps:/tmp/cpm/cpanfile
+	docker cp cpanfile.snapshot $(IMAGE_NAME)-deps:/tmp/cpm/cpanfile.snapshot
+	docker run --rm --volumes-from $(IMAGE_NAME)-deps $(IMAGE_NAME) carton install --deployment
+	docker cp $(IMAGE_NAME)-deps:/tmp/cpm/local .
 
 .PHONY: update
 update: .image.exists ## download dependencies and update cpanfile.snapshot
 	-docker rm $(IMAGE_NAME)-update
-	docker run --name $(IMAGE_NAME)-update $(IMAGE_NAME) \
-		sh -c "rm -f cpanfile.snapshot && rm -rf local && carton install"
+	docker create -v /tmp/cpm --name $(IMAGE_NAME)-update $(IMAGE_NAME) /bin/true
+	docker cp cpanfile $(IMAGE_NAME)-update:/tmp/cpm/cpanfile
+	docker run --rm --volumes-from $(IMAGE_NAME)-update $(IMAGE_NAME) carton install
 	docker cp $(IMAGE_NAME)-update:/tmp/cpm/cpanfile.snapshot cpanfile.snapshot
+	-docker rm $(IMAGE_NAME)-update
 
 .PHONY: install
 install: all ## installs into the bin directory of this repository

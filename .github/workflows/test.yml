@@ -22,6 +22,7 @@ jobs:
       fail-fast: false
       matrix:
         os:
+          - ubuntu-24.04
           - ubuntu-22.04
           - ubuntu-20.04
         multi-thread:
@@ -103,7 +104,6 @@ jobs:
           - macos-14
           - macos-13
           - macos-12
-          - macos-11
         multi-thread:
           - false
           - true

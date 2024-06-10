@@ -9,25 +9,36 @@ all: carton
 
 .PHONY: image
 image: .image.exists ## build docker image of packing environment
+.DELETE_ON_ERROR: .image.exists
 .image.exists: Dockerfile cpanfile cpanfile.snapshot build.pl
+	touch .image.exists
 	-docker rmi $(IMAGE_NAME)
 	docker build -t $(IMAGE_NAME) .
-	touch .image.exists
 
-.container.exists: .image.exists
-	-docker rm $(IMAGE_NAME)-tmp
-	docker run --name $(IMAGE_NAME)-tmp $(IMAGE_NAME) perl build.pl
-	touch .container.exists
-
-carton: .container.exists ## generate fat-packed carton
-	docker cp $(IMAGE_NAME)-tmp:/tmp/carton/carton carton
+carton: .deps.exists build.pl ## generate fat-packed carton
+	cat build.pl | docker run --rm -i --volumes-from $(IMAGE_NAME)-deps $(IMAGE_NAME) perl -
+	docker cp $(IMAGE_NAME)-deps:/tmp/carton/carton carton
+	
+.PHONY: deps
+deps: .deps.exists ## install dependencies
+.DELETE_ON_ERROR: .deps.exists
+.deps.exists: .image.exists cpanfile.snapshot
+	touch .deps.exists
+	-docker rm $(IMAGE_NAME)-deps
+	docker create -v /tmp/carton --name $(IMAGE_NAME)-deps $(IMAGE_NAME) /bin/true
+	docker cp cpanfile $(IMAGE_NAME)-deps:/tmp/carton/cpanfile
+	docker cp cpanfile.snapshot $(IMAGE_NAME)-deps:/tmp/carton/cpanfile.snapshot
+	docker run --rm --volumes-from $(IMAGE_NAME)-deps $(IMAGE_NAME) carton install --deployment
+	docker cp $(IMAGE_NAME)-deps:/tmp/carton/local .
 
 .PHONY: update
 update: .image.exists ## download dependencies and update cpanfile.snapshot
 	-docker rm $(IMAGE_NAME)-update
-	docker run --name $(IMAGE_NAME)-update $(IMAGE_NAME) \
-		sh -c "rm -f cpanfile.snapshot && rm -rf local && carton install"
+	docker create -v /tmp/carton --name $(IMAGE_NAME)-update $(IMAGE_NAME) /bin/true
+	docker cp cpanfile $(IMAGE_NAME)-update:/tmp/carton/cpanfile
+	docker run --rm --volumes-from $(IMAGE_NAME)-update $(IMAGE_NAME) carton install
 	docker cp $(IMAGE_NAME)-update:/tmp/carton/cpanfile.snapshot cpanfile.snapshot
+	-docker rm $(IMAGE_NAME)-update
 
 .PHONY: install
 install: all ## installs into the bin directory of this repository
@@ -36,7 +47,7 @@ install: all ## installs into the bin directory of this repository
 .PHONY: clean
 clean:
 	rm -f carton carton.bat
-	rm -f .image.exists .container.exists
+	rm -f .image.exists .deps.exists
 	-docker rm $(IMAGE_NAME)-tmp
 	-docker rm $(IMAGE_NAME)-update
 	-docker rmi $(IMAGE_NAME)

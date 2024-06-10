@@ -6,10 +6,10 @@ DISTRIBUTIONS
       Canary::Stability 2013
     requirements:
       ExtUtils::MakeMaker 0
-  Cpanel-JSON-XS-4.37
-    pathname: R/RU/RURBAN/Cpanel-JSON-XS-4.37.tar.gz
+  Cpanel-JSON-XS-4.38
+    pathname: R/RU/RURBAN/Cpanel-JSON-XS-4.38.tar.gz
     provides:
-      Cpanel::JSON::XS 4.37
+      Cpanel::JSON::XS 4.38
       Cpanel::JSON::XS::Type undef
     requirements:
       Carp 0
@@ -75,10 +75,10 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 6.52
       Types::Serialiser 0
       common::sense 0
-  Mozilla-CA-20231213
-    pathname: L/LW/LWP/Mozilla-CA-20231213.tar.gz
+  Mozilla-CA-20240313
+    pathname: L/LW/LWP/Mozilla-CA-20240313.tar.gz
     provides:
-      Mozilla::CA 20231213
+      Mozilla::CA 20240313
     requirements:
       ExtUtils::MakeMaker 0
   Net-SSLeay-1.94

@@ -112,16 +112,16 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  HTML-Parser-3.81
-    pathname: O/OA/OALDERS/HTML-Parser-3.81.tar.gz
+  HTML-Parser-3.82
+    pathname: O/OA/OALDERS/HTML-Parser-3.82.tar.gz
     provides:
-      HTML::Entities 3.81
-      HTML::Filter 3.81
-      HTML::HeadParser 3.81
-      HTML::LinkExtor 3.81
-      HTML::Parser 3.81
-      HTML::PullParser 3.81
-      HTML::TokeParser 3.81
+      HTML::Entities 3.82
+      HTML::Filter 3.82
+      HTML::HeadParser 3.82
+      HTML::LinkExtor 3.82
+      HTML::Parser 3.82
+      HTML::PullParser 3.82
+      HTML::TokeParser 3.82
     requirements:
       Carp 0
       Exporter 0
@@ -133,12 +133,13 @@ DISTRIBUTIONS
       URI::URL 0
       XSLoader 0
       strict 0
-  HTML-Tagset-3.20
-    pathname: P/PE/PETDANCE/HTML-Tagset-3.20.tar.gz
+  HTML-Tagset-3.24
+    pathname: P/PE/PETDANCE/HTML-Tagset-3.24.tar.gz
     provides:
-      HTML::Tagset 3.20
+      HTML::Tagset 3.24
     requirements:
-      ExtUtils::MakeMaker 0
+      ExtUtils::MakeMaker 6.46
+      perl 5.010001
   HTTP-Cookies-6.11
     pathname: O/OA/OALDERS/HTTP-Cookies-6.11.tar.gz
     provides:
@@ -166,19 +167,19 @@ DISTRIBUTIONS
       Time::Zone 0
       perl 5.006002
       strict 0
-  HTTP-Message-6.45
-    pathname: O/OA/OALDERS/HTTP-Message-6.45.tar.gz
+  HTTP-Message-6.46
+    pathname: O/OA/OALDERS/HTTP-Message-6.46.tar.gz
     provides:
-      HTTP::Config 6.45
-      HTTP::Headers 6.45
-      HTTP::Headers::Auth 6.45
-      HTTP::Headers::ETag 6.45
-      HTTP::Headers::Util 6.45
-      HTTP::Message 6.45
-      HTTP::Request 6.45
-      HTTP::Request::Common 6.45
-      HTTP::Response 6.45
-      HTTP::Status 6.45
+      HTTP::Config 6.46
+      HTTP::Headers 6.46
+      HTTP::Headers::Auth 6.46
+      HTTP::Headers::ETag 6.46
+      HTTP::Headers::Util 6.46
+      HTTP::Message 6.46
+      HTTP::Request 6.46
+      HTTP::Request::Common 6.46
+      HTTP::Response 6.46
+      HTTP::Status 6.46
     requirements:
       Carp 0
       Clone 0.46
@@ -212,10 +213,10 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       HTTP::Headers 6
       perl 5.008001
-  HTTP-Tinyish-0.18
-    pathname: M/MI/MIYAGAWA/HTTP-Tinyish-0.18.tar.gz
+  HTTP-Tinyish-0.19
+    pathname: M/MI/MIYAGAWA/HTTP-Tinyish-0.19.tar.gz
     provides:
-      HTTP::Tinyish 0.18
+      HTTP::Tinyish 0.19
       HTTP::Tinyish::Base undef
       HTTP::Tinyish::Curl undef
       HTTP::Tinyish::HTTPTiny undef
@@ -295,11 +296,11 @@ DISTRIBUTIONS
       Scalar::Util 0
       perl 5.006002
       strict 0
-  LWP-Protocol-https-6.13
-    pathname: O/OA/OALDERS/LWP-Protocol-https-6.13.tar.gz
+  LWP-Protocol-https-6.14
+    pathname: O/OA/OALDERS/LWP-Protocol-https-6.14.tar.gz
     provides:
-      LWP::Protocol::https 6.13
-      LWP::Protocol::https::Socket 6.13
+      LWP::Protocol::https 6.14
+      LWP::Protocol::https::Socket 6.14
     requirements:
       ExtUtils::MakeMaker 0
       IO::Socket::SSL 1.970
@@ -371,10 +372,10 @@ DISTRIBUTIONS
       if 0
       perl 5.005030
       strict 0
-  Mozilla-CA-20231213
-    pathname: L/LW/LWP/Mozilla-CA-20231213.tar.gz
+  Mozilla-CA-20240313
+    pathname: L/LW/LWP/Mozilla-CA-20240313.tar.gz
     provides:
-      Mozilla::CA 20231213
+      Mozilla::CA 20240313
     requirements:
       ExtUtils::MakeMaker 0
   Net-HTTP-6.23
@@ -462,56 +463,56 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       common::sense 0
-  URI-5.27
-    pathname: O/OA/OALDERS/URI-5.27.tar.gz
+  URI-5.28
+    pathname: O/OA/OALDERS/URI-5.28.tar.gz
     provides:
-      URI 5.27
-      URI::Escape 5.27
-      URI::Heuristic 5.27
-      URI::IRI 5.27
-      URI::QueryParam 5.27
-      URI::Split 5.27
-      URI::URL 5.27
-      URI::WithBase 5.27
-      URI::data 5.27
-      URI::file 5.27
-      URI::file::Base 5.27
-      URI::file::FAT 5.27
-      URI::file::Mac 5.27
-      URI::file::OS2 5.27
-      URI::file::QNX 5.27
-      URI::file::Unix 5.27
-      URI::file::Win32 5.27
-      URI::ftp 5.27
-      URI::geo 5.27
-      URI::gopher 5.27
-      URI::http 5.27
-      URI::https 5.27
-      URI::icap 5.27
-      URI::icaps 5.27
-      URI::ldap 5.27
-      URI::ldapi 5.27
-      URI::ldaps 5.27
-      URI::mailto 5.27
-      URI::mms 5.27
-      URI::news 5.27
-      URI::nntp 5.27
-      URI::nntps 5.27
-      URI::pop 5.27
-      URI::rlogin 5.27
-      URI::rsync 5.27
-      URI::rtsp 5.27
-      URI::rtspu 5.27
-      URI::sftp 5.27
-      URI::sip 5.27
-      URI::sips 5.27
-      URI::snews 5.27
-      URI::ssh 5.27
-      URI::telnet 5.27
-      URI::tn3270 5.27
-      URI::urn 5.27
-      URI::urn::isbn 5.27
-      URI::urn::oid 5.27
+      URI 5.28
+      URI::Escape 5.28
+      URI::Heuristic 5.28
+      URI::IRI 5.28
+      URI::QueryParam 5.28
+      URI::Split 5.28
+      URI::URL 5.28
+      URI::WithBase 5.28
+      URI::data 5.28
+      URI::file 5.28
+      URI::file::Base 5.28
+      URI::file::FAT 5.28
+      URI::file::Mac 5.28
+      URI::file::OS2 5.28
+      URI::file::QNX 5.28
+      URI::file::Unix 5.28
+      URI::file::Win32 5.28
+      URI::ftp 5.28
+      URI::geo 5.28
+      URI::gopher 5.28
+      URI::http 5.28
+      URI::https 5.28
+      URI::icap 5.28
+      URI::icaps 5.28
+      URI::ldap 5.28
+      URI::ldapi 5.28
+      URI::ldaps 5.28
+      URI::mailto 5.28
+      URI::mms 5.28
+      URI::news 5.28
+      URI::nntp 5.28
+      URI::nntps 5.28
+      URI::pop 5.28
+      URI::rlogin 5.28
+      URI::rsync 5.28
+      URI::rtsp 5.28
+      URI::rtspu 5.28
+      URI::sftp 5.28
+      URI::sip 5.28
+      URI::sips 5.28
+      URI::snews 5.28
+      URI::ssh 5.28
+      URI::telnet 5.28
+      URI::tn3270 5.28
+      URI::urn 5.28
+      URI::urn::isbn 5.28
+      URI::urn::oid 5.28
     requirements:
       Carp 0
       Cwd 0
@@ -554,32 +555,32 @@ DISTRIBUTIONS
       common::sense 3.75
     requirements:
       ExtUtils::MakeMaker 0
-  libwww-perl-6.76
-    pathname: O/OA/OALDERS/libwww-perl-6.76.tar.gz
+  libwww-perl-6.77
+    pathname: O/OA/OALDERS/libwww-perl-6.77.tar.gz
     provides:
-      LWP 6.76
-      LWP::Authen::Basic 6.76
-      LWP::Authen::Digest 6.76
-      LWP::Authen::Ntlm 6.76
-      LWP::ConnCache 6.76
-      LWP::Debug 6.76
-      LWP::Debug::TraceHTTP 6.76
-      LWP::DebugFile 6.76
-      LWP::MemberMixin 6.76
-      LWP::Protocol 6.76
-      LWP::Protocol::cpan 6.76
-      LWP::Protocol::data 6.76
-      LWP::Protocol::file 6.76
-      LWP::Protocol::ftp 6.76
-      LWP::Protocol::gopher 6.76
-      LWP::Protocol::http 6.76
-      LWP::Protocol::loopback 6.76
-      LWP::Protocol::mailto 6.76
-      LWP::Protocol::nntp 6.76
-      LWP::Protocol::nogo 6.76
-      LWP::RobotUA 6.76
-      LWP::Simple 6.76
-      LWP::UserAgent 6.76
+      LWP 6.77
+      LWP::Authen::Basic 6.77
+      LWP::Authen::Digest 6.77
+      LWP::Authen::Ntlm 6.77
+      LWP::ConnCache 6.77
+      LWP::Debug 6.77
+      LWP::Debug::TraceHTTP 6.77
+      LWP::DebugFile 6.77
+      LWP::MemberMixin 6.77
+      LWP::Protocol 6.77
+      LWP::Protocol::cpan 6.77
+      LWP::Protocol::data 6.77
+      LWP::Protocol::file 6.77
+      LWP::Protocol::ftp 6.77
+      LWP::Protocol::gopher 6.77
+      LWP::Protocol::http 6.77
+      LWP::Protocol::loopback 6.77
+      LWP::Protocol::mailto 6.77
+      LWP::Protocol::nntp 6.77
+      LWP::Protocol::nogo 6.77
+      LWP::RobotUA 6.77
+      LWP::Simple 6.77
+      LWP::UserAgent 6.77
     requirements:
       Digest::MD5 0
       Encode 2.12

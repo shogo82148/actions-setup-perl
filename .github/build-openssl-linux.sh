@@ -4,7 +4,7 @@
 
 set -e
 
-OPENSSL_VERSION=3.2.1
+OPENSSL_VERSION=3.3.1
 ROOT=$(cd "$(dirname "$0")" && pwd)
 : "${RUNNER_TEMP:=$ROOT/working}"
 : "${RUNNER_TOOL_CACHE:=$RUNNER_TEMP/dist}"
@@ -49,8 +49,4 @@ echo "::endgroup::"
 # configure for building Net::SSLeay
 cat <<__END__  >> "$GITHUB_ENV"
 OPENSSL_PREFIX=$PREFIX
-LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH
 __END__
-
-export LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH
-sudo ldconfig

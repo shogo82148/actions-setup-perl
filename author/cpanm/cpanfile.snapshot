@@ -491,11 +491,11 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  Getopt-Long-2.57
-    pathname: J/JV/JV/Getopt-Long-2.57.tar.gz
+  Getopt-Long-2.58
+    pathname: J/JV/JV/Getopt-Long-2.58.tar.gz
     provides:
-      Getopt::Long 2.57
-      Getopt::Long::Parser 2.57
+      Getopt::Long 2.58
+      Getopt::Long::Parser 2.58
     requirements:
       ExtUtils::MakeMaker 0
       Pod::Usage 1.14

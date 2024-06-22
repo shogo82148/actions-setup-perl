@@ -64449,7 +64449,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.install = void 0;
+exports.install = install;
 const core = __importStar(__nccwpck_require__(2186));
 const exec = __importStar(__nccwpck_require__(1514));
 const cache = __importStar(__nccwpck_require__(7799));
@@ -64526,7 +64526,6 @@ async function install(opt) {
     }
     return;
 }
-exports.install = install;
 async function cacheKey(opt) {
     let key = "setup-perl-module-cache-v1-";
     key += opt.perlHash;
@@ -64701,7 +64700,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getPerl = void 0;
+exports.getPerl = getPerl;
 const core = __importStar(__nccwpck_require__(2186));
 const tc = __importStar(__nccwpck_require__(7784));
 const os = __importStar(__nccwpck_require__(2037));
@@ -64757,7 +64756,6 @@ async function getPerl(version, thread) {
         path: toolPath,
     };
 }
-exports.getPerl = getPerl;
 async function acquirePerl(version, thread) {
     //
     // Download - a tool installer intimately knows how to get the tool (and construct urls)
@@ -64976,7 +64974,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getPerl = void 0;
+exports.getPerl = getPerl;
 const core = __importStar(__nccwpck_require__(2186));
 const tc = __importStar(__nccwpck_require__(7784));
 const path = __importStar(__nccwpck_require__(1017));
@@ -65051,7 +65049,6 @@ async function getPerl(version) {
         path: path.join(toolPath, "perl"),
     };
 }
-exports.getPerl = getPerl;
 async function acquirePerl(version) {
     //
     // Download - a tool installer intimately knows how to get the tool (and construct urls)
@@ -65110,7 +65107,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.cacheDir = exports.find = void 0;
+exports.find = find;
+exports.cacheDir = cacheDir;
 const os = __importStar(__nccwpck_require__(2037));
 const fs = __importStar(__nccwpck_require__(7147));
 const path = __importStar(__nccwpck_require__(1017));
@@ -65139,7 +65137,6 @@ function find(toolName, versionSpec, arch) {
     }
     return toolPath;
 }
-exports.find = find;
 // Caches a directory and installs it into the tool cacheDir
 async function cacheDir(sourceDir, tool, version, arch) {
     version = semver.clean(version) || version;
@@ -65161,7 +65158,6 @@ async function cacheDir(sourceDir, tool, version, arch) {
     _completeToolPath(tool, version, arch);
     return destPath;
 }
-exports.cacheDir = cacheDir;
 async function _createToolPath(tool, version, arch) {
     const folderPath = path.join(_getCacheDirectory(), tool, semver.clean(version) || version, arch || "");
     core.debug(`destination ${folderPath}`);
@@ -65227,7 +65223,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getPackagePath = exports.parseBoolean = void 0;
+exports.parseBoolean = parseBoolean;
+exports.getPackagePath = getPackagePath;
 const path = __importStar(__nccwpck_require__(1017));
 function parseBoolean(s) {
     // YAML 1.0 compatible boolean values
@@ -65253,14 +65250,12 @@ function parseBoolean(s) {
     }
     throw `invalid boolean value: ${s}`;
 }
-exports.parseBoolean = parseBoolean;
 function getPackagePath() {
     if (process.env["ACTIONS_SETUP_PERL_TESTING"]) {
         return path.join(__dirname, "..");
     }
     return path.join(__dirname, "..", "..");
 }
-exports.getPackagePath = getPackagePath;
 
 
 /***/ }),

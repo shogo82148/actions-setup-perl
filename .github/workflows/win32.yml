@@ -160,10 +160,6 @@ jobs:
         shell: bash
         working-directory: ${{ runner.temp }}/perl-wer
 
-      - uses: actions/attest-build-provenance@v1
-        with:
-          subject-path: ${{ runner.temp }}/perl.zip
-
       - name: upload
         shell: bash
         run: |
@@ -174,6 +170,10 @@ jobs:
         env:
           PERL_VERSION: ${{ matrix.perl }}
           GITHUB_TOKEN: ${{ github.token }}
+
+      - uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: ${{ runner.temp }}/*.zip
 
   build-multi-thread:
     runs-on: windows-2022
@@ -259,10 +259,6 @@ jobs:
         shell: bash
         working-directory: ${{ runner.temp }}/perl-wer
 
-      - uses: actions/attest-build-provenance@v1
-        with:
-          subject-path: ${{ runner.temp }}/perl.zip
-
       - name: upload
         shell: bash
         run: |
@@ -273,3 +269,7 @@ jobs:
         env:
           PERL_VERSION: ${{ matrix.perl }}
           GITHUB_TOKEN: ${{ github.token }}
+
+      - uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: ${{ runner.temp }}/*.zip

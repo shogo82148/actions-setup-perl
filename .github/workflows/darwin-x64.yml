@@ -111,10 +111,6 @@ jobs:
           PERL5LIB: ${{ github.workspace }}/scripts/darwin/local/lib/perl5
         working-directory: ./scripts/darwin
 
-      - uses: actions/attest-build-provenance@v1
-        with:
-          subject-path: ${{ runner.temp }}/perl.tar.zstd
-
       - name: upload
         run: |
           ACTIONS_VERSION=v$(<"$GITHUB_WORKSPACE/package.json" jq -r .version)
@@ -122,6 +118,10 @@ jobs:
           gh release upload --clobber "$ACTIONS_VERSION" "$RUNNER_TEMP/perl-$PERL_VERSION-darwin-x64.tar.zstd"
         env:
           GITHUB_TOKEN: ${{ github.token }}
+
+      - uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: ${{ runner.temp }}/*.tar.zstd
 
   build-multi-thread:
     runs-on: macos-12
@@ -172,10 +172,6 @@ jobs:
           PERL5LIB: ${{ github.workspace }}/scripts/darwin/local/lib/perl5
         working-directory: ./scripts/darwin
 
-      - uses: actions/attest-build-provenance@v1
-        with:
-          subject-path: ${{ runner.temp }}/perl.tar.zstd
-
       - name: upload
         run: |
           ACTIONS_VERSION=v$(<"$GITHUB_WORKSPACE/package.json" jq -r .version)
@@ -183,3 +179,7 @@ jobs:
           gh release upload --clobber "$ACTIONS_VERSION" "$RUNNER_TEMP/perl-$PERL_VERSION-darwin-x64-multi-thread.tar.zstd"
         env:
           GITHUB_TOKEN: ${{ github.token }}
+
+      - uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: ${{ runner.temp }}/*.tar.zstd

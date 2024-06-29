@@ -164,16 +164,16 @@ jobs:
         run: ../../bin/carton install --deployment
         working-directory: ./scripts/linux
 
-      - uses: actions/attest-build-provenance@v1
-        with:
-          subject-path: ${{ runner.temp }}/perl.tar.zstd
-
       - name: build
         shell: bash
         run: perl build.pl
         env:
           PERL5LIB: ${{ github.workspace }}/scripts/linux/local/lib/perl5
         working-directory: ./scripts/linux
+
+      - uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: ${{ runner.temp }}/perl.tar.zstd
 
       - name: upload
         run: |

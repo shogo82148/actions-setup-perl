@@ -23,6 +23,8 @@ on:
 jobs:
   list:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - id: set-matrix
@@ -40,6 +42,8 @@ jobs:
 
   sanity-check:
     runs-on: windows-2022
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
 
@@ -74,6 +78,10 @@ jobs:
     needs:
       - list
       - sanity-check
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
     timeout-minutes: 120
     strategy:
       fail-fast: false
@@ -154,6 +162,10 @@ jobs:
         shell: bash
         working-directory: ${{ runner.temp }}/perl-wer
 
+      - uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: ${{ runner.temp }}/perl.zip
+
       - name: upload
         shell: bash
         run: |
@@ -170,6 +182,10 @@ jobs:
     needs:
       - sanity-check
       - list
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
     timeout-minutes: 120
     strategy:
       fail-fast: false
@@ -244,6 +260,10 @@ jobs:
         if: failure()
         shell: bash
         working-directory: ${{ runner.temp }}/perl-wer
+
+      - uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: ${{ runner.temp }}/perl.zip
 
       - name: upload
         shell: bash

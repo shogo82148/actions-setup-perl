@@ -11,8 +11,6 @@ on:
   push:
     branches:
       - "releases/*"
-  schedule:
-    - cron: "15 6 * * 5"
   workflow_dispatch:
     inputs:
       perl-versions:

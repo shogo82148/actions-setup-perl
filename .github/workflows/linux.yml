@@ -21,6 +21,8 @@ on:
 jobs:
   list:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - id: set-matrix
@@ -38,6 +40,8 @@ jobs:
 
   sanity-check:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - id: perl
         name: check pre-installed perl version
@@ -65,6 +69,10 @@ jobs:
     needs:
       - list
       - sanity-check
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
     timeout-minutes: 25
     strategy:
       fail-fast: false
@@ -103,6 +111,10 @@ jobs:
           PERL5LIB: ${{ github.workspace }}/scripts/linux/local/lib/perl5
         working-directory: ./scripts/linux
 
+      - uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: ${{ runner.temp }}/perl.tar.zstd
+
       - name: upload
         run: |
           ACTIONS_VERSION=v$(<"$GITHUB_WORKSPACE/package.json" jq -r .version)
@@ -116,6 +128,10 @@ jobs:
     needs:
       - sanity-check
       - list
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
     timeout-minutes: 25
     strategy:
       fail-fast: false
@@ -147,6 +163,10 @@ jobs:
         shell: bash
         run: ../../bin/carton install --deployment
         working-directory: ./scripts/linux
+
+      - uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: ${{ runner.temp }}/perl.tar.zstd
 
       - name: build
         shell: bash

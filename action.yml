@@ -45,6 +45,11 @@ inputs:
     description: working directory.
     default: "."
     required: false
+  github-token:
+    description: |
+      GitHub token to use for verifying Perl binary.
+    default: "${{ github.token }}"
+    required: false
 outputs:
   perl-version:
     description: |
@@ -55,11 +60,11 @@ outputs:
       It contains useful information to use as the cache key,
       e.g. the platform, the version of perl, the compiler option for building perl.
   cache-hit:
-    description: 'A boolean value to indicate if a cache was hit'
+    description: "A boolean value to indicate if a cache was hit"
 runs:
   using: "node20"
   main: "dist/setup/index.js"
-  post: 'dist/cache-save/index.js'
+  post: "dist/cache-save/index.js"
   post-if: success()
 branding:
   icon: "play"

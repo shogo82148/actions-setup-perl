@@ -6,6 +6,7 @@ import * as path from "path";
 import * as semver from "semver";
 import * as tcp from "./tool-cache-port";
 import { getPackagePath } from "./utils";
+import { verify } from "@shogo82148/attestation-verify";
 
 const osPlat = os.platform();
 const osArch = os.arch();
@@ -43,7 +44,7 @@ async function determineVersion(version: string): Promise<string> {
   throw new Error("unable to get latest version");
 }
 
-export async function getPerl(version: string, thread: boolean): Promise<Result> {
+export async function getPerl(version: string, thread: boolean, githubToken?: string): Promise<Result> {
   const selected = await determineVersion(version);
 
   // check cache
@@ -52,7 +53,7 @@ export async function getPerl(version: string, thread: boolean): Promise<Result>
 
   if (!toolPath) {
     // download, extract, cache
-    toolPath = await acquirePerl(selected, thread);
+    toolPath = await acquirePerl(selected, thread, githubToken);
     core.debug("Perl tool is cached under " + toolPath);
   }
 
@@ -72,7 +73,7 @@ export async function getPerl(version: string, thread: boolean): Promise<Result>
   };
 }
 
-async function acquirePerl(version: string, thread: boolean): Promise<string> {
+async function acquirePerl(version: string, thread: boolean, githubToken?: string): Promise<string> {
   //
   // Download - a tool installer intimately knows how to get the tool (and construct urls)
   //
@@ -90,6 +91,13 @@ async function acquirePerl(version: string, thread: boolean): Promise<string> {
 
     throw new Error(`Failed to download version ${version}: ${error}`);
   }
+
+  // Verify the downloaded archive
+  await verify(downloadPath, {
+    githubToken: githubToken,
+    owner: "shogo82148",
+    repository: "shogo82148/actions-setup-perl",
+  });
 
   //
   // Extract compressed archive

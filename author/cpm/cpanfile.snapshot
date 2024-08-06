@@ -1022,13 +1022,13 @@ DISTRIBUTIONS
     requirements:
       Module::Build::Tiny 0.034
       perl 5.008001
-  Scalar-List-Utils-1.64
-    pathname: P/PE/PEVANS/Scalar-List-Utils-1.64.tar.gz
+  Scalar-List-Utils-1.65
+    pathname: P/PE/PEVANS/Scalar-List-Utils-1.65.tar.gz
     provides:
-      List::Util 1.64
-      List::Util::XS 1.64
-      Scalar::Util 1.64
-      Sub::Util 1.64
+      List::Util 1.65
+      List::Util::XS 1.65
+      Scalar::Util 1.65
+      Sub::Util 1.65
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006

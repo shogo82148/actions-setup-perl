@@ -268,11 +268,11 @@ DISTRIBUTIONS
       IPC::Cmd 0
       Perl::OSType 1
       Text::ParseWords 0
-  ExtUtils-Config-0.009
-    pathname: L/LE/LEONT/ExtUtils-Config-0.009.tar.gz
+  ExtUtils-Config-0.010
+    pathname: L/LE/LEONT/ExtUtils-Config-0.010.tar.gz
     provides:
-      ExtUtils::Config 0.009
-      ExtUtils::Config::MakeMaker 0.009
+      ExtUtils::Config 0.010
+      ExtUtils::Config::MakeMaker 0.010
     requirements:
       Data::Dumper 0
       ExtUtils::MakeMaker 0

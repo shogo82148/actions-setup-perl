@@ -251,10 +251,10 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  Clone-0.46
-    pathname: G/GA/GARU/Clone-0.46.tar.gz
+  Clone-0.47
+    pathname: A/AT/ATOOMIC/Clone-0.47.tar.gz
     provides:
-      Clone 0.46
+      Clone 0.47
     requirements:
       ExtUtils::MakeMaker 0
   Command-Runner-0.200

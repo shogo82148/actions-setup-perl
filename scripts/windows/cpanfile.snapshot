@@ -16,10 +16,10 @@ DISTRIBUTIONS
       Canary::Stability 2013
     requirements:
       ExtUtils::MakeMaker 0
-  Clone-0.46
-    pathname: G/GA/GARU/Clone-0.46.tar.gz
+  Clone-0.47
+    pathname: A/AT/ATOOMIC/Clone-0.47.tar.gz
     provides:
-      Clone 0.46
+      Clone 0.47
     requirements:
       ExtUtils::MakeMaker 0
   Devel-PatchPerl-2.08
@@ -112,16 +112,16 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  HTML-Parser-3.82
-    pathname: O/OA/OALDERS/HTML-Parser-3.82.tar.gz
+  HTML-Parser-3.83
+    pathname: O/OA/OALDERS/HTML-Parser-3.83.tar.gz
     provides:
-      HTML::Entities 3.82
-      HTML::Filter 3.82
-      HTML::HeadParser 3.82
-      HTML::LinkExtor 3.82
-      HTML::Parser 3.82
-      HTML::PullParser 3.82
-      HTML::TokeParser 3.82
+      HTML::Entities 3.83
+      HTML::Filter 3.83
+      HTML::HeadParser 3.83
+      HTML::LinkExtor 3.83
+      HTML::Parser 3.83
+      HTML::PullParser 3.83
+      HTML::TokeParser 3.83
     requirements:
       Carp 0
       Exporter 0
@@ -239,18 +239,18 @@ DISTRIBUTIONS
       Exporter 5.57
       ExtUtils::MakeMaker 0
       perl 5.008
-  IO-Socket-SSL-2.085
-    pathname: S/SU/SULLR/IO-Socket-SSL-2.085.tar.gz
+  IO-Socket-SSL-2.088
+    pathname: S/SU/SULLR/IO-Socket-SSL-2.088.tar.gz
     provides:
-      IO::Socket::SSL 2.085
+      IO::Socket::SSL 2.088
       IO::Socket::SSL::Intercept 2.056
-      IO::Socket::SSL::OCSP_Cache 2.085
-      IO::Socket::SSL::OCSP_Resolver 2.085
+      IO::Socket::SSL::OCSP_Cache 2.088
+      IO::Socket::SSL::OCSP_Resolver 2.088
       IO::Socket::SSL::PublicSuffix undef
-      IO::Socket::SSL::SSL_Context 2.085
-      IO::Socket::SSL::SSL_HANDLE 2.085
-      IO::Socket::SSL::Session_Cache 2.085
-      IO::Socket::SSL::Trace 2.085
+      IO::Socket::SSL::SSL_Context 2.088
+      IO::Socket::SSL::SSL_HANDLE 2.088
+      IO::Socket::SSL::Session_Cache 2.088
+      IO::Socket::SSL::Trace 2.088
       IO::Socket::SSL::Utils 2.015
     requirements:
       ExtUtils::MakeMaker 0
@@ -372,10 +372,10 @@ DISTRIBUTIONS
       if 0
       perl 5.005030
       strict 0
-  Mozilla-CA-20240313
-    pathname: L/LW/LWP/Mozilla-CA-20240313.tar.gz
+  Mozilla-CA-20240730
+    pathname: L/LW/LWP/Mozilla-CA-20240730.tar.gz
     provides:
-      Mozilla::CA 20240313
+      Mozilla::CA 20240730
     requirements:
       ExtUtils::MakeMaker 0
   Net-HTTP-6.23
@@ -441,10 +441,10 @@ DISTRIBUTIONS
       TimeDate 1.21
     requirements:
       ExtUtils::MakeMaker 0
-  Try-Tiny-0.31
-    pathname: E/ET/ETHER/Try-Tiny-0.31.tar.gz
+  Try-Tiny-0.32
+    pathname: E/ET/ETHER/Try-Tiny-0.32.tar.gz
     provides:
-      Try::Tiny 0.31
+      Try::Tiny 0.32
     requirements:
       Carp 0
       Exporter 5.57

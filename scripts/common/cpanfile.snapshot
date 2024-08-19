@@ -22,22 +22,21 @@ DISTRIBUTIONS
       overload 0
       strict 0
       warnings 0
-  IO-Socket-SSL-2.085
-    pathname: S/SU/SULLR/IO-Socket-SSL-2.085.tar.gz
+  IO-Socket-SSL-2.088
+    pathname: S/SU/SULLR/IO-Socket-SSL-2.088.tar.gz
     provides:
-      IO::Socket::SSL 2.085
+      IO::Socket::SSL 2.088
       IO::Socket::SSL::Intercept 2.056
-      IO::Socket::SSL::OCSP_Cache 2.085
-      IO::Socket::SSL::OCSP_Resolver 2.085
+      IO::Socket::SSL::OCSP_Cache 2.088
+      IO::Socket::SSL::OCSP_Resolver 2.088
       IO::Socket::SSL::PublicSuffix undef
-      IO::Socket::SSL::SSL_Context 2.085
-      IO::Socket::SSL::SSL_HANDLE 2.085
-      IO::Socket::SSL::Session_Cache 2.085
-      IO::Socket::SSL::Trace 2.085
+      IO::Socket::SSL::SSL_Context 2.088
+      IO::Socket::SSL::SSL_HANDLE 2.088
+      IO::Socket::SSL::Session_Cache 2.088
+      IO::Socket::SSL::Trace 2.088
       IO::Socket::SSL::Utils 2.015
     requirements:
       ExtUtils::MakeMaker 0
-      Mozilla::CA 0
       Net::SSLeay 1.46
       Scalar::Util 0
   JSON-4.10
@@ -48,10 +47,10 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
-  JSON-MaybeXS-1.004005
-    pathname: E/ET/ETHER/JSON-MaybeXS-1.004005.tar.gz
+  JSON-MaybeXS-1.004008
+    pathname: E/ET/ETHER/JSON-MaybeXS-1.004008.tar.gz
     provides:
-      JSON::MaybeXS 1.004005
+      JSON::MaybeXS 1.004008
     requirements:
       Carp 0
       Cpanel::JSON::XS 2.3310
@@ -75,10 +74,10 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 6.52
       Types::Serialiser 0
       common::sense 0
-  Mozilla-CA-20240313
-    pathname: L/LW/LWP/Mozilla-CA-20240313.tar.gz
+  Mozilla-CA-20240730
+    pathname: L/LW/LWP/Mozilla-CA-20240730.tar.gz
     provides:
-      Mozilla::CA 20240313
+      Mozilla::CA 20240730
     requirements:
       ExtUtils::MakeMaker 0
   Net-SSLeay-1.94

@@ -11,8 +11,6 @@ on:
   push:
     branches:
       - "releases/*"
-  schedule:
-    - cron: "29 0 * * 2"
   workflow_dispatch:
     inputs:
       perl-versions:
@@ -23,6 +21,8 @@ on:
 jobs:
   list:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - id: set-matrix
@@ -40,6 +40,8 @@ jobs:
 
   sanity-check:
     runs-on: windows-2022
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
 
@@ -74,6 +76,10 @@ jobs:
     needs:
       - list
       - sanity-check
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
     timeout-minutes: 120
     strategy:
       fail-fast: false
@@ -165,11 +171,19 @@ jobs:
           PERL_VERSION: ${{ matrix.perl }}
           GITHUB_TOKEN: ${{ github.token }}
 
+      - uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: ${{ runner.temp }}/*.zip
+
   build-multi-thread:
     runs-on: windows-2022
     needs:
       - sanity-check
       - list
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
     timeout-minutes: 120
     strategy:
       fail-fast: false
@@ -255,3 +269,7 @@ jobs:
         env:
           PERL_VERSION: ${{ matrix.perl }}
           GITHUB_TOKEN: ${{ github.token }}
+
+      - uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: ${{ runner.temp }}/*.zip

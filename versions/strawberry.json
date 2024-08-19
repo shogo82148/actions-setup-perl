@@ -1,5 +1,9 @@
 [
     {
+        "version": "5.40.0",
+        "release": "1"
+    },
+    {
         "version": "5.38.2",
         "release": "2"
     },

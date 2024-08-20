@@ -196,7 +196,7 @@ sub _patch_db_file {
 -    ((ExtUtils::MakeMaker->VERSION() gt '6.30')
 -            ?  ('LICENSE'  => 'perl')
 -            : ()
-+	DEFINE		=> "-D_NOT_CORE $OS2 $VER_INFO $COMPAT185 $WALL",
++	DEFINE		=> "$OS2 $VER_INFO $COMPAT185 $WALL",
 +	OBJECT		=> 'version$(OBJ_EXT) DB_File$(OBJ_EXT)',
 +    ((ExtUtils::MakeMaker->VERSION() gt '6.30') 
 +        ?  ('LICENSE'  => 'perl')         

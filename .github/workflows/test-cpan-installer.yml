@@ -74,11 +74,10 @@ jobs:
           install-modules-with: "${{ matrix.installer }}"
           install-modules-args: "--notest"
           working-directory: __test__/p5-Test-Module
-      - name: print the version of App::p and use it
+      - name: print the version of Acme::this
         run: |
           # shellcheck disable=SC2016
-          perl -MApp::p -e 'print "$App::p::VERSION\n"'
-          p 'print "Hello World\n"'
+          perl -MAcme::this -e 'print "$Acme::this::VERSION\n"'
 
       - run: ${{ matrix.installer }} --help
       - run: ${{ matrix.installer }} --version

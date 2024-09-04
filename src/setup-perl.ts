@@ -55,7 +55,12 @@ async function run() {
       core.addPath(path.join(getPackagePath(), "bin"));
 
       // for pre-installed modules
-      core.exportVariable("PERL5LIB", path.join(getPackagePath(), "scripts", "lib"));
+      core.exportVariable(
+        "PERL5LIB",
+        path.join(getPackagePath(), "scripts", "lib") +
+          path.delimiter +
+          path.join(getPackagePath(), "scripts", "lib", "perl5"),
+      );
     });
 
     await core.group("install CPAN modules", async () => {

@@ -36,6 +36,18 @@ jobs:
         distribution:
           - "default"
         include:
+          - perl: "5.40"
+            os: "windows-latest"
+            installer: "cpanm"
+            distribution: "strawberry"
+          - perl: "5.40"
+            os: "windows-latest"
+            installer: "cpm"
+            distribution: "strawberry"
+          - perl: "5.40"
+            os: "windows-latest"
+            installer: "carton"
+            distribution: "strawberry"
           - perl: "5.6"
             os: "windows-latest"
             installer: "cpanm"

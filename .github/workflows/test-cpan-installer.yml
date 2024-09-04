@@ -32,34 +32,19 @@ jobs:
           - carton
         perl:
           - "5.40" # latest version of Perl 5
-          - "5.18"
-          - "5.16"
-          - "5.14"
-          - "5.12"
-          - "5.10"
-          - "5.8"
-          # TODO: fix cpm
-          # - "5.8.1" # oldest version the original cpanm supports
-          # TODO: @shogo82148 fix me
-          # building ExtUtils::MakeMaker fails.
-          # - "5.8.0"
-          # TODO: fix cpm
-          # - "5.6.2"
-          # - "5.6.1" # oldest version the action supports
-          # too old to work cpanm... I gave up.
-          # - "5.6.0"
+          - "5.6"
         distribution:
           - "default"
         include:
-          - perl: "5.8"
+          - perl: "5.6"
             os: "windows-latest"
             installer: "cpanm"
             distribution: "strawberry"
-          - perl: "5.8"
+          - perl: "5.6"
             os: "windows-latest"
             installer: "cpm"
             distribution: "strawberry"
-          - perl: "5.8"
+          - perl: "5.6"
             os: "windows-latest"
             installer: "carton"
             distribution: "strawberry"

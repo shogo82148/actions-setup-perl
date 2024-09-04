@@ -32,7 +32,7 @@ jobs:
           - carton
         perl:
           - "5.40" # latest version of Perl 5
-          - "5.10"
+          - "5.12"
           # TODO: fix cpm
           # - "5.8.1" # oldest version the original cpanm supports
           # TODO: @shogo82148 fix me
@@ -46,15 +46,15 @@ jobs:
         distribution:
           - "default"
         include:
-          - perl: "5.10"
+          - perl: "5.12"
             os: "windows-latest"
             installer: "cpanm"
             distribution: "strawberry"
-          - perl: "5.10"
+          - perl: "5.12"
             os: "windows-latest"
             installer: "cpm"
             distribution: "strawberry"
-          - perl: "5.10"
+          - perl: "5.12"
             os: "windows-latest"
             installer: "carton"
             distribution: "strawberry"

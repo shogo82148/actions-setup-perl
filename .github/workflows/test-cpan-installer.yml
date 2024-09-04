@@ -69,6 +69,7 @@ jobs:
           install-modules-with: "${{ matrix.installer }}"
           install-modules: |
             ExtUtils::MakeMaker
+          install-modules-args: "--notest"
           working-directory: __test__/p5-Test-Module
       - name: print the version of App::p and use it
         run: |

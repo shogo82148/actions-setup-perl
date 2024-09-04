@@ -2,6 +2,7 @@ name: CPAN installer
 on:
   pull_request:
     paths:
+      - ".github/workflows/test-cpan-installer.yml"
       - "bin/cpanm"
       - "bin/cpm"
       - "bin/carton"
@@ -30,49 +31,50 @@ jobs:
           - cpm
           - carton
         perl:
-          - "5" # latest version of Perl 5
-
-          # TODO: fix cpm
-          # - "5.8.1" # oldest version the original cpanm supports
-          # TODO: @shogo82148 fix me
-          # building ExtUtils::MakeMaker fails.
-          # - "5.8.0"
-          # TODO: fix cpm
-          # - "5.6.2"
-          # - "5.6.1" # oldest version the action supports
-          # too old to work cpanm... I gave up.
-          # - "5.6.0"
+          - "5.40" # latest version of Perl 5
+          - "5.8"
+        distribution:
+          - "default"
+        include:
+          - perl: "5.40"
+            os: "windows-latest"
+            installer: "cpanm"
+            distribution: "strawberry"
+          - perl: "5.40"
+            os: "windows-latest"
+            installer: "cpm"
+            distribution: "strawberry"
+          - perl: "5.40"
+            os: "windows-latest"
+            installer: "carton"
+            distribution: "strawberry"
+          - perl: "5.8"
+            os: "windows-latest"
+            installer: "cpanm"
+            distribution: "strawberry"
+          - perl: "5.8"
+            os: "windows-latest"
+            installer: "cpm"
+            distribution: "strawberry"
+          - perl: "5.8"
+            os: "windows-latest"
+            installer: "carton"
+            distribution: "strawberry"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Set Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: "package.json"
-          cache: npm
-
-      - run: npm ci
-      - run: npm run build
-      - run: npm run package
 
       - name: use the action
         uses: ./
         with:
           perl-version: "${{ matrix.perl }}"
           install-modules-with: "${{ matrix.installer }}"
-          install-modules: |
-            ExtUtils::MakeMaker
+          install-modules-args: "--notest"
           working-directory: __test__/p5-Test-Module
-      - name: print the version of App::p and use it
+      - name: print the version of Acme::this
         run: |
           # shellcheck disable=SC2016
-          perl -MApp::p -e 'print "$App::p::VERSION\n"'
-          p 'print "Hello World\n"'
-
-      - name: print the version of ExtUtils::MakeMaker
-        run: |
-          perl -MExtUtils::MakeMaker -e 'print $ExtUtils::MakeMaker::VERSION'
+          perl -MAcme::this -e 'print "$Acme::this::VERSION\n"'
 
       - run: ${{ matrix.installer }} --help
       - run: ${{ matrix.installer }} --version

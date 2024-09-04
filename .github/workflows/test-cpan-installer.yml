@@ -2,6 +2,7 @@ name: CPAN installer
 on:
   pull_request:
     paths:
+      - ".github/workflows/test-cpan-installer.yml"
       - "bin/cpanm"
       - "bin/cpm"
       - "bin/carton"

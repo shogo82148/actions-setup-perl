@@ -131,15 +131,21 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.008001
-  YAML-LibYAML-0.89
-    pathname: T/TI/TINITA/YAML-LibYAML-0.89.tar.gz
+  YAML-LibYAML-v0.901.0
+    pathname: T/TI/TINITA/YAML-LibYAML-v0.901.0.tar.gz
     provides:
-      YAML::LibYAML 0.89
-      YAML::XS 0.89
-      YAML::XS::LibYAML undef
+      YAML::LibYAML v0.901.0
+      YAML::XS v0.901.0
     requirements:
+      B::Deparse 0
+      Exporter 0
       ExtUtils::MakeMaker 0
+      Scalar::Util 0
+      base 0
+      constant 0
       perl 5.008001
+      strict 0
+      warnings 0
   YAML-Tiny-1.74
     pathname: E/ET/ETHER/YAML-Tiny-1.74.tar.gz
     provides:

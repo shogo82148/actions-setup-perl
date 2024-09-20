@@ -770,11 +770,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20240829
-    pathname: B/BI/BINGOS/Module-CoreList-5.20240829.tar.gz
+  Module-CoreList-5.20240920
+    pathname: B/BI/BINGOS/Module-CoreList-5.20240920.tar.gz
     provides:
-      Module::CoreList 5.20240829
-      Module::CoreList::Utils 5.20240829
+      Module::CoreList 5.20240920
+      Module::CoreList::Utils 5.20240920
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0
@@ -1031,13 +1031,13 @@ DISTRIBUTIONS
     requirements:
       Module::Build::Tiny 0.034
       perl 5.008001
-  Scalar-List-Utils-1.65
-    pathname: P/PE/PEVANS/Scalar-List-Utils-1.65.tar.gz
+  Scalar-List-Utils-1.66
+    pathname: P/PE/PEVANS/Scalar-List-Utils-1.66.tar.gz
     provides:
-      List::Util 1.65
-      List::Util::XS 1.65
-      Scalar::Util 1.65
-      Sub::Util 1.65
+      List::Util 1.66
+      List::Util::XS 1.66
+      Scalar::Util 1.66
+      Sub::Util 1.66
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006

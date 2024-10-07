@@ -167,19 +167,19 @@ DISTRIBUTIONS
       Time::Zone 0
       perl 5.006002
       strict 0
-  HTTP-Message-6.46
-    pathname: O/OA/OALDERS/HTTP-Message-6.46.tar.gz
+  HTTP-Message-7.00
+    pathname: O/OA/OALDERS/HTTP-Message-7.00.tar.gz
     provides:
-      HTTP::Config 6.46
-      HTTP::Headers 6.46
-      HTTP::Headers::Auth 6.46
-      HTTP::Headers::ETag 6.46
-      HTTP::Headers::Util 6.46
-      HTTP::Message 6.46
-      HTTP::Request 6.46
-      HTTP::Request::Common 6.46
-      HTTP::Response 6.46
-      HTTP::Status 6.46
+      HTTP::Config 7.00
+      HTTP::Headers 7.00
+      HTTP::Headers::Auth 7.00
+      HTTP::Headers::ETag 7.00
+      HTTP::Headers::Util 7.00
+      HTTP::Message 7.00
+      HTTP::Request 7.00
+      HTTP::Request::Common 7.00
+      HTTP::Response 7.00
+      HTTP::Status 7.00
     requirements:
       Carp 0
       Clone 0.46

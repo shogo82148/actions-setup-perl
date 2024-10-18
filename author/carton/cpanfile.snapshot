@@ -956,13 +956,14 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       PPI 1.213
       common::sense 3.3
-  Scalar-List-Utils-1.66
-    pathname: P/PE/PEVANS/Scalar-List-Utils-1.66.tar.gz
+  Scalar-List-Utils-1.68
+    pathname: P/PE/PEVANS/Scalar-List-Utils-1.68.tar.gz
     provides:
-      List::Util 1.66
-      List::Util::XS 1.66
-      Scalar::Util 1.66
-      Sub::Util 1.66
+      List::Util 1.68
+      List::Util::XS 1.68
+      Scalar::List::Utils 1.68
+      Scalar::Util 1.68
+      Sub::Util 1.68
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006

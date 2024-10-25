@@ -365,11 +365,11 @@ DISTRIBUTIONS
       Text::ParseWords 0
       perl 5.006001
       version 0.87
-  Module-Pluggable-6.1
-    pathname: S/SI/SIMONW/Module-Pluggable-6.1.tar.gz
+  Module-Pluggable-6.2
+    pathname: S/SI/SIMONW/Module-Pluggable-6.2.tar.gz
     provides:
       Devel::InnerPackage 0.4
-      Module::Pluggable 6.1
+      Module::Pluggable 6.2
       Module::Pluggable::Object 5.2
     requirements:
       Exporter 5.57

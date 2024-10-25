@@ -4,7 +4,7 @@ requires "Module::Build::Tiny";
 requires 'CPAN::Meta::Requirements', '==2.140'; # 2.141 doesn't support perl 5.8.
 requires 'Distribution::Metadata', '==0.06';
 requires 'App::FatPacker::Simple', '==0.09';
-requires 'Module::Build::Tiny', '==0.047'; # 0.048 doesn't work on perl 5.8.
+requires 'Module::Build::Tiny', '0.051';
 
 requires "App::cpm";
 requires "Class::C3";

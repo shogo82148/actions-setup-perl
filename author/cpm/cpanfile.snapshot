@@ -36,10 +36,10 @@ DISTRIBUTIONS
       Perl::Strip 0
       Pod::Usage 1.33
       perl 5.008001
-  App-cpm-0.997017
-    pathname: S/SK/SKAJI/App-cpm-0.997017.tar.gz
+  App-cpm-0.997018
+    pathname: S/SK/SKAJI/App-cpm-0.997018.tar.gz
     provides:
-      App::cpm 0.997017
+      App::cpm 0.997018
       App::cpm::CLI undef
       App::cpm::CircularDependency undef
       App::cpm::DistNotation undef
@@ -81,7 +81,7 @@ DISTRIBUTIONS
       HTTP::Tinyish 0.12
       JSON::PP 2.27300
       Menlo::CLI::Compat 1.9021
-      Module::Build::Tiny 0.034
+      Module::Build::Tiny 0.051
       Module::CPANfile 0
       Module::Metadata 0
       Module::cpmfile 0.001
@@ -732,10 +732,10 @@ DISTRIBUTIONS
       Menlo 1.9018
       perl 5.008001
       version 0.9905
-  Module-Build-Tiny-0.047
-    pathname: L/LE/LEONT/Module-Build-Tiny-0.047.tar.gz
+  Module-Build-Tiny-0.051
+    pathname: L/LE/LEONT/Module-Build-Tiny-0.051.tar.gz
     provides:
-      Module::Build::Tiny 0.047
+      Module::Build::Tiny 0.051
     requirements:
       CPAN::Meta 0
       DynaLoader 0
@@ -770,11 +770,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20240920
-    pathname: B/BI/BINGOS/Module-CoreList-5.20240920.tar.gz
+  Module-CoreList-5.20241020
+    pathname: B/BI/BINGOS/Module-CoreList-5.20241020.tar.gz
     provides:
-      Module::CoreList 5.20240920
-      Module::CoreList::Utils 5.20240920
+      Module::CoreList 5.20241020
+      Module::CoreList::Utils 5.20241020
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0
@@ -1031,13 +1031,14 @@ DISTRIBUTIONS
     requirements:
       Module::Build::Tiny 0.034
       perl 5.008001
-  Scalar-List-Utils-1.66
-    pathname: P/PE/PEVANS/Scalar-List-Utils-1.66.tar.gz
+  Scalar-List-Utils-1.68
+    pathname: P/PE/PEVANS/Scalar-List-Utils-1.68.tar.gz
     provides:
-      List::Util 1.66
-      List::Util::XS 1.66
-      Scalar::Util 1.66
-      Sub::Util 1.66
+      List::Util 1.68
+      List::Util::XS 1.68
+      Scalar::List::Utils 1.68
+      Scalar::Util 1.68
+      Sub::Util 1.68
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006

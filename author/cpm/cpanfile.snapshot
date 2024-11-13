@@ -586,10 +586,10 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Pod::Usage 1.14
-  HTTP-Tiny-0.088
-    pathname: D/DA/DAGOLDEN/HTTP-Tiny-0.088.tar.gz
+  HTTP-Tiny-0.090
+    pathname: H/HA/HAARG/HTTP-Tiny-0.090.tar.gz
     provides:
-      HTTP::Tiny 0.088
+      HTTP::Tiny 0.090
     requirements:
       Carp 0
       ExtUtils::MakeMaker 6.17

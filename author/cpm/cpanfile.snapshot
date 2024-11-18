@@ -36,10 +36,10 @@ DISTRIBUTIONS
       Perl::Strip 0
       Pod::Usage 1.33
       perl 5.008001
-  App-cpm-0.997018
-    pathname: S/SK/SKAJI/App-cpm-0.997018.tar.gz
+  App-cpm-0.997019
+    pathname: S/SK/SKAJI/App-cpm-0.997019.tar.gz
     provides:
-      App::cpm 0.997018
+      App::cpm 0.997019
       App::cpm::CLI undef
       App::cpm::CircularDependency undef
       App::cpm::DistNotation undef

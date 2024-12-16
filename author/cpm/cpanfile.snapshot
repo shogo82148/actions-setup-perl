@@ -189,10 +189,10 @@ DISTRIBUTIONS
       strict 0
       version 0.88
       warnings 0
-  CPAN-Meta-YAML-0.018
-    pathname: D/DA/DAGOLDEN/CPAN-Meta-YAML-0.018.tar.gz
+  CPAN-Meta-YAML-0.019
+    pathname: E/ET/ETHER/CPAN-Meta-YAML-0.019.tar.gz
     provides:
-      CPAN::Meta::YAML 0.018
+      CPAN::Meta::YAML 0.019
     requirements:
       B 0
       Carp 0

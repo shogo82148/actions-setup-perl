@@ -105,7 +105,6 @@ jobs:
           - macos-15
           - macos-14
           - macos-13
-          - macos-12
         multi-thread:
           - false
           - true

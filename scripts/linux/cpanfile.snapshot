@@ -120,11 +120,11 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 6.52
       Types::Serialiser 0
       common::sense 0
-  Module-Pluggable-6.2
-    pathname: S/SI/SIMONW/Module-Pluggable-6.2.tar.gz
+  Module-Pluggable-6.3
+    pathname: S/SI/SIMONW/Module-Pluggable-6.3.tar.gz
     provides:
       Devel::InnerPackage 0.4
-      Module::Pluggable 6.2
+      Module::Pluggable 6.3
       Module::Pluggable::Object 5.2
     requirements:
       Exporter 5.57

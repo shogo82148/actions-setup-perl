@@ -1,0 +1,184 @@
+name: build on linux
+
+on:
+  pull_request:
+    paths:
+      - "versions/linux.json"
+      - "scripts/linux/**"
+      - "scripts/lib/Devel/**"
+      - ".github/workflows/linux-arm64.yml"
+      - ".github/build-openssl-linux.sh"
+  push:
+    branches:
+      - "releases/*"
+  workflow_dispatch:
+    inputs:
+      perl-versions:
+        description: perl versions to build (JSON Array)
+        required: false
+        default: ""
+
+jobs:
+  list:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - id: set-matrix
+        name: list available perl versions
+        run: |
+          if [ -n "$PERL_VERSIONS" ]; then
+            echo "matrix=$(printenv PERL_VERSIONS | jq -c '{perl: .}')" >> "$GITHUB_OUTPUT"
+          else
+            echo "matrix=$(<versions/linux.json jq -c '{perl: .}')" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          PERL_VERSIONS: ${{ github.event.inputs.perl-versions }}
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+
+  sanity-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - id: perl
+        name: check pre-installed perl version
+        run: |
+          perl -e 'print "version=$^V\n"' >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: scripts/linux/local
+          key: Linux-sanity-check-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/linux/cpanfile.snapshot') }}
+          restore-keys: Linux-sanity-check-perl-${{ steps.perl.outputs.version }}-
+      - name: sanity check
+        run: |
+          ../../bin/carton install --deployment
+          ../../bin/carton exec perl -c build.pl
+          ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/GitHubActions.pm
+          ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/MinGW.pm
+          ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/MinGWGNUmakefile.pm
+        working-directory: ./scripts/linux
+        env:
+          PERL5LIB: ${{ github.workspace }}/scripts/lib
+
+  build:
+    runs-on: ubuntu-22.04-arm
+    needs:
+      - list
+      - sanity-check
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix: ${{fromJson(needs.list.outputs.matrix)}}
+    env:
+      PERL_VERSION: ${{ matrix.perl }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: perl
+        name: setup host perl
+        run: |
+          perl -MConfig -E 'say "$Config{bin}"' >> "$GITHUB_PATH"
+          perl -e 'print "version=$^V\n"' >> "$GITHUB_OUTPUT"
+      - name: Host perl -V
+        run: perl -V
+      - name: gcc --version
+        run: gcc --version
+
+      - name: build OpenSSL
+        run: .github/build-openssl-linux.sh
+
+      - uses: actions/cache@v4
+        with:
+          path: scripts/linux/local
+          key: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/linux/cpanfile.snapshot') }}
+          restore-keys: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-
+      - name: carton install --deployment
+        shell: bash
+        run: ../../bin/carton install --deployment
+        working-directory: ./scripts/linux
+
+      - name: build
+        shell: bash
+        run: perl build.pl
+        env:
+          PERL5LIB: ${{ github.workspace }}/scripts/linux/local/lib/perl5
+        working-directory: ./scripts/linux
+
+      - name: upload
+        run: |
+          ACTIONS_VERSION=v$(<"$GITHUB_WORKSPACE/package.json" jq -r .version)
+          mv "$RUNNER_TEMP/perl.tar.zstd" "$RUNNER_TEMP/perl-$PERL_VERSION-linux-x64.tar.zstd"
+          gh release upload --clobber "$ACTIONS_VERSION" "$RUNNER_TEMP/perl-$PERL_VERSION-linux-x64.tar.zstd"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: ${{ runner.temp }}/*.tar.zstd
+
+  build-multi-thread:
+    runs-on: ubuntu-22.04-arm
+    needs:
+      - sanity-check
+      - list
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix: ${{fromJson(needs.list.outputs.matrix)}}
+    env:
+      PERL_VERSION: ${{ matrix.perl }}
+      PERL_MULTI_THREAD: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - id: perl
+        name: setup host perl
+        run: |
+          perl -MConfig -E 'say "$Config{bin}"' >> "$GITHUB_PATH"
+          perl -e 'print "version=$^V\n"' >> "$GITHUB_OUTPUT"
+      - name: Host perl -V
+        run: perl -V
+      - name: gcc --version
+        run: gcc --version
+
+      - name: build OpenSSL
+        run: .github/build-openssl-linux.sh
+
+      - uses: actions/cache@v4
+        with:
+          path: scripts/linux/local
+          key: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/linux/cpanfile.snapshot') }}
+          restore-keys: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-
+      - name: carton install --deployment
+        shell: bash
+        run: ../../bin/carton install --deployment
+        working-directory: ./scripts/linux
+
+      - name: build
+        shell: bash
+        run: perl build.pl
+        env:
+          PERL5LIB: ${{ github.workspace }}/scripts/linux/local/lib/perl5
+        working-directory: ./scripts/linux
+
+      - name: upload
+        run: |
+          ACTIONS_VERSION=v$(<"$GITHUB_WORKSPACE/package.json" jq -r .version)
+          mv "$RUNNER_TEMP/perl.tar.zstd" "$RUNNER_TEMP/perl-$PERL_VERSION-linux-x64-multi-thread.tar.zstd"
+          gh release upload --clobber "$ACTIONS_VERSION" "$RUNNER_TEMP/perl-$PERL_VERSION-linux-x64-multi-thread.tar.zstd"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: ${{ runner.temp }}/*.tar.zstd

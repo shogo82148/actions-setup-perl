@@ -12,7 +12,15 @@ PERL_DIR=$PERL_VERSION
 if [[ "x$PERL_MULTI_THREAD" != "x" ]]; then
     PERL_DIR="$PERL_DIR-thr"
 fi
-PREFIX=$RUNNER_TOOL_CACHE/perl/$PERL_DIR/x64
+case $(uname -m) in
+  "x86_64")
+    ARCH=x64;;
+  "arm64" | "aarch64")
+    ARCH=arm64;;
+  *)
+    echo "unknown architecture: $(uname -m)"
+esac
+PREFIX=$RUNNER_TOOL_CACHE/perl/$PERL_DIR/$ARCH
 
 # detect the number of CPU Core
 JOBS=$(nproc)

@@ -1,9 +1,9 @@
 # carton snapshot format: version 1.0
 DISTRIBUTIONS
-  CPAN-Perl-Releases-5.20241020
-    pathname: B/BI/BINGOS/CPAN-Perl-Releases-5.20241020.tar.gz
+  CPAN-Perl-Releases-5.20250106
+    pathname: B/BI/BINGOS/CPAN-Perl-Releases-5.20250106.tar.gz
     provides:
-      CPAN::Perl::Releases 5.20241020
+      CPAN::Perl::Releases 5.20250106
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006000
@@ -165,11 +165,11 @@ DISTRIBUTIONS
       Text::ParseWords 0
       perl 5.006001
       version 0.87
-  Module-Pluggable-6.1
-    pathname: S/SI/SIMONW/Module-Pluggable-6.1.tar.gz
+  Module-Pluggable-6.3
+    pathname: S/SI/SIMONW/Module-Pluggable-6.3.tar.gz
     provides:
       Devel::InnerPackage 0.4
-      Module::Pluggable 6.1
+      Module::Pluggable 6.3
       Module::Pluggable::Object 5.2
     requirements:
       Exporter 5.57

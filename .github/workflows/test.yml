@@ -26,6 +26,8 @@ jobs:
           - ubuntu-24.04
           - ubuntu-22.04
           - ubuntu-20.04
+          - ubuntu-24.04-arm
+          - ubuntu-22.04-arm
         multi-thread:
           - false
           - true
@@ -105,7 +107,6 @@ jobs:
           - macos-15
           - macos-14
           - macos-13
-          - macos-12
         multi-thread:
           - false
           - true
@@ -185,6 +186,7 @@ jobs:
         os:
           - windows-2019
           - windows-2022
+          - windows-2025
         multi-thread:
           - false
           - true
@@ -268,6 +270,8 @@ jobs:
       matrix:
         os:
           - windows-2019
+          - windows-2022
+          - windows-2025
     steps:
       - name: disable autocrlf
         run: git config --global core.autocrlf false

@@ -6,10 +6,10 @@ DISTRIBUTIONS
       Canary::Stability 2013
     requirements:
       ExtUtils::MakeMaker 0
-  Cpanel-JSON-XS-4.38
-    pathname: R/RU/RURBAN/Cpanel-JSON-XS-4.38.tar.gz
+  Cpanel-JSON-XS-4.39
+    pathname: R/RU/RURBAN/Cpanel-JSON-XS-4.39.tar.gz
     provides:
-      Cpanel::JSON::XS 4.38
+      Cpanel::JSON::XS 4.39
       Cpanel::JSON::XS::Type undef
     requirements:
       Carp 0
@@ -53,7 +53,7 @@ DISTRIBUTIONS
       JSON::MaybeXS 1.004008
     requirements:
       Carp 0
-      Cpanel::JSON::XS 2.3310
+      Cpanel::JSON::XS 4.38
       ExtUtils::MakeMaker 0
       JSON::PP 2.27300
       Scalar::Util 0
@@ -146,10 +146,10 @@ DISTRIBUTIONS
       perl 5.008001
       strict 0
       warnings 0
-  YAML-Tiny-1.74
-    pathname: E/ET/ETHER/YAML-Tiny-1.74.tar.gz
+  YAML-Tiny-1.76
+    pathname: E/ET/ETHER/YAML-Tiny-1.76.tar.gz
     provides:
-      YAML::Tiny 1.74
+      YAML::Tiny 1.76
     requirements:
       B 0
       Carp 0

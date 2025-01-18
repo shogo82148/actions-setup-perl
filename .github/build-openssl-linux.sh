@@ -18,7 +18,8 @@ case $(uname -m) in
   "arm64" | "aarch64")
     ARCH=arm64;;
   *)
-    echo "unknown architecture: $(uname -m)"
+    echo "unknown architecture: $(uname -m)" >&2
+    exit 1
 esac
 PREFIX=$RUNNER_TOOL_CACHE/perl/$PERL_DIR/$ARCH
 

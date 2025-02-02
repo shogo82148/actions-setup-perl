@@ -74,10 +74,10 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 6.52
       Types::Serialiser 0
       common::sense 0
-  Mozilla-CA-20240924
-    pathname: L/LW/LWP/Mozilla-CA-20240924.tar.gz
+  Mozilla-CA-20250202
+    pathname: L/LW/LWP/Mozilla-CA-20250202.tar.gz
     provides:
-      Mozilla::CA 20240924
+      Mozilla::CA 20250202
     requirements:
       ExtUtils::MakeMaker 0
   Net-SSLeay-1.94

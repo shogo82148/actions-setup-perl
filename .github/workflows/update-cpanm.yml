@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: main
           fetch-depth: 0
@@ -40,10 +40,10 @@ jobs:
 
       - name: Generate token
         id: generate_token
-        uses: shogo82148/actions-github-app-token@v1
+        uses: shogo82148/actions-github-app-token@7ed70a12e0d77c0e3c946ef4d093e6d17f402935 # v1.0.3
 
       - name: commit
-        uses: shogo82148/actions-commit-and-create-pr@v1
+        uses: shogo82148/actions-commit-and-create-pr@b1322fe9da4037e9720e34ea221997cffcd3498d # v1.1.4
         with:
           github-token: ${{ steps.generate_token.outputs.token }}
           head-branch-prefix: "auto-update/cpanm-"

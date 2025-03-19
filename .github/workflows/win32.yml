@@ -24,7 +24,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - id: set-matrix
         name: list available perl versions
         run: |
@@ -43,7 +43,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - id: perl
         name: setup host perl
@@ -56,7 +56,7 @@ jobs:
           END_OF_PATH
           perl -e 'print "version=$^V\n"' >> "$GITHUB_OUTPUT"
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
         with:
           path: scripts/windows/local
           key: Windows-sanity-check-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/windows/cpanfile.snapshot') }}
@@ -87,9 +87,9 @@ jobs:
     env:
       PERL_VERSION: ${{ matrix.perl }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - uses: msys2/setup-msys2@v2
+      - uses: msys2/setup-msys2@61f9e5e925871ba6c9e3e8da24ede83ea27fa91f # v2.27.0
         with:
           install: make mingw-w64-x86_64-gcc nasm
       - name: install OpenSSL
@@ -120,7 +120,7 @@ jobs:
           reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpFolder /t REG_EXPAND_SZ /d "${{ runner.temp }}/perl-wer"
         shell: cmd
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
         with:
           path: scripts/windows/local
           key: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/windows/cpanfile.snapshot') }}
@@ -144,12 +144,12 @@ jobs:
       #     name: perl-${{ matrix.perl }}
       #     path: ${{ runner.temp }}/perl-${{ matrix.perl }}
       #   if: failure()
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: perl-${{ matrix.perl }}-wer
           path: ${{ runner.temp }}/perl-wer
         if: failure()
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
         with:
           python-version: "3.x"
         if: failure()
@@ -171,7 +171,7 @@ jobs:
           PERL_VERSION: ${{ matrix.perl }}
           GITHUB_TOKEN: ${{ github.token }}
 
-      - uses: actions/attest-build-provenance@v2
+      - uses: actions/attest-build-provenance@c074443f1aee8d4aeeae555aebba3282517141b2 # v2.2.3
         with:
           subject-path: ${{ runner.temp }}/*.zip
 
@@ -192,9 +192,9 @@ jobs:
       PERL_VERSION: ${{ matrix.perl }}
       PERL_MULTI_THREAD: "1"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - uses: msys2/setup-msys2@v2
+      - uses: msys2/setup-msys2@61f9e5e925871ba6c9e3e8da24ede83ea27fa91f # v2.27.0
         with:
           install: make mingw-w64-x86_64-gcc nasm
       - name: install OpenSSL
@@ -225,7 +225,7 @@ jobs:
           reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpFolder /t REG_EXPAND_SZ /d "${{ runner.temp }}/perl-wer"
         shell: cmd
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
         with:
           path: scripts/windows/local
           key: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/windows/cpanfile.snapshot') }}
@@ -243,12 +243,12 @@ jobs:
           # PERL_DL_DEBUG: "10" # enables debugging
         working-directory: ./scripts/windows
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: perl-${{ matrix.perl }}-wer
           path: ${{ runner.temp }}/perl-wer
         if: failure()
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
         with:
           python-version: "3.x"
         if: failure()
@@ -270,6 +270,6 @@ jobs:
           PERL_VERSION: ${{ matrix.perl }}
           GITHUB_TOKEN: ${{ github.token }}
 
-      - uses: actions/attest-build-provenance@v2
+      - uses: actions/attest-build-provenance@c074443f1aee8d4aeeae555aebba3282517141b2 # v2.2.3
         with:
           subject-path: ${{ runner.temp }}/*.zip

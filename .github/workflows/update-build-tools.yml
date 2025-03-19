@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: carton install
         shell: bash
@@ -25,7 +25,7 @@ jobs:
           ../../bin/carton install
         working-directory: ./scripts/linux
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: cpanfile.snapshot-linux
           path: scripts/linux/cpanfile.snapshot
@@ -36,7 +36,7 @@ jobs:
       - name: setup host perl
         run: perl -MConfig -E 'say "$Config{bin}"' >> "$GITHUB_PATH"
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: carton install
         shell: bash
@@ -45,7 +45,7 @@ jobs:
           ../../bin/carton install
         working-directory: ./scripts/darwin
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: cpanfile.snapshot-darwin
           path: scripts/darwin/cpanfile.snapshot
@@ -54,7 +54,7 @@ jobs:
     runs-on: windows-2019
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: setup host perl
         shell: bash
@@ -73,7 +73,7 @@ jobs:
         run: ..\..\bin\carton install
         working-directory: ./scripts/windows
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: cpanfile.snapshot-windows
           path: scripts/windows/cpanfile.snapshot
@@ -82,7 +82,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: carton install
         shell: bash
@@ -91,7 +91,7 @@ jobs:
           ../../bin/carton install
         working-directory: ./scripts/common
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: cpanfile.snapshot-common
           path: scripts/common/cpanfile.snapshot
@@ -110,7 +110,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
       - name: cleanup
@@ -121,22 +121,22 @@ jobs:
           rm -f scripts/common/cpanfile.snapshot
 
       - name: download cpanfile.snapshot for linux
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
         with:
           name: cpanfile.snapshot-linux
           path: scripts/linux
       - name: download cpanfile.snapshot for darwin
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
         with:
           name: cpanfile.snapshot-darwin
           path: scripts/darwin
       - name: download cpanfile.snapshot for windows
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
         with:
           name: cpanfile.snapshot-windows
           path: scripts/windows
       - name: download cpanfile.snapshot for any-platform
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
         with:
           name: cpanfile.snapshot-common
           path: scripts/common
@@ -148,10 +148,10 @@ jobs:
 
       - name: Generate token
         id: generate_token
-        uses: shogo82148/actions-github-app-token@v1
+        uses: shogo82148/actions-github-app-token@7ed70a12e0d77c0e3c946ef4d093e6d17f402935 # v1.0.3
 
       - name: commit
-        uses: shogo82148/actions-commit-and-create-pr@v1
+        uses: shogo82148/actions-commit-and-create-pr@b1322fe9da4037e9720e34ea221997cffcd3498d # v1.1.4
         with:
           github-token: ${{ steps.generate_token.outputs.token }}
           head-branch-prefix: "auto-update/build-tools-"

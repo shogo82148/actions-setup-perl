@@ -1,166 +1,207 @@
 [
     {
         "version": "5.40.0",
-        "release": "1"
+        "release": "1",
+        "sha256": "754f3e2a8e473dc68d1540c7802fb166a025f35ef18960c4564a31f8b5933907"
     },
     {
         "version": "5.38.2",
-        "release": "2"
+        "release": "2",
+        "sha256": "ea451686065d6338d7e4d4a04c9af49f17951d15aa4c2e19ab8cb56fa2373440"
     },
     {
         "version": "5.38.0",
-        "release": "1"
+        "release": "1",
+        "sha256": "ca6402a466939d5d658cc0d09a20dc59635ae68f6903a92a747a802539e40908"
     },
     {
         "version": "5.36.3",
-        "release": "1"
+        "release": "1",
+        "sha256": "e8602751f989bbeaf9e424f9189a9a8323e9f48e445e5d22ed0f6d795ef7855f"
     },
     {
         "version": "5.36.1",
-        "release": "1"
+        "release": "1",
+        "sha256": "96dc0fc440e3123dd8d58df3498e41caba20610f33ed67af937a61b296c4786c"
     },
     {
         "version": "5.32.1",
-        "release": "1"
+        "release": "1",
+        "sha256": "692646105b0f5e058198a852dc52a48f1cebcaf676d63bbdeae12f4eaee9bf5c"
     },
     {
         "version": "5.32.0",
-        "release": "1"
+        "release": "1",
+        "sha256": "3d83ba14b1cd007c656c86ab1c2197b812e709e3ed35fb3ddaebaf31e9cda13b"
     },
     {
         "version": "5.30.3",
-        "release": "1"
+        "release": "1",
+        "sha256": "f8b7c4d92522baeb098764c9e85bcc0261ff29eca50b083fb81d65829ba11937"
     },
     {
         "version": "5.30.2",
-        "release": "1"
+        "release": "1",
+        "sha256": "f51cb085ff2849597d815792fe4d579393614d76a53c9acbbb26a84471737288"
     },
     {
         "version": "5.30.1",
-        "release": "1"
+        "release": "1",
+        "sha256": "45d6bc187ab40f59ebd1a44d4014703c5cda23316ea7f2fb5eac182ea2972f0b"
     },
     {
         "version": "5.30.0",
-        "release": "1"
+        "release": "1",
+        "sha256": "9367a64ac1451b21804a224bb6235fe6848dd42f5fa1871583821ac3dfabf013"
     },
     {
         "version": "5.28.2",
-        "release": "1"
+        "release": "1",
+        "sha256": "9f2188e4af1b13111ac1185ba88b535d4b8f77fa5b8dbb5b9910666a475375e9"
     },
     {
         "version": "5.28.1",
-        "release": "1"
+        "release": "1",
+        "sha256": "935c95ba096fa11c4e1b5188732e3832d330a2a79e9882ab7ba8460ddbca810d"
     },
     {
         "version": "5.28.0",
-        "release": "1"
+        "release": "1",
+        "sha256": "dcdc5f4d54e6def73a472bbd4820aa7a22d336f6004fc35e180818f3d388c7e1"
     },
     {
         "version": "5.26.3",
-        "release": "1"
+        "release": "1",
+        "sha256": "4fd8aac9e3e8cf774dccc20471c58c408e1ca6dec9e94e5bbcf2a498d4bd88b5"
     },
     {
         "version": "5.26.2",
-        "release": "1"
+        "release": "1",
+        "sha256": "b3b8b210cf93c0a8cd2b6c48c2bb0b9a8a9d6be8bfad23b13f8bb1be73aaca1a"
     },
     {
         "version": "5.26.1",
-        "release": "1"
+        "release": "1",
+        "sha256": "1bb54d7f5e487ff468bf980dbfd9962fb9d83ff1f10ccde008e0bee1f1f5b6ce"
     },
     {
         "version": "5.26.0",
-        "release": "2"
+        "release": "2",
+        "sha256": "588ca52f8a95f4f953c0d78379ba565de229be8a48000dc477c2450d0a066eae"
     },
     {
         "version": "5.24.4",
-        "release": "1"
+        "release": "1",
+        "sha256": "0d78e7fb9e30dbb269592addf43fc86b755ad6d88db1f46fae158f9173460ab7"
     },
     {
         "version": "5.24.3",
-        "release": "1"
+        "release": "1",
+        "sha256": "6b124d3f33b0927577e04493e50554726a39983667dc10a61b47b305de68280c"
     },
     {
         "version": "5.24.2",
-        "release": "1"
+        "release": "1",
+        "sha256": "a9611622b8647a5eb1073e6dfae3452360e72341feb8635a839f0b4f3e15e68a"
     },
     {
         "version": "5.24.1",
-        "release": "1"
+        "release": "1",
+        "sha256": "e42a954f6d7081c98c8af76a87d01dbc8d16a8acbdcb709fb506755a78cdb2e5"
     },
     {
         "version": "5.24.0",
-        "release": "1"
+        "release": "1",
+        "sha256": "98330f799134f1693baa3c20cf4092dec957df89f7a26c7d0af3232b0141b388"
     },
     {
         "version": "5.22.3",
-        "release": "1"
+        "release": "1",
+        "sha256": "30517f3e5ceec81e5adf5f97260930b84e59f7fec1bb67706098b3a4b6f450ce"
     },
     {
         "version": "5.22.2",
-        "release": "1"
+        "release": "1",
+        "sha256": "901bf8081e20555d53d8bc917d9cfe997898b8cd89b10c00226a530b605ac076"
     },
     {
         "version": "5.22.1",
-        "release": "3"
+        "release": "3",
+        "sha256": "9290431a424b88322f4cba59a7fd4b7419529b20a0bd0095b12adf42cc68e2a1"
     },
     {
         "version": "5.22.0",
-        "release": "1"
+        "release": "1",
+        "sha256": "0d4fb239d057d2038ab34ee9c9759a298cd49352146bff3cb3d956c5f4db90d3"
     },
     {
         "version": "5.20.3",
-        "release": "3"
+        "release": "3",
+        "sha256": "5b1ded73642acf4518a148346daf084d48162cf0417968f08c3c45e7f9b7eb16"
     },
     {
         "version": "5.20.2",
-        "release": "1"
+        "release": "1",
+        "sha256": "2344b45c3a259dab5797e229f7dde0a87ef10db94d6de74661bc081d9dc4ea1e"
     },
     {
         "version": "5.20.1",
-        "release": "1"
+        "release": "1",
+        "sha256": "63c935f58daacd8e1238a9360ccf93d82eea115ddf73d753ef509fec494ad406"
     },
     {
         "version": "5.20.0",
-        "release": "1"
+        "release": "1",
+        "sha256": "021d75f9f42920c540e37be9dc64acbd7fdd0b207f8adfa3cb1e5fd1dc418c1b"
     },
     {
         "version": "5.18.4",
-        "release": "1"
+        "release": "1",
+        "sha256": "c7f9777c9ee8600c8e43e06d0a5a66eaa3f1a16ae04906b3abc9c23548a620ed"
     },
     {
         "version": "5.18.2",
-        "release": "1"
+        "release": "1",
+        "sha256": "cbcd147bf37412ce6067fb49cd2a5784b0b9a292283ea65ea373f78fbb9ed9af"
     },
     {
         "version": "5.18.1",
-        "release": "1"
+        "release": "1",
+        "sha256": "af14fa9ad192ef39cf5872442afc5e1fd0fd052e7ee552c21b13a9036f4edd59"
     },
     {
         "version": "5.18.0",
-        "release": "1"
+        "release": "1",
+        "sha256": "279012a1ccc9462342384b93171dd1737312c2da97631287fa7631965a5be4fa"
     },
     {
         "version": "5.16.2",
-        "release": "2"
+        "release": "2",
+        "sha256": "c1f506f7e12cdf7c1d1a17602a2f653e1d1061208dbf8592813db20ffc98364d"
     },
     {
         "version": "5.16.1",
-        "release": "1"
+        "release": "1",
+        "sha256": "414e9be9463d3ff912067594bcc43b82fb1d75431befbd1175e9d69d6931ccbc"
     },
     {
         "version": "5.16.0",
-        "release": "1"
+        "release": "1",
+        "sha256": "9f0f11897c2ac918e19af386261810c7564475d2ebd0cd3faf4da656d9359bef"
     },
     {
         "version": "5.14.4",
-        "release": "1"
+        "release": "1",
+        "sha256": "f1843fcd272534aa842ba77a84fcc4db1bddccf1ede704fbe6936087fb2fc7d2"
     },
     {
         "version": "5.14.3",
-        "release": "1"
+        "release": "1",
+        "sha256": "5351acd1849d38514a69c9c7593a8274a06effaf792bda0f8e3240f237b91ab0"
     },
     {
         "version": "5.14.2",
-        "release": "1"
+        "release": "1",
+        "sha256": "ab897d3cad56adc5d0d5e4c19c041c1fe5e7191483e6eb9ce3908ae25df74619"
     }
 ]

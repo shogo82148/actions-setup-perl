@@ -70677,6 +70677,7 @@ const path = __importStar(__nccwpck_require__(6928));
 const semver = __importStar(__nccwpck_require__(2088));
 const fs = __importStar(__nccwpck_require__(9896));
 const tcp = __importStar(__nccwpck_require__(4992));
+const crypto = __importStar(__nccwpck_require__(6982));
 const utils_1 = __nccwpck_require__(1798);
 // NOTE:
 // I don't know why, but 5.18.3 is missing.
@@ -70753,7 +70754,13 @@ async function acquirePerl(version) {
     const downloadUrl = `https://github.com/shogo82148/strawberry-perl-releases/releases/download/${version.version}.${version.release}/strawberry-perl-${version.version}.${version.release}-64bit-portable.zip`;
     let downloadPath = null;
     try {
+        core.info(`Downloading ${downloadUrl}`);
         downloadPath = await tc.downloadTool(downloadUrl);
+        core.debug(`Verify download ${downloadPath}`);
+        const actual = await calculateDigest(downloadPath, "sha256");
+        if (actual.toLowerCase() !== version.sha256.toLowerCase()) {
+            throw new Error(`SHA256 mismatch: expected ${version.sha256}, got ${actual}`);
+        }
     }
     catch (error) {
         if (error instanceof Error) {
@@ -70766,6 +70773,16 @@ async function acquirePerl(version) {
     }
     const extPath = await tc.extractZip(downloadPath);
     return await tcp.cacheDir(extPath, "strawberry-perl", version.version);
+}
+async function calculateDigest(filename, algorithm) {
+    const hash = await new Promise((resolve, reject) => {
+        const hash = crypto.createHash(algorithm);
+        const stream = fs.createReadStream(filename);
+        stream.on("data", (data) => hash.update(data));
+        stream.on("end", () => resolve(`${algorithm}:${hash.digest("hex")}`));
+        stream.on("error", (err) => reject(err));
+    });
+    return hash;
 }
 
 

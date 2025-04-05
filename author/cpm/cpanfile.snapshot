@@ -36,10 +36,10 @@ DISTRIBUTIONS
       Perl::Strip 0
       Pod::Usage 1.33
       perl 5.008001
-  App-cpm-0.997021
-    pathname: S/SK/SKAJI/App-cpm-0.997021.tar.gz
+  App-cpm-0.997022
+    pathname: S/SK/SKAJI/App-cpm-0.997022.tar.gz
     provides:
-      App::cpm 0.997021
+      App::cpm 0.997022
       App::cpm::CLI undef
       App::cpm::CircularDependency undef
       App::cpm::DistNotation undef
@@ -74,6 +74,7 @@ DISTRIBUTIONS
       CPAN::Meta::Requirements 2.130
       CPAN::Meta::YAML 0
       Command::Runner 0.100
+      Darwin::InitObjC 0
       ExtUtils::Install 2.20
       ExtUtils::InstallPaths 0.002
       File::Copy::Recursive 0
@@ -272,6 +273,13 @@ DISTRIBUTIONS
       String::ShellQuote 0
       Win32::ShellQuote 0
       perl 5.008001
+  Darwin-InitObjC-0.001
+    pathname: S/SK/SKAJI/Darwin-InitObjC-0.001.tar.gz
+    provides:
+      Darwin::InitObjC 0.001
+    requirements:
+      Module::Build::Tiny 0.051
+      perl v5.8.1
   Devel-GlobalDestruction-0.14
     pathname: H/HA/HAARG/Devel-GlobalDestruction-0.14.tar.gz
     provides:

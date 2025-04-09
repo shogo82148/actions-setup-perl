@@ -65,7 +65,7 @@ jobs:
           PERL5LIB: ${{ github.workspace }}/scripts/lib
 
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs:
       - list
       - sanity-check
@@ -124,7 +124,7 @@ jobs:
           subject-path: ${{ runner.temp }}/*.tar.zstd
 
   build-multi-thread:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs:
       - sanity-check
       - list

@@ -82,11 +82,11 @@ This option is available on Windows and falls back to the default customized bin
 
 The action works for [GitHub-hosted runners](https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners).
 
-| Operating System | Supported Versions                             |
-| ---------------- | ---------------------------------------------- |
-| Linux            | `ubuntu-20.04`, `ubuntu-22.04`, `ubuntu-24.04` |
-| macOS            | `macos-13`, `macos-14`, `macos-15`             |
-| Windows          | `windows-2019`, `windows-2022`                 |
+| Operating System | Supported Versions                 |
+| ---------------- | ---------------------------------- |
+| Linux            | `ubuntu-22.04`, `ubuntu-24.04`     |
+| macOS            | `macos-13`, `macos-14`, `macos-15` |
+| Windows          | `windows-2019`, `windows-2022`     |
 
 [Self-hosted runners](https://docs.github.com/en/actions/hosting-your-own-runners) are not supported.
 

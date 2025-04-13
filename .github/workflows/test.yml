@@ -45,6 +45,8 @@ jobs:
       - run: npm run build
       - run: npm run package
       - run: npm test
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - id: setup-perl
         name: use the action

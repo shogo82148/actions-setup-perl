@@ -2,6 +2,10 @@ name: "Setup Perl environment"
 description: "Setup a Perl environment and add it to the PATH"
 author: "Ichinose Shogo"
 inputs:
+  github-token:
+    description: |
+      The GitHub token to use for verifying the perl binary.
+    default: "${{ secrets.GITHUB_TOKEN }}"
   perl-version:
     description: "The Perl version to download (if necessary) and use. Example: 5.30.0"
     required: false
@@ -55,11 +59,11 @@ outputs:
       It contains useful information to use as the cache key,
       e.g. the platform, the version of perl, the compiler option for building perl.
   cache-hit:
-    description: 'A boolean value to indicate if a cache was hit'
+    description: "A boolean value to indicate if a cache was hit"
 runs:
   using: "node20"
   main: "dist/setup/index.js"
-  post: 'dist/cache-save/index.js'
+  post: "dist/cache-save/index.js"
   post-if: success()
 branding:
   icon: "play"

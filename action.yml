@@ -5,7 +5,7 @@ inputs:
   github-token:
     description: |
       The GitHub token to use for verifying the perl binary.
-    default: "${{ secrets.GITHUB_TOKEN }}"
+    default: "${{ github.token }}"
   perl-version:
     description: "The Perl version to download (if necessary) and use. Example: 5.30.0"
     required: false

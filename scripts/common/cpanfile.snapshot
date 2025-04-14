@@ -74,10 +74,10 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 6.52
       Types::Serialiser 0
       common::sense 0
-  Mozilla-CA-20240924
-    pathname: L/LW/LWP/Mozilla-CA-20240924.tar.gz
+  Mozilla-CA-20250202
+    pathname: L/LW/LWP/Mozilla-CA-20250202.tar.gz
     provides:
-      Mozilla::CA 20240924
+      Mozilla::CA 20250202
     requirements:
       ExtUtils::MakeMaker 0
   Net-SSLeay-1.94
@@ -131,11 +131,11 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.008001
-  YAML-LibYAML-v0.902.0
-    pathname: T/TI/TINITA/YAML-LibYAML-v0.902.0.tar.gz
+  YAML-LibYAML-v0.903.0
+    pathname: T/TI/TINITA/YAML-LibYAML-v0.903.0.tar.gz
     provides:
-      YAML::LibYAML v0.902.0
-      YAML::XS v0.902.0
+      YAML::LibYAML v0.903.0
+      YAML::XS v0.903.0
     requirements:
       B::Deparse 0
       Exporter 0

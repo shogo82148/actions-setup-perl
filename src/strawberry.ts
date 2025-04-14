@@ -4,11 +4,13 @@ import * as path from "path";
 import * as semver from "semver";
 import * as fs from "fs";
 import * as tcp from "./tool-cache-port";
+import * as crypto from "crypto";
 import { getPackagePath } from "./utils";
 
 interface PerlVersion {
   version: string;
   release: string;
+  sha256: string;
 }
 
 export interface Result {
@@ -104,7 +106,14 @@ async function acquirePerl(version: PerlVersion): Promise<string> {
   const downloadUrl = `https://github.com/shogo82148/strawberry-perl-releases/releases/download/${version.version}.${version.release}/strawberry-perl-${version.version}.${version.release}-64bit-portable.zip`;
   let downloadPath: string | null = null;
   try {
+    core.info(`Downloading ${downloadUrl}`);
     downloadPath = await tc.downloadTool(downloadUrl);
+
+    core.debug(`Verify download ${downloadPath}`);
+    const actual = await calculateDigest(downloadPath, "sha256");
+    if (actual.toLowerCase() !== version.sha256.toLowerCase()) {
+      throw new Error(`SHA256 mismatch: expected ${version.sha256}, got ${actual}`);
+    }
   } catch (error) {
     if (error instanceof Error) {
       core.debug(error.message);
@@ -117,4 +126,15 @@ async function acquirePerl(version: PerlVersion): Promise<string> {
 
   const extPath = await tc.extractZip(downloadPath);
   return await tcp.cacheDir(extPath, "strawberry-perl", version.version);
+}
+
+async function calculateDigest(filename: string, algorithm: string): Promise<string> {
+  const hash = await new Promise<string>((resolve, reject) => {
+    const hash = crypto.createHash(algorithm);
+    const stream = fs.createReadStream(filename);
+    stream.on("data", (data) => hash.update(data));
+    stream.on("end", () => resolve(hash.digest("hex")));
+    stream.on("error", (err) => reject(err));
+  });
+  return hash;
 }

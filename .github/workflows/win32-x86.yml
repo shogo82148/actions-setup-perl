@@ -1,0 +1,275 @@
+name: build on windows
+
+on:
+  pull_request:
+    paths:
+      - "versions/win32.json"
+      - "scripts/windows/**"
+      - "scripts/lib/Devel/**"
+      - ".github/workflows/win32-x86.yml"
+      - ".github/build-openssl-win32.sh"
+  push:
+    branches:
+      - "releases/*"
+  workflow_dispatch:
+    inputs:
+      perl-versions:
+        description: perl versions to build (JSON Array)
+        required: false
+        default: ""
+
+jobs:
+  list:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - id: set-matrix
+        name: list available perl versions
+        run: |
+          if [ -n "$PERL_VERSIONS" ]; then
+            echo "matrix=$(printenv PERL_VERSIONS | jq -c '{perl: .}')" >> "$GITHUB_OUTPUT"
+          else
+            echo "matrix=$(<versions/win32.json jq -c '{perl: .}')" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          PERL_VERSIONS: ${{ github.event.inputs.perl-versions }}
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+
+  sanity-check:
+    runs-on: windows-2022
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - id: perl
+        name: setup host perl
+        shell: bash
+        run: |
+          cat << 'END_OF_PATH' >> "$GITHUB_PATH"
+          C:\strawberry\c\bin
+          C:\strawberry\perl\site\bin
+          C:\strawberry\perl\bin
+          END_OF_PATH
+          perl -e 'print "version=$^V\n"' >> "$GITHUB_OUTPUT"
+
+      - uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: scripts/windows/local
+          key: Windows-sanity-check-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/windows/cpanfile.snapshot') }}
+          restore-keys: Windows-sanity-check-perl-${{ steps.perl.outputs.version }}-
+      - name: sanity check
+        run: |
+          ../../bin/carton install --deployment
+          ../../bin/carton exec perl -c build.pl
+          ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/GitHubActions.pm
+          ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/MinGW.pm
+          ../../bin/carton exec perl -I../lib -c ../lib/Devel/PatchPerl/Plugin/MinGWGNUmakefile.pm
+        working-directory: ./scripts/windows
+        shell: cmd
+
+  build:
+    runs-on: windows-2022
+    needs:
+      - list
+      - sanity-check
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix: ${{fromJson(needs.list.outputs.matrix)}}
+    env:
+      PERL_VERSION: ${{ matrix.perl }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - uses: msys2/setup-msys2@61f9e5e925871ba6c9e3e8da24ede83ea27fa91f # v2.27.0
+        with:
+          install: make mingw-w64-x86_64-gcc nasm
+      - name: install OpenSSL
+        run: .github/build-openssl-win32.sh
+        shell: "msys2 {0}"
+
+      - id: perl
+        name: setup host perl
+        shell: bash
+        run: |
+          cat << 'END_OF_PATH' >> "$GITHUB_PATH"
+          C:\strawberry\c\bin
+          C:\strawberry\perl\site\bin
+          C:\strawberry\perl\bin
+          END_OF_PATH
+          perl -e 'print "version=$^V\n"' >> "$GITHUB_OUTPUT"
+      - name: Host perl -V
+        run: perl -V
+      - name: gcc --version
+        run: gcc --version
+
+      # https://support.microsoft.com/en-us/help/254649/overview-of-memory-dump-file-options-for-windows
+      # https://docs.microsoft.com/en-us/windows/win32/wer/collecting-user-mode-dumps
+      - name: "enable Windows Error Reporting, WER"
+        run: |
+          mkdir "${{ runner.temp }}/perl-wer"
+          reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpType /t REG_DWORD /d 2
+          reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpFolder /t REG_EXPAND_SZ /d "${{ runner.temp }}/perl-wer"
+        shell: cmd
+
+      - uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: scripts/windows/local
+          key: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/windows/cpanfile.snapshot') }}
+          restore-keys: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-
+      - name: carton install
+        shell: cmd
+        run: ../../bin/carton install
+        working-directory: ./scripts/windows
+
+      - name: build
+        shell: cmd
+        run: perl build.pl
+        env:
+          PERL5LIB: ${{ github.workspace }}/scripts/windows/local/lib/perl5
+          # PERL_DL_DEBUG: "10" # enables debugging
+        working-directory: ./scripts/windows
+
+      # for debugging
+      # - uses: actions/upload-artifact@v4
+      #   with:
+      #     name: perl-${{ matrix.perl }}
+      #     path: ${{ runner.temp }}/perl-${{ matrix.perl }}
+      #   if: failure()
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: perl-${{ matrix.perl }}-wer
+          path: ${{ runner.temp }}/perl-wer
+        if: failure()
+      - uses: actions/setup-python@8d9ed9ac5c53483de85588cdf95a591a75ab9f55 # v5.5.0
+        with:
+          python-version: "3.x"
+        if: failure()
+      - run: |
+          pip install minidump
+          minidump --all ./*.dmp
+        if: failure()
+        shell: bash
+        working-directory: ${{ runner.temp }}/perl-wer
+
+      - name: upload
+        shell: bash
+        run: |
+          ACTIONS_VERSION=v$(< "$GITHUB_WORKSPACE/package.json" jq -r .version)
+          TEMP_DIR=$(cygpath "$RUNNER_TEMP")
+          mv "$TEMP_DIR/perl.zip" "$TEMP_DIR/perl-$PERL_VERSION-win32-x64.zip"
+          gh release upload --clobber "$ACTIONS_VERSION" "$TEMP_DIR/perl-$PERL_VERSION-win32-x64.zip"
+        env:
+          PERL_VERSION: ${{ matrix.perl }}
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - uses: actions/attest-build-provenance@c074443f1aee8d4aeeae555aebba3282517141b2 # v2.2.3
+        with:
+          subject-path: ${{ runner.temp }}/*.zip
+
+  build-multi-thread:
+    runs-on: windows-2022
+    needs:
+      - sanity-check
+      - list
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix: ${{fromJson(needs.list.outputs.matrix)}}
+    env:
+      PERL_VERSION: ${{ matrix.perl }}
+      PERL_MULTI_THREAD: "1"
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - uses: msys2/setup-msys2@61f9e5e925871ba6c9e3e8da24ede83ea27fa91f # v2.27.0
+        with:
+          install: make mingw-w64-x86_64-gcc nasm
+      - name: install OpenSSL
+        run: .github/build-openssl-win32.sh
+        shell: "msys2 {0}"
+
+      - id: perl
+        name: setup host perl
+        shell: bash
+        run: |
+          cat << 'END_OF_PATH' >> "$GITHUB_PATH"
+          C:\strawberry\c\bin
+          C:\strawberry\perl\site\bin
+          C:\strawberry\perl\bin
+          END_OF_PATH
+          perl -e 'print "version=$^V\n"' >> "$GITHUB_OUTPUT"
+      - name: Host perl -V
+        run: perl -V
+      - name: gcc --version
+        run: gcc --version
+
+      # https://support.microsoft.com/en-us/help/254649/overview-of-memory-dump-file-options-for-windows
+      # https://docs.microsoft.com/en-us/windows/win32/wer/collecting-user-mode-dumps
+      - name: "enable Windows Error Reporting, WER"
+        run: |
+          mkdir "${{ runner.temp }}/perl-wer"
+          reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpType /t REG_DWORD /d 2
+          reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpFolder /t REG_EXPAND_SZ /d "${{ runner.temp }}/perl-wer"
+        shell: cmd
+
+      - uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: scripts/windows/local
+          key: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/windows/cpanfile.snapshot') }}
+          restore-keys: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-
+      - name: carton install
+        shell: cmd
+        run: ../../bin/carton install
+        working-directory: ./scripts/windows
+
+      - name: build
+        shell: cmd
+        run: perl build.pl
+        env:
+          PERL5LIB: ${{ github.workspace }}/scripts/windows/local/lib/perl5
+          # PERL_DL_DEBUG: "10" # enables debugging
+        working-directory: ./scripts/windows
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: perl-${{ matrix.perl }}-wer
+          path: ${{ runner.temp }}/perl-wer
+        if: failure()
+      - uses: actions/setup-python@8d9ed9ac5c53483de85588cdf95a591a75ab9f55 # v5.5.0
+        with:
+          python-version: "3.x"
+        if: failure()
+      - run: |
+          pip install minidump
+          minidump --all ./*.dmp
+        if: failure()
+        shell: bash
+        working-directory: ${{ runner.temp }}/perl-wer
+
+      - name: upload
+        shell: bash
+        run: |
+          ACTIONS_VERSION=v$(< "$GITHUB_WORKSPACE/package.json" jq -r .version)
+          TEMP_DIR=$(cygpath "$RUNNER_TEMP")
+          mv "$TEMP_DIR/perl.zip" "$TEMP_DIR/perl-$PERL_VERSION-win32-x64-multi-thread.zip"
+          gh release upload --clobber "$ACTIONS_VERSION" "$TEMP_DIR/perl-$PERL_VERSION-win32-x64-multi-thread.zip"
+        env:
+          PERL_VERSION: ${{ matrix.perl }}
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - uses: actions/attest-build-provenance@c074443f1aee8d4aeeae555aebba3282517141b2 # v2.2.3
+        with:
+          subject-path: ${{ runner.temp }}/*.zip

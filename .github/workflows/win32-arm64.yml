@@ -6,7 +6,7 @@ on:
       - "versions/win32.json"
       - "scripts/windows/**"
       - "scripts/lib/Devel/**"
-      - ".github/workflows/win32.yml"
+      - ".github/workflows/win32-arm64.yml"
       - ".github/build-openssl-win32.sh"
   push:
     branches:
@@ -39,7 +39,7 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
 
   sanity-check:
-    runs-on: windows-2022
+    runs-on: windows-11-arm
     permissions:
       contents: read
     steps:
@@ -72,7 +72,7 @@ jobs:
         shell: cmd
 
   build:
-    runs-on: windows-2022
+    runs-on: windows-11-arm
     needs:
       - list
       - sanity-check
@@ -165,8 +165,8 @@ jobs:
         run: |
           ACTIONS_VERSION=v$(< "$GITHUB_WORKSPACE/package.json" jq -r .version)
           TEMP_DIR=$(cygpath "$RUNNER_TEMP")
-          mv "$TEMP_DIR/perl.zip" "$TEMP_DIR/perl-$PERL_VERSION-win32-x64.zip"
-          gh release upload --clobber "$ACTIONS_VERSION" "$TEMP_DIR/perl-$PERL_VERSION-win32-x64.zip"
+          mv "$TEMP_DIR/perl.zip" "$TEMP_DIR/perl-$PERL_VERSION-win32-arm64.zip"
+          gh release upload --clobber "$ACTIONS_VERSION" "$TEMP_DIR/perl-$PERL_VERSION-win32-arm64.zip"
         env:
           PERL_VERSION: ${{ matrix.perl }}
           GITHUB_TOKEN: ${{ github.token }}
@@ -176,7 +176,7 @@ jobs:
           subject-path: ${{ runner.temp }}/*.zip
 
   build-multi-thread:
-    runs-on: windows-2022
+    runs-on: windows-11-arm
     needs:
       - sanity-check
       - list
@@ -264,8 +264,8 @@ jobs:
         run: |
           ACTIONS_VERSION=v$(< "$GITHUB_WORKSPACE/package.json" jq -r .version)
           TEMP_DIR=$(cygpath "$RUNNER_TEMP")
-          mv "$TEMP_DIR/perl.zip" "$TEMP_DIR/perl-$PERL_VERSION-win32-x64-multi-thread.zip"
-          gh release upload --clobber "$ACTIONS_VERSION" "$TEMP_DIR/perl-$PERL_VERSION-win32-x64-multi-thread.zip"
+          mv "$TEMP_DIR/perl.zip" "$TEMP_DIR/perl-$PERL_VERSION-win32-arm64-multi-thread.zip"
+          gh release upload --clobber "$ACTIONS_VERSION" "$TEMP_DIR/perl-$PERL_VERSION-win32-arm64-multi-thread.zip"
         env:
           PERL_VERSION: ${{ matrix.perl }}
           GITHUB_TOKEN: ${{ github.token }}

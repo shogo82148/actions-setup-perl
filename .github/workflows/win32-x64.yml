@@ -1,4 +1,4 @@
-name: build on windows
+name: build on win32-x64
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
       - "versions/win32.json"
       - "scripts/windows/**"
       - "scripts/lib/Devel/**"
-      - ".github/workflows/win32-x86.yml"
+      - ".github/workflows/win32-x64.yml"
       - ".github/build-openssl-win32.sh"
   push:
     branches:

@@ -1,4 +1,4 @@
-name: build on windows
+name: build on win32-arm64
 
 on:
   pull_request:

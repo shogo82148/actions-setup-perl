@@ -121,22 +121,22 @@ jobs:
           rm -f scripts/common/cpanfile.snapshot
 
       - name: download cpanfile.snapshot for linux
-        uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: cpanfile.snapshot-linux
           path: scripts/linux
       - name: download cpanfile.snapshot for darwin
-        uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: cpanfile.snapshot-darwin
           path: scripts/darwin
       - name: download cpanfile.snapshot for windows
-        uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: cpanfile.snapshot-windows
           path: scripts/windows
       - name: download cpanfile.snapshot for any-platform
-        uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: cpanfile.snapshot-common
           path: scripts/common

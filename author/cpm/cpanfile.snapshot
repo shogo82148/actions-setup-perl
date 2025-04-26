@@ -258,18 +258,17 @@ DISTRIBUTIONS
       Clone 0.47
     requirements:
       ExtUtils::MakeMaker 0
-  Command-Runner-0.200
-    pathname: S/SK/SKAJI/Command-Runner-0.200.tar.gz
+  Command-Runner-0.201
+    pathname: S/SK/SKAJI/Command-Runner-0.201.tar.gz
     provides:
-      Command::Runner 0.200
-      Command::Runner::Format undef
+      Command::Runner 0.201
       Command::Runner::LineBuffer undef
       Command::Runner::Quote undef
       Command::Runner::Timeout undef
     requirements:
       Capture::Tiny 0
       File::pushd 0
-      Module::Build::Tiny 0.034
+      Module::Build::Tiny 0.051
       String::ShellQuote 0
       Win32::ShellQuote 0
       perl 5.008001

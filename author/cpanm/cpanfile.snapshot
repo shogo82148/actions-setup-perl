@@ -418,10 +418,10 @@ DISTRIBUTIONS
       File::Spec 0
       Symbol 0
       Test::More 0.47
-  File-Fetch-1.04
-    pathname: B/BI/BINGOS/File-Fetch-1.04.tar.gz
+  File-Fetch-1.08
+    pathname: B/BI/BINGOS/File-Fetch-1.08.tar.gz
     provides:
-      File::Fetch 1.04
+      File::Fetch 1.08
     requirements:
       ExtUtils::MakeMaker 0
       File::Basename 0

@@ -409,22 +409,22 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  ExtUtils-ParseXS-3.55
-    pathname: L/LE/LEONT/ExtUtils-ParseXS-3.55.tar.gz
+  ExtUtils-ParseXS-3.57
+    pathname: L/LE/LEONT/ExtUtils-ParseXS-3.57.tar.gz
     provides:
-      ExtUtils::ParseXS 3.55
-      ExtUtils::ParseXS::Constants 3.55
-      ExtUtils::ParseXS::CountLines 3.55
-      ExtUtils::ParseXS::Eval 3.55
-      ExtUtils::ParseXS::Node 3.55
-      ExtUtils::ParseXS::Node::Param 3.55
-      ExtUtils::ParseXS::Node::Sig 3.55
-      ExtUtils::ParseXS::Utilities 3.55
-      ExtUtils::Typemaps 3.55
-      ExtUtils::Typemaps::Cmd 3.55
-      ExtUtils::Typemaps::InputMap 3.55
-      ExtUtils::Typemaps::OutputMap 3.55
-      ExtUtils::Typemaps::Type 3.55
+      ExtUtils::ParseXS 3.57
+      ExtUtils::ParseXS::Constants 3.57
+      ExtUtils::ParseXS::CountLines 3.57
+      ExtUtils::ParseXS::Eval 3.57
+      ExtUtils::ParseXS::Node 3.57
+      ExtUtils::ParseXS::Node::Param 3.57
+      ExtUtils::ParseXS::Node::Sig 3.57
+      ExtUtils::ParseXS::Utilities 3.57
+      ExtUtils::Typemaps 3.57
+      ExtUtils::Typemaps::Cmd 3.57
+      ExtUtils::Typemaps::InputMap 3.57
+      ExtUtils::Typemaps::OutputMap 3.57
+      ExtUtils::Typemaps::Type 3.57
     requirements:
       Carp 0
       Cwd 0

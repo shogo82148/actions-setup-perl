@@ -4,6 +4,9 @@
 
 ![social preview](social-preview.png)
 
+Perl 5 camel from [perl-assets](https://github.com/metacpan/perl-assets/), 
+license [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/)
+
 This action sets by perl environment for use in actions by:
 
 - optionally downloading and caching a version of perl

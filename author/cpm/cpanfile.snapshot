@@ -742,10 +742,10 @@ DISTRIBUTIONS
       Menlo 1.9018
       perl 5.008001
       version 0.9905
-  Module-Build-Tiny-0.051
-    pathname: L/LE/LEONT/Module-Build-Tiny-0.051.tar.gz
+  Module-Build-Tiny-0.052
+    pathname: L/LE/LEONT/Module-Build-Tiny-0.052.tar.gz
     provides:
-      Module::Build::Tiny 0.051
+      Module::Build::Tiny 0.052
     requirements:
       CPAN::Meta 0
       DynaLoader 0

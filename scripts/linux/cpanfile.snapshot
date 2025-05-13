@@ -137,11 +137,11 @@ DISTRIBUTIONS
       if 0
       perl 5.006
       strict 0
-  Perl-Build-1.33
-    pathname: S/SK/SKAJI/Perl-Build-1.33.tar.gz
+  Perl-Build-1.34
+    pathname: S/SK/SKAJI/Perl-Build-1.34.tar.gz
     provides:
-      Perl::Build 1.33
-      Perl::Build::Built 1.33
+      Perl::Build 1.34
+      Perl::Build::Built 1.34
     requirements:
       CPAN::Perl::Releases 3.58
       CPAN::Perl::Releases::MetaCPAN 0.006

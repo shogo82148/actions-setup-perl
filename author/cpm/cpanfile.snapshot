@@ -955,13 +955,13 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       version 0.77
-  Parallel-Pipes-0.200
-    pathname: S/SK/SKAJI/Parallel-Pipes-0.200.tar.gz
+  Parallel-Pipes-0.201
+    pathname: S/SK/SKAJI/Parallel-Pipes-0.201.tar.gz
     provides:
-      Parallel::Pipes 0.200
-      Parallel::Pipes::App 0.200
+      Parallel::Pipes 0.201
+      Parallel::Pipes::App 0.201
     requirements:
-      Module::Build::Tiny 0.034
+      Module::Build::Tiny 0.052
       perl 5.008001
   Params-Check-0.38
     pathname: B/BI/BINGOS/Params-Check-0.38.tar.gz

@@ -573,32 +573,32 @@ DISTRIBUTIONS
       common::sense 3.75
     requirements:
       ExtUtils::MakeMaker 0
-  libwww-perl-6.78
-    pathname: O/OA/OALDERS/libwww-perl-6.78.tar.gz
+  libwww-perl-6.79
+    pathname: O/OA/OALDERS/libwww-perl-6.79.tar.gz
     provides:
-      LWP 6.78
-      LWP::Authen::Basic 6.78
-      LWP::Authen::Digest 6.78
-      LWP::Authen::Ntlm 6.78
-      LWP::ConnCache 6.78
-      LWP::Debug 6.78
-      LWP::Debug::TraceHTTP 6.78
-      LWP::DebugFile 6.78
-      LWP::MemberMixin 6.78
-      LWP::Protocol 6.78
-      LWP::Protocol::cpan 6.78
-      LWP::Protocol::data 6.78
-      LWP::Protocol::file 6.78
-      LWP::Protocol::ftp 6.78
-      LWP::Protocol::gopher 6.78
-      LWP::Protocol::http 6.78
-      LWP::Protocol::loopback 6.78
-      LWP::Protocol::mailto 6.78
-      LWP::Protocol::nntp 6.78
-      LWP::Protocol::nogo 6.78
-      LWP::RobotUA 6.78
-      LWP::Simple 6.78
-      LWP::UserAgent 6.78
+      LWP 6.79
+      LWP::Authen::Basic 6.79
+      LWP::Authen::Digest 6.79
+      LWP::Authen::Ntlm 6.79
+      LWP::ConnCache 6.79
+      LWP::Debug 6.79
+      LWP::Debug::TraceHTTP 6.79
+      LWP::DebugFile 6.79
+      LWP::MemberMixin 6.79
+      LWP::Protocol 6.79
+      LWP::Protocol::cpan 6.79
+      LWP::Protocol::data 6.79
+      LWP::Protocol::file 6.79
+      LWP::Protocol::ftp 6.79
+      LWP::Protocol::gopher 6.79
+      LWP::Protocol::http 6.79
+      LWP::Protocol::loopback 6.79
+      LWP::Protocol::mailto 6.79
+      LWP::Protocol::nntp 6.79
+      LWP::Protocol::nogo 6.79
+      LWP::RobotUA 6.79
+      LWP::Simple 6.79
+      LWP::UserAgent 6.79
     requirements:
       Digest::MD5 0
       Encode 2.12

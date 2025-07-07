@@ -4,7 +4,7 @@
 
 ![social preview](social-preview.png)
 
-Perl 5 camel from [perl-assets](https://github.com/metacpan/perl-assets/), 
+Perl 5 camel from [perl-assets](https://github.com/metacpan/perl-assets/),
 license [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/)
 
 This action sets by perl environment for use in actions by:
@@ -89,7 +89,7 @@ The action works for [GitHub-hosted runners](https://docs.github.com/en/actions/
 | ---------------- | ---------------------------------- |
 | Linux            | `ubuntu-22.04`, `ubuntu-24.04`     |
 | macOS            | `macos-13`, `macos-14`, `macos-15` |
-| Windows          | `windows-2019`, `windows-2022`     |
+| Windows          | `windows-2022`, `windows-2025`     |
 
 [Self-hosted runners](https://docs.github.com/en/actions/hosting-your-own-runners) are not supported.
 

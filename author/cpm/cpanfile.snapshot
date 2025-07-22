@@ -479,22 +479,64 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  ExtUtils-ParseXS-3.57
-    pathname: L/LE/LEONT/ExtUtils-ParseXS-3.57.tar.gz
+  ExtUtils-ParseXS-3.58
+    pathname: L/LE/LEONT/ExtUtils-ParseXS-3.58.tar.gz
     provides:
-      ExtUtils::ParseXS 3.57
-      ExtUtils::ParseXS::Constants 3.57
-      ExtUtils::ParseXS::CountLines 3.57
-      ExtUtils::ParseXS::Eval 3.57
-      ExtUtils::ParseXS::Node 3.57
-      ExtUtils::ParseXS::Node::Param 3.57
-      ExtUtils::ParseXS::Node::Sig 3.57
-      ExtUtils::ParseXS::Utilities 3.57
-      ExtUtils::Typemaps 3.57
-      ExtUtils::Typemaps::Cmd 3.57
-      ExtUtils::Typemaps::InputMap 3.57
-      ExtUtils::Typemaps::OutputMap 3.57
-      ExtUtils::Typemaps::Type 3.57
+      ExtUtils::ParseXS 3.58
+      ExtUtils::ParseXS::Constants 3.58
+      ExtUtils::ParseXS::CountLines 3.58
+      ExtUtils::ParseXS::Eval 3.58
+      ExtUtils::ParseXS::Node 3.58
+      ExtUtils::ParseXS::Node::ALIAS 3.58
+      ExtUtils::ParseXS::Node::ALIAS_line 3.58
+      ExtUtils::ParseXS::Node::ATTRS 3.58
+      ExtUtils::ParseXS::Node::CASE 3.58
+      ExtUtils::ParseXS::Node::CLEANUP 3.58
+      ExtUtils::ParseXS::Node::CODE 3.58
+      ExtUtils::ParseXS::Node::C_ARGS 3.58
+      ExtUtils::ParseXS::Node::EXPORT_XSUB_SYMBOLS 3.58
+      ExtUtils::ParseXS::Node::INIT 3.58
+      ExtUtils::ParseXS::Node::INPUT 3.58
+      ExtUtils::ParseXS::Node::INPUT_line 3.58
+      ExtUtils::ParseXS::Node::INTERFACE 3.58
+      ExtUtils::ParseXS::Node::INTERFACE_MACRO 3.58
+      ExtUtils::ParseXS::Node::IO_Param 3.58
+      ExtUtils::ParseXS::Node::NOT_IMPLEMENTED_YET 3.58
+      ExtUtils::ParseXS::Node::OUTPUT 3.58
+      ExtUtils::ParseXS::Node::OUTPUT_line 3.58
+      ExtUtils::ParseXS::Node::OVERLOAD 3.58
+      ExtUtils::ParseXS::Node::POSTCALL 3.58
+      ExtUtils::ParseXS::Node::PPCODE 3.58
+      ExtUtils::ParseXS::Node::PREINIT 3.58
+      ExtUtils::ParseXS::Node::PROTOTYPE 3.58
+      ExtUtils::ParseXS::Node::PROTOTYPES 3.58
+      ExtUtils::ParseXS::Node::Param 3.58
+      ExtUtils::ParseXS::Node::Params 3.58
+      ExtUtils::ParseXS::Node::ReturnType 3.58
+      ExtUtils::ParseXS::Node::SCOPE 3.58
+      ExtUtils::ParseXS::Node::VERSIONCHECK 3.58
+      ExtUtils::ParseXS::Node::autocall 3.58
+      ExtUtils::ParseXS::Node::cleanup_part 3.58
+      ExtUtils::ParseXS::Node::code_part 3.58
+      ExtUtils::ParseXS::Node::codeblock 3.58
+      ExtUtils::ParseXS::Node::enable 3.58
+      ExtUtils::ParseXS::Node::init_part 3.58
+      ExtUtils::ParseXS::Node::input_part 3.58
+      ExtUtils::ParseXS::Node::keyline 3.58
+      ExtUtils::ParseXS::Node::keylines 3.58
+      ExtUtils::ParseXS::Node::multiline 3.58
+      ExtUtils::ParseXS::Node::multiline_merged 3.58
+      ExtUtils::ParseXS::Node::oneline 3.58
+      ExtUtils::ParseXS::Node::output_part 3.58
+      ExtUtils::ParseXS::Node::xbody 3.58
+      ExtUtils::ParseXS::Node::xsub 3.58
+      ExtUtils::ParseXS::Node::xsub_decl 3.58
+      ExtUtils::ParseXS::Utilities 3.58
+      ExtUtils::Typemaps 3.58
+      ExtUtils::Typemaps::Cmd 3.58
+      ExtUtils::Typemaps::InputMap 3.58
+      ExtUtils::Typemaps::OutputMap 3.58
+      ExtUtils::Typemaps::Type 3.58
     requirements:
       Carp 0
       Cwd 0
@@ -780,11 +822,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20250702
-    pathname: B/BI/BINGOS/Module-CoreList-5.20250702.tar.gz
+  Module-CoreList-5.20250720
+    pathname: B/BI/BINGOS/Module-CoreList-5.20250720.tar.gz
     provides:
-      Module::CoreList 5.20250702
-      Module::CoreList::Utils 5.20250702
+      Module::CoreList 5.20250720
+      Module::CoreList::Utils 5.20250720
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0

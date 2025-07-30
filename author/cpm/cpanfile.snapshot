@@ -1096,14 +1096,14 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Scalar::Util 0
       perl 5.006
-  Scalar-List-Utils-1.69
-    pathname: P/PE/PEVANS/Scalar-List-Utils-1.69.tar.gz
+  Scalar-List-Utils-1.70
+    pathname: P/PE/PEVANS/Scalar-List-Utils-1.70.tar.gz
     provides:
-      List::Util 1.69
-      List::Util::XS 1.69
-      Scalar::List::Utils 1.69
-      Scalar::Util 1.69
-      Sub::Util 1.69
+      List::Util 1.70
+      List::Util::XS 1.70
+      Scalar::List::Utils 1.70
+      Scalar::Util 1.70
+      Sub::Util 1.70
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006

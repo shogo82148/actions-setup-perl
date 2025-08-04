@@ -14,6 +14,7 @@ use Try::Tiny;
 use File::pushd qw[pushd];
 use File::Spec;
 use File::Path qw/make_path remove_tree/;
+use version 0.77 ();
 use Carp qw/croak/;
 use Actions::Core qw/warning info group set_failed/;
 use Actions::Core::Command qw(issue_command);

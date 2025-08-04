@@ -133,12 +133,9 @@ sub _ge {
 
 sub _patch_win32_perllib {
     # from https://github.com/Perl/perl5/pull/23178
-		print STDERR "Patching win32/perllib.c\n";
     _patch(<<'PATCH');
-diff --git a/win32/perllib.c b/win32/perllib.c
-index 1200a351bea9..efae2d817b8d 100644
---- a/win32/perllib.c
-+++ b/win32/perllib.c
+--- win32/perllib.c
++++ win32/perllib.c
 @@ -48,9 +48,17 @@ xs_init(pTHX)
  
  #include "perlhost.h"

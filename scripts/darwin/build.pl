@@ -7,7 +7,9 @@ use 5.026001;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 use Try::Tiny;
+use Devel::PatchPerl;
 use Perl::Build;
+use File::pushd qw[pushd];
 use File::Spec;
 use File::Path qw/make_path/;
 use version 0.77 ();
@@ -17,6 +19,36 @@ use Actions::Core::Command qw(issue_command);
 
 my $version = $ENV{PERL_VERSION};
 my $thread = $ENV{PERL_MULTI_THREAD};
+
+if (version->parse("v$version") >= version->parse("v5.42.0")) {
+    # monkey patch Devel::PatchPerl to allow patching perl source
+    # https://github.com/bingos/devel-patchperl/issues/64
+    no warnings 'redefine';
+    no strict 'refs';
+    *Devel::PatchPerl::patch_source = sub {
+        my $vers = shift;
+        $vers = shift if eval { $vers->isa('Devel::PatchPerl') };
+        my $source = shift || '.';
+        if ( !$vers ) {
+            $vers = Devel::PatchPerl::_determine_version($source);
+            if ( $vers ) {
+                warn "Auto-guessed '$vers'\n";
+            }
+            else {
+                die "You didn't provide a perl version and I don't appear to be in a perl source tree\n";
+            }
+        }
+
+        $source = File::Spec->rel2abs($source);
+
+        my $patch_exe = Devel::PatchPerl::_can_run('gpatch') || Devel::PatchPerl::_can_run('patch');
+        {
+            my $dir = pushd( $source );
+            Devel::PatchPerl::_process_plugin( version => $vers, source => $source, patchexe => $patch_exe );
+        }
+    };
+}
+
 my $tmpdir = File::Spec->rel2abs($ENV{RUNNER_TEMP} || "tmp");
 make_path($tmpdir);
 my $runner_tool_cache = $tmpdir;

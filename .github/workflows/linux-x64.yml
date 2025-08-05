@@ -65,7 +65,7 @@ jobs:
           PERL5LIB: ${{ github.workspace }}/scripts/lib
 
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs:
       - list
       - sanity-check
@@ -119,12 +119,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-      - uses: actions/attest-build-provenance@c074443f1aee8d4aeeae555aebba3282517141b2 # v2.2.3
+      - uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2.4.0
         with:
           subject-path: ${{ runner.temp }}/*.tar.zstd
 
   build-multi-thread:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs:
       - sanity-check
       - list
@@ -179,6 +179,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-      - uses: actions/attest-build-provenance@c074443f1aee8d4aeeae555aebba3282517141b2 # v2.2.3
+      - uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2.4.0
         with:
           subject-path: ${{ runner.temp }}/*.tar.zstd

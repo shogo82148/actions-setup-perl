@@ -4,6 +4,9 @@
 
 ![social preview](social-preview.png)
 
+Perl 5 camel from [perl-assets](https://github.com/metacpan/perl-assets/),
+license [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/)
+
 This action sets by perl environment for use in actions by:
 
 - optionally downloading and caching a version of perl
@@ -82,11 +85,11 @@ This option is available on Windows and falls back to the default customized bin
 
 The action works for [GitHub-hosted runners](https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners).
 
-| Operating System | Supported Versions                             |
-| ---------------- | ---------------------------------------------- |
-| Linux            | `ubuntu-20.04`, `ubuntu-22.04`, `ubuntu-24.04` |
-| macOS            | `macos-13`, `macos-14`, `macos-15`             |
-| Windows          | `windows-2019`, `windows-2022`                 |
+| Operating System | Supported Versions                 |
+| ---------------- | ---------------------------------- |
+| Linux            | `ubuntu-22.04`, `ubuntu-24.04`     |
+| macOS            | `macos-13`, `macos-14`, `macos-15` |
+| Windows          | `windows-2022`, `windows-2025`     |
 
 [Self-hosted runners](https://docs.github.com/en/actions/hosting-your-own-runners) are not supported.
 

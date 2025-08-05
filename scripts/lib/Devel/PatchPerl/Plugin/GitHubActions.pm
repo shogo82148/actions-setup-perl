@@ -22,6 +22,14 @@ use Devel::PatchPerl::Plugin::MinGW;
 my @patch = (
     {
         perl => [
+            qr/^5\.42\.0$/,
+        ],
+        subs => [
+            [ \&_patch_win32_perllib ],
+        ],
+    },
+    {
+        perl => [
             qr/^5\.10\.0$/,
             qr/^5\.8\.[1-9]$/,
         ],
@@ -121,6 +129,55 @@ sub _patch_patchlevel {
 sub _ge {
     my ($v1, $v2) = @_;
     return version->parse("v$v1") >= version->parse("v$v2");
+}
+
+sub _patch_win32_perllib {
+    # from https://github.com/Perl/perl5/pull/23178
+    _patch(<<'PATCH');
+--- win32/perllib.c
++++ win32/perllib.c
+@@ -48,9 +48,17 @@ xs_init(pTHX)
+ 
+ #include "perlhost.h"
+ 
++#define PANIC_THREAD_ID_MSG "panic: thread id mismatch\n"
++
++#define panic_thread_id() \
++    (void)WriteFile(GetStdHandle(STD_ERROR_HANDLE),         \
++        PANIC_THREAD_ID_MSG, sizeof(PANIC_THREAD_ID_MSG)-1, \
++        NULL, NULL)
++
+ void
+ win32_checkTLS(PerlInterpreter *host_perl)
+ {
++#ifdef USE_ITHREADS
+ /* GCurThdId() is lightweight, but b/c of the ctrl-c/signals sometimes firing
+   in other random WinOS threads, that make the TIDs go out of sync.
+   This isn't always an error, although high chance of a SEGV in the next
+@@ -62,11 +70,20 @@ win32_checkTLS(PerlInterpreter *host_perl)
+     if(tid != host_perl->Isys_intern.cur_tid) {
+         dTHX; /* heavyweight */
+         if (host_perl != my_perl) {
+-            int *nowhere = NULL;
++            panic_thread_id();
++            DebugBreak();
+             abort();
+         }
+         host_perl->Isys_intern.cur_tid = tid;
+     }
++#elif defined(PERL_MULTIPLICITY)
++    dTHX;
++    if (host_perl != my_perl) {
++        panic_thread_id();
++        DebugBreak();
++        abort();
++    }
++#endif
+ }
+ 
+ EXTERN_C void
+PATCH
+    return;
 }
 
 sub _patch_db_file {

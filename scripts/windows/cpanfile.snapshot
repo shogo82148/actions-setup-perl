@@ -239,18 +239,18 @@ DISTRIBUTIONS
       Exporter 5.57
       ExtUtils::MakeMaker 0
       perl 5.008
-  IO-Socket-SSL-2.089
-    pathname: S/SU/SULLR/IO-Socket-SSL-2.089.tar.gz
+  IO-Socket-SSL-2.095
+    pathname: S/SU/SULLR/IO-Socket-SSL-2.095.tar.gz
     provides:
-      IO::Socket::SSL 2.089
+      IO::Socket::SSL 2.095
       IO::Socket::SSL::Intercept 2.056
-      IO::Socket::SSL::OCSP_Cache 2.089
-      IO::Socket::SSL::OCSP_Resolver 2.089
+      IO::Socket::SSL::OCSP_Cache 2.095
+      IO::Socket::SSL::OCSP_Resolver 2.095
       IO::Socket::SSL::PublicSuffix undef
-      IO::Socket::SSL::SSL_Context 2.089
-      IO::Socket::SSL::SSL_HANDLE 2.089
-      IO::Socket::SSL::Session_Cache 2.089
-      IO::Socket::SSL::Trace 2.089
+      IO::Socket::SSL::SSL_Context 2.095
+      IO::Socket::SSL::SSL_HANDLE 2.095
+      IO::Socket::SSL::Session_Cache 2.095
+      IO::Socket::SSL::Trace 2.095
       IO::Socket::SSL::Utils 2.015
     requirements:
       ExtUtils::MakeMaker 0
@@ -382,10 +382,10 @@ DISTRIBUTIONS
       if 0
       perl 5.006
       strict 0
-  Mozilla-CA-20250202
-    pathname: L/LW/LWP/Mozilla-CA-20250202.tar.gz
+  Mozilla-CA-20250602
+    pathname: L/LW/LWP/Mozilla-CA-20250602.tar.gz
     provides:
-      Mozilla::CA 20250202
+      Mozilla::CA 20250602
     requirements:
       ExtUtils::MakeMaker 0
   Net-HTTP-6.23
@@ -473,62 +473,63 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       common::sense 0
-  URI-5.31
-    pathname: O/OA/OALDERS/URI-5.31.tar.gz
+  URI-5.32
+    pathname: O/OA/OALDERS/URI-5.32.tar.gz
     provides:
-      URI 5.31
-      URI::Escape 5.31
-      URI::Heuristic 5.31
-      URI::IRI 5.31
-      URI::QueryParam 5.31
-      URI::Split 5.31
-      URI::URL 5.31
-      URI::WithBase 5.31
-      URI::data 5.31
-      URI::file 5.31
-      URI::file::Base 5.31
-      URI::file::FAT 5.31
-      URI::file::Mac 5.31
-      URI::file::OS2 5.31
-      URI::file::QNX 5.31
-      URI::file::Unix 5.31
-      URI::file::Win32 5.31
-      URI::ftp 5.31
-      URI::ftpes 5.31
-      URI::ftps 5.31
-      URI::geo 5.31
-      URI::gopher 5.31
-      URI::http 5.31
-      URI::https 5.31
-      URI::icap 5.31
-      URI::icaps 5.31
-      URI::irc 5.31
-      URI::ircs 5.31
-      URI::ldap 5.31
-      URI::ldapi 5.31
-      URI::ldaps 5.31
-      URI::mailto 5.31
-      URI::mms 5.31
-      URI::news 5.31
-      URI::nntp 5.31
-      URI::nntps 5.31
-      URI::otpauth 5.31
-      URI::pop 5.31
-      URI::rlogin 5.31
-      URI::rsync 5.31
-      URI::rtsp 5.31
-      URI::rtspu 5.31
-      URI::scp 5.31
-      URI::sftp 5.31
-      URI::sip 5.31
-      URI::sips 5.31
-      URI::snews 5.31
-      URI::ssh 5.31
-      URI::telnet 5.31
-      URI::tn3270 5.31
-      URI::urn 5.31
-      URI::urn::isbn 5.31
-      URI::urn::oid 5.31
+      URI 5.32
+      URI::Escape 5.32
+      URI::Heuristic 5.32
+      URI::IRI 5.32
+      URI::QueryParam 5.32
+      URI::Split 5.32
+      URI::URL 5.32
+      URI::WithBase 5.32
+      URI::data 5.32
+      URI::file 5.32
+      URI::file::Base 5.32
+      URI::file::FAT 5.32
+      URI::file::Mac 5.32
+      URI::file::OS2 5.32
+      URI::file::QNX 5.32
+      URI::file::Unix 5.32
+      URI::file::Win32 5.32
+      URI::ftp 5.32
+      URI::ftpes 5.32
+      URI::ftps 5.32
+      URI::geo 5.32
+      URI::gopher 5.32
+      URI::http 5.32
+      URI::https 5.32
+      URI::icap 5.32
+      URI::icaps 5.32
+      URI::irc 5.32
+      URI::ircs 5.32
+      URI::ldap 5.32
+      URI::ldapi 5.32
+      URI::ldaps 5.32
+      URI::mailto 5.32
+      URI::mms 5.32
+      URI::news 5.32
+      URI::nntp 5.32
+      URI::nntps 5.32
+      URI::otpauth 5.32
+      URI::pop 5.32
+      URI::rlogin 5.32
+      URI::rsync 5.32
+      URI::rtsp 5.32
+      URI::rtspu 5.32
+      URI::scp 5.32
+      URI::sftp 5.32
+      URI::sip 5.32
+      URI::sips 5.32
+      URI::smb 5.32
+      URI::snews 5.32
+      URI::ssh 5.32
+      URI::telnet 5.32
+      URI::tn3270 5.32
+      URI::urn 5.32
+      URI::urn::isbn 5.32
+      URI::urn::oid 5.32
     requirements:
       Carp 0
       Cwd 0
@@ -572,32 +573,32 @@ DISTRIBUTIONS
       common::sense 3.75
     requirements:
       ExtUtils::MakeMaker 0
-  libwww-perl-6.78
-    pathname: O/OA/OALDERS/libwww-perl-6.78.tar.gz
+  libwww-perl-6.79
+    pathname: O/OA/OALDERS/libwww-perl-6.79.tar.gz
     provides:
-      LWP 6.78
-      LWP::Authen::Basic 6.78
-      LWP::Authen::Digest 6.78
-      LWP::Authen::Ntlm 6.78
-      LWP::ConnCache 6.78
-      LWP::Debug 6.78
-      LWP::Debug::TraceHTTP 6.78
-      LWP::DebugFile 6.78
-      LWP::MemberMixin 6.78
-      LWP::Protocol 6.78
-      LWP::Protocol::cpan 6.78
-      LWP::Protocol::data 6.78
-      LWP::Protocol::file 6.78
-      LWP::Protocol::ftp 6.78
-      LWP::Protocol::gopher 6.78
-      LWP::Protocol::http 6.78
-      LWP::Protocol::loopback 6.78
-      LWP::Protocol::mailto 6.78
-      LWP::Protocol::nntp 6.78
-      LWP::Protocol::nogo 6.78
-      LWP::RobotUA 6.78
-      LWP::Simple 6.78
-      LWP::UserAgent 6.78
+      LWP 6.79
+      LWP::Authen::Basic 6.79
+      LWP::Authen::Digest 6.79
+      LWP::Authen::Ntlm 6.79
+      LWP::ConnCache 6.79
+      LWP::Debug 6.79
+      LWP::Debug::TraceHTTP 6.79
+      LWP::DebugFile 6.79
+      LWP::MemberMixin 6.79
+      LWP::Protocol 6.79
+      LWP::Protocol::cpan 6.79
+      LWP::Protocol::data 6.79
+      LWP::Protocol::file 6.79
+      LWP::Protocol::ftp 6.79
+      LWP::Protocol::gopher 6.79
+      LWP::Protocol::http 6.79
+      LWP::Protocol::loopback 6.79
+      LWP::Protocol::mailto 6.79
+      LWP::Protocol::nntp 6.79
+      LWP::Protocol::nogo 6.79
+      LWP::RobotUA 6.79
+      LWP::Simple 6.79
+      LWP::UserAgent 6.79
     requirements:
       Digest::MD5 0
       Encode 2.12

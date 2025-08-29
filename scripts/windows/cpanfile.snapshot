@@ -388,13 +388,13 @@ DISTRIBUTIONS
       Mozilla::CA 20250602
     requirements:
       ExtUtils::MakeMaker 0
-  Net-HTTP-6.23
-    pathname: O/OA/OALDERS/Net-HTTP-6.23.tar.gz
+  Net-HTTP-6.24
+    pathname: O/OA/OALDERS/Net-HTTP-6.24.tar.gz
     provides:
-      Net::HTTP 6.23
-      Net::HTTP::Methods 6.23
-      Net::HTTP::NB 6.23
-      Net::HTTPS 6.23
+      Net::HTTP 6.24
+      Net::HTTP::Methods 6.24
+      Net::HTTP::NB 6.24
+      Net::HTTPS 6.24
     requirements:
       Carp 0
       Compress::Raw::Zlib 0

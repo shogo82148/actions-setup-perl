@@ -382,10 +382,10 @@ DISTRIBUTIONS
       File::Temp 0
       Test::More 0.47
       perl 5.006
-  ExtUtils-InstallPaths-0.014
-    pathname: L/LE/LEONT/ExtUtils-InstallPaths-0.014.tar.gz
+  ExtUtils-InstallPaths-0.015
+    pathname: L/LE/LEONT/ExtUtils-InstallPaths-0.015.tar.gz
     provides:
-      ExtUtils::InstallPaths 0.014
+      ExtUtils::InstallPaths 0.015
     requirements:
       Carp 0
       ExtUtils::Config 0.009
@@ -479,64 +479,64 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  ExtUtils-ParseXS-3.58
-    pathname: L/LE/LEONT/ExtUtils-ParseXS-3.58.tar.gz
+  ExtUtils-ParseXS-3.60
+    pathname: L/LE/LEONT/ExtUtils-ParseXS-3.60.tar.gz
     provides:
-      ExtUtils::ParseXS 3.58
-      ExtUtils::ParseXS::Constants 3.58
-      ExtUtils::ParseXS::CountLines 3.58
-      ExtUtils::ParseXS::Eval 3.58
-      ExtUtils::ParseXS::Node 3.58
-      ExtUtils::ParseXS::Node::ALIAS 3.58
-      ExtUtils::ParseXS::Node::ALIAS_line 3.58
-      ExtUtils::ParseXS::Node::ATTRS 3.58
-      ExtUtils::ParseXS::Node::CASE 3.58
-      ExtUtils::ParseXS::Node::CLEANUP 3.58
-      ExtUtils::ParseXS::Node::CODE 3.58
-      ExtUtils::ParseXS::Node::C_ARGS 3.58
-      ExtUtils::ParseXS::Node::EXPORT_XSUB_SYMBOLS 3.58
-      ExtUtils::ParseXS::Node::INIT 3.58
-      ExtUtils::ParseXS::Node::INPUT 3.58
-      ExtUtils::ParseXS::Node::INPUT_line 3.58
-      ExtUtils::ParseXS::Node::INTERFACE 3.58
-      ExtUtils::ParseXS::Node::INTERFACE_MACRO 3.58
-      ExtUtils::ParseXS::Node::IO_Param 3.58
-      ExtUtils::ParseXS::Node::NOT_IMPLEMENTED_YET 3.58
-      ExtUtils::ParseXS::Node::OUTPUT 3.58
-      ExtUtils::ParseXS::Node::OUTPUT_line 3.58
-      ExtUtils::ParseXS::Node::OVERLOAD 3.58
-      ExtUtils::ParseXS::Node::POSTCALL 3.58
-      ExtUtils::ParseXS::Node::PPCODE 3.58
-      ExtUtils::ParseXS::Node::PREINIT 3.58
-      ExtUtils::ParseXS::Node::PROTOTYPE 3.58
-      ExtUtils::ParseXS::Node::PROTOTYPES 3.58
-      ExtUtils::ParseXS::Node::Param 3.58
-      ExtUtils::ParseXS::Node::Params 3.58
-      ExtUtils::ParseXS::Node::ReturnType 3.58
-      ExtUtils::ParseXS::Node::SCOPE 3.58
-      ExtUtils::ParseXS::Node::VERSIONCHECK 3.58
-      ExtUtils::ParseXS::Node::autocall 3.58
-      ExtUtils::ParseXS::Node::cleanup_part 3.58
-      ExtUtils::ParseXS::Node::code_part 3.58
-      ExtUtils::ParseXS::Node::codeblock 3.58
-      ExtUtils::ParseXS::Node::enable 3.58
-      ExtUtils::ParseXS::Node::init_part 3.58
-      ExtUtils::ParseXS::Node::input_part 3.58
-      ExtUtils::ParseXS::Node::keyline 3.58
-      ExtUtils::ParseXS::Node::keylines 3.58
-      ExtUtils::ParseXS::Node::multiline 3.58
-      ExtUtils::ParseXS::Node::multiline_merged 3.58
-      ExtUtils::ParseXS::Node::oneline 3.58
-      ExtUtils::ParseXS::Node::output_part 3.58
-      ExtUtils::ParseXS::Node::xbody 3.58
-      ExtUtils::ParseXS::Node::xsub 3.58
-      ExtUtils::ParseXS::Node::xsub_decl 3.58
-      ExtUtils::ParseXS::Utilities 3.58
-      ExtUtils::Typemaps 3.58
-      ExtUtils::Typemaps::Cmd 3.58
-      ExtUtils::Typemaps::InputMap 3.58
-      ExtUtils::Typemaps::OutputMap 3.58
-      ExtUtils::Typemaps::Type 3.58
+      ExtUtils::ParseXS 3.60
+      ExtUtils::ParseXS::Constants 3.60
+      ExtUtils::ParseXS::CountLines 3.60
+      ExtUtils::ParseXS::Eval 3.60
+      ExtUtils::ParseXS::Node 3.60
+      ExtUtils::ParseXS::Node::ALIAS 3.60
+      ExtUtils::ParseXS::Node::ALIAS_line 3.60
+      ExtUtils::ParseXS::Node::ATTRS 3.60
+      ExtUtils::ParseXS::Node::CASE 3.60
+      ExtUtils::ParseXS::Node::CLEANUP 3.60
+      ExtUtils::ParseXS::Node::CODE 3.60
+      ExtUtils::ParseXS::Node::C_ARGS 3.60
+      ExtUtils::ParseXS::Node::EXPORT_XSUB_SYMBOLS 3.60
+      ExtUtils::ParseXS::Node::INIT 3.60
+      ExtUtils::ParseXS::Node::INPUT 3.60
+      ExtUtils::ParseXS::Node::INPUT_line 3.60
+      ExtUtils::ParseXS::Node::INTERFACE 3.60
+      ExtUtils::ParseXS::Node::INTERFACE_MACRO 3.60
+      ExtUtils::ParseXS::Node::IO_Param 3.60
+      ExtUtils::ParseXS::Node::NOT_IMPLEMENTED_YET 3.60
+      ExtUtils::ParseXS::Node::OUTPUT 3.60
+      ExtUtils::ParseXS::Node::OUTPUT_line 3.60
+      ExtUtils::ParseXS::Node::OVERLOAD 3.60
+      ExtUtils::ParseXS::Node::POSTCALL 3.60
+      ExtUtils::ParseXS::Node::PPCODE 3.60
+      ExtUtils::ParseXS::Node::PREINIT 3.60
+      ExtUtils::ParseXS::Node::PROTOTYPE 3.60
+      ExtUtils::ParseXS::Node::PROTOTYPES 3.60
+      ExtUtils::ParseXS::Node::Param 3.60
+      ExtUtils::ParseXS::Node::Params 3.60
+      ExtUtils::ParseXS::Node::ReturnType 3.60
+      ExtUtils::ParseXS::Node::SCOPE 3.60
+      ExtUtils::ParseXS::Node::VERSIONCHECK 3.60
+      ExtUtils::ParseXS::Node::autocall 3.60
+      ExtUtils::ParseXS::Node::cleanup_part 3.60
+      ExtUtils::ParseXS::Node::code_part 3.60
+      ExtUtils::ParseXS::Node::codeblock 3.60
+      ExtUtils::ParseXS::Node::enable 3.60
+      ExtUtils::ParseXS::Node::init_part 3.60
+      ExtUtils::ParseXS::Node::input_part 3.60
+      ExtUtils::ParseXS::Node::keyline 3.60
+      ExtUtils::ParseXS::Node::keylines 3.60
+      ExtUtils::ParseXS::Node::multiline 3.60
+      ExtUtils::ParseXS::Node::multiline_merged 3.60
+      ExtUtils::ParseXS::Node::oneline 3.60
+      ExtUtils::ParseXS::Node::output_part 3.60
+      ExtUtils::ParseXS::Node::xbody 3.60
+      ExtUtils::ParseXS::Node::xsub 3.60
+      ExtUtils::ParseXS::Node::xsub_decl 3.60
+      ExtUtils::ParseXS::Utilities 3.60
+      ExtUtils::Typemaps 3.60
+      ExtUtils::Typemaps::Cmd 3.60
+      ExtUtils::Typemaps::InputMap 3.60
+      ExtUtils::Typemaps::OutputMap 3.60
+      ExtUtils::Typemaps::Type 3.60
     requirements:
       Carp 0
       Cwd 0
@@ -583,10 +583,10 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       File::Basename 0
       File::Spec 0
-  File-Temp-0.2311
-    pathname: E/ET/ETHER/File-Temp-0.2311.tar.gz
+  File-Temp-0.2312
+    pathname: E/ET/ETHER/File-Temp-0.2312.tar.gz
     provides:
-      File::Temp 0.2311
+      File::Temp 0.2312
     requirements:
       Carp 0
       Carp::Heavy 0
@@ -822,11 +822,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20250803
-    pathname: B/BI/BINGOS/Module-CoreList-5.20250803.tar.gz
+  Module-CoreList-5.20250923
+    pathname: B/BI/BINGOS/Module-CoreList-5.20250923.tar.gz
     provides:
-      Module::CoreList 5.20250803
-      Module::CoreList::Utils 5.20250803
+      Module::CoreList 5.20250923
+      Module::CoreList::Utils 5.20250923
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0
@@ -1146,16 +1146,16 @@ DISTRIBUTIONS
       Scalar::Util 1.14
       perl 5.006
       strict 0
-  Term-Table-0.024
-    pathname: E/EX/EXODIST/Term-Table-0.024.tar.gz
+  Term-Table-0.025
+    pathname: E/EX/EXODIST/Term-Table-0.025.tar.gz
     provides:
-      Term::Table 0.024
-      Term::Table::Cell 0.024
-      Term::Table::CellStack 0.024
-      Term::Table::HashBase 0.024
-      Term::Table::LineBreak 0.024
-      Term::Table::Spacer 0.024
-      Term::Table::Util 0.024
+      Term::Table 0.025
+      Term::Table::Cell 0.025
+      Term::Table::CellStack 0.025
+      Term::Table::HashBase 0.025
+      Term::Table::LineBreak 0.025
+      Term::Table::Spacer 0.025
+      Term::Table::Util 0.025
     requirements:
       Carp 0
       ExtUtils::MakeMaker 0
@@ -1440,63 +1440,66 @@ DISTRIBUTIONS
       Tie::Handle 0
       perl 5.006
       strict 0
-  URI-5.32
-    pathname: O/OA/OALDERS/URI-5.32.tar.gz
+  URI-5.34
+    pathname: O/OA/OALDERS/URI-5.34.tar.gz
     provides:
-      URI 5.32
-      URI::Escape 5.32
-      URI::Heuristic 5.32
-      URI::IRI 5.32
-      URI::QueryParam 5.32
-      URI::Split 5.32
-      URI::URL 5.32
-      URI::WithBase 5.32
-      URI::data 5.32
-      URI::file 5.32
-      URI::file::Base 5.32
-      URI::file::FAT 5.32
-      URI::file::Mac 5.32
-      URI::file::OS2 5.32
-      URI::file::QNX 5.32
-      URI::file::Unix 5.32
-      URI::file::Win32 5.32
-      URI::ftp 5.32
-      URI::ftpes 5.32
-      URI::ftps 5.32
-      URI::geo 5.32
-      URI::gopher 5.32
-      URI::http 5.32
-      URI::https 5.32
-      URI::icap 5.32
-      URI::icaps 5.32
-      URI::irc 5.32
-      URI::ircs 5.32
-      URI::ldap 5.32
-      URI::ldapi 5.32
-      URI::ldaps 5.32
-      URI::mailto 5.32
-      URI::mms 5.32
-      URI::news 5.32
-      URI::nntp 5.32
-      URI::nntps 5.32
-      URI::otpauth 5.32
-      URI::pop 5.32
-      URI::rlogin 5.32
-      URI::rsync 5.32
-      URI::rtsp 5.32
-      URI::rtspu 5.32
-      URI::scp 5.32
-      URI::sftp 5.32
-      URI::sip 5.32
-      URI::sips 5.32
-      URI::smb 5.32
-      URI::snews 5.32
-      URI::ssh 5.32
-      URI::telnet 5.32
-      URI::tn3270 5.32
-      URI::urn 5.32
-      URI::urn::isbn 5.32
-      URI::urn::oid 5.32
+      URI 5.34
+      URI::Escape 5.34
+      URI::Heuristic 5.34
+      URI::IRI 5.34
+      URI::QueryParam 5.34
+      URI::Split 5.34
+      URI::URL 5.34
+      URI::WithBase 5.34
+      URI::data 5.34
+      URI::file 5.34
+      URI::file::Base 5.34
+      URI::file::FAT 5.34
+      URI::file::Mac 5.34
+      URI::file::OS2 5.34
+      URI::file::QNX 5.34
+      URI::file::Unix 5.34
+      URI::file::Win32 5.34
+      URI::ftp 5.34
+      URI::ftpes 5.34
+      URI::ftps 5.34
+      URI::geo 5.34
+      URI::gopher 5.34
+      URI::http 5.34
+      URI::https 5.34
+      URI::icap 5.34
+      URI::icaps 5.34
+      URI::irc 5.34
+      URI::ircs 5.34
+      URI::ldap 5.34
+      URI::ldapi 5.34
+      URI::ldaps 5.34
+      URI::mailto 5.34
+      URI::mms 5.34
+      URI::news 5.34
+      URI::nntp 5.34
+      URI::nntps 5.34
+      URI::otpauth 5.34
+      URI::pop 5.34
+      URI::rlogin 5.34
+      URI::rsync 5.34
+      URI::rtsp 5.34
+      URI::rtspu 5.34
+      URI::scp 5.34
+      URI::sftp 5.34
+      URI::sip 5.34
+      URI::sips 5.34
+      URI::smb 5.34
+      URI::smtp 5.34
+      URI::snews 5.34
+      URI::ssh 5.34
+      URI::telnet 5.34
+      URI::tn3270 5.34
+      URI::urn 5.34
+      URI::urn::isbn 5.34
+      URI::urn::oid 5.34
+      URI::ws 5.34
+      URI::wss 5.34
     requirements:
       Carp 0
       Cwd 0

@@ -1,5 +1,10 @@
 [
     {
+        "version": "5.42.0",
+        "release": "1",
+        "sha256": "a1cde185656cf307b51670eed69f648b9eff15b5c518cb136e027c628e650b71"
+    },
+    {
         "version": "5.40.0",
         "release": "1",
         "sha256": "754f3e2a8e473dc68d1540c7802fb166a025f35ef18960c4564a31f8b5933907"

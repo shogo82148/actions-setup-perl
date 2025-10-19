@@ -31,20 +31,20 @@ jobs:
           - cpm
           - carton
         perl:
-          - "5.40" # latest version of Perl 5
+          - "5.42" # latest version of Perl 5
           - "5.8"
         distribution:
           - "default"
         include:
-          - perl: "5.40"
+          - perl: "5.42" # latest version of Perl 5
             os: "windows-latest"
             installer: "cpanm"
             distribution: "strawberry"
-          - perl: "5.40"
+          - perl: "5.42" # latest version of Perl 5
             os: "windows-latest"
             installer: "cpm"
             distribution: "strawberry"
-          - perl: "5.40"
+          - perl: "5.42" # latest version of Perl 5
             os: "windows-latest"
             installer: "carton"
             distribution: "strawberry"

@@ -29,7 +29,7 @@
     "@actions/exec": "^1.1.1",
     "@actions/tool-cache": "^2.0.2",
     "@shogo82148/attestation-verify": "^0.2.0",
-    "semver": "^7.7.2"
+    "semver": "^7.7.3"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",

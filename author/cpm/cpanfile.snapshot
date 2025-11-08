@@ -36,10 +36,11 @@ DISTRIBUTIONS
       Perl::Strip 0
       Pod::Usage 1.33
       perl 5.008001
-  App-cpm-0.997024
-    pathname: S/SK/SKAJI/App-cpm-0.997024.tar.gz
+  App-cpm-0.998000
+    pathname: S/SK/SKAJI/App-cpm-0.998000.tar.gz
     provides:
-      App::cpm 0.997024
+      App::cpm 0.998000
+      App::cpm::Builder::Static undef
       App::cpm::CLI undef
       App::cpm::CircularDependency undef
       App::cpm::DistNotation undef
@@ -63,7 +64,6 @@ DISTRIBUTIONS
       App::cpm::Util undef
       App::cpm::Worker undef
       App::cpm::Worker::Installer undef
-      App::cpm::Worker::Installer::Menlo undef
       App::cpm::Worker::Installer::Prebuilt undef
       App::cpm::Worker::Resolver undef
       App::cpm::version undef
@@ -75,21 +75,25 @@ DISTRIBUTIONS
       CPAN::Meta::YAML 0
       Command::Runner 0.100
       Darwin::InitObjC 0
+      ExtUtils::Config 0
+      ExtUtils::Helpers 0
       ExtUtils::Install 2.20
       ExtUtils::InstallPaths 0.002
       File::Copy::Recursive 0
+      File::Temp 0.2304
+      File::Which 0
       File::pushd 0
+      Getopt::Long 2.36
       HTTP::Tinyish 0.12
       JSON::PP 2.27300
-      Menlo::CLI::Compat 1.9021
       Module::Build::Tiny 0.051
       Module::CPANfile 0
       Module::Metadata 0
       Module::cpmfile 0.001
       Parallel::Pipes::App 0.100
+      Parse::LocalDistribution 0.20
       Parse::PMFile 0.43
       Proc::ForkSafe 0.001
-      local::lib 2.000018
       parent 0
       perl 5.008001
       version 0.77
@@ -102,35 +106,6 @@ DISTRIBUTIONS
       Search::Dict 1.07
       Tie::Handle::SkipHeader 0.004
       perl 5.008001
-  CPAN-Common-Index-0.010
-    pathname: D/DA/DAGOLDEN/CPAN-Common-Index-0.010.tar.gz
-    provides:
-      CPAN::Common::Index 0.010
-      CPAN::Common::Index::LocalPackage 0.010
-      CPAN::Common::Index::MetaDB 0.010
-      CPAN::Common::Index::Mirror 0.010
-      CPAN::Common::Index::Mux::Ordered 0.010
-    requirements:
-      CPAN::DistnameInfo 0
-      CPAN::Meta::YAML 0
-      Carp 0
-      Class::Tiny 0
-      ExtUtils::MakeMaker 6.17
-      File::Basename 0
-      File::Copy 0
-      File::Fetch 0
-      File::Spec 0
-      File::Temp 0.19
-      File::stat 0
-      HTTP::Tiny 0
-      Module::Load 0
-      Search::Dict 1.07
-      Tie::Handle::SkipHeader 0
-      URI 0
-      parent 0
-      perl 5.008001
-      strict 0
-      warnings 0
   CPAN-DistnameInfo-0.12
     pathname: G/GB/GBARR/CPAN-DistnameInfo-0.12.tar.gz
     provides:
@@ -163,20 +138,6 @@ DISTRIBUTIONS
       perl 5.008001
       strict 0
       version 0.88
-      warnings 0
-  CPAN-Meta-Check-0.018
-    pathname: L/LE/LEONT/CPAN-Meta-Check-0.018.tar.gz
-    provides:
-      CPAN::Meta::Check 0.018
-    requirements:
-      CPAN::Meta::Prereqs 2.132830
-      CPAN::Meta::Requirements 2.121
-      Exporter 0
-      ExtUtils::MakeMaker 0
-      Module::Metadata 1.000023
-      base 0
-      perl 5.006
-      strict 0
       warnings 0
   CPAN-Meta-Requirements-2.140
     pathname: D/DA/DAGOLDEN/CPAN-Meta-Requirements-2.140.tar.gz
@@ -236,19 +197,6 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       XSLoader 0
-      perl 5.006
-      strict 0
-      warnings 0
-  Class-Tiny-1.008
-    pathname: D/DA/DAGOLDEN/Class-Tiny-1.008.tar.gz
-    provides:
-      Class::Tiny 1.008
-      Class::Tiny::Object 1.008
-    requirements:
-      Carp 0
-      Devel::GlobalDestruction 0
-      ExtUtils::MakeMaker 6.17
-      MRO::Compat 0
       perl 5.006
       strict 0
       warnings 0
@@ -558,21 +506,6 @@ DISTRIBUTIONS
       File::Copy 0
       File::Glob 0
       File::Spec 0
-  File-Fetch-1.08
-    pathname: B/BI/BINGOS/File-Fetch-1.08.tar.gz
-    provides:
-      File::Fetch 1.08
-    requirements:
-      ExtUtils::MakeMaker 0
-      File::Basename 0
-      File::Copy 0
-      File::Path 0
-      File::Spec 0.82
-      IPC::Cmd 0.42
-      Locale::Maketext::Simple 0
-      Module::Load::Conditional 0.66
-      Params::Check 0.07
-      Test::More 0
   File-Path-2.18
     pathname: J/JK/JKEENAN/File-Path-2.18.tar.gz
     provides:
@@ -714,15 +647,6 @@ DISTRIBUTIONS
       Locale::Maketext::Simple 0.21
     requirements:
       ExtUtils::MakeMaker 0
-  MIME-Base32-1.303
-    pathname: R/RE/REHSACK/MIME-Base32-1.303.tar.gz
-    provides:
-      MIME::Base32 1.303
-    requirements:
-      Exporter 0
-      ExtUtils::MakeMaker 0
-      perl 5.008001
-      utf8 0
   MRO-Compat-0.15
     pathname: H/HA/HAARG/MRO-Compat-0.15.tar.gz
     provides:
@@ -731,59 +655,6 @@ DISTRIBUTIONS
       Class::C3 0.24
       ExtUtils::MakeMaker 0
       perl 5.006
-  Menlo-1.9019
-    pathname: M/MI/MIYAGAWA/Menlo-1.9019.tar.gz
-    provides:
-      Menlo 1.9019
-      Menlo::Builder::Static undef
-      Menlo::Dependency undef
-      Menlo::Index::MetaCPAN undef
-      Menlo::Index::MetaDB 1.9019
-      Menlo::Index::Mirror undef
-      Menlo::Util undef
-    requirements:
-      CPAN::Common::Index 0.006
-      CPAN::DistnameInfo 0
-      CPAN::Meta 2.132830
-      CPAN::Meta::Check 0
-      CPAN::Meta::Requirements 0
-      CPAN::Meta::YAML 0
-      Capture::Tiny 0
-      Class::Tiny 1.001
-      Exporter 0
-      ExtUtils::Config 0.003
-      ExtUtils::Helpers 0.020
-      ExtUtils::InstallPaths 0.002
-      ExtUtils::MakeMaker 0
-      File::Temp 0
-      File::Which 0
-      File::pushd 0
-      Getopt::Long 2.36
-      HTTP::Tiny 0.054
-      HTTP::Tinyish 0.04
-      JSON::PP 2
-      Module::CPANfile 0
-      Module::CoreList 0
-      Module::Metadata 0
-      Parse::CPAN::Meta 0
-      Parse::PMFile 0.26
-      String::ShellQuote 0
-      URI 0
-      Win32::ShellQuote 0
-      local::lib 0
-      parent 0
-      perl 5.008001
-      version 0
-  Menlo-Legacy-1.9022
-    pathname: M/MI/MIYAGAWA/Menlo-Legacy-1.9022.tar.gz
-    provides:
-      Menlo::CLI::Compat 1.9022
-      Menlo::Legacy 1.9022
-    requirements:
-      ExtUtils::MakeMaker 0
-      Menlo 1.9018
-      perl 5.008001
-      version 0.9905
   Module-Build-Tiny-0.052
     pathname: L/LE/LEONT/Module-Build-Tiny-0.052.tar.gz
     provides:
@@ -1029,6 +900,18 @@ DISTRIBUTIONS
       Scalar::Util 1.18
       XSLoader 0.22
       parent 0
+  Parse-LocalDistribution-0.20
+    pathname: I/IS/ISHIGAKI/Parse-LocalDistribution-0.20.tar.gz
+    provides:
+      Parse::LocalDistribution 0.20
+    requirements:
+      ExtUtils::MakeMaker 0
+      ExtUtils::MakeMaker::CPANfile 0.09
+      File::Find 0
+      File::Spec 0
+      List::Util 0
+      Parse::CPAN::Meta 0
+      Parse::PMFile 0.37
   Parse-PMFile-0.47
     pathname: I/IS/ISHIGAKI/Parse-PMFile-0.47.tar.gz
     provides:
@@ -1440,85 +1323,6 @@ DISTRIBUTIONS
       Tie::Handle 0
       perl 5.006
       strict 0
-  URI-5.34
-    pathname: O/OA/OALDERS/URI-5.34.tar.gz
-    provides:
-      URI 5.34
-      URI::Escape 5.34
-      URI::Heuristic 5.34
-      URI::IRI 5.34
-      URI::QueryParam 5.34
-      URI::Split 5.34
-      URI::URL 5.34
-      URI::WithBase 5.34
-      URI::data 5.34
-      URI::file 5.34
-      URI::file::Base 5.34
-      URI::file::FAT 5.34
-      URI::file::Mac 5.34
-      URI::file::OS2 5.34
-      URI::file::QNX 5.34
-      URI::file::Unix 5.34
-      URI::file::Win32 5.34
-      URI::ftp 5.34
-      URI::ftpes 5.34
-      URI::ftps 5.34
-      URI::geo 5.34
-      URI::gopher 5.34
-      URI::http 5.34
-      URI::https 5.34
-      URI::icap 5.34
-      URI::icaps 5.34
-      URI::irc 5.34
-      URI::ircs 5.34
-      URI::ldap 5.34
-      URI::ldapi 5.34
-      URI::ldaps 5.34
-      URI::mailto 5.34
-      URI::mms 5.34
-      URI::news 5.34
-      URI::nntp 5.34
-      URI::nntps 5.34
-      URI::otpauth 5.34
-      URI::pop 5.34
-      URI::rlogin 5.34
-      URI::rsync 5.34
-      URI::rtsp 5.34
-      URI::rtspu 5.34
-      URI::scp 5.34
-      URI::sftp 5.34
-      URI::sip 5.34
-      URI::sips 5.34
-      URI::smb 5.34
-      URI::smtp 5.34
-      URI::snews 5.34
-      URI::ssh 5.34
-      URI::telnet 5.34
-      URI::tn3270 5.34
-      URI::urn 5.34
-      URI::urn::isbn 5.34
-      URI::urn::oid 5.34
-      URI::ws 5.34
-      URI::wss 5.34
-    requirements:
-      Carp 0
-      Cwd 0
-      Data::Dumper 0
-      Encode 0
-      Exporter 5.57
-      ExtUtils::MakeMaker 0
-      MIME::Base32 0
-      MIME::Base64 2
-      Net::Domain 0
-      Scalar::Util 0
-      constant 0
-      integer 0
-      overload 0
-      parent 0
-      perl 5.008001
-      strict 0
-      utf8 0
-      warnings 0
   Win32-ShellQuote-0.003001
     pathname: H/HA/HAARG/Win32-ShellQuote-0.003001.tar.gz
     provides:
@@ -1595,13 +1399,6 @@ DISTRIBUTIONS
       common::sense 3.75
     requirements:
       ExtUtils::MakeMaker 0
-  local-lib-2.000029
-    pathname: H/HA/HAARG/local-lib-2.000029.tar.gz
-    provides:
-      lib::core::only undef
-      local::lib 2.000029
-    requirements:
-      perl 5.006
   parent-0.244
     pathname: C/CO/CORION/parent-0.244.tar.gz
     provides:

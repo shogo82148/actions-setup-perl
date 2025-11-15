@@ -1064,16 +1064,16 @@ DISTRIBUTIONS
       Scalar::Util 1.14
       perl 5.006
       strict 0
-  Term-Table-0.025
-    pathname: E/EX/EXODIST/Term-Table-0.025.tar.gz
+  Term-Table-0.027
+    pathname: E/EX/EXODIST/Term-Table-0.027.tar.gz
     provides:
-      Term::Table 0.025
-      Term::Table::Cell 0.025
-      Term::Table::CellStack 0.025
-      Term::Table::HashBase 0.025
-      Term::Table::LineBreak 0.025
-      Term::Table::Spacer 0.025
-      Term::Table::Util 0.025
+      Term::Table 0.027
+      Term::Table::Cell 0.027
+      Term::Table::CellStack 0.027
+      Term::Table::HashBase 0.027
+      Term::Table::LineBreak 0.027
+      Term::Table::Spacer 0.027
+      Term::Table::Util 0.027
     requirements:
       Carp 0
       ExtUtils::MakeMaker 0

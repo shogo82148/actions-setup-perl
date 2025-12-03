@@ -148,7 +148,7 @@ jobs:
 
       - name: Generate token
         id: generate_token
-        uses: shogo82148/actions-github-app-token@7ed70a12e0d77c0e3c946ef4d093e6d17f402935 # v1.0.3
+        uses: shogo82148/actions-github-app-token@e3b5eeb7dbe0eb2703b0847ece727b8c2122b2b5 # v1.1.0
 
       - name: commit
         uses: shogo82148/actions-commit-and-create-pr@b1322fe9da4037e9720e34ea221997cffcd3498d # v1.1.4

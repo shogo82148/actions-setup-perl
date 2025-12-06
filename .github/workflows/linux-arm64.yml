@@ -24,7 +24,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       - id: set-matrix
         name: list available perl versions
         run: |
@@ -47,7 +47,7 @@ jobs:
         name: check pre-installed perl version
         run: |
           perl -e 'print "version=$^V\n"' >> "$GITHUB_OUTPUT"
-      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: scripts/linux/local
@@ -80,7 +80,7 @@ jobs:
     env:
       PERL_VERSION: ${{ matrix.perl }}
     steps:
-      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       - id: perl
         name: setup host perl
         run: |
@@ -140,7 +140,7 @@ jobs:
       PERL_VERSION: ${{ matrix.perl }}
       PERL_MULTI_THREAD: "1"
     steps:
-      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       - id: perl
         name: setup host perl
         run: |

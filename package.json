@@ -26,7 +26,7 @@
   "dependencies": {
     "@actions/cache": "^4.1.0",
     "@actions/core": "^1.11.1",
-    "@actions/exec": "^1.1.1",
+    "@actions/exec": "^2.0.0",
     "@actions/tool-cache": "^2.0.2",
     "@shogo82148/attestation-verify": "^0.2.0",
     "semver": "^7.7.3"

@@ -4,7 +4,7 @@
   "description": "",
   "main": "lib/setup-perl.js",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=24.0.0"
   },
   "scripts": {
     "build": "tsc",
@@ -24,21 +24,21 @@
   },
   "homepage": "https://github.com/shogo82148/actions-setup-perl#readme",
   "dependencies": {
-    "@actions/cache": "^4.1.0",
-    "@actions/core": "^1.11.1",
-    "@actions/exec": "^1.1.1",
+    "@actions/cache": "^5.0.1",
+    "@actions/core": "^2.0.1",
+    "@actions/exec": "^2.0.0",
     "@actions/tool-cache": "^2.0.2",
     "@shogo82148/attestation-verify": "^0.2.0",
     "semver": "^7.7.3"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
-    "@types/node": "^20.19.0",
+    "@types/node": "^24.10.4",
     "@types/semver": "^7.7.1",
     "@vercel/ncc": "^0.38.4",
     "jest": "^30.2.0",
-    "prettier": "^3.6.2",
-    "ts-jest": "^29.4.5",
+    "prettier": "^3.7.4",
+    "ts-jest": "^29.4.6",
     "typescript": "^5.9.3"
   }
 }

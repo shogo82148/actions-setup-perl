@@ -39,7 +39,7 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
 
   sanity-check:
-    runs-on: macos-13
+    runs-on: macos-15-intel
     permissions:
       contents: read
     steps:
@@ -65,7 +65,7 @@ jobs:
           PERL5LIB: ${{ github.workspace }}/scripts/lib
 
   build:
-    runs-on: macos-13
+    runs-on: macos-15-intel
     needs:
       - sanity-check
       - list
@@ -124,7 +124,7 @@ jobs:
           subject-path: ${{ runner.temp }}/*.tar.zstd
 
   build-multi-thread:
-    runs-on: macos-13
+    runs-on: macos-15-intel
     needs:
       - sanity-check
       - list

@@ -106,9 +106,9 @@ jobs:
       matrix:
         os:
           - macos-26
+          - macos-15-intel
           - macos-15
           - macos-14
-          - macos-13
         multi-thread:
           - false
           - true
@@ -147,12 +147,11 @@ jobs:
       - name: run perl -V on pwsh
         run: perl -V
         shell: pwsh
-      # skip this test because it fails on macos-13: https://github.com/actions/runner-images/issues/7488
-      # - name: run perl -V on python
-      #   run: |
-      #     import subprocess
-      #     subprocess.call(['perl', '-V'])
-      #   shell: python
+      - name: run perl -V on python
+        run: |
+          import subprocess
+          subprocess.call(['perl', '-V'])
+        shell: python
       - name: run perl -V on sh
         run: perl -V
         shell: sh

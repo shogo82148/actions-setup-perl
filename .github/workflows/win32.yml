@@ -56,7 +56,7 @@ jobs:
           END_OF_PATH
           perl -e 'print "version=$^V\n"' >> "$GITHUB_OUTPUT"
 
-      - uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+      - uses: actions/cache@8b402f58fbc84540c8b491a91e594a4576fec3d7 # v5.0.2
         with:
           path: scripts/windows/local
           key: Windows-sanity-check-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/windows/cpanfile.snapshot') }}
@@ -120,7 +120,7 @@ jobs:
           reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpFolder /t REG_EXPAND_SZ /d "${{ runner.temp }}/perl-wer"
         shell: cmd
 
-      - uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+      - uses: actions/cache@8b402f58fbc84540c8b491a91e594a4576fec3d7 # v5.0.2
         with:
           path: scripts/windows/local
           key: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/windows/cpanfile.snapshot') }}
@@ -225,7 +225,7 @@ jobs:
           reg add HKLM\SOFTWARE\Microsoft\Windows"\Windows Error Reporting"\LocalDumps /v DumpFolder /t REG_EXPAND_SZ /d "${{ runner.temp }}/perl-wer"
         shell: cmd
 
-      - uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+      - uses: actions/cache@8b402f58fbc84540c8b491a91e594a4576fec3d7 # v5.0.2
         with:
           path: scripts/windows/local
           key: ${{ runner.os }}-build-perl-${{ steps.perl.outputs.version }}-${{ hashFiles('scripts/windows/cpanfile.snapshot') }}

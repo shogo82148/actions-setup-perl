@@ -72,18 +72,18 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
-  CPAN-Meta-2.150010
-    pathname: D/DA/DAGOLDEN/CPAN-Meta-2.150010.tar.gz
+  CPAN-Meta-2.150011
+    pathname: R/RJ/RJBS/CPAN-Meta-2.150011.tar.gz
     provides:
-      CPAN::Meta 2.150010
-      CPAN::Meta::Converter 2.150010
-      CPAN::Meta::Feature 2.150010
-      CPAN::Meta::History 2.150010
-      CPAN::Meta::Merge 2.150010
-      CPAN::Meta::Prereqs 2.150010
-      CPAN::Meta::Spec 2.150010
-      CPAN::Meta::Validator 2.150010
-      Parse::CPAN::Meta 2.150010
+      CPAN::Meta 2.150011
+      CPAN::Meta::Converter 2.150011
+      CPAN::Meta::Feature 2.150011
+      CPAN::Meta::History 2.150011
+      CPAN::Meta::Merge 2.150011
+      CPAN::Meta::Prereqs 2.150011
+      CPAN::Meta::Spec 2.150011
+      CPAN::Meta::Validator 2.150011
+      Parse::CPAN::Meta 2.150011
     requirements:
       CPAN::Meta::Requirements 2.121
       CPAN::Meta::YAML 0.011
@@ -761,11 +761,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20251220
-    pathname: B/BI/BINGOS/Module-CoreList-5.20251220.tar.gz
+  Module-CoreList-5.20260119
+    pathname: B/BI/BINGOS/Module-CoreList-5.20260119.tar.gz
     provides:
-      Module::CoreList 5.20251220
-      Module::CoreList::Utils 5.20251220
+      Module::CoreList 5.20260119
+      Module::CoreList::Utils 5.20260119
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0

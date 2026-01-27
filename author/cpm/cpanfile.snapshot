@@ -115,18 +115,18 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
-  CPAN-Meta-2.150011
-    pathname: R/RJ/RJBS/CPAN-Meta-2.150011.tar.gz
+  CPAN-Meta-2.150012
+    pathname: R/RJ/RJBS/CPAN-Meta-2.150012.tar.gz
     provides:
-      CPAN::Meta 2.150011
-      CPAN::Meta::Converter 2.150011
-      CPAN::Meta::Feature 2.150011
-      CPAN::Meta::History 2.150011
-      CPAN::Meta::Merge 2.150011
-      CPAN::Meta::Prereqs 2.150011
-      CPAN::Meta::Spec 2.150011
-      CPAN::Meta::Validator 2.150011
-      Parse::CPAN::Meta 2.150011
+      CPAN::Meta 2.150012
+      CPAN::Meta::Converter 2.150012
+      CPAN::Meta::Feature 2.150012
+      CPAN::Meta::History 2.150012
+      CPAN::Meta::Merge 2.150012
+      CPAN::Meta::Prereqs 2.150012
+      CPAN::Meta::Spec 2.150012
+      CPAN::Meta::Validator 2.150012
+      Parse::CPAN::Meta 2.150012
     requirements:
       CPAN::Meta::Requirements 2.121
       CPAN::Meta::YAML 0.011

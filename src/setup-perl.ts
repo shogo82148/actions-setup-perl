@@ -12,7 +12,6 @@ async function run() {
   try {
     const platform = process.platform;
     let dist = core.getInput("distribution");
-    const githubToken = core.getInput("github-token");
     const multiThread = core.getInput("multi-thread");
     const version = await resolveVersionInput();
 
@@ -40,7 +39,7 @@ async function run() {
           result = await strawberry.getPerl(version);
           break;
         case "default":
-          result = await installer.getPerl(version, thread, githubToken);
+          result = await installer.getPerl(version, thread);
           break;
         default:
           throw new Error(`unknown distribution: ${dist}`);

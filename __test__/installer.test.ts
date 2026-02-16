@@ -3,7 +3,6 @@ import path = require("path");
 import os = require("os");
 import fs = require("fs");
 
-const githubToken = process.env["GITHUB_TOKEN"] || "";
 const toolDir = path.join(__dirname, "runner", "tools");
 const tempDir = path.join(__dirname, "runner", "temp");
 // const dataDir = path.join(__dirname, 'data');

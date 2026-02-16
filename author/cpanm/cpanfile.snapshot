@@ -72,18 +72,18 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
-  CPAN-Meta-2.150010
-    pathname: D/DA/DAGOLDEN/CPAN-Meta-2.150010.tar.gz
+  CPAN-Meta-2.150012
+    pathname: R/RJ/RJBS/CPAN-Meta-2.150012.tar.gz
     provides:
-      CPAN::Meta 2.150010
-      CPAN::Meta::Converter 2.150010
-      CPAN::Meta::Feature 2.150010
-      CPAN::Meta::History 2.150010
-      CPAN::Meta::Merge 2.150010
-      CPAN::Meta::Prereqs 2.150010
-      CPAN::Meta::Spec 2.150010
-      CPAN::Meta::Validator 2.150010
-      Parse::CPAN::Meta 2.150010
+      CPAN::Meta 2.150012
+      CPAN::Meta::Converter 2.150012
+      CPAN::Meta::Feature 2.150012
+      CPAN::Meta::History 2.150012
+      CPAN::Meta::Merge 2.150012
+      CPAN::Meta::Prereqs 2.150012
+      CPAN::Meta::Spec 2.150012
+      CPAN::Meta::Validator 2.150012
+      Parse::CPAN::Meta 2.150012
     requirements:
       CPAN::Meta::Requirements 2.121
       CPAN::Meta::YAML 0.011
@@ -394,64 +394,82 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  ExtUtils-ParseXS-3.60
-    pathname: L/LE/LEONT/ExtUtils-ParseXS-3.60.tar.gz
+  ExtUtils-ParseXS-3.61
+    pathname: L/LE/LEONT/ExtUtils-ParseXS-3.61.tar.gz
     provides:
-      ExtUtils::ParseXS 3.60
-      ExtUtils::ParseXS::Constants 3.60
-      ExtUtils::ParseXS::CountLines 3.60
-      ExtUtils::ParseXS::Eval 3.60
-      ExtUtils::ParseXS::Node 3.60
-      ExtUtils::ParseXS::Node::ALIAS 3.60
-      ExtUtils::ParseXS::Node::ALIAS_line 3.60
-      ExtUtils::ParseXS::Node::ATTRS 3.60
-      ExtUtils::ParseXS::Node::CASE 3.60
-      ExtUtils::ParseXS::Node::CLEANUP 3.60
-      ExtUtils::ParseXS::Node::CODE 3.60
-      ExtUtils::ParseXS::Node::C_ARGS 3.60
-      ExtUtils::ParseXS::Node::EXPORT_XSUB_SYMBOLS 3.60
-      ExtUtils::ParseXS::Node::INIT 3.60
-      ExtUtils::ParseXS::Node::INPUT 3.60
-      ExtUtils::ParseXS::Node::INPUT_line 3.60
-      ExtUtils::ParseXS::Node::INTERFACE 3.60
-      ExtUtils::ParseXS::Node::INTERFACE_MACRO 3.60
-      ExtUtils::ParseXS::Node::IO_Param 3.60
-      ExtUtils::ParseXS::Node::NOT_IMPLEMENTED_YET 3.60
-      ExtUtils::ParseXS::Node::OUTPUT 3.60
-      ExtUtils::ParseXS::Node::OUTPUT_line 3.60
-      ExtUtils::ParseXS::Node::OVERLOAD 3.60
-      ExtUtils::ParseXS::Node::POSTCALL 3.60
-      ExtUtils::ParseXS::Node::PPCODE 3.60
-      ExtUtils::ParseXS::Node::PREINIT 3.60
-      ExtUtils::ParseXS::Node::PROTOTYPE 3.60
-      ExtUtils::ParseXS::Node::PROTOTYPES 3.60
-      ExtUtils::ParseXS::Node::Param 3.60
-      ExtUtils::ParseXS::Node::Params 3.60
-      ExtUtils::ParseXS::Node::ReturnType 3.60
-      ExtUtils::ParseXS::Node::SCOPE 3.60
-      ExtUtils::ParseXS::Node::VERSIONCHECK 3.60
-      ExtUtils::ParseXS::Node::autocall 3.60
-      ExtUtils::ParseXS::Node::cleanup_part 3.60
-      ExtUtils::ParseXS::Node::code_part 3.60
-      ExtUtils::ParseXS::Node::codeblock 3.60
-      ExtUtils::ParseXS::Node::enable 3.60
-      ExtUtils::ParseXS::Node::init_part 3.60
-      ExtUtils::ParseXS::Node::input_part 3.60
-      ExtUtils::ParseXS::Node::keyline 3.60
-      ExtUtils::ParseXS::Node::keylines 3.60
-      ExtUtils::ParseXS::Node::multiline 3.60
-      ExtUtils::ParseXS::Node::multiline_merged 3.60
-      ExtUtils::ParseXS::Node::oneline 3.60
-      ExtUtils::ParseXS::Node::output_part 3.60
-      ExtUtils::ParseXS::Node::xbody 3.60
-      ExtUtils::ParseXS::Node::xsub 3.60
-      ExtUtils::ParseXS::Node::xsub_decl 3.60
-      ExtUtils::ParseXS::Utilities 3.60
-      ExtUtils::Typemaps 3.60
-      ExtUtils::Typemaps::Cmd 3.60
-      ExtUtils::Typemaps::InputMap 3.60
-      ExtUtils::Typemaps::OutputMap 3.60
-      ExtUtils::Typemaps::Type 3.60
+      ExtUtils::ParseXS 3.61
+      ExtUtils::ParseXS::Constants 3.61
+      ExtUtils::ParseXS::CountLines 3.61
+      ExtUtils::ParseXS::Eval 3.61
+      ExtUtils::ParseXS::Node 3.61
+      ExtUtils::ParseXS::Node::ALIAS 3.61
+      ExtUtils::ParseXS::Node::ALIAS_line 3.61
+      ExtUtils::ParseXS::Node::ATTRS 3.61
+      ExtUtils::ParseXS::Node::BOOT 3.61
+      ExtUtils::ParseXS::Node::CASE 3.61
+      ExtUtils::ParseXS::Node::CLEANUP 3.61
+      ExtUtils::ParseXS::Node::CODE 3.61
+      ExtUtils::ParseXS::Node::C_ARGS 3.61
+      ExtUtils::ParseXS::Node::C_part 3.61
+      ExtUtils::ParseXS::Node::C_part_POD 3.61
+      ExtUtils::ParseXS::Node::C_part_code 3.61
+      ExtUtils::ParseXS::Node::C_part_postamble 3.61
+      ExtUtils::ParseXS::Node::EXPORT_XSUB_SYMBOLS 3.61
+      ExtUtils::ParseXS::Node::FALLBACK 3.61
+      ExtUtils::ParseXS::Node::INCLUDE 3.61
+      ExtUtils::ParseXS::Node::INCLUDE_COMMAND 3.61
+      ExtUtils::ParseXS::Node::INIT 3.61
+      ExtUtils::ParseXS::Node::INPUT 3.61
+      ExtUtils::ParseXS::Node::INPUT_line 3.61
+      ExtUtils::ParseXS::Node::INTERFACE 3.61
+      ExtUtils::ParseXS::Node::INTERFACE_MACRO 3.61
+      ExtUtils::ParseXS::Node::IO_Param 3.61
+      ExtUtils::ParseXS::Node::MODULE 3.61
+      ExtUtils::ParseXS::Node::NOT_IMPLEMENTED_YET 3.61
+      ExtUtils::ParseXS::Node::OUTPUT 3.61
+      ExtUtils::ParseXS::Node::OUTPUT_line 3.61
+      ExtUtils::ParseXS::Node::OVERLOAD 3.61
+      ExtUtils::ParseXS::Node::POSTCALL 3.61
+      ExtUtils::ParseXS::Node::PPCODE 3.61
+      ExtUtils::ParseXS::Node::PREINIT 3.61
+      ExtUtils::ParseXS::Node::PROTOTYPE 3.61
+      ExtUtils::ParseXS::Node::PROTOTYPES 3.61
+      ExtUtils::ParseXS::Node::Param 3.61
+      ExtUtils::ParseXS::Node::Params 3.61
+      ExtUtils::ParseXS::Node::REQUIRE 3.61
+      ExtUtils::ParseXS::Node::ReturnType 3.61
+      ExtUtils::ParseXS::Node::SCOPE 3.61
+      ExtUtils::ParseXS::Node::TYPEMAP 3.61
+      ExtUtils::ParseXS::Node::VERSIONCHECK 3.61
+      ExtUtils::ParseXS::Node::XS_file 3.61
+      ExtUtils::ParseXS::Node::autocall 3.61
+      ExtUtils::ParseXS::Node::boot_xsub 3.61
+      ExtUtils::ParseXS::Node::cleanup_part 3.61
+      ExtUtils::ParseXS::Node::code_part 3.61
+      ExtUtils::ParseXS::Node::codeblock 3.61
+      ExtUtils::ParseXS::Node::cpp_scope 3.61
+      ExtUtils::ParseXS::Node::enable 3.61
+      ExtUtils::ParseXS::Node::global_cpp_line 3.61
+      ExtUtils::ParseXS::Node::include 3.61
+      ExtUtils::ParseXS::Node::init_part 3.61
+      ExtUtils::ParseXS::Node::input_part 3.61
+      ExtUtils::ParseXS::Node::keyline 3.61
+      ExtUtils::ParseXS::Node::keylines 3.61
+      ExtUtils::ParseXS::Node::multiline 3.61
+      ExtUtils::ParseXS::Node::multiline_merged 3.61
+      ExtUtils::ParseXS::Node::oneline 3.61
+      ExtUtils::ParseXS::Node::output_part 3.61
+      ExtUtils::ParseXS::Node::pre_boot 3.61
+      ExtUtils::ParseXS::Node::preamble 3.61
+      ExtUtils::ParseXS::Node::xbody 3.61
+      ExtUtils::ParseXS::Node::xsub 3.61
+      ExtUtils::ParseXS::Node::xsub_decl 3.61
+      ExtUtils::ParseXS::Utilities 3.61
+      ExtUtils::Typemaps 3.61
+      ExtUtils::Typemaps::Cmd 3.61
+      ExtUtils::Typemaps::InputMap 3.61
+      ExtUtils::Typemaps::OutputMap 3.61
+      ExtUtils::Typemaps::Type 3.61
     requirements:
       Carp 0
       Cwd 0
@@ -543,10 +561,10 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Pod::Usage 1.14
-  HTTP-Tiny-0.090
-    pathname: H/HA/HAARG/HTTP-Tiny-0.090.tar.gz
+  HTTP-Tiny-0.092
+    pathname: H/HA/HAARG/HTTP-Tiny-0.092.tar.gz
     provides:
-      HTTP::Tiny 0.090
+      HTTP::Tiny 0.092
     requirements:
       Carp 0
       ExtUtils::MakeMaker 6.17
@@ -554,6 +572,7 @@ DISTRIBUTIONS
       IO::Socket 0
       MIME::Base64 0
       Socket 0
+      Time::HiRes 0
       Time::Local 0
       bytes 0
       perl 5.006
@@ -734,11 +753,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20251220
-    pathname: B/BI/BINGOS/Module-CoreList-5.20251220.tar.gz
+  Module-CoreList-5.20260119
+    pathname: B/BI/BINGOS/Module-CoreList-5.20260119.tar.gz
     provides:
-      Module::CoreList 5.20251220
-      Module::CoreList::Utils 5.20251220
+      Module::CoreList 5.20260119
+      Module::CoreList::Utils 5.20260119
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0

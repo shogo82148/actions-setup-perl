@@ -3,7 +3,6 @@ import path = require("path");
 import os = require("os");
 import fs = require("fs");
 
-const githubToken = process.env["GITHUB_TOKEN"] || "";
 const toolDir = path.join(__dirname, "runner", "tools");
 const tempDir = path.join(__dirname, "runner", "temp");
 // const dataDir = path.join(__dirname, 'data');
@@ -31,7 +30,7 @@ describe("installer tests", () => {
   }, 100000);
 
   it("Acquires version of Perl if no matching version is installed", async () => {
-    await installer.getPerl("5.26.x", false, githubToken);
+    await installer.getPerl("5.26.x", false);
     const perlDir = path.join(toolDir, "perl", "5.26.3", os.arch());
 
     expect(fs.existsSync(`${perlDir}.complete`)).toBe(true);

@@ -2,7 +2,7 @@
   "name": "actions-setup-perl",
   "version": "0.0.0",
   "description": "",
-  "main": "lib/setup-perl.js",
+  "type": "module",
   "engines": {
     "node": ">=24.0.0"
   },
@@ -10,8 +10,8 @@
     "build": "tsc",
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
-    "package": "tsc && ncc build -o dist/setup --source-map --license licenses.txt src/setup-perl.ts && ncc build -o dist/cache-save --source-map --license licenses.txt src/cache-save.ts",
-    "test": "jest"
+    "package": "npx rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
+    "test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js"
   },
   "repository": {
     "type": "git",
@@ -32,13 +32,18 @@
     "semver": "^7.7.3"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^29.0.2",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-typescript": "^12.3.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.12.0",
     "@types/semver": "^7.7.1",
-    "@vercel/ncc": "^0.38.4",
     "jest": "^30.2.0",
     "prettier": "^3.7.4",
+    "rollup": "^4.59.0",
     "ts-jest": "^29.4.6",
+    "ts-jest-resolver": "^2.0.1",
     "typescript": "^5.9.3"
   }
 }

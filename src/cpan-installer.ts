@@ -8,8 +8,8 @@ import * as fs from "fs";
 import * as stream from "stream";
 import * as util from "util";
 import * as path from "path";
-import { State, Outputs } from "./constants";
-import { getPackagePath } from "./utils";
+import { State, Outputs } from "./constants.js";
+import { getPackagePath } from "./utils.js";
 
 export interface Options {
   // the digest of `perl -V`

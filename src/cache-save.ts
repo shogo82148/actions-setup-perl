@@ -1,6 +1,6 @@
 import * as core from "@actions/core";
 import * as cache from "@actions/cache";
-import { State } from "./constants";
+import { State } from "./constants.js";
 
 async function run() {
   try {

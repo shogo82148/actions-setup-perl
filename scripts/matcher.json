@@ -1,13 +1,13 @@
 {
-    "problemMatcher": [
+  "problemMatcher": [
+    {
+      "owner": "perl-builder",
+      "pattern": [
         {
-            "owner": "perl-builder",
-            "pattern": [
-                {
-                    "regexp": "^([0-9]+ out of [0-9]+ hunks? FAILED -- saving rejects to file .*\\.rej)$",
-                    "message": 1
-                }
-            ]
+          "regexp": "^([0-9]+ out of [0-9]+ hunks? FAILED -- saving rejects to file .*\\.rej)$",
+          "message": 1
         }
-    ]
+      ]
+    }
+  ]
 }

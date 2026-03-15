@@ -7,11 +7,13 @@
     "node": ">=24.0.0"
   },
   "scripts": {
-    "build": "tsc",
-    "format": "prettier --write **/*.ts",
-    "format-check": "prettier --check **/*.ts",
-    "package": "npx rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
-    "test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js"
+    "bundle": "npm run format:write && npm run package",
+    "format:write": "npx prettier --write .",
+    "format:check": "npx prettier --check .",
+    "lint": "npx eslint .",
+    "package": "npx rimraf ./dist && npx rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
+    "test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js",
+    "all": "npm run format:write && npm run lint && npm run test && npm run package"
   },
   "repository": {
     "type": "git",
@@ -41,6 +43,7 @@
     "@types/semver": "^7.7.1",
     "jest": "^30.2.0",
     "prettier": "^3.7.4",
+    "rimraf": "^6.1.3",
     "rollup": "^4.59.0",
     "ts-jest": "^29.4.6",
     "ts-jest-resolver": "^2.0.1",

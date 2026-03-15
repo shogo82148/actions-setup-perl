@@ -5,12 +5,7 @@ import json from "@rollup/plugin-json";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import typescript from "@rollup/plugin-typescript";
 
-const sharedPlugins = [
-  typescript({ declaration: false }),
-  json(),
-  nodeResolve({ preferBuiltins: true }),
-  commonjs(),
-];
+const sharedPlugins = [typescript({ declaration: false }), json(), nodeResolve({ preferBuiltins: true }), commonjs()];
 
 const config = [
   {

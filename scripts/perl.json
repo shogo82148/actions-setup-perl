@@ -1,15 +1,15 @@
 {
-    "problemMatcher": [
+  "problemMatcher": [
+    {
+      "owner": "perl",
+      "pattern": [
         {
-            "owner": "perl",
-            "pattern": [
-                {
-                    "regexp": "^\\s*([^#\\s].+)\\sat\\s(.+)\\sline\\s(\\d+)\\.$",
-                    "file": 2,
-                    "line": 3,
-                    "message": 1
-                }
-            ]
+          "regexp": "^\\s*([^#\\s].+)\\sat\\s(.+)\\sline\\s(\\d+)\\.$",
+          "file": 2,
+          "line": 3,
+          "message": 1
         }
-    ]
+      ]
+    }
+  ]
 }

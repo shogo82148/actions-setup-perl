@@ -33,8 +33,7 @@ jobs:
 
       - name: Rebuild the dist/ directory
         run: |
-          npm run build
-          npm run package
+          npm run bundle
 
       - name: Compare the expected and actual dist/ directories
         run: |

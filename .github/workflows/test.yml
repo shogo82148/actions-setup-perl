@@ -123,8 +123,6 @@ jobs:
           cache: npm
 
       - run: npm ci
-      - run: npm run build
-      - run: npm run package
       - run: npm test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -206,8 +204,6 @@ jobs:
           cache: npm
 
       - run: npm ci
-      - run: npm run build
-      - run: npm run package
       - run: npm test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -289,8 +285,6 @@ jobs:
           cache: npm
 
       - run: npm ci
-      - run: npm run build
-      - run: npm run package
       - run: npm test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -363,8 +357,6 @@ jobs:
           cache: npm
 
       - run: npm ci
-      - run: npm run build
-      - run: npm run package
       - run: echo "5.30.0" > .perl-version
 
       - id: setup-perl
@@ -388,4 +380,4 @@ jobs:
           node-version-file: "package.json"
           cache: npm
       - run: npm ci
-      - run: npm run format-check
+      - run: npm run format:check

@@ -71441,7 +71441,8 @@ class DocTypeReader {
                                     `Entity count (${entityCount + 1}) exceeds maximum allowed (${this.options.maxEntityCount})`
                                 );
                             }
-                            const escaped = entityName.replace(/[.\-+*:]/g, '\\.');
+                            //const escaped = entityName.replace(/[.\-+*:]/g, '\\.');
+                            const escaped = entityName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
                             entities[entityName] = {
                                 regx: RegExp(`&${escaped};`, "g"),
                                 val: val
@@ -73237,7 +73238,7 @@ function replaceEntitiesValue$1(val, tagName, jPath) {
   }
 
   // Replace DOCTYPE entities
-  for (let entityName in this.docTypeEntities) {
+  for (const entityName of Object.keys(this.docTypeEntities)) {
     const entity = this.docTypeEntities[entityName];
     const matches = val.match(entity.regx);
 
@@ -73269,19 +73270,38 @@ function replaceEntitiesValue$1(val, tagName, jPath) {
       }
     }
   }
-  if (val.indexOf('&') === -1) return val;  // Early exit
-
   // Replace standard entities
-  for (let entityName in this.lastEntities) {
+  for (const entityName of Object.keys(this.lastEntities)) {
     const entity = this.lastEntities[entityName];
+    const matches = val.match(entity.regex);
+    if (matches) {
+      this.entityExpansionCount += matches.length;
+      if (entityConfig.maxTotalExpansions &&
+        this.entityExpansionCount > entityConfig.maxTotalExpansions) {
+        throw new Error(
+          `Entity expansion limit exceeded: ${this.entityExpansionCount} > ${entityConfig.maxTotalExpansions}`
+        );
+      }
+    }
     val = val.replace(entity.regex, entity.val);
   }
-  if (val.indexOf('&') === -1) return val;  // Early exit
+  if (val.indexOf('&') === -1) return val;
 
   // Replace HTML entities if enabled
   if (this.options.htmlEntities) {
-    for (let entityName in this.htmlEntities) {
+    for (const entityName of Object.keys(this.htmlEntities)) {
       const entity = this.htmlEntities[entityName];
+      const matches = val.match(entity.regex);
+      if (matches) {
+        //console.log(matches);
+        this.entityExpansionCount += matches.length;
+        if (entityConfig.maxTotalExpansions &&
+          this.entityExpansionCount > entityConfig.maxTotalExpansions) {
+          throw new Error(
+            `Entity expansion limit exceeded: ${this.entityExpansionCount} > ${entityConfig.maxTotalExpansions}`
+          );
+        }
+      }
       val = val.replace(entity.regex, entity.val);
     }
   }
@@ -73774,6 +73794,9 @@ function arrToStr(arr, options, indentation, matcher, stopNodeExpressions) {
     let xmlStr = "";
     let isPreviousElementTag = false;
 
+    if (options.maxNestedTags && matcher.getDepth() > options.maxNestedTags) {
+        throw new Error("Maximum nested tags exceeded");
+    }
 
     if (!Array.isArray(arr)) {
         // Non-array values (e.g. string tag values) should be treated as text content
@@ -73850,6 +73873,7 @@ function arrToStr(arr, options, indentation, matcher, stopNodeExpressions) {
         if (isStopNode) {
             tagValue = getRawContent(tagObj[tagName], options);
         } else {
+
             tagValue = arrToStr(tagObj[tagName], options, newIdentation, matcher, stopNodeExpressions);
         }
 
@@ -74075,6 +74099,7 @@ const defaultOptions = {
   // transformTagName: false,
   // transformAttributeName: false,
   oneListGroup: false,
+  maxNestedTags: 100,
   jPath: true  // When true, callbacks receive string jPath; when false, receive Matcher instance
 };
 
@@ -74150,7 +74175,9 @@ Builder.prototype.build = function (jObj) {
 Builder.prototype.j2x = function (jObj, level, matcher) {
   let attrStr = '';
   let val = '';
-
+  if (this.options.maxNestedTags && matcher.getDepth() >= this.options.maxNestedTags) {
+    throw new Error("Maximum nested tags exceeded");
+  }
   // Get jPath based on option: string for backward compatibility, or Matcher for new features
   const jPath = this.options.jPath ? matcher.toString() : matcher;
 

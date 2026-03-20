@@ -1,12 +1,12 @@
 import * as core from "@actions/core";
 import * as exec from "@actions/exec";
-import * as installer from "./installer";
+import * as installer from "./installer.js";
 import * as path from "path";
 import * as crypto from "crypto";
 import * as fs from "fs/promises";
-import * as strawberry from "./strawberry";
-import * as cpan from "./cpan-installer";
-import { getPackagePath, parseBoolean } from "./utils";
+import * as strawberry from "./strawberry.js";
+import * as cpan from "./cpan-installer.js";
+import { getPackagePath, parseBoolean } from "./utils.js";
 
 async function run() {
   try {

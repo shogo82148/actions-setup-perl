@@ -4,8 +4,8 @@ import * as os from "os";
 import { readFile } from "fs/promises";
 import * as path from "path";
 import * as semver from "semver";
-import * as tcp from "./tool-cache-port";
-import { getPackagePath } from "./utils";
+import * as tcp from "./tool-cache-port.js";
+import { getPackagePath } from "./utils.js";
 
 const osPlat = os.platform();
 const osArch = os.arch();

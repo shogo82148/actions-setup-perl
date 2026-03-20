@@ -1,7 +1,10 @@
-import io = require("@actions/io");
-import path = require("path");
-import os = require("os");
-import fs = require("fs");
+import * as io from "@actions/io";
+import * as path from "path";
+import * as os from "os";
+import * as fs from "fs";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const toolDir = path.join(__dirname, "runner", "tools");
 const tempDir = path.join(__dirname, "runner", "temp");
@@ -10,7 +13,7 @@ const tempDir = path.join(__dirname, "runner", "temp");
 process.env["ACTIONS_SETUP_PERL_TESTING"] = "1";
 process.env["RUNNER_TOOL_CACHE"] = toolDir;
 process.env["RUNNER_TEMP"] = tempDir;
-import * as installer from "../src/installer";
+import * as installer from "../src/installer.js";
 
 const IS_WINDOWS = process.platform === "win32";
 

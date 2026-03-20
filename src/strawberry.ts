@@ -3,9 +3,9 @@ import * as tc from "@actions/tool-cache";
 import * as path from "path";
 import * as semver from "semver";
 import * as fs from "fs";
-import * as tcp from "./tool-cache-port";
+import * as tcp from "./tool-cache-port.js";
 import * as crypto from "crypto";
-import { getPackagePath } from "./utils";
+import { getPackagePath } from "./utils.js";
 
 interface PerlVersion {
   version: string;

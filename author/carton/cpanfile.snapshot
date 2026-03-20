@@ -637,16 +637,16 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
-  JSON-PP-4.16
-    pathname: I/IS/ISHIGAKI/JSON-PP-4.16.tar.gz
+  JSON-PP-4.18
+    pathname: I/IS/ISHIGAKI/JSON-PP-4.18.tar.gz
     provides:
-      JSON::PP 4.16
-      JSON::PP::Boolean 4.16
-      JSON::PP::IncrParser 4.16
+      JSON::PP 4.18
+      JSON::PP::Boolean 4.18
+      JSON::PP::IncrParser 4.18
     requirements:
       ExtUtils::MakeMaker 0
       Scalar::Util 1.08
-      Test::More 0
+      Test::More 0.88
   Locale-Maketext-Simple-0.21
     pathname: J/JE/JESSE/Locale-Maketext-Simple-0.21.tar.gz
     provides:
@@ -761,11 +761,11 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-CoreList-5.20260308
-    pathname: B/BI/BINGOS/Module-CoreList-5.20260308.tar.gz
+  Module-CoreList-5.20260320
+    pathname: B/BI/BINGOS/Module-CoreList-5.20260320.tar.gz
     provides:
-      Module::CoreList 5.20260308
-      Module::CoreList::Utils 5.20260308
+      Module::CoreList 5.20260320
+      Module::CoreList::Utils 5.20260320
     requirements:
       ExtUtils::MakeMaker 0
       List::Util 0

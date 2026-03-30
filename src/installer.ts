@@ -30,7 +30,12 @@ export interface Result {
 function determineVersion(version: string, thread: boolean): PerlVersion {
   // stable latest version
   if (version === "latest") {
-    return versions[0];
+    for (let v of versions) {
+      if (v.thread === thread && v.os === osPlat && v.arch === osArch) {
+        return v;
+      }
+    }
+    throw new Error(`unable to get the binary for ${version} with thread=${thread}`);
   }
 
   for (let v of versions) {

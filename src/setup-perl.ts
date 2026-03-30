@@ -48,19 +48,14 @@ async function run() {
       perlHash = await digestOfPerlVersion(result.path);
       core.setOutput("perl-hash", perlHash);
 
-      const matchersPath = path.join(getPackagePath(), "scripts");
-      console.log(`::add-matcher::${path.join(matchersPath, "perl.json")}`);
+      const packagePath = getPackagePath();
+      console.log(`::add-matcher::${path.join(packagePath, "problem-matcher.json")}`);
 
       // for pre-installed scripts
-      core.addPath(path.join(getPackagePath(), "bin"));
+      core.addPath(path.join(packagePath, "bin"));
 
       // for pre-installed modules
-      core.exportVariable(
-        "PERL5LIB",
-        path.join(getPackagePath(), "scripts", "lib") +
-          path.delimiter +
-          path.join(getPackagePath(), "scripts", "lib", "perl5"),
-      );
+      core.exportVariable("PERL5LIB", path.join(packagePath, "lib") + path.delimiter + (process.env["PERL5LIB"] || ""));
     });
 
     await core.group("install CPAN modules", async () => {

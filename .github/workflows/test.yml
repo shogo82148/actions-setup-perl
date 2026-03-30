@@ -1,16 +1,6 @@
 name: Main workflow
 on:
   pull_request:
-    paths:
-      - ".github/workflows/test.yml"
-      - "__test__/**"
-      - "src/**"
-      - "package.json"
-      - "package-lock.json"
-      - "action.yml"
-      - ".prettierrc.json"
-      - "tsconfig.json"
-      - "scripts/lib/Actions/**"
   push:
     branches:
       - "main"
@@ -79,7 +69,6 @@ jobs:
 
       - name: "Actions::Core"
         run: prove -lv t
-        working-directory: ./scripts
       - name: list perl versions
         id: versions
         run: |
@@ -159,7 +148,6 @@ jobs:
 
       - name: "Actions::Core"
         run: prove -lv t
-        working-directory: ./scripts
       - name: list perl versions
         id: versions
         run: |
@@ -243,7 +231,6 @@ jobs:
 
       - name: "Actions::Core"
         run: prove -lv t
-        working-directory: ./scripts
       - name: list perl versions
         id: versions
         run: |
@@ -324,7 +311,6 @@ jobs:
 
       - name: "Actions::Core"
         run: prove -lv t
-        working-directory: ./scripts
       - name: list perl versions
         id: versions
         run: |

@@ -1,5 +1,7 @@
 import * as path from "path";
 import { fileURLToPath } from "url";
+import * as fs from "fs";
+import * as crypto from "crypto";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -33,4 +35,15 @@ export function getPackagePath(): string {
     return path.join(__dirname, "..");
   }
   return path.join(__dirname, "..", "..");
+}
+
+export async function calculateDigest(filename: string, algorithm: string): Promise<string> {
+  const hash = await new Promise<string>((resolve, reject) => {
+    const hash = crypto.createHash(algorithm);
+    const stream = fs.createReadStream(filename);
+    stream.on("data", (data) => hash.update(data));
+    stream.on("end", () => resolve(hash.digest("hex")));
+    stream.on("error", (err) => reject(err));
+  });
+  return hash;
 }

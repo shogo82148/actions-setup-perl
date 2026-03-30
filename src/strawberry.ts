@@ -55,7 +55,7 @@ export async function getPerl(version: string): Promise<Result> {
   // check cache
   const selected = determineVersion(version);
   let toolPath: string;
-  toolPath = tcp.find("perl", selected.version);
+  toolPath = tcp.find("strawberry-perl", selected.version);
 
   if (!toolPath) {
     // download, extract, cache

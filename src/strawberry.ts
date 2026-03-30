@@ -2,10 +2,9 @@ import * as core from "@actions/core";
 import * as tc from "@actions/tool-cache";
 import * as path from "path";
 import * as semver from "semver";
-import * as fs from "fs";
 import * as tcp from "./tool-cache-port.js";
-import * as crypto from "crypto";
-import { getPackagePath } from "./utils.js";
+import versions from "./versions/strawberry.json" with { type: "json" };
+import { calculateDigest } from "./utils.js";
 
 interface PerlVersion {
   version: string;
@@ -37,20 +36,8 @@ export interface Result {
 //   path: 'strawberry-perl-5.14.0.1-64bit-portable.zip'
 // },
 // 64 bit Portable binaries are not available with Perl 5.12.x and older.
-async function getAvailableVersions(): Promise<PerlVersion[]> {
-  return new Promise<PerlVersion[]>((resolve, reject) => {
-    fs.readFile(path.join(getPackagePath(), "versions", `strawberry.json`), (err, data) => {
-      if (err) {
-        reject(err);
-      }
-      const info = JSON.parse(data.toString()) as PerlVersion[];
-      resolve(info);
-    });
-  });
-}
-
-async function determineVersion(version: string): Promise<PerlVersion> {
-  const availableVersions = await getAvailableVersions();
+function determineVersion(version: string): PerlVersion {
+  const availableVersions = versions;
   // stable latest version
   if (version === "latest") {
     return availableVersions[0];
@@ -61,12 +48,12 @@ async function determineVersion(version: string): Promise<PerlVersion> {
       return v;
     }
   }
-  throw new Error("unable to get latest version");
+  throw new Error(`unable to get the binary for ${version}`);
 }
 
 export async function getPerl(version: string): Promise<Result> {
   // check cache
-  const selected = await determineVersion(version);
+  const selected = determineVersion(version);
   let toolPath: string;
   toolPath = tcp.find("perl", selected.version);
 
@@ -126,15 +113,4 @@ async function acquirePerl(version: PerlVersion): Promise<string> {
 
   const extPath = await tc.extractZip(downloadPath);
   return await tcp.cacheDir(extPath, "strawberry-perl", version.version);
-}
-
-async function calculateDigest(filename: string, algorithm: string): Promise<string> {
-  const hash = await new Promise<string>((resolve, reject) => {
-    const hash = crypto.createHash(algorithm);
-    const stream = fs.createReadStream(filename);
-    stream.on("data", (data) => hash.update(data));
-    stream.on("end", () => resolve(hash.digest("hex")));
-    stream.on("error", (err) => reject(err));
-  });
-  return hash;
 }

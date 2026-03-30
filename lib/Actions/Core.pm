@@ -218,31 +218,37 @@ sub get_state {
 
 sub _perl_versions_default {
     my ($platform, $patch) = @_;
-    my $path = File::Spec->catfile(dirname(__FILE__), ("..") x 3, 'versions', "$platform.json");
+    my $path = File::Spec->catfile(dirname(__FILE__), ("..") x 2, 'src', 'versions', "perl.json");
     open my $fh, '<', $path or die "failed to open $path: $!";
     my $contents = decode_utf8(scalar do { local $/; <$fh> });
     close($fh);
 
-    my $ret = decode_json($contents);
-    if (!$patch) {
-        # get latest versions for each minor versions
-        my %seen;
-        my @latest;
-        for my $v (@$ret) {
-            my ($major, $minor) = split /\./, $v;
-            if (!$seen{"$major.$minor"}) {
-                push @latest, $v;
-            }
-            $seen{"$major.$minor"} = 1;
-        }
-        $ret = \@latest;
+    my $versions = decode_json($contents);
+    my @ret;
+    if ($patch) {
+      my %seen;
+      for my $v (@$versions) {
+        next if $v->{os} ne $platform;
+        next if $seen{$v->{version}}++;
+        push @ret, $v->{version};
+      }
     }
-    return wantarray ? @$ret : $ret;
+    if (!$patch) {
+      # get latest versions for each minor versions
+      my %seen;
+      for my $v (@$versions) {
+        next if $v->{os} ne $platform;
+        my ($major, $minor) = split /\./, $v->{version};
+        next if $seen{"$major.$minor"}++;
+        push @ret, $v->{version};
+      }
+    }
+    return wantarray ? @ret : \@ret;
 }
 
 sub _perl_versions_strawberry {
     my ($platform, $patch) = @_;
-    my $path = File::Spec->catfile(dirname(__FILE__), ("..") x 3, 'versions', 'strawberry.json');
+    my $path = File::Spec->catfile(dirname(__FILE__), ("..") x 2, 'src', 'versions', 'strawberry.json');
     open my $fh, '<', $path or die "failed to open $path: $!";
     my $contents = decode_utf8(scalar do { local $/; <$fh> });
     close($fh);

@@ -1,7 +1,0 @@
-requires "Devel::PatchPerl", "2.02";
-requires "Perl::Build";
-requires "Try::Tiny";
-requires "File::Slurp";
-requires "JSON";
-requires "JSON::XS";
-

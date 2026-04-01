@@ -29,11 +29,11 @@
     "@actions/cache": "^6.0.0",
     "@actions/core": "^3.0.0",
     "@actions/exec": "^3.0.0",
+    "@actions/io": "^3.0.2",
     "@actions/tool-cache": "^4.0.0",
     "semver": "^7.7.4"
   },
   "devDependencies": {
-    "@actions/io": "^3.0.2",
     "@rollup/plugin-commonjs": "^29.0.2",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",

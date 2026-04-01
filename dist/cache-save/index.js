@@ -27945,7 +27945,7 @@ var MediaTypes$1;
 };
 const { access: access$1, appendFile, writeFile } = promises;
 
-var __awaiter$g = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+var __awaiter$e = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -27954,14 +27954,14 @@ var __awaiter$g = (undefined && undefined.__awaiter) || function (thisArg, _argu
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const { chmod: chmod$1, copyFile: copyFile$1, lstat: lstat$1, mkdir: mkdir$1, open: open$1, readdir: readdir$1, rename: rename$1, rm: rm$1, rmdir: rmdir$1, stat: stat$1, symlink: symlink$1, unlink: unlink$1 } = fs.promises;
+const { chmod, copyFile, lstat, mkdir, open, readdir, rename, rm, rmdir, stat, symlink, unlink } = fs.promises;
 // export const {open} = 'fs'
-const IS_WINDOWS$8 = process.platform === 'win32';
+const IS_WINDOWS$7 = process.platform === 'win32';
 fs.constants.O_RDONLY;
 function exists(fsPath) {
-    return __awaiter$g(this, void 0, void 0, function* () {
+    return __awaiter$e(this, void 0, void 0, function* () {
         try {
-            yield stat$1(fsPath);
+            yield stat(fsPath);
         }
         catch (err) {
             if (err.code === 'ENOENT') {
@@ -27976,12 +27976,12 @@ function exists(fsPath) {
  * On OSX/Linux, true if path starts with '/'. On Windows, true for paths like:
  * \, \hello, \\hello\share, C:, and C:\hello (and corresponding alternate separator cases).
  */
-function isRooted$1(p) {
-    p = normalizeSeparators$2(p);
+function isRooted(p) {
+    p = normalizeSeparators$1(p);
     if (!p) {
         throw new Error('isRooted() parameter "p" cannot be empty');
     }
-    if (IS_WINDOWS$8) {
+    if (IS_WINDOWS$7) {
         return (p.startsWith('\\') || /^[A-Z]:/i.test(p) // e.g. \ or \hello or \\hello
         ); // e.g. C: or C:\hello
     }
@@ -27993,12 +27993,12 @@ function isRooted$1(p) {
  * @param extensions  additional file extensions to try
  * @return if file exists and is executable, returns the file path. otherwise empty string.
  */
-function tryGetExecutablePath$1(filePath, extensions) {
-    return __awaiter$g(this, void 0, void 0, function* () {
+function tryGetExecutablePath(filePath, extensions) {
+    return __awaiter$e(this, void 0, void 0, function* () {
         let stats = undefined;
         try {
             // test file exists
-            stats = yield stat$1(filePath);
+            stats = yield stat(filePath);
         }
         catch (err) {
             if (err.code !== 'ENOENT') {
@@ -28007,7 +28007,7 @@ function tryGetExecutablePath$1(filePath, extensions) {
             }
         }
         if (stats && stats.isFile()) {
-            if (IS_WINDOWS$8) {
+            if (IS_WINDOWS$7) {
                 // on Windows, test for valid extension
                 const upperExt = path.extname(filePath).toUpperCase();
                 if (extensions.some(validExt => validExt.toUpperCase() === upperExt)) {
@@ -28015,7 +28015,7 @@ function tryGetExecutablePath$1(filePath, extensions) {
                 }
             }
             else {
-                if (isUnixExecutable$1(stats)) {
+                if (isUnixExecutable(stats)) {
                     return filePath;
                 }
             }
@@ -28026,7 +28026,7 @@ function tryGetExecutablePath$1(filePath, extensions) {
             filePath = originalFilePath + extension;
             stats = undefined;
             try {
-                stats = yield stat$1(filePath);
+                stats = yield stat(filePath);
             }
             catch (err) {
                 if (err.code !== 'ENOENT') {
@@ -28035,12 +28035,12 @@ function tryGetExecutablePath$1(filePath, extensions) {
                 }
             }
             if (stats && stats.isFile()) {
-                if (IS_WINDOWS$8) {
+                if (IS_WINDOWS$7) {
                     // preserve the case of the actual file (since an extension was appended)
                     try {
                         const directory = path.dirname(filePath);
                         const upperName = path.basename(filePath).toUpperCase();
-                        for (const actualName of yield readdir$1(directory)) {
+                        for (const actualName of yield readdir(directory)) {
                             if (upperName === actualName.toUpperCase()) {
                                 filePath = path.join(directory, actualName);
                                 break;
@@ -28054,7 +28054,7 @@ function tryGetExecutablePath$1(filePath, extensions) {
                     return filePath;
                 }
                 else {
-                    if (isUnixExecutable$1(stats)) {
+                    if (isUnixExecutable(stats)) {
                         return filePath;
                     }
                 }
@@ -28063,9 +28063,9 @@ function tryGetExecutablePath$1(filePath, extensions) {
         return '';
     });
 }
-function normalizeSeparators$2(p) {
+function normalizeSeparators$1(p) {
     p = p || '';
-    if (IS_WINDOWS$8) {
+    if (IS_WINDOWS$7) {
         // convert slashes on Windows
         p = p.replace(/\//g, '\\');
         // remove redundant slashes
@@ -28077,7 +28077,7 @@ function normalizeSeparators$2(p) {
 // on Mac/Linux, test the execute bit
 //     R   W  X  R  W X R W X
 //   256 128 64 32 16 8 4 2 1
-function isUnixExecutable$1(stats) {
+function isUnixExecutable(stats) {
     return ((stats.mode & 1) > 0 ||
         ((stats.mode & 8) > 0 &&
             process.getgid !== undefined &&
@@ -28087,7 +28087,7 @@ function isUnixExecutable$1(stats) {
             stats.uid === process.getuid()));
 }
 
-var __awaiter$f = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+var __awaiter$d = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -28097,6 +28097,19 @@ var __awaiter$f = (undefined && undefined.__awaiter) || function (thisArg, _argu
     });
 };
 /**
+ * Make a directory.  Creates the full path with folders in between
+ * Will throw if it fails
+ *
+ * @param   fsPath        path to create
+ * @returns Promise<void>
+ */
+function mkdirP(fsPath) {
+    return __awaiter$d(this, void 0, void 0, function* () {
+        ok(fsPath, 'a path argument must be provided');
+        yield mkdir(fsPath, { recursive: true });
+    });
+}
+/**
  * Returns path of a tool had the tool actually been invoked.  Resolves via paths.
  * If you check and the tool does not exist, it will throw.
  *
@@ -28104,16 +28117,16 @@ var __awaiter$f = (undefined && undefined.__awaiter) || function (thisArg, _argu
  * @param     check             whether to check if tool exists
  * @returns   Promise<string>   path to tool
  */
-function which$1(tool, check) {
-    return __awaiter$f(this, void 0, void 0, function* () {
+function which(tool, check) {
+    return __awaiter$d(this, void 0, void 0, function* () {
         if (!tool) {
             throw new Error("parameter 'tool' is required");
         }
         // recursive when check=true
         if (check) {
-            const result = yield which$1(tool, false);
+            const result = yield which(tool, false);
             if (!result) {
-                if (IS_WINDOWS$8) {
+                if (IS_WINDOWS$7) {
                     throw new Error(`Unable to locate executable file: ${tool}. Please verify either the file path exists or the file can be found within a directory specified by the PATH environment variable. Also verify the file has a valid extension for an executable file.`);
                 }
                 else {
@@ -28122,7 +28135,7 @@ function which$1(tool, check) {
             }
             return result;
         }
-        const matches = yield findInPath$1(tool);
+        const matches = yield findInPath(tool);
         if (matches && matches.length > 0) {
             return matches[0];
         }
@@ -28134,14 +28147,14 @@ function which$1(tool, check) {
  *
  * @returns   Promise<string[]>  the paths of the tool
  */
-function findInPath$1(tool) {
-    return __awaiter$f(this, void 0, void 0, function* () {
+function findInPath(tool) {
+    return __awaiter$d(this, void 0, void 0, function* () {
         if (!tool) {
             throw new Error("parameter 'tool' is required");
         }
         // build the list of extensions to try
         const extensions = [];
-        if (IS_WINDOWS$8 && process.env['PATHEXT']) {
+        if (IS_WINDOWS$7 && process.env['PATHEXT']) {
             for (const extension of process.env['PATHEXT'].split(path.delimiter)) {
                 if (extension) {
                     extensions.push(extension);
@@ -28149,8 +28162,8 @@ function findInPath$1(tool) {
             }
         }
         // if it's rooted, return it if exists. otherwise return empty.
-        if (isRooted$1(tool)) {
-            const filePath = yield tryGetExecutablePath$1(tool, extensions);
+        if (isRooted(tool)) {
+            const filePath = yield tryGetExecutablePath(tool, extensions);
             if (filePath) {
                 return [filePath];
             }
@@ -28177,7 +28190,7 @@ function findInPath$1(tool) {
         // find all matches
         const matches = [];
         for (const directory of directories) {
-            const filePath = yield tryGetExecutablePath$1(path.join(directory, tool), extensions);
+            const filePath = yield tryGetExecutablePath(path.join(directory, tool), extensions);
             if (filePath) {
                 matches.push(filePath);
             }
@@ -28186,7 +28199,7 @@ function findInPath$1(tool) {
     });
 }
 
-var __awaiter$e = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+var __awaiter$c = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -28196,7 +28209,7 @@ var __awaiter$e = (undefined && undefined.__awaiter) || function (thisArg, _argu
     });
 };
 /* eslint-disable @typescript-eslint/unbound-method */
-const IS_WINDOWS$7 = process.platform === 'win32';
+const IS_WINDOWS$6 = process.platform === 'win32';
 /*
  * Class for running command line tools. Handles quoting and arg parsing in a platform agnostic way.
  */
@@ -28219,7 +28232,7 @@ class ToolRunner extends events$2.EventEmitter {
         const toolPath = this._getSpawnFileName();
         const args = this._getSpawnArgs(options);
         let cmd = noPrefix ? '' : '[command]'; // omit prefix when piped to a second tool
-        if (IS_WINDOWS$7) {
+        if (IS_WINDOWS$6) {
             // Windows + cmd file
             if (this._isCmdFile()) {
                 cmd += toolPath;
@@ -28273,7 +28286,7 @@ class ToolRunner extends events$2.EventEmitter {
         }
     }
     _getSpawnFileName() {
-        if (IS_WINDOWS$7) {
+        if (IS_WINDOWS$6) {
             if (this._isCmdFile()) {
                 return process.env['COMSPEC'] || 'cmd.exe';
             }
@@ -28281,7 +28294,7 @@ class ToolRunner extends events$2.EventEmitter {
         return this.toolPath;
     }
     _getSpawnArgs(options) {
-        if (IS_WINDOWS$7) {
+        if (IS_WINDOWS$6) {
             if (this._isCmdFile()) {
                 let argline = `/D /S /C "${this._windowsQuoteCmdArg(this.toolPath)}`;
                 for (const a of this.args) {
@@ -28534,18 +28547,18 @@ class ToolRunner extends events$2.EventEmitter {
      * @returns   number
      */
     exec() {
-        return __awaiter$e(this, void 0, void 0, function* () {
+        return __awaiter$c(this, void 0, void 0, function* () {
             // root the tool path if it is unrooted and contains relative pathing
-            if (!isRooted$1(this.toolPath) &&
+            if (!isRooted(this.toolPath) &&
                 (this.toolPath.includes('/') ||
-                    (IS_WINDOWS$7 && this.toolPath.includes('\\')))) {
+                    (IS_WINDOWS$6 && this.toolPath.includes('\\')))) {
                 // prefer options.cwd if it is specified, however options.cwd may also need to be rooted
                 this.toolPath = path.resolve(process.cwd(), this.options.cwd || process.cwd(), this.toolPath);
             }
             // if the tool is only a file name, then resolve it from the PATH
             // otherwise verify it exists (add extension on Windows if necessary)
-            this.toolPath = yield which$1(this.toolPath, true);
-            return new Promise((resolve, reject) => __awaiter$e(this, void 0, void 0, function* () {
+            this.toolPath = yield which(this.toolPath, true);
+            return new Promise((resolve, reject) => __awaiter$c(this, void 0, void 0, function* () {
                 this._debug(`exec tool: ${this.toolPath}`);
                 this._debug('arguments:');
                 for (const arg of this.args) {
@@ -28766,7 +28779,7 @@ class ExecState extends events$2.EventEmitter {
     }
 }
 
-var __awaiter$d = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+var __awaiter$b = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -28786,7 +28799,7 @@ var __awaiter$d = (undefined && undefined.__awaiter) || function (thisArg, _argu
  * @returns   Promise<number>    exit code
  */
 function exec(commandLine, args, options) {
-    return __awaiter$d(this, void 0, void 0, function* () {
+    return __awaiter$b(this, void 0, void 0, function* () {
         const commandArgs = argStringToArray(commandLine);
         if (commandArgs.length === 0) {
             throw new Error(`Parameter 'commandLine' cannot be null or empty.`);
@@ -28963,7 +28976,7 @@ function getOptions(copy) {
     return result;
 }
 
-const IS_WINDOWS$6 = process.platform === 'win32';
+const IS_WINDOWS$5 = process.platform === 'win32';
 /**
  * Similar to path.dirname except normalizes the path separators and slightly better handling for Windows UNC paths.
  *
@@ -28985,13 +28998,13 @@ function dirname(p) {
     // Normalize slashes and trim unnecessary trailing slash
     p = safeTrimTrailingSeparator(p);
     // Windows UNC root, e.g. \\hello or \\hello\world
-    if (IS_WINDOWS$6 && /^\\\\[^\\]+(\\[^\\]+)?$/.test(p)) {
+    if (IS_WINDOWS$5 && /^\\\\[^\\]+(\\[^\\]+)?$/.test(p)) {
         return p;
     }
     // Get dirname
     let result = path.dirname(p);
     // Trim trailing slash for Windows UNC root, e.g. \\hello\world\
-    if (IS_WINDOWS$6 && /^\\\\[^\\]+\\[^\\]+\\$/.test(result)) {
+    if (IS_WINDOWS$5 && /^\\\\[^\\]+\\[^\\]+\\$/.test(result)) {
         result = safeTrimTrailingSeparator(result);
     }
     return result;
@@ -29008,7 +29021,7 @@ function ensureAbsoluteRoot(root, itemPath) {
         return itemPath;
     }
     // Windows
-    if (IS_WINDOWS$6) {
+    if (IS_WINDOWS$5) {
         // Check for itemPath like C: or C:foo
         if (itemPath.match(/^[A-Z]:[^\\/]|^[A-Z]:$/i)) {
             let cwd = process.cwd();
@@ -29035,7 +29048,7 @@ function ensureAbsoluteRoot(root, itemPath) {
             }
         }
         // Check for itemPath like \ or \foo
-        else if (normalizeSeparators$1(itemPath).match(/^\\$|^\\[^\\]/)) {
+        else if (normalizeSeparators(itemPath).match(/^\\$|^\\[^\\]/)) {
             const cwd = process.cwd();
             assert$1(cwd.match(/^[A-Z]:\\/i), `Expected current directory to start with an absolute drive root. Actual '${cwd}'`);
             return `${cwd[0]}:\\${itemPath.substr(1)}`;
@@ -29043,7 +29056,7 @@ function ensureAbsoluteRoot(root, itemPath) {
     }
     assert$1(hasAbsoluteRoot(root), `ensureAbsoluteRoot parameter 'root' must have an absolute root`);
     // Otherwise ensure root ends with a separator
-    if (root.endsWith('/') || (IS_WINDOWS$6 && root.endsWith('\\'))) ;
+    if (root.endsWith('/') || (IS_WINDOWS$5 && root.endsWith('\\'))) ;
     else {
         // Append separator
         root += path.sep;
@@ -29057,9 +29070,9 @@ function ensureAbsoluteRoot(root, itemPath) {
 function hasAbsoluteRoot(itemPath) {
     assert$1(itemPath, `hasAbsoluteRoot parameter 'itemPath' must not be empty`);
     // Normalize separators
-    itemPath = normalizeSeparators$1(itemPath);
+    itemPath = normalizeSeparators(itemPath);
     // Windows
-    if (IS_WINDOWS$6) {
+    if (IS_WINDOWS$5) {
         // E.g. \\hello\share or C:\hello
         return itemPath.startsWith('\\\\') || /^[A-Z]:\\/i.test(itemPath);
     }
@@ -29073,9 +29086,9 @@ function hasAbsoluteRoot(itemPath) {
 function hasRoot(itemPath) {
     assert$1(itemPath, `isRooted parameter 'itemPath' must not be empty`);
     // Normalize separators
-    itemPath = normalizeSeparators$1(itemPath);
+    itemPath = normalizeSeparators(itemPath);
     // Windows
-    if (IS_WINDOWS$6) {
+    if (IS_WINDOWS$5) {
         // E.g. \ or \hello or \\hello
         // E.g. C: or C:\hello
         return itemPath.startsWith('\\') || /^[A-Z]:/i.test(itemPath);
@@ -29086,10 +29099,10 @@ function hasRoot(itemPath) {
 /**
  * Removes redundant slashes and converts `/` to `\` on Windows
  */
-function normalizeSeparators$1(p) {
+function normalizeSeparators(p) {
     p = p || '';
     // Windows
-    if (IS_WINDOWS$6) {
+    if (IS_WINDOWS$5) {
         // Convert slashes on Windows
         p = p.replace(/\//g, '\\');
         // Remove redundant slashes
@@ -29109,7 +29122,7 @@ function safeTrimTrailingSeparator(p) {
         return '';
     }
     // Normalize separators
-    p = normalizeSeparators$1(p);
+    p = normalizeSeparators(p);
     // No trailing slash
     if (!p.endsWith(path.sep)) {
         return p;
@@ -29119,7 +29132,7 @@ function safeTrimTrailingSeparator(p) {
         return p;
     }
     // On Windows check if drive root. E.g. C:\
-    if (IS_WINDOWS$6 && /^[A-Z]:\\$/i.test(p)) {
+    if (IS_WINDOWS$5 && /^[A-Z]:\\$/i.test(p)) {
         return p;
     }
     // Otherwise trim trailing slash
@@ -29141,7 +29154,7 @@ var MatchKind;
     MatchKind[MatchKind["All"] = 3] = "All";
 })(MatchKind || (MatchKind = {}));
 
-const IS_WINDOWS$5 = process.platform === 'win32';
+const IS_WINDOWS$4 = process.platform === 'win32';
 /**
  * Given an array of patterns, returns an array of paths to search.
  * Duplicates and paths under other included paths are filtered out.
@@ -29152,7 +29165,7 @@ function getSearchPaths(patterns) {
     // Create a map of all search paths
     const searchPathMap = {};
     for (const pattern of patterns) {
-        const key = IS_WINDOWS$5
+        const key = IS_WINDOWS$4
             ? pattern.searchPath.toUpperCase()
             : pattern.searchPath;
         searchPathMap[key] = 'candidate';
@@ -29160,7 +29173,7 @@ function getSearchPaths(patterns) {
     const result = [];
     for (const pattern of patterns) {
         // Check if already included
-        const key = IS_WINDOWS$5
+        const key = IS_WINDOWS$4
             ? pattern.searchPath.toUpperCase()
             : pattern.searchPath;
         if (searchPathMap[key] === 'included') {
@@ -30522,7 +30535,7 @@ function requireMinimatch () {
 var minimatchExports = requireMinimatch();
 var minimatch = /*@__PURE__*/getDefaultExportFromCjs(minimatchExports);
 
-const IS_WINDOWS$4 = process.platform === 'win32';
+const IS_WINDOWS$3 = process.platform === 'win32';
 /**
  * Helper class for parsing paths into segments
  */
@@ -30569,7 +30582,7 @@ class Path {
                 // Must not be empty
                 assert$1(segment, `Parameter 'itemPath' must not contain any empty segments`);
                 // Normalize slashes
-                segment = normalizeSeparators$1(itemPath[i]);
+                segment = normalizeSeparators(itemPath[i]);
                 // Root segment
                 if (i === 0 && hasRoot(segment)) {
                     segment = safeTrimTrailingSeparator(segment);
@@ -30592,7 +30605,7 @@ class Path {
         // First segment
         let result = this.segments[0];
         // All others
-        let skipSlash = result.endsWith(path.sep) || (IS_WINDOWS$4 && /^[A-Z]:$/i.test(result));
+        let skipSlash = result.endsWith(path.sep) || (IS_WINDOWS$3 && /^[A-Z]:$/i.test(result));
         for (let i = 1; i < this.segments.length; i++) {
             if (skipSlash) {
                 skipSlash = false;
@@ -30607,7 +30620,7 @@ class Path {
 }
 
 const { Minimatch } = minimatch;
-const IS_WINDOWS$3 = process.platform === 'win32';
+const IS_WINDOWS$2 = process.platform === 'win32';
 class Pattern {
     constructor(patternOrNegate, isImplicitPattern = false, segments, homedir) {
         /**
@@ -30641,7 +30654,7 @@ class Pattern {
         // Segments
         this.segments = new Path(pattern).segments;
         // Trailing slash indicates the pattern should only match directories, not regular files
-        this.trailingSeparator = normalizeSeparators$1(pattern)
+        this.trailingSeparator = normalizeSeparators(pattern)
             .endsWith(path.sep);
         pattern = safeTrimTrailingSeparator(pattern);
         // Search path (literal path prior to the first glob segment)
@@ -30651,18 +30664,18 @@ class Pattern {
             .filter(x => !foundGlob && !(foundGlob = x === ''));
         this.searchPath = new Path(searchSegments).toString();
         // Root RegExp (required when determining partial match)
-        this.rootRegExp = new RegExp(Pattern.regExpEscape(searchSegments[0]), IS_WINDOWS$3 ? 'i' : '');
+        this.rootRegExp = new RegExp(Pattern.regExpEscape(searchSegments[0]), IS_WINDOWS$2 ? 'i' : '');
         this.isImplicitPattern = isImplicitPattern;
         // Create minimatch
         const minimatchOptions = {
             dot: true,
             nobrace: true,
-            nocase: IS_WINDOWS$3,
+            nocase: IS_WINDOWS$2,
             nocomment: true,
             noext: true,
             nonegate: true
         };
-        pattern = IS_WINDOWS$3 ? pattern.replace(/\\/g, '/') : pattern;
+        pattern = IS_WINDOWS$2 ? pattern.replace(/\\/g, '/') : pattern;
         this.minimatch = new Minimatch(pattern, minimatchOptions);
     }
     /**
@@ -30672,7 +30685,7 @@ class Pattern {
         // Last segment is globstar?
         if (this.segments[this.segments.length - 1] === '**') {
             // Normalize slashes
-            itemPath = normalizeSeparators$1(itemPath);
+            itemPath = normalizeSeparators(itemPath);
             // Append a trailing slash. Otherwise Minimatch will not match the directory immediately
             // preceding the globstar. For example, given the pattern `/foo/**`, Minimatch returns
             // false for `/foo` but returns true for `/foo/`. Append a trailing slash to handle that quirk.
@@ -30702,13 +30715,13 @@ class Pattern {
         if (dirname(itemPath) === itemPath) {
             return this.rootRegExp.test(itemPath);
         }
-        return this.minimatch.matchOne(itemPath.split(IS_WINDOWS$3 ? /\\+/ : /\/+/), this.minimatch.set[0], true);
+        return this.minimatch.matchOne(itemPath.split(IS_WINDOWS$2 ? /\\+/ : /\/+/), this.minimatch.set[0], true);
     }
     /**
      * Escapes glob patterns within a path
      */
     static globEscape(s) {
-        return (IS_WINDOWS$3 ? s : s.replace(/\\/g, '\\\\')) // escape '\' on Linux/macOS
+        return (IS_WINDOWS$2 ? s : s.replace(/\\/g, '\\\\')) // escape '\' on Linux/macOS
             .replace(/(\[)(?=[^/]+\])/g, '[[]') // escape '[' when ']' follows within the path segment
             .replace(/\?/g, '[?]') // escape '?'
             .replace(/\*/g, '[*]'); // escape '*'
@@ -30726,7 +30739,7 @@ class Pattern {
         // Must not contain globs in root, e.g. Windows UNC path \\foo\b*r
         assert$1(!hasRoot(pattern) || literalSegments[0], `Invalid pattern '${pattern}'. Root segment must not contain globs.`);
         // Normalize slashes
-        pattern = normalizeSeparators$1(pattern);
+        pattern = normalizeSeparators(pattern);
         // Replace leading `.` segment
         if (pattern === '.' || pattern.startsWith(`.${path.sep}`)) {
             pattern = Pattern.globEscape(process.cwd()) + pattern.substr(1);
@@ -30739,7 +30752,7 @@ class Pattern {
             pattern = Pattern.globEscape(homedir) + pattern.substr(1);
         }
         // Replace relative drive root, e.g. pattern is C: or C:foo
-        else if (IS_WINDOWS$3 &&
+        else if (IS_WINDOWS$2 &&
             (pattern.match(/^[A-Z]:$/i) || pattern.match(/^[A-Z]:[^\\]/i))) {
             let root = ensureAbsoluteRoot('C:\\dummy-root', pattern.substr(0, 2));
             if (pattern.length > 2 && !root.endsWith('\\')) {
@@ -30748,7 +30761,7 @@ class Pattern {
             pattern = Pattern.globEscape(root) + pattern.substr(2);
         }
         // Replace relative root, e.g. pattern is \ or \foo
-        else if (IS_WINDOWS$3 && (pattern === '\\' || pattern.match(/^\\[^\\]/))) {
+        else if (IS_WINDOWS$2 && (pattern === '\\' || pattern.match(/^\\[^\\]/))) {
             let root = ensureAbsoluteRoot('C:\\dummy-root', '\\');
             if (!root.endsWith('\\')) {
                 root += '\\';
@@ -30759,7 +30772,7 @@ class Pattern {
         else {
             pattern = ensureAbsoluteRoot(Pattern.globEscape(process.cwd()), pattern);
         }
-        return normalizeSeparators$1(pattern);
+        return normalizeSeparators(pattern);
     }
     /**
      * Attempts to unescape a pattern segment to create a literal path segment.
@@ -30770,7 +30783,7 @@ class Pattern {
         for (let i = 0; i < segment.length; i++) {
             const c = segment[i];
             // Escape
-            if (c === '\\' && !IS_WINDOWS$3 && i + 1 < segment.length) {
+            if (c === '\\' && !IS_WINDOWS$2 && i + 1 < segment.length) {
                 literal += segment[++i];
                 continue;
             }
@@ -30785,7 +30798,7 @@ class Pattern {
                 for (let i2 = i + 1; i2 < segment.length; i2++) {
                     const c2 = segment[i2];
                     // Escape
-                    if (c2 === '\\' && !IS_WINDOWS$3 && i2 + 1 < segment.length) {
+                    if (c2 === '\\' && !IS_WINDOWS$2 && i2 + 1 < segment.length) {
                         set += segment[++i2];
                         continue;
                     }
@@ -30835,7 +30848,7 @@ class SearchState {
     }
 }
 
-var __awaiter$c = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+var __awaiter$a = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -30864,7 +30877,7 @@ var __asyncGenerator = (undefined && undefined.__asyncGenerator) || function (th
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
 };
-const IS_WINDOWS$2 = process.platform === 'win32';
+const IS_WINDOWS$1 = process.platform === 'win32';
 class DefaultGlobber {
     constructor(options) {
         this.patterns = [];
@@ -30876,7 +30889,7 @@ class DefaultGlobber {
         return this.searchPaths.slice();
     }
     glob() {
-        return __awaiter$c(this, void 0, void 0, function* () {
+        return __awaiter$a(this, void 0, void 0, function* () {
             var _a, e_1, _b, _c;
             const result = [];
             try {
@@ -30978,9 +30991,9 @@ class DefaultGlobber {
      * Constructs a DefaultGlobber
      */
     static create(patterns, options) {
-        return __awaiter$c(this, void 0, void 0, function* () {
+        return __awaiter$a(this, void 0, void 0, function* () {
             const result = new DefaultGlobber(options);
-            if (IS_WINDOWS$2) {
+            if (IS_WINDOWS$1) {
                 patterns = patterns.replace(/\r\n/g, '\n');
                 patterns = patterns.replace(/\r/g, '\n');
             }
@@ -31000,7 +31013,7 @@ class DefaultGlobber {
         });
     }
     static stat(item, options, traversalChain) {
-        return __awaiter$c(this, void 0, void 0, function* () {
+        return __awaiter$a(this, void 0, void 0, function* () {
             // Note:
             // `stat` returns info about the target of a symlink (or symlink chain)
             // `lstat` returns info about a symlink itself
@@ -31063,7 +31076,7 @@ class DefaultGlobber {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 
-var __awaiter$b = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+var __awaiter$9 = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -31079,248 +31092,8 @@ var __awaiter$b = (undefined && undefined.__awaiter) || function (thisArg, _argu
  * @param options   Glob options
  */
 function create(patterns, options) {
-    return __awaiter$b(this, void 0, void 0, function* () {
+    return __awaiter$9(this, void 0, void 0, function* () {
         return yield DefaultGlobber.create(patterns, options);
-    });
-}
-
-var __awaiter$a = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-const { chmod, copyFile, lstat, mkdir, open, readdir, rename, rm, rmdir, stat, symlink, unlink } = fs.promises;
-// export const {open} = 'fs'
-const IS_WINDOWS$1 = process.platform === 'win32';
-fs.constants.O_RDONLY;
-/**
- * On OSX/Linux, true if path starts with '/'. On Windows, true for paths like:
- * \, \hello, \\hello\share, C:, and C:\hello (and corresponding alternate separator cases).
- */
-function isRooted(p) {
-    p = normalizeSeparators(p);
-    if (!p) {
-        throw new Error('isRooted() parameter "p" cannot be empty');
-    }
-    if (IS_WINDOWS$1) {
-        return (p.startsWith('\\') || /^[A-Z]:/i.test(p) // e.g. \ or \hello or \\hello
-        ); // e.g. C: or C:\hello
-    }
-    return p.startsWith('/');
-}
-/**
- * Best effort attempt to determine whether a file exists and is executable.
- * @param filePath    file path to check
- * @param extensions  additional file extensions to try
- * @return if file exists and is executable, returns the file path. otherwise empty string.
- */
-function tryGetExecutablePath(filePath, extensions) {
-    return __awaiter$a(this, void 0, void 0, function* () {
-        let stats = undefined;
-        try {
-            // test file exists
-            stats = yield stat(filePath);
-        }
-        catch (err) {
-            if (err.code !== 'ENOENT') {
-                // eslint-disable-next-line no-console
-                console.log(`Unexpected error attempting to determine if executable file exists '${filePath}': ${err}`);
-            }
-        }
-        if (stats && stats.isFile()) {
-            if (IS_WINDOWS$1) {
-                // on Windows, test for valid extension
-                const upperExt = path.extname(filePath).toUpperCase();
-                if (extensions.some(validExt => validExt.toUpperCase() === upperExt)) {
-                    return filePath;
-                }
-            }
-            else {
-                if (isUnixExecutable(stats)) {
-                    return filePath;
-                }
-            }
-        }
-        // try each extension
-        const originalFilePath = filePath;
-        for (const extension of extensions) {
-            filePath = originalFilePath + extension;
-            stats = undefined;
-            try {
-                stats = yield stat(filePath);
-            }
-            catch (err) {
-                if (err.code !== 'ENOENT') {
-                    // eslint-disable-next-line no-console
-                    console.log(`Unexpected error attempting to determine if executable file exists '${filePath}': ${err}`);
-                }
-            }
-            if (stats && stats.isFile()) {
-                if (IS_WINDOWS$1) {
-                    // preserve the case of the actual file (since an extension was appended)
-                    try {
-                        const directory = path.dirname(filePath);
-                        const upperName = path.basename(filePath).toUpperCase();
-                        for (const actualName of yield readdir(directory)) {
-                            if (upperName === actualName.toUpperCase()) {
-                                filePath = path.join(directory, actualName);
-                                break;
-                            }
-                        }
-                    }
-                    catch (err) {
-                        // eslint-disable-next-line no-console
-                        console.log(`Unexpected error attempting to determine the actual case of the file '${filePath}': ${err}`);
-                    }
-                    return filePath;
-                }
-                else {
-                    if (isUnixExecutable(stats)) {
-                        return filePath;
-                    }
-                }
-            }
-        }
-        return '';
-    });
-}
-function normalizeSeparators(p) {
-    p = p || '';
-    if (IS_WINDOWS$1) {
-        // convert slashes on Windows
-        p = p.replace(/\//g, '\\');
-        // remove redundant slashes
-        return p.replace(/\\\\+/g, '\\');
-    }
-    // remove redundant slashes
-    return p.replace(/\/\/+/g, '/');
-}
-// on Mac/Linux, test the execute bit
-//     R   W  X  R  W X R W X
-//   256 128 64 32 16 8 4 2 1
-function isUnixExecutable(stats) {
-    return ((stats.mode & 1) > 0 ||
-        ((stats.mode & 8) > 0 &&
-            process.getgid !== undefined &&
-            stats.gid === process.getgid()) ||
-        ((stats.mode & 64) > 0 &&
-            process.getuid !== undefined &&
-            stats.uid === process.getuid()));
-}
-
-var __awaiter$9 = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-/**
- * Make a directory.  Creates the full path with folders in between
- * Will throw if it fails
- *
- * @param   fsPath        path to create
- * @returns Promise<void>
- */
-function mkdirP(fsPath) {
-    return __awaiter$9(this, void 0, void 0, function* () {
-        ok(fsPath, 'a path argument must be provided');
-        yield mkdir(fsPath, { recursive: true });
-    });
-}
-/**
- * Returns path of a tool had the tool actually been invoked.  Resolves via paths.
- * If you check and the tool does not exist, it will throw.
- *
- * @param     tool              name of the tool
- * @param     check             whether to check if tool exists
- * @returns   Promise<string>   path to tool
- */
-function which(tool, check) {
-    return __awaiter$9(this, void 0, void 0, function* () {
-        if (!tool) {
-            throw new Error("parameter 'tool' is required");
-        }
-        // recursive when check=true
-        if (check) {
-            const result = yield which(tool, false);
-            if (!result) {
-                if (IS_WINDOWS$1) {
-                    throw new Error(`Unable to locate executable file: ${tool}. Please verify either the file path exists or the file can be found within a directory specified by the PATH environment variable. Also verify the file has a valid extension for an executable file.`);
-                }
-                else {
-                    throw new Error(`Unable to locate executable file: ${tool}. Please verify either the file path exists or the file can be found within a directory specified by the PATH environment variable. Also check the file mode to verify the file is executable.`);
-                }
-            }
-            return result;
-        }
-        const matches = yield findInPath(tool);
-        if (matches && matches.length > 0) {
-            return matches[0];
-        }
-        return '';
-    });
-}
-/**
- * Returns a list of all occurrences of the given tool on the system path.
- *
- * @returns   Promise<string[]>  the paths of the tool
- */
-function findInPath(tool) {
-    return __awaiter$9(this, void 0, void 0, function* () {
-        if (!tool) {
-            throw new Error("parameter 'tool' is required");
-        }
-        // build the list of extensions to try
-        const extensions = [];
-        if (IS_WINDOWS$1 && process.env['PATHEXT']) {
-            for (const extension of process.env['PATHEXT'].split(path.delimiter)) {
-                if (extension) {
-                    extensions.push(extension);
-                }
-            }
-        }
-        // if it's rooted, return it if exists. otherwise return empty.
-        if (isRooted(tool)) {
-            const filePath = yield tryGetExecutablePath(tool, extensions);
-            if (filePath) {
-                return [filePath];
-            }
-            return [];
-        }
-        // if any path separators, return empty
-        if (tool.includes(path.sep)) {
-            return [];
-        }
-        // build the list of directories
-        //
-        // Note, technically "where" checks the current directory on Windows. From a toolkit perspective,
-        // it feels like we should not do this. Checking the current directory seems like more of a use
-        // case of a shell, and the which() function exposed by the toolkit should strive for consistency
-        // across platforms.
-        const directories = [];
-        if (process.env.PATH) {
-            for (const p of process.env.PATH.split(path.delimiter)) {
-                if (p) {
-                    directories.push(p);
-                }
-            }
-        }
-        // find all matches
-        const matches = [];
-        for (const directory of directories) {
-            const filePath = yield tryGetExecutablePath(path.join(directory, tool), extensions);
-            if (filePath) {
-                matches.push(filePath);
-            }
-        }
-        return matches;
     });
 }
 

@@ -1970,7 +1970,7 @@ $fatpacked{"Module/Load/Conditional.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."
 MODULE_LOAD_CONDITIONAL
 
 $fatpacked{"Module/Metadata.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MODULE_METADATA';
-  package Module::Metadata;sub __clean_eval {eval $_[0]}use strict;use warnings;our$VERSION='1.000038';use Carp qw/croak/;use File::Spec;BEGIN {eval {require Fcntl;Fcntl->import('SEEK_SET');1}or *SEEK_SET=sub {0}}use version 0.87;BEGIN {if ($INC{'Log/Contextual.pm'}){require "Log/Contextual/WarnLogger.pm";Log::Contextual->import('log_info','-default_logger'=>Log::Contextual::WarnLogger->new({env_prefix=>'MODULE_METADATA',}),)}else {*log_info=sub (&) {warn $_[0]->()}}}use File::Find qw(find);my$V_NUM_REGEXP=qr{v?[0-9._]+};my$PKG_FIRST_WORD_REGEXP=qr{ # the FIRST word in a package name
+  package Module::Metadata;sub __clean_eval {eval $_[0]}use strict;use warnings;our$VERSION='1.000039';use Carp qw/croak/;use File::Spec;BEGIN {eval {require Fcntl;Fcntl->import('SEEK_SET');1}or *SEEK_SET=sub {0}}use version 0.87;BEGIN {if ($INC{'Log/Contextual.pm'}){require "Log/Contextual/WarnLogger.pm";Log::Contextual->import('log_info','-default_logger'=>Log::Contextual::WarnLogger->new({env_prefix=>'MODULE_METADATA',}),)}else {*log_info=sub (&) {warn $_[0]->()}}}use File::Find qw(find);my$V_NUM_REGEXP=qr{v?[0-9._]+};my$PKG_FIRST_WORD_REGEXP=qr{ # the FIRST word in a package name
     [a-zA-Z_]                     # the first word CANNOT start with a digit
       (?:
         [\w']?                    # can contain letters, digits, _, or ticks
@@ -2009,7 +2009,7 @@ $fatpacked{"Module/Metadata.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
     \s*                   # optional whitespace
     ($V_NUM_REGEXP)?      # optional version number
     \s*                   # optional whitespace
-    [;\{]                 # semicolon line terminator or block start
+    [:;\{]                # attribute start, semicolon line terminator or block start
   }x;my$VARNAME_REGEXP=qr{ # match fully-qualified VERSION name
     ([\$*])         # sigil - $ or *
     (

@@ -1,8 +1,18 @@
 [
   {
+    "version": "5.42.2",
+    "release": "1",
+    "sha256": "32d83be90cf04b807cfb9477482bc36302cdee6f5b04cf57e81adecbd8f07898"
+  },
+  {
     "version": "5.42.0",
     "release": "1",
     "sha256": "a1cde185656cf307b51670eed69f648b9eff15b5c518cb136e027c628e650b71"
+  },
+  {
+    "version": "5.40.4",
+    "release": "1",
+    "sha256": "aa9052ac082c8a8a0f952823b3f4f0bf9c1d0f84bbe0b3dfe0aa94291d6b1045"
   },
   {
     "version": "5.40.2",

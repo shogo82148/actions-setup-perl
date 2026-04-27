@@ -59,10 +59,11 @@ jobs:
             os: "windows-latest"
             installer: "carton"
             distribution: "strawberry"
-          - perl: "5.24" # cpm requires Perl 5.24 or later
-            os: "windows-latest"
-            installer: "cpm"
-            distribution: "strawberry"
+          # XXX: It doesn't work.
+          # - perl: "5.24" # cpm requires Perl 5.24 or later
+          #   os: "windows-latest"
+          #   installer: "cpm"
+          #   distribution: "strawberry"
 
           # old Perl on Linux
           - perl: "5.8"
@@ -101,10 +102,11 @@ jobs:
             os: "windows-latest"
             installer: "carton"
             distribution: "default"
-          - perl: "5.24" # cpm requires Perl 5.24 or later
-            os: "windows-latest"
-            installer: "cpm"
-            distribution: "default"
+          # XXX: It doesn't work.
+          # - perl: "5.24" # cpm requires Perl 5.24 or later
+          #   os: "windows-latest"
+          #   installer: "cpm"
+          #   distribution: "default"
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2

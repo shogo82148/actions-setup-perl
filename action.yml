@@ -30,7 +30,7 @@ inputs:
   install-modules-with:
     description: |
       install CPAN modules from your cpanfile with the specified installer.
-      cpanm(App::cpanminus), cpm(App::cpm), and carton(Carton) are available.
+      cpanm(App::cpanminus), cpm(App::cpm, required Perl 5.24 or later.), and carton(Carton) are available.
       By default, any CPAN modules are not installed.
     required: false
   install-modules-args:

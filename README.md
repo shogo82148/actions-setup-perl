@@ -124,7 +124,7 @@ Enables interpreter-based threads (ithread) options (`-Duseithreads`). `true` an
 ### `install-modules-with`
 
 Install CPAN modules from your `cpanfile` with the specified installer.
-`cpanm`([App::cpanminus](https://metacpan.org/pod/App::cpanminus)), `cpm`([App::cpm](https://metacpan.org/pod/App::cpm)), and `carton`([Carton](https://metacpan.org/pod/Carton)) are available.
+`cpanm`([App::cpanminus](https://metacpan.org/pod/App::cpanminus)), `cpm`([App::cpm](https://metacpan.org/pod/App::cpm), required Perl 5.24 or later.), and `carton`([Carton](https://metacpan.org/pod/Carton)) are available.
 CPAN modules is installed into `${working-directory}/local/`.
 
 - Default: Nothing. Any CPAN module is not installed.
@@ -195,7 +195,7 @@ The following Perl scripts are pre-installed for convenience.
 
 - [carton](https://metacpan.org/pod/distribution/Carton/script/carton)
 - [cpanm](https://metacpan.org/pod/distribution/App-cpanminus/bin/cpanm)
-- [cpm](https://metacpan.org/pod/distribution/App-cpm/script/cpm)
+- [cpm](https://metacpan.org/pod/distribution/App-cpm/script/cpm) (required Perl 5.24 or later.)
 
 # Pre-installed Modules
 

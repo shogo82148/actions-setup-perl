@@ -36,10 +36,10 @@ DISTRIBUTIONS
       Module::Build::Tiny 0.034
       Perl::Strip 0
       perl v5.16.0
-  App-cpm-v1.0.4
-    pathname: S/SK/SKAJI/App-cpm-v1.0.4.tar.gz
+  App-cpm-v1.1.0
+    pathname: S/SK/SKAJI/App-cpm-v1.1.0.tar.gz
     provides:
-      App::cpm v1.0.4
+      App::cpm v1.1.0
       App::cpm::Builder::Base undef
       App::cpm::Builder::EUMM undef
       App::cpm::Builder::MB undef

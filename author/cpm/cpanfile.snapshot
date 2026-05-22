@@ -24,18 +24,18 @@ DISTRIBUTIONS
       File::Spec::Unix 0
       Getopt::Long 0
       perl 5.008000
-  App-FatPacker-Simple-0.20
-    pathname: S/SK/SKAJI/App-FatPacker-Simple-0.20.tar.gz
+  App-FatPacker-Simple-v1.0.2
+    pathname: S/SK/SKAJI/App-FatPacker-Simple-v1.0.2.tar.gz
     provides:
-      App::FatPacker::Simple 0.20
+      App::FatPacker::Simple v1.0.2
       App::FatPacker::Simple::Tutorial undef
     requirements:
       App::FatPacker 0
       Distribution::Metadata 0.05
       Getopt::Long 2.39
-      Module::Build::Tiny 0.034
+      Module::Build::Tiny 0.053
       Perl::Strip 0
-      perl v5.16.0
+      perl v5.24.0
   App-cpm-v1.1.0
     pathname: S/SK/SKAJI/App-cpm-v1.1.0.tar.gz
     provides:

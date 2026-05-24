@@ -36,10 +36,10 @@ DISTRIBUTIONS
       Module::Build::Tiny 0.053
       Perl::Strip 0
       perl v5.24.0
-  App-cpm-v1.1.0
-    pathname: S/SK/SKAJI/App-cpm-v1.1.0.tar.gz
+  App-cpm-v1.1.1
+    pathname: S/SK/SKAJI/App-cpm-v1.1.1.tar.gz
     provides:
-      App::cpm v1.1.0
+      App::cpm v1.1.1
       App::cpm::Builder::Base undef
       App::cpm::Builder::EUMM undef
       App::cpm::Builder::MB undef
@@ -74,10 +74,10 @@ DISTRIBUTIONS
       App::cpm::Worker::Resolver undef
       App::cpm::version undef
     requirements:
-      CPAN::02Packages::Search 0.100
+      CPAN::02Packages::Search v1.0.0
       CPAN::DistnameInfo 0
-      Command::Runner 0.201
-      Darwin::InitObjC 0
+      Command::Runner v1.0.0
+      Darwin::InitObjC v1.0.0
       ExtUtils::Config 0
       ExtUtils::Helpers 0
       ExtUtils::Install 2.20
@@ -89,20 +89,20 @@ DISTRIBUTIONS
       IPC::Run3 0
       Module::Build::Tiny 0.051
       Module::CPANfile 0
-      Module::cpmfile 0.001
-      Parallel::Pipes::App 0.201
+      Module::cpmfile v1.0.0
+      Parallel::Pipes::App v1.0.0
       Parse::LocalDistribution 0.20
-      Proc::ForkSafe 0.001
+      Proc::ForkSafe v1.0.0
       perl v5.24.0
-  CPAN-02Packages-Search-0.100
-    pathname: S/SK/SKAJI/CPAN-02Packages-Search-0.100.tar.gz
+  CPAN-02Packages-Search-v1.0.0
+    pathname: S/SK/SKAJI/CPAN-02Packages-Search-v1.0.0.tar.gz
     provides:
-      CPAN::02Packages::Search 0.100
+      CPAN::02Packages::Search v1.0.0
     requirements:
-      Module::Build::Tiny 0.034
+      Module::Build::Tiny 0.053
       Search::Dict 1.07
       Tie::Handle::SkipHeader 0.004
-      perl 5.008001
+      perl v5.24.0
   CPAN-DistnameInfo-0.12
     pathname: G/GB/GBARR/CPAN-DistnameInfo-0.12.tar.gz
     provides:
@@ -140,27 +140,27 @@ DISTRIBUTIONS
       Clone 0.50
     requirements:
       ExtUtils::MakeMaker 0
-  Command-Runner-0.201
-    pathname: S/SK/SKAJI/Command-Runner-0.201.tar.gz
+  Command-Runner-v1.0.0
+    pathname: S/SK/SKAJI/Command-Runner-v1.0.0.tar.gz
     provides:
-      Command::Runner 0.201
+      Command::Runner v1.0.0
       Command::Runner::LineBuffer undef
       Command::Runner::Quote undef
       Command::Runner::Timeout undef
     requirements:
       Capture::Tiny 0
       File::pushd 0
-      Module::Build::Tiny 0.051
+      Module::Build::Tiny 0.053
       String::ShellQuote 0
       Win32::ShellQuote 0
-      perl 5.008001
-  Darwin-InitObjC-0.001
-    pathname: S/SK/SKAJI/Darwin-InitObjC-0.001.tar.gz
+      perl v5.24.0
+  Darwin-InitObjC-v1.0.0
+    pathname: S/SK/SKAJI/Darwin-InitObjC-v1.0.0.tar.gz
     provides:
-      Darwin::InitObjC 0.001
+      Darwin::InitObjC v1.0.0
     requirements:
-      Module::Build::Tiny 0.051
-      perl v5.8.1
+      Module::Build::Tiny 0.053
+      perl v5.24.0
   Devel-GlobalDestruction-0.14
     pathname: H/HA/HAARG/Devel-GlobalDestruction-0.14.tar.gz
     provides:
@@ -174,19 +174,19 @@ DISTRIBUTIONS
     provides:
       Devel::GlobalDestruction::XS 0.03
     requirements:
-  Distribution-Metadata-0.10
-    pathname: S/SK/SKAJI/Distribution-Metadata-0.10.tar.gz
+  Distribution-Metadata-v1.0.0
+    pathname: S/SK/SKAJI/Distribution-Metadata-v1.0.0.tar.gz
     provides:
-      Distribution::Metadata 0.10
+      Distribution::Metadata v1.0.0
       Distribution::Metadata::Factory undef
     requirements:
       CPAN::DistnameInfo 0
       CPAN::Meta 0
       ExtUtils::Packlist 0
       JSON 0
-      Module::Build::Tiny 0.034
+      Module::Build::Tiny 0.053
       Module::Metadata 0
-      perl v5.16.0
+      perl v5.24.0
   ExtUtils-Config-0.010
     pathname: L/LE/LEONT/ExtUtils-Config-0.010.tar.gz
     provides:
@@ -383,20 +383,20 @@ DISTRIBUTIONS
       CPAN::Meta::Prereqs 2.12091
       ExtUtils::MakeMaker 0
       parent 0
-  Module-cpmfile-0.006
-    pathname: S/SK/SKAJI/Module-cpmfile-0.006.tar.gz
+  Module-cpmfile-v1.0.0
+    pathname: S/SK/SKAJI/Module-cpmfile-v1.0.0.tar.gz
     provides:
-      Module::cpmfile 0.006
+      Module::cpmfile v1.0.0
       Module::cpmfile::Prereqs undef
       Module::cpmfile::Util undef
     requirements:
       CPAN::Meta::Prereqs 0
       CPAN::Meta::Requirements 2.130
       Exporter 5.57
-      Module::Build::Tiny 0.034
+      Module::Build::Tiny 0.053
       Scalar::Util 0
       YAML::PP 0.027
-      perl 5.008001
+      perl v5.24.0
   PPI-1.291
     pathname: M/MI/MITHALDU/PPI-1.291.tar.gz
     provides:
@@ -513,14 +513,14 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       version 0.77
-  Parallel-Pipes-0.201
-    pathname: S/SK/SKAJI/Parallel-Pipes-0.201.tar.gz
+  Parallel-Pipes-v1.0.0
+    pathname: S/SK/SKAJI/Parallel-Pipes-v1.0.0.tar.gz
     provides:
-      Parallel::Pipes 0.201
-      Parallel::Pipes::App 0.201
+      Parallel::Pipes v1.0.0
+      Parallel::Pipes::App v1.0.0
     requirements:
-      Module::Build::Tiny 0.052
-      perl 5.008001
+      Module::Build::Tiny 0.053
+      perl v5.24.0
   Params-Util-1.102
     pathname: R/RE/REHSACK/Params-Util-1.102.tar.gz
     provides:
@@ -570,13 +570,13 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       PPI 1.213
       common::sense 3.3
-  Proc-ForkSafe-0.001
-    pathname: S/SK/SKAJI/Proc-ForkSafe-0.001.tar.gz
+  Proc-ForkSafe-v1.0.0
+    pathname: S/SK/SKAJI/Proc-ForkSafe-v1.0.0.tar.gz
     provides:
-      Proc::ForkSafe 0.001
+      Proc::ForkSafe v1.0.0
     requirements:
-      Module::Build::Tiny 0.034
-      perl 5.008001
+      Module::Build::Tiny 0.053
+      perl v5.24.0
   Safe-Isa-1.000010
     pathname: E/ET/ETHER/Safe-Isa-1.000010.tar.gz
     provides:

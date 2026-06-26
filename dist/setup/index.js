@@ -79593,7 +79593,7 @@ function getCacheServiceURL() {
     }
 }
 
-var version = "6.0.1";
+var version = "6.1.0";
 var require$$0 = {
 	version: version};
 

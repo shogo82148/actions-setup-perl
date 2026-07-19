@@ -381,10 +381,10 @@ DISTRIBUTIONS
       File::Spec 0.8
       Pod::Man 0
       perl 5.006
-  ExtUtils-MakeMaker-CPANfile-0.09
-    pathname: I/IS/ISHIGAKI/ExtUtils-MakeMaker-CPANfile-0.09.tar.gz
+  ExtUtils-MakeMaker-CPANfile-0.10
+    pathname: I/IS/ISHIGAKI/ExtUtils-MakeMaker-CPANfile-0.10.tar.gz
     provides:
-      ExtUtils::MakeMaker::CPANfile 0.09
+      ExtUtils::MakeMaker::CPANfile 0.10
     requirements:
       CPAN::Meta::Converter 2.141170
       Cwd 0
@@ -954,7 +954,7 @@ DISTRIBUTIONS
     requirements:
       Dumpvalue 0
       ExtUtils::MakeMaker 0
-      ExtUtils::MakeMaker::CPANfile 0.09
+      ExtUtils::MakeMaker::CPANfile 0.10
       File::Spec 0
       JSON::PP 2.00
       Safe 0

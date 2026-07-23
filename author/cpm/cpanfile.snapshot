@@ -248,10 +248,10 @@ DISTRIBUTIONS
       perl 5.008
       strict 0
       warnings 0
-  ExtUtils-MakeMaker-CPANfile-0.10
-    pathname: I/IS/ISHIGAKI/ExtUtils-MakeMaker-CPANfile-0.10.tar.gz
+  ExtUtils-MakeMaker-CPANfile-0.11
+    pathname: I/IS/ISHIGAKI/ExtUtils-MakeMaker-CPANfile-0.11.tar.gz
     provides:
-      ExtUtils::MakeMaker::CPANfile 0.10
+      ExtUtils::MakeMaker::CPANfile 0.11
     requirements:
       CPAN::Meta::Converter 2.141170
       Cwd 0
@@ -543,7 +543,7 @@ DISTRIBUTIONS
       Parse::LocalDistribution 0.21
     requirements:
       ExtUtils::MakeMaker 0
-      ExtUtils::MakeMaker::CPANfile 0.10
+      ExtUtils::MakeMaker::CPANfile 0.11
       File::Find 0
       File::Spec 0
       List::Util 0
@@ -556,7 +556,7 @@ DISTRIBUTIONS
     requirements:
       Dumpvalue 0
       ExtUtils::MakeMaker 0
-      ExtUtils::MakeMaker::CPANfile 0.10
+      ExtUtils::MakeMaker::CPANfile 0.11
       File::Spec 0
       JSON::PP 2.00
       Safe 0

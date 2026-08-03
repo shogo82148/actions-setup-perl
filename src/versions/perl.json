@@ -82,6 +82,86 @@
   {
     "arch": "arm64",
     "os": "darwin",
+    "sha256": "695cae14678acbdb7b96043bfae93a6734bbf8feb41d423270e98bcaa450ef2f",
+    "thread": false,
+    "url": "https://github.com/shogo82148/build-perl/releases/download/perl-5.42.3-20260803012115/perl-5.42.3-darwin-arm64.tar.zstd",
+    "version": "5.42.3"
+  },
+  {
+    "arch": "x64",
+    "os": "darwin",
+    "sha256": "715ad423f192fc19d65510c09ab5bf91412972ec5ae9dce678dc6acbbe75bc20",
+    "thread": false,
+    "url": "https://github.com/shogo82148/build-perl/releases/download/perl-5.42.3-20260803012115/perl-5.42.3-darwin-x64.tar.zstd",
+    "version": "5.42.3"
+  },
+  {
+    "arch": "arm64",
+    "os": "linux",
+    "sha256": "a27c6f8724e2951b7c0785829e570c6d09658a81b7f6c01608768db04f25c65e",
+    "thread": false,
+    "url": "https://github.com/shogo82148/build-perl/releases/download/perl-5.42.3-20260803012115/perl-5.42.3-linux-arm64.tar.zstd",
+    "version": "5.42.3"
+  },
+  {
+    "arch": "x64",
+    "os": "linux",
+    "sha256": "8c491ec3c6ae3fe4b8ba8af21aa219a5a4d71b9ed854c68e8b5c8acd6363638b",
+    "thread": false,
+    "url": "https://github.com/shogo82148/build-perl/releases/download/perl-5.42.3-20260803012115/perl-5.42.3-linux-x64.tar.zstd",
+    "version": "5.42.3"
+  },
+  {
+    "arch": "arm64",
+    "os": "darwin",
+    "sha256": "db342b7624efecc9b1ac451353bd6854b3d97fd04c4a8d1f202726193d8be9f4",
+    "thread": true,
+    "url": "https://github.com/shogo82148/build-perl/releases/download/perl-5.42.3-20260803012115/perl-5.42.3-thr-darwin-arm64.tar.zstd",
+    "version": "5.42.3"
+  },
+  {
+    "arch": "x64",
+    "os": "darwin",
+    "sha256": "2d575880c6fb3ef23e186197d67a729c1128372a35f9937d0d817fea45caed3d",
+    "thread": true,
+    "url": "https://github.com/shogo82148/build-perl/releases/download/perl-5.42.3-20260803012115/perl-5.42.3-thr-darwin-x64.tar.zstd",
+    "version": "5.42.3"
+  },
+  {
+    "arch": "arm64",
+    "os": "linux",
+    "sha256": "7597db49c60b646d6b3b9a21ace26da9378e791b4a600f008c07cf7e020224b3",
+    "thread": true,
+    "url": "https://github.com/shogo82148/build-perl/releases/download/perl-5.42.3-20260803012115/perl-5.42.3-thr-linux-arm64.tar.zstd",
+    "version": "5.42.3"
+  },
+  {
+    "arch": "x64",
+    "os": "linux",
+    "sha256": "dac9e391f0bb7c5c705712b1355627b77b5ac4c7e3e708b3515338b6e3ce921a",
+    "thread": true,
+    "url": "https://github.com/shogo82148/build-perl/releases/download/perl-5.42.3-20260803012115/perl-5.42.3-thr-linux-x64.tar.zstd",
+    "version": "5.42.3"
+  },
+  {
+    "arch": "x64",
+    "os": "win32",
+    "sha256": "4f0ac6fe1a4221c1fa1804c2d81999bdecebd505a61d0d04720e9b3925cd6db4",
+    "thread": true,
+    "url": "https://github.com/shogo82148/build-perl/releases/download/perl-5.42.3-20260803012115/perl-5.42.3-thr-win32-x64.zip",
+    "version": "5.42.3"
+  },
+  {
+    "arch": "x64",
+    "os": "win32",
+    "sha256": "5d9d09e43f6c56acf9bc6f6c07e37014f6079834854ef090c3eae9e7abf75a74",
+    "thread": false,
+    "url": "https://github.com/shogo82148/build-perl/releases/download/perl-5.42.3-20260803012115/perl-5.42.3-win32-x64.zip",
+    "version": "5.42.3"
+  },
+  {
+    "arch": "arm64",
+    "os": "darwin",
     "sha256": "fbd6e2940a6f69e3d5e425dd2dacef66ced925a277a127937556e32a0a3d366b",
     "thread": false,
     "url": "https://github.com/shogo82148/build-perl/releases/download/perl-5.42.2-20260330131635/perl-5.42.2-darwin-arm64.tar.zstd",
@@ -318,6 +398,86 @@
     "thread": false,
     "url": "https://github.com/shogo82148/build-perl/releases/download/perl-5.42.0-20260321094406/perl-5.42.0-win32-x64.zip",
     "version": "5.42.0"
+  },
+  {
+    "arch": "arm64",
+    "os": "darwin",
+    "sha256": "8af6d54d1bdefb4963813683e2fe8578444f7b80d1614d08d1088368ce0d9898",
+    "thread": false,
+    "url": "https://github.com/shogo82148/build-perl/releases/download/perl-5.40.5-20260803012115/perl-5.40.5-darwin-arm64.tar.zstd",
+    "version": "5.40.5"
+  },
+  {
+    "arch": "x64",
+    "os": "darwin",
+    "sha256": "da60a6995a7e13a95d78f4a0aa317c9227310757302a59a31ecd308966e1076c",
+    "thread": false,
+    "url": "https://github.com/shogo82148/build-perl/releases/download/perl-5.40.5-20260803012115/perl-5.40.5-darwin-x64.tar.zstd",
+    "version": "5.40.5"
+  },
+  {
+    "arch": "arm64",
+    "os": "linux",
+    "sha256": "a65c30cfd60db51661634444f4a5ae085a1e9dc6c36ea480098c22e7f994da95",
+    "thread": false,
+    "url": "https://github.com/shogo82148/build-perl/releases/download/perl-5.40.5-20260803012115/perl-5.40.5-linux-arm64.tar.zstd",
+    "version": "5.40.5"
+  },
+  {
+    "arch": "x64",
+    "os": "linux",
+    "sha256": "8316c21bae1489250116a49d82bf027a2b1be6a82cbdae17eaa54b31f602e864",
+    "thread": false,
+    "url": "https://github.com/shogo82148/build-perl/releases/download/perl-5.40.5-20260803012115/perl-5.40.5-linux-x64.tar.zstd",
+    "version": "5.40.5"
+  },
+  {
+    "arch": "arm64",
+    "os": "darwin",
+    "sha256": "1444ee4138305cb59b3280ab0e660f38437a9fd41fdcf09f10f74ff9ed038b3e",
+    "thread": true,
+    "url": "https://github.com/shogo82148/build-perl/releases/download/perl-5.40.5-20260803012115/perl-5.40.5-thr-darwin-arm64.tar.zstd",
+    "version": "5.40.5"
+  },
+  {
+    "arch": "x64",
+    "os": "darwin",
+    "sha256": "98822d3e6aa16a222a59c393a2fb83392a06e6ba517c392bcb870c45808b3417",
+    "thread": true,
+    "url": "https://github.com/shogo82148/build-perl/releases/download/perl-5.40.5-20260803012115/perl-5.40.5-thr-darwin-x64.tar.zstd",
+    "version": "5.40.5"
+  },
+  {
+    "arch": "arm64",
+    "os": "linux",
+    "sha256": "094624c9bf18440ab4267a58cdae1c4c183a8ead9ea495795c8ba7e845974220",
+    "thread": true,
+    "url": "https://github.com/shogo82148/build-perl/releases/download/perl-5.40.5-20260803012115/perl-5.40.5-thr-linux-arm64.tar.zstd",
+    "version": "5.40.5"
+  },
+  {
+    "arch": "x64",
+    "os": "linux",
+    "sha256": "ca28067702e20f547f591e70d784f6ac25dbcc2f76e9261444ef43d7fbed487e",
+    "thread": true,
+    "url": "https://github.com/shogo82148/build-perl/releases/download/perl-5.40.5-20260803012115/perl-5.40.5-thr-linux-x64.tar.zstd",
+    "version": "5.40.5"
+  },
+  {
+    "arch": "x64",
+    "os": "win32",
+    "sha256": "62e4bd450c6270a176b55fb080bd6b810920851e8aae484175d7032d3fe37fe5",
+    "thread": true,
+    "url": "https://github.com/shogo82148/build-perl/releases/download/perl-5.40.5-20260803012115/perl-5.40.5-thr-win32-x64.zip",
+    "version": "5.40.5"
+  },
+  {
+    "arch": "x64",
+    "os": "win32",
+    "sha256": "412475d6fd1f1e1acae1a8880d50d6b7729d7c0edafe893b3f91f6e24aa064a7",
+    "thread": false,
+    "url": "https://github.com/shogo82148/build-perl/releases/download/perl-5.40.5-20260803012115/perl-5.40.5-win32-x64.zip",
+    "version": "5.40.5"
   },
   {
     "arch": "arm64",

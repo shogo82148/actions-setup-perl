@@ -261,10 +261,10 @@ DISTRIBUTIONS
       Module::CPANfile 0
       Test::More 0.88
       version 0.76
-  ExtUtils-PL2Bat-0.005
-    pathname: L/LE/LEONT/ExtUtils-PL2Bat-0.005.tar.gz
+  ExtUtils-PL2Bat-0.006
+    pathname: L/LE/LEONT/ExtUtils-PL2Bat-0.006.tar.gz
     provides:
-      ExtUtils::PL2Bat 0.005
+      ExtUtils::PL2Bat 0.006
     requirements:
       Carp 0
       ExtUtils::MakeMaker 0

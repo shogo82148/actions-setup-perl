@@ -72,32 +72,6 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
-  CPAN-Meta-2.150013
-    pathname: R/RJ/RJBS/CPAN-Meta-2.150013.tar.gz
-    provides:
-      CPAN::Meta 2.150013
-      CPAN::Meta::Converter 2.150013
-      CPAN::Meta::Feature 2.150013
-      CPAN::Meta::History 2.150013
-      CPAN::Meta::Merge 2.150013
-      CPAN::Meta::Prereqs 2.150013
-      CPAN::Meta::Spec 2.150013
-      CPAN::Meta::Validator 2.150013
-      Parse::CPAN::Meta 2.150013
-    requirements:
-      CPAN::Meta::Requirements 2.121
-      CPAN::Meta::YAML 0.011
-      Carp 0
-      Encode 0
-      Exporter 0
-      ExtUtils::MakeMaker 6.17
-      File::Spec 0.80
-      JSON::PP 2.27300
-      Scalar::Util 0
-      perl 5.008001
-      strict 0
-      version 0.88
-      warnings 0
   CPAN-Meta-Check-0.018
     pathname: L/LE/LEONT/CPAN-Meta-Check-0.018.tar.gz
     provides:

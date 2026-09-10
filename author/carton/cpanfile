@@ -3,6 +3,14 @@ requires 'perl', '5.006';
 requires 'Carton';
 requires 'Menlo::Legacy';
 requires 'Menlo';
+# CPAN::Meta is only a transitive dependency of Carton, and the base perl already
+# bundles a copy in its core lib, so `carton install` (make update) considers it
+# satisfied and never installs it into local/. App::FatPacker::Simple fatpacks only
+# what is under local/, so the generated carton would be missing CPAN::Meta.
+# Requiring it here (pinned above the base perl's bundled version) forces it into
+# local/ so it gets fat-packed. 2.150015+ needs CPAN::Meta::Requirements 2.145,
+# which doesn't support perl 5.8, so keep it at 2.150013.
+requires 'CPAN::Meta', '==2.150013';
 requires 'CPAN::Meta::Requirements', '==2.140'; # 2.141 doesn't support perl 5.8.
 requires 'Distribution::Metadata', '==0.06';
 requires 'App::FatPacker::Simple', '==0.09';

@@ -7,7 +7,15 @@ requires 'App::FatPacker::Simple', '==0.09';
 # https://github.com/miyagawa/cpanminus/issues/455
 requires 'CPAN::Common::Index', 0.006;
 requires 'CPAN::DistnameInfo';
-requires 'CPAN::Meta', '2.132830';
+# CPAN::Meta is only a transitive dependency here, and the base perl image already
+# bundles a copy (installed alongside Carton), so `carton install` (make update)
+# considers the minimum requirement satisfied and never installs it into local/.
+# App::FatPacker::Simple fatpacks only what is under local/, so the generated cpanm
+# would be missing CPAN::Meta (and the Parse/CPAN/Meta.pm patch would have no file to
+# patch). Pin it above the base perl's bundled version to force it into local/ so it
+# gets fat-packed. 2.150015+ needs CPAN::Meta::Requirements 2.145, which doesn't
+# support perl 5.8, so keep it at 2.150014.
+requires 'CPAN::Meta', '==2.150014';
 requires 'CPAN::Meta::Check';
 requires 'CPAN::Meta::Requirements', '==2.140'; # 2.141 doesn't support perl 5.8.
 requires 'CPAN::Meta::YAML';

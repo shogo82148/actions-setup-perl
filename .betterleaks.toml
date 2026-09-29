@@ -1,0 +1,12 @@
+# Exclude the dist/ directory from scanning since it holds build artifacts.
+# Note: this top-level `prefilter` must appear before the [extend] table,
+# otherwise TOML would parse it as `extend.prefilter` and ignore it.
+prefilter = '''
+matchesAny(attributes["path"], [
+  `(?:^|/)dist/.*`,
+])
+'''
+
+# Inherit the built-in default rules as-is.
+[extend]
+useDefault = true

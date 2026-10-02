@@ -135,10 +135,10 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Scalar::Util 0
       perl 5.006
-  Clone-0.50
-    pathname: A/AT/ATOOMIC/Clone-0.50.tar.gz
+  Clone-0.51
+    pathname: A/AT/ATOOMIC/Clone-0.51.tar.gz
     provides:
-      Clone 0.50
+      Clone 0.51
     requirements:
       ExtUtils::MakeMaker 0
   Command-Runner-v1.0.0

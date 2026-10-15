@@ -24,10 +24,10 @@ jobs:
           - true
     steps:
       - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@v7.0.1
 
       - name: Set Node.js
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        uses: actions/setup-node@v7.1.0
         with:
           node-version-file: "package.json"
           cache: npm
@@ -39,7 +39,7 @@ jobs:
 
       - id: setup-perl
         name: use the action
-        uses: ./
+        uses: $/
         with:
           perl-version: "5.30.0"
           multi-thread: ${{ matrix.multi-thread }}
@@ -103,10 +103,10 @@ jobs:
           - true
     steps:
       - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@v7.0.1
 
       - name: Set Node.js
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        uses: actions/setup-node@v7.1.0
         with:
           node-version-file: "package.json"
           cache: npm
@@ -118,7 +118,7 @@ jobs:
 
       - id: setup-perl
         name: use the action
-        uses: ./
+        uses: $/
         with:
           perl-version: "5.30.0"
           multi-thread: ${{ matrix.multi-thread }}
@@ -183,10 +183,10 @@ jobs:
         run: git config --global core.autocrlf false
 
       - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@v7.0.1
 
       - name: Set Node.js
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        uses: actions/setup-node@v7.1.0
         with:
           node-version-file: "package.json"
           cache: npm
@@ -198,7 +198,7 @@ jobs:
 
       - id: setup-perl
         name: use the action
-        uses: ./
+        uses: $/
         with:
           perl-version: "5.30.0"
           multi-thread: ${{ matrix.multi-thread }}
@@ -263,10 +263,10 @@ jobs:
         run: git config --global core.autocrlf false
 
       - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@v7.0.1
 
       - name: Set Node.js
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        uses: actions/setup-node@v7.1.0
         with:
           node-version-file: "package.json"
           cache: npm
@@ -278,7 +278,7 @@ jobs:
 
       - id: setup-perl
         name: use the action
-        uses: ./
+        uses: $/
         with:
           perl-version: "5.30.0"
           distribution: strawberry
@@ -334,10 +334,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@v7.0.1
 
       - name: Set Node.js
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        uses: actions/setup-node@v7.1.0
         with:
           node-version-file: "package.json"
           cache: npm
@@ -347,7 +347,7 @@ jobs:
 
       - id: setup-perl
         name: use the action
-        uses: ./
+        uses: $/
         with:
           perl-version-file: ".perl-version"
       - name: show the version
@@ -358,10 +358,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@v7.0.1
 
       - name: Set Node.js
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        uses: actions/setup-node@v7.1.0
         with:
           node-version-file: "package.json"
           cache: npm

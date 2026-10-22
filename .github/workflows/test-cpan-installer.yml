@@ -32,22 +32,22 @@ jobs:
           - cpm
           - carton
         perl:
-          - "5.42" # latest version of Perl 5
+          - "5.44" # latest version of Perl
         distribution:
           - "default"
 
         # extra tests
         include:
           # Strawberry Perl
-          - perl: "5.42" # latest version of Perl 5
+          - perl: "5.42" # latest version of Strawberry Perl
             os: "windows-latest"
             installer: "cpanm"
             distribution: "strawberry"
-          - perl: "5.42" # latest version of Perl 5
+          - perl: "5.42" # latest version of Strawberry Perl
             os: "windows-latest"
             installer: "cpm"
             distribution: "strawberry"
-          - perl: "5.42" # latest version of Perl 5
+          - perl: "5.42" # latest version of Strawberry Perl
             os: "windows-latest"
             installer: "carton"
             distribution: "strawberry"
@@ -59,11 +59,10 @@ jobs:
             os: "windows-latest"
             installer: "carton"
             distribution: "strawberry"
-          # XXX: It doesn't work.
-          # - perl: "5.24" # cpm requires Perl 5.24 or later
-          #   os: "windows-latest"
-          #   installer: "cpm"
-          #   distribution: "strawberry"
+          - perl: "5.24" # cpm requires Perl 5.24 or later
+            os: "windows-latest"
+            installer: "cpm"
+            distribution: "strawberry"
 
           # old Perl on Linux
           - perl: "5.8"
@@ -102,11 +101,10 @@ jobs:
             os: "windows-latest"
             installer: "carton"
             distribution: "default"
-          # XXX: It doesn't work.
-          # - perl: "5.24" # cpm requires Perl 5.24 or later
-          #   os: "windows-latest"
-          #   installer: "cpm"
-          #   distribution: "default"
+          - perl: "5.24" # cpm requires Perl 5.24 or later
+            os: "windows-latest"
+            installer: "cpm"
+            distribution: "default"
     steps:
       - name: Checkout
         uses: actions/checkout@v7.0.1

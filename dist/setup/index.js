@@ -40931,6 +40931,8 @@ async function getPerl$1(version, thread) {
     // prepend the tools path. instructs the agent to prepend for future tasks
     //
     addPath(bin);
+    // configure OpenSSL path for Net::SSLeay
+    exportVariable("OPENSSL_PREFIX", toolPath);
     if (osPlat === "win32") {
         // on Windows, add the path to the Strawberry Perl's C compiler.
         addPath("C:\\strawberry\\c\\bin");
@@ -41273,6 +41275,8 @@ async function getPerl(version) {
     addPath(path$1.join(toolPath, "c", "bin"));
     addPath(path$1.join(toolPath, "perl", "bin"));
     addPath(path$1.join(toolPath, "perl", "site", "bin"));
+    // configure OpenSSL path for Net::SSLeay
+    exportVariable("OPENSSL_PREFIX", path$1.join(toolPath, "c"));
     return {
         version: selected.version,
         path: path$1.join(toolPath, "perl"),

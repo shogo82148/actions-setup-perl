@@ -66,6 +66,9 @@ export async function getPerl(version: string, thread: boolean): Promise<Result>
   //
   core.addPath(bin);
 
+  // configure OpenSSL path for Net::SSLeay
+  core.exportVariable("OPENSSL_PREFIX", toolPath);
+
   if (osPlat === "win32") {
     // on Windows, add the path to the Strawberry Perl's C compiler.
     core.addPath("C:\\strawberry\\c\\bin");

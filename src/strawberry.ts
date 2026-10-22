@@ -78,6 +78,9 @@ export async function getPerl(version: string): Promise<Result> {
   core.addPath(path.join(toolPath, "perl", "bin"));
   core.addPath(path.join(toolPath, "perl", "site", "bin"));
 
+  // configure OpenSSL path for Net::SSLeay
+  core.exportVariable("OPENSSL_PREFIX", path.join(toolPath, "c"));
+
   return {
     version: selected.version,
     path: path.join(toolPath, "perl"),

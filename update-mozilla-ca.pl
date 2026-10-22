@@ -18,6 +18,16 @@ use File::Temp qw(tempdir);
 
 my $root    = File::Spec->rel2abs(dirname(__FILE__));
 my $lib_dir = File::Spec->catdir($root, "lib");
+my $dest    = File::Spec->catdir($lib_dir, "Mozilla");
+my $staging = File::Spec->catdir($lib_dir, "Mozilla.new");
+my $backup  = File::Spec->catdir($lib_dir, "Mozilla.old");
+
+# Recover from an update interrupted mid-swap before doing any network request:
+# if the installed tree is gone but the backup remains, restore it.
+if (!-d $dest && -d $backup) {
+    rename($backup, $dest) or die "failed to restore $dest from $backup: $!\n";
+    say "restored $dest from an interrupted update";
+}
 
 # Fetch the latest release metadata from MetaCPAN.
 my $meta = decode_json(http_get("https://fastapi.metacpan.org/v1/download_url/Mozilla::CA"));
@@ -54,10 +64,6 @@ die "could not find lib/Mozilla in the distribution\n" unless $src && -d $src;
 # Replace the existing copy under lib/Mozilla. Copy into a staging directory
 # first and swap it in only once the copy succeeds, so a failed copy never
 # leaves the previously installed CA bundle deleted or half-written.
-my $dest    = File::Spec->catdir($lib_dir, "Mozilla");
-my $staging = File::Spec->catdir($lib_dir, "Mozilla.new");
-my $backup  = File::Spec->catdir($lib_dir, "Mozilla.old");
-
 make_path($lib_dir);
 remove_tree($staging) if -d $staging;
 remove_tree($backup)  if -d $backup;
@@ -81,7 +87,8 @@ say "installed Mozilla::CA $version into $dest";
 # interpreted as shell syntax.
 sub http_get {
     my ($url) = @_;
-    open my $curl, "-|", "curl", "--fail", "--silent", "--show-error", "--location", $url
+    open my $curl, "-|", "curl", "--fail", "--silent", "--show-error", "--location",
+        "--connect-timeout", "30", "--max-time", "300", $url
         or die "failed to run curl for $url: $!\n";
     binmode $curl;
     local $/;

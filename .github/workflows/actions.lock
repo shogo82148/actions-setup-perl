@@ -18,15 +18,15 @@ workflows:
     '.github/workflows/update-carton.yml':
         - 'actions/checkout@v7.0.1'
         - 'shogo82148/actions-commit-and-create-pr@v1.1.4'
-        - 'shogo82148/actions-github-app-token@v1.3.3'
+        - 'shogo82148/actions-github-app-token@v1.3.4'
     '.github/workflows/update-cpanm.yml':
         - 'actions/checkout@v7.0.1'
         - 'shogo82148/actions-commit-and-create-pr@v1.1.4'
-        - 'shogo82148/actions-github-app-token@v1.3.3'
+        - 'shogo82148/actions-github-app-token@v1.3.4'
     '.github/workflows/update-cpm.yml':
         - 'actions/checkout@v7.0.1'
         - 'shogo82148/actions-commit-and-create-pr@v1.1.4'
-        - 'shogo82148/actions-github-app-token@v1.3.3'
+        - 'shogo82148/actions-github-app-token@v1.3.4'
 dependencies:
     'actions/checkout@v7.0.1':
         ref: 'v7.0.1'
@@ -53,8 +53,8 @@ dependencies:
         commit: 'sha1-b1322fe9da4037e9720e34ea221997cffcd3498d'
         owner_id: 1157344
         repo_id: 443524796
-    'shogo82148/actions-github-app-token@v1.3.3':
-        ref: 'v1.3.3'
-        commit: 'sha1-bbdb11feaf1f848a9e8f84cb1d10a8b97e4d9f5b'
+    'shogo82148/actions-github-app-token@v1.3.4':
+        ref: 'v1.3.4'
+        commit: 'sha1-bf955a861ff7c9d64c86b567bac12d7baae5614a'
         owner_id: 1157344
         repo_id: 398574950

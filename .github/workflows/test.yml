@@ -98,7 +98,6 @@ jobs:
           - macos-26
           - macos-15-intel
           - macos-15
-          - macos-14
         multi-thread:
           - false
           - true

@@ -1,0 +1,46 @@
+Additional TLS hardening on top of secure-by-default.patch.
+- mask credentials in mirror URLs in the TLS error message
+- verify certificates in the MetaCPAN and MetaDB index clients
+
+--- Menlo/CLI/Compat.pm
++++ Menlo/CLI/Compat.pm
+@@ -2694,7 +2694,7 @@
+             $invalid_cert = 1 if $reply->{content} =~ m{Can't connect.+?:443}mi;
+         }
+         if ( $invalid_cert ) {
+-            die <<"DIE";
++            die $self->mask_uri_passwords(<<"DIE");
+ TLS issue found while fetching $uri:\n
+ $reply->{content}\n
+ Please verify your certificates or force an HTTP-only request/mirror
+--- Menlo/Index/MetaCPAN.pm
++++ Menlo/Index/MetaCPAN.pm
+@@ -44,7 +44,7 @@
+     my $query = join "&", map { "$_=" . $self->_uri_escape($query{$_}) } sort keys %query;
+ 
+     my $uri = $self->uri . $args->{package} . ($query ? "?$query" : "");
+-    my $res = HTTP::Tinyish->new->get($uri);
++    my $res = HTTP::Tinyish->new(verify_SSL => 1)->get($uri);
+     return unless $res->{success};
+ 
+     my $dist_meta = eval { JSON::PP::decode_json($res->{content}) };
+--- Menlo/Index/MetaDB.pm
++++ Menlo/Index/MetaDB.pm
+@@ -38,7 +38,7 @@
+     my $mod = $args->{package};
+ 
+     if ($args->{version} || $args->{version_range}) {
+-        my $res = HTTP::Tiny->new->get( $self->uri . "history/$mod" );
++        my $res = HTTP::Tiny->new(verify_SSL => 1)->get( $self->uri . "history/$mod" );
+         return unless $res->{success};
+ 
+         my $range = defined $args->{version} ? "== $args->{version}" : $args->{version_range};
+@@ -77,7 +77,7 @@
+             };
+         }
+     } else {
+-        my $res = HTTP::Tiny->new->get( $self->uri . "package/$mod" );
++        my $res = HTTP::Tiny->new(verify_SSL => 1)->get( $self->uri . "package/$mod" );
+         return unless $res->{success};
+ 
+         if ( my $yaml = CPAN::Meta::YAML->read_string( $res->{content} ) ) {

@@ -1,6 +1,8 @@
 Additional TLS hardening on top of secure-by-default.patch.
-- mask credentials in mirror URLs in the TLS error message
+- mask credentials in mirror URLs in the TLS error message (including an empty user name)
 - verify certificates in the MetaCPAN and MetaDB index clients
+- LWP backend: always verify the hostname when verify_SSL is set
+- Curl backend: reject redirects from HTTPS to plain HTTP when verify_SSL is set
 
 --- Menlo/CLI/Compat.pm
 +++ Menlo/CLI/Compat.pm
@@ -13,6 +15,15 @@ Additional TLS hardening on top of secure-by-default.patch.
  TLS issue found while fetching $uri:\n
  $reply->{content}\n
  Please verify your certificates or force an HTTP-only request/mirror
+@@ -2933,7 +2933,7 @@
+ 
+ sub mask_uri_passwords {
+     my($self, @strings) = @_;
+-    s{ (https?://) ([^:/]+) : [^@/]+ @ }{$1$2:********@}gx for @strings;
++    s{ (https?://) ([^:/]*) : [^@/]+ @ }{$1$2:********@}gx for @strings;
+     return @strings;
+ }
+ 
 --- Menlo/Index/MetaCPAN.pm
 +++ Menlo/Index/MetaCPAN.pm
 @@ -44,7 +44,7 @@
@@ -44,3 +55,32 @@ Additional TLS hardening on top of secure-by-default.patch.
          return unless $res->{success};
  
          if ( my $yaml = CPAN::Meta::YAML->read_string( $res->{content} ) ) {
+--- HTTP/Tinyish/LWP.pm
++++ HTTP/Tinyish/LWP.pm
+@@ -107,10 +107,10 @@
+     $agent->agent(delete $attr{agent} || "HTTP-Tinyish/$HTTP::Tinyish::VERSION");
+ 
+     # LWP default is to verify, HTTP::Tiny isn't
+-    unless ($attr{verify_SSL}) {
+-        if ($agent->can("ssl_opts")) {
+-            $agent->ssl_opts(verify_hostname => 0);
+-        }
++    # but LWP disables hostname verification when HTTPS_CA_FILE or HTTPS_CA_DIR is set,
++    # so set it explicitly.
++    if ($agent->can("ssl_opts")) {
++        $agent->ssl_opts(verify_hostname => $attr{verify_SSL} ? 1 : 0);
+     }
+ 
+     if ($attr{default_headers}) {
+--- HTTP/Tinyish/Curl.pm
++++ HTTP/Tinyish/Curl.pm
+@@ -138,6 +138,9 @@
+ 
+     unless ($self->{verify_SSL}) {
+         push @options, '--insecure';
++    } elsif ($url =~ /^https:/i) {
++        # do not allow redirects from HTTPS to plain HTTP
++        push @options, '--proto-redir', '=https';
+     }
+ 
+     if ($opts->{content}) {

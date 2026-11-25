@@ -22,13 +22,14 @@ carton: .deps.exists build.pl ## generate fat-packed carton
 .PHONY: deps
 deps: .deps.exists ## install dependencies
 .DELETE_ON_ERROR: .deps.exists
-.deps.exists: .image.exists cpanfile.snapshot
+.deps.exists: .image.exists cpanfile.snapshot patches/*.patch
 	touch .deps.exists
 	-docker rm $(IMAGE_NAME)-deps
 	docker create -v /tmp/carton --name $(IMAGE_NAME)-deps $(IMAGE_NAME) /bin/true
 	docker cp cpanfile $(IMAGE_NAME)-deps:/tmp/carton/cpanfile
 	docker cp cpanfile.snapshot $(IMAGE_NAME)-deps:/tmp/carton/cpanfile.snapshot
 	docker run --rm --volumes-from $(IMAGE_NAME)-deps $(IMAGE_NAME) carton install --deployment
+	cat patches/*.patch | docker run --rm -i --volumes-from $(IMAGE_NAME)-deps -w /tmp/carton/local/lib/perl5 $(IMAGE_NAME) patch -s -f -p0
 	docker cp $(IMAGE_NAME)-deps:/tmp/carton/local .
 
 .PHONY: update

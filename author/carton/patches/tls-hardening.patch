@@ -1,8 +1,8 @@
 Additional TLS hardening on top of secure-by-default.patch.
 - mask credentials in mirror URLs in the TLS error message (including an empty user name)
 - verify certificates in the MetaCPAN and MetaDB index clients
-- LWP backend: always verify the hostname when verify_SSL is set
-- Curl backend: reject redirects from HTTPS to plain HTTP when verify_SSL is set
+- LWP backend: always verify the hostname when verify_SSL is set, and do not use LWP for HTTPS (including redirects) without ssl_opts (LWP < 6.00)
+- LWP and Curl backends: reject redirects from HTTPS to plain HTTP when verify_SSL is set
 
 --- Menlo/CLI/Compat.pm
 +++ Menlo/CLI/Compat.pm
@@ -57,7 +57,27 @@ Additional TLS hardening on top of secure-by-default.patch.
          if ( my $yaml = CPAN::Meta::YAML->read_string( $res->{content} ) ) {
 --- HTTP/Tinyish/LWP.pm
 +++ HTTP/Tinyish/LWP.pm
-@@ -107,10 +107,10 @@
+@@ -12,7 +12,9 @@
+         LWP => $LWP::VERSION,
+     );
+ 
+-    if (eval { require LWP::Protocol::https; require Mozilla::CA; 1 }) {
++    # hostname verification requires ssl_opts (LWP 6.00+),
++    # so do not use LWP for HTTPS on older releases.
++    if (LWP::UserAgent->can("ssl_opts") and eval { require LWP::Protocol::https; require Mozilla::CA; 1 }) {
+         $supports{https} = 1;
+         $meta{"LWP::Protocol::https"} = $LWP::Protocol::https::VERSION;
+     }
+@@ -27,7 +29,7 @@
+ sub new {
+     my($class, %attr) = @_;
+ 
+-    my $ua = LWP::UserAgent->new;
++    my $ua = HTTP::Tinyish::LWP::UserAgent->new;
+     
+     bless {
+         ua => $class->translate_lwp($ua, %attr),
+@@ -107,12 +109,19 @@
      $agent->agent(delete $attr{agent} || "HTTP-Tinyish/$HTTP::Tinyish::VERSION");
  
      # LWP default is to verify, HTTP::Tiny isn't
@@ -69,9 +89,36 @@ Additional TLS hardening on top of secure-by-default.patch.
 +    # so set it explicitly.
 +    if ($agent->can("ssl_opts")) {
 +        $agent->ssl_opts(verify_hostname => $attr{verify_SSL} ? 1 : 0);
++    } elsif ($attr{verify_SSL}) {
++        # hostname verification is not available without ssl_opts (LWP < 6.00),
++        # so do not allow HTTPS requests, including redirects from HTTP.
++        $agent->protocols_forbidden(['https']);
      }
  
++    # do not allow redirects from HTTPS to plain HTTP (see HTTP::Tinyish::LWP::UserAgent::redirect_ok)
++    $agent->{tinyish_verify_SSL} = $attr{verify_SSL} ? 1 : 0;
++
      if ($attr{default_headers}) {
+         $agent->default_headers( HTTP::Headers->new(%{$attr{default_headers}}) );
+     }
+@@ -127,4 +136,17 @@
+       ( $res->header('Client-Warning') || '' ) eq 'Internal response';
+ }
+ 
++package HTTP::Tinyish::LWP::UserAgent;
++our @ISA = qw(LWP::UserAgent);
++
++sub redirect_ok {
++    my($self, $new_request, $response) = @_;
++    if ($self->{tinyish_verify_SSL}
++        && lc($response->request->uri->scheme) eq 'https'
++        && lc($new_request->uri->scheme) ne 'https') {
++        return 0;
++    }
++    $self->SUPER::redirect_ok($new_request, $response);
++}
++
+ 1;
 --- HTTP/Tinyish/Curl.pm
 +++ HTTP/Tinyish/Curl.pm
 @@ -138,6 +138,9 @@

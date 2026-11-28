@@ -511,10 +511,10 @@ DISTRIBUTIONS
       Module::Load::Conditional 0.66
       Params::Check 0.07
       Test::More 0
-  File-Path-2.18
-    pathname: J/JK/JKEENAN/File-Path-2.18.tar.gz
+  File-Path-2.19
+    pathname: J/JK/JKEENAN/File-Path-2.19.tar.gz
     provides:
-      File::Path 2.18
+      File::Path 2.19
     requirements:
       Cwd 0
       Exporter 0
